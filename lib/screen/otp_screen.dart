@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'package:emp_app/controller/login_controller.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.mobileNumber, re, required this.otpNo});
+  const OtpScreen({super.key, required this.mobileNumber, required this.otpNo, required this.deviceToken});
   final String mobileNumber;
   final String otpNo;
+  final String deviceToken;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -15,27 +17,68 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final LoginController loginController = Get.put(LoginController());
-  int _counter = 10;
   late Timer _timer;
-  // String otp = "";
+  bool isButtonEnabled = false;
+  final formKey = GlobalKey<FormState>();
+  bool isTimerOver = false;
+  bool isDropdownEnabled = true;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  String deviceTok = "";
 
   void startTimer() {
-    _counter = 20;
+    setState(() {
+      isButtonEnabled = false;
+    });
+    loginController.counter = 20;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_counter > 0) {
+      if (loginController.counter > 0) {
         setState(() {
-          _counter--;
+          loginController.counter--;
         });
       } else {
-        _timer.cancel();
+        setState(() {
+          isButtonEnabled = true;
+        });
+        timer.cancel();
+        onResendOtp();
       }
     });
   }
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void onResendOtp() {
+    setState(() {
+      loginController.counter = 20;
+    });
+    startTimer();
+    // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('OTP has been resent. Please check your messages.'),
+    // ));
+  }
+
+  // void startTimer() {
+  //   isButtonEnabled = false;
+  //   counter = 20;
+  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     if (counter > 0) {
+  //       setState(() {
+  //         counter--;
+  //       });
+  //     } else {
+  //       _timer.cancel();
+  //     }
+  //   });
+  // }
+
   Widget textWidgetInfo() {
-    if (_counter > 0) {
+    if (loginController.counter > 0) {
       return Text(
-        "Request otp in $_counter",
+        "Request otp in ${loginController.counter}",
         style: const TextStyle(
           fontSize: 15.0,
           color: Colors.white,
@@ -60,14 +103,39 @@ class _OtpScreenState extends State<OtpScreen> {
     startTimer();
     super.initState();
     print('RespOTP: ${widget.otpNo}');
+
+    _firebaseMessaging.requestPermission();
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print('Received a message while in the foreground!');
+    //   print('Message data: ${message.data}');
+
+    //   if (message.notification != null) {
+    //     print('Message also contained a notification: ${message.notification}');
+    //   }
+    // });
+
+    _firebaseMessaging.getToken().then((String? token) {
+      assert(token != null);
+      print("FCM Token: $token");
+      setState(() {
+        deviceTok = token.toString();
+      });
+      // Send this token to your server to register the device
+    });
+
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   // Handle background messages
+    //   if (message.notification != null) {
+    //     print('Message title: ${message.notification!.title}');
+    //     print('Message body: ${message.notification!.body}');
+    //     // Navigate to a different screen or update UI
+    //   }
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    // const focusedBorderColor = Color.fromRGBO(239, 240, 240, 1);
-    // const fillColor = Color.fromRGBO(243, 246, 249, 0);
     const borderColor = Color.fromRGBO(239, 240, 240, 1);
-
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
@@ -145,7 +213,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   width: MediaQuery.of(context).size.width * 0.6,
                   child: ElevatedButton(
                     onPressed: () {
-                      loginController.otpOnClk(context, widget.otpNo);
+                      loginController.otpOnClk(context, widget.otpNo, deviceTok);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 23, 53, 109),

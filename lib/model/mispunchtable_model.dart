@@ -36,17 +36,17 @@ class MispunchTable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['empCode'] = this.empCode;
-    data['empName'] = this.empName;
-    data['department'] = this.department;
-    data['designation'] = this.designation;
-    data['emp_Type'] = this.empType;
-    data['dt'] = this.dt;
-    data['mis_Punch'] = this.misPunch;
-    data['punch_Time'] = this.punchTime;
-    data['shiftTime'] = this.shiftTime;
-    data['note'] = this.note;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['empCode'] = empCode;
+    data['empName'] = empName;
+    data['department'] = department;
+    data['designation'] = designation;
+    data['emp_Type'] = empType;
+    data['dt'] = dt;
+    data['mis_Punch'] = misPunch;
+    data['punch_Time'] = punchTime;
+    data['shiftTime'] = shiftTime;
+    data['note'] = note;
     return data;
   }
 }

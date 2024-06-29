@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "685940304823",
+    "project_id": "vhempapp",
+    "storage_bucket": "vhempapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685940304823:android:95f83ccfe487fe1ad51632",
+        "android_client_info": {
+          "package_name": "com.example.emp_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh3RY8fXdFiSmheWUi6ZaSh05DqEC4ekY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

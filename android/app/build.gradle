@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -38,10 +39,14 @@ android {
         applicationId = "com.example.emp_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutterVersionCode.toInteger()
-        versionName = flutterVersionName
+        // minSdk = flutter.minSdkVersion
+        // targetSdk = flutter.targetSdkVersion
+        // versionCode = flutterVersionCode.toInteger()
+        // versionName = flutterVersionName
+        minSdk = 21
+        targetSdk = 31
+        versionCode = 1
+        versionName = "1.0"
     }
 
     buildTypes {
@@ -50,6 +55,12 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
         }
+    }
+    
+    dependencies {
+        implementation "androidx.work:work-runtime:2.7.1" 
+        implementation platform('com.google.firebase:firebase-bom:28.4.1')
+        implementation 'com.google.firebase:firebase-messaging'
     }
 }
 

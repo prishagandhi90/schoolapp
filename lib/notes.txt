@@ -1,0 +1,66 @@
+attendence screen 2nd table data
+Row(
+                children: [
+                  if (controller.FixedColRowBuilder().isNotEmpty)
+                    FixedColumnWidget(
+                      columns: const [
+                        DataColumn(label: Text('#')),
+                        DataColumn(label: Text('Att Date')),
+                      ],
+                      rowBuilder: controller.FixedColRowBuilder,
+                      headingRowColor: const WidgetStatePropertyAll(Color.fromARGB(255, 130, 240, 198)),
+                    ),
+                  if (controller.ScrollableColRowBuilder().isNotEmpty)
+                    ScrollableColumnWidget(
+                      columns: const [
+                        DataColumn(label: Text('IN')),
+                        DataColumn(label: Text('OUT')),
+                        DataColumn(label: Text('Punch')),
+                        DataColumn(label: Text('SHIFT')),
+                        DataColumn(label: Text('LV')),
+                        DataColumn(label: Text('ST')),
+                        DataColumn(label: Text('OT ENT\nMIN')),
+                        DataColumn(label: Text('OT MIN')),
+                        DataColumn(label: Text('LC')),
+                        DataColumn(label: Text('EG')),
+                        DataColumn(label: Text('LC/EG MIN')),
+                      ],
+                      rowBuilder: controller.ScrollableColRowBuilder,
+                      headingRowColor: const WidgetStatePropertyAll(Color.fromARGB(255, 182, 235, 214)),
+                    ),
+                ],
+              )
+
+List<DataRow> FixedColRowBuilderatt() {
+    return mispunchtable.asMap().entries.map((attData) {
+      int index = attData.key;
+      MispunchTable team = attData.value;
+      return DataRow(
+        cells: [
+          DataCell(Text((index + 1).toString())),
+          DataCell(Text(team.dt.toString().substring(0, 10))),
+          
+        ],
+      );
+    }).toList();
+  }
+
+  List<DataRow> ScrollableColRowBuilderatt() {
+    return mispunchtable
+        .map((team) => DataRow(
+              cells: [
+                DataCell(Text(team.in.toString())),
+                DataCell(Text(team.out.toString())),
+                DataCell(Text(team.punch.toString())),
+                DataCell(Text(team.shift.toString())),
+                DataCell(Text(team.lv.toString())),
+                DataCell(Text(team.st.toString())),
+                DataCell(Text(team.ot ent min.toString())),
+                DataCell(Text(team.ot min.toString())),
+                DataCell(Text(team.lc.toString())),
+                DataCell(Text(team.eg.toString())),
+                DataCell(Text(team.lc/eg min.toString())),
+              ],
+            ))
+        .toList();
+  }

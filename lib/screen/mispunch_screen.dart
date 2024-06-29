@@ -17,7 +17,7 @@ class _MispunchScreenState extends State<MispunchScreen> {
   void initState() {
     super.initState();
     final AttendenceController attendenceController = Get.put(AttendenceController());
-    attendenceController.getmonthyr_empinfo();
+    attendenceController.getmonthyrempinfo();
   }
 
   @override
@@ -45,10 +45,10 @@ class _MispunchScreenState extends State<MispunchScreen> {
                         )
                         .toList(),
                     onChange: (Dropdown_Glbl? value) {
-                      controller.MonthYr_OnClick(value);
+                      controller.monthYr_OnClick(value);
                     },
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                   ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: const WidgetStatePropertyAll(Color.fromARGB(255, 179, 226, 238)),
@@ -104,7 +104,6 @@ class _MispunchScreenState extends State<MispunchScreen> {
                 ),
               ),
               const SizedBox(height: 15),
-              // if (controller.mispunchtable.isNotEmpty && controller.mispunchtable.length > 0) {
               Row(
                 children: [
                   if (controller.FixedColRowBuilder().isNotEmpty)

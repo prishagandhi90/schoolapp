@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class FixedColumnWidget extends StatelessWidget {
@@ -5,30 +7,37 @@ class FixedColumnWidget extends StatelessWidget {
   final List<DataRow> Function() rowBuilder;
   final WidgetStateProperty<Color?>? headingRowColor;
 
-  const FixedColumnWidget({Key? key, required this.columns, required this.rowBuilder, this.headingRowColor}) : super(key: key);
+  const FixedColumnWidget({super.key, required this.columns, required this.rowBuilder, this.headingRowColor});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.26)),
-            bottom: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.26)),
-            left: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.26)),
-          ),
-        ),
-        child: DataTable(
-          columnSpacing: 20,
-          headingRowColor: headingRowColor,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
           decoration: const BoxDecoration(
             border: Border(
-              right: BorderSide(color: Colors.grey, width: 2),
+              top: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.26)),
+              bottom: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.26)),
+              left: BorderSide(width: 1, color: Color.fromRGBO(0, 0, 0, 0.26)),
             ),
           ),
-          columns: columns,
-          rows: rowBuilder(),
+          child: DataTable(
+            border: const TableBorder(
+                top: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+                left: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+                bottom: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+                horizontalInside: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+                verticalInside: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26))),
+            columnSpacing: 20,
+            headingRowColor: headingRowColor,
+            decoration: const BoxDecoration(
+              border: Border(right: BorderSide(color: Colors.grey, width: 2)),
+            ),
+            columns: columns,
+            rows: rowBuilder(),
+          ),
         ),
       ),
     );
@@ -40,7 +49,7 @@ class ScrollableColumnWidget extends StatelessWidget {
   final List<DataRow> Function() rowBuilder;
   final WidgetStateProperty<Color?>? headingRowColor;
 
-  const ScrollableColumnWidget({Key? key, required this.columns, required this.rowBuilder, this.headingRowColor}) : super(key: key);
+  const ScrollableColumnWidget({super.key, required this.columns, required this.rowBuilder, this.headingRowColor});
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +65,13 @@ class ScrollableColumnWidget extends StatelessWidget {
             ),
           ),
           child: DataTable(
+            border: const TableBorder(
+              top: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+              right: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+              bottom: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+              horizontalInside: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+              verticalInside: BorderSide(width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.26)),
+            ),
             headingRowColor: headingRowColor,
             columnSpacing: 20,
             decoration: const BoxDecoration(border: Border(right: BorderSide(color: Colors.grey, width: 0.5))),
