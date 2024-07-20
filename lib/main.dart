@@ -1,17 +1,37 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:emp_app/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(DevicePreview(
     enabled: true,
     builder: (context) => const MyApp(),
   ));
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("Handling a background message: ${message.messageId}");
 }
 
 class MyApp extends StatefulWidget {
@@ -23,7 +43,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  String deviceToken = "";
+  // String otpNo = "";
 
   @override
   void initState() {
@@ -36,6 +56,25 @@ class _MyAppState extends State<MyApp> {
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
+      }
+
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              '1',
+              'channel.name',
+              channelDescription: 'channel.description',
+              icon: android.smallIcon,
+            ),
+          ),
+        );
       }
     });
 
@@ -54,7 +93,6 @@ class _MyAppState extends State<MyApp> {
       if (message.notification != null) {
         print('Message title: ${message.notification!.title}');
         print('Message body: ${message.notification!.body}');
-        // Navigate to a different screen or update UI
       }
     });
   }
@@ -62,14 +100,18 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: ControllerBinding(),
+      debugShowCheckedModeBanner: false,
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: LoginNumber(
-        deviceToken: deviceToken,
-      ),
+      home: LoginNumber(),
+      // home: Dashboard1Screen(),
     );
   }
 }
