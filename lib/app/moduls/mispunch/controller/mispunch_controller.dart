@@ -16,7 +16,7 @@ class MispunchController extends GetxController {
   Dropdown_Glbl? selectedMonthYear;
   late List<MispunchTable> mispunchtable = [];
   RxInt MonthSel_selIndex = (-1).obs;
-  RxInt YearSel_selIndex = (-1).obs;
+  String YearSel_selIndex = "";
   var selectedYear = ''.obs;
   List<String> years = ['2023', '2024'];
 
@@ -32,16 +32,17 @@ class MispunchController extends GetxController {
     await getmonthyrempinfotable();
   }
 
-  void upd_YearSelIndex(int index) {
-    YearSel_selIndex.value = index;
-    selectedYear.value = years[index];
-    fetchDataIfReady();
+  void upd_YearSelIndex(String index) async {
+    YearSel_selIndex = index;
+    // selectedYear.value = years[index as int];
+    update();
+    await fetchDataIfReady();
   }
 
   // Check if both month and year are selected and fetch data
-  void fetchDataIfReady() {
-    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.value != -1) {
-      getmonthyrempinfotable();
+  Future fetchDataIfReady() async {
+    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
+      await getmonthyrempinfotable();
     }
   }
 
@@ -82,7 +83,7 @@ class MispunchController extends GetxController {
       // var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": selectedMonthYear!.value};
       loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
-      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex.value);
+      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
       mispunchtable = apiController.parseJson_Flag_Mispunch(empmonthyrtable, 'data');
@@ -97,12 +98,17 @@ class MispunchController extends GetxController {
     return [];
   }
 
-  String getMonthYearFromIndex(int index, int yearIndex) {
+  String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
+    if (year == '2024') {
+      year = '24';
+    } else {
+      year = '23';
+    }
 
-    if (index >= 0 && index < months.length && yearIndex >= 0 && yearIndex < years.length) {
-      return '${months[index]}${years[yearIndex]}'; // Format as 'Jan24'
+    if (index >= 0 && index < months.length && year.isNotEmpty && year != "") {
+      return '${months[index]}${year}'; // Format as 'Jan24'
     }
     return 'Select year and month';
   }

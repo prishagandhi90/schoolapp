@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 class CustomDropDown extends StatefulWidget {
   const CustomDropDown({super.key, required this.onPressed});
-  final Function(int) onPressed;
+  final Function(String) onPressed;
 
   @override
   State<CustomDropDown> createState() => CustomDropDownState();
@@ -13,68 +13,73 @@ class CustomDropDown extends StatefulWidget {
 
 class CustomDropDownState extends State<CustomDropDown> {
   String? selectedValue;
+  List<String> years = ['2023', '2024'];
+  String selValue = "";
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AttendenceController>(
-      builder: (controller) {
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton2<String>(
-              isExpanded: true,
-              hint: const Text(
-                'Select',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              // decoration: InputDecoration(
-              //               labelText: "label Text",
-              //               labelStyle: TextStyle(
-              //                   color: true
-              //                       ? Colors.black54
-              //                       : Theme.of(context).disabledColor),
-              //               contentPadding: EdgeInsets.all(16),
-              //               focusedBorder: OutlineInputBorder(
-              //                 borderSide:
-              //                     BorderSide(color: Theme.of(context).primaryColor),
-              //               ),
-              //               border: new OutlineInputBorder(
-              //                   borderSide: new BorderSide()),
-              //             ),
-              items: controller.years
-                  .map((String item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ))
-                  .toList(),
-              value: controller.selectedYear.value.isNotEmpty ? controller.selectedYear.value : null,
-              onChanged: (String? value) {
-                if (value != null) {
-                  controller.selectedYear.value = value;
-                  int yearIndex = controller.years.indexOf(value);
-                  controller.upd_YearSelIndex(yearIndex);
-                }
-              },
-              buttonStyleData: ButtonStyleData(
-                height: 50,
-                width: 140,
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                decoration: BoxDecoration(border: Border.all(color: Colors.black), color: Colors.white),
-              ),
-              menuItemStyleData: const MenuItemStyleData(
-                height: 40,
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2<String>(
+          isExpanded: true,
+          hint: const Text(
+            'Select',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-        );
-      },
+          // decoration: InputDecoration(
+          //               labelText: "label Text",
+          //               labelStyle: TextStyle(
+          //                   color: true
+          //                       ? Colors.black54
+          //                       : Theme.of(context).disabledColor),
+          //               contentPadding: EdgeInsets.all(16),
+          //               focusedBorder: OutlineInputBorder(
+          //                 borderSide:
+          //                     BorderSide(color: Theme.of(context).primaryColor),
+          //               ),
+          //               border: new OutlineInputBorder(
+          //                   borderSide: new BorderSide()),
+          //             ),
+          items: years
+              .map((String item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ))
+              .toList(),
+          // value: controller.selectedYear.value.isNotEmpty ? controller.selectedYear.value : null,
+          value: selValue.isNotEmpty ? selValue : null,
+          // onChanged: (String? value) {
+          //   if (value != null) {
+          //     controller.selectedYear.value = value;
+          //     int yearIndex = controller.years.indexOf(value);
+          //     controller.upd_YearSelIndex(yearIndex);
+          //   }
+          // },
+          onChanged: (String? value) {
+            widget.onPressed(value!);
+            setState(() {
+              selValue = value;
+            });
+          },
+          buttonStyleData: ButtonStyleData(
+            height: 50,
+            width: 140,
+            padding: const EdgeInsets.only(left: 14, right: 14),
+            decoration: BoxDecoration(border: Border.all(color: Colors.black), color: Colors.white),
+          ),
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+          ),
+        ),
+      ),
     );
   }
 }

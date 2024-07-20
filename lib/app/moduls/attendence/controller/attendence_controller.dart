@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
+import '../../../app_custom_widget/custom_containerview.dart';
+
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
   var bottomBarController = Get.put(BottomBarController());
@@ -22,7 +24,7 @@ class AttendenceController extends GetxController {
   Dropdown_Glbl? selectedMonthYear;
   final _storage = const FlutterSecureStorage();
   RxInt MonthSel_selIndex = (-1).obs;
-  RxInt YearSel_selIndex = (-1).obs;
+  String YearSel_selIndex = "";
   var selectedYear = ''.obs;
   List<String> years = ['2023', '2024'];
 
@@ -40,15 +42,23 @@ class AttendenceController extends GetxController {
     await getattendeceinfotable();
   }
 
-  void upd_YearSelIndex(int index) {
-    YearSel_selIndex.value = index;
-    selectedYear.value = years[index];
+  // void upd_YearSelIndex(int index) {
+  //   YearSel_selIndex.value = index;
+  //   selectedYear.value = years[index];
+  //   update();
+  //   fetchDataIfReady();
+  // }
+
+  void upd_YearSelIndex(String index) {
+    YearSel_selIndex = index;
+    // selectedYear.value = years[index];
+    update();
     fetchDataIfReady();
   }
 
   // Check if both month and year are selected and fetch data
   void fetchDataIfReady() {
-    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.value != -1) {
+    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       getattendeceprsnttable();
     }
   }
@@ -60,7 +70,7 @@ class AttendenceController extends GetxController {
       // var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": selectedMonthYear!.value};
       loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
-      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex.value);
+      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
       attendencetable = apiController.parseJson_Flag_attendence(empmonthyrtable, 'data');
@@ -81,7 +91,7 @@ class AttendenceController extends GetxController {
       String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
       loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
-      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex.value);
+      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
       attpresenttable = apiController.parseJson_Flag_attprsnt(empmonthyrtable, 'data');
@@ -102,12 +112,17 @@ class AttendenceController extends GetxController {
   //   }
   //   return 'Select year and month';
   // }
-  String getMonthYearFromIndex(int index, int yearIndex) {
+  String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
+    if (year == '2024') {
+      year = '24';
+    } else {
+      year = '23';
+    }
 
-    if (index >= 0 && index < months.length && yearIndex >= 0 && yearIndex < years.length) {
-      return '${months[index]}${years[yearIndex]}'; // Format as 'Jan24'
+    if (index >= 0 && index < months.length && year.isNotEmpty && year != "") {
+      return '${months[index]}${year}'; // Format as 'Jan24'
     }
     return 'Select year and month';
   }
@@ -230,17 +245,30 @@ class AttendenceController extends GetxController {
     }).toList();
   }
 
-  Future<void> detailbottomsheet(BuildContext context) async {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      isDismissible: true,
-      useSafeArea: true,
-      builder: (context) {
-        return Container();
-      },
-    );
-  }
+  // Future<void> detailbottomsheet(BuildContext context) async {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     isDismissible: true,
+  //     useSafeArea: true,
+  //     builder: (context) {
+  //       return Column(
+  //         children: [
+  //           ListView.builder(
+  //             itemCount: attendencetable.length,
+  //             shrinkWrap: true,
+  //             itemBuilder: (context, index) {
+  //               return Padding(
+  //                 padding: const EdgeInsets.all(8.0),
+  //                 child:
+  //               );
+  //             },
+  //           )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 class CustomWidthCell extends StatelessWidget {
