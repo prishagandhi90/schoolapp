@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
-import '../../../app_custom_widget/custom_containerview.dart';
 
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
@@ -31,15 +30,34 @@ class AttendenceController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getattendeceprsnttable();
-    getattendeceinfotable();
+    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
+      getattendeceprsnttable();
+      getattendeceinfotable();
+    }
   }
 
   void upd_MonthSelIndex(int index) async {
     MonthSel_selIndex.value = index;
     update();
-    await getattendeceprsnttable();
-    await getattendeceinfotable();
+    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
+      await getattendeceprsnttable();
+      await getattendeceinfotable();
+    }
+  }
+
+  void showHideMsg() {
+    String msg = "";
+    if (MonthSel_selIndex.value == -1 && YearSel_selIndex.isEmpty) {
+      msg = "Please select Month and Year!";
+    } else if (MonthSel_selIndex.value == -1 && YearSel_selIndex.isNotEmpty) {
+      msg = "Please select Month!";
+    } else if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isEmpty) {
+      msg = "Please select Year!";
+    }
+
+    if (msg.isNotEmpty) {
+      Get.rawSnackbar(message: msg);
+    }
   }
 
   // void upd_YearSelIndex(int index) {
@@ -49,17 +67,18 @@ class AttendenceController extends GetxController {
   //   fetchDataIfReady();
   // }
 
-  void upd_YearSelIndex(String index) {
+  void upd_YearSelIndex(String index) async {
     YearSel_selIndex = index;
     // selectedYear.value = years[index];
     update();
-    fetchDataIfReady();
+    await fetchDataIfReady();
   }
 
   // Check if both month and year are selected and fetch data
-  void fetchDataIfReady() {
+  Future fetchDataIfReady() async {
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
-      getattendeceprsnttable();
+      await getattendeceprsnttable();
+      await getattendeceinfotable();
     }
   }
 

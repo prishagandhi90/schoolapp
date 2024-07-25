@@ -16,6 +16,16 @@ class AttendanceScreen extends StatefulWidget {
 
 class AttendanceScreenState extends State<AttendanceScreen> {
   final AttendenceController attendenceController = Get.put(AttendenceController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      attendenceController.showHideMsg();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AttendenceController>(
@@ -31,6 +41,7 @@ class AttendanceScreenState extends State<AttendanceScreen> {
                 CustomDropDown(
                   onPressed: (index) {
                     controller.upd_YearSelIndex(index);
+                    attendenceController.showHideMsg();
                   },
                 )
               ],

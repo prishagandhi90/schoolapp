@@ -16,8 +16,10 @@ class SummaryScreen extends StatelessWidget {
         child: Column(
           children: [
             MonthSelectionScreen(
+              selectedMonthIndex: controller.MonthSel_selIndex.value,
               onPressed: (index) {
                 attendenceController.upd_MonthSelIndex(index);
+                attendenceController.showHideMsg();
               },
             ),
             controller.isLoading1.value

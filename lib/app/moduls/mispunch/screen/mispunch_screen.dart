@@ -39,6 +39,7 @@ class MispunchScreen extends StatelessWidget {
               child: Column(
                 children: [
                   MonthSelectionScreen(
+                    selectedMonthIndex: controller.MonthSel_selIndex.value,
                     onPressed: (index) {
                       controller.upd_MonthSelIndex(index);
                     },
