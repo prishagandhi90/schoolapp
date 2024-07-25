@@ -1,6 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
+import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -99,8 +100,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(NoInternetController());
     return GetMaterialApp(
-      initialBinding: ControllerBinding(),
+      initialBinding: NoInternetBinding(),
       debugShowCheckedModeBanner: false,
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),

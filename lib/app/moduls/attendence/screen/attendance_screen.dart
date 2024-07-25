@@ -19,7 +19,6 @@ class AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       attendenceController.showHideMsg();
@@ -36,7 +35,7 @@ class AttendanceScreenState extends State<AttendanceScreen> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               title: const Text('Attendance', style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700)),
-              centerTitle: true,
+              // centerTitle: true,
               actions: [
                 CustomDropDown(
                   onPressed: (index) {

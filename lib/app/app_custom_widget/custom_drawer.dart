@@ -154,6 +154,7 @@ class CustomDrawer extends StatelessWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: AppConst.listItems.length,
+                    physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return SizedBox(
                         height: 40,

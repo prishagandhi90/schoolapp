@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,12 +53,12 @@ class _MonthSelectionScreenState extends State<MonthSelectionScreen> {
                         ),
                         child: Text(
                           months[index],
-                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18,fontFamily: CommonFontStyle.plusJakartaSans,),
                         ),
                       )
                     : Text(
                         months[index],
-                        style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15),
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15,fontFamily: CommonFontStyle.plusJakartaSans,),
                       ),
               ),
             );

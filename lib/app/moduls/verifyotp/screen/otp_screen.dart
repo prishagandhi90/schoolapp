@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  // final LoginController loginController = Get.put(LoginController());
   final OtpController otpController = Get.put(OtpController());
   late Timer _timer;
   bool isButtonEnabled = false;
@@ -78,16 +78,13 @@ class _OtpScreenState extends State<OtpScreen> {
     if (otpController.counter > 0) {
       return Text(
         "Request otp in ${otpController.counter}",
-        style: const TextStyle(
-          fontSize: 15.0,
-          color: Colors.white,
-        ),
+        style: TextStyle(fontSize: 15.0, color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans),
       );
     } else {
       return InkWell(
-        child: const Text(
+        child: Text(
           'Resend',
-          style: TextStyle(fontSize: 15.0, color: Colors.white),
+          style: TextStyle(fontSize: 15.0, color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans),
         ),
         onTap: () {
           startTimer();
@@ -171,12 +168,15 @@ class _OtpScreenState extends State<OtpScreen> {
                   const SizedBox(height: 60),
                   Text(
                     'Enter OTP',
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.w800, color: Colors.white),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium!
+                        .copyWith(fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w800, color: Colors.white),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'We have sent you an OTP on +91 1234567890',
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(color: Colors.white, fontSize: 17, fontFamily: CommonFontStyle.plusJakartaSans),
                   ),
                   const SizedBox(height: 30),
                   Pinput(
@@ -235,7 +235,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                         child: otpController.isLoadingLogin
                             ? const CircularProgressIndicator()
-                            : const Text('Verify OTP', style: TextStyle(color: Colors.white))),
+                            : Text('Verify OTP', style: TextStyle(color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans))),
                   )
                 ],
               ),

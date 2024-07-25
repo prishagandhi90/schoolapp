@@ -7,7 +7,8 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
   final count = 0.obs;
-  PersistentTabController? persistentController = PersistentTabController(initialIndex: 0);
+  final Rx<int> selectedIndex = 2.obs;
+  PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
     persistentController = PersistentTabController(initialIndex: 0);
@@ -20,37 +21,37 @@ class BottomBarController extends GetxController {
     super.onClose();
   }
 
-  Widget buildBottomNavigationBar(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: persistentController,
-      screens: buildScreens(),
-      items: navBarsItems(),
-      // navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
-      backgroundColor: Colors.white,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: true,
-      // hideNavigationBarWhenKeyboardShows: true,
-      // decoration: NavBarDecoration(
-      //   boxShadow: [
-      //     BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 10.0),
-      //   ],
-      // ),
-      animationSettings: const NavBarAnimationSettings(
-        navBarItemAnimation: ItemAnimationSettings(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: ScreenTransitionAnimationSettings(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 100),
-        ),
-      ),
-      navBarStyle: NavBarStyle.style15,
-    );
-  }
+  // Widget buildBottomNavigationBar(BuildContext context) {
+  //   return PersistentTabView(
+  //     context,
+  //     controller: persistentController,
+  //     screens: buildScreens(),
+  //     items: navBarsItems(),
+  //     // navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
+  //     backgroundColor: Colors.white,
+  //     handleAndroidBackButtonPress: true,
+  //     resizeToAvoidBottomInset: true,
+  //     stateManagement: true,
+  //     // hideNavigationBarWhenKeyboardShows: true,
+  //     decoration: NavBarDecoration(
+  //       boxShadow: [
+  //         BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 10.0),
+  //       ],
+  //     ),
+  //     animationSettings: const NavBarAnimationSettings(
+  //       navBarItemAnimation: ItemAnimationSettings(
+  //         duration: Duration(milliseconds: 200),
+  //         curve: Curves.ease,
+  //       ),
+  //       screenTransitionAnimation: ScreenTransitionAnimationSettings(
+  //         animateTabTransition: true,
+  //         curve: Curves.ease,
+  //         duration: Duration(milliseconds: 100),
+  //       ),
+  //     ),
+  //     navBarStyle: NavBarStyle.style15,
+  //   );
+  // }
 
   List<Widget> buildScreens() {
     return [
@@ -62,38 +63,67 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  List<PersistentBottomNavBarItem> navBarsItems() {
+  Widget get currentScreen => buildScreens()[selectedIndex.value];
+
+  // List<PersistentBottomNavBarItem> navBarsItems() {
+  //   return [
+  //     PersistentBottomNavBarItem(
+  //       title: "Home",
+  //       icon: Image.asset('assets/image/home.png'),
+  //       inactiveIcon: Image.asset('assets/image/home.png'),
+  //       activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       title: "Attendence",
+  //       icon: Image.asset('assets/image/attendence.png'),
+  //       inactiveIcon: Image.asset('assets/image/attendence.png'),
+  //       activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       icon: Image.asset('assets/image/dashboard.png',),
+  //       title: "Dashboard",
+  //       activeColorPrimary: Colors.white,
+  //       inactiveColorPrimary: Colors.grey,
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       title: "Leave",
+  //       icon: Image.asset('assets/image/leave.png'),
+  //       inactiveIcon: Image.asset('assets/image/leave.png'),
+  //       activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       title: "Over Time",
+  //       icon: Image.asset('assets/image/overtime.png'),
+  //       inactiveIcon: Image.asset('assets/image/overtime.png'),
+  //       activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
+  //     ),
+  //   ];
+  // }
+  List<NavigationDestination> navBarsItems() {
     return [
-      PersistentBottomNavBarItem(
-        title: "Home",
-        icon: Image.asset('assets/image/home.png'),
-        // inactiveIcon: Image.asset('assets/image/home.png'),
-        activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
+      NavigationDestination(
+        icon: Image.asset('assets/image/home.png', width: 20.0),
+        label: "Home",
       ),
-      PersistentBottomNavBarItem(
-        title: "Attendence",
-        icon: Image.asset('assets/image/attendence.png'),
-        // inactiveIcon: Image.asset('assets/image/attendence.png'),
-        activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
+      NavigationDestination(
+        icon: Image.asset('assets/image/attendence.png', width: 20.0),
+        label: "Attendence",
       ),
-      PersistentBottomNavBarItem(
-        icon: Image.asset('assets/image/dashboard.png'),
-        title: "dashboard",
-        activeColorPrimary: Colors.blueAccent,
-        inactiveColorPrimary: Colors.grey,
+      NavigationDestination(
+          icon: Image.asset(
+            'assets/image/dashboard.png',
+            width: 20.0,
+            color: Colors.black,
+          ),
+          label: "Dashboard"),
+      NavigationDestination(
+        icon: Image.asset('assets/image/leave.png', width: 20.0),
+        label: "Leave",
       ),
-      PersistentBottomNavBarItem(
-        title: "Leave",
-        icon: Image.asset('assets/image/leave.png'),
-        inactiveIcon: Image.asset('assets/image/leave.png'),
-        activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
-      ),
-      PersistentBottomNavBarItem(
-        title: "Over Time",
-        icon: Image.asset('assets/image/overtime.png'),
-        inactiveIcon: Image.asset('assets/image/overtime.png'),
-        activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
-      ),
+      NavigationDestination(
+        icon: Image.asset('assets/image/overtime.png', width: 20.0),
+        label: "Over Time",
+      )
     ];
   }
 }

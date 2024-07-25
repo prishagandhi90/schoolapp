@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -50,7 +51,10 @@ class CustomDropDownState extends State<CustomDropDown> {
                     value: item,
                     child: Text(
                       item,
-                      style: const TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        fontSize: 13, //16
+                        fontFamily: CommonFontStyle.plusJakartaSans,
+                      ),
                     ),
                   ))
               .toList(),
@@ -73,7 +77,11 @@ class CustomDropDownState extends State<CustomDropDown> {
             height: 50,
             width: 140,
             padding: const EdgeInsets.only(left: 14, right: 14),
-            decoration: BoxDecoration(border: Border.all(color: Colors.black), color: Colors.white),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6.0),
+            ),
           ),
           menuItemStyleData: const MenuItemStyleData(
             height: 40,

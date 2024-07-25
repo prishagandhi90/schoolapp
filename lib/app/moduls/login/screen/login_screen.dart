@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +8,6 @@ class LoginNumber extends StatelessWidget {
   LoginNumber({super.key});
 
   final loginController = Get.put(LoginController());
-  
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,10 @@ class LoginNumber extends StatelessWidget {
                     const SizedBox(height: 60),
                     Text(
                       'Log In',
-                      style: Theme.of(context).textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.w800, color: Colors.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineLarge!
+                          .copyWith(fontWeight: FontWeight.w800, color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans),
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
@@ -44,17 +47,17 @@ class LoginNumber extends StatelessWidget {
                           return null;
                         },
                         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           filled: true,
-                          hintText: 'Enter Mobile Number',
-                          fillColor: Color.fromARGB(255, 228, 227, 227),
-                          enabledBorder: OutlineInputBorder(
+                          hintText: 'Enter Mobile Number', hintStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
+                          fillColor: const Color.fromARGB(255, 228, 227, 227),
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Color.fromARGB(255, 228, 227, 227)),
                           ),
                           // focusedBorder: OutlineInputBorder(
                           //   borderSide: BorderSide(color: Color.fromARGB(255, 228, 227, 227)),
                           // ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Color.fromARGB(255, 228, 227, 227)),
                           ),
                         )),
@@ -75,7 +78,9 @@ class LoginNumber extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color.fromARGB(255, 23, 53, 109),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                        child: loginController.isLoadingLogin ? const CircularProgressIndicator() : const Text('Login', style: TextStyle(color: Colors.white)),
+                        child: loginController.isLoadingLogin
+                            ? const CircularProgressIndicator()
+                            : Text('Login', style: TextStyle(color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans)),
                       ),
                     )
                   ],

@@ -264,30 +264,7 @@ class AttendenceController extends GetxController {
     }).toList();
   }
 
-  // Future<void> detailbottomsheet(BuildContext context) async {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     isScrollControlled: true,
-  //     isDismissible: true,
-  //     useSafeArea: true,
-  //     builder: (context) {
-  //       return Column(
-  //         children: [
-  //           ListView.builder(
-  //             itemCount: attendencetable.length,
-  //             shrinkWrap: true,
-  //             itemBuilder: (context, index) {
-  //               return Padding(
-  //                 padding: const EdgeInsets.all(8.0),
-  //                 child:
-  //               );
-  //             },
-  //           )
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  
 }
 
 class CustomWidthCell extends StatelessWidget {

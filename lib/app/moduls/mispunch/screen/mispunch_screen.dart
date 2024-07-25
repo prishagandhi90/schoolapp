@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
@@ -13,7 +14,6 @@ class MispunchScreen extends StatelessWidget {
   MispunchScreen({super.key});
 
   final MispunchController mispunchController = Get.put(MispunchController());
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MispunchController>(
@@ -22,9 +22,14 @@ class MispunchScreen extends StatelessWidget {
           length: 2,
           child: Scaffold(
             appBar: AppBar(
-              title: const Text(
-                'Mispunch Details',
-                style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w600, fontSize: 20),
+              title: Text(
+                'Mispunch',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 94, 157, 168),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18, //20
+                  fontFamily: CommonFontStyle.plusJakartaSans,
+                ),
               ),
               actions: [
                 CustomDropDown(
@@ -48,7 +53,7 @@ class MispunchScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: controller.isLoading.value
-                        ? const Padding(padding: EdgeInsets.symmetric(vertical: 100), child: Center(child: ProgressWithIcon()))
+                        ? const Center(child: ProgressWithIcon())
                         : controller.mispunchtable.isNotEmpty
                             ? ListView.builder(
                                 itemCount: controller.mispunchtable.length,
@@ -57,7 +62,7 @@ class MispunchScreen extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.15,
+                                      height: MediaQuery.of(context).size.height * 0.23,
                                       decoration:
                                           BoxDecoration(color: const Color.fromRGBO(211, 240, 243, 0.58), borderRadius: BorderRadius.circular(10)),
                                       child: Column(
@@ -83,17 +88,23 @@ class MispunchScreen extends StatelessWidget {
                                                   alignment: Alignment.centerLeft,
                                                   child: Text(
                                                     controller.mispunchtable[index].dt.toString(),
-                                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.w500, //20
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    ),
                                                   )),
                                             ),
                                           ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: [
-                                              CustomContainerview(text: 'TYPE', text1: controller.mispunchtable[index].misPunch.toString()),
-                                              CustomContainerview(text: 'PUNCH TIME', text1: controller.mispunchtable[index].punchTime.toString()),
-                                              CustomContainerview(text: 'SHIFT TIME', text1: controller.mispunchtable[index].shiftTime.toString()),
-                                            ],
+                                          Flexible(
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              children: [
+                                                CustomContainerview(text: 'TYPE', text1: controller.mispunchtable[index].misPunch.toString()),
+                                                CustomContainerview(text: 'PUNCH TIME', text1: controller.mispunchtable[index].punchTime.toString()),
+                                                CustomContainerview(text: 'SHIFT TIME', text1: controller.mispunchtable[index].shiftTime.toString()),
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),

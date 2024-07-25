@@ -1,31 +1,28 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:emp_app/app/moduls/internetconnection/view/nointernet_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class ConnectivityController extends GetxController {
-  final _connectionType = MConnectivityResult.none.obs;
-  final Connectivity _connectivity = Connectivity();
+class NoInternetController extends GetxController {
+  var connectionType = 0.obs;
+  final Connectivity connectivity = Connectivity();
   late StreamSubscription _streamSubscription;
-
-  MConnectivityResult get connectionType => _connectionType.value;
-
-  set connectionType(value) {
-    _connectionType.value = value;
-  }
+  bool isOpenInternetConnectionDialog = false;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    getConnectivityType();
-    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateState as void Function(List<ConnectivityResult> event)?);
+    await getConnectivityType();
+    _streamSubscription = connectivity.onConnectivityChanged.listen(_updateState);
   }
 
   Future<void> getConnectivityType() async {
     late ConnectivityResult connectivityResult;
     try {
-      connectivityResult = (await (_connectivity.checkConnectivity())) as ConnectivityResult;
+      connectivityResult = (await (connectivity.checkConnectivity()));
+      update();
     } on PlatformException catch (e) {
       if (kDebugMode) {
         print(e);
@@ -34,27 +31,73 @@ class ConnectivityController extends GetxController {
     return _updateState(connectivityResult);
   }
 
-  _updateState(ConnectivityResult result) {
-    switch (result) {
+  // Update State Function
+  _updateState(ConnectivityResult connectivityResult) {
+    switch (connectivityResult) {
+      // WIFI
       case ConnectivityResult.wifi:
-        connectionType = MConnectivityResult.wifi;
+        connectionType.value = ConnectivityResult.wifi.index;
+        checkAndCloseDialog();
+
+        print("ConnectivityResult.wifi : ${connectionType.value}");
+
         break;
       case ConnectivityResult.mobile:
-        connectionType = MConnectivityResult.mobile;
+        connectionType.value = ConnectivityResult.mobile.index;
+        checkAndCloseDialog();
+        print("ConnectivityResult.mobile : ${connectionType.value}");
+        break;
+      // Ethernet
+      case ConnectivityResult.ethernet:
+        connectionType.value = ConnectivityResult.ethernet.index;
+        checkAndCloseDialog();
+        print("ConnectivityResult.ethernet : ${connectionType.value}");
+
         break;
       case ConnectivityResult.none:
-        connectionType = MConnectivityResult.none;
+        connectionType.value = ConnectivityResult.none.index;
+        print("ConnectivityResult.none : ${connectionType.value}");
+        if (isOpenInternetConnectionDialog == false) {
+          isOpenInternetConnectionDialog = true;
+          update();
+          // Get.toNamed(Routes.);
+          Get.to(const NoInternetView());
+        }
+        break;
+      case ConnectivityResult.bluetooth:
+        connectionType.value = ConnectivityResult.bluetooth.index;
+        print("ConnectivityResult.bluetooth : ${connectionType.value}");
+        break;
+      case ConnectivityResult.vpn:
+        connectionType.value = ConnectivityResult.vpn.index;
+        print("ConnectivityResult.vpn : ${connectionType.value}");
+        break;
+
+      case ConnectivityResult.other:
+        connectionType.value = ConnectivityResult.other.index;
+        print("ConnectivityResult.other : ${connectionType.value}");
         break;
       default:
-        print('Failed to get connection type');
+        Get.rawSnackbar(message: "Failed to get connection type");
+        // Get.showSnackbar(const GetSnackBar(
+        //     title: 'Error', message: 'Failed to get connection type'));
         break;
     }
+    update();
   }
 
   @override
   void onClose() {
     _streamSubscription.cancel();
   }
-}
 
-enum MConnectivityResult { none, wifi, mobile }
+  void checkAndCloseDialog() {
+    if (isOpenInternetConnectionDialog) {
+      isOpenInternetConnectionDialog = false;
+      // Get.offAllNamed(Routes.SPLASH);
+      // Get.offAll(const SplashView());
+      update();
+      Get.back();
+    }
+  }
+}

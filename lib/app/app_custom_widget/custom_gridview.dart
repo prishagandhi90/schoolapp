@@ -1,4 +1,5 @@
 import 'package:emp_app/app/core/util/app_const.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,9 +42,9 @@ class _CustomGridviewState extends State<CustomGridview> {
       itemCount: AppConst.gridview.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 13,
-        mainAxisSpacing: 13,
-        childAspectRatio: 0.85,
+        crossAxisSpacing: 18, //13
+        mainAxisSpacing: 18,  //13
+        childAspectRatio: 1.30, //0.85
       ),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
@@ -89,13 +90,21 @@ class _CustomGridviewState extends State<CustomGridview> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset(gridview[index]['image'], height: 50, width: 50),
+            Image.asset(
+              gridview[index]['image'],
+              height: 35, //50
+              width: 35,  //50
+            ),
             Text(
               gridview[index]['label'],
-              style: const TextStyle(fontSize: 20.0, overflow: TextOverflow.ellipsis),
+              style: TextStyle(
+                fontSize: 15.0,
+                overflow: TextOverflow.ellipsis,
+                fontFamily: CommonFontStyle.plusJakartaSans,
+              ),
             ),
             const SizedBox(
-              height: 5,
+              height: 10, //5
             )
           ],
         ),

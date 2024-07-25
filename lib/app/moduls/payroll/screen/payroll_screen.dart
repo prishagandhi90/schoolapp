@@ -1,4 +1,5 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
@@ -60,7 +61,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                           color: Color.fromARGB(255, 192, 191, 191),
                         ),
                         hintText: 'Search...',
-                        hintStyle: const TextStyle(color: Color.fromARGB(255, 192, 191, 191)),
+                        hintStyle: TextStyle(
+                          color: const Color.fromARGB(255, 192, 191, 191),
+                          fontFamily: CommonFontStyle.plusJakartaSans,
+                        ),
                         filled: true,
                         focusColor: Colors.grey,
                         fillColor: Colors.white,
@@ -86,7 +90,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                           ),
                           title: Text(
                             AppConst.payrollgrid[index]['label'],
-                            style: const TextStyle(fontSize: 16.0),
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: CommonFontStyle.plusJakartaSans,
+                            ),
                           ),
                           trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
                         ),
@@ -96,7 +103,14 @@ class _PayrollScreenState extends State<PayrollScreen> {
                 ],
               )),
           appBar: AppBar(
-            title: const Text('PAYROLL', style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700)),
+            title: Text(
+              'PAYROLL',
+              style: TextStyle(
+                color: const Color.fromARGB(255, 94, 157, 168),
+                fontWeight: FontWeight.w700,
+                fontFamily: CommonFontStyle.plusJakartaSans,
+              ),
+            ),
             actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))],
             // leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios)),
             centerTitle: true,
@@ -115,7 +129,6 @@ class _PayrollScreenState extends State<PayrollScreen> {
                               padding: const EdgeInsets.all(20),
                               width: double.infinity,
                               decoration: BoxDecoration(
-                                boxShadow: const [],
                                 borderRadius: BorderRadius.circular(30),
                                 gradient: LinearGradient(
                                   begin: Alignment.topRight,
@@ -129,18 +142,26 @@ class _PayrollScreenState extends State<PayrollScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Padding(
+                                  Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 10),
                                     child: Text(
                                       "Today's Overview",
-                                      style: TextStyle(fontSize: 18, color: Color.fromARGB(255, 80, 74, 74)),
+                                      style: TextStyle(
+                                        fontSize: 16, //18
+                                        color: const Color.fromARGB(255, 80, 74, 74),
+                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10),
                                     child: Text(
                                       controller.formattedDate,
-                                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                                      style: TextStyle(
+                                        fontSize: 17, //20
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
                                     ),
                                   ),
                                   Padding(
@@ -151,9 +172,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         boxShadow: const [
                                           BoxShadow(
                                               color: Colors.grey,
-                                              blurRadius: 5.0, // soften the shadow
-                                              spreadRadius: 3.0, //extend the shadow
-                                              offset: Offset(4.0, 4.0))
+                                              blurRadius: 2.0, // soften the shadow
+                                              spreadRadius: 1.0, //extend the shadow
+                                              offset: Offset(3.0, 3.0))
                                         ],
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(20),
@@ -164,12 +185,27 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         children: [
                                           Column(
                                             children: [
-                                              const Text('Clock In', style: TextStyle(fontSize: 18)),
+                                              Text('Clock In',
+                                                  style: TextStyle(
+                                                    fontSize: 16, //18
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  )),
                                               if (controller.payrolltable.isNotEmpty)
-                                                Text(controller.payrolltable[0].inPunchTime.toString(),
-                                                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600))
+                                                Text(
+                                                  controller.payrolltable[0].inPunchTime.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16, //25
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                )
                                               else
-                                                const Text('--:-- ', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+                                                Text('--:-- ',
+                                                    style: TextStyle(
+                                                      fontSize: 16, //25
+                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    )),
                                               Container(
                                                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                 decoration: BoxDecoration(
@@ -180,7 +216,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                                     controller.payrolltable.isNotEmpty && controller.payrolltable[0].inPunchTime.toString().isNotEmpty
                                                         ? Text(
                                                             'Done at ${controller.payrolltable[0].inPunchTime}',
-                                                            style: const TextStyle(fontSize: 12),
+                                                            style: TextStyle(
+                                                              fontSize: 10, //12
+                                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                                            ),
                                                           )
                                                         : const Text('Not Yet'),
                                               )
@@ -188,12 +227,25 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                           ),
                                           Column(
                                             children: [
-                                              const Text('Clock Out', style: TextStyle(fontSize: 18)),
+                                              Text('Clock Out',
+                                                  style: TextStyle(
+                                                    fontSize: 16, //18
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  )),
                                               if (controller.payrolltable.isNotEmpty)
                                                 Text(controller.payrolltable[0].outPunchTime.toString(),
-                                                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600))
+                                                    style: TextStyle(
+                                                      fontSize: 16, //25
+                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    ))
                                               else
-                                                const Text('--:-- ', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+                                                Text('--:-- ',
+                                                    style: TextStyle(
+                                                      fontSize: 16, //16
+                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    )),
                                               Container(
                                                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                 decoration: BoxDecoration(
@@ -204,7 +256,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                                         controller.payrolltable[0].outPunchTime.toString().isNotEmpty
                                                     ? Text(
                                                         'Done at ${controller.payrolltable[0].outPunchTime}',
-                                                        style: const TextStyle(fontSize: 12),
+                                                        style: TextStyle(
+                                                          fontSize: 10, //12
+                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        ),
                                                       )
                                                     : const Text('Not Yet'),
                                               )
@@ -223,11 +278,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                           borderRadius: BorderRadius.circular(20),
                                           boxShadow: const [
                                             BoxShadow(
-                                              color: Colors.grey,
-                                              blurRadius: 5.0, // soften the shadow
-                                              spreadRadius: 3.0, //extend the shadow
-                                              offset: Offset(4.0, 4.0),
-                                            )
+                                                color: Colors.grey,
+                                                blurRadius: 2.0, // soften the shadow
+                                                spreadRadius: 1.0, //extend the shadow
+                                                offset: Offset(3.0, 3.0))
                                           ],
                                           border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
                                         ),
@@ -236,15 +290,28 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text(
+                                              Text(
                                                 'LC/EG MIN',
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                                                style: TextStyle(
+                                                  fontSize: 14, //18
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
                                               ),
                                               if (controller.payrolltable.isNotEmpty)
                                                 Text(controller.payrolltable[0].totLCEGMin.toString(),
-                                                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
+                                                    style: TextStyle(
+                                                      fontSize: 16, //22
+                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    ))
                                               else
-                                                const Text('-- ', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+                                                Text('-- ',
+                                                    style: TextStyle(
+                                                      fontSize: 16, //25
+                                                      fontWeight: FontWeight.w600,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    )),
                                               // Text(''), //controller.payrolltable[0].totLCEGMin.toString())
                                             ],
                                           ),
@@ -259,13 +326,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         borderRadius: BorderRadius.circular(20),
                                         boxShadow: const [
                                           BoxShadow(
-                                            color: Colors.grey,
-                                            blurRadius: 5.0, // soften the shadow
-                                            spreadRadius: 3.0, //extend the shadow
-                                            offset: Offset(
-                                                4.0, // Move to right 5  horizontally
-                                                4.0),
-                                          )
+                                              color: Colors.grey,
+                                              blurRadius: 2.0, // soften the shadow
+                                              spreadRadius: 1.0, //extend the shadow
+                                              offset: Offset(3.0, 3.0))
                                         ],
                                         border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
                                       ),
@@ -274,12 +338,26 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const Text('LC/EG CNT', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                                            Text('LC/EG CNT',
+                                                style: TextStyle(
+                                                  fontSize: 14, //18
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                )),
                                             if (controller.payrolltable.isNotEmpty)
                                               Text(controller.payrolltable[0].cnt.toString(),
-                                                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600))
+                                                  style: TextStyle(
+                                                    fontSize: 16, //22
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ))
                                             else
-                                              const Text('--', style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)),
+                                              Text('--',
+                                                  style: TextStyle(
+                                                    fontSize: 16, //25
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  )),
                                           ],
                                         ),
                                       ),
@@ -287,149 +365,154 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                   ),
                                 ],
                               )),
-                          // ListView.builder(
-                          //   itemCount: AppConst.payrolllist.length,
-                          //   shrinkWrap: true,
-                          //   itemBuilder: (context, index) {
-                          //     return Row(
-                          //       children: [
-                          //         Column(
-                          //           mainAxisSize: MainAxisSize.min,
-                          //           children: [
-                          //             GestureDetector(
-                          //               onTap: () => Get.to(const AttendanceScreen()),
-                          //               child: Container(
-                          //                 height: MediaQuery.of(context).size.height * 0.07,
-                          //                 width: MediaQuery.of(context).size.width * 0.17,
-                          //                 margin: const EdgeInsets.only(top: 15, left: 10),
-                          //                 decoration: BoxDecoration(
-                          //                     border: Border.all(
-                          //                       color: const Color.fromARGB(255, 94, 157, 168),
-                          //                     ),
-                          //                     borderRadius: BorderRadius.circular(10)),
-                          //                 child: Image.asset(
-                          //                   AppConst.payrolllist[index]['image'],
-                          //                   height: 50,
-                          //                   width: 50,
-                          //                   color: const Color.fromARGB(255, 94, 157, 168),
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //             Text(AppConst.payrolllist[index]['label']),
-                          //           ],
-                          //         ),
-                          //       ],
-                          //     );
-                          //   },
-                          // )
+                        
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => Get.to(const AttendanceScreen()),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.07,
-                                      width: MediaQuery.of(context).size.width * 0.17,
-                                      margin: const EdgeInsets.only(top: 15, left: 10),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromARGB(255, 94, 157, 168),
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        'assets/image/attendence.png',
-                                        height: 50,
-                                        width: 50,
-                                        color: const Color.fromARGB(255, 94, 157, 168),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Get.to(const AttendanceScreen()),
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                        width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                        margin: const EdgeInsets.only(
+                                          top: 15,
+                                          left: 10,
+                                        ),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color.fromARGB(255, 94, 157, 168),
+                                            ),
+                                            borderRadius: BorderRadius.circular(10)),
+                                        child: Image.asset(
+                                          'assets/image/attendence.png',
+                                          // height: 35.0, //50
+                                          // width: 35.0, //50
+                                          color: const Color.fromARGB(255, 94, 157, 168),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Text('Attendence'),
-                                ],
+                                    Text(
+                                      'Attendence',
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => Get.to(MispunchScreen()),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.07,
-                                      width: MediaQuery.of(context).size.width * 0.17,
-                                      margin: const EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromARGB(255, 94, 157, 168),
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        'assets/image/mispunch.png',
-                                        height: 50,
-                                        width: 50,
-                                        color: const Color.fromARGB(255, 94, 157, 168),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Get.to(MispunchScreen()),
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                        width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                        margin: const EdgeInsets.only(top: 15),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color.fromARGB(255, 94, 157, 168),
+                                            ),
+                                            borderRadius: BorderRadius.circular(10)),
+                                        child: Image.asset(
+                                          'assets/image/mispunch.png',
+                                          // height: 35, //50
+                                          // width: 35, //50
+                                          color: const Color.fromARGB(255, 94, 157, 168),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Text('Mispunch Info'),
-                                ],
+                                    Text(
+                                      'Mispunch Info',
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => Get.to(MispunchScreen()),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.07,
-                                      width: MediaQuery.of(context).size.width * 0.17,
-                                      margin: const EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromARGB(255, 94, 157, 168),
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        'assets/image/leave.png',
-                                        height: 50,
-                                        width: 50,
-                                        color: const Color.fromARGB(255, 94, 157, 168),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Get.to(MispunchScreen()),
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                        width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                        margin: const EdgeInsets.only(top: 15),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color.fromARGB(255, 94, 157, 168),
+                                            ),
+                                            borderRadius: BorderRadius.circular(10)),
+                                        child: Image.asset(
+                                          'assets/image/leave.png',
+                                          // height: 35, //50
+                                          // width: 35, //50
+                                          color: const Color.fromARGB(255, 94, 157, 168),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Text('Leave Entry'),
-                                ],
+                                    Text(
+                                      'Leave Entry',
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                              Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => Get.to(MispunchScreen()),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.07,
-                                      width: MediaQuery.of(context).size.width * 0.17,
-                                      margin: const EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: const Color.fromARGB(255, 94, 157, 168),
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        'assets/image/overtime.png',
-                                        height: 50,
-                                        width: 50,
-                                        color: const Color.fromARGB(255, 94, 157, 168),
+                              const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () => Get.to(MispunchScreen()),
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                        width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                        margin: const EdgeInsets.only(top: 15),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color.fromARGB(255, 94, 157, 168),
+                                            ),
+                                            borderRadius: BorderRadius.circular(10)),
+                                        child: Image.asset(
+                                          'assets/image/overtime.png',
+                                          // height: 35, //50
+                                          // width: 35, //50
+                                          color: const Color.fromARGB(255, 94, 157, 168),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const Text('Over Time'),
-                                ],
+                                    Text(
+                                      'Over Time',
+                                      style: TextStyle(
+                                        fontSize: 12.0,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           )
                         ],
                       ),
               )),
-          // bottomNavigationBar: CustomBottomBar(),
+          // bottomNavigationBar: BottomBarView(),
         );
       },
     );

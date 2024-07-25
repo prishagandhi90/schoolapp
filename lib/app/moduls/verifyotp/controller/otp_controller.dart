@@ -1,15 +1,16 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 class OtpController extends GetxController {
-  // final GlobalKey<FormState> oTPFormKey = GlobalKey<FormState>();
+  final BottomBarController barController = Get.put(BottomBarController());
   final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   final _storage = const FlutterSecureStorage();
@@ -72,8 +73,6 @@ class OtpController extends GetxController {
   }
 
   Future otpOnClk(BuildContext context, String otpNo, String deviceToken) async {
-    // if (isLoggingIn) return;
-    // isLoggingIn = true;
     isLoadingLogin = true;
     update();
     try {
@@ -82,10 +81,6 @@ class OtpController extends GetxController {
           print('OTP Controller: ${otpController.text}');
           print('OTP: ${otpNo}');
           Get.snackbar('OTP is incorrect!', 'Please enter correct OTP!', colorText: Colors.white, backgroundColor: Colors.black);
-          // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          //   content: Text('OTP is incorrect!'),
-          // ));
-          // isLoggingIn = false;
           return false;
         }
         formKey.currentState!.save();
@@ -93,7 +88,6 @@ class OtpController extends GetxController {
         isLoadingLogin = true;
         update();
         isValidLogin = await otp(otpNo, context, deviceToken);
-
         update();
         if (isValidLogin == "true") {
           otpController.text = "";
@@ -101,7 +95,7 @@ class OtpController extends GetxController {
           // Get.to(const HomeScreen());
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Dashboard1Screen()),
+            MaterialPageRoute(builder: (context) => BottomBarView()),
           );
         } else {
           Get.snackbar('OTP incorrect!', '', colorText: Colors.white, backgroundColor: Colors.black);
@@ -109,7 +103,6 @@ class OtpController extends GetxController {
       } else {
         Get.snackbar('Please enter the proper Mobile/OTP!', '', colorText: Colors.white, backgroundColor: Colors.black);
       }
-      // isLoggingIn = false;
     } catch (e) {
       print(e);
     } finally {

@@ -1,8 +1,6 @@
 import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
-import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,18 +57,13 @@ class DashboardController extends GetxController {
     }
   }
 
-  void getSelectedWidget(int index) {
-    switch (index) {
-      case 0:
-        Get.to(const PayrollScreen());
-      case 1:
-        Get.to(const AttendanceScreen());
-      case 2:
-        Get.to(const PayrollScreen());
-      case 3:
-        Get.to(Dashboard1Screen());
-    }
+  void navigateToScreen(BuildContext context, Widget screen) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => screen),
+    );
   }
+
+ 
 
   Future<dynamic> getProfileData() async {
     try {
