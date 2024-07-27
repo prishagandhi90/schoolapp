@@ -17,6 +17,7 @@ class DetailsScreen extends StatelessWidget {
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
+          backgroundColor: Colors.white,
             body: SingleChildScrollView(
           child: Column(
             children: [

@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
-
-import 'package:emp_app/app/app_custom_widget/common_elevated_button.dart';
 import 'package:emp_app/app/core/constant/asset_constant.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/const_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -118,11 +117,11 @@ class CustomDrawer extends StatelessWidget {
                           color: const Color.fromARGB(255, 94, 157, 168),
                         ),
                         gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
+                          begin: Alignment.centerRight,
+                          end: Alignment.centerLeft,
                           colors: [
-                            const Color.fromRGBO(119, 229, 17, 0.37).withOpacity(0.2),
-                            const Color.fromRGBO(7, 164, 178, 0.582).withOpacity(0.2),
+                            const Color.fromARGB(192, 198, 238, 243).withOpacity(0.3),
+                            const Color.fromARGB(162, 94, 157, 168).withOpacity(0.4),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(40),
@@ -154,20 +153,23 @@ class CustomDrawer extends StatelessWidget {
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: AppConst.listItems.length,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return SizedBox(
-                        height: 40,
-                        child: ListTile(
-                          // contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                          leading: Image.asset(
-                            AppConst.listItems[index]['image'],
-                            height: 25,
-                            width: 25,
-                          ),
-                          title: Text(
-                            AppConst.listItems[index]['label'],
-                            style: const TextStyle(fontSize: 16.0),
+                      return GestureDetector(
+                        onTap: () => dashboardController.gridOnClk(index, context),
+                        child: SizedBox(
+                          height: 40,
+                          child: ListTile(
+                            leading: Image.asset(
+                              AppConst.listItems[index]['image'],
+                              color: AppColor.primaryColor,
+                              height: 25,
+                              width: 25,
+                            ),
+                            title: Text(
+                              AppConst.listItems[index]['label'],
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
                           ),
                         ),
                       );
@@ -387,15 +389,17 @@ class CustomDrawer extends StatelessWidget {
                     height: Sizes.crossLength * 0.010,
                   ),
                   SizedBox(
-                    width: 120,
-                    height: 40,
-                    child: AppButton(
-                      radius: 50,
-                      isDelete: true,
-                      text: 'Logout',
-                      onPressed: () {},
-                    ),
-                  ),
+                      width: 120,
+                      height: 40,
+                      child: ElevatedButton(
+                          style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color.fromARGB(204, 244, 67, 54))),
+                          onPressed: () {
+                            otpController.showLogoutDialog(context);
+                          },
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.white),
+                          ))),
                   const SizedBox(
                     height: 20,
                   ),
@@ -403,9 +407,6 @@ class CustomDrawer extends StatelessWidget {
                     'assets/sidemenulogo.png',
                     scale: 2.5,
                   ),
-                  // SizedBox(
-                  //   height: Sizes.crossLength * 0.010,
-                  // ),
                   const SizedBox(
                     height: 20,
                   )

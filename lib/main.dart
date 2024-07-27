@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
@@ -10,9 +11,11 @@ import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+RxBool hideBottomBar = false.obs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(BottomBarController());
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -109,7 +112,7 @@ class _MyAppState extends State<MyApp> {
       builder: DevicePreview.appBuilder,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
       home: LoginNumber(),

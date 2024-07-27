@@ -1,19 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
-import 'dart:io';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/model/dropdown_G_model.dart';
-import 'package:emp_app/app/core/service/local_pref.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:device_marketing_names/device_marketing_names.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart' as diopackage;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
-  List<Dropdown_Glbl> dropdown_G = [];
+  // List<Dropdown_Glbl> dropdown_G = [];
   List<Dropdown_Glbl> userNameList = [];
   List<Dropdown_Glbl> companyList = [];
   List<Dropdown_Glbl> yearList = [];
@@ -68,7 +62,7 @@ class LoginController extends GetxController {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to request OTP')),
+            SnackBar(content: Text(AppString.failedtorequestotp)),
           );
         }
       }

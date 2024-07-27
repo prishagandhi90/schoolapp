@@ -1,14 +1,15 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class PayrollScreen extends StatefulWidget {
   const PayrollScreen({super.key});
@@ -35,6 +36,11 @@ class _PayrollScreenState extends State<PayrollScreen> {
       init: PayrollController(),
       builder: (controller) {
         return Scaffold(
+          onDrawerChanged: (isop) {
+            var bottomBarController = Get.put(BottomBarController());
+            hideBottomBar.value = isop;
+            bottomBarController.update();
+          },
           drawer: Drawer(
               backgroundColor: Colors.white,
               child: ListView(
@@ -131,11 +137,11 @@ class _PayrollScreenState extends State<PayrollScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                                 gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
+                                  begin: Alignment.centerRight,
+                                  end: Alignment.centerLeft,
                                   colors: [
-                                    const Color.fromRGBO(119, 229, 17, 0.37).withOpacity(0.2),
-                                    const Color.fromRGBO(7, 164, 178, 0.582).withOpacity(0.2),
+                                    const Color.fromARGB(192, 198, 238, 243).withOpacity(0.3),
+                                    const Color.fromARGB(162, 94, 157, 168).withOpacity(0.4),
                                   ],
                                 ),
                               ),
@@ -143,7 +149,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10),
                                     child: Text(
                                       "Today's Overview",
                                       style: TextStyle(
@@ -365,7 +371,6 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                   ),
                                 ],
                               )),
-                        
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -373,7 +378,17 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.to(const AttendanceScreen()),
+                                      onTap: () {
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: const AttendanceScreen(),
+                                          withNavBar: true,
+                                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                        ).then((value) {
+                                          hideBottomBar.value = false;
+                                          // controller.getDashboardData();
+                                        });
+                                      }, //Get.to(const AttendanceScreen()),
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -410,7 +425,17 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.to(MispunchScreen()),
+                                      onTap: () {
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: MispunchScreen(),
+                                          withNavBar: true,
+                                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                        ).then((value) {
+                                          hideBottomBar.value = false;
+                                          // controller.getDashboardData();
+                                        });
+                                      }, //Get.to(MispunchScreen()),
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17

@@ -1,9 +1,9 @@
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
 import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,10 +32,22 @@ class AttendanceScreenState extends State<AttendanceScreen> {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
+            onDrawerChanged: (isop) {
+              var bottomBarController = Get.put(BottomBarController());
+              hideBottomBar.value = isop;
+              bottomBarController.update();
+            },
             backgroundColor: Colors.white,
             appBar: AppBar(
-              title: const Text('Attendance', style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700)),
-              // centerTitle: true,
+              backgroundColor: Colors.white,
+              title: const Text(
+                'Attendance',
+                style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700),
+              ),
+              centerTitle: true,
+              // leading: IconButton(onPressed: () {
+              //   Get.back();
+              // }, icon: const Icon(Icons.arrow_back)),
               actions: [
                 CustomDropDown(
                   onPressed: (index) {

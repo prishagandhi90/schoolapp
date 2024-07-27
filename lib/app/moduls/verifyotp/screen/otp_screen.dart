@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -75,23 +81,28 @@ class _OtpScreenState extends State<OtpScreen> {
   // }
 
   Widget textWidgetInfo() {
-    if (otpController.counter > 0) {
-      return Text(
-        "Request otp in ${otpController.counter}",
-        style: TextStyle(fontSize: 15.0, color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans),
-      );
-    } else {
-      return InkWell(
-        child: Text(
-          'Resend',
-          style: TextStyle(fontSize: 15.0, color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans),
-        ),
-        onTap: () {
-          startTimer();
-          // resendM();
-        },
-      );
-    }
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(fontSize: 15.0, color: AppColor.black, fontFamily: CommonFontStyle.plusJakartaSans),
+        children: [
+          TextSpan(text: AppString.requestnewotp),
+          otpController.counter > 0
+              ? TextSpan(
+                  text: '${otpController.counter}',
+                  style: TextStyle(color: AppColor.red, fontFamily: CommonFontStyle.plusJakartaSans),
+                )
+              : TextSpan(
+                  text: AppString.resend,
+                  style: TextStyle(color: AppColor.primaryColor, fontFamily: CommonFontStyle.plusJakartaSans),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      startTimer();
+                      // resendM();
+                    },
+                ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -132,115 +143,153 @@ class _OtpScreenState extends State<OtpScreen> {
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${widget.otpNo}', '', colorText: Colors.white, backgroundColor: Colors.black);
+      Get.snackbar('RespOTP: ${widget.otpNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('RespOTP: ${widget.otpNo}')));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    const borderColor = Color.fromRGBO(239, 240, 240, 1);
+    const borderColor = Color.fromARGB(255, 94, 157, 168);
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: const TextStyle(
+      textStyle: TextStyle(
         fontSize: 22,
-        color: Color.fromRGBO(30, 60, 87, 1),
+        color: AppColor.primaryColor,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: borderColor),
       ),
     );
-    return Scaffold(
-      backgroundColor: const Color(0xFF74c3c7),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
-          child: SingleChildScrollView(
-            child: Form(
-              key: otpController.formKey,
-              child: Column(
-                children: [
-                  Align(
-                      alignment: AlignmentDirectional.center,
-                      child: Image.asset('assets/output-onlinepngtools.png', width: MediaQuery.of(context).size.width * 0.8)),
-                  const SizedBox(height: 60),
-                  Text(
-                    'Enter OTP',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium!
-                        .copyWith(fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w800, color: Colors.white),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'We have sent you an OTP on +91 1234567890',
-                    style: TextStyle(color: Colors.white, fontSize: 17, fontFamily: CommonFontStyle.plusJakartaSans),
-                  ),
-                  const SizedBox(height: 30),
-                  Pinput(
-                    controller: otpController.isLoadingLogin ? null : otpController.otpController,
-                    showCursor: true,
-                    length: 6,
-                    keyboardType: TextInputType.number,
-                    defaultPinTheme: defaultPinTheme,
-                    separatorBuilder: (index) => const SizedBox(width: 8),
-                    // validator: (value) {
-                    //   if (Get.find<LoginController>().apiController['isValid']) {
-                    //     return null;
-                    //   } else {
-                    //     return 'Pin is incorrect';
-                    //   }
-                    // },
-                    onCompleted: (pin) async {
-                      print('onCompOTP: ${widget.otpNo}');
-                      otpController.isLoadingLogin ? null : await otpController.otpOnClk(context, widget.otpNo, deviceTok);
-                    },
-                    onChanged: (value) {},
-                    // submittedPinTheme: defaultPinTheme.copyWith(
-                    //   decoration: defaultPinTheme.decoration!.copyWith(
-                    //     color: fillColor,
-                    //     borderRadius: BorderRadius.circular(19),
-                    //     border: Border.all(color: focusedBorderColor),
-                    //   ),
-                    // ),
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    alignment: AlignmentDirectional.centerStart,
-                    margin: const EdgeInsets.all(15.0),
-                    child: textWidgetInfo(),
-                  ),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.11,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: ElevatedButton(
-                        onPressed: otpController.isLoadingLogin
-                            ? null
-                            : () async {
-                                if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
-                                  Get.snackbar('Error', 'Please enter valid OTP', colorText: Colors.white, backgroundColor: Colors.black);
-                                } else {
-                                  // await loginController.otpOnClk(context, loginController.otpController.text, widget.deviceToken);
-                                  await otpController.otpOnClk(context, widget.otpNo, widget.deviceToken);
-                                }
-                              },
-                        // loginController.otpOnClk(context, widget.otpNo, deviceTok);
 
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 23, 53, 109),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    return Scaffold(
+      backgroundColor: AppColor.backgroundcolor,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Form(
+                          key: otpController.formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                              Text(
+                                AppString.verifyyiurnumber,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 22,
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                ),
+                              ),
+                              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                              Text(
+                                "Please enter the 6 digit code we set to \n+919318****07",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                ),
+                              ),
+                              const SizedBox(height: 50),
+                              Pinput(
+                                controller: otpController.isLoadingLogin ? null : otpController.otpController,
+                                showCursor: true,
+                                length: 6,
+                                keyboardType: TextInputType.number,
+                                defaultPinTheme: defaultPinTheme,
+                                separatorBuilder: (index) => const SizedBox(width: 8),
+                                onCompleted: (pin) async {
+                                  print('onCompOTP: ${widget.otpNo}');
+                                  otpController.isLoadingLogin ? null : await otpController.otpOnClk(context, widget.otpNo, deviceTok);
+
+                                  // PersistentNavBarNavigator.pushNewScreen(
+                                  //   context,
+                                  //   screen: Dashboard1Screen(),
+                                  //   withNavBar: true,
+                                  //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  // ).then((value) {
+                                  //   // hideBottomBar.value = false;
+                                  //   // controller.getDashboardData();
+                                  // });
+                                },
+                                onChanged: (value) {},
+                              ),
+                              const SizedBox(height: 20),
+                              Container(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: textWidgetInfo(),
+                              ),
+                              const SizedBox(height: 50),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.width * 0.11,
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: otpController.isLoadingLogin
+                                      ? null
+                                      : () async {
+                                          if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
+                                            Get.snackbar(AppString.error, AppString.plzentervalidotp,
+                                                colorText: AppColor.white, backgroundColor: AppColor.black);
+                                          } else {
+                                            await otpController.otpOnClk(context, widget.otpNo, widget.deviceToken);
+
+                                            // PersistentNavBarNavigator.pushNewScreen(
+                                            //   context,
+                                            //   screen: Dashboard1Screen(),
+                                            //   withNavBar: true,
+                                            //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            // ).then((value) {
+                                            //   // hideBottomBar.value = false;
+                                            //   // controller.getDashboardData();
+                                            // });
+                                          }
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.lightgreen,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: otpController.isLoadingLogin
+                                      ? const CircularProgressIndicator()
+                                      : Text(
+                                          AppString.verify,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: AppColor.black,
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: otpController.isLoadingLogin
-                            ? const CircularProgressIndicator()
-                            : Text('Verify OTP', style: TextStyle(color: Colors.white, fontFamily: CommonFontStyle.plusJakartaSans))),
-                  )
-                ],
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Image.asset(
+                            AppImage.logo,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

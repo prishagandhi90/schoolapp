@@ -1,7 +1,4 @@
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
@@ -16,6 +13,7 @@ class MispunchScreen extends StatelessWidget {
   final MispunchController mispunchController = Get.put(MispunchController());
   @override
   Widget build(BuildContext context) {
+ 
     return GetBuilder<MispunchController>(
       builder: (controller) {
         return DefaultTabController(
@@ -25,12 +23,13 @@ class MispunchScreen extends StatelessWidget {
               title: Text(
                 'Mispunch',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 94, 157, 168),
+                  color: const Color.fromARGB(255, 94, 157, 168),
                   fontWeight: FontWeight.w600,
                   fontSize: 18, //20
                   fontFamily: CommonFontStyle.plusJakartaSans,
                 ),
               ),
+              centerTitle: true,
               actions: [
                 CustomDropDown(
                   onPressed: (index) {

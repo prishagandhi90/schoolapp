@@ -1,36 +1,42 @@
 import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/app_custom_widget/custom_gridview.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Dashboard1Screen extends StatelessWidget {
+class Dashboard1Screen extends GetView<DashboardController> {
   Dashboard1Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        drawer: CustomDrawer(),
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            'VENUS HOSPITAL',
-            style: TextStyle(
-              color: const Color.fromARGB(255, 94, 157, 168),
-              fontWeight: FontWeight.w700,
-              fontFamily: CommonFontStyle.plusJakartaSans,
+    Get.put(DashboardController());
+    return GetBuilder<DashboardController>(builder: (controller) {
+      return SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: AppColor.white,
+          drawer: CustomDrawer(),
+          appBar: AppBar(
+            backgroundColor: AppColor.white,
+            title: Text(
+              'VENUS HOSPITAL',
+              style: TextStyle(
+                color: AppColor.primaryColor,
+                fontWeight: FontWeight.w700,
+                fontFamily: CommonFontStyle.plusJakartaSans,
+              ),
             ),
+            centerTitle: true,
+            actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_active_outlined))],
           ),
-          centerTitle: true,
-          actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_active_outlined))],
+          body: const CustomGridview(),
+          // bottomNavigationBar: barController.buildBottomNavigationBar(context),
         ),
-        body: const CustomGridview(),
-        // bottomNavigationBar: barController.buildBottomNavigationBar(context),
-      ),
-    );
+      );
+    });
   }
 }
 //   Widget buildBottomNavigationBar(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -32,7 +33,7 @@ class _CustomGridviewState extends State<CustomGridview> {
     setState(() {
       selectedIndex = index;
     });
-    dashboardController.gridOnClk(index);
+    dashboardController.gridOnClk(index, context);
   }
 
   @override
@@ -43,7 +44,7 @@ class _CustomGridviewState extends State<CustomGridview> {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 18, //13
-        mainAxisSpacing: 18,  //13
+        mainAxisSpacing: 18, //13
         childAspectRatio: 1.30, //0.85
       ),
       itemBuilder: (BuildContext context, int index) {
@@ -92,8 +93,9 @@ class _CustomGridviewState extends State<CustomGridview> {
           children: [
             Image.asset(
               gridview[index]['image'],
+              color: AppColor.primaryColor,
               height: 35, //50
-              width: 35,  //50
+              width: 35, //50
             ),
             Text(
               gridview[index]['label'],
