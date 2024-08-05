@@ -1,4 +1,5 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
@@ -85,23 +86,28 @@ class _PayrollScreenState extends State<PayrollScreen> {
                     shrinkWrap: true,
                     itemCount: AppConst.payrollgrid.length,
                     itemBuilder: (context, index) {
-                      return SizedBox(
-                        height: 40,
-                        child: ListTile(
-                          leading: Image.asset(
-                            AppConst.payrollgrid[index]['image'],
-                            height: 25,
-                            width: 25,
-                            color: const Color.fromARGB(255, 94, 157, 168),
-                          ),
-                          title: Text(
-                            AppConst.payrollgrid[index]['label'],
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontFamily: CommonFontStyle.plusJakartaSans,
+                      return GestureDetector(
+                        onTap: () {
+                          controller.payrolListOnClk(index, context);
+                        },
+                        child: SizedBox(
+                          height: 40,
+                          child: ListTile(
+                            leading: Image.asset(
+                              AppConst.payrollgrid[index]['image'],
+                              height: 25,
+                              width: 25,
+                              color: const Color.fromARGB(255, 94, 157, 168),
                             ),
+                            title: Text(
+                              AppConst.payrollgrid[index]['label'],
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: CommonFontStyle.plusJakartaSans,
+                              ),
+                            ),
+                            trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
                           ),
-                          trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
                         ),
                       );
                     },
@@ -117,8 +123,28 @@ class _PayrollScreenState extends State<PayrollScreen> {
                 fontFamily: CommonFontStyle.plusJakartaSans,
               ),
             ),
-            actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))],
-            // leading: IconButton(onPressed: () => Get.back(), icon: const Icon(Icons.arrow_back_ios)),
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: Image.asset(
+                    'assets/image/drawer.png',
+                    width: 20,
+                    color: AppColor.black,
+                  ),
+                );
+              },
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    'assets/image/notification.png',
+                    width: 20,
+                  ))
+            ],
             centerTitle: true,
           ),
           body: Padding(
@@ -381,7 +407,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                       onTap: () {
                                         PersistentNavBarNavigator.pushNewScreen(
                                           context,
-                                          screen: const AttendanceScreen(),
+                                          screen: AttendanceScreen(),
                                           withNavBar: true,
                                           pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                         ).then((value) {
@@ -428,7 +454,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                       onTap: () {
                                         PersistentNavBarNavigator.pushNewScreen(
                                           context,
-                                          screen: MispunchScreen(),
+                                          screen: const MispunchScreen(),
                                           withNavBar: true,
                                           pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                         ).then((value) {
@@ -469,7 +495,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.to(MispunchScreen()),
+                                      onTap: () => Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black),
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -503,7 +529,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.to(MispunchScreen()),
+                                      onTap: () => Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black),
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17

@@ -1,3 +1,5 @@
+import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/core/model/dropdown_G_model.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -23,7 +25,43 @@ class MispunchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getmonthyrempinfotable();
+    // setCurrentMonthYear();
+  }
+
+  void setCurrentMonthYear() {
+    DateTime now = DateTime.now();
+    MonthSel_selIndex.value = now.month - 1;
+
+    MonthSelectionScreen(
+      selectedMonthIndex: MonthSel_selIndex.value,
+      onPressed: (index) {
+        upd_MonthSelIndex(index);
+        showHideMsg();
+      },
+    );
+
+    YearSel_selIndex = now.year.toString();
+
+    CustomDropDown(
+      selValue: YearSel_selIndex,
+      onPressed: (index) {
+        upd_YearSelIndex(index);
+        showHideMsg();
+      },
+    );
+
+    if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
+      getmonthyrempinfotable();
+    }
+
+    update();
+  }
+
+  void clearData() {
+    MonthSel_selIndex.value = 0;
+    YearSel_selIndex = "";
+    mispunchtable.clear();
+    isLoading.value = false;
   }
 
   void upd_MonthSelIndex(int index) async {
@@ -37,6 +75,21 @@ class MispunchController extends GetxController {
     // selectedYear.value = years[index as int];
     update();
     await fetchDataIfReady();
+  }
+
+  void showHideMsg() {
+    String msg = "";
+    if (MonthSel_selIndex.value == -1 && YearSel_selIndex.isEmpty) {
+      msg = "Please select Month and Year!";
+    } else if (MonthSel_selIndex.value == -1 && YearSel_selIndex.isNotEmpty) {
+      msg = "Please select Month!";
+    } else if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isEmpty) {
+      msg = "Please select Year!";
+    }
+
+    if (msg.isNotEmpty) {
+      Get.rawSnackbar(message: msg);
+    }
   }
 
   // Check if both month and year are selected and fetch data
@@ -150,7 +203,7 @@ class CustomWidthCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       child: child,
     );

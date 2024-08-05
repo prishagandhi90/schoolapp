@@ -1,3 +1,5 @@
+import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/emp_att_dtl_extra_data.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -5,10 +7,11 @@ import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
 import 'package:emp_app/app/core/model/dropdown_G_model.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-
 
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
@@ -26,14 +29,68 @@ class AttendenceController extends GetxController {
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
   List<String> years = ['2023', '2024'];
+  final ScrollController attendanceScrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
+    // if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
+    //   getattendeceprsnttable();
+    //   getattendeceinfotable();
+    // }
+    attendanceScrollController.addListener(() {
+      if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        hideBottomBar = false.obs;
+        update();
+        // print("=====Up");
+        bottomBarController.update();
+        // update(0.0, true);
+      } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        hideBottomBar = true.obs;
+        update();
+        bottomBarController.update();
+        // print("=====Down");
+      }
+    });
+
+    setCurrentMonthYear();
+  }
+
+  void setCurrentMonthYear() {
+    DateTime now = DateTime.now();
+    MonthSel_selIndex.value = now.month - 1;
+
+    MonthSelectionScreen(
+      selectedMonthIndex: MonthSel_selIndex.value,
+      onPressed: (index) {
+        upd_MonthSelIndex(index);
+        showHideMsg();
+      },
+    );
+
+    YearSel_selIndex = now.year.toString();
+
+    CustomDropDown(
+      selValue: YearSel_selIndex,
+      onPressed: (index) {
+        upd_YearSelIndex(index);
+        showHideMsg();
+      },
+    );
+
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       getattendeceprsnttable();
       getattendeceinfotable();
     }
+    update();
+  }
+
+  void clearData() {
+    MonthSel_selIndex.value = -1;
+    YearSel_selIndex = "";
+    attendencetable.clear();
+    attpresenttable.clear();
+    isLoading1.value = false;
   }
 
   void upd_MonthSelIndex(int index) async {
@@ -60,13 +117,6 @@ class AttendenceController extends GetxController {
     }
   }
 
-  // void upd_YearSelIndex(int index) {
-  //   YearSel_selIndex.value = index;
-  //   selectedYear.value = years[index];
-  //   update();
-  //   fetchDataIfReady();
-  // }
-
   void upd_YearSelIndex(String index) async {
     YearSel_selIndex = index;
     // selectedYear.value = years[index];
@@ -74,7 +124,6 @@ class AttendenceController extends GetxController {
     await fetchDataIfReady();
   }
 
-  // Check if both month and year are selected and fetch data
   Future fetchDataIfReady() async {
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       await getattendeceprsnttable();
@@ -133,7 +182,7 @@ class AttendenceController extends GetxController {
   // }
   String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
+    // List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
     if (year == '2024') {
       year = '24';
     } else {
@@ -264,7 +313,418 @@ class AttendenceController extends GetxController {
     }).toList();
   }
 
-  
+  // Future<void> detailbottomsheet(BuildContext context, int index) async {
+  //   showModalBottomSheet(
+  //     isScrollControlled: true,
+  //     isDismissible: true,
+  //     enableDrag: true,
+  //     context: context,
+  //     // context: Get.context!,
+  //     constraints: const BoxConstraints(maxWidth: 380),
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(20.0),
+  //       side: const BorderSide(color: Colors.black),
+  //     ),
+  //     builder: (context) {
+  //       return attpresenttable.isNotEmpty
+  //           ? Container(
+  //               height: MediaQuery.of(context).size.height * 0.70,
+  //               width: Get.width,
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.only(
+  //                   topLeft: Radius.circular(25.0),
+  //                   topRight: Radius.circular(25.0),
+  //                 ),
+  //               ),
+  //               child: SingleChildScrollView(
+  //                 child: Column(
+  //                   children: [
+  //                     Container(
+  //                       height: MediaQuery.of(context).size.height * 0.15,
+  //                       decoration: BoxDecoration(
+  //                         color: const Color.fromARGB(255, 223, 239, 241),
+  //                         borderRadius: BorderRadius.circular(20),
+  //                       ),
+  //                       child: Column(
+  //                         children: [
+  //                           Row(
+  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                             children: [
+  //                               const SizedBox(
+  //                                 width: 30,
+  //                               ),
+  //                               //  Divider(
+  //                               //   thickness: 20,
+  //                               //   color: AppColor.black,
+  //                               // ),
+  //                               GestureDetector(
+  //                                 onTap: () {
+  //                                   Navigator.pop(context);
+  //                                 },
+  //                                 child: const Icon(Icons.cancel),
+  //                               )
+  //                             ],
+  //                           ),
+  //                           Container(
+  //                             padding: const EdgeInsets.all(10),
+  //                             width: double.infinity,
+  //                             height: 45,
+  //                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                             child: const Padding(
+  //                               padding: EdgeInsets.symmetric(horizontal: 15),
+  //                               child: Align(
+  //                                   alignment: Alignment.center,
+  //                                   child: Text(
+  //                                     'PUNCH',
+  //                                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+  //                                   )),
+  //                             ),
+  //                           ),
+  //                           Row(
+  //                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                             children: [
+  //                               attendencetable.isNotEmpty
+  //                                   ? Text(
+  //                                       split_go_leftRight(attendencetable[index].punch.toString(), 'left'),
+  //                                     )
+  //                                   : Text('--:-- ',
+  //                                       style: TextStyle(
+  //                                         fontSize: 16, //25
+  //                                         fontWeight: FontWeight.w600,
+  //                                         fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                       )),
+  //                               attendencetable.isNotEmpty
+  //                                   ? Text(
+  //                                       split_go_leftRight(attendencetable[index].punch.toString(), 'right'),
+  //                                     )
+  //                                   : Text('--:-- ',
+  //                                       style: TextStyle(
+  //                                         fontSize: 16, //25
+  //                                         fontWeight: FontWeight.w600,
+  //                                         fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                       )),
+  //                               // if (attendenceController.attendencetable.isNotEmpty)
+  //                               //   Text(
+  //                               //     split_go_leftRight(attendenceController.attendencetable[index].punch.toString(), 'left'),
+  //                               //   )
+  //                               // else
+  //                               //   Text('--:-- ',
+  //                               //       style: TextStyle(
+  //                               //         fontSize: 16, //25
+  //                               //         fontWeight: FontWeight.w600,
+  //                               //         fontFamily: CommonFontStyle.plusJakartaSans,
+  //                               //       )),
+  //                               // if (attendenceController.attendencetable.isNotEmpty)
+  //                               //   Text(split_go_leftRight(attendenceController.attendencetable[index].punch.toString(), 'right'))
+  //                               // else
+  //                               //   Text('--:-- ',
+  //                               //       style: TextStyle(
+  //                               //         fontSize: 16, //25
+  //                               //         fontWeight: FontWeight.w600,
+  //                               //         fontFamily: CommonFontStyle.plusJakartaSans,
+  //                               //       )),
+  //                             ],
+  //                           )
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+  //                     Container(
+  //                       height: MediaQuery.of(context).size.height * 0.15,
+  //                       decoration: BoxDecoration(
+  //                         color: const Color.fromARGB(255, 223, 239, 241),
+  //                         borderRadius: BorderRadius.circular(20),
+  //                       ),
+  //                       child: Column(
+  //                         children: [
+  //                           Container(
+  //                             padding: const EdgeInsets.all(10),
+  //                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                             child: Row(
+  //                               // mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                               children: [
+  //                                 Flexible(
+  //                                   flex: 3,
+  //                                   child: Container(
+  //                                       width: MediaQuery.of(context).size.height * 0.5,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('SHIFT', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                                 Flexible(
+  //                                   flex: 1,
+  //                                   child: Container(
+  //                                       width: MediaQuery.of(context).size.height * 0.25,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('ST', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                                 Flexible(
+  //                                   flex: 1,
+  //                                   child: Container(
+  //                                       width: MediaQuery.of(context).size.height * 0.25,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('LV', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           Row(
+  //                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                             children: [
+  //                               Flexible(
+  //                                 flex: 3,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.5,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].shift.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.25,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].st.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.25,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].lv.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           )
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+  //                     Container(
+  //                       height: MediaQuery.of(context).size.height * 0.15,
+  //                       decoration: BoxDecoration(
+  //                         color: const Color.fromARGB(255, 223, 239, 241),
+  //                         borderRadius: BorderRadius.circular(20),
+  //                       ),
+  //                       child: Column(
+  //                         children: [
+  //                           Container(
+  //                             padding: const EdgeInsets.all(10),
+  //                             // width: double.infinity,
+  //                             // height: 45,
+  //                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                             child: Row(
+  //                               // mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                               children: [
+  //                                 Flexible(
+  //                                   flex: 1,
+  //                                   child: Container(
+  //                                       // height: 100,
+  //                                       width: MediaQuery.of(context).size.height * 0.5,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('LC', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                                 Flexible(
+  //                                   flex: 1,
+  //                                   child: Container(
+  //                                       // height: 100,
+  //                                       width: MediaQuery.of(context).size.height * 0.5,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('EG', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           Row(
+  //                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                             children: [
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.5,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].lc.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.5,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].eg.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           )
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+  //                     Container(
+  //                       height: MediaQuery.of(context).size.height * 0.15,
+  //                       decoration: BoxDecoration(
+  //                         color: const Color.fromARGB(255, 223, 239, 241),
+  //                         borderRadius: BorderRadius.circular(20),
+  //                       ),
+  //                       child: Column(
+  //                         children: [
+  //                           Container(
+  //                             padding: const EdgeInsets.all(10),
+  //                             // width: double.infinity,
+  //                             // height: 45,
+  //                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                             child: Row(
+  //                               // mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                               children: [
+  //                                 Flexible(
+  //                                   flex: 1,
+  //                                   child: Container(
+  //                                       // height: 100,
+  //                                       width: MediaQuery.of(context).size.height * 0.5,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('OT ENT MIN', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                                 Flexible(
+  //                                   flex: 1,
+  //                                   child: Container(
+  //                                       // height: 100,
+  //                                       width: MediaQuery.of(context).size.height * 0.5,
+  //                                       alignment: Alignment.center,
+  //                                       child: const Text('OT MIN', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           Row(
+  //                             // mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //                             children: [
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.5,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].oTENTMIN.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+  //                               Flexible(
+  //                                 flex: 1,
+  //                                 child: Container(
+  //                                   // height: 100,
+  //                                   width: MediaQuery.of(context).size.height * 0.5,
+  //                                   alignment: Alignment.center,
+  //                                   child: attendencetable.isNotEmpty
+  //                                       ? Text(
+  //                                           attendencetable[index].oTMIN.toString(),
+  //                                         )
+  //                                       : Text('--:-- ',
+  //                                           style: TextStyle(
+  //                                             fontSize: 16, //25
+  //                                             fontWeight: FontWeight.w600,
+  //                                             fontFamily: CommonFontStyle.plusJakartaSans,
+  //                                           )),
+  //                                 ),
+  //                               ),
+
+  //                               // Text(attendenceController.attendencetable[index].shift.toString()),
+  //                               // Text(attendenceController.attendencetable[index].st.toString()),
+  //                               // Text(attendenceController.attendencetable[index].lv.toString()),
+  //                             ],
+  //                           )
+  //                         ],
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             )
+  //           : const Padding(
+  //               padding: EdgeInsets.all(15),
+  //               child: Center(child: Text('No attendance data available')),
+  //             );
+  //     },
+  //   );
+  // }
+
+  String split_go_leftRight(String string1, String flag) {
+    string1 = string1.replaceAll('\r', ' ');
+    List<String> parts = string1.split(' ');
+
+    // If the string has fewer than 3 parts, just return the original string
+    if (parts.length < 1) {
+      // print("The string has fewer than 3 parts.");
+      return "";
+    }
+
+    String firstPart = parts.sublist(0, 2).join(' ');
+    String secondPart = parts.sublist(2).join(' ');
+
+    if (flag == 'left')
+      return firstPart;
+    else if (flag == 'right') return secondPart;
+
+    return '';
+  }
 }
 
 class CustomWidthCell extends StatelessWidget {
@@ -275,7 +735,7 @@ class CustomWidthCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       child: child,
     );

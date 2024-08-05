@@ -33,16 +33,16 @@ class OTPModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['is_valid_token'] = this.is_valid_token;
-    data['login_id'] = this.login_id;
-    data['token'] = this.token;
-    data['employeeId'] = this.employeeId;
-    data['employeeName'] = this.employeeName;
-    data['mobileNumber'] = this.mobileNumber;
-    data['emailAddress'] = this.emailAddress;
-    data['dob'] = this.dob;
-    data['address'] = this.address;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['is_valid_token'] = is_valid_token;
+    data['login_id'] = login_id;
+    data['token'] = token;
+    data['employeeId'] = employeeId;
+    data['employeeName'] = employeeName;
+    data['mobileNumber'] = mobileNumber;
+    data['emailAddress'] = emailAddress;
+    data['dob'] = dob;
+    data['address'] = address;
     return data;
   }
 }

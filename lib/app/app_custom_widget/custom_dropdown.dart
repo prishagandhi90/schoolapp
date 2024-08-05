@@ -1,12 +1,11 @@
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:get/get.dart';
 
 class CustomDropDown extends StatefulWidget {
-  const CustomDropDown({super.key, required this.onPressed});
+  CustomDropDown({super.key, this.selValue, required this.onPressed});
   final Function(String) onPressed;
+  String? selValue = "";
 
   @override
   State<CustomDropDown> createState() => CustomDropDownState();
@@ -15,7 +14,7 @@ class CustomDropDown extends StatefulWidget {
 class CustomDropDownState extends State<CustomDropDown> {
   String? selectedValue;
   List<String> years = ['2023', '2024'];
-  String selValue = "";
+  // String selValue = "";
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +58,7 @@ class CustomDropDownState extends State<CustomDropDown> {
                   ))
               .toList(),
           // value: controller.selectedYear.value.isNotEmpty ? controller.selectedYear.value : null,
-          value: selValue.isNotEmpty ? selValue : null,
+          value: widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
           // onChanged: (String? value) {
           //   if (value != null) {
           //     controller.selectedYear.value = value;
@@ -70,7 +69,7 @@ class CustomDropDownState extends State<CustomDropDown> {
           onChanged: (String? value) {
             widget.onPressed(value!);
             setState(() {
-              selValue = value;
+              widget.selValue = value;
             });
           },
           buttonStyleData: ButtonStyleData(

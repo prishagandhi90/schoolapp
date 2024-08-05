@@ -35,6 +35,7 @@ class SummaryScreen extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 223, 239, 241),
                                 border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -60,6 +61,7 @@ class SummaryScreen extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 223, 239, 241),
                                 border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -82,6 +84,7 @@ class SummaryScreen extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 223, 239, 241),
                                 border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -103,6 +106,7 @@ class SummaryScreen extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 223, 239, 241),
                                 border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
                                 borderRadius: BorderRadius.circular(10),
                               ),

@@ -1,21 +1,23 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
+import 'dart:convert';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.mobileNumber, required this.otpNo, required this.deviceToken});
+  OtpScreen({super.key, required this.mobileNumber, required this.otpNo, required this.deviceToken});
   final String mobileNumber;
-  final String otpNo;
+  String otpNo;
   final String deviceToken;
 
   @override
@@ -24,41 +26,42 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final OtpController otpController = Get.put(OtpController());
-  late Timer _timer;
+  final LoginController loginController = Get.put(LoginController());
   bool isButtonEnabled = false;
   bool isTimerOver = false;
   bool isDropdownEnabled = true;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String deviceTok = "";
 
-  void startTimer() {
-    setState(() {
-      isButtonEnabled = false;
-    });
-    otpController.counter = 20;
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (otpController.counter > 0) {
-        setState(() {
-          otpController.counter--;
-        });
-      } else {
-        setState(() {
-          isButtonEnabled = true;
-        });
-        timer.cancel();
-      }
-    });
-  }
+  // void startTimer() {
+  //   setState(() {
+  //     isButtonEnabled = false;
+  //   });
+  //   otpController.counter = 20;
+  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     if (otpController.counter > 0) {
+  //       setState(() {
+  //         otpController.counter--;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         isButtonEnabled = true;
+  //       });
+  //       timer.cancel();
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
-    _timer.cancel();
+    otpController.timer!.cancel();
+    otpController.otpController.clear();
     super.dispose();
   }
 
   void onResendOtp() {
     setState(() {
-      otpController.counter = 20;
+      otpController.secondsRemaining.value = 90;
     });
     startTimer();
     // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -66,19 +69,39 @@ class _OtpScreenState extends State<OtpScreen> {
     // ));
   }
 
-  // void startTimer() {
-  //   isButtonEnabled = false;
-  //   counter = 20;
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (counter > 0) {
-  //       setState(() {
-  //         counter--;
-  //       });
-  //     } else {
-  //       _timer.cancel();
-  //     }
-  //   });
-  // }
+  void startTimer() {
+    isButtonEnabled = false;
+    otpController.secondsRemaining.value = 90;
+    otpController.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (otpController.secondsRemaining.value > 0) {
+        setState(() {
+          otpController.secondsRemaining.value--;
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  void resendOTP(BuildContext context) async {
+    otpController.secondsRemaining.value = 90;
+    otpController.update();
+    startTimer();
+    try {
+      final response = await otpController.sendotp();
+      if (response != null) {
+        final respOTP = json.decode(response)["data"]["otpNo"].toString();
+        setState(() {
+          widget.otpNo = respOTP;
+        });
+        Get.snackbar('RespOTP: $respOTP', '', colorText: AppColor.white, backgroundColor: AppColor.black);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Failed to resend OTP. Please try again.'),
+      ));
+    }
+  }
 
   Widget textWidgetInfo() {
     return RichText(
@@ -86,9 +109,10 @@ class _OtpScreenState extends State<OtpScreen> {
         style: TextStyle(fontSize: 15.0, color: AppColor.black, fontFamily: CommonFontStyle.plusJakartaSans),
         children: [
           TextSpan(text: AppString.requestnewotp),
-          otpController.counter > 0
+          otpController.secondsRemaining.value > 0
               ? TextSpan(
-                  text: '${otpController.counter}',
+                  text:
+                      "0${(otpController.secondsRemaining.value / 60).floor().toStringAsFixed(0)} : ${(otpController.secondsRemaining.value % 60).toString().length == 1 ? '0' : ''}${otpController.secondsRemaining.value % 60}",
                   style: TextStyle(color: AppColor.red, fontFamily: CommonFontStyle.plusJakartaSans),
                 )
               : TextSpan(
@@ -96,8 +120,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   style: TextStyle(color: AppColor.primaryColor, fontFamily: CommonFontStyle.plusJakartaSans),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      startTimer();
-                      // resendM();
+                      resendOTP(context);
                     },
                 ),
         ],
@@ -163,8 +186,9 @@ class _OtpScreenState extends State<OtpScreen> {
         border: Border.all(color: borderColor),
       ),
     );
-
+    String maskedNumber = otpController.maskMobileNumber(widget.mobileNumber);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.backgroundcolor,
       body: SafeArea(
         child: LayoutBuilder(
@@ -194,7 +218,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               ),
                               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                               Text(
-                                "Please enter the 6 digit code we set to \n+919318****07",
+                                "Please enter the 6 digit code we sent to \n+91 $maskedNumber",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontFamily: CommonFontStyle.plusJakartaSans,
@@ -276,13 +300,15 @@ class _OtpScreenState extends State<OtpScreen> {
                             ],
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Image.asset(
-                            AppImage.logo,
-                            width: MediaQuery.of(context).size.width * 0.8,
-                          ),
-                        ),
+                        MediaQuery.of(context).viewInsets.bottom > 0
+                            ? const Spacer()
+                            : Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Image.asset(
+                                  AppImage.logo,
+                                  width: MediaQuery.of(context).size.width * 0.8,
+                                ),
+                              ),
                       ],
                     ),
                   ),

@@ -19,8 +19,8 @@ class DashboardController extends GetxController {
   void onInit() {
     super.onInit();
     getProfileData();
-    // hideBottomBar.value = false;
-    bottomBarController.update();
+    hideBottomBar.value = false;
+    update();
   }
 
   Future<void> gridOnClk(int index, BuildContext context) async {
@@ -47,16 +47,21 @@ class DashboardController extends GetxController {
         Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
         break;
       case 7:
-        // Get.to(const PayrollScreen());
+        hideBottomBar.value = false;
+        var bottomBarController = Get.put(BottomBarController());
+        bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: const PayrollScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {
-          hideBottomBar.value = false;
+          // hideBottomBar.value = false;
+          // var bottomBarController = BottomBarController();
+          // bottomBarController.update();
           // controller.getDashboardData();
         });
+
         break;
       case 8:
         Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);

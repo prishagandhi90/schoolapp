@@ -1,29 +1,29 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
 import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AttendanceScreen extends StatefulWidget {
-  const AttendanceScreen({super.key});
+class AttendanceScreen extends GetView<AttendenceController> {
+  AttendanceScreen({super.key});
 
-  @override
-  State<AttendanceScreen> createState() => AttendanceScreenState();
-}
+//   @override
+//   State<AttendanceScreen> createState() => AttendanceScreenState();
+// }
 
-class AttendanceScreenState extends State<AttendanceScreen> {
+// class AttendanceScreenState extends State<AttendanceScreen> {
   final AttendenceController attendenceController = Get.put(AttendenceController());
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      attendenceController.showHideMsg();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     attendenceController.setCurrentMonthYear();
+  //     // attendenceController.showHideMsg();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,11 @@ class AttendanceScreenState extends State<AttendanceScreen> {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            onDrawerChanged: (isop) {
-              var bottomBarController = Get.put(BottomBarController());
-              hideBottomBar.value = isop;
-              bottomBarController.update();
-            },
+            // onDrawerChanged: (isop) {
+            //   var bottomBarController = Get.put(BottomBarController());
+            //   hideBottomBar.value = isop;
+            //   bottomBarController.update();
+            // },
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -45,11 +45,15 @@ class AttendanceScreenState extends State<AttendanceScreen> {
                 style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700),
               ),
               centerTitle: true,
-              // leading: IconButton(onPressed: () {
-              //   Get.back();
-              // }, icon: const Icon(Icons.arrow_back)),
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    controller.clearData();
+                  },
+                  icon: const Icon(Icons.arrow_back)),
               actions: [
                 CustomDropDown(
+                  selValue: controller.YearSel_selIndex,
                   onPressed: (index) {
                     controller.upd_YearSelIndex(index);
                     attendenceController.showHideMsg();
@@ -66,23 +70,14 @@ class AttendanceScreenState extends State<AttendanceScreen> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 228, 243, 242),
+                      color: const Color.fromARGB(255, 223, 239, 241),
                     ),
                     child: TabBar(
-                      labelColor: Colors.black,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: AppColor.black,
                       dividerColor: Colors.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            const Color.fromRGBO(119, 229, 17, 0.37).withOpacity(0.2),
-                            const Color.fromRGBO(7, 164, 178, 0.582).withOpacity(0.2),
-                          ],
-                        ),
-                      ),
+                      indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'Summary'), Tab(text: 'Details')],
                     ),
                   ),

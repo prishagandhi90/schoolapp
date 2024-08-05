@@ -1,134 +1,34 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
   final count = 0.obs;
-
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
-    hideBottomBar.value = false;
     super.onInit();
+    hideBottomBar.value = false;
+    update();
   }
-
-  // Widget buildBottomNavigationBar(BuildContext context) {
-  //   return PersistentTabView(
-  //     context,
-  //     controller: persistentController,
-  //     screens: buildScreens(),
-  //     items: navBarsItems(),
-  //     // navBarHeight: MediaQuery.of(context).viewInsets.bottom > 0 ? 0.0 : kBottomNavigationBarHeight,
-  //     backgroundColor: Colors.white,
-  //     handleAndroidBackButtonPress: true,
-  //     resizeToAvoidBottomInset: true,
-  //     stateManagement: true,
-  //     // hideNavigationBarWhenKeyboardShows: true,
-  //     decoration: NavBarDecoration(
-  //       boxShadow: [
-  //         BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 10.0),
-  //       ],
-  //     ),
-  //     animationSettings: const NavBarAnimationSettings(
-  //       navBarItemAnimation: ItemAnimationSettings(
-  //         duration: Duration(milliseconds: 200),
-  //         curve: Curves.ease,
-  //       ),
-  //       screenTransitionAnimation: ScreenTransitionAnimationSettings(
-  //         animateTabTransition: true,
-  //         curve: Curves.ease,
-  //         duration: Duration(milliseconds: 100),
-  //       ),
-  //     ),
-  //     navBarStyle: NavBarStyle.style15,
-  //   );
-  // }
 
   List<Widget> buildScreens() {
     return [
       const PayrollScreen(),
-      const AttendanceScreen(),
-      Dashboard1Screen(),
-      const PayrollScreen(),
-      const AttendanceScreen(),
+      AttendanceScreen(),
+      const Dashboard1Screen(),
+      const LeaveScreen(),
+      const OvertimeScreen(),
     ];
   }
-
-  // List<PersistentBottomNavBarItem> items(BuildContext? ctx) {
-  //   return [
-  //     PersistentBottomNavBarItem(
-  //       title: "Home",
-  //       icon: Image.asset(
-  //         'assets/image/home.png',
-  //         color: const Color.fromARGB(255, 94, 157, 168),
-  //       ),
-  //       inactiveIcon: Image.asset(
-  //         'assets/image/home.png',
-  //         height: Sizes.crossLength * 0.050,
-  //         color: Colors.black,
-  //       ),
-  //       activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
-  //       textStyle: TextStyle(
-  //         fontSize: Sizes.px12,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       title: "Attendence",
-  //       textStyle: TextStyle(fontSize: Sizes.px12, fontWeight: FontWeight.w600),
-  //       icon: Image.asset(
-  //         'assets/image/attendence.png',
-  //       ),
-  //       inactiveIcon: Image.asset(
-  //         'assets/image/home.png',
-  //         color: Colors.black,
-  //       ),
-  //       activeColorPrimary: Color.fromARGB(255, 94, 157, 168),
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       icon: Image.asset('assets/image/dashboard.png'),
-  //       title: "",
-  //       activeColorPrimary: Colors.blueAccent,
-  //       inactiveColorPrimary: Colors.grey,
-  //       // activeColorSecondary: _getSecondaryItemColorForSpecificStyles(),
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       title: "Leave",
-  //       textStyle: TextStyle(
-  //         fontSize: Sizes.px12,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //       icon: Image.asset(
-  //         'assets/image/leave.png',
-  //       ),
-  //       inactiveIcon: Image.asset(
-  //         'assets/image/leave.png',
-  //         color: Colors.black,
-  //       ),
-  //       activeColorPrimary: Color.fromARGB(255, 94, 157, 168),
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       title: "Over Time",
-  //       textStyle: TextStyle(
-  //         fontSize: Sizes.px12,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //       icon: Image.asset(
-  //         'assets/image/overtime.png',
-  //       ),
-  //       inactiveIcon: Image.asset(
-  //         'assets/image/overtime.png',
-  //         color: Colors.black,
-  //       ),
-  //       activeColorPrimary: Color.fromARGB(255, 94, 157, 168),
-  //     ),
-  //   ];
-  // }
 
   void onItemTapped(int index) {
     update();
@@ -138,74 +38,35 @@ class BottomBarController extends GetxController {
     return [
       PersistentBottomNavBarItem(
         title: "Home",
-        icon: Image.asset('assets/image/home.png'),
-        inactiveIcon: Image.asset('assets/image/home.png'),
+        // icon: Icon(Icons.home),
+        icon: Image.asset('assets/image/home.png', color: AppColor.primaryColor),
+        inactiveIcon: Image.asset('assets/image/home.png', color: AppColor.primaryColor),
         activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
       ),
       PersistentBottomNavBarItem(
         title: "Attendence",
-        icon: Image.asset('assets/image/attendence.png'),
-        inactiveIcon: Image.asset('assets/image/attendence.png'),
+        icon: Image.asset('assets/image/attendence.png', color: AppColor.primaryColor),
+        inactiveIcon: Image.asset('assets/image/attendence.png', color: AppColor.black),
         activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
       ),
       PersistentBottomNavBarItem(
-        icon: Image.asset(
-          'assets/image/dashboard.png',
-        ),
+        icon: Image.asset('assets/image/dashboard.png', color: AppColor.primaryColor),
+        inactiveIcon: Image.asset('assets/image/dashboard.png', color: AppColor.black),
         title: "Dashboard",
-        activeColorPrimary: Colors.white,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: AppColor.primaryColor,
       ),
       PersistentBottomNavBarItem(
         title: "Leave",
-        icon: Image.asset('assets/image/leave.png'),
+        icon: Image.asset('assets/image/leave.png', color: AppColor.primaryColor),
         inactiveIcon: Image.asset('assets/image/leave.png'),
         activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
       ),
       PersistentBottomNavBarItem(
         title: "Over Time",
-        icon: Image.asset('assets/image/overtime.png'),
-        inactiveIcon: Image.asset('assets/image/overtime.png'),
+        icon: Image.asset('assets/image/overtime.png', color: AppColor.primaryColor),
+        inactiveIcon: Image.asset('assets/image/overtime.png', color: AppColor.black),
         activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
       ),
     ];
   }
 }
-  
-
-// class BottomNavigationController extends GetxController {
-//   late PersistentTabController controller;
-
-//   @override
-//   void onInit() {
-//     controller = PersistentTabController(initialIndex: 0);
-//     super.onInit();
-//   }
-
-//   @override
-//   void onClose() {}
-// }
-  // @override
-  // void onInit() async {
-  //   super.onInit();
-  //   update();
-  // }
-
-  // List<Widget> buildScreens() {
-  //   return [
-  //     const PayrollScreen(),
-  //     const AttendanceScreen(),
-  //     Dashboard1Screen(),
-  //     const PayrollScreen(),
-  //     const AttendanceScreen(),
-  //   ];
-  // }
-
- 
-
-  // void onItemTapped(int index) {
-  //   print("=====index---$index");
-  //   persistentController!.jumpToTab(index);
-  //   update();
-  // }
-

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  // List<Dropdown_Glbl> dropdown_G = [];
   List<Dropdown_Glbl> userNameList = [];
   List<Dropdown_Glbl> companyList = [];
   List<Dropdown_Glbl> yearList = [];

@@ -27,14 +27,14 @@ class Payroll {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['employeeName'] = this.employeeName;
-    data['employeeCode'] = this.employeeCode;
-    data['department'] = this.department;
-    data['inPunchTime'] = this.inPunchTime;
-    data['outPunchTime'] = this.outPunchTime;
-    data['totLCEGMin'] = this.totLCEGMin;
-    data['cnt'] = this.cnt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['employeeName'] = employeeName;
+    data['employeeCode'] = employeeCode;
+    data['department'] = department;
+    data['inPunchTime'] = inPunchTime;
+    data['outPunchTime'] = outPunchTime;
+    data['totLCEGMin'] = totLCEGMin;
+    data['cnt'] = cnt;
     return data;
   }
 }

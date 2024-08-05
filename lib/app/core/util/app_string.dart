@@ -11,6 +11,6 @@ class AppString {
   static String error = "Error";
   static String plzentervalidotp = "Please enter valid OTP";
   static String verifyyiurnumber = "Verify your Number";
-  static String requestnewotp = "Request new OTP in";
+  static String requestnewotp = "Request new OTP in ";
   static String resend = "Resend";
 }

@@ -1,9 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
-  // final BottomBarController barController = Get.put(BottomBarController());
   var bottomBarController = Get.put(BottomBarController());
   final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
@@ -22,8 +21,9 @@ class OtpController extends GetxController {
   final TextEditingController numberController = TextEditingController(); //text: '8780917338'
   bool isLoadingLogin = false;
   List<OTPModel> otpmodel = [];
-  int counter = 10;
-
+  Timer? timer;
+  // var counter = 20;
+  RxInt secondsRemaining = 90.obs;
   final DashboardController dashboardController = Get.put(DashboardController());
 
   void clearText() {
@@ -36,9 +36,25 @@ class OtpController extends GetxController {
     bottomBarController.update();
   }
 
-  Future<String> otp(String otp, BuildContext context, String deviceToken) async {
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<dynamic> sendotp() async {
+    isLoadingLogin = true;
+    update();
+    try {
+      String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
+      var jsonbodyObj = {"mobileNo": numberController.text};
+      var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
+      isLoadingLogin = false;
+      update();
+      return loginEmp;
+    } catch (e) {
+      //
+    } finally {
+      isLoadingLogin = false;
+      update();
+    }
+  }
 
+  Future<String> otp(String otp, BuildContext context, String deviceToken) async {
     try {
       String url = 'http://117.217.126.127:44166/api/Employee/authentication';
       var jsonbodyObj = {
@@ -58,7 +74,6 @@ class OtpController extends GetxController {
 
       var decodedResp = json.decode(loginEmp);
       if (decodedResp["isSuccess"].toString() == "true") {
-        // Save data to SharedPreferences
         await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
         await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
         await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
@@ -138,58 +153,11 @@ class OtpController extends GetxController {
       dashboardController.designation = "";
       dashboardController.update();
 
-      // Navigate to login screen or other appropriate screen
       Get.offAll(() => LoginNumber());
     } catch (e) {
       print('Error during logout: $e');
     }
   }
-
-  // Future<String> otp(String otp, BuildContext context, String deviceToken) async {
-  //   try {
-  //     String url = 'http://117.217.126.127:44166/api/Employee/authentication';
-  //     var jsonbodyObj = {
-  //       "mobileNo": numberController.text,
-  //       "password": "",
-  //       "otp": otp,
-  //       "deviceType": "1",
-  //       "deviceName": "string",
-  //       "osType": "string",
-  //       "deviceToken": deviceToken
-  //     };
-  //     var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
-  //     print(loginEmp);
-  //     if (loginEmp == null) {
-  //       return "false";
-  //     }
-
-  //     var decodedResp = json.decode(loginEmp);
-  //     if (decodedResp["isSuccess"].toString() == "true") {
-  //       await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
-  //       await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
-  //       await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
-  //       // otpmodel = apiController.parseJson_Flag_otptable(loginEmp, "data");
-
-  //       dashboardController.employeeName = json.decode(loginEmp)["data"]["employeeName"].toString();
-  //       dashboardController.mobileNumber = json.decode(loginEmp)["data"]["mobileNumber"].toString();
-  //       dashboardController.emailAddress = json.decode(loginEmp)["data"]["emailAddress"].toString();
-  //       dashboardController.empCode = json.decode(loginEmp)["data"]["empCode"].toString();
-  //       dashboardController.empType = json.decode(loginEmp)["data"]["emp_Type"].toString();
-  //       dashboardController.department = json.decode(loginEmp)["data"]["department"].toString();
-  //       dashboardController.designation = json.decode(loginEmp)["data"]["designation"].toString();
-
-  //       dashboardController.update();
-  //       return "true";
-  //     }
-
-  //     return "false";
-  //   } catch (e) {
-  //     return "false";
-  //   } finally {
-  //     isLoadingLogin = false;
-  //     update();
-  //   }
-  // }
 
   Future otpOnClk(BuildContext context, String otpNo, String deviceToken) async {
     isLoadingLogin = true;
@@ -198,7 +166,7 @@ class OtpController extends GetxController {
       if (formKey.currentState!.validate()) {
         if (otpController.text != otpNo) {
           print('OTP Controller: ${otpController.text}');
-          print('OTP: ${otpNo}');
+          print('OTP: $otpNo');
           Get.snackbar('OTP is incorrect!', 'Please enter correct OTP!', colorText: Colors.white, backgroundColor: Colors.black);
           return false;
         }
@@ -212,11 +180,6 @@ class OtpController extends GetxController {
           otpController.text = "";
           update();
           Get.offAll(BottomBarView());
-          // Get.to(const HomeScreen());
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => BottomBarView()),
-          // );
         } else {
           Get.snackbar('OTP incorrect!', '', colorText: Colors.white, backgroundColor: Colors.black);
         }
@@ -229,5 +192,12 @@ class OtpController extends GetxController {
       isLoadingLogin = false;
       update();
     }
+  }
+
+  String maskMobileNumber(String mobileNumber) {
+    if (mobileNumber.length < 10) return mobileNumber;
+    String start = mobileNumber.substring(0, 3);
+    String end = mobileNumber.substring(mobileNumber.length - 3);
+    return '$start****$end';
   }
 }

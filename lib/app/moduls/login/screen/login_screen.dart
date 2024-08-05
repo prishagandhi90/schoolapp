@@ -15,6 +15,7 @@ class LoginNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColor.backgroundcolor,
       body: SafeArea(
         child: LayoutBuilder(
@@ -71,6 +72,7 @@ class LoginNumber extends StatelessWidget {
                                 },
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(10), 
                                 ],
                                 decoration: InputDecoration(
                                   hintText: AppString.entermobileno,
@@ -117,13 +119,15 @@ class LoginNumber extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Image.asset(
-                              AppImage.logo,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                            ),
-                          ),
+                          MediaQuery.of(context).viewInsets.bottom > 0
+                              ? const Spacer()
+                              : Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Image.asset(
+                                    AppImage.logo,
+                                    width: MediaQuery.of(context).size.width * 0.8,
+                                  ),
+                                ),
                         ],
                       ),
                     ),

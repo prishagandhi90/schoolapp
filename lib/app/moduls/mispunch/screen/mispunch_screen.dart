@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
@@ -7,13 +8,25 @@ import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MispunchScreen extends StatelessWidget {
-  MispunchScreen({super.key});
+class MispunchScreen extends StatefulWidget {
+  const MispunchScreen({super.key});
 
+  @override
+  State<MispunchScreen> createState() => _MispunchScreenState();
+}
+
+class _MispunchScreenState extends State<MispunchScreen> {
   final MispunchController mispunchController = Get.put(MispunchController());
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      mispunchController.setCurrentMonthYear();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
- 
     return GetBuilder<MispunchController>(
       builder: (controller) {
         return DefaultTabController(
@@ -25,15 +38,23 @@ class MispunchScreen extends StatelessWidget {
                 style: TextStyle(
                   color: const Color.fromARGB(255, 94, 157, 168),
                   fontWeight: FontWeight.w600,
-                  fontSize: 18, //20
+                  fontSize: 18, 
                   fontFamily: CommonFontStyle.plusJakartaSans,
                 ),
               ),
-              centerTitle: true,
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    controller.clearData();
+                  },
+                  icon: const Icon(Icons.arrow_back)),
+              // centerTitle: true,
               actions: [
                 CustomDropDown(
+                  selValue: controller.YearSel_selIndex,
                   onPressed: (index) {
                     controller.upd_YearSelIndex(index);
+                    mispunchController.showHideMsg();
                   },
                 )
               ],
@@ -46,6 +67,7 @@ class MispunchScreen extends StatelessWidget {
                     selectedMonthIndex: controller.MonthSel_selIndex.value,
                     onPressed: (index) {
                       controller.upd_MonthSelIndex(index);
+                      mispunchController.showHideMsg();
                     },
                   ),
                   const SizedBox(height: 20),
@@ -72,14 +94,7 @@ class MispunchScreen extends StatelessWidget {
                                             height: 45,
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(10),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topRight,
-                                                end: Alignment.bottomLeft,
-                                                colors: [
-                                                  const Color.fromRGBO(119, 229, 17, 0.37).withOpacity(0.2),
-                                                  const Color.fromRGBO(7, 164, 178, 0.582).withOpacity(0.2),
-                                                ],
-                                              ),
+                                              color: AppColor.primaryColor
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -114,14 +129,13 @@ class MispunchScreen extends StatelessWidget {
                             : const Padding(
                                 padding: EdgeInsets.all(15),
                                 child: Center(
-                                  child: Text('No attendance data available'),
+                                  child: Text('No Mispunch in this month'),
                                 ),
                               ),
                   ),
                 ],
               ),
             ),
-            // bottomNavigationBar: CustomBottomBar(),
           ),
         );
       },

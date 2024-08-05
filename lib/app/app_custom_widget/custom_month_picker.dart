@@ -1,3 +1,6 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
@@ -41,24 +44,27 @@ class _MonthSelectionScreenState extends State<MonthSelectionScreen> {
                     ? Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            colors: [
-                              const Color.fromRGBO(119, 229, 17, 0.37).withOpacity(0.2),
-                              const Color.fromRGBO(7, 164, 178, 0.582).withOpacity(0.2),
-                            ],
-                          ),
+                          color: AppColor.primaryColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           months[index],
-                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18,fontFamily: CommonFontStyle.plusJakartaSans,),
+                          style: TextStyle(
+                            color: AppColor.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                          ),
                         ),
                       )
                     : Text(
                         months[index],
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15,fontFamily: CommonFontStyle.plusJakartaSans,),
+                        style: TextStyle(
+                          color: AppColor.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15,
+                          fontFamily: CommonFontStyle.plusJakartaSans,
+                        ),
                       ),
               ),
             );
