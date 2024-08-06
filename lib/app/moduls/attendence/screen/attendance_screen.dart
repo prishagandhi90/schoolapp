@@ -1,4 +1,6 @@
+import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
@@ -9,48 +11,46 @@ import 'package:get/get.dart';
 class AttendanceScreen extends GetView<AttendenceController> {
   AttendanceScreen({super.key});
 
-//   @override
-//   State<AttendanceScreen> createState() => AttendanceScreenState();
-// }
-
-// class AttendanceScreenState extends State<AttendanceScreen> {
   final AttendenceController attendenceController = Get.put(AttendenceController());
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     attendenceController.setCurrentMonthYear();
-  //     // attendenceController.showHideMsg();
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
+    final bool fromBottomNavigation = Get.arguments?['fromBottomNavigation'] ?? false;
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            // onDrawerChanged: (isop) {
-            //   var bottomBarController = Get.put(BottomBarController());
-            //   hideBottomBar.value = isop;
-            //   bottomBarController.update();
-            // },
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
-              title: const Text(
+              title: Text(
                 'Attendance',
-                style: TextStyle(color: Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    color: const Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
               ),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    controller.clearData();
-                  },
-                  icon: const Icon(Icons.arrow_back)),
+              // centerTitle: true,
+              leading: fromBottomNavigation
+                  ? IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        controller.clearData();
+                      },
+                      icon: const Icon(Icons.arrow_back))
+                  : Builder(
+                      builder: (context) {
+                        return IconButton(
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          icon: Image.asset(
+                            'assets/image/drawer.png',
+                            width: 20,
+                            color: AppColor.black,
+                          ),
+                        );
+                      },
+                    ),
               actions: [
                 CustomDropDown(
                   selValue: controller.YearSel_selIndex,
@@ -61,6 +61,7 @@ class AttendanceScreen extends GetView<AttendenceController> {
                 )
               ],
             ),
+            drawer: CustomDrawer(),
             body: Column(
               children: [
                 Container(
@@ -77,12 +78,13 @@ class AttendanceScreen extends GetView<AttendenceController> {
                       unselectedLabelColor: AppColor.black,
                       dividerColor: Colors.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,
+                      labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'Summary'), Tab(text: 'Details')],
                     ),
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: TabBarView(
                     children: [
                       SummaryScreen(),

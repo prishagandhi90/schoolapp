@@ -50,7 +50,22 @@ class Dashboard1Screen extends GetView<DashboardController> {
               },
             ),
             centerTitle: true,
-            actions: [IconButton(onPressed: () {}, icon: Image.asset('assets/image/notification.png',width: 20,))],
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Get.snackbar(
+                      'Coming Soon',
+                      '',
+                      colorText: Colors.white,
+                      backgroundColor: Colors.black,
+                      duration: const Duration(seconds: 1),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/image/notification.png',
+                    width: 20,
+                  ))
+            ],
           ),
           body: const CustomGridview(),
           // bottomNavigationBar: barController.buildBottomNavigationBar(context),

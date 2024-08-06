@@ -79,10 +79,10 @@ class PayrollController extends GetxController {
         });
         break;
       case 2:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
         break;
       case 3:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
         break;
       default:
     }

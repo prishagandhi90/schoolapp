@@ -2,6 +2,7 @@
 import 'package:emp_app/app/core/constant/asset_constant.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/const_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -67,38 +68,59 @@ class CustomDrawer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (dashboardController.employeeName.isNotEmpty)
-                                Text(dashboardController.employeeName.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                                Text(dashboardController.employeeName.toString(),
+                                    style: TextStyle(
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                      fontWeight: FontWeight.w600,
+                                    ))
                               else
-                                const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
+                                Text('-- ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    )),
                               SizedBox(
                                 height: Sizes.crossLength * 0.002,
                               ),
                               if (dashboardController.designation.isNotEmpty)
-                                Text(dashboardController.designation.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                                Text(dashboardController.designation.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    ))
                               else
-                                const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
+                                Text('-- ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    )),
                               SizedBox(
                                 height: Sizes.crossLength * 0.010,
                               ),
                               if (dashboardController.mobileNumber.isNotEmpty)
-                                Text(dashboardController.mobileNumber.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                                Text(dashboardController.mobileNumber.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    ))
                               else
-                                const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
-                              // const Text(
-                              //   'number',
-                              //   style: TextStyle(fontWeight: FontWeight.w700),
-                              // ),
+                                Text('-- ',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    )),
                               SizedBox(
                                 height: Sizes.crossLength * 0.010,
                               ),
                               if (dashboardController.emailAddress.isNotEmpty)
-                                Text(dashboardController.emailAddress.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                                Text(dashboardController.emailAddress.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                      overflow: TextOverflow.ellipsis,
+                                    ))
                               else
-                                const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
-                              // const Text(
-                              //   'email',
-                              //   style: TextStyle(fontWeight: FontWeight.w700),
-                              // ),
+                                Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                               SizedBox(
                                 height: Sizes.crossLength * 0.010,
                               ),
@@ -130,26 +152,24 @@ class CustomDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         if (dashboardController.department.isNotEmpty)
-                          Text(dashboardController.department.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                          Text(dashboardController.department.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                         else
-                          const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
-                        // Text('ADMIN', style: TextStyle(fontWeight: FontWeight.w500)),
+                          Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                         if (dashboardController.empCode.isNotEmpty)
-                          Text(dashboardController.empCode.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                          Text(dashboardController.empCode.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                         else
-                          const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
-                        // Text('2027', style: TextStyle(fontWeight: FontWeight.w500)),
+                          Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                         if (dashboardController.empType.isNotEmpty)
-                          Text(dashboardController.empType.toString(), style: const TextStyle(fontWeight: FontWeight.w600))
+                          Text(dashboardController.empType.toString(),
+                              style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                         else
-                          const Text('-- ', style: TextStyle(fontWeight: FontWeight.w600)),
-                        // Text('CONTRACT', style: TextStyle(fontWeight: FontWeight.w500)),
+                          Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: AppConst.listItems.length,

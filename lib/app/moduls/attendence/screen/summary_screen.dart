@@ -5,18 +5,36 @@ import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SummaryScreen extends StatelessWidget {
-  SummaryScreen({super.key});
+class SummaryScreen extends StatefulWidget {
+  const SummaryScreen({super.key});
+
+  @override
+  State<SummaryScreen> createState() => _SummaryScreenState();
+}
+
+class _SummaryScreenState extends State<SummaryScreen> {
   final AttendenceController attendenceController = Get.put(AttendenceController());
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      attendenceController.setCurrentMonthYear("SummaryScreen");
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Get.put(AttendenceController());
+    // ScrollController summaryScrollController = attendenceController.createScrollController();
     return GetBuilder<AttendenceController>(builder: (controller) {
       return SingleChildScrollView(
+        controller: controller.attendanceScrollController,
         child: Column(
           children: [
             MonthSelectionScreen(
               selectedMonthIndex: controller.MonthSel_selIndex.value,
+              scrollController: controller.monthScrollControllerSummary,
               onPressed: (index) {
                 attendenceController.upd_MonthSelIndex(index);
                 attendenceController.showHideMsg();

@@ -21,6 +21,7 @@ class MispunchController extends GetxController {
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
   List<String> years = ['2023', '2024'];
+  final ScrollController monthScrollController = ScrollController();
 
   @override
   void onInit() {
@@ -34,12 +35,49 @@ class MispunchController extends GetxController {
 
     MonthSelectionScreen(
       selectedMonthIndex: MonthSel_selIndex.value,
+      scrollController: monthScrollController,
       onPressed: (index) {
         upd_MonthSelIndex(index);
         showHideMsg();
       },
     );
 
+    // Wait for the widget to build before scrolling
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (monthScrollController.hasClients) {
+    //     double itemWidth = Get.context!.size!.width / 3; // Adjust this based on your item width
+    //     monthScrollController.animateTo(
+    //       MonthSel_selIndex.value * itemWidth - Get.context!.size!.width / 2 + itemWidth / 2,
+    //       duration: Duration(milliseconds: 500),
+    //       curve: Curves.easeInOut,
+    //     );
+    //   }
+    // });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (monthScrollController.hasClients) {
+        double itemWidth = 80; // Adjust this based on your item width
+        double screenWidth = Get.context!.size!.width;
+        double screenCenter = screenWidth / 2;
+        double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
+        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
+
+        // Ensure the calculated position is within valid scroll range
+        double maxScrollExtent = monthScrollController.position.maxScrollExtent;
+        double minScrollExtent = monthScrollController.position.minScrollExtent;
+        if (targetScrollPosition < minScrollExtent) {
+          targetScrollPosition = minScrollExtent;
+        } else if (targetScrollPosition > maxScrollExtent) {
+          targetScrollPosition = maxScrollExtent;
+        }
+
+        monthScrollController.animateTo(
+          targetScrollPosition,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
     YearSel_selIndex = now.year.toString();
 
     CustomDropDown(

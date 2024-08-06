@@ -26,25 +26,67 @@ class DashboardController extends GetxController {
   Future<void> gridOnClk(int index, BuildContext context) async {
     switch (index) {
       case 0:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 1:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 2:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 3:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 4:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 5:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 6:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 7:
         hideBottomBar.value = false;
@@ -64,13 +106,31 @@ class DashboardController extends GetxController {
 
         break;
       case 8:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 9:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 10:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
     }
   }

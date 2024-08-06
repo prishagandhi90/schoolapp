@@ -167,7 +167,7 @@ class OtpController extends GetxController {
         if (otpController.text != otpNo) {
           print('OTP Controller: ${otpController.text}');
           print('OTP: $otpNo');
-          Get.snackbar('OTP is incorrect!', 'Please enter correct OTP!', colorText: Colors.white, backgroundColor: Colors.black);
+          Get.snackbar('OTP is incorrect!', 'Please enter correct OTP!', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
           return false;
         }
         formKey.currentState!.save();
@@ -181,10 +181,10 @@ class OtpController extends GetxController {
           update();
           Get.offAll(BottomBarView());
         } else {
-          Get.snackbar('OTP incorrect!', '', colorText: Colors.white, backgroundColor: Colors.black);
+          Get.snackbar('OTP incorrect!', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
         }
       } else {
-        Get.snackbar('Please enter the proper Mobile/OTP!', '', colorText: Colors.white, backgroundColor: Colors.black);
+        Get.snackbar('Please enter the proper Mobile/OTP!', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
       }
     } catch (e) {
       print(e);

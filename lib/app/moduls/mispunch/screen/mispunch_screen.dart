@@ -37,8 +37,8 @@ class _MispunchScreenState extends State<MispunchScreen> {
                 'Mispunch',
                 style: TextStyle(
                   color: const Color.fromARGB(255, 94, 157, 168),
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18, 
+                  fontWeight: FontWeight.w700,
+                  // fontSize: 18,
                   fontFamily: CommonFontStyle.plusJakartaSans,
                 ),
               ),
@@ -65,6 +65,7 @@ class _MispunchScreenState extends State<MispunchScreen> {
                 children: [
                   MonthSelectionScreen(
                     selectedMonthIndex: controller.MonthSel_selIndex.value,
+                    scrollController: controller.monthScrollController,
                     onPressed: (index) {
                       controller.upd_MonthSelIndex(index);
                       mispunchController.showHideMsg();
@@ -92,10 +93,7 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                             padding: const EdgeInsets.all(10),
                                             width: double.infinity,
                                             height: 45,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: AppColor.primaryColor
-                                            ),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 15),
                                               child: Align(
@@ -111,13 +109,18 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                             ),
                                           ),
                                           Flexible(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                              children: [
-                                                CustomContainerview(text: 'TYPE', text1: controller.mispunchtable[index].misPunch.toString()),
-                                                CustomContainerview(text: 'PUNCH TIME', text1: controller.mispunchtable[index].punchTime.toString()),
-                                                CustomContainerview(text: 'SHIFT TIME', text1: controller.mispunchtable[index].shiftTime.toString()),
-                                              ],
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                children: [
+                                                  CustomContainerview(text: 'TYPE', text1: controller.mispunchtable[index].misPunch.toString()),
+                                                  CustomContainerview(
+                                                      text: 'PUNCH TIME', text1: controller.mispunchtable[index].punchTime.toString()),
+                                                  CustomContainerview(
+                                                      text: 'SHIFT TIME', text1: controller.mispunchtable[index].shiftTime.toString()),
+                                                ],
+                                              ),
                                             ),
                                           )
                                         ],
@@ -142,17 +145,6 @@ class _MispunchScreenState extends State<MispunchScreen> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 // import 'package:emp_app/app/app_custom_widget/custom_list_Scrollable.dart';

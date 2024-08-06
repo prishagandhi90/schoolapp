@@ -262,8 +262,13 @@ class _OtpScreenState extends State<OtpScreen> {
                                       ? null
                                       : () async {
                                           if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
-                                            Get.snackbar(AppString.error, AppString.plzentervalidotp,
-                                                colorText: AppColor.white, backgroundColor: AppColor.black);
+                                            Get.snackbar(
+                                              AppString.error,
+                                              AppString.plzentervalidotp,
+                                              colorText: AppColor.white,
+                                              backgroundColor: AppColor.black,
+                                              duration: const Duration(seconds: 1),
+                                            );
                                           } else {
                                             await otpController.otpOnClk(context, widget.otpNo, widget.deviceToken);
 

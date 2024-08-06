@@ -6,13 +6,26 @@ import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    AttendenceController controller = Get.put(AttendenceController());
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
 
+class _DetailsScreenState extends State<DetailsScreen> {
+  final AttendenceController attendenceController = Get.put(AttendenceController());
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      attendenceController.setCurrentMonthYear("DetailScreen");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
@@ -24,6 +37,7 @@ class DetailsScreen extends StatelessWidget {
               children: [
                 MonthSelectionScreen(
                   selectedMonthIndex: controller.MonthSel_selIndex.value,
+                  scrollController: controller.monthScrollControllerDetail,
                   onPressed: (index) {
                     controller.upd_MonthSelIndex(index);
                     controller.showHideMsg();
@@ -44,7 +58,7 @@ class DetailsScreen extends StatelessWidget {
                                     child: SingleChildScrollView(
                                       // controller: controller.attendanceScrollController, // Assign the ScrollController here
                                       child: DataTable(
-                                        headingRowColor: MaterialStateColor.resolveWith(
+                                        headingRowColor: WidgetStateColor.resolveWith(
                                           (states) => const Color.fromARGB(255, 94, 157, 168),
                                         ),
                                         columnSpacing: Get.width * 0.06,
@@ -169,12 +183,15 @@ class DetailsScreen extends StatelessWidget {
 
   Future<void> detailbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
+        backgroundColor: AppColor.white,
         isScrollControlled: true,
         isDismissible: true,
         enableDrag: true,
         // context: context,
         context: Get.context!,
-        constraints: const BoxConstraints(maxWidth: 380),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.95,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
           side: const BorderSide(color: Colors.black),
@@ -186,6 +203,29 @@ class DetailsScreen extends StatelessWidget {
                   ? SingleChildScrollView(
                       child: Column(
                         children: [
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const SizedBox(width: 30),
+                              const Spacer(),
+                              Container(
+                                width: 90,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                                child: const Divider(height: 20, color: Colors.grey, thickness: 5),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Icon(Icons.cancel),
+                              ),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
@@ -194,24 +234,6 @@ class DetailsScreen extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
-                                    //  Divider(
-                                    //   thickness: 20,
-                                    //   color: AppColor.black,
-                                    // ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Icon(Icons.cancel),
-                                    )
-                                  ],
-                                ),
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,

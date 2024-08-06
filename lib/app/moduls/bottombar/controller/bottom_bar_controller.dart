@@ -38,9 +38,8 @@ class BottomBarController extends GetxController {
     return [
       PersistentBottomNavBarItem(
         title: "Home",
-        // icon: Icon(Icons.home),
         icon: Image.asset('assets/image/home.png', color: AppColor.primaryColor),
-        inactiveIcon: Image.asset('assets/image/home.png', color: AppColor.primaryColor),
+        inactiveIcon: Image.asset('assets/image/home.png', color: AppColor.black),
         activeColorPrimary: const Color.fromARGB(255, 94, 157, 168),
       ),
       PersistentBottomNavBarItem(

@@ -495,7 +495,13 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black),
+                                      onTap: () => Get.snackbar(
+                                        'Coming Soon',
+                                        '',
+                                        colorText: Colors.white,
+                                        backgroundColor: Colors.black,
+                                        duration: const Duration(seconds: 1),
+                                      ),
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -529,7 +535,13 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                 child: Column(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black),
+                                      onTap: () => Get.snackbar(
+                                        'Coming Soon',
+                                        '',
+                                        colorText: Colors.white,
+                                        backgroundColor: Colors.black,
+                                        duration: const Duration(seconds: 1),
+                                      ),
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17

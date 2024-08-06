@@ -14,7 +14,8 @@ class CustomGridview extends StatefulWidget {
 
 class _CustomGridviewState extends State<CustomGridview> {
   final DashboardController dashboardController = Get.put(DashboardController());
-  int selectedIndex = 1;
+  int selectedIndex = -1;
+  List<Container> containers = [];
 
   static const List<Map<String, dynamic>> gridview = [
     {'image': 'assets/image/HIMS.png', 'label': 'HIMS'},
@@ -29,6 +30,19 @@ class _CustomGridviewState extends State<CustomGridview> {
     {'image': 'assets/image/NABH.png', 'label': 'NABH'},
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadContainers();
+  }
+
+  Future<void> _loadContainers() async {
+    for (int i = 0; i < gridview.length; i++) {
+      containers.add(card(i));
+    }
+    setState(() {});
+  }
+
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -40,42 +54,60 @@ class _CustomGridviewState extends State<CustomGridview> {
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: const EdgeInsets.all(15),
-      itemCount: AppConst.gridview.length,
+      itemCount: gridview.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 18, //13
-        mainAxisSpacing: 18, //13
-        childAspectRatio: 1.30, //0.85
+        crossAxisSpacing: 18,
+        mainAxisSpacing: 18,
+        childAspectRatio: 1.30,
       ),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () => onItemTapped(index),
-          child: FutureBuilder<Container>(
-            future: card(index, context),
-            builder: (BuildContext context, AsyncSnapshot<Container> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(child: Icon(Icons.error));
-              } else {
-                return snapshot.data ?? const SizedBox.shrink();
-              }
-            },
-          ),
+          child: card(index),
         );
       },
     );
   }
+  //   GridView.builder(
+  //     padding: const EdgeInsets.all(15),
+  //     itemCount: AppConst.gridview.length,
+  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //       crossAxisCount: 3,
+  //       crossAxisSpacing: 18, //13
+  //       mainAxisSpacing: 18, //13
+  //       childAspectRatio: 1.30, //0.85
+  //     ),
+  //     itemBuilder: (BuildContext context, int index) {
+  //       return GestureDetector(
+  //         onTap: () => onItemTapped(index),
+  //         child: FutureBuilder<Container>(
+  //           future: card(index, context),
+  //           builder: (BuildContext context, AsyncSnapshot<Container> snapshot) {
+  //             if (snapshot.connectionState == ConnectionState.waiting) {
+  //               return const Center(child: CircularProgressIndicator());
+  //             } else if (snapshot.hasError) {
+  //               return const Center(child: Icon(Icons.error));
+  //             } else {
+  //               return snapshot.data ?? const SizedBox.shrink();
+  //             }
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Future<Container> card(int index, BuildContext context) async {
-    // Simulate some delay
-    await Future.delayed(const Duration(seconds: 1));
+  // Future<Container> card(int index, BuildContext context) async {
+  //   await Future.delayed(const Duration(seconds: 1));
+  Container card(int index) {
+    bool isSelected = selectedIndex == index;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: selectedIndex == index
+        boxShadow: isSelected
             ? [
                 const BoxShadow(
                   color: Color.fromARGB(255, 163, 163, 163),
