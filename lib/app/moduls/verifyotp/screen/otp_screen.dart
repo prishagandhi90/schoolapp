@@ -64,9 +64,6 @@ class _OtpScreenState extends State<OtpScreen> {
       otpController.secondsRemaining.value = 90;
     });
     startTimer();
-    // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //   content: Text('OTP has been resent. Please check your messages.'),
-    // ));
   }
 
   void startTimer() {
@@ -136,14 +133,6 @@ class _OtpScreenState extends State<OtpScreen> {
     otpController.numberController.text = widget.mobileNumber;
     showSnackBar();
     _firebaseMessaging.requestPermission();
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   print('Received a message while in the foreground!');
-    //   print('Message data: ${message.data}');
-
-    //   if (message.notification != null) {
-    //     print('Message also contained a notification: ${message.notification}');
-    //   }
-    // });
 
     _firebaseMessaging.getToken().then((String? token) {
       assert(token != null);
@@ -151,23 +140,12 @@ class _OtpScreenState extends State<OtpScreen> {
       setState(() {
         deviceTok = token.toString();
       });
-      // Send this token to your server to register the device
     });
-
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    //   // Handle background messages
-    //   if (message.notification != null) {
-    //     print('Message title: ${message.notification!.title}');
-    //     print('Message body: ${message.notification!.body}');
-    //     // Navigate to a different screen or update UI
-    //   }
-    // });
   }
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Get.snackbar('RespOTP: ${widget.otpNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('RespOTP: ${widget.otpNo}')));
     });
   }
 
@@ -235,16 +213,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                 onCompleted: (pin) async {
                                   print('onCompOTP: ${widget.otpNo}');
                                   otpController.isLoadingLogin ? null : await otpController.otpOnClk(context, widget.otpNo, deviceTok);
-
-                                  // PersistentNavBarNavigator.pushNewScreen(
-                                  //   context,
-                                  //   screen: Dashboard1Screen(),
-                                  //   withNavBar: true,
-                                  //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                  // ).then((value) {
-                                  //   // hideBottomBar.value = false;
-                                  //   // controller.getDashboardData();
-                                  // });
                                 },
                                 onChanged: (value) {},
                               ),

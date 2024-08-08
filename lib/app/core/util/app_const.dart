@@ -31,12 +31,6 @@ class AppConst {
     {'image': 'assets/image/mispunch.png', 'label': 'Mispunch Info'},
     {'image': 'assets/image/leave.png', 'label': 'Leave Entry'},
     {'image': 'assets/image/overtime.png', 'label': 'Over Time'},
-    // {'image': 'assets/image/HIMS.svg', 'label': 'RADIOLOGY'},
-    // {'image': 'assets/image/HIMS.svg', 'label': 'PATHOLOGY'},
-    // {'image': 'assets/image/HIMS.svg', 'label': 'PHARMACY'},
-    // {'image': 'assets/image/HIMS.svg', 'label': 'PAYROLL'},
-    // {'image': 'assets/image/HIMS.svg', 'label': 'OT'},
-    // {'image': 'assets/image/HIMS.svg', 'label': 'NABH'},
   ];
 
   static const List<Map<String, dynamic>> bottomview = [

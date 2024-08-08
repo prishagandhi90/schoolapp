@@ -1,6 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
-import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
+import 'package:emp_app/app/moduls/leave/screen/leavedemo.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
@@ -25,7 +25,7 @@ class BottomBarController extends GetxController {
       const PayrollScreen(),
       AttendanceScreen(),
       const Dashboard1Screen(),
-      const LeaveScreen(),
+      const Leavedemo(),
       const OvertimeScreen(),
     ];
   }

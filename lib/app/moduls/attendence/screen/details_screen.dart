@@ -15,6 +15,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final AttendenceController attendenceController = Get.put(AttendenceController());
+
   @override
   void initState() {
     super.initState();
@@ -25,156 +26,157 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            controller: controller.attendanceScrollController, // Assign the ScrollController here
-            child: Column(
-              children: [
-                MonthSelectionScreen(
-                  selectedMonthIndex: controller.MonthSel_selIndex.value,
-                  scrollController: controller.monthScrollControllerDetail,
-                  onPressed: (index) {
-                    controller.upd_MonthSelIndex(index);
-                    controller.showHideMsg();
-                  },
-                ),
-                const SizedBox(height: 20),
-                controller.isLoading1.value
-                    ? const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 100),
-                        child: Center(child: ProgressWithIcon()),
-                      )
-                    : Row(
-                        children: [
-                          (controller.attendencetable.isNotEmpty)
-                              ? Expanded(
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: SingleChildScrollView(
-                                      // controller: controller.attendanceScrollController, // Assign the ScrollController here
-                                      child: DataTable(
-                                        headingRowColor: WidgetStateColor.resolveWith(
-                                          (states) => const Color.fromARGB(255, 94, 157, 168),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                controller: controller.attendanceScrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MonthSelectionScreen(
+                      selectedMonthIndex: controller.MonthSel_selIndex.value,
+                      scrollController: controller.monthScrollControllerDetail,
+                      onPressed: (index) {
+                        controller.upd_MonthSelIndex(index);
+                        controller.showHideMsg();
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    controller.isLoading1.value
+                        ? const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 100),
+                              child: ProgressWithIcon(),
+                            ),
+                          )
+                        : controller.attendencetable.isNotEmpty
+                            ? SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minWidth: constraints.maxWidth,
+                                  ),
+                                  child: DataTable(
+                                    headingRowColor: WidgetStateColor.resolveWith(
+                                      (states) => const Color.fromARGB(255, 94, 157, 168),
+                                    ),
+                                    columnSpacing: constraints.maxWidth * 0.05,
+                                    columns: [
+                                      DataColumn(
+                                        label: Text(
+                                          'DATE',
+                                          style: TextStyle(
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
                                         ),
-                                        columnSpacing: Get.width * 0.06,
-                                        columns: [
-                                          DataColumn(
-                                            label: Text(
-                                              'DATE',
-                                              style: TextStyle(
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ),
+                                      DataColumn(
+                                        label: Text(
+                                          'IN',
+                                          style: TextStyle(
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Text(
+                                          'OUT',
+                                          style: TextStyle(
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Text(
+                                          'LC/EG \nMIN',
+                                          style: TextStyle(
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: Text(
+                                          '',
+                                          style: TextStyle(
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: List.generate(
+                                      controller.attendencetable.length,
+                                      (index) => DataRow(
+                                        cells: [
+                                          DataCell(
+                                            Container(
+                                              height: 40,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                color: const Color.fromARGB(255, 199, 199, 199),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  controller.attendencetable[index].atTDATE.toString(),
+                                                  style: TextStyle(
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                          DataColumn(
-                                            label: Text(
-                                              'IN',
-                                              style: TextStyle(
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                          DataCell(Text(
+                                            controller.attendencetable[index].iN.toString(),
+                                            style: TextStyle(
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
                                             ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'OUT',
-                                              style: TextStyle(
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                          )),
+                                          DataCell(Text(
+                                            controller.attendencetable[index].out.toString(),
+                                            style: TextStyle(
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
                                             ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              'LC/EG \nMIN',
-                                              style: TextStyle(
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                          )),
+                                          DataCell(Text(
+                                            controller.attendencetable[index].lCEGMIN.toString(),
+                                            style: TextStyle(
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
                                             ),
-                                          ),
-                                          DataColumn(
-                                            label: Text(
-                                              '',
-                                              style: TextStyle(
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                          )),
+                                          DataCell(
+                                            GestureDetector(
+                                              onTap: () {
+                                                detailbottomsheet(context, index);
+                                              },
+                                              child: const Icon(Icons.arrow_drop_down_circle),
                                             ),
                                           ),
                                         ],
-                                        rows: List.generate(
-                                            controller.attendencetable.length,
-                                            (index) => DataRow(cells: [
-                                                  DataCell(
-                                                    Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: const Color.fromARGB(255, 199, 199, 199),
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: Column(
-                                                        children: [
-                                                          Text(
-                                                            controller.attendencetable[index].atTDATE.toString(),
-                                                            style: TextStyle(
-                                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  DataCell(Text(
-                                                    controller.attendencetable[index].iN.toString(),
-                                                    style: TextStyle(
-                                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                                    ),
-                                                  )),
-                                                  DataCell(Text(
-                                                    controller.attendencetable[index].out.toString(),
-                                                    style: TextStyle(
-                                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                                    ),
-                                                  )),
-                                                  DataCell(Text(
-                                                    controller.attendencetable[index].lCEGMIN.toString(),
-                                                    style: TextStyle(
-                                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                                    ),
-                                                  )),
-                                                  DataCell(
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        detailbottomsheet(context, index);
-                                                      },
-                                                      child: Container(
-                                                        child: const Icon(Icons.arrow_drop_down_circle),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ])),
                                       ),
                                     ),
                                   ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Center(
-                                    child: Text(
-                                      'No attendance data available',
-                                      style: TextStyle(
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                      ),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Center(
+                                  child: Text(
+                                    'No attendance data available',
+                                    style: TextStyle(
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
                                     ),
                                   ),
-                                )
-                        ],
-                      ),
-              ],
-            ),
+                                ),
+                              ),
+                  ],
+                ),
+              );
+            },
           ),
         );
       },
@@ -272,26 +274,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               fontWeight: FontWeight.w600,
                                               fontFamily: CommonFontStyle.plusJakartaSans,
                                             )),
-                                    // if (attendenceController.attendencetable.isNotEmpty)
-                                    //   Text(
-                                    //     split_go_leftRight(attendenceController.attendencetable[index].punch.toString(), 'left'),
-                                    //   )
-                                    // else
-                                    //   Text('--:-- ',
-                                    //       style: TextStyle(
-                                    //         fontSize: 16, //25
-                                    //         fontWeight: FontWeight.w600,
-                                    //         fontFamily: CommonFontStyle.plusJakartaSans,
-                                    //       )),
-                                    // if (attendenceController.attendencetable.isNotEmpty)
-                                    //   Text(split_go_leftRight(attendenceController.attendencetable[index].punch.toString(), 'right'))
-                                    // else
-                                    //   Text('--:-- ',
-                                    //       style: TextStyle(
-                                    //         fontSize: 16, //25
-                                    //         fontWeight: FontWeight.w600,
-                                    //         fontFamily: CommonFontStyle.plusJakartaSans,
-                                    //       )),
                                   ],
                                 )
                               ],
@@ -553,10 +535,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 )),
                                       ),
                                     ),
-
-                                    // Text(attendenceController.attendencetable[index].shift.toString()),
-                                    // Text(attendenceController.attendencetable[index].st.toString()),
-                                    // Text(attendenceController.attendencetable[index].lv.toString()),
                                   ],
                                 )
                               ],

@@ -25,7 +25,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(AttendenceController());
+    Get.put(AttendenceController());
     // ScrollController summaryScrollController = attendenceController.createScrollController();
     return GetBuilder<AttendenceController>(builder: (controller) {
       return SingleChildScrollView(

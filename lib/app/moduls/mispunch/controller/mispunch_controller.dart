@@ -42,27 +42,13 @@ class MispunchController extends GetxController {
       },
     );
 
-    // Wait for the widget to build before scrolling
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (monthScrollController.hasClients) {
-    //     double itemWidth = Get.context!.size!.width / 3; // Adjust this based on your item width
-    //     monthScrollController.animateTo(
-    //       MonthSel_selIndex.value * itemWidth - Get.context!.size!.width / 2 + itemWidth / 2,
-    //       duration: Duration(milliseconds: 500),
-    //       curve: Curves.easeInOut,
-    //     );
-    //   }
-    // });
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (monthScrollController.hasClients) {
-        double itemWidth = 80; // Adjust this based on your item width
+        double itemWidth = 80;
         double screenWidth = Get.context!.size!.width;
         double screenCenter = screenWidth / 2;
         double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
         double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
-
-        // Ensure the calculated position is within valid scroll range
         double maxScrollExtent = monthScrollController.position.maxScrollExtent;
         double minScrollExtent = monthScrollController.position.minScrollExtent;
         if (targetScrollPosition < minScrollExtent) {
@@ -110,7 +96,6 @@ class MispunchController extends GetxController {
 
   void upd_YearSelIndex(String index) async {
     YearSel_selIndex = index;
-    // selectedYear.value = years[index as int];
     update();
     await fetchDataIfReady();
   }
@@ -130,7 +115,6 @@ class MispunchController extends GetxController {
     }
   }
 
-  // Check if both month and year are selected and fetch data
   Future fetchDataIfReady() async {
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       await getmonthyrempinfotable();
@@ -162,16 +146,10 @@ class MispunchController extends GetxController {
     return [];
   }
 
-  // Future monthYr_OnClick(Dropdown_Glbl? value) async {
-  //   selectedMonthYear = value;
-  //   update();
-  // }
-
   Future<dynamic> getmonthyrempinfotable() async {
     try {
       isLoading.value = true;
       String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
-      // var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": selectedMonthYear!.value};
       loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
@@ -191,7 +169,6 @@ class MispunchController extends GetxController {
 
   String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
     if (year == '2024') {
       year = '24';
     } else {
@@ -224,9 +201,6 @@ class MispunchController extends GetxController {
                 DataCell(CustomWidthCell(width: 50, child: Text(team.misPunch.toString()))),
                 DataCell(CustomWidthCell(width: 150, child: Text(team.punchTime.toString()))),
                 DataCell(CustomWidthCell(width: 100, child: Text(team.shiftTime.toString()))),
-                // DataCell(Text(team.misPunch.toString())),
-                // DataCell(Text(team.punchTime.toString())),
-                // DataCell(Text(team.shiftTime.toString())),
               ],
             ))
         .toList();

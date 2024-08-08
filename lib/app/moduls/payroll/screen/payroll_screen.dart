@@ -2,6 +2,7 @@ import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -405,13 +406,19 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
+                                        // AttendenceController attendenceController = Get.put(AttendenceController());
+                                        var attendenceController = Get.put(AttendenceController());
+                                        DateTime now = DateTime.now();
+                                        attendenceController.MonthSel_selIndex.value = now.month - 1;
+                                        attendenceController.YearSel_selIndex = now.year.toString();
+                                        attendenceController.update();
                                         PersistentNavBarNavigator.pushNewScreen(
                                           context,
                                           screen: AttendanceScreen(),
                                           withNavBar: true,
                                           pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                         ).then((value) {
-                                          hideBottomBar.value = false;
+                                          // hideBottomBar.value = false;
                                           // controller.getDashboardData();
                                         });
                                       }, //Get.to(const AttendanceScreen()),
@@ -502,6 +509,17 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         backgroundColor: Colors.black,
                                         duration: const Duration(seconds: 1),
                                       ),
+                                      // onTap: () {
+                                      //   PersistentNavBarNavigator.pushNewScreen(
+                                      //     context,
+                                      //     screen: const LeaveMainScreen(),
+                                      //     withNavBar: true,
+                                      //     pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      //   ).then((value) {
+                                      //     // hideBottomBar.value = false;
+                                      //     // controller.getDashboardData();
+                                      //   });
+                                      // },
                                       child: Container(
                                         height: MediaQuery.of(context).size.height * 0.06, //0.07
                                         width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -575,7 +593,6 @@ class _PayrollScreenState extends State<PayrollScreen> {
                         ],
                       ),
               )),
-          // bottomNavigationBar: BottomBarView(),
         );
       },
     );

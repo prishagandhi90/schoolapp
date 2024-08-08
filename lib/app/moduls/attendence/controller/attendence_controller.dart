@@ -56,6 +56,7 @@ class AttendenceController extends GetxController {
 
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
+    YearSel_selIndex = now.year.toString();
     setCurrentMonthYear("SummaryScreen");
   }
 
@@ -63,7 +64,7 @@ class AttendenceController extends GetxController {
     return ScrollController();
   }
 
-  void setCurrentMonthYear(String ScreenName) {
+  void setCurrentMonthYear(String screenName) {
     DateTime now = DateTime.now();
 
     // if (ScreenName == "SummaryScreen") {
@@ -72,7 +73,7 @@ class AttendenceController extends GetxController {
 
     MonthSelectionScreen(
       selectedMonthIndex: MonthSel_selIndex.value,
-      scrollController: ScreenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
+      scrollController: screenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
       onPressed: (index) {
         upd_MonthSelIndex(index);
         showHideMsg();
@@ -109,7 +110,7 @@ class AttendenceController extends GetxController {
 
         monthScrollControllerDetail.animateTo(
           targetScrollPosition,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
@@ -140,8 +141,6 @@ class AttendenceController extends GetxController {
       }
     });
 
-    YearSel_selIndex = now.year.toString();
-
     CustomDropDown(
       selValue: YearSel_selIndex,
       onPressed: (index) {
@@ -157,13 +156,13 @@ class AttendenceController extends GetxController {
     update();
   }
 
-  void clearData() {
-    MonthSel_selIndex.value = -1;
-    YearSel_selIndex = "";
-    attendencetable.clear();
-    attpresenttable.clear();
-    isLoading1.value = false;
-  }
+  // void clearData() {
+  //   MonthSel_selIndex.value = -1;
+  //   YearSel_selIndex = "";
+  //   attendencetable.clear();
+  //   attpresenttable.clear();
+  //   isLoading1.value = false;
+  // }
 
   void upd_MonthSelIndex(int index) async {
     MonthSel_selIndex.value = index;

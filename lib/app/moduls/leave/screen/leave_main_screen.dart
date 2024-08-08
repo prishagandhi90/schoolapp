@@ -1,49 +1,50 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
-import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
+import 'package:emp_app/app/moduls/leave/screen/view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AttendanceScreen extends GetView<AttendenceController> {
-  AttendanceScreen({super.key});
-
-  final AttendenceController attendenceController = Get.put(AttendenceController());
-
+class LeaveMainScreen extends GetView<LeaveController> {
+  const LeaveMainScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AttendenceController>(
-      builder: (controller) {
-        return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: Colors.white,
+    Get.put(LeaveController());
+    return GetBuilder<LeaveController>(builder: (controller) {
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+           backgroundColor: Colors.white,
+            key: controller.scaffoldKey,
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(
-                'Attendance',
+                'Leave',
                 style: TextStyle(
                     color: const Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
               ),
-              // centerTitle: true,
+              centerTitle: true,
               leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    // controller.clearData();
                   },
                   icon: const Icon(Icons.arrow_back)),
-              actions: [
-                CustomDropDown(
-                  selValue: controller.YearSel_selIndex,
-                  onPressed: (index) {
-                    controller.upd_YearSelIndex(index);
-                    attendenceController.showHideMsg();
-                  },
-                )
-              ],
+              // leading: IconButton(
+              //     icon: Image.asset(
+              //       'assets/image/drawer.png',
+              //       width: 20,
+              //       color: AppColor.black,
+              //     ),
+              //     onPressed: () => controller.scaffoldKey.currentState!.openDrawer()),
             ),
+            // backgroundColor: Colors.white,
+            // onDrawerChanged: (isop) {
+            //   var bottomBarController = Get.put(BottomBarController());
+            //   hideBottomBar.value = isop;
+            //   bottomBarController.update();
+            // },
+            // drawer: CustomDrawer(),
             body: Column(
               children: [
                 Container(
@@ -62,23 +63,21 @@ class AttendanceScreen extends GetView<AttendenceController> {
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
-                      tabs: const [Tab(text: 'Summary'), Tab(text: 'Details')],
+                      tabs: const [Tab(text: 'Leave'), Tab(text: 'View')],
                     ),
                   ),
                 ),
                 const Expanded(
                   child: TabBarView(
                     children: [
-                      SummaryScreen(),
-                      DetailsScreen(),
+                      LeaveScreen(),
+                      ViewScreen(),
                     ],
                   ),
                 ),
               ],
-            ),
-          ),
-        );
-      },
-    );
+            )),
+      );
+    });
   }
 }

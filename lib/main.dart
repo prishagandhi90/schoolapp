@@ -46,7 +46,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  // String otpNo = "";
 
   @override
   void initState() {
@@ -81,18 +80,7 @@ class _MyAppState extends State<MyApp> {
       }
     });
 
-    // _firebaseMessaging.getToken().then((String? token) {
-    //   assert(token != null);
-    //   print("FCM Token: $token");
-    //   setState(() {
-    //     deviceToken = token!;
-    //   });
-
-    //   // Send this token to your server to register the device
-    // });
-
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // Handle background messages
       if (message.notification != null) {
         print('Message title: ${message.notification!.title}');
         print('Message body: ${message.notification!.body}');

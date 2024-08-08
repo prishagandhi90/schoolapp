@@ -1,2 +1,1 @@
-bottom navigation bar mathi jo attendence screen open thay and back jay to direct login sceen pr jay che...
-but jo normally karia to avu nathi thatu.
+flutter build apk --split-per-abi ------ for build apk

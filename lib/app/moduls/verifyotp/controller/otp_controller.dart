@@ -22,7 +22,6 @@ class OtpController extends GetxController {
   bool isLoadingLogin = false;
   List<OTPModel> otpmodel = [];
   Timer? timer;
-  // var counter = 20;
   RxInt secondsRemaining = 90.obs;
   final DashboardController dashboardController = Get.put(DashboardController());
 
@@ -77,10 +76,6 @@ class OtpController extends GetxController {
         await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
         await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
         await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
-        // await prefs.setString("KEY_TOKENNO", decodedResp["data"]["token"]);
-        // await prefs.setString("KEY_LOGINID", decodedResp["data"]["login_id"].toString());
-        // await prefs.setString("KEY_EMPID", decodedResp["data"]["employeeId"].toString());
-
         dashboardController.employeeName = json.decode(loginEmp)["data"]["employeeName"].toString();
         dashboardController.mobileNumber = json.decode(loginEmp)["data"]["mobileNumber"].toString();
         dashboardController.emailAddress = json.decode(loginEmp)["data"]["emailAddress"].toString();
@@ -138,12 +133,10 @@ class OtpController extends GetxController {
     hideBottomBar.value = true;
     bottomBarController.update();
     try {
-      // Clear the stored data
       await prefs.remove("KEY_TOKENNO");
       await prefs.remove("KEY_LOGINID");
       await prefs.remove("KEY_EMPID");
 
-      // Optionally clear other user data or reset state
       dashboardController.employeeName = "";
       dashboardController.mobileNumber = "";
       dashboardController.emailAddress = "";
@@ -167,7 +160,13 @@ class OtpController extends GetxController {
         if (otpController.text != otpNo) {
           print('OTP Controller: ${otpController.text}');
           print('OTP: $otpNo');
-          Get.snackbar('OTP is incorrect!', 'Please enter correct OTP!', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
+          Get.snackbar(
+            'OTP is incorrect!',
+            'Please enter correct OTP!',
+            colorText: Colors.white,
+            backgroundColor: Colors.black,
+            duration: const Duration(seconds: 1),
+          );
           return false;
         }
         formKey.currentState!.save();
@@ -181,10 +180,22 @@ class OtpController extends GetxController {
           update();
           Get.offAll(BottomBarView());
         } else {
-          Get.snackbar('OTP incorrect!', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
+          Get.snackbar(
+            'OTP incorrect!',
+            '',
+            colorText: Colors.white,
+            backgroundColor: Colors.black,
+            duration: const Duration(seconds: 1),
+          );
         }
       } else {
-        Get.snackbar('Please enter the proper Mobile/OTP!', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
+        Get.snackbar(
+          'Please enter the proper Mobile/OTP!',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
       }
     } catch (e) {
       print(e);
