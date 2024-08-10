@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
-  final formKey = GlobalKey<FormState>();
+  final formKey1 = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   final _storage = const FlutterSecureStorage();
   final TextEditingController otpController = TextEditingController(); //text: '1234'
@@ -32,7 +32,7 @@ class OtpController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    bottomBarController.update();
+    // bottomBarController.update();
   }
 
   Future<dynamic> sendotp() async {
@@ -73,9 +73,13 @@ class OtpController extends GetxController {
 
       var decodedResp = json.decode(loginEmp);
       if (decodedResp["isSuccess"].toString() == "true") {
-        await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
-        await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
-        await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('KEY_TOKENNO', decodedResp["data"]["token"] ?? '');
+        await prefs.setString('KEY_LOGINID', decodedResp["data"]["login_id"].toString() ?? '');
+        await prefs.setString('KEY_EMPID', decodedResp["data"]["employeeId"].toString() ?? '');
+        // await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
+        // await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
+        // await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
         dashboardController.employeeName = json.decode(loginEmp)["data"]["employeeName"].toString();
         dashboardController.mobileNumber = json.decode(loginEmp)["data"]["mobileNumber"].toString();
         dashboardController.emailAddress = json.decode(loginEmp)["data"]["emailAddress"].toString();
@@ -130,6 +134,7 @@ class OtpController extends GetxController {
   Future<void> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    print('tokenprint ${prefs.getString('token')}');
     hideBottomBar.value = true;
     bottomBarController.update();
     try {
@@ -146,7 +151,7 @@ class OtpController extends GetxController {
       dashboardController.designation = "";
       dashboardController.update();
 
-      Get.offAll(() => LoginNumber());
+      Get.offAll(() => LoginScreen());
     } catch (e) {
       print('Error during logout: $e');
     }
@@ -156,7 +161,7 @@ class OtpController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      if (formKey.currentState!.validate()) {
+      if (formKey1.currentState!.validate()) {
         if (otpController.text != otpNo) {
           print('OTP Controller: ${otpController.text}');
           print('OTP: $otpNo');
@@ -169,14 +174,18 @@ class OtpController extends GetxController {
           );
           return false;
         }
-        formKey.currentState!.save();
+        formKey1.currentState!.save();
         String isValidLogin = "false";
         isLoadingLogin = true;
         update();
         isValidLogin = await otp(otpNo, context, deviceToken);
         update();
         if (isValidLogin == "true") {
+          // await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
+          // await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
+          // await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
           otpController.text = "";
+          bottomBarController.update();
           update();
           Get.offAll(BottomBarView());
         } else {

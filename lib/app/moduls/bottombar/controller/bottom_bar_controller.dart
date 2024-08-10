@@ -11,7 +11,6 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
   final count = 0.obs;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
@@ -23,10 +22,10 @@ class BottomBarController extends GetxController {
   List<Widget> buildScreens() {
     return [
       const PayrollScreen(),
-      AttendanceScreen(),
+      const AttendanceScreen(fromDashboard: true),
       const Dashboard1Screen(),
-      const Leavedemo(),
-      const OvertimeScreen(),
+      Leavedemo(),
+      OvertimeScreen(),
     ];
   }
 

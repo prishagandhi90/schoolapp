@@ -40,6 +40,7 @@ class ProgressWithIconState extends State<ProgressWithIcon> with SingleTickerPro
             // ..rotateX(_controller.value * 2.0 * math.pi) // X-axis rotation
             // 1.0,
             ..rotateY(_controller.value * 6.0 * math.pi), // Y-axis rotation
+          // ..rotateY(0.5 * 6.0 * math.pi), // Y-axis rotation
           child: Container(
             width: 200,
             height: 200,

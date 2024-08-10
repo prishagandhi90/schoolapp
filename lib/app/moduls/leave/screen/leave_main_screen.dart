@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeaveMainScreen extends GetView<LeaveController> {
-  const LeaveMainScreen({super.key});
+   LeaveMainScreen({super.key});
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Get.put(LeaveController());
@@ -16,7 +17,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
         length: 2,
         child: Scaffold(
            backgroundColor: Colors.white,
-            key: controller.scaffoldKey,
+            key: scaffoldKey,
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(

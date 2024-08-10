@@ -9,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PayrollController extends GetxController {
   DateTime now = DateTime.now();
@@ -31,8 +32,12 @@ class PayrollController extends GetxController {
     try {
       String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
 
-      loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
+      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString('KEY_LOGINID') ?? "";
+      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+
       var jsonbodyObj = {"loginId": loginId};
 
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
@@ -56,7 +61,7 @@ class PayrollController extends GetxController {
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: AttendanceScreen(),
+          screen: const AttendanceScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {
@@ -79,10 +84,22 @@ class PayrollController extends GetxController {
         });
         break;
       case 2:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 3:
-        Get.snackbar('Coming Soon', '', colorText: Colors.white, backgroundColor: Colors.black, duration: const Duration(seconds: 1),);
+        Get.snackbar(
+          'Coming Soon',
+          '',
+          colorText: Colors.white,
+          backgroundColor: Colors.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       default:
     }

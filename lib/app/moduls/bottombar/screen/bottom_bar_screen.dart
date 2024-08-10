@@ -28,11 +28,15 @@ class BottomBarView extends GetView<BottomBarController> {
             navBarHeight: hideBottomBar.value ? 0 : 70.0,
             backgroundColor: Colors.white,
             resizeToAvoidBottomInset: true,
-            stateManagement: true,
+            stateManagement: false,
             bottomScreenMargin: Sizes.crossLength * 0.020,
-            popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
-            isVisible: true,
+            // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
+            // isVisible: true,
             hideNavigationBarWhenKeyboardAppears: true,
+            handleAndroidBackButtonPress: true,
+            onItemSelected: (value) {
+              controller.onItemTapped(value);
+            },
             decoration: NavBarDecoration(
               colorBehindNavBar: Colors.transparent,
               boxShadow: [
@@ -48,7 +52,7 @@ class BottomBarView extends GetView<BottomBarController> {
                 curve: Curves.ease,
               ),
               screenTransitionAnimation: ScreenTransitionAnimationSettings(
-                animateTabTransition: true,
+                animateTabTransition: false,
                 curve: Curves.ease,
                 duration: Duration(milliseconds: 100),
               ),

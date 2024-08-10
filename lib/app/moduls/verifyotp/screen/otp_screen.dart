@@ -181,7 +181,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Form(
-                          key: otpController.formKey,
+                          key: otpController.formKey1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

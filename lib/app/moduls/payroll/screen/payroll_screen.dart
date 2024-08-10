@@ -414,7 +414,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         attendenceController.update();
                                         PersistentNavBarNavigator.pushNewScreen(
                                           context,
-                                          screen: AttendanceScreen(),
+                                          screen: const AttendanceScreen(),
                                           withNavBar: true,
                                           pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                         ).then((value) {

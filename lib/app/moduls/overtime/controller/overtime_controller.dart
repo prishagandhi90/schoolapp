@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class OvertimeController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  
 
   final count = 0.obs;
 

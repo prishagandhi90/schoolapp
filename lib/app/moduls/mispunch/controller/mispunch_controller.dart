@@ -7,6 +7,7 @@ import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MispunchController extends GetxController {
   late List<Dropdown_Glbl> monthyr = [];
@@ -125,9 +126,14 @@ class MispunchController extends GetxController {
     try {
       String url = 'http://117.217.126.127:44166/api/Employee/GetMonthYr_EmpInfo';
 
-      tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
-      loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      empId = await _storage.read(key: "KEY_EMPID") ?? '';
+      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
+      // empId = await _storage.read(key: "KEY_EMPID") ?? '';
+
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString('KEY_LOGINID') ?? "";
+      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+      empId = await pref.getString('KEY_EMPID') ?? "";
 
       var jsonbodyObj = {"loginId": loginId};
 
@@ -150,8 +156,12 @@ class MispunchController extends GetxController {
     try {
       isLoading.value = true;
       String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
-      loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
+      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString('KEY_LOGINID') ?? "";
+      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);

@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 class LeaveController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
 
   final count = 0.obs;
 

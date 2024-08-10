@@ -1,5 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -8,12 +9,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 RxBool hideBottomBar = false.obs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
   Get.put(BottomBarController());
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -28,7 +33,7 @@ void main() async {
 
   runApp(DevicePreview(
     enabled: true,
-    builder: (context) => const MyApp(),
+    builder: (context) => MyApp(),
   ));
 }
 
@@ -39,7 +44,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-
+  // final bool isLoggedIn;
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -50,7 +55,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     _firebaseMessaging.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Received a message while in the foreground!');
@@ -102,8 +106,10 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: LoginNumber(),
-      // home: Dashboard1Screen(),
+      home: LoginScreen(),
+      navigatorObservers: [
+        NavigatorObserver(),
+      ],
     );
   }
 }

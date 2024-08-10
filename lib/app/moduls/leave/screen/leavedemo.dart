@@ -1,22 +1,25 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/core/theme/const_color.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Leavedemo extends GetView<OvertimeController> {
-  const Leavedemo({super.key});
+class Leavedemo extends GetView<LeaveController> {
+  Leavedemo({super.key});
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    Get.put(OvertimeController());
-    return GetBuilder<OvertimeController>(builder: (controller) {
+    Get.put(LeaveController());
+    return GetBuilder<LeaveController>(builder: (controller) {
       return Scaffold(
-        key: controller.scaffoldKey,
+        key: scaffoldKey,
         appBar: AppBar(
           title: AppText(
             text: 'Contact',
@@ -36,7 +39,7 @@ class Leavedemo extends GetView<OvertimeController> {
                 width: 20,
                 color: AppColor.black,
               ),
-              onPressed: () => controller.scaffoldKey.currentState!.openDrawer()),
+              onPressed: () => scaffoldKey.currentState!.openDrawer()),
         ),
         backgroundColor: Colors.white,
         onDrawerChanged: (isop) {

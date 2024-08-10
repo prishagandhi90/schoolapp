@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/core/theme/const_color.dart';
@@ -10,13 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OvertimeScreen extends GetView<OvertimeController> {
-  const OvertimeScreen({super.key});
+  OvertimeScreen({super.key});
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Get.put(OvertimeController());
     return GetBuilder<OvertimeController>(builder: (controller) {
       return Scaffold(
-        key: controller.scaffoldKey,
+        key: scaffoldKey,
         appBar: AppBar(
           title: AppText(
             text: 'Contact',
@@ -36,7 +39,7 @@ class OvertimeScreen extends GetView<OvertimeController> {
                 width: 20,
                 color: AppColor.black,
               ),
-              onPressed: () => controller.scaffoldKey.currentState!.openDrawer()),
+              onPressed: () => scaffoldKey.currentState!.openDrawer()),
         ),
         backgroundColor: Colors.white,
         onDrawerChanged: (isop) {

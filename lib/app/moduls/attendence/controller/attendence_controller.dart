@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
@@ -27,6 +28,7 @@ class AttendenceController extends GetxController {
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
+
   List<String> years = ['2023', '2024'];
   final ScrollController attendanceScrollController = ScrollController();
   final ScrollController monthScrollControllerSummary = ScrollController();
@@ -207,8 +209,13 @@ class AttendenceController extends GetxController {
       isLoading1.value = true;
       String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
       // var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": selectedMonthYear!.value};
-      loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+
+      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
+      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString('KEY_LOGINID') ?? "";
+      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
@@ -228,8 +235,12 @@ class AttendenceController extends GetxController {
     try {
       isLoading1.value = true;
       String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
-      loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
+      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString('KEY_LOGINID') ?? "";
+      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);

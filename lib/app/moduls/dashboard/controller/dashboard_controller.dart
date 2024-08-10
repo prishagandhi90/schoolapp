@@ -1,11 +1,13 @@
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController {
   String tokenNo = '', loginId = '';
@@ -158,4 +160,22 @@ class DashboardController extends GetxController {
     }
     return [];
   }
+
+  // getDashboardData() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String token = prefs.getString('token') ?? '';
+  //   String loginId = prefs.getString('loginId') ?? '';
+  //   var jsonbodyObj = {"loginId": loginId};
+  //   String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+  //   var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
+  //   if (empmonthyrtable.statusCode == 200) {
+  //     update();
+  //   } else if (empmonthyrtable.statusCode == 401) {
+  //     prefs.clear();
+  //     Get.offAll(LoginNumber());
+  //     Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+  //   } else {
+  //     Get.rawSnackbar(message: "Something went wrong");
+  //   }
+  // }
 }

@@ -1,5 +1,4 @@
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +39,7 @@ class _CustomGridviewState extends State<CustomGridview> {
     for (int i = 0; i < gridview.length; i++) {
       containers.add(card(i));
     }
-    setState(() {});
+    // setState(() {});
   }
 
   void onItemTapped(int index) {
@@ -133,6 +132,7 @@ class _CustomGridviewState extends State<CustomGridview> {
               gridview[index]['label'],
               style: TextStyle(
                 fontSize: 15.0,
+                fontWeight: FontWeight.w600,
                 overflow: TextOverflow.ellipsis,
                 fontFamily: CommonFontStyle.plusJakartaSans,
               ),
