@@ -185,6 +185,7 @@ class OtpController extends GetxController {
           // await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
           // await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
           otpController.text = "";
+          hideBottomBar.value = false;
           bottomBarController.update();
           update();
           Get.offAll(BottomBarView());
