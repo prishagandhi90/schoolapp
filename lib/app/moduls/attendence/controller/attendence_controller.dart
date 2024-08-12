@@ -9,7 +9,6 @@ import 'package:emp_app/app/core/model/dropdown_G_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +23,6 @@ class AttendenceController extends GetxController {
   bool isLoading = true;
   var isLoading1 = false.obs;
   Dropdown_Glbl? selectedMonthYear;
-  final _storage = const FlutterSecureStorage();
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;

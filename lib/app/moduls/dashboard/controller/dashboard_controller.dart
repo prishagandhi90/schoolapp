@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
@@ -161,21 +164,43 @@ class DashboardController extends GetxController {
     return [];
   }
 
-  // getDashboardData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String token = prefs.getString('token') ?? '';
-  //   String loginId = prefs.getString('loginId') ?? '';
-  //   var jsonbodyObj = {"loginId": loginId};
-  //   String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
-  //   var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
-  //   if (empmonthyrtable.statusCode == 200) {
-  //     update();
-  //   } else if (empmonthyrtable.statusCode == 401) {
-  //     prefs.clear();
-  //     Get.offAll(LoginNumber());
-  //     Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //   } else {
-  //     Get.rawSnackbar(message: "Something went wrong");
-  //   }
-  // }
+  Future<void> getDashboardData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('KEY_TOKENNO') != null && prefs.getString('KEY_TOKENNO') != '') {
+      String token = prefs.getString('KEY_TOKENNO') ?? '';
+      String loginId = prefs.getString('KEY_LOGINID') ?? '';
+      var jsonbodyObj = {"loginId": loginId};
+      String url = 'http://117.217.126.127:44166/api/Employee/GetDashboardList';
+      var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
+      if (empmonthyrtable != "" && jsonDecode(empmonthyrtable)["statusCode"] == 200) {
+        var decodedResp = json.decode(empmonthyrtable);
+        if (decodedResp["isSuccess"].toString() == "true") {
+          var dashboardController = Get.put(DashboardController());
+          dashboardController.employeeName = json.decode(empmonthyrtable)["data"]["employeeName"].toString();
+          dashboardController.mobileNumber = json.decode(empmonthyrtable)["data"]["mobileNumber"].toString();
+          dashboardController.emailAddress = json.decode(empmonthyrtable)["data"]["emailAddress"].toString();
+          dashboardController.empCode = json.decode(empmonthyrtable)["data"]["empCode"].toString();
+          dashboardController.empType = json.decode(empmonthyrtable)["data"]["emp_Type"].toString();
+          dashboardController.department = json.decode(empmonthyrtable)["data"]["department"].toString();
+          dashboardController.designation = json.decode(empmonthyrtable)["data"]["designation"].toString();
+
+          dashboardController.update();
+        }
+        update();
+        Get.offAll(const BottomBarView());
+      } else {
+        prefs.clear();
+        Get.offAll(LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      }
+    } else {
+      prefs.clear();
+      Get.offAll(LoginScreen());
+    }
+
+    Get.offAll(LoginScreen());
+    // else {
+    //   Get.rawSnackbar(message: "Something went wrong");
+    // }
+  }
 }

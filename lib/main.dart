@@ -1,8 +1,10 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
+import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -17,9 +19,9 @@ RxBool hideBottomBar = false.obs;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  // bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  bool isLoggedIn = prefs.getString('KEY_TOKENNO') != null && prefs.getString('KEY_TOKENNO') != '' ? true : false;
 
-  Get.put(BottomBarController());
+  // Get.put(BottomBarController());
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -33,7 +35,9 @@ void main() async {
 
   runApp(DevicePreview(
     enabled: true,
-    builder: (context) => MyApp(),
+    builder: (context) => MyApp(
+      isLoggedIn: isLoggedIn,
+    ),
   ));
 }
 
@@ -43,14 +47,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-  // final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
+  final bool isLoggedIn;
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  var loginController = Get.put(LoginController());
 
   @override
   void initState() {
@@ -90,6 +95,10 @@ class _MyAppState extends State<MyApp> {
         print('Message body: ${message.notification!.body}');
       }
     });
+    // loginController.saveLoginStatus();
+    // hideBottomBar.value = false;
+    // var bottomBarController = Get.put(BottomBarController());
+    // bottomBarController.update();
   }
 
   @override
@@ -106,7 +115,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
       navigatorObservers: [
         NavigatorObserver(),
       ],

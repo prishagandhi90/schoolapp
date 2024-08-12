@@ -24,6 +24,7 @@ class BottomBarView extends GetView<BottomBarController> {
             controller: controller.persistentController,
             screens: controller.buildScreens(),
             items: controller.navBarsItems(),
+            // onWillPop: controller.handleBackButton(),
             // navBarHeight: hideBottomBar.value ? 0 : Sizes.crossLength * 0.082,
             navBarHeight: hideBottomBar.value ? 0 : 70.0,
             backgroundColor: Colors.white,
@@ -57,7 +58,6 @@ class BottomBarView extends GetView<BottomBarController> {
                 duration: Duration(milliseconds: 100),
               ),
             ),
-
             navBarStyle: NavBarStyle.style3,
           ),
         );

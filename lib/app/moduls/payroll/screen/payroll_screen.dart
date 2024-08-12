@@ -34,6 +34,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(PayrollController());
     return GetBuilder<PayrollController>(
       init: PayrollController(),
       builder: (controller) {

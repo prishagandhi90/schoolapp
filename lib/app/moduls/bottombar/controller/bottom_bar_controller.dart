@@ -6,18 +6,36 @@ import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class BottomBarController extends GetxController {
+class BottomBarController extends GetxController with WidgetsBindingObserver {
   final count = 0.obs;
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     hideBottomBar.value = false;
     update();
   }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  // void handleBackButton() {
+  //   if (persistentController!.index != 2) {
+  //     // Navigate to the center tab
+  //     persistentController!.index = 2;
+  //   } else {
+  //     // If already on the center tab, exit the app
+  //     SystemNavigator.pop();
+  //   }
+  // }
 
   List<Widget> buildScreens() {
     return [
