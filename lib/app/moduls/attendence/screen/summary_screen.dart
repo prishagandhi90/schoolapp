@@ -14,7 +14,8 @@ class SummaryScreen extends StatefulWidget {
 }
 
 class _SummaryScreenState extends State<SummaryScreen> {
-  final AttendenceController attendenceController = Get.put(AttendenceController());
+  final AttendenceController attendenceController =
+      Get.put(AttendenceController());
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     padding: EdgeInsets.symmetric(vertical: 100),
                     child: Center(child: ProgressWithIcon()),
                   )
-                : controller.attpresenttable.isNotEmpty
+                : controller.attSummaryModelTable.data!.isNotEmpty
                     ? Column(
                         children: [
                           Padding(
@@ -54,19 +55,41 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
                                 color: AppColor.lightblue,
-                                border: Border.all(color: AppColor.primaryColor),
+                                border:
+                                    Border.all(color: AppColor.primaryColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      CustomContainerview(text: 'TOT P', text1: controller.attpresenttable[0].toTP.toString()),
-                                      CustomContainerview(text: 'TOT A', text1: controller.attpresenttable[0].toTA.toString()),
-                                      CustomContainerview(text: 'TOT DAYS', text1: controller.attpresenttable[0].toTDAYS.toString()),
-                                      CustomContainerview(text: 'P', text1: controller.attpresenttable[0].p.toString()),
-                                      CustomContainerview(text: 'A', text1: controller.attpresenttable[0].a.toString()),
+                                      CustomContainerview(
+                                          text: 'TOT P',
+                                          text1: controller.attSummaryModelTable
+                                              .data![0].toTP
+                                              .toString()),
+                                      CustomContainerview(
+                                          text: 'TOT A',
+                                          text1: controller.attSummaryModelTable
+                                              .data![0].toTA
+                                              .toString()),
+                                      CustomContainerview(
+                                          text: 'TOT DAYS',
+                                          text1: controller.attSummaryModelTable
+                                              .data![0].toTDAYS
+                                              .toString()),
+                                      CustomContainerview(
+                                          text: 'P',
+                                          text1: controller
+                                              .attSummaryModelTable.data![0].p
+                                              .toString()),
+                                      CustomContainerview(
+                                          text: 'A',
+                                          text1: controller
+                                              .attSummaryModelTable.data![0].a
+                                              .toString()),
                                     ],
                                   ),
                                 ],
@@ -79,60 +102,136 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
                                 color: AppColor.lightblue,
-                                border: Border.all(color: AppColor.primaryColor),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    CustomContainerview(text: 'PL', text1: controller.attpresenttable[0].pl.toString()),
-                                    CustomContainerview(text: 'HO', text1: controller.attpresenttable[0].ho.toString()),
-                                    CustomContainerview(text: 'SL', text1: controller.attpresenttable[0].sl.toString()),
-                                    CustomContainerview(text: 'CL', text1: controller.attpresenttable[0].cl.toString()),
-                                    CustomContainerview(text: 'ML', text1: controller.attpresenttable[0].ml.toString())
-                                  ]),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              decoration: BoxDecoration(
-                                color: AppColor.lightblue,
-                                border: Border.all(color: AppColor.primaryColor),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    CustomContainerview(text: 'LC/EG CNT', text1: controller.attpresenttable[0].lCEGCNT.toString()),
-                                    CustomContainerview(text: 'LC/EG MIN', text1: controller.attpresenttable[0].lCEGMIN.toString()),
-                                    CustomContainerview(text: 'WO', text1: controller.attpresenttable[0].wo.toString()),
-                                    CustomContainerview(text: 'CO', text1: controller.attpresenttable[0].co.toString()),
-                                  ]),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              decoration: BoxDecoration(
-                                color: AppColor.lightblue,
-                                border: Border.all(color: AppColor.primaryColor),
+                                border:
+                                    Border.all(color: AppColor.primaryColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        CustomContainerview(
+                                            text: 'PL',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .pl
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'HO',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .ho
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'SL',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .sl
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'CL',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .cl
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'ML',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .ml
+                                                .toString())
+                                      ]),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              decoration: BoxDecoration(
+                                color: AppColor.lightblue,
+                                border:
+                                    Border.all(color: AppColor.primaryColor),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        CustomContainerview(
+                                            text: 'LC/EG CNT',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .lCEGCNT
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'LC/EG MIN',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .lCEGMIN
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'WO',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .wo
+                                                .toString()),
+                                        CustomContainerview(
+                                            text: 'CO',
+                                            text1: controller
+                                                .attSummaryModelTable
+                                                .data![0]
+                                                .co
+                                                .toString()),
+                                      ]),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              decoration: BoxDecoration(
+                                color: AppColor.lightblue,
+                                border:
+                                    Border.all(color: AppColor.primaryColor),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      CustomContainerview(text: 'OT HRS', text1: controller.attpresenttable[0].cOTHRS.toString()),
-                                      CustomContainerview(text: 'DUTY HRS', text1: controller.attpresenttable[0].dutYHRS.toString()),
-                                      CustomContainerview(text: 'DUTY ST', text1: controller.attpresenttable[0].dutYST.toString()),
+                                      CustomContainerview(
+                                          text: 'OT HRS',
+                                          text1: controller.attSummaryModelTable
+                                              .data![0].cOTHRS
+                                              .toString()),
+                                      CustomContainerview(
+                                          text: 'DUTY HRS',
+                                          text1: controller.attSummaryModelTable
+                                              .data![0].dutYHRS
+                                              .toString()),
+                                      CustomContainerview(
+                                          text: 'DUTY ST',
+                                          text1: controller.attSummaryModelTable
+                                              .data![0].dutYST
+                                              .toString()),
                                     ],
                                   ),
                                 ],
@@ -143,7 +242,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                       )
                     : const Padding(
                         padding: EdgeInsets.all(15),
-                        child: Center(child: Text('No attendance data available')),
+                        child:
+                            Center(child: Text('No attendance data available')),
                       )
           ],
         ),

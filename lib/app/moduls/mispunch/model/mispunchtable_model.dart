@@ -1,4 +1,36 @@
 class MispunchTable {
+  int? statusCode;
+  String? isSuccess;
+  String? message;
+  List<Data>? data;
+
+  MispunchTable({this.statusCode, this.isSuccess, this.message, this.data});
+
+  MispunchTable.fromJson(Map<String, dynamic> json) {
+    statusCode = json['statusCode'];
+    isSuccess = json['isSuccess'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['statusCode'] = this.statusCode;
+    data['isSuccess'] = this.isSuccess;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
   String? empCode;
   String? empName;
   String? department;
@@ -10,7 +42,7 @@ class MispunchTable {
   String? shiftTime;
   String? note;
 
-  MispunchTable(
+  Data(
       {this.empCode,
       this.empName,
       this.department,
@@ -22,7 +54,7 @@ class MispunchTable {
       this.shiftTime,
       this.note});
 
-  MispunchTable.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     empCode = json['empCode'];
     empName = json['empName'];
     department = json['department'];
@@ -36,17 +68,17 @@ class MispunchTable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['empCode'] = empCode;
-    data['empName'] = empName;
-    data['department'] = department;
-    data['designation'] = designation;
-    data['emp_Type'] = empType;
-    data['dt'] = dt;
-    data['mis_Punch'] = misPunch;
-    data['punch_Time'] = punchTime;
-    data['shiftTime'] = shiftTime;
-    data['note'] = note;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['empCode'] = this.empCode;
+    data['empName'] = this.empName;
+    data['department'] = this.department;
+    data['designation'] = this.designation;
+    data['emp_Type'] = this.empType;
+    data['dt'] = this.dt;
+    data['mis_Punch'] = this.misPunch;
+    data['punch_Time'] = this.punchTime;
+    data['shiftTime'] = this.shiftTime;
+    data['note'] = this.note;
     return data;
   }
 }

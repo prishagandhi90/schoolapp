@@ -1,4 +1,36 @@
 class Attendencetable {
+  int? statusCode;
+  String? isSuccess;
+  String? message;
+  List<Data>? data;
+
+  Attendencetable({this.statusCode, this.isSuccess, this.message, this.data});
+
+  Attendencetable.fromJson(Map<String, dynamic> json) {
+    statusCode = json['statusCode'];
+    isSuccess = json['isSuccess'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['statusCode'] = this.statusCode;
+    data['isSuccess'] = this.isSuccess;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
   String? mntHYR;
   int? empLCD;
   String? atTDATE;
@@ -14,7 +46,7 @@ class Attendencetable {
   String? eg;
   String? lCEGMIN;
 
-  Attendencetable(
+  Data(
       {this.mntHYR,
       this.empLCD,
       this.atTDATE,
@@ -30,7 +62,7 @@ class Attendencetable {
       this.eg,
       this.lCEGMIN});
 
-  Attendencetable.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     mntHYR = json['mntH_YR'];
     empLCD = json['empL_CD'];
     atTDATE = json['atT_DATE'];
@@ -48,21 +80,21 @@ class Attendencetable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['mntH_YR'] = mntHYR;
-    data['empL_CD'] = empLCD;
-    data['atT_DATE'] = atTDATE;
-    data['iN_'] = iN;
-    data['out'] = out;
-    data['punch'] = punch;
-    data['shift'] = shift;
-    data['lv'] = lv;
-    data['st'] = st;
-    data['oT_ENT_MIN'] = oTENTMIN;
-    data['oT_MIN'] = oTMIN;
-    data['lc'] = lc;
-    data['eg'] = eg;
-    data['lC_EG_MIN'] = lCEGMIN;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['mntH_YR'] = this.mntHYR;
+    data['empL_CD'] = this.empLCD;
+    data['atT_DATE'] = this.atTDATE;
+    data['iN_'] = this.iN;
+    data['out'] = this.out;
+    data['punch'] = this.punch;
+    data['shift'] = this.shift;
+    data['lv'] = this.lv;
+    data['st'] = this.st;
+    data['oT_ENT_MIN'] = this.oTENTMIN;
+    data['oT_MIN'] = this.oTMIN;
+    data['lc'] = this.lc;
+    data['eg'] = this.eg;
+    data['lC_EG_MIN'] = this.lCEGMIN;
     return data;
   }
 }

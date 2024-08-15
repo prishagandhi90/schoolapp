@@ -76,49 +76,85 @@ class _MispunchScreenState extends State<MispunchScreen> {
                     padding: const EdgeInsets.all(10),
                     child: controller.isLoading.value
                         ? const Center(child: ProgressWithIcon())
-                        : controller.mispunchtable.isNotEmpty
+                        : controller.mispunchTable.data!.isNotEmpty
                             ? ListView.builder(
-                                itemCount: controller.mispunchtable.length,
+                                itemCount:
+                                    controller.mispunchTable.data!.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.23,
-                                      decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.23,
+                                      decoration: BoxDecoration(
+                                          color: AppColor.lightblue1,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       child: Column(
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             width: double.infinity,
                                             height: 45,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: AppColor.primaryColor),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15),
                                               child: Align(
-                                                  alignment: Alignment.centerLeft,
+                                                  alignment:
+                                                      Alignment.centerLeft,
                                                   child: Text(
-                                                    controller.mispunchtable[index].dt.toString(),
+                                                    controller.mispunchTable
+                                                        .data![index].dt
+                                                        .toString(),
                                                     style: TextStyle(
                                                       fontSize: 20,
-                                                      fontWeight: FontWeight.w500, //20
-                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      fontWeight:
+                                                          FontWeight.w500, //20
+                                                      fontFamily:
+                                                          CommonFontStyle
+                                                              .plusJakartaSans,
                                                     ),
                                                   )),
                                             ),
                                           ),
                                           Flexible(
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
                                                 children: [
                                                   CustomContainerview(
-                                                      text: AppString.type, text1: controller.mispunchtable[index].misPunch.toString()),
+                                                      text: AppString.type,
+                                                      text1: controller
+                                                          .mispunchTable
+                                                          .data![index]
+                                                          .misPunch
+                                                          .toString()),
                                                   CustomContainerview(
-                                                      text: AppString.punchtime, text1: controller.mispunchtable[index].punchTime.toString()),
+                                                      text: AppString.punchtime,
+                                                      text1: controller
+                                                          .mispunchTable
+                                                          .data![index]
+                                                          .punchTime
+                                                          .toString()),
                                                   CustomContainerview(
-                                                      text: AppString.shifttime, text1: controller.mispunchtable[index].shiftTime.toString()),
+                                                      text: AppString.shifttime,
+                                                      text1: controller
+                                                          .mispunchTable
+                                                          .data![index]
+                                                          .shiftTime
+                                                          .toString()),
                                                 ],
                                               ),
                                             ),

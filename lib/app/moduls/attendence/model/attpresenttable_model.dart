@@ -1,26 +1,59 @@
-class AttPresentTable {
-  double? toTP;
-  double? toTA;
-  double? toTDAYS;
-  double? p;
-  double? a;
-  double? wo;
-  double? co;
+class AttendenceSummarytable {
+  int? statusCode;
+  String? isSuccess;
+  String? message;
+  List<Data>? data;
+
+  AttendenceSummarytable(
+      {this.statusCode, this.isSuccess, this.message, this.data});
+
+  AttendenceSummarytable.fromJson(Map<String, dynamic> json) {
+    statusCode = json['statusCode'];
+    isSuccess = json['isSuccess'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['statusCode'] = this.statusCode;
+    data['isSuccess'] = this.isSuccess;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Data {
+  int? toTP;
+  int? toTA;
+  int? toTDAYS;
+  int? p;
+  int? a;
+  int? wo;
+  int? co;
   double? pl;
-  double? sl;
-  double? cl;
+  int? sl;
+  int? cl;
   double? ho;
-  double? ml;
-  double? ch;
-  double? lCEGMIN;
-  double? lCEGCNT;
-  double? nOTHRS;
-  double? cOTHRS;
-  double? ttLOTHRS;
+  int? ml;
+  int? ch;
+  int? lCEGMIN;
+  int? lCEGCNT;
+  int? nOTHRS;
+  int? cOTHRS;
+  int? ttLOTHRS;
   String? dutYHRS;
   String? dutYST;
 
-  AttPresentTable(
+  Data(
       {this.toTP,
       this.toTA,
       this.toTDAYS,
@@ -42,7 +75,7 @@ class AttPresentTable {
       this.dutYHRS,
       this.dutYST});
 
-  AttPresentTable.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     toTP = json['toT_P'];
     toTA = json['toT_A'];
     toTDAYS = json['toT_DAYS'];
@@ -66,7 +99,7 @@ class AttPresentTable {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['toT_P'] = this.toTP;
     data['toT_A'] = this.toTA;
     data['toT_DAYS'] = this.toTDAYS;

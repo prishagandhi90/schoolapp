@@ -12,7 +12,8 @@ class MispunchController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   String tokenNo = '', loginId = '', empId = '';
   var isLoading = false.obs;
-  late List<MispunchTable> mispunchtable = [];
+  // late List<MispunchTable> mispunchtable = [];
+  late MispunchTable mispunchTable;
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
@@ -44,7 +45,8 @@ class MispunchController extends GetxController {
         double screenWidth = Get.context!.size!.width;
         double screenCenter = screenWidth / 2;
         double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
+        double targetScrollPosition =
+            selectedMonthPosition - screenCenter + itemWidth / 2;
         double maxScrollExtent = monthScrollController.position.maxScrollExtent;
         double minScrollExtent = monthScrollController.position.minScrollExtent;
         if (targetScrollPosition < minScrollExtent) {
@@ -80,7 +82,7 @@ class MispunchController extends GetxController {
   void clearData() {
     MonthSel_selIndex.value = 0;
     YearSel_selIndex = "";
-    mispunchtable.clear();
+    mispunchTable.data?.clear();
     isLoading.value = false;
   }
 
@@ -120,21 +122,28 @@ class MispunchController extends GetxController {
   Future<dynamic> getmonthyrempinfotable() async {
     try {
       isLoading.value = true;
-      String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
+      String url =
+          'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
       // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
 
-      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
-      var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
-      var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      mispunchtable = apiController.parseJson_Flag_Mispunch(empmonthyrtable, 'data');
+      String monthYr =
+          getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "monthYr": monthYr
+      };
+      // var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
+      var decodedResp = apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      mispunchTable = MispunchTable.fromJson(decodedResp);
 
       isLoading.value = false;
       update();
-      return mispunchtable;
+      return mispunchTable;
     } catch (e) {
       isLoading.value = false;
       update();
@@ -143,7 +152,20 @@ class MispunchController extends GetxController {
   }
 
   String getMonthYearFromIndex(int index, String year) {
-    List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    List<String> months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
     if (year == '2024') {
       year = '24';
     } else {
@@ -157,25 +179,35 @@ class MispunchController extends GetxController {
   }
 
   List<DataRow> FixedColRowBuilder() {
-    return mispunchtable.asMap().entries.map((mispunchData) {
-      int index = mispunchData.key;
-      MispunchTable team = mispunchData.value;
+    // Ensure that the data is not null before proceeding
+    if (mispunchTable.data == null) {
+      return []; // Return an empty list if data is null
+    }
+
+    return mispunchTable.data!.asMap().entries.map((entry) {
+      int index = entry.key;
+      Data data = entry.value;
+
       return DataRow(
         cells: [
-          DataCell(Text((index + 1).toString())),
-          DataCell(Text(team.dt.toString().substring(0, 10))),
+          DataCell(Text((index + 1).toString())), // Row number
+          DataCell(
+              Text(data.dt!.substring(0, 10))), // Date (first 10 characters)
         ],
       );
     }).toList();
   }
 
   List<DataRow> ScrollableColRowBuilder() {
-    return mispunchtable
+    return mispunchTable.data!
         .map((team) => DataRow(
               cells: [
-                DataCell(CustomWidthCell(width: 50, child: Text(team.misPunch.toString()))),
-                DataCell(CustomWidthCell(width: 150, child: Text(team.punchTime.toString()))),
-                DataCell(CustomWidthCell(width: 100, child: Text(team.shiftTime.toString()))),
+                DataCell(CustomWidthCell(
+                    width: 50, child: Text(team.misPunch.toString()))),
+                DataCell(CustomWidthCell(
+                    width: 150, child: Text(team.punchTime.toString()))),
+                DataCell(CustomWidthCell(
+                    width: 100, child: Text(team.shiftTime.toString()))),
               ],
             ))
         .toList();
