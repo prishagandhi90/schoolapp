@@ -1,19 +1,19 @@
-class Attendencetable {
+class ResponseAttendenceDetail {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<Data>? data;
+  List<AttendanceDetailTable>? data;
 
-  Attendencetable({this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseAttendenceDetail({this.statusCode, this.isSuccess, this.message, this.data});
 
-  Attendencetable.fromJson(Map<String, dynamic> json) {
+  ResponseAttendenceDetail.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <AttendanceDetailTable>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new AttendanceDetailTable.fromJson(v));
       });
     }
   }
@@ -30,7 +30,7 @@ class Attendencetable {
   }
 }
 
-class Data {
+class AttendanceDetailTable {
   String? mntHYR;
   int? empLCD;
   String? atTDATE;
@@ -46,7 +46,7 @@ class Data {
   String? eg;
   String? lCEGMIN;
 
-  Data(
+  AttendanceDetailTable(
       {this.mntHYR,
       this.empLCD,
       this.atTDATE,
@@ -62,7 +62,7 @@ class Data {
       this.eg,
       this.lCEGMIN});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  AttendanceDetailTable.fromJson(Map<String, dynamic> json) {
     mntHYR = json['mntH_YR'];
     empLCD = json['empL_CD'];
     atTDATE = json['atT_DATE'];

@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
-import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +17,10 @@ class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
   var bottomBarController = Get.put(BottomBarController());
   late List<MispunchTable> mispunchtable = [];
-  // late List<Attendencetable> attendencetable = [];
-  late Attendencetable attendenceModelTable;
+  List<AttendenceSummarytable> attendenceSummaryTable = [];
+  List<AttendanceDetailTable> attendenceDetailTable = [];
   // late List<AttPresentTable> attpresenttable = [];
-  late AttendenceSummarytable attSummaryModelTable;
+  // List<Attendencetable> attSummaryModelTable = [];
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = true;
   var isLoading1 = false.obs;
@@ -39,15 +41,13 @@ class AttendenceController extends GetxController {
     //   getattendeceinfotable();
     // }
     attendanceScrollController.addListener(() {
-      if (attendanceScrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
+      if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
         hideBottomBar = false.obs;
         update();
         // print("=====Up");
         bottomBarController.update();
         // update(0.0, true);
-      } else if (attendanceScrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
+      } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
         hideBottomBar = true.obs;
         update();
         bottomBarController.update();
@@ -74,9 +74,7 @@ class AttendenceController extends GetxController {
 
     MonthSelectionScreen(
       selectedMonthIndex: MonthSel_selIndex.value,
-      scrollController: screenName == "DetailScreen"
-          ? monthScrollControllerDetail
-          : monthScrollControllerSummary,
+      scrollController: screenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
       onPressed: (index) {
         upd_MonthSelIndex(index);
         showHideMsg();
@@ -100,14 +98,11 @@ class AttendenceController extends GetxController {
         double screenWidth = Get.context!.size!.width;
         double screenCenter = screenWidth / 2;
         double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition =
-            selectedMonthPosition - screenCenter + itemWidth / 2;
+        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
 
         // Ensure the calculated position is within valid scroll range
-        double maxScrollExtent =
-            monthScrollControllerDetail.position.maxScrollExtent;
-        double minScrollExtent =
-            monthScrollControllerDetail.position.minScrollExtent;
+        double maxScrollExtent = monthScrollControllerDetail.position.maxScrollExtent;
+        double minScrollExtent = monthScrollControllerDetail.position.minScrollExtent;
         if (targetScrollPosition < minScrollExtent) {
           targetScrollPosition = minScrollExtent;
         } else if (targetScrollPosition > maxScrollExtent) {
@@ -128,14 +123,11 @@ class AttendenceController extends GetxController {
         double screenWidth = Get.context!.size!.width;
         double screenCenter = screenWidth / 2;
         double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition =
-            selectedMonthPosition - screenCenter + itemWidth / 2;
+        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
 
         // Ensure the calculated position is within valid scroll range
-        double maxScrollExtent =
-            monthScrollControllerSummary.position.maxScrollExtent;
-        double minScrollExtent =
-            monthScrollControllerSummary.position.minScrollExtent;
+        double maxScrollExtent = monthScrollControllerSummary.position.maxScrollExtent;
+        double minScrollExtent = monthScrollControllerSummary.position.minScrollExtent;
         if (targetScrollPosition < minScrollExtent) {
           targetScrollPosition = minScrollExtent;
         } else if (targetScrollPosition > maxScrollExtent) {
@@ -211,11 +203,10 @@ class AttendenceController extends GetxController {
     }
   }
 
-  Future<dynamic> getattendeceinfotable() async {
+  Future<List<AttendanceDetailTable>> getattendeceinfotable() async {
     try {
       isLoading1.value = true;
-      String url =
-          'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+      String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
       // var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": selectedMonthYear!.value};
 
       // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
@@ -224,24 +215,19 @@ class AttendenceController extends GetxController {
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
 
-      String monthYr =
-          getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "empId": empId,
-        "monthYr": monthYr
-      };
+      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
 
       // var empmonthyrtable =
       //     await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
 
-      final Map<String, dynamic> decodedResp =
-          apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      attendenceModelTable = Attendencetable.fromJson(decodedResp);
+      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseAttendenceDetail detailResponse = ResponseAttendenceDetail.fromJson(jsonDecode(decodedResp));
+      attendenceDetailTable = detailResponse.data!;
 
       isLoading1.value = false;
       update();
-      return attendenceModelTable;
+      return attendenceDetailTable;
     } catch (e) {
       isLoading1.value = false;
       update();
@@ -249,31 +235,26 @@ class AttendenceController extends GetxController {
     return [];
   }
 
-  Future<dynamic> getattendeceprsnttable() async {
+  Future<List<AttendenceSummarytable>> getattendeceprsnttable() async {
     try {
       isLoading1.value = true;
-      String url =
-          'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
+      String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
       // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
 
-      String monthYr =
-          getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "empId": empId,
-        "monthYr": monthYr
-      };
+      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
       // var empmonthyrtable =
       //     await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      var decodedResp = apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      attSummaryModelTable = AttendenceSummarytable.fromJson(decodedResp);
+      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseAttendenceSummary summaryResponse = ResponseAttendenceSummary.fromJson(jsonDecode(decodedResp));
+      attendenceSummaryTable = summaryResponse.data!;
       isLoading1.value = false;
       update();
-      return attSummaryModelTable;
+      return attendenceSummaryTable;
     } catch (e) {
       isLoading1.value = false;
       update();
@@ -290,20 +271,7 @@ class AttendenceController extends GetxController {
   // }
 
   String getMonthYearFromIndex(int index, String year) {
-    List<String> months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
+    List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     // List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
     if (year == '2024') {
       year = '24';

@@ -138,7 +138,7 @@ class MispunchController extends GetxController {
         "monthYr": monthYr
       };
       // var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      var decodedResp = apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      Map<String, dynamic> decodedResp = apiController.parseJsonBody(url, tokenNo, jsonbodyObj) as Map<String, dynamic>;
       mispunchTable = MispunchTable.fromJson(decodedResp);
 
       isLoading.value = false;

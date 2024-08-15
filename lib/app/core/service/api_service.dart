@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
-import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
-import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -15,9 +12,7 @@ class ApiController extends GetxController {
       print(responseBody);
       final decodedResp = json.decode(responseBody)[flag];
       print(decodedResp);
-      final parsed = decodedResp.length > 0
-          ? decodedResp?.cast<Map<String, dynamic>>()
-          : [];
+      final parsed = decodedResp.length > 0 ? decodedResp?.cast<Map<String, dynamic>>() : [];
 
       return parsed.map<OTPModel>((json) => OTPModel.fromJson(json)).toList();
     } catch (e) {}
@@ -47,8 +42,7 @@ class ApiController extends GetxController {
     print(responseBody);
     final decodedResp = json.decode(responseBody)[flag];
     print(decodedResp);
-    final parsed =
-        decodedResp.length > 0 ? decodedResp?.cast<Map<String, dynamic>>() : [];
+    final parsed = decodedResp.length > 0 ? decodedResp?.cast<Map<String, dynamic>>() : [];
     if (parsed != null && parsed.isNotEmpty) {
       return parsed.map<Payroll>((json) => Payroll.fromJson(json)).toList();
     } else {
@@ -106,53 +100,37 @@ class ApiController extends GetxController {
   //   return attendanceTable;
   // }
 
-  dynamic parseJsonBody(
-      String apiURL, String headerToken, Object jsonBodyObj) async {
+  Future<String> parseJsonBody(String apiURL, String headerToken, Object jsonBodyObj) async {
     var headers;
-    // if (isShowLoader) {
-    //   EasyLoading.show(maskType: EasyLoadingMaskType.clear);
-    // }
+
     if (headerToken == '') {
       headers = {"Content-Type": "application/json"};
     } else {
-      headers = {
-        'Authorization': 'Bearer $headerToken',
-        "Content-Type": "application/json"
-      };
+      headers = {'Authorization': 'Bearer $headerToken', "Content-Type": "application/json"};
     }
 
     final body = jsonEncode(jsonBodyObj);
     try {
-      final response =
-          await http.post(Uri.parse(apiURL), headers: headers, body: body);
+      final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
 
-      // Decode the JSON string into a Map
-      final Map<String, dynamic> decodedResp = json.decode(response.body);
-
-      return decodedResp;
+      return response.body; // This returns a String
     } catch (exception) {
-      // EasyLoading.dismiss();
       if (exception.toString().contains('SocketException')) {
-        if (Get.isSnackbarOpen) {
-        } else {
+        if (!Get.isSnackbarOpen) {
           Get.rawSnackbar(message: "Please check your internet connection.");
         }
-
         return 'NetworkError';
       } else if (exception.toString().contains('TimeoutException')) {
-        if (Get.isSnackbarOpen) {
-        } else {
+        if (!Get.isSnackbarOpen) {
           Get.rawSnackbar(message: "Server Error.");
         }
-
         return 'NetworkError';
       } else {
         Get.rawSnackbar(message: exception.toString());
-        return null;
+        return 'Error'; // Return a default error message or null if necessary
       }
     }
   }
-
   // List<AttPresentTable> parseJson_Flag_attprsnt(
   //     String responseBody, String flag) {
   //   print(responseBody);
@@ -169,20 +147,15 @@ class ApiController extends GetxController {
   //   }
   // }
 
-  Future<String?> getDropdownData_NP(
-      String apiURL, String headerToken, Object jsonBodyObj) async {
+  Future<String?> getDropdownData_NP(String apiURL, String headerToken, Object jsonBodyObj) async {
     var headers;
     if (headerToken == '') {
       headers = {"Content-Type": "application/json"};
     } else {
-      headers = {
-        'Authorization': 'Bearer $headerToken',
-        "Content-Type": "application/json"
-      };
+      headers = {'Authorization': 'Bearer $headerToken', "Content-Type": "application/json"};
     }
     final body = jsonEncode(jsonBodyObj);
-    final response =
-        await http.post(Uri.parse(apiURL), headers: headers, body: body);
+    final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
 
     if (response.statusCode == 200) {
       return response.body;
@@ -217,21 +190,16 @@ class ApiController extends GetxController {
   //   }
   // }
 
-  Future<String> getDynamicData(
-      String apiURL, String headerToken, Object jsonBodyObj) async {
+  Future<String> getDynamicData(String apiURL, String headerToken, Object jsonBodyObj) async {
     var headers;
     if (headerToken == '') {
       headers = {"Content-Type": "application/json"};
     } else {
-      headers = {
-        'Authorization': 'Bearer $headerToken',
-        "Content-Type": "application/json"
-      };
+      headers = {'Authorization': 'Bearer $headerToken', "Content-Type": "application/json"};
     }
 
     final body = jsonEncode(jsonBodyObj);
-    final response =
-        await http.post(Uri.parse(apiURL), headers: headers, body: body);
+    final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
 
     if (response.statusCode == 200) {
       return response.body;
@@ -248,9 +216,7 @@ class ApiController extends GetxController {
       final diopackage.Response response = await dio.post(
         url,
         data: body,
-        options: diopackage.Options(
-            validateStatus: (_) => true,
-            headers: {'Content-Type': 'application/json'}),
+        options: diopackage.Options(validateStatus: (_) => true, headers: {'Content-Type': 'application/json'}),
       );
 
       EasyLoading.dismiss();

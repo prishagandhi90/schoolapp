@@ -15,8 +15,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  final AttendenceController attendenceController =
-      Get.put(AttendenceController());
+  final AttendenceController attendenceController = Get.put(AttendenceController());
 
   @override
   void initState() {
@@ -56,7 +55,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               child: ProgressWithIcon(),
                             ),
                           )
-                        : controller.attendenceModelTable.data!.length > 0
+                        : controller.attendenceDetailTable.length > 0
                             ? SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: ConstrainedBox(
@@ -64,10 +63,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     minWidth: constraints.maxWidth,
                                   ),
                                   child: DataTable(
-                                    headingRowColor:
-                                        WidgetStateColor.resolveWith(
-                                      (states) => const Color.fromARGB(
-                                          255, 94, 157, 168),
+                                    headingRowColor: WidgetStateColor.resolveWith(
+                                      (states) => const Color.fromARGB(255, 94, 157, 168),
                                     ),
                                     columnSpacing: constraints.maxWidth * 0.05,
                                     columns: [
@@ -103,8 +100,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ],
                                     rows: List.generate(
-                                      controller
-                                          .attendenceModelTable.data!.length,
+                                      controller.attendenceDetailTable.length,
                                       (index) => DataRow(
                                         cells: [
                                           DataCell(
@@ -113,48 +109,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               width: 40,
                                               decoration: BoxDecoration(
                                                 color: AppColor.lightgrey,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Center(
                                                 child: Text(
-                                                  controller
-                                                      .attendenceModelTable
-                                                      .data![index]
-                                                      .atTDATE
-                                                      .toString(),
-                                                  style:
-                                                      AppStyle.fontfamilyplus,
+                                                  controller.attendenceDetailTable[index].atTDATE.toString(),
+                                                  style: AppStyle.fontfamilyplus,
                                                 ),
                                               ),
                                             ),
                                           ),
                                           DataCell(Text(
-                                            controller.attendenceModelTable
-                                                .data![index].iN
-                                                .toString(),
+                                            controller.attendenceDetailTable[index].iN.toString(),
                                             style: AppStyle.fontfamilyplus,
                                           )),
                                           DataCell(Text(
-                                            controller.attendenceModelTable
-                                                .data![index].out
-                                                .toString(),
+                                            controller.attendenceDetailTable[index].out.toString(),
                                             style: AppStyle.fontfamilyplus,
                                           )),
                                           DataCell(Text(
-                                            controller.attendenceModelTable
-                                                .data![index].lCEGMIN
-                                                .toString(),
+                                            controller.attendenceDetailTable[index].lCEGMIN.toString(),
                                             style: AppStyle.fontfamilyplus,
                                           )),
                                           DataCell(
                                             GestureDetector(
                                               onTap: () {
-                                                detailbottomsheet(
-                                                    context, index);
+                                                detailbottomsheet(context, index);
                                               },
-                                              child: const Icon(
-                                                  Icons.arrow_drop_down_circle),
+                                              child: const Icon(Icons.arrow_drop_down_circle),
                                             ),
                                           ),
                                         ],
@@ -200,7 +182,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         builder: (context) {
           return GetBuilder<AttendenceController>(
             builder: (controller) {
-              return controller.attendenceModelTable.data!.isNotEmpty
+              return controller.attendenceDetailTable.isNotEmpty
                   ? SingleChildScrollView(
                       child: Column(
                         children: [
@@ -211,12 +193,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               const Spacer(),
                               Container(
                                 width: 90,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Divider(
-                                    height: 20,
-                                    color: AppColor.originalgrey,
-                                    thickness: 5),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                                child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
                               ),
                               const Spacer(),
                               GestureDetector(
@@ -243,12 +221,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 15),
+                                    padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
                                         alignment: Alignment.center,
                                         child: Text(
@@ -258,40 +233,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    controller.attendenceModelTable.data!
-                                                .length >
-                                            0
+                                    controller.attendenceDetailTable.length > 0
                                         ? Text(
-                                            split_go_leftRight(
-                                                controller.attendenceModelTable
-                                                    .data![index].punch
-                                                    .toString(),
-                                                'left'),
+                                            split_go_leftRight(controller.attendenceDetailTable[index].punch.toString(), 'left'),
                                           )
-                                        : Text('--:-- ',
-                                            style: AppStyle.plus16w600),
-                                    controller.attendenceModelTable.data!
-                                                .length >
-                                            0
+                                        : Text('--:-- ', style: AppStyle.plus16w600),
+                                    controller.attendenceDetailTable.length > 0
                                         ? Text(
-                                            split_go_leftRight(
-                                                controller.attendenceModelTable
-                                                    .data![index].punch
-                                                    .toString(),
-                                                'right'),
+                                            split_go_leftRight(controller.attendenceDetailTable[index].punch.toString(), 'right'),
                                           )
-                                        : Text('--:-- ',
-                                            style: AppStyle.plus16w600),
+                                        : Text('--:-- ', style: AppStyle.plus16w600),
                                   ],
                                 )
                               ],
                             ),
                           ),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15)),
+                          const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
@@ -302,43 +261,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
                                         flex: 3,
                                         child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
+                                            width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.shift,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.shift, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
                                         child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.25,
+                                            width: MediaQuery.of(context).size.height * 0.25,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.st,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.st, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
                                         child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.25,
+                                            width: MediaQuery.of(context).size.height * 0.25,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.lv,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.lv, style: AppStyle.w50018)),
                                       ),
                                     ],
                                   ),
@@ -349,60 +294,39 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       flex: 3,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.5,
+                                        width: MediaQuery.of(context).size.height * 0.5,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].shift
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].shift.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
                                       flex: 1,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.25,
+                                        width: MediaQuery.of(context).size.height * 0.25,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].st
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].st.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
                                       flex: 1,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.25,
+                                        width: MediaQuery.of(context).size.height * 0.25,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].lv
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].lv.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                   ],
@@ -410,8 +334,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ],
                             ),
                           ),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15)),
+                          const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
@@ -424,9 +347,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -434,25 +355,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         flex: 1,
                                         child: Container(
                                             // height: 100,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
+                                            width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.lc,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.lc, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
                                         child: Container(
                                             // height: 100,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
+                                            width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.eg,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.eg, style: AppStyle.w50018)),
                                       ),
                                     ],
                                   ),
@@ -464,40 +377,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       flex: 1,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.5,
+                                        width: MediaQuery.of(context).size.height * 0.5,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].lc
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].lc.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
                                       flex: 1,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.5,
+                                        width: MediaQuery.of(context).size.height * 0.5,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].eg
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].eg.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                   ],
@@ -505,8 +404,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ],
                             ),
                           ),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 15)),
+                          const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
@@ -519,9 +417,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -529,25 +425,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         flex: 1,
                                         child: Container(
                                             // height: 100,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
+                                            width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.otentmin,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.otentmin, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
                                         child: Container(
                                             // height: 100,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.5,
+                                            width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: Text(AppString.otmin,
-                                                style: AppStyle.w50018)),
+                                            child: Text(AppString.otmin, style: AppStyle.w50018)),
                                       ),
                                     ],
                                   ),
@@ -559,40 +447,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       flex: 1,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.5,
+                                        width: MediaQuery.of(context).size.height * 0.5,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].oTENTMIN
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].oTENTMIN.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
                                       flex: 1,
                                       child: Container(
                                         // height: 100,
-                                        width:
-                                            MediaQuery.of(context).size.height *
-                                                0.5,
+                                        width: MediaQuery.of(context).size.height * 0.5,
                                         alignment: Alignment.center,
-                                        child: controller.attendenceModelTable
-                                                    .data!.length >
-                                                0
+                                        child: controller.attendenceDetailTable.length > 0
                                             ? Text(
-                                                controller.attendenceModelTable
-                                                    .data![index].oTMIN
-                                                    .toString(),
+                                                controller.attendenceDetailTable[index].oTMIN.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: AppStyle.plus16w600),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                   ],

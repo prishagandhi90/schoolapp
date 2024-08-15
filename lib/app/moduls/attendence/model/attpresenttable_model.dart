@@ -1,20 +1,19 @@
-class AttendenceSummarytable {
+class ResponseAttendenceSummary {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<Data>? data;
+  List<AttendenceSummarytable>? data;
 
-  AttendenceSummarytable(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseAttendenceSummary({this.statusCode, this.isSuccess, this.message, this.data});
 
-  AttendenceSummarytable.fromJson(Map<String, dynamic> json) {
+  ResponseAttendenceSummary.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <AttendenceSummarytable>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new AttendenceSummarytable.fromJson(v));
       });
     }
   }
@@ -31,29 +30,29 @@ class AttendenceSummarytable {
   }
 }
 
-class Data {
-  int? toTP;
-  int? toTA;
-  int? toTDAYS;
-  int? p;
-  int? a;
-  int? wo;
-  int? co;
+class AttendenceSummarytable {
+  double? toTP;
+  double? toTA;
+  double? toTDAYS;
+  double? p;
+  double? a;
+  double? wo;
+  double? co;
   double? pl;
-  int? sl;
-  int? cl;
+  double? sl;
+  double? cl;
   double? ho;
-  int? ml;
-  int? ch;
-  int? lCEGMIN;
-  int? lCEGCNT;
-  int? nOTHRS;
-  int? cOTHRS;
-  int? ttLOTHRS;
+  double? ml;
+  double? ch;
+  double? lCEGMIN;
+  double? lCEGCNT;
+  double? nOTHRS;
+  double? cOTHRS;
+  double? ttLOTHRS;
   String? dutYHRS;
   String? dutYST;
 
-  Data(
+  AttendenceSummarytable(
       {this.toTP,
       this.toTA,
       this.toTDAYS,
@@ -75,7 +74,7 @@ class Data {
       this.dutYHRS,
       this.dutYST});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  AttendenceSummarytable.fromJson(Map<String, dynamic> json) {
     toTP = json['toT_P'];
     toTA = json['toT_A'];
     toTDAYS = json['toT_DAYS'];
