@@ -10,8 +10,6 @@ import 'package:get/get.dart';
 class LoginScreen extends GetView<LoginController> {
   const LoginScreen({super.key});
 
-  // final loginController = Get.put(LoginController());
-
   @override
   Widget build(BuildContext context) {
     Get.put(LoginController());

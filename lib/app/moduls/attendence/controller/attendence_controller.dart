@@ -5,7 +5,6 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
-import 'package:emp_app/app/core/model/dropdown_G_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,14 +14,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
   var bottomBarController = Get.put(BottomBarController());
-  late List<Dropdown_Glbl> monthyr = [];
   late List<MispunchTable> mispunchtable = [];
   late List<Attendencetable> attendencetable = [];
   late List<AttPresentTable> attpresenttable = [];
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = true;
   var isLoading1 = false.obs;
-  Dropdown_Glbl? selectedMonthYear;
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;

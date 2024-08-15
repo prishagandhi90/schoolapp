@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
@@ -23,7 +23,7 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getProfileData();
+    getDashboardData();
     hideBottomBar.value = false;
     update();
   }
@@ -32,64 +32,64 @@ class DashboardController extends GetxController {
     switch (index) {
       case 0:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 1:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 2:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 3:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 4:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 5:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 6:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
@@ -103,37 +103,35 @@ class DashboardController extends GetxController {
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {
-          // hideBottomBar.value = false;
-          // var bottomBarController = BottomBarController();
-          // bottomBarController.update();
-          // controller.getDashboardData();
+          hideBottomBar.value = false;
+          getDashboardData();
         });
 
         break;
       case 8:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 9:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 10:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
@@ -187,20 +185,15 @@ class DashboardController extends GetxController {
           dashboardController.update();
         }
         update();
-        Get.offAll(const BottomBarView());
-      } else {
+        // Get.offAll(const BottomBarView());
+      } else if (empmonthyrtable != "" && jsonDecode(empmonthyrtable)["statusCode"] == 401) {
         prefs.clear();
         Get.offAll(LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       }
+      ;
     } else {
-      prefs.clear();
-      Get.offAll(LoginScreen());
+      Get.rawSnackbar(message: "Something went wrong");
     }
-
-    Get.offAll(LoginScreen());
-    // else {
-    //   Get.rawSnackbar(message: "Something went wrong");
-    // }
   }
 }

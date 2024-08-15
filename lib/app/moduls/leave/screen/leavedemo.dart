@@ -2,8 +2,9 @@
 
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
-import 'package:emp_app/app/core/theme/const_color.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -22,35 +23,35 @@ class Leavedemo extends GetView<LeaveController> {
         key: scaffoldKey,
         appBar: AppBar(
           title: AppText(
-            text: 'Contact',
+            text: AppString.contact,
             fontSize: Sizes.px22,
-            fontColor: ConstColor.headingTexColor,
+            fontColor: AppColor.teal,
             fontWeight: FontWeight.w800,
           ),
           centerTitle: true,
-          backgroundColor: Colors.white,
+          backgroundColor: AppColor.white,
           elevation: 2,
           excludeHeaderSemantics: false,
-          surfaceTintColor: Colors.white,
-          shadowColor: Colors.grey,
+          surfaceTintColor: AppColor.white,
+          shadowColor: AppColor.originalgrey,
           leading: IconButton(
               icon: Image.asset(
-                'assets/image/drawer.png',
+                AppImage.drawer,
                 width: 20,
                 color: AppColor.black,
               ),
               onPressed: () => scaffoldKey.currentState!.openDrawer()),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.white,
         onDrawerChanged: (isop) {
           var bottomBarController = Get.put(BottomBarController());
           hideBottomBar.value = isop;
           bottomBarController.update();
         },
         drawer: CustomDrawer(),
-        body: const Center(
+        body: Center(
           child: Text(
-            'Coming Soon...',
+            AppString.comingsoon,
             style: TextStyle(fontSize: 20),
           ),
         ),

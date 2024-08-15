@@ -1,5 +1,5 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/const_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +26,9 @@ class AppText extends Text {
                 fontStyle: amalfiFontstyle ?? FontStyle.normal,
                 letterSpacing: letterSpacing ?? 0,
                 decoration: textDecoration ?? TextDecoration.none,
-                decorationColor: ConstColor.headingTexColor,
+                decorationColor: AppColor.teal,
                 fontSize: fontSize ?? Sizes.px14,
-                color: fontColor ?? ConstColor.blackColor,
+                color: fontColor ?? AppColor.black,
                 fontWeight: fontWeight ?? FontWeight.w400,
                 height: height ?? 0.00,
                 fontFamily: amalfiFontFamily ?? CommonFontStyle.plusJakartaSans),

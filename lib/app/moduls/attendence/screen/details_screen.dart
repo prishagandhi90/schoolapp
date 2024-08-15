@@ -1,7 +1,8 @@
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       builder: (controller) {
         return Scaffold(
           resizeToAvoidBottomInset: true,
-          backgroundColor: Colors.white,
+          backgroundColor: AppColor.white,
           body: LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(
@@ -69,42 +70,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     columns: [
                                       DataColumn(
                                         label: Text(
-                                          'DATE',
-                                          style: TextStyle(
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                          ),
+                                          AppString.date,
+                                          style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
                                       DataColumn(
                                         label: Text(
-                                          'IN',
-                                          style: TextStyle(
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                          ),
+                                          AppString.iN,
+                                          style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
                                       DataColumn(
                                         label: Text(
-                                          'OUT',
-                                          style: TextStyle(
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                          ),
+                                          AppString.out,
+                                          style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
                                       DataColumn(
                                         label: Text(
-                                          'LC/EG \nMIN',
-                                          style: TextStyle(
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                          ),
+                                          AppString.lcegmin,
+                                          style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
                                       DataColumn(
                                         label: Text(
                                           '',
-                                          style: TextStyle(
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                          ),
+                                          style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
                                     ],
@@ -117,36 +108,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               height: 40,
                                               width: 40,
                                               decoration: BoxDecoration(
-                                                color: const Color.fromARGB(255, 199, 199, 199),
+                                                color: AppColor.lightgrey,
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Center(
                                                 child: Text(
                                                   controller.attendencetable[index].atTDATE.toString(),
-                                                  style: TextStyle(
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
+                                                  style: AppStyle.fontfamilyplus,
                                                 ),
                                               ),
                                             ),
                                           ),
                                           DataCell(Text(
                                             controller.attendencetable[index].iN.toString(),
-                                            style: TextStyle(
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
+                                            style: AppStyle.fontfamilyplus,
                                           )),
                                           DataCell(Text(
                                             controller.attendencetable[index].out.toString(),
-                                            style: TextStyle(
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
+                                            style: AppStyle.fontfamilyplus,
                                           )),
                                           DataCell(Text(
                                             controller.attendencetable[index].lCEGMIN.toString(),
-                                            style: TextStyle(
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
+                                            style: AppStyle.fontfamilyplus,
                                           )),
                                           DataCell(
                                             GestureDetector(
@@ -166,10 +149,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 padding: const EdgeInsets.all(15),
                                 child: Center(
                                   child: Text(
-                                    'No attendance data available',
-                                    style: TextStyle(
-                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                    ),
+                                    AppString.noattendencedata,
+                                    style: AppStyle.fontfamilyplus,
                                   ),
                                 ),
                               ),
@@ -196,7 +177,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
-          side: const BorderSide(color: Colors.black),
+          side: BorderSide(color: AppColor.black),
         ),
         builder: (context) {
           return GetBuilder<AttendenceController>(
@@ -213,7 +194,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               Container(
                                 width: 90,
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                                child: const Divider(height: 20, color: Colors.grey, thickness: 5),
+                                child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
                               ),
                               const Spacer(),
                               GestureDetector(
@@ -231,7 +212,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 223, 239, 241),
+                              color: AppColor.lightblue,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
@@ -241,13 +222,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   width: double.infinity,
                                   height: 45,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                                  child: const Padding(
+                                  child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
                                         alignment: Alignment.center,
                                         child: Text(
-                                          'PUNCH',
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                                          AppString.punch,
+                                          style: AppStyle.w50018,
                                         )),
                                   ),
                                 ),
@@ -258,22 +239,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ? Text(
                                             split_go_leftRight(controller.attendencetable[index].punch.toString(), 'left'),
                                           )
-                                        : Text('--:-- ',
-                                            style: TextStyle(
-                                              fontSize: 16, //25
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            )),
+                                        : Text('--:-- ', style: AppStyle.plus16w600),
                                     controller.attendencetable.isNotEmpty
                                         ? Text(
                                             split_go_leftRight(controller.attendencetable[index].punch.toString(), 'right'),
                                           )
-                                        : Text('--:-- ',
-                                            style: TextStyle(
-                                              fontSize: 16, //25
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            )),
+                                        : Text('--:-- ', style: AppStyle.plus16w600),
                                   ],
                                 )
                               ],
@@ -283,7 +254,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 223, 239, 241),
+                              color: AppColor.lightblue,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
@@ -292,34 +263,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       Flexible(
                                         flex: 3,
                                         child: Container(
                                             width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: const Text('SHIFT', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.shift, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
                                         child: Container(
                                             width: MediaQuery.of(context).size.height * 0.25,
                                             alignment: Alignment.center,
-                                            child: const Text('ST', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.st, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
                                         child: Container(
                                             width: MediaQuery.of(context).size.height * 0.25,
                                             alignment: Alignment.center,
-                                            child: const Text('LV', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.lv, style: AppStyle.w50018)),
                                       ),
                                     ],
                                   ),
                                 ),
                                 Row(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Flexible(
                                       flex: 3,
@@ -331,12 +300,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].shift.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
@@ -349,12 +313,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].st.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
@@ -367,12 +326,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].lv.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                   ],
@@ -384,7 +338,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 223, 239, 241),
+                              color: AppColor.lightblue,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
@@ -403,7 +357,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             // height: 100,
                                             width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: const Text('LC', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.lc, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
@@ -411,7 +365,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             // height: 100,
                                             width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: const Text('EG', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.eg, style: AppStyle.w50018)),
                                       ),
                                     ],
                                   ),
@@ -429,12 +383,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].lc.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
@@ -447,12 +396,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].eg.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                   ],
@@ -464,7 +408,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 223, 239, 241),
+                              color: AppColor.lightblue,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
@@ -483,7 +427,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             // height: 100,
                                             width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: const Text('OT ENT MIN', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.otentmin, style: AppStyle.w50018)),
                                       ),
                                       Flexible(
                                         flex: 1,
@@ -491,7 +435,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             // height: 100,
                                             width: MediaQuery.of(context).size.height * 0.5,
                                             alignment: Alignment.center,
-                                            child: const Text('OT MIN', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))),
+                                            child: Text(AppString.otmin, style: AppStyle.w50018)),
                                       ),
                                     ],
                                   ),
@@ -509,12 +453,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].oTENTMIN.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                     Flexible(
@@ -527,12 +466,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             ? Text(
                                                 controller.attendencetable[index].oTMIN.toString(),
                                               )
-                                            : Text('--:-- ',
-                                                style: TextStyle(
-                                                  fontSize: 16, //25
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                )),
+                                            : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
                                     ),
                                   ],
@@ -543,9 +477,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ],
                       ),
                     )
-                  : const Padding(
+                  : Padding(
                       padding: EdgeInsets.all(15),
-                      child: Center(child: Text('No attendance data available')),
+                      child: Center(child: Text(AppString.noattendencedata)),
                     );
             },
           );

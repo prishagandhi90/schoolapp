@@ -2,7 +2,6 @@
 
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
-import 'package:emp_app/app/core/theme/const_color.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -24,7 +23,7 @@ class OvertimeScreen extends GetView<OvertimeController> {
           title: AppText(
             text: 'Contact',
             fontSize: Sizes.px22,
-            fontColor: ConstColor.headingTexColor,
+            fontColor: AppColor.teal,
             fontWeight: FontWeight.w800,
           ),
           centerTitle: true,

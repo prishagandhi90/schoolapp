@@ -1,21 +1,12 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/model/dropdown_G_model.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
-  List<Dropdown_Glbl> userNameList = [];
-  List<Dropdown_Glbl> companyList = [];
-  List<Dropdown_Glbl> yearList = [];
-  Dropdown_Glbl? selectedUserName;
-  Dropdown_Glbl? selectedCompany;
-  Dropdown_Glbl? selectedYear;
   bool isObscured = true;
   bool isVerifyingOtp = false;
   String devToken = "";

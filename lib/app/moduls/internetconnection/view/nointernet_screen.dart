@@ -1,6 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/common_elevated_button.dart';
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/core/theme/const_color.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class NoInternetView extends GetView<NoInternetController> {
     Sizes.init(context);
     return GetBuilder(builder: (NoInternetController controller) {
       return Scaffold(
-        backgroundColor: ConstColor.whiteColor,
+        backgroundColor: AppColor.white,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -87,7 +87,7 @@ class NoInternetView extends GetView<NoInternetController> {
                           child: AppButton(
                             radius: 50,
                             // backgroundColor: Colors.transparent,
-                            textColor: ConstColor.whiteColor,
+                            textColor: AppColor.white,
                             // padding: const EdgeInsets.symmetric(vertical: 15),
                             text: "Try Again",
                             onPressed: () {

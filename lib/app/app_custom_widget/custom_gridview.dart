@@ -68,48 +68,18 @@ class _CustomGridviewState extends State<CustomGridview> {
       },
     );
   }
-  //   GridView.builder(
-  //     padding: const EdgeInsets.all(15),
-  //     itemCount: AppConst.gridview.length,
-  //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-  //       crossAxisCount: 3,
-  //       crossAxisSpacing: 18, //13
-  //       mainAxisSpacing: 18, //13
-  //       childAspectRatio: 1.30, //0.85
-  //     ),
-  //     itemBuilder: (BuildContext context, int index) {
-  //       return GestureDetector(
-  //         onTap: () => onItemTapped(index),
-  //         child: FutureBuilder<Container>(
-  //           future: card(index, context),
-  //           builder: (BuildContext context, AsyncSnapshot<Container> snapshot) {
-  //             if (snapshot.connectionState == ConnectionState.waiting) {
-  //               return const Center(child: CircularProgressIndicator());
-  //             } else if (snapshot.hasError) {
-  //               return const Center(child: Icon(Icons.error));
-  //             } else {
-  //               return snapshot.data ?? const SizedBox.shrink();
-  //             }
-  //           },
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
-  // Future<Container> card(int index, BuildContext context) async {
-  //   await Future.delayed(const Duration(seconds: 1));
   Container card(int index) {
     bool isSelected = selectedIndex == index;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
+        color: AppColor.white,
+        border: Border.all(color: AppColor.primaryColor),
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: isSelected
             ? [
-                const BoxShadow(
-                  color: Color.fromARGB(255, 163, 163, 163),
+                BoxShadow(
+                  color: AppColor.grey,
                   spreadRadius: 2,
                   offset: Offset(0, 4),
                   blurRadius: 0.0,

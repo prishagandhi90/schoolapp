@@ -33,25 +33,6 @@ class _OtpScreenState extends State<OtpScreen> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   String deviceTok = "";
 
-  // void startTimer() {
-  //   setState(() {
-  //     isButtonEnabled = false;
-  //   });
-  //   otpController.counter = 20;
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (otpController.counter > 0) {
-  //       setState(() {
-  //         otpController.counter--;
-  //       });
-  //     } else {
-  //       setState(() {
-  //         isButtonEnabled = true;
-  //       });
-  //       timer.cancel();
-  //     }
-  //   });
-  // }
-
   @override
   void dispose() {
     otpController.timer!.cancel();
@@ -94,9 +75,11 @@ class _OtpScreenState extends State<OtpScreen> {
         Get.snackbar('RespOTP: $respOTP', '', colorText: AppColor.white, backgroundColor: AppColor.black);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Failed to resend OTP. Please try again.'),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppString.failedtoresendotp),
+        ),
+      );
     }
   }
 
@@ -151,7 +134,6 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const borderColor = Color.fromARGB(255, 94, 157, 168);
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
@@ -161,7 +143,7 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: borderColor),
+        border: Border.all(color: AppColor.primaryColor),
       ),
     );
     String maskedNumber = otpController.maskMobileNumber(widget.mobileNumber);
@@ -239,16 +221,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                             );
                                           } else {
                                             await otpController.otpOnClk(context, widget.otpNo, widget.deviceToken);
-
-                                            // PersistentNavBarNavigator.pushNewScreen(
-                                            //   context,
-                                            //   screen: Dashboard1Screen(),
-                                            //   withNavBar: true,
-                                            //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                            // ).then((value) {
-                                            //   // hideBottomBar.value = false;
-                                            //   // controller.getDashboardData();
-                                            // });
                                           }
                                         },
                                   style: ElevatedButton.styleFrom(

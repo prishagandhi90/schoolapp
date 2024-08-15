@@ -1,6 +1,6 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/core/util/const_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class AppButton extends StatelessWidget {
   final double? fontLetterSpacing;
   final bool? isLoading;
 
-  const AppButton({
+   AppButton({
     super.key,
     required this.text,
     required this.onPressed,
@@ -25,7 +25,7 @@ class AppButton extends StatelessWidget {
     this.isDelete = false,
     this.bgColor,
     this.gradientColors,
-    this.textColor = ConstColor.whiteColor,
+    this.textColor = Colors.white,
     this.fontWeight = FontWeight.w400,
     this.fontSize,
     this.fontLetterSpacing,
@@ -37,9 +37,7 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isDelete != true
-            ? bgColor ?? ConstColor.buttonColor
-            : ConstColor.redColor, // Set transparent color
+        backgroundColor: isDelete != true ? bgColor ?? AppColor.teal1 : AppColor.red1, // Set transparent color
         padding: EdgeInsets.zero,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -50,14 +48,14 @@ class AppButton extends StatelessWidget {
       child: Container(
         decoration: isDelete != true
             ? BoxDecoration(
-                border: Border.all(color: bgColor ?? ConstColor.buttonColor),
+                border: Border.all(color: bgColor ?? AppColor.teal1),
                 // image: DecorationImage(
                 //     image: AssetImage(ConstAsset.gradientButtonImage),
                 //     fit: BoxFit.cover),
                 borderRadius: BorderRadius.circular(radius ?? 5.0),
               )
             : BoxDecoration(
-                border: Border.all(color: ConstColor.redColor),
+                border: Border.all(color: AppColor.red1),
                 // image: DecorationImage(
                 //     image: AssetImage(ConstAsset.gradientDeleteButtonImage),
                 //     fit: BoxFit.cover),
@@ -65,15 +63,16 @@ class AppButton extends StatelessWidget {
               ),
         child: Container(
           constraints: BoxConstraints(
-              minWidth: Sizes.crossLength * .088,
-              minHeight: Sizes.crossLength * .050),
+            minWidth: Sizes.crossLength * .088,
+            minHeight: Sizes.crossLength * .050,
+          ),
           alignment: Alignment.center,
           child: (isLoading ?? false)
               ? Transform.scale(
                   scale: 0.6,
-                  child: const Center(
+                  child: Center(
                     child: CircularProgressIndicator(
-                      color: Colors.white,
+                      color: AppColor.white,
                     ),
                   ),
                 )

@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -25,9 +26,9 @@ class _CustomDropdown1State extends State<CustomDropdown1> {
             Expanded(
               child: Text(
                 widget.text,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: Colors.black,
+                  color: AppColor.black,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -61,17 +62,17 @@ class _CustomDropdown1State extends State<CustomDropdown1> {
           padding: const EdgeInsets.only(left: 14, right: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0),
-            border: Border.all(color: Colors.black),
+            border: Border.all(color: AppColor.black),
             // color: Colors.white,
           ),
         ),
-        iconStyleData: const IconStyleData(
+        iconStyleData:  IconStyleData(
           icon: Icon(
             Icons.keyboard_arrow_down,
           ),
           iconSize: 14,
-          iconEnabledColor: Colors.black,
-          iconDisabledColor: Colors.black,
+          iconEnabledColor: AppColor.black,
+          iconDisabledColor: AppColor.black,
         ),
       ),
     );

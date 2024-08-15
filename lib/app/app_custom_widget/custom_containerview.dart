@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class CustomContainerview extends StatelessWidget {
             fontFamily: CommonFontStyle.plusJakartaSans,
           ),
         ),
-        const Divider(color: Color.fromARGB(255, 230, 229, 229),),
+        Divider(color: AppColor.lightwhite),
         Text(
           text1,
           style: TextStyle(

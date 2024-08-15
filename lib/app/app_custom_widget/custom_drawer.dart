@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
-import 'package:emp_app/app/core/constant/asset_constant.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/const_color.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
@@ -22,14 +22,13 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var topPadding = MediaQuery.of(context).viewPadding.top;
-
     return Drawer(
       elevation: 0,
       width: Get.width * 0.75,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
       ),
-      backgroundColor: ConstColor.whiteColor,
+      backgroundColor: AppColor.white,
       child: Padding(
         padding: EdgeInsets.only(left: Sizes.crossLength * 0.015, right: Sizes.crossLength * 0.015),
         child: Column(
@@ -41,20 +40,18 @@ class CustomDrawer extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 15,
-                        // right: 15,
                         top: 10,
                         bottom: 5),
                     child: Row(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: ConstColor.hintTextColor),
-                              borderRadius: const BorderRadius.all(Radius.circular(10))),
+                              border: Border.all(width: 1, color: AppColor.darkgery), borderRadius: const BorderRadius.all(Radius.circular(10))),
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 30),
                               child: Image.asset(
-                                ConstAsset.profileImage,
+                                AppImage.venuspro,
                                 scale: 2,
                               ),
                             ),
@@ -216,15 +213,15 @@ class CustomDrawer extends StatelessWidget {
                           onPressed: () {
                             otpController.showLogoutDialog(context);
                           },
-                          child: const Text(
-                            'Logout',
-                            style: TextStyle(color: Colors.white),
+                          child: Text(
+                            AppString.logout,
+                            style: TextStyle(color: AppColor.white),
                           ))),
                   const SizedBox(
                     height: 20,
                   ),
                   Image.asset(
-                    'assets/sidemenulogo.png',
+                    AppImage.sidemenulogo,
                     scale: 2.5,
                   ),
                   const SizedBox(

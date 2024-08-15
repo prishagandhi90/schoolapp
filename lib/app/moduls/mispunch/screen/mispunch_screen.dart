@@ -4,6 +4,7 @@ import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,11 +35,10 @@ class _MispunchScreenState extends State<MispunchScreen> {
           child: Scaffold(
             appBar: AppBar(
               title: Text(
-                'Mispunch',
+                AppString.mispunch,
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 94, 157, 168),
+                  color: AppColor.primaryColor,
                   fontWeight: FontWeight.w700,
-                  // fontSize: 18,
                   fontFamily: CommonFontStyle.plusJakartaSans,
                 ),
               ),
@@ -85,8 +85,7 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.23,
-                                      decoration:
-                                          BoxDecoration(color: const Color.fromRGBO(211, 240, 243, 0.58), borderRadius: BorderRadius.circular(10)),
+                                      decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
                                       child: Column(
                                         children: [
                                           Container(
@@ -114,11 +113,12 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                 children: [
-                                                  CustomContainerview(text: 'TYPE', text1: controller.mispunchtable[index].misPunch.toString()),
                                                   CustomContainerview(
-                                                      text: 'PUNCH TIME', text1: controller.mispunchtable[index].punchTime.toString()),
+                                                      text: AppString.type, text1: controller.mispunchtable[index].misPunch.toString()),
                                                   CustomContainerview(
-                                                      text: 'SHIFT TIME', text1: controller.mispunchtable[index].shiftTime.toString()),
+                                                      text: AppString.punchtime, text1: controller.mispunchtable[index].punchTime.toString()),
+                                                  CustomContainerview(
+                                                      text: AppString.shifttime, text1: controller.mispunchtable[index].shiftTime.toString()),
                                                 ],
                                               ),
                                             ),
@@ -129,10 +129,10 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                   );
                                 },
                               )
-                            : const Padding(
+                            : Padding(
                                 padding: EdgeInsets.all(15),
                                 child: Center(
-                                  child: Text('No Mispunch in this month'),
+                                  child: Text(AppString.nomispunchinthismonth),
                                 ),
                               ),
                   ),

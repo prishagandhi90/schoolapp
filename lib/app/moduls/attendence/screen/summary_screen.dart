@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
-    // ScrollController summaryScrollController = attendenceController.createScrollController();
     return GetBuilder<AttendenceController>(builder: (controller) {
       return SingleChildScrollView(
         controller: controller.attendanceScrollController,
@@ -53,8 +53,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 223, 239, 241),
-                                border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
+                                color: AppColor.lightblue,
+                                border: Border.all(color: AppColor.primaryColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
@@ -69,7 +69,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                       CustomContainerview(text: 'A', text1: controller.attpresenttable[0].a.toString()),
                                     ],
                                   ),
-                                  // const Divider(endIndent: 10, indent: 10),
                                 ],
                               ),
                             ),
@@ -79,8 +78,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 223, 239, 241),
-                                border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
+                                color: AppColor.lightblue,
+                                border: Border.all(color: AppColor.primaryColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
@@ -92,7 +91,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     CustomContainerview(text: 'CL', text1: controller.attpresenttable[0].cl.toString()),
                                     CustomContainerview(text: 'ML', text1: controller.attpresenttable[0].ml.toString())
                                   ]),
-                                  // const Divider(endIndent: 10, indent: 10),
                                 ],
                               ),
                             ),
@@ -102,8 +100,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 223, 239, 241),
-                                border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
+                                color: AppColor.lightblue,
+                                border: Border.all(color: AppColor.primaryColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
@@ -114,7 +112,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                     CustomContainerview(text: 'WO', text1: controller.attpresenttable[0].wo.toString()),
                                     CustomContainerview(text: 'CO', text1: controller.attpresenttable[0].co.toString()),
                                   ]),
-                                  // const Divider(endIndent: 10, indent: 10),
                                 ],
                               ),
                             ),
@@ -124,18 +121,20 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 223, 239, 241),
-                                border: Border.all(color: const Color.fromARGB(255, 94, 157, 168)),
+                                color: AppColor.lightblue,
+                                border: Border.all(color: AppColor.primaryColor),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Column(
                                 children: [
-                                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    CustomContainerview(text: 'OT HRS', text1: controller.attpresenttable[0].cOTHRS.toString()),
-                                    CustomContainerview(text: 'DUTY HRS', text1: controller.attpresenttable[0].dutYHRS.toString()),
-                                    CustomContainerview(text: 'DUTY ST', text1: controller.attpresenttable[0].dutYST.toString()),
-                                  ]),
-                                  // const Divider(endIndent: 10, indent: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      CustomContainerview(text: 'OT HRS', text1: controller.attpresenttable[0].cOTHRS.toString()),
+                                      CustomContainerview(text: 'DUTY HRS', text1: controller.attpresenttable[0].dutYHRS.toString()),
+                                      CustomContainerview(text: 'DUTY ST', text1: controller.attpresenttable[0].dutYST.toString()),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

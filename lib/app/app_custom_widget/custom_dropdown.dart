@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -25,12 +27,12 @@ class CustomDropDownState extends State<CustomDropDown> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           isExpanded: true,
-          hint: const Text(
-            'Select',
+          hint: Text(
+            AppString.select,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: AppColor.black,
             ),
           ),
           // decoration: InputDecoration(
@@ -79,8 +81,8 @@ class CustomDropDownState extends State<CustomDropDown> {
             width: 140,
             padding: const EdgeInsets.only(left: 14, right: 14),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              color: Colors.white,
+              border: Border.all(color: AppColor.black),
+              color: AppColor.white,
               borderRadius: BorderRadius.circular(6.0),
             ),
           ),

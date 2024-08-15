@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -8,7 +10,6 @@ import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,7 +17,6 @@ class OtpController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   final formKey1 = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
-  final _storage = const FlutterSecureStorage();
   final TextEditingController otpController = TextEditingController(); //text: '1234'
   final TextEditingController numberController = TextEditingController(); //text: '8780917338'
   bool isLoadingLogin = false;
@@ -32,7 +32,6 @@ class OtpController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // bottomBarController.update();
   }
 
   Future<dynamic> sendotp() async {
@@ -106,20 +105,20 @@ class OtpController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to log out?'),
+          title: Text(AppString.logout),
+          content: Text(AppString.areyousuretologout),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text('No'),
+              child: Text(AppString.no),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: const Text('Yes'),
+              child: Text(AppString.yes),
             ),
           ],
         );
@@ -166,10 +165,10 @@ class OtpController extends GetxController {
           print('OTP Controller: ${otpController.text}');
           print('OTP: $otpNo');
           Get.snackbar(
-            'OTP is incorrect!',
-            'Please enter correct OTP!',
-            colorText: Colors.white,
-            backgroundColor: Colors.black,
+            AppString.otpisincorrect,
+            AppString.plzentercorrectotp,
+            colorText: AppColor.white,
+            backgroundColor: AppColor.black,
             duration: const Duration(seconds: 1),
           );
           return false;
@@ -191,19 +190,19 @@ class OtpController extends GetxController {
           Get.offAll(BottomBarView());
         } else {
           Get.snackbar(
-            'OTP incorrect!',
+            AppString.otpincorrect,
             '',
-            colorText: Colors.white,
-            backgroundColor: Colors.black,
+            colorText: AppColor.white,
+            backgroundColor: AppColor.black,
             duration: const Duration(seconds: 1),
           );
         }
       } else {
         Get.snackbar(
-          'Please enter the proper Mobile/OTP!',
+          AppString.plzenterproperotp,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
       }

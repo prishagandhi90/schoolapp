@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
@@ -10,20 +11,21 @@ import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// class AttendanceScreen extends GetView<AttendenceController> {
-class AttendanceScreen extends StatefulWidget {
-  const AttendanceScreen({super.key, this.fromDashboard = false});
+class AttendanceScreen extends GetView<AttendenceController> {
+// class AttendanceScreen extends StatefulWidget {
+  AttendanceScreen({super.key, this.fromDashboard = false});
   final bool fromDashboard;
 
-  @override
-  State<AttendanceScreen> createState() => _AttendanceScreenState();
-}
+//   @override
+//   State<AttendanceScreen> createState() => _AttendanceScreenState();
+// }
 
-class _AttendanceScreenState extends State<AttendanceScreen> {
-  final AttendenceController attendenceController = Get.put(AttendenceController());
-  var scaffoldKey1 = GlobalKey<ScaffoldState>();
+// class _AttendanceScreenState extends State<AttendanceScreen> {
+  // final AttendenceController attendenceController = Get.put(AttendenceController());
+  final scaffoldKey1 = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return DefaultTabController(
@@ -34,12 +36,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(
-                'Attendance',
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 94, 157, 168), fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
+                AppString.attendence,
+                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
               ),
               // centerTitle: true,
-              leading: widget.fromDashboard
+              leading: fromDashboard
                   ? IconButton(
                       icon: const Icon(Icons.menu),
                       onPressed: () {
@@ -57,7 +58,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   selValue: controller.YearSel_selIndex,
                   onPressed: (index) {
                     controller.upd_YearSelIndex(index);
-                    attendenceController.showHideMsg();
+                    controller.showHideMsg();
                   },
                 )
               ],
@@ -77,10 +78,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 223, 239, 241),
+                      color: AppColor.lightblue,
                     ),
                     child: TabBar(
-                      labelColor: Colors.white,
+                      labelColor: AppColor.white,
                       unselectedLabelColor: AppColor.black,
                       dividerColor: Colors.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,

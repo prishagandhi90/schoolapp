@@ -1,11 +1,14 @@
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_const.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -18,14 +21,30 @@ class PayrollController extends GetxController {
   var isLoading = false.obs;
   late List<Payroll> payrolltable = [];
   final ApiController apiController = Get.put(ApiController());
+  TextEditingController textEditingController = TextEditingController();
   String tokenNo = '', loginId = '';
-  final _storage = const FlutterSecureStorage();
+  FocusNode focusNode = FocusNode();
+  bool hasFocus = false;
+  var dashboardController = Get.put(DashboardController());
+
   @override
   void onInit() {
     super.onInit();
     getProfileData();
     hideBottomBar.value = false;
+    filteredList = originalList;
+    focusNode.addListener(() {
+      hasFocus = focusNode.hasFocus;
+      update();
+    });
     update();
+  }
+
+  @override
+  void onClose() {
+    focusNode.dispose();
+    textEditingController.dispose();
+    super.onClose();
   }
 
   Future<dynamic> getProfileData() async {
@@ -61,12 +80,12 @@ class PayrollController extends GetxController {
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: const AttendanceScreen(),
+          screen: AttendanceScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) {
-          // hideBottomBar.value = false;
-          // controller.getDashboardData();
+        ).then((value) async {
+          hideBottomBar.value = false;
+          await dashboardController.getDashboardData();
         });
         break;
       case 1:
@@ -78,30 +97,45 @@ class PayrollController extends GetxController {
           screen: const MispunchScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) {
-          // hideBottomBar.value = false;
-          // controller.getDashboardData();
+        ).then((value) async {
+          hideBottomBar.value = false;
+          await dashboardController.getDashboardData();
         });
         break;
       case 2:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       case 3:
         Get.snackbar(
-          'Coming Soon',
+          AppString.comingsoon,
           '',
-          colorText: Colors.white,
-          backgroundColor: Colors.black,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
           duration: const Duration(seconds: 1),
         );
         break;
       default:
     }
+  }
+
+  List<Map<String, dynamic>> originalList = AppConst.payrollgrid;
+  List<Map<String, dynamic>> filteredList = [];
+
+  void filterSearchResults(String query) {
+    List<Map<String, dynamic>> tempList = [];
+    if (query.isNotEmpty) {
+      tempList = originalList.where((item) => item['label'].toLowerCase().contains(query.toLowerCase())).toList();
+    } else {
+      tempList = originalList;
+    }
+
+    filteredList = tempList;
+    update();
   }
 }

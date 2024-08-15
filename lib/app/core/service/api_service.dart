@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
-import 'package:emp_app/app/core/model/dropdown_G_model.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
@@ -11,17 +10,6 @@ import 'package:dio/dio.dart' as diopackage;
 import 'package:get/get.dart';
 
 class ApiController extends GetxController {
-  List<Dropdown_Glbl> ParseJson(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Dropdown_Glbl>((json) => Dropdown_Glbl.fromJson(json)).toList();
-  }
-
-  List<Dropdown_Glbl> parseJson_Flag_monthyr(String responseBody, String flag) {
-    print(responseBody);
-    final parsed = json.decode(responseBody)[flag].cast<Map<String, dynamic>>();
-    return parsed.map<Dropdown_Glbl>((json) => Dropdown_Glbl.fromJson(json)).toList();
-  }
-
   List<OTPModel> parseJson_Flag_otptable(String responseBody, String flag) {
     try {
       print(responseBody);
@@ -84,24 +72,6 @@ class ApiController extends GetxController {
       return parsed.map<AttPresentTable>((json) => AttPresentTable.fromJson(json)).toList();
     } else {
       return [];
-    }
-  }
-
-  Future<List<Dropdown_Glbl>> getUserNames(String apiURL, String headerToken, Object jsonBodyObj) async {
-    var headers;
-    if (headerToken == '') {
-      headers = {"Content-Type": "application/json"};
-    } else {
-      headers = {'Authorization': 'Bearer $headerToken', "Content-Type": "application/json"};
-    }
-
-    final body = jsonEncode(jsonBodyObj);
-    final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
-
-    if (response.statusCode == 200) {
-      return ParseJson(response.body);
-    } else {
-      throw Exception('Unable to fetch products from the REST API');
     }
   }
 

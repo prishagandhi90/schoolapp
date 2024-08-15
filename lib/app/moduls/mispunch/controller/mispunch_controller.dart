@@ -1,22 +1,17 @@
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
-import 'package:emp_app/app/core/model/dropdown_G_model.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MispunchController extends GetxController {
-  late List<Dropdown_Glbl> monthyr = [];
-  final _storage = const FlutterSecureStorage();
   final ApiController apiController = Get.put(ApiController());
   var bottomBarController = Get.put(BottomBarController());
   String tokenNo = '', loginId = '', empId = '';
   var isLoading = false.obs;
-  Dropdown_Glbl? selectedMonthYear;
   late List<MispunchTable> mispunchtable = [];
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
@@ -120,36 +115,6 @@ class MispunchController extends GetxController {
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       await getmonthyrempinfotable();
     }
-  }
-
-  Future<List<Dropdown_Glbl>> getmonthyrempinfo() async {
-    try {
-      String url = 'http://117.217.126.127:44166/api/Employee/GetMonthYr_EmpInfo';
-
-      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
-      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      // empId = await _storage.read(key: "KEY_EMPID") ?? '';
-
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString('KEY_LOGINID') ?? "";
-      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
-      empId = await pref.getString('KEY_EMPID') ?? "";
-
-      var jsonbodyObj = {"loginId": loginId};
-
-      final EmpMonthYr = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      monthyr = apiController.parseJson_Flag_monthyr(EmpMonthYr, "data");
-      if (monthyr.length > 0) {
-        selectedMonthYear = monthyr[0];
-      }
-      isLoading.value = false;
-      update();
-      return monthyr;
-    } catch (e) {
-      isLoading.value = false;
-      update();
-    }
-    return [];
   }
 
   Future<dynamic> getmonthyrempinfotable() async {

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeaveMainScreen extends GetView<LeaveController> {
-   LeaveMainScreen({super.key});
+  LeaveMainScreen({super.key});
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
       return DefaultTabController(
         length: 2,
         child: Scaffold(
-           backgroundColor: Colors.white,
+            backgroundColor: Colors.white,
             key: scaffoldKey,
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -31,21 +33,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back)),
-              // leading: IconButton(
-              //     icon: Image.asset(
-              //       'assets/image/drawer.png',
-              //       width: 20,
-              //       color: AppColor.black,
-              //     ),
-              //     onPressed: () => controller.scaffoldKey.currentState!.openDrawer()),
             ),
-            // backgroundColor: Colors.white,
-            // onDrawerChanged: (isop) {
-            //   var bottomBarController = Get.put(BottomBarController());
-            //   hideBottomBar.value = isop;
-            //   bottomBarController.update();
-            // },
-            // drawer: CustomDrawer(),
             body: Column(
               children: [
                 Container(

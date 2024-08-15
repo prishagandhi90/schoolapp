@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -44,7 +45,7 @@ class ProgressWithIconState extends State<ProgressWithIcon> with SingleTickerPro
           child: Container(
             width: 200,
             height: 200,
-            child: Image.asset('assets/venus_profile.png'),
+            child: Image.asset(AppImage.venuspro),
           ),
         );
       },

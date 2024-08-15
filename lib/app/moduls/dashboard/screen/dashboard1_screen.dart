@@ -2,6 +2,8 @@ import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/app_custom_widget/custom_gridview.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/main.dart';
@@ -28,7 +30,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
           appBar: AppBar(
             backgroundColor: AppColor.white,
             title: Text(
-              'Venus Hospital',
+              AppString.venushospital,
               style: TextStyle(
                 color: AppColor.primaryColor,
                 fontWeight: FontWeight.w700,
@@ -42,7 +44,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
                     Scaffold.of(context).openDrawer();
                   },
                   icon: Image.asset(
-                    'assets/image/drawer.png',
+                    AppImage.drawer,
                     width: 20,
                     color: AppColor.black,
                   ),
@@ -54,7 +56,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
               IconButton(
                   onPressed: () {
                     Get.snackbar(
-                      'Coming Soon',
+                      AppString.comingsoon,
                       '',
                       colorText: Colors.white,
                       backgroundColor: Colors.black,
@@ -62,7 +64,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
                     );
                   },
                   icon: Image.asset(
-                    'assets/image/notification.png',
+                    AppImage.notification,
                     width: 20,
                   ))
             ],
