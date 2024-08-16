@@ -76,10 +76,9 @@ class _MispunchScreenState extends State<MispunchScreen> {
                     padding: const EdgeInsets.all(10),
                     child: controller.isLoading.value
                         ? const Center(child: ProgressWithIcon())
-                        : controller.mispunchTable.data!.isNotEmpty
+                        : controller.mispunchTable.isNotEmpty
                             ? ListView.builder(
-                                itemCount:
-                                    controller.mispunchTable.data!.length,
+                                itemCount: controller.mispunchTable.length,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return Padding(
@@ -110,8 +109,8 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                                   alignment:
                                                       Alignment.centerLeft,
                                                   child: Text(
-                                                    controller.mispunchTable
-                                                        .data![index].dt
+                                                    controller
+                                                        .mispunchTable[index].dt
                                                         .toString(),
                                                     style: TextStyle(
                                                       fontSize: 20,
@@ -137,22 +136,19 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                                   CustomContainerview(
                                                       text: AppString.type,
                                                       text1: controller
-                                                          .mispunchTable
-                                                          .data![index]
+                                                          .mispunchTable[index]
                                                           .misPunch
                                                           .toString()),
                                                   CustomContainerview(
                                                       text: AppString.punchtime,
                                                       text1: controller
-                                                          .mispunchTable
-                                                          .data![index]
+                                                          .mispunchTable[index]
                                                           .punchTime
                                                           .toString()),
                                                   CustomContainerview(
                                                       text: AppString.shifttime,
                                                       text1: controller
-                                                          .mispunchTable
-                                                          .data![index]
+                                                          .mispunchTable[index]
                                                           .shiftTime
                                                           .toString()),
                                                 ],

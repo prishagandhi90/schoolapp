@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/service/common_methods.dart';
 import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
@@ -28,7 +29,8 @@ class AttendenceController extends GetxController {
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
 
-  List<String> years = ['2023', '2024'];
+  // List<String> years = ['2023', '2024'];
+  List<String> years = getLastTwoYears();
   final ScrollController attendanceScrollController = ScrollController();
   final ScrollController monthScrollControllerSummary = ScrollController();
   final ScrollController monthScrollControllerDetail = ScrollController();
@@ -66,12 +68,6 @@ class AttendenceController extends GetxController {
   }
 
   void setCurrentMonthYear(String screenName) {
-    DateTime now = DateTime.now();
-
-    // if (ScreenName == "SummaryScreen") {
-    //   MonthSel_selIndex.value = now.month - 1;
-    // }
-
     MonthSelectionScreen(
       selectedMonthIndex: MonthSel_selIndex.value,
       scrollController: screenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
@@ -80,17 +76,6 @@ class AttendenceController extends GetxController {
         showHideMsg();
       },
     );
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (monthScrollController.hasClients) {
-    //     double itemWidth = Get.context!.size!.width / 3; // Adjust this based on your item width
-    //     monthScrollController.animateTo(
-    //       MonthSel_selIndex.value * itemWidth - Get.context!.size!.width / 2 + itemWidth / 2,
-    //       duration: Duration(milliseconds: 500),
-    //       curve: Curves.easeInOut,
-    //     );
-    //   }
-    // });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (monthScrollControllerDetail.hasClients) {
@@ -157,14 +142,6 @@ class AttendenceController extends GetxController {
     update();
   }
 
-  // void clearData() {
-  //   MonthSel_selIndex.value = -1;
-  //   YearSel_selIndex = "";
-  //   attendencetable.clear();
-  //   attpresenttable.clear();
-  //   isLoading1.value = false;
-  // }
-
   void upd_MonthSelIndex(int index) async {
     MonthSel_selIndex.value = index;
     update();
@@ -191,7 +168,6 @@ class AttendenceController extends GetxController {
 
   void upd_YearSelIndex(String index) async {
     YearSel_selIndex = index;
-    // selectedYear.value = years[index];
     update();
     await fetchDataIfReady();
   }
@@ -207,19 +183,13 @@ class AttendenceController extends GetxController {
     try {
       isLoading1.value = true;
       String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
-      // var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": selectedMonthYear!.value};
 
-      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
 
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
-
-      // var empmonthyrtable =
-      //     await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
 
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseAttendenceDetail detailResponse = ResponseAttendenceDetail.fromJson(jsonDecode(decodedResp));
@@ -239,16 +209,13 @@ class AttendenceController extends GetxController {
     try {
       isLoading1.value = true;
       String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
-      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
 
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
-      // var empmonthyrtable =
-      //     await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
+
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseAttendenceSummary summaryResponse = ResponseAttendenceSummary.fromJson(jsonDecode(decodedResp));
       attendenceSummaryTable = summaryResponse.data!;
@@ -262,25 +229,16 @@ class AttendenceController extends GetxController {
     return [];
   }
 
-  // String getMonthYearFromIndex(int index) {
-  //   List<String> months = ['Jan24', 'Feb24', 'Mar24', 'Apr24', 'May24', 'Jun24', 'Jul24', 'Aug24', 'Sep24', 'Oct24', 'Nov24', 'Dec24'];
-  //   if (index >= 0 && index < months.length) {
-  //     return months[index];
-  //   }
-  //   return 'Select year and month';
-  // }
-
   String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    // List<String> years = ['23', '24', '25']; // Example year suffixes (adjust as needed)
-    if (year == '2024') {
-      year = '24';
-    } else {
-      year = '23';
-    }
+    // if (year == '2024') {
+    //   year = '24';
+    // } else {
+    //   year = '23';
+    // }
 
     if (index >= 0 && index < months.length && year.isNotEmpty && year != "") {
-      return '${months[index]}${year}'; // Format as 'Jan24'
+      return '${months[index]}${year.substring(year.length - 2)}'; // Format as 'Jan24'
     }
     return 'Select year and month';
   }

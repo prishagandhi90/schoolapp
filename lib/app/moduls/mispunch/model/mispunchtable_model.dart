@@ -1,19 +1,20 @@
-class MispunchTable {
+class ResponseMispunchData {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<Data>? data;
+  List<MispunchTable>? data;
 
-  MispunchTable({this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseMispunchData(
+      {this.statusCode, this.isSuccess, this.message, this.data});
 
-  MispunchTable.fromJson(Map<String, dynamic> json) {
+  ResponseMispunchData.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <MispunchTable>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new MispunchTable.fromJson(v));
       });
     }
   }
@@ -30,7 +31,7 @@ class MispunchTable {
   }
 }
 
-class Data {
+class MispunchTable {
   String? empCode;
   String? empName;
   String? department;
@@ -42,7 +43,7 @@ class Data {
   String? shiftTime;
   String? note;
 
-  Data(
+  MispunchTable(
       {this.empCode,
       this.empName,
       this.department,
@@ -54,7 +55,7 @@ class Data {
       this.shiftTime,
       this.note});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  MispunchTable.fromJson(Map<String, dynamic> json) {
     empCode = json['empCode'];
     empName = json['empName'];
     department = json['department'];
