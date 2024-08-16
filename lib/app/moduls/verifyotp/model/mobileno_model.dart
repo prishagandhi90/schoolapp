@@ -2,15 +2,15 @@ class ResponseMobileNo {
   int? statusCode;
   String? isSuccess;
   String? message;
-  MobileTable? mobileTable;
+  MobileTable? data;
 
-  ResponseMobileNo({this.statusCode, this.isSuccess, this.message, this.mobileTable});
+  ResponseMobileNo({this.statusCode, this.isSuccess, this.message, this.data});
 
   ResponseMobileNo.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    mobileTable = json['MobileTable'] != null ? new MobileTable.fromJson(json['MobileTable']) : null;
+    data = json['data'] != null ? new MobileTable.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -18,8 +18,8 @@ class ResponseMobileNo {
     data['statusCode'] = this.statusCode;
     data['isSuccess'] = this.isSuccess;
     data['message'] = this.message;
-    if (this.mobileTable != null) {
-      data['MobileTable'] = this.mobileTable!.toJson();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
     return data;
   }

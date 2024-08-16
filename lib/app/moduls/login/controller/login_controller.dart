@@ -38,7 +38,7 @@ class LoginController extends GetxController {
       var jsonbodyObj = {"mobileNo": numberController.text};
       var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
       ResponseMobileNo responseMobileNo = ResponseMobileNo.fromJson(jsonDecode(decodedResp));
-      mobileTable = responseMobileNo.mobileTable!;
+      mobileTable = responseMobileNo.data!;
 
       isLoadingLogin = false;
       update();
