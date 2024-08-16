@@ -26,7 +26,7 @@ class LoginController extends GetxController {
 
   Future<void> saveLoginStatus() async {
     var dashboardController = Get.put(DashboardController());
-    await dashboardController.getDashboardData();
+    await dashboardController.getDashboardDataUsingToken();
   }
 
   Future<MobileTable> sendotp() async {

@@ -7,6 +7,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class OtpController extends GetxController {
   Timer? timer;
   RxInt secondsRemaining = 90.obs;
   final DashboardController dashboardController = Get.put(DashboardController());
+  late DashboardTable dashboardTable;
 
   void clearText() {
     otpController.clear();
@@ -52,7 +54,7 @@ class OtpController extends GetxController {
     }
   }
 
-  Future<String> otp(String otp, BuildContext context, String deviceToken) async {
+  Future<String> getDashboardData(String otp, BuildContext context, String deviceToken) async {
     try {
       String url = 'http://117.217.126.127:44166/api/Employee/authentication';
       var jsonbodyObj = {
@@ -64,28 +66,31 @@ class OtpController extends GetxController {
         "osType": "string",
         "deviceToken": deviceToken
       };
-      var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
-      print(loginEmp);
-      if (loginEmp == null) {
-        return "false";
-      }
 
-      var decodedResp = json.decode(loginEmp);
-      if (decodedResp["isSuccess"].toString() == "true") {
+      // var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
+      var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
+      ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
+      dashboardTable = responseDashboardData.data!;
+
+      // print(loginEmp);
+      // if (decodedResp == null) {
+      //   return "false";
+      // }
+
+      if (responseDashboardData.isSuccess.toString() == "true") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('KEY_TOKENNO', decodedResp["data"]["token"] ?? '');
-        await prefs.setString('KEY_LOGINID', decodedResp["data"]["login_id"].toString() ?? '');
-        await prefs.setString('KEY_EMPID', decodedResp["data"]["employeeId"].toString() ?? '');
-        // await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
-        // await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
-        // await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
-        dashboardController.employeeName = json.decode(loginEmp)["data"]["employeeName"].toString();
-        dashboardController.mobileNumber = json.decode(loginEmp)["data"]["mobileNumber"].toString();
-        dashboardController.emailAddress = json.decode(loginEmp)["data"]["emailAddress"].toString();
-        dashboardController.empCode = json.decode(loginEmp)["data"]["empCode"].toString();
-        dashboardController.empType = json.decode(loginEmp)["data"]["emp_Type"].toString();
-        dashboardController.department = json.decode(loginEmp)["data"]["department"].toString();
-        dashboardController.designation = json.decode(loginEmp)["data"]["designation"].toString();
+
+        await prefs.setString('KEY_TOKENNO', dashboardTable.token ?? '');
+        await prefs.setString('KEY_LOGINID', dashboardTable.loginId.toString());
+        await prefs.setString('KEY_EMPID', dashboardTable.employeeId.toString());
+
+        dashboardController.employeeName = dashboardTable.employeeName.toString();
+        dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
+        dashboardController.emailAddress = dashboardTable.emailAddress.toString();
+        dashboardController.empCode = dashboardTable.empCode.toString();
+        dashboardController.empType = dashboardTable.empType.toString();
+        dashboardController.department = dashboardTable.department.toString();
+        dashboardController.designation = dashboardTable.designation.toString();
 
         dashboardController.update();
         return "true";
@@ -177,12 +182,9 @@ class OtpController extends GetxController {
         String isValidLogin = "false";
         isLoadingLogin = true;
         update();
-        isValidLogin = await otp(otpNo, context, deviceToken);
+        isValidLogin = await getDashboardData(otpNo, context, deviceToken);
         update();
         if (isValidLogin == "true") {
-          // await _storage.write(key: "KEY_TOKENNO", value: decodedResp["data"]["token"]);
-          // await _storage.write(key: "KEY_LOGINID", value: decodedResp["data"]["login_id"].toString());
-          // await _storage.write(key: "KEY_EMPID", value: decodedResp["data"]["employeeId"].toString());
           otpController.text = "";
           hideBottomBar.value = false;
           bottomBarController.update();

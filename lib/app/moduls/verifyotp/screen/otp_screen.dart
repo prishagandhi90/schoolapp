@@ -8,6 +8,7 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
+import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +67,12 @@ class _OtpScreenState extends State<OtpScreen> {
     otpController.update();
     startTimer();
     try {
-      final response = await otpController.sendotp();
+      // final response = await otpController.sendotp();
+      var loginController = Get.put(LoginController());
+      MobileTable response = await loginController.sendotp();
       if (response != null) {
-        final respOTP = json.decode(response)["data"]["otpNo"].toString();
+        // final respOTP = json.decode(response)["data"]["otpNo"].toString();
+        final respOTP = response.otpNo.toString();
         setState(() {
           widget.otpNo = respOTP;
         });
@@ -194,7 +198,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                 separatorBuilder: (index) => const SizedBox(width: 8),
                                 onCompleted: (pin) async {
                                   print('onCompOTP: ${widget.otpNo}');
-                                  otpController.isLoadingLogin ? null : await otpController.otpOnClk(context, widget.otpNo, deviceTok);
+                                  otpController.isLoadingLogin
+                                      ? null
+                                      : await otpController.otpOnClk(context, widget.otpNo, deviceTok);
                                 },
                                 onChanged: (value) {},
                               ),
@@ -211,7 +217,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                   onPressed: otpController.isLoadingLogin
                                       ? null
                                       : () async {
-                                          if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
+                                          if (otpController.otpController.text.isEmpty ||
+                                              otpController.otpController.text.length < 6) {
                                             Get.snackbar(
                                               AppString.error,
                                               AppString.plzentervalidotp,

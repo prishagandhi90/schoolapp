@@ -234,16 +234,16 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                                   color: AppColor.lightblue2,
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
-                                              child:
-                                                  controller.payrolltable.isNotEmpty && controller.payrolltable[0].inPunchTime.toString().isNotEmpty
-                                                      ? Text(
-                                                          'Done at ${controller.payrolltable[0].inPunchTime}',
-                                                          style: TextStyle(
-                                                            fontSize: 10, //12
-                                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                                          ),
-                                                        )
-                                                      : Text(AppString.notyet),
+                                              child: controller.payrolltable.isNotEmpty &&
+                                                      controller.payrolltable[0].inPunchTime.toString().isNotEmpty
+                                                  ? Text(
+                                                      'Done at ${controller.payrolltable[0].inPunchTime}',
+                                                      style: TextStyle(
+                                                        fontSize: 10, //12
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    )
+                                                  : Text(AppString.notyet),
                                             )
                                           ],
                                         ),
@@ -263,13 +263,13 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                                   color: AppColor.lightblue2,
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
-                                              child:
-                                                  controller.payrolltable.isNotEmpty && controller.payrolltable[0].outPunchTime.toString().isNotEmpty
-                                                      ? Text(
-                                                          'Done at ${controller.payrolltable[0].outPunchTime}',
-                                                          style: AppStyle.plus10,
-                                                        )
-                                                      : Text(AppString.notyet),
+                                              child: controller.payrolltable.isNotEmpty &&
+                                                      controller.payrolltable[0].outPunchTime.toString().isNotEmpty
+                                                  ? Text(
+                                                      'Done at ${controller.payrolltable[0].outPunchTime}',
+                                                      style: AppStyle.plus10,
+                                                    )
+                                                  : Text(AppString.notyet),
                                             )
                                           ],
                                         ),
@@ -300,7 +300,8 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                           children: [
                                             Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                             if (controller.payrolltable.isNotEmpty)
-                                              Text(controller.payrolltable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                              Text(controller.payrolltable[0].totLCEGMin.toString(),
+                                                  style: AppStyle.plus16w600)
                                             else
                                               Text('-- ', style: AppStyle.plus16w600),
                                           ],
@@ -365,7 +366,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) {
                                         hideBottomBar.value = false;
-                                        dashboardController.getDashboardData();
+                                        dashboardController.getDashboardDataUsingToken();
                                       });
                                     }, //Get.to(const AttendanceScreen()),
                                     child: Container(
@@ -404,7 +405,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
                                         hideBottomBar.value = false;
-                                        await dashboardController.getDashboardData();
+                                        await dashboardController.getDashboardDataUsingToken();
                                       });
                                     }, //Get.to(MispunchScreen()),
                                     child: Container(

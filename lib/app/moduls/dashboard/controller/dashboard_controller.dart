@@ -6,6 +6,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
+import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,12 +19,19 @@ class DashboardController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   bool isLoading = true;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "";
+  late DashboardTable dashboardTable;
 
   @override
   void onInit() {
     super.onInit();
-    getDashboardData();
+    getDashboardDataUsingToken();
     hideBottomBar.value = false;
     update();
   }
@@ -104,7 +112,7 @@ class DashboardController extends GetxController {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {
           hideBottomBar.value = false;
-          getDashboardData();
+          getDashboardDataUsingToken();
         });
 
         break;
@@ -162,31 +170,37 @@ class DashboardController extends GetxController {
     return [];
   }
 
-  Future<void> getDashboardData() async {
+  Future<void> getDashboardDataUsingToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getString('KEY_TOKENNO') != null && prefs.getString('KEY_TOKENNO') != '') {
       String token = prefs.getString('KEY_TOKENNO') ?? '';
       String loginId = prefs.getString('KEY_LOGINID') ?? '';
       var jsonbodyObj = {"loginId": loginId};
       String url = 'http://117.217.126.127:44166/api/Employee/GetDashboardList';
-      var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
-      if (empmonthyrtable != "" && jsonDecode(empmonthyrtable)["statusCode"] == 200) {
-        var decodedResp = json.decode(empmonthyrtable);
-        if (decodedResp["isSuccess"].toString() == "true") {
+
+      // var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
+
+      var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
+      ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
+      dashboardTable = responseDashboardData.data!;
+
+      if (responseDashboardData.statusCode == 200) {
+        // var decodedResp = json.decode(empmonthyrtable);
+        if (responseDashboardData.isSuccess.toString() == "true") {
           var dashboardController = Get.put(DashboardController());
-          dashboardController.employeeName = json.decode(empmonthyrtable)["data"]["employeeName"].toString();
-          dashboardController.mobileNumber = json.decode(empmonthyrtable)["data"]["mobileNumber"].toString();
-          dashboardController.emailAddress = json.decode(empmonthyrtable)["data"]["emailAddress"].toString();
-          dashboardController.empCode = json.decode(empmonthyrtable)["data"]["empCode"].toString();
-          dashboardController.empType = json.decode(empmonthyrtable)["data"]["emp_Type"].toString();
-          dashboardController.department = json.decode(empmonthyrtable)["data"]["department"].toString();
-          dashboardController.designation = json.decode(empmonthyrtable)["data"]["designation"].toString();
+          dashboardController.employeeName = dashboardTable.employeeName.toString();
+          dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
+          dashboardController.emailAddress = dashboardTable.emailAddress.toString();
+          dashboardController.empCode = dashboardTable.empCode.toString();
+          dashboardController.empType = dashboardTable.empType.toString();
+          dashboardController.department = dashboardTable.department.toString();
+          dashboardController.designation = dashboardTable.designation.toString();
 
           dashboardController.update();
         }
         update();
         // Get.offAll(const BottomBarView());
-      } else if (empmonthyrtable != "" && jsonDecode(empmonthyrtable)["statusCode"] == 401) {
+      } else if (responseDashboardData.statusCode == 401) {
         prefs.clear();
         Get.offAll(LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');

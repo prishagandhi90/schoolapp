@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
@@ -6,6 +8,7 @@ import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/payroll/model/empsummdash_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +29,7 @@ class PayrollController extends GetxController {
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   var dashboardController = Get.put(DashboardController());
+  List<EmpSummDashboardTable> empSummDashboardTable = [];
 
   @override
   void onInit() {
@@ -59,12 +63,17 @@ class PayrollController extends GetxController {
 
       var jsonbodyObj = {"loginId": loginId};
 
-      var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      payrolltable = apiController.parseJson_Flag_payroll(empmonthyrtable, 'data');
+      // var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
+      // payrolltable = apiController.parseJson_Flag_payroll(empmonthyrtable, 'data');
+
+      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseEmpSummDashboardData empSummDashboardDataResponse =
+          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      empSummDashboardTable = empSummDashboardDataResponse.data!;
 
       isLoading.value = false;
       update();
-      return payrolltable;
+      return empSummDashboardTable;
     } catch (e) {
       isLoading.value = false;
       update();
@@ -85,7 +94,7 @@ class PayrollController extends GetxController {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           hideBottomBar.value = false;
-          await dashboardController.getDashboardData();
+          await dashboardController.getDashboardDataUsingToken();
         });
         break;
       case 1:
@@ -99,7 +108,7 @@ class PayrollController extends GetxController {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           hideBottomBar.value = false;
-          await dashboardController.getDashboardData();
+          await dashboardController.getDashboardDataUsingToken();
         });
         break;
       case 2:
