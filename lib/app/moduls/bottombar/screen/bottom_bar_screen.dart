@@ -18,46 +18,55 @@ class BottomBarView extends GetView<BottomBarController> {
     return GetBuilder<BottomBarController>(
       builder: (controller) {
         return Obx(
-          () => Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: PersistentTabView(
-              padding: const EdgeInsets.only(bottom: 4, top: 0),
-              context,
-              confineToSafeArea: Platform.isAndroid ? true : false,
-              controller: controller.persistentController,
-              screens: controller.buildScreens(),
-              items: controller.navBarsItems(),
-              navBarHeight: hideBottomBar.value ? 0 : 70.0,
-              backgroundColor: AppColor.white,
-              resizeToAvoidBottomInset: true,
-              stateManagement: false,
-              bottomScreenMargin: Sizes.crossLength * 0.020,
-              hideNavigationBarWhenKeyboardAppears: true,
-              handleAndroidBackButtonPress: true,
-              onItemSelected: (value) {
-                controller.onItemTapped(value);
-              },
-              decoration: NavBarDecoration(
-                colorBehindNavBar: AppColor.trasparent,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.originalgrey.withOpacity(0.1),
-                    spreadRadius: 3.0,
+          () => WillPopScope(
+            onWillPop: () async {
+              if (controller.selectedIndex != 2) {
+                // Check if not on the center screen
+
+                controller.selectedIndex = 2; // Navigate back to the center screen
+                controller.update();
+                return false; // Prevent the app from closing
+              } else {
+                return true; // Allow the app to close if already on the center screen
+              }
+            },
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: PersistentTabView(
+                padding: const EdgeInsets.only(bottom: 4, top: 0),
+                context,
+                confineToSafeArea: Platform.isAndroid ? true : false,
+                controller: controller.persistentController,
+                handleAndroidBackButtonPress: true,
+                hideNavigationBarWhenKeyboardAppears: true,
+                backgroundColor: AppColor.white,
+                navBarHeight: hideBottomBar.value ? 0 : 70.0,
+                decoration: NavBarDecoration(
+                  colorBehindNavBar: AppColor.trasparent,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColor.originalgrey.withOpacity(0.1),
+                      spreadRadius: 3.0,
+                    ),
+                  ],
+                ),
+                animationSettings: const NavBarAnimationSettings(
+                  screenTransitionAnimation: ScreenTransitionAnimationSettings(
+                    animateTabTransition: false,
+                    curve: Curves.ease,
+                    duration: Duration(milliseconds: 100),
                   ),
-                ],
-              ),
-              animationSettings: const NavBarAnimationSettings(
-                navBarItemAnimation: ItemAnimationSettings(
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.ease,
                 ),
-                screenTransitionAnimation: ScreenTransitionAnimationSettings(
-                  animateTabTransition: false,
-                  curve: Curves.ease,
-                  duration: Duration(milliseconds: 100),
-                ),
+                screens: controller.buildScreens(),
+                items: controller.navBarsItems(),
+                navBarStyle: NavBarStyle.style8,
+                stateManagement: false,
+                resizeToAvoidBottomInset: true,
+                bottomScreenMargin: Sizes.crossLength * 0.020,
+                onItemSelected: (value) {
+                  controller.onItemTapped(value);
+                },
               ),
-              navBarStyle: NavBarStyle.style8,
             ),
           ),
         );

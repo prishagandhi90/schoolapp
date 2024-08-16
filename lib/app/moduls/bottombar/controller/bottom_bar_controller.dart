@@ -14,6 +14,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 class BottomBarController extends GetxController with WidgetsBindingObserver {
   final count = 0.obs;
   DateTime? lastBackPressed;
+  int selectedIndex = 2;
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
@@ -25,7 +26,7 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
   List<Widget> buildScreens() {
     return [
       const PayrollScreen(),
-      AttendanceScreen(fromDashboard: true),
+      AttendanceScreen(fromDashboard: true),  
       const Dashboard1Screen(),
       Leavedemo(),
       OvertimeScreen(),

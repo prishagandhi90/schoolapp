@@ -37,6 +37,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
                 fontFamily: CommonFontStyle.plusJakartaSans,
               ),
             ),
+            excludeHeaderSemantics: false,
             leading: Builder(
               builder: (context) {
                 return IconButton(

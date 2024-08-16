@@ -16,6 +16,7 @@ class AppStyle {
   static TextStyle w50018 = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
+    fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle fontfamilyplus = TextStyle(
     fontFamily: CommonFontStyle.plusJakartaSans,

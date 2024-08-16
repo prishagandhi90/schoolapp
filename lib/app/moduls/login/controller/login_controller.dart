@@ -11,7 +11,7 @@ class LoginController extends GetxController {
   bool isVerifyingOtp = false;
   String devToken = "";
   bool isLoadingLogin = false;
-  final TextEditingController numberController = TextEditingController(text: '8780917338'); //text: '8780917338'
+  final TextEditingController numberController = TextEditingController(text: '8780917338');
   final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
 

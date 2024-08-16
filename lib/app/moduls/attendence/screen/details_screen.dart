@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
@@ -201,7 +202,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
-                                child: const Icon(Icons.cancel),
+                                child: const Icon(Icons.close),
                               ),
                               const SizedBox(
                                 width: 30,
@@ -237,12 +238,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     controller.attendenceDetailTable.length > 0
                                         ? Text(
-                                            split_go_leftRight(controller.attendenceDetailTable[index].punch.toString(), 'left'),
-                                          )
-                                        : Text('--:-- ', style: AppStyle.plus16w600),
-                                    controller.attendenceDetailTable.length > 0
-                                        ? Text(
-                                            split_go_leftRight(controller.attendenceDetailTable[index].punch.toString(), 'right'),
+                                            controller.attendenceDetailTable[index].punch.toString(),
+                                            style: AppStyle.fontfamilyplus,
                                           )
                                         : Text('--:-- ', style: AppStyle.plus16w600),
                                   ],
@@ -299,6 +296,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].shift.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -312,6 +310,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].st.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -325,6 +324,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].lv.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -382,6 +382,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].lc.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -395,6 +396,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].eg.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -452,6 +454,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].oTENTMIN.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -465,6 +468,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         child: controller.attendenceDetailTable.length > 0
                                             ? Text(
                                                 controller.attendenceDetailTable[index].oTMIN.toString(),
+                                                style: AppStyle.fontfamilyplus,
                                               )
                                             : Text('--:-- ', style: AppStyle.plus16w600),
                                       ),
@@ -486,25 +490,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
         });
   }
 
-  String split_go_leftRight(String string1, String flag) {
-    if (string1 == "") return '';
+  // String split_go_leftRight(String string1, String flag) {
+  //   if (string1 == "") return '';
 
-    string1 = string1.replaceAll('\r', ' ');
-    List<String> parts = string1.split(' ');
+  //   string1 = string1.replaceAll('\r', ' ');
+  //   List<String> parts = string1.split(' ');
 
-    // If the string has fewer than 3 parts, just return the original string
-    if (parts.length < 1) {
-      // print("The string has fewer than 3 parts.");
-      return "";
-    }
+  //   // If the string has fewer than 3 parts, just return the original string
+  //   if (parts.length < 1) {
+  //     // print("The string has fewer than 3 parts.");
+  //     return "";
+  //   }
 
-    String firstPart = parts.sublist(0, 2).join(' ');
-    String secondPart = parts.sublist(2).join(' ');
+  //   String firstPart = parts.sublist(0, 2).join(' ');
+  //   String secondPart = parts.sublist(2).join(' ');
 
-    if (flag == 'left')
-      return firstPart;
-    else if (flag == 'right') return secondPart;
+  //   if (flag == 'left')
+  //     return firstPart;
+  //   else if (flag == 'right') return secondPart;
 
-    return '';
-  }
+  //   return '';
+  // }
 }
