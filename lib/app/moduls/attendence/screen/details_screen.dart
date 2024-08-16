@@ -211,12 +211,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                           const SizedBox(height: 10),
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.15,
+                            // height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
                               color: AppColor.lightblue,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
@@ -233,16 +234,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         )),
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    controller.attendenceDetailTable.length > 0
-                                        ? Text(
-                                            controller.attendenceDetailTable[index].punch.toString(),
-                                            style: AppStyle.fontfamilyplus,
-                                          )
-                                        : Text('--:-- ', style: AppStyle.plus16w600),
-                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      controller.attendenceDetailTable.length > 0
+                                          ? Text(
+                                              controller.attendenceDetailTable[index].punch.toString(),
+                                              style: AppStyle.fontfamilyplus,
+                                            )
+                                          : Text('--:-- ', style: AppStyle.plus16w600),
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
