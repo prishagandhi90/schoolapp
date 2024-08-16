@@ -20,8 +20,6 @@ class AttendenceController extends GetxController {
   late List<MispunchTable> mispunchtable = [];
   List<AttendenceSummarytable> attendenceSummaryTable = [];
   List<AttendanceDetailTable> attendenceDetailTable = [];
-  // late List<AttPresentTable> attpresenttable = [];
-  // List<Attendencetable> attSummaryModelTable = [];
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = true;
   var isLoading1 = false.obs;
@@ -29,7 +27,6 @@ class AttendenceController extends GetxController {
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
 
-  // List<String> years = ['2023', '2024'];
   List<String> years = getLastTwoYears();
   final ScrollController attendanceScrollController = ScrollController();
   final ScrollController monthScrollControllerSummary = ScrollController();
@@ -38,22 +35,16 @@ class AttendenceController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
-    //   getattendeceprsnttable();
-    //   getattendeceinfotable();
-    // }
+
     attendanceScrollController.addListener(() {
       if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
         hideBottomBar = false.obs;
         update();
-        // print("=====Up");
         bottomBarController.update();
-        // update(0.0, true);
       } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
         hideBottomBar = true.obs;
         update();
         bottomBarController.update();
-        // print("=====Down");
       }
     });
 
@@ -231,11 +222,6 @@ class AttendenceController extends GetxController {
 
   String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    // if (year == '2024') {
-    //   year = '24';
-    // } else {
-    //   year = '23';
-    // }
 
     if (index >= 0 && index < months.length && year.isNotEmpty && year != "") {
       return '${months[index]}${year.substring(year.length - 2)}'; // Format as 'Jan24'

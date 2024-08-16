@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class LoginController extends GetxController {
   final TextEditingController numberController = TextEditingController(text: '8780917338');
   final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
+  late MobileTable mobileTable;
 
   @override
   void onInit() {
@@ -27,20 +29,23 @@ class LoginController extends GetxController {
     await dashboardController.getDashboardData();
   }
 
-  Future<dynamic> sendotp() async {
+  Future<MobileTable> sendotp() async {
     isLoadingLogin = true;
     update();
     try {
       String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
 
       var jsonbodyObj = {"mobileNo": numberController.text};
-      var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
+      var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
+      ResponseMobileNo responseMobileNo = ResponseMobileNo.fromJson(jsonDecode(decodedResp));
+      mobileTable = responseMobileNo.mobileTable!;
 
       isLoadingLogin = false;
       update();
-      return loginEmp;
+      return mobileTable;
     } catch (e) {
-      //
+      print('Error: $e');
+      return MobileTable();
     } finally {
       isLoadingLogin = false;
       update();
@@ -52,17 +57,11 @@ class LoginController extends GetxController {
     update();
     try {
       if (formKey.currentState!.validate()) {
-        final response = await sendotp();
+        MobileTable response = await sendotp();
         if (response != null) {
-          final respOTP = json.decode(response)["data"]["otpNo"].toString();
-          // final SharedPreferences prefs = await SharedPreferences.getInstance();
-          // if (prefs.getString('token') != null && prefs.getString('token') != '') {
-          //   await saveLoginStatus();
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(content: Text('${prefs.getString('token').toString()}')),
-          //   );
-          //   print(prefs.getString('token'));
-          // } else {
+          // final respOTP = json.decode(response)["data"]["otpNo"].toString();
+          final respOTP = response.otpNo.toString();
+
           Navigator.push(
             context,
             MaterialPageRoute(
