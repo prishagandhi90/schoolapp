@@ -10,11 +10,13 @@ class ResponseEmpSummDashboardData {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <EmpSummDashboardTable>[];
       json['data'].forEach((v) {
         data!.add(new EmpSummDashboardTable.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 
@@ -39,14 +41,7 @@ class EmpSummDashboardTable {
   String? totLCEGMin;
   String? cnt;
 
-  EmpSummDashboardTable(
-      {this.employeeName,
-      this.employeeCode,
-      this.department,
-      this.inPunchTime,
-      this.outPunchTime,
-      this.totLCEGMin,
-      this.cnt});
+  EmpSummDashboardTable({this.employeeName, this.employeeCode, this.department, this.inPunchTime, this.outPunchTime, this.totLCEGMin, this.cnt});
 
   EmpSummDashboardTable.fromJson(Map<String, dynamic> json) {
     employeeName = json['employeeName'];

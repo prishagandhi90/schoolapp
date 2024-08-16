@@ -7,14 +7,7 @@ class Profiletable {
   String? totLCEGMin;
   String? cnt;
 
-  Profiletable(
-      {this.employeeName,
-      this.employeeCode,
-      this.department,
-      this.inPunchTime,
-      this.outPunchTime,
-      this.totLCEGMin,
-      this.cnt});
+  Profiletable({this.employeeName, this.employeeCode, this.department, this.inPunchTime, this.outPunchTime, this.totLCEGMin, this.cnt});
 
   Profiletable.fromJson(Map<String, dynamic> json) {
     employeeName = json['employeeName'];

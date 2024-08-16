@@ -23,7 +23,7 @@ class OtpController extends GetxController {
   bool isLoadingLogin = false;
   List<OTPModel> otpmodel = [];
   Timer? timer;
-  RxInt secondsRemaining = 90.obs;
+  RxInt secondsRemaining = 10.obs;
   final DashboardController dashboardController = Get.put(DashboardController());
   late DashboardTable dashboardTable;
 

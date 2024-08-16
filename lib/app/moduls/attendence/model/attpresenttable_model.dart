@@ -10,11 +10,13 @@ class ResponseAttendenceSummary {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <AttendenceSummarytable>[];
       json['data'].forEach((v) {
-        data!.add(new AttendenceSummarytable.fromJson(v));
+        data!.add(AttendenceSummarytable.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

@@ -4,18 +4,19 @@ class ResponseMispunchData {
   String? message;
   List<MispunchTable>? data;
 
-  ResponseMispunchData(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseMispunchData({this.statusCode, this.isSuccess, this.message, this.data});
 
   ResponseMispunchData.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <MispunchTable>[];
       json['data'].forEach((v) {
         data!.add(new MispunchTable.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

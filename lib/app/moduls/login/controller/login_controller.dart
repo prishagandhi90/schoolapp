@@ -16,6 +16,7 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;
+  String responseOTPNo = "";
 
   @override
   void onInit() {
@@ -61,13 +62,14 @@ class LoginController extends GetxController {
         if (response != null) {
           // final respOTP = json.decode(response)["data"]["otpNo"].toString();
           final respOTP = response.otpNo.toString();
-
+          var loginController = Get.put(LoginController());
+          loginController.responseOTPNo = respOTP;
+          loginController.update();
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => OtpScreen(
                 mobileNumber: numberController.text,
-                otpNo: respOTP,
                 deviceToken: devToken,
               ),
             ),

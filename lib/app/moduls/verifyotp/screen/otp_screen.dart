@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:async';
-import 'dart:convert';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
@@ -16,9 +15,8 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
-  OtpScreen({super.key, required this.mobileNumber, required this.otpNo, required this.deviceToken});
+  OtpScreen({super.key, required this.mobileNumber, required this.deviceToken});
   final String mobileNumber;
-  String otpNo;
   final String deviceToken;
 
   @override
@@ -43,14 +41,14 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void onResendOtp() {
     setState(() {
-      otpController.secondsRemaining.value = 90;
+      otpController.secondsRemaining.value = 10;
     });
     startTimer();
   }
 
   void startTimer() {
     isButtonEnabled = false;
-    otpController.secondsRemaining.value = 90;
+    otpController.secondsRemaining.value = 10;
     otpController.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (otpController.secondsRemaining.value > 0) {
         setState(() {
@@ -63,7 +61,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void resendOTP(BuildContext context) async {
-    otpController.secondsRemaining.value = 90;
+    otpController.secondsRemaining.value = 10;
     otpController.update();
     startTimer();
     try {
@@ -74,7 +72,8 @@ class _OtpScreenState extends State<OtpScreen> {
         // final respOTP = json.decode(response)["data"]["otpNo"].toString();
         final respOTP = response.otpNo.toString();
         setState(() {
-          widget.otpNo = respOTP;
+          // widget.otpNo = respOTP;
+          loginController.responseOTPNo = respOTP;
         });
         Get.snackbar('RespOTP: $respOTP', '', colorText: AppColor.white, backgroundColor: AppColor.black);
       }
@@ -116,7 +115,7 @@ class _OtpScreenState extends State<OtpScreen> {
   void initState() {
     startTimer();
     super.initState();
-    print('RespOTP: ${widget.otpNo}');
+    print('RespOTP: ${loginController.responseOTPNo}');
     otpController.numberController.text = widget.mobileNumber;
     showSnackBar();
     _firebaseMessaging.requestPermission();
@@ -132,7 +131,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${widget.otpNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
+      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
     });
   }
 
@@ -197,10 +196,10 @@ class _OtpScreenState extends State<OtpScreen> {
                                 defaultPinTheme: defaultPinTheme,
                                 separatorBuilder: (index) => const SizedBox(width: 8),
                                 onCompleted: (pin) async {
-                                  print('onCompOTP: ${widget.otpNo}');
+                                  print('onCompOTP: ${loginController.responseOTPNo}');
                                   otpController.isLoadingLogin
                                       ? null
-                                      : await otpController.otpOnClk(context, widget.otpNo, deviceTok);
+                                      : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
                                 },
                                 onChanged: (value) {},
                               ),
@@ -217,8 +216,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   onPressed: otpController.isLoadingLogin
                                       ? null
                                       : () async {
-                                          if (otpController.otpController.text.isEmpty ||
-                                              otpController.otpController.text.length < 6) {
+                                          if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
                                             Get.snackbar(
                                               AppString.error,
                                               AppString.plzentervalidotp,
@@ -227,7 +225,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                               duration: const Duration(seconds: 1),
                                             );
                                           } else {
-                                            await otpController.otpOnClk(context, widget.otpNo, widget.deviceToken);
+                                            await otpController.otpOnClk(context, loginController.responseOTPNo, widget.deviceToken);
                                           }
                                         },
                                   style: ElevatedButton.styleFrom(
