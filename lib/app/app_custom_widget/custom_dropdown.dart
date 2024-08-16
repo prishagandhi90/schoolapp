@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/core/service/common_methods.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -17,7 +18,8 @@ class CustomDropDown extends StatefulWidget {
 
 class CustomDropDownState extends State<CustomDropDown> {
   String? selectedValue;
-  List<String> years = ['2023', '2024'];
+  List<String> years = getLastTwoYears();
+  // List<String> years = ['2023', '2024'];
   // String selValue = "";
 
   @override
@@ -94,60 +96,3 @@ class CustomDropDownState extends State<CustomDropDown> {
     );
   }
 }
-
-// import 'package:emp_app/app/core/model/dropdown_G_model.dart';
-// import 'package:flutter/material.dart';
-// import 'package:dropdown_button2/dropdown_button2.dart';
-
-// class CustomDropDown extends StatelessWidget {
-//   final Dropdown_Glbl? selectedValue;
-//   final Function? onChange;
-//   final List<DropdownMenuItem<Dropdown_Glbl>>? items;
-
-//   const CustomDropDown({
-//     super.key,
-//     this.selectedValue,
-//     this.onChange,
-//     this.items,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       child: Column(
-//         children: [
-//           DropdownButtonHideUnderline(
-//             child: DropdownButton2<Dropdown_Glbl>(
-//               isExpanded: true,
-//               hint: Text(
-//                 'Select',
-//                 style: TextStyle(
-//                   fontSize: 14,
-//                   color: Theme.of(context).hintColor,
-//                 ),
-//               ),
-//               value: selectedValue,
-//               items: items,
-//               onChanged: (Dropdown_Glbl? value) {
-//                 onChange!(value);
-//               },
-//               buttonStyleData: ButtonStyleData(
-//                 padding: const EdgeInsets.symmetric(horizontal: 16),
-//                 height: 40,
-//                 width: MediaQuery.of(context).size.width * 0.5,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(10),
-//                   border: Border.all(
-//                     color: Colors.black26,
-//                   ),
-//                 ),
-//                 // elevation: 2,
-//               ),
-//               menuItemStyleData: const MenuItemStyleData(height: 40),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

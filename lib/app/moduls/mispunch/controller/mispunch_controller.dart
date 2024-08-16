@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -13,7 +14,7 @@ class MispunchController extends GetxController {
   String tokenNo = '', loginId = '', empId = '';
   var isLoading = false.obs;
   // late List<MispunchTable> mispunchtable = [];
-  late MispunchTable mispunchTable;
+  List<MispunchTable> mispunchTable = [];
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
@@ -45,8 +46,7 @@ class MispunchController extends GetxController {
         double screenWidth = Get.context!.size!.width;
         double screenCenter = screenWidth / 2;
         double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition =
-            selectedMonthPosition - screenCenter + itemWidth / 2;
+        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
         double maxScrollExtent = monthScrollController.position.maxScrollExtent;
         double minScrollExtent = monthScrollController.position.minScrollExtent;
         if (targetScrollPosition < minScrollExtent) {
@@ -82,7 +82,7 @@ class MispunchController extends GetxController {
   void clearData() {
     MonthSel_selIndex.value = 0;
     YearSel_selIndex = "";
-    mispunchTable.data?.clear();
+    mispunchTable.clear();
     isLoading.value = false;
   }
 
@@ -119,27 +119,22 @@ class MispunchController extends GetxController {
     }
   }
 
-  Future<dynamic> getmonthyrempinfotable() async {
+  Future<List<MispunchTable>> getmonthyrempinfotable() async {
     try {
       isLoading.value = true;
-      String url =
-          'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
-      // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
-      // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';
+      String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
 
-      String monthYr =
-          getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "empId": empId,
-        "monthYr": monthYr
-      };
+      String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
+
       // var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      Map<String, dynamic> decodedResp = apiController.parseJsonBody(url, tokenNo, jsonbodyObj) as Map<String, dynamic>;
-      mispunchTable = MispunchTable.fromJson(decodedResp);
+      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseMispunchData detailResponse = ResponseMispunchData.fromJson(jsonDecode(decodedResp));
+      mispunchTable = detailResponse.data!;
 
       isLoading.value = false;
       update();
@@ -152,62 +147,47 @@ class MispunchController extends GetxController {
   }
 
   String getMonthYearFromIndex(int index, String year) {
-    List<String> months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    if (year == '2024') {
-      year = '24';
-    } else {
-      year = '23';
-    }
+    List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // if (year == '2024') {
+    //   year = '24';
+    // } else {
+    //   year = '23';
+    // }
 
     if (index >= 0 && index < months.length && year.isNotEmpty && year != "") {
-      return '${months[index]}${year}'; // Format as 'Jan24'
+      return '${months[index]}${year.substring(year.length - 2)}'; // Format as 'Jan24'
     }
     return 'Select year and month';
   }
 
-  List<DataRow> FixedColRowBuilder() {
-    // Ensure that the data is not null before proceeding
-    if (mispunchTable.data == null) {
-      return []; // Return an empty list if data is null
-    }
+  // List<DataRow> FixedColRowBuilder() {
+  //   // Ensure that the data is not null before proceeding
+  //   if (mispunchTable == null) {
+  //     return []; // Return an empty list if data is null
+  //   }
 
-    return mispunchTable.data!.asMap().entries.map((entry) {
-      int index = entry.key;
-      Data data = entry.value;
+  //   return mispunchTable.asMap().entries.map((entry) {
+  //     int index = entry.key;
+  //     Data data = entry.value;
 
-      return DataRow(
-        cells: [
-          DataCell(Text((index + 1).toString())), // Row number
-          DataCell(
-              Text(data.dt!.substring(0, 10))), // Date (first 10 characters)
-        ],
-      );
-    }).toList();
-  }
+  //     return DataRow(
+  //       cells: [
+  //         DataCell(Text((index + 1).toString())), // Row number
+  //         DataCell(
+  //             Text(data.dt!.substring(0, 10))), // Date (first 10 characters)
+  //       ],
+  //     );
+  //   }).toList();
+  // }
 
   List<DataRow> ScrollableColRowBuilder() {
-    return mispunchTable.data!
+    return mispunchTable
         .map((team) => DataRow(
               cells: [
-                DataCell(CustomWidthCell(
-                    width: 50, child: Text(team.misPunch.toString()))),
-                DataCell(CustomWidthCell(
-                    width: 150, child: Text(team.punchTime.toString()))),
-                DataCell(CustomWidthCell(
-                    width: 100, child: Text(team.shiftTime.toString()))),
+                DataCell(CustomWidthCell(width: 50, child: Text(team.misPunch.toString()))),
+                DataCell(CustomWidthCell(width: 150, child: Text(team.punchTime.toString()))),
+                DataCell(CustomWidthCell(width: 100, child: Text(team.shiftTime.toString()))),
               ],
             ))
         .toList();
