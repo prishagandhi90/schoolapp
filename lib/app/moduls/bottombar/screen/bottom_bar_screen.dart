@@ -18,55 +18,42 @@ class BottomBarView extends GetView<BottomBarController> {
     return GetBuilder<BottomBarController>(
       builder: (controller) {
         return Obx(
-          () => WillPopScope(
-            onWillPop: () async {
-              if (controller.selectedIndex != 2) {
-                // Check if not on the center screen
-
-                controller.selectedIndex = 2; // Navigate back to the center screen
-                controller.update();
-                return false; // Prevent the app from closing
-              } else {
-                return true; // Allow the app to close if already on the center screen
-              }
-            },
-            child: Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: PersistentTabView(
-                padding: const EdgeInsets.only(bottom: 4, top: 0),
-                context,
-                confineToSafeArea: Platform.isAndroid ? true : false,
-                controller: controller.persistentController,
-                handleAndroidBackButtonPress: true,
-                hideNavigationBarWhenKeyboardAppears: true,
-                backgroundColor: AppColor.white,
-                navBarHeight: hideBottomBar.value ? 0 : 70.0,
-                decoration: NavBarDecoration(
-                  colorBehindNavBar: AppColor.trasparent,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColor.originalgrey.withOpacity(0.1),
-                      spreadRadius: 3.0,
-                    ),
-                  ],
-                ),
-                animationSettings: const NavBarAnimationSettings(
-                  screenTransitionAnimation: ScreenTransitionAnimationSettings(
-                    animateTabTransition: false,
-                    curve: Curves.ease,
-                    duration: Duration(milliseconds: 100),
+          () => Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: PersistentTabView(
+              padding: const EdgeInsets.only(bottom: 4, top: 0),
+              context,
+              confineToSafeArea: Platform.isAndroid ? true : false,
+              controller: controller.persistentController,
+              handleAndroidBackButtonPress: true,
+              hideNavigationBarWhenKeyboardAppears: true,
+              backgroundColor: AppColor.white,
+              navBarHeight: hideBottomBar.value ? 0 : 70.0,
+              decoration: NavBarDecoration(
+                colorBehindNavBar: AppColor.trasparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.originalgrey.withOpacity(0.1),
+                    spreadRadius: 3.0,
                   ),
-                ),
-                screens: controller.buildScreens(),
-                items: controller.navBarsItems(),
-                navBarStyle: NavBarStyle.style8,
-                stateManagement: false,
-                resizeToAvoidBottomInset: true,
-                bottomScreenMargin: Sizes.crossLength * 0.020,
-                onItemSelected: (value) {
-                  controller.onItemTapped(value);
-                },
+                ],
               ),
+              animationSettings: const NavBarAnimationSettings(
+                screenTransitionAnimation: ScreenTransitionAnimationSettings(
+                  animateTabTransition: false,
+                  curve: Curves.ease,
+                  duration: Duration(milliseconds: 100),
+                ),
+              ),
+              screens: controller.buildScreens(),
+              items: controller.navBarsItems(),
+              navBarStyle: NavBarStyle.style8,
+              stateManagement: false,
+              resizeToAvoidBottomInset: true,
+              bottomScreenMargin: Sizes.crossLength * 0.020,
+              onItemSelected: (value) {
+                controller.onItemTapped(value);
+              },
             ),
           ),
         );

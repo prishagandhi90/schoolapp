@@ -12,13 +12,12 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController with WidgetsBindingObserver {
-  final count = 0.obs;
+  PersistentTabController? persistentController;
   DateTime? lastBackPressed;
-  int selectedIndex = 2;
-  PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
     super.onInit();
+    persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
     update();
   }
@@ -26,7 +25,7 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
   List<Widget> buildScreens() {
     return [
       const PayrollScreen(),
-      AttendanceScreen(fromDashboard: true),  
+      AttendanceScreen(fromDashboard: true),
       const Dashboard1Screen(),
       Leavedemo(),
       OvertimeScreen(),
@@ -71,4 +70,26 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
       ),
     ];
   }
+
+  // Future<bool> onWillPop(BuildContext context) async {
+  //   if (Navigator.of(context).canPop()) {
+  //     // If there's anything to pop on the current stack, pop it.
+  //     Navigator.of(context).pop();
+  //     return Future.value(false);
+  //   } else if (persistentController!.index != 2) {
+  //     // If not on the dashboard, navigate back to the dashboard
+  //     persistentController!.jumpToTab(2);
+  //     return Future.value(false);
+  //   } else {
+  //     // Handle exit from the app
+  //     if (lastBackPressed == null ||
+  //         DateTime.now().difference(lastBackPressed!) > Duration(seconds: 2)) {
+  //       lastBackPressed = DateTime.now();
+  //       Get.snackbar("Press Back Again", "to exit the app",
+  //           snackPosition: SnackPosition.BOTTOM);
+  //       return Future.value(false);
+  //     }
+  //     return Future.value(true); // Exit the app
+  //   }
+  // }
 }
