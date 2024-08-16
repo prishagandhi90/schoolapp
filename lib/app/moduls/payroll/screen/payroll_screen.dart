@@ -221,9 +221,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         Column(
                                           children: [
                                             Text(AppString.clockin, style: AppStyle.plus16),
-                                            if (controller.payrolltable.isNotEmpty)
+                                            if (controller.empSummDashboardTable.isNotEmpty)
                                               Text(
-                                                controller.payrolltable[0].inPunchTime.toString(),
+                                                controller.empSummDashboardTable[0].inPunchTime.toString(),
                                                 style: AppStyle.plus16w600,
                                               )
                                             else
@@ -234,10 +234,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                                   color: AppColor.lightblue2,
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
-                                              child: controller.payrolltable.isNotEmpty &&
-                                                      controller.payrolltable[0].inPunchTime.toString().isNotEmpty
+                                              child: controller.empSummDashboardTable.isNotEmpty &&
+                                                      controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
                                                   ? Text(
-                                                      'Done at ${controller.payrolltable[0].inPunchTime}',
+                                                      'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                       style: TextStyle(
                                                         fontSize: 10, //12
                                                         fontFamily: CommonFontStyle.plusJakartaSans,
@@ -250,9 +250,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         Column(
                                           children: [
                                             Text(AppString.clockout, style: AppStyle.plus16),
-                                            if (controller.payrolltable.isNotEmpty)
+                                            if (controller.empSummDashboardTable.isNotEmpty)
                                               Text(
-                                                controller.payrolltable[0].outPunchTime.toString(),
+                                                controller.empSummDashboardTable[0].outPunchTime.toString(),
                                                 style: AppStyle.plus16w600,
                                               )
                                             else
@@ -263,10 +263,10 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                                   color: AppColor.lightblue2,
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
-                                              child: controller.payrolltable.isNotEmpty &&
-                                                      controller.payrolltable[0].outPunchTime.toString().isNotEmpty
+                                              child: controller.empSummDashboardTable.isNotEmpty &&
+                                                      controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
                                                   ? Text(
-                                                      'Done at ${controller.payrolltable[0].outPunchTime}',
+                                                      'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                       style: AppStyle.plus10,
                                                     )
                                                   : Text(AppString.notyet),
@@ -299,9 +299,8 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(AppString.lcEgmin, style: AppStyle.plus14w500),
-                                            if (controller.payrolltable.isNotEmpty)
-                                              Text(controller.payrolltable[0].totLCEGMin.toString(),
-                                                  style: AppStyle.plus16w600)
+                                            if (controller.empSummDashboardTable.isNotEmpty)
+                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
                                             else
                                               Text('-- ', style: AppStyle.plus16w600),
                                           ],
@@ -330,9 +329,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(AppString.lcegcnt, style: AppStyle.plus14w500),
-                                          if (controller.payrolltable.isNotEmpty)
+                                          if (controller.empSummDashboardTable.isNotEmpty)
                                             Text(
-                                              controller.payrolltable[0].cnt.toString(),
+                                              controller.empSummDashboardTable[0].cnt.toString(),
                                               style: AppStyle.plus16w600,
                                             )
                                           else
