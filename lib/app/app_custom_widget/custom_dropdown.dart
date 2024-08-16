@@ -19,8 +19,6 @@ class CustomDropDown extends StatefulWidget {
 class CustomDropDownState extends State<CustomDropDown> {
   String? selectedValue;
   List<String> years = getLastTwoYears();
-  // List<String> years = ['2023', '2024'];
-  // String selValue = "";
 
   @override
   Widget build(BuildContext context) {
@@ -37,20 +35,6 @@ class CustomDropDownState extends State<CustomDropDown> {
               color: AppColor.black,
             ),
           ),
-          // decoration: InputDecoration(
-          //               labelText: "label Text",
-          //               labelStyle: TextStyle(
-          //                   color: true
-          //                       ? Colors.black54
-          //                       : Theme.of(context).disabledColor),
-          //               contentPadding: EdgeInsets.all(16),
-          //               focusedBorder: OutlineInputBorder(
-          //                 borderSide:
-          //                     BorderSide(color: Theme.of(context).primaryColor),
-          //               ),
-          //               border: new OutlineInputBorder(
-          //                   borderSide: new BorderSide()),
-          //             ),
           items: years
               .map((String item) => DropdownMenuItem<String>(
                     value: item,
@@ -63,15 +47,7 @@ class CustomDropDownState extends State<CustomDropDown> {
                     ),
                   ))
               .toList(),
-          // value: controller.selectedYear.value.isNotEmpty ? controller.selectedYear.value : null,
           value: widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
-          // onChanged: (String? value) {
-          //   if (value != null) {
-          //     controller.selectedYear.value = value;
-          //     int yearIndex = controller.years.indexOf(value);
-          //     controller.upd_YearSelIndex(yearIndex);
-          //   }
-          // },
           onChanged: (String? value) {
             widget.onPressed(value!);
             setState(() {
