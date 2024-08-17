@@ -155,7 +155,9 @@ class MispunchController extends GetxController {
         // Get.rawSnackbar(message: finalData.data['message']);
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (detailResponse.statusCode == 400) {
+        isLoading.value = false;
         mispunchTable = [];
+        Get.rawSnackbar(message: "No data found!");
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }

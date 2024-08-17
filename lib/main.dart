@@ -18,11 +18,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 RxBool hideBottomBar = false.obs;
 
 void main() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool isLoggedIn =
-      prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' ? true : false;
-
   await InitFirebaseSettings();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' ? true : false;
 
   runApp(DevicePreview(
     enabled: true,
