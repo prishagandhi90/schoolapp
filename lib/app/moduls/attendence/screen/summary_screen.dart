@@ -6,24 +6,12 @@ import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SummaryScreen extends StatefulWidget {
+class SummaryScreen extends GetView<AttendenceController> {
   const SummaryScreen({super.key});
 
-  @override
-  State<SummaryScreen> createState() => _SummaryScreenState();
-}
+  // final AttendenceController attendenceController = Get.put(AttendenceController());
 
-class _SummaryScreenState extends State<SummaryScreen> {
-  final AttendenceController attendenceController = Get.put(AttendenceController());
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      attendenceController.setCurrentMonthYear("SummaryScreen");
-    });
-  }
-
+  // @override
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
@@ -36,8 +24,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
               selectedMonthIndex: controller.MonthSel_selIndex.value,
               scrollController: controller.monthScrollControllerSummary,
               onPressed: (index) {
-                attendenceController.upd_MonthSelIndex(index);
-                attendenceController.showHideMsg();
+                controller.upd_MonthSelIndex(index);
+                controller.showHideMsg();
               },
             ),
             controller.isLoader.value
@@ -62,17 +50,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      CustomContainerview(
-                                          text: 'TOT P', text1: controller.attendenceSummaryTable[0].toTP.toString()),
-                                      CustomContainerview(
-                                          text: 'TOT A', text1: controller.attendenceSummaryTable[0].toTA.toString()),
-                                      CustomContainerview(
-                                          text: 'TOT DAYS',
-                                          text1: controller.attendenceSummaryTable[0].toTDAYS.toString()),
-                                      CustomContainerview(
-                                          text: 'P', text1: controller.attendenceSummaryTable[0].p.toString()),
-                                      CustomContainerview(
-                                          text: 'A', text1: controller.attendenceSummaryTable[0].a.toString()),
+                                      CustomContainerview(text: 'TOT P', text1: controller.attendenceSummaryTable[0].toTP.toString()),
+                                      CustomContainerview(text: 'TOT A', text1: controller.attendenceSummaryTable[0].toTA.toString()),
+                                      CustomContainerview(text: 'TOT DAYS', text1: controller.attendenceSummaryTable[0].toTDAYS.toString()),
+                                      CustomContainerview(text: 'P', text1: controller.attendenceSummaryTable[0].p.toString()),
+                                      CustomContainerview(text: 'A', text1: controller.attendenceSummaryTable[0].a.toString()),
                                     ],
                                   ),
                                 ],
@@ -91,16 +73,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               child: Column(
                                 children: [
                                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    CustomContainerview(
-                                        text: 'PL', text1: controller.attendenceSummaryTable[0].pl.toString()),
-                                    CustomContainerview(
-                                        text: 'HO', text1: controller.attendenceSummaryTable[0].ho.toString()),
-                                    CustomContainerview(
-                                        text: 'SL', text1: controller.attendenceSummaryTable[0].sl.toString()),
-                                    CustomContainerview(
-                                        text: 'CL', text1: controller.attendenceSummaryTable[0].cl.toString()),
-                                    CustomContainerview(
-                                        text: 'ML', text1: controller.attendenceSummaryTable[0].ml.toString())
+                                    CustomContainerview(text: 'PL', text1: controller.attendenceSummaryTable[0].pl.toString()),
+                                    CustomContainerview(text: 'HO', text1: controller.attendenceSummaryTable[0].ho.toString()),
+                                    CustomContainerview(text: 'SL', text1: controller.attendenceSummaryTable[0].sl.toString()),
+                                    CustomContainerview(text: 'CL', text1: controller.attendenceSummaryTable[0].cl.toString()),
+                                    CustomContainerview(text: 'ML', text1: controller.attendenceSummaryTable[0].ml.toString())
                                   ]),
                                 ],
                               ),
@@ -118,16 +95,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               child: Column(
                                 children: [
                                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                                    CustomContainerview(
-                                        text: 'LC/EG CNT',
-                                        text1: controller.attendenceSummaryTable[0].lCEGCNT.toString()),
-                                    CustomContainerview(
-                                        text: 'LC/EG MIN',
-                                        text1: controller.attendenceSummaryTable[0].lCEGMIN.toString()),
-                                    CustomContainerview(
-                                        text: 'WO', text1: controller.attendenceSummaryTable[0].wo.toString()),
-                                    CustomContainerview(
-                                        text: 'CO', text1: controller.attendenceSummaryTable[0].co.toString()),
+                                    CustomContainerview(text: 'LC/EG CNT', text1: controller.attendenceSummaryTable[0].lCEGCNT.toString()),
+                                    CustomContainerview(text: 'LC/EG MIN', text1: controller.attendenceSummaryTable[0].lCEGMIN.toString()),
+                                    CustomContainerview(text: 'WO', text1: controller.attendenceSummaryTable[0].wo.toString()),
+                                    CustomContainerview(text: 'CO', text1: controller.attendenceSummaryTable[0].co.toString()),
                                   ]),
                                 ],
                               ),
@@ -147,15 +118,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      CustomContainerview(
-                                          text: 'OT HRS',
-                                          text1: controller.attendenceSummaryTable[0].cOTHRS.toString()),
-                                      CustomContainerview(
-                                          text: 'DUTY HRS',
-                                          text1: controller.attendenceSummaryTable[0].dutYHRS.toString()),
-                                      CustomContainerview(
-                                          text: 'DUTY ST',
-                                          text1: controller.attendenceSummaryTable[0].dutYST.toString()),
+                                      CustomContainerview(text: 'OT HRS', text1: controller.attendenceSummaryTable[0].cOTHRS.toString()),
+                                      CustomContainerview(text: 'DUTY HRS', text1: controller.attendenceSummaryTable[0].dutYHRS.toString()),
+                                      CustomContainerview(text: 'DUTY ST', text1: controller.attendenceSummaryTable[0].dutYST.toString()),
                                     ],
                                   ),
                                 ],

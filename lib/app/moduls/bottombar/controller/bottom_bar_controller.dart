@@ -12,12 +12,11 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController with WidgetsBindingObserver {
-  PersistentTabController? persistentController;
-  DateTime? lastBackPressed;
+  PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
     super.onInit();
-    persistentController = PersistentTabController(initialIndex: 2);
+    // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
     update();
   }
@@ -32,11 +31,22 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
     ];
   }
 
-  void onItemTapped(int index) {
+  void onItemTapped(int index, BuildContext context) {
+    // if (persistentController!.index != index) {
+    // Pop all previous screens in the current tab stack
+    // Get.until((route) => route.isFirst);
+    // while (Navigator.canPop(context)) {
+    //   Navigator.pop(context);
+    // }
+    // hideBottomBar.value = false;
+    // Get.offAll(buildScreens1()[index]);
+    // Change the tab
+    // persistentController!.index = index;
     update();
+    // }
   }
 
-  List<PersistentBottomNavBarItem> navBarsItems() {
+  List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
     return [
       PersistentBottomNavBarItem(
         title: AppString.home,

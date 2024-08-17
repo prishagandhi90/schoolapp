@@ -54,6 +54,7 @@ class AttendenceController extends GetxController {
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
     setCurrentMonthYear("SummaryScreen");
+    update();
   }
 
   ScrollController createScrollController() {

@@ -9,25 +9,12 @@ import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MispunchScreen extends StatefulWidget {
+class MispunchScreen extends GetView<MispunchController> {
   const MispunchScreen({super.key});
 
   @override
-  State<MispunchScreen> createState() => _MispunchScreenState();
-}
-
-class _MispunchScreenState extends State<MispunchScreen> {
-  final MispunchController mispunchController = Get.put(MispunchController());
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      mispunchController.setCurrentMonthYear();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    Get.put(MispunchController());
     return GetBuilder<MispunchController>(
       builder: (controller) {
         return DefaultTabController(
@@ -54,7 +41,7 @@ class _MispunchScreenState extends State<MispunchScreen> {
                   selValue: controller.YearSel_selIndex,
                   onPressed: (index) {
                     controller.upd_YearSelIndex(index);
-                    mispunchController.showHideMsg();
+                    controller.showHideMsg();
                   },
                 )
               ],
@@ -68,7 +55,7 @@ class _MispunchScreenState extends State<MispunchScreen> {
                     scrollController: controller.monthScrollController,
                     onPressed: (index) {
                       controller.upd_MonthSelIndex(index);
-                      mispunchController.showHideMsg();
+                      controller.showHideMsg();
                     },
                   ),
                   const SizedBox(height: 20),
@@ -84,73 +71,44 @@ class _MispunchScreenState extends State<MispunchScreen> {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.23,
-                                      decoration: BoxDecoration(
-                                          color: AppColor.lightblue1,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
+                                      height: MediaQuery.of(context).size.height * 0.23,
+                                      decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
                                       child: Column(
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             width: double.infinity,
                                             height: 45,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: AppColor.primaryColor),
+                                            decoration:
+                                                BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
+                                              padding: const EdgeInsets.symmetric(horizontal: 15),
                                               child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
+                                                  alignment: Alignment.centerLeft,
                                                   child: Text(
-                                                    controller
-                                                        .mispunchTable[index].dt
-                                                        .toString(),
+                                                    controller.mispunchTable[index].dt.toString(),
                                                     style: TextStyle(
                                                       fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w500, //20
-                                                      fontFamily:
-                                                          CommonFontStyle
-                                                              .plusJakartaSans,
+                                                      fontWeight: FontWeight.w500, //20
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
                                                     ),
                                                   )),
                                             ),
                                           ),
                                           Flexible(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
+                                              padding: const EdgeInsets.symmetric(vertical: 10),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
+                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                 children: [
                                                   CustomContainerview(
-                                                      text: AppString.type,
-                                                      text1: controller
-                                                          .mispunchTable[index]
-                                                          .misPunch
-                                                          .toString()),
+                                                      text: AppString.type, text1: controller.mispunchTable[index].misPunch.toString()),
                                                   CustomContainerview(
                                                       text: AppString.punchtime,
-                                                      text1: controller
-                                                          .mispunchTable[index]
-                                                          .punchTime
-                                                          .toString()),
+                                                      text1: controller.mispunchTable[index].punchTime.toString()),
                                                   CustomContainerview(
                                                       text: AppString.shifttime,
-                                                      text1: controller
-                                                          .mispunchTable[index]
-                                                          .shiftTime
-                                                          .toString()),
+                                                      text1: controller.mispunchTable[index].shiftTime.toString()),
                                                 ],
                                               ),
                                             ),

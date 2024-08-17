@@ -27,6 +27,7 @@ class BottomBarView extends GetView<BottomBarController> {
               controller: controller.persistentController,
               handleAndroidBackButtonPress: true,
               hideNavigationBarWhenKeyboardAppears: true,
+              // popBehaviorOnSelectedNavBarItemPress: PopBehavior.none,
               backgroundColor: AppColor.white,
               navBarHeight: hideBottomBar.value ? 0 : 70.0,
               decoration: NavBarDecoration(
@@ -46,14 +47,16 @@ class BottomBarView extends GetView<BottomBarController> {
                 ),
               ),
               screens: controller.buildScreens(),
-              items: controller.navBarsItems(),
+              items: controller.navBarsItems(context),
               navBarStyle: NavBarStyle.style8,
               stateManagement: false,
               resizeToAvoidBottomInset: true,
               bottomScreenMargin: Sizes.crossLength * 0.020,
-              onItemSelected: (value) {
-                controller.onItemTapped(value);
-              },
+              // onItemSelected: (value) {
+              //   controller.onItemTapped(value, context);
+              // },
+              onItemSelected: (index) => controller.onItemTapped(index, context),
+              // popAllScreensOnTapOfSelectedTab: true,
             ),
           ),
         );

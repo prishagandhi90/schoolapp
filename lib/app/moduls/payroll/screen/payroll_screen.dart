@@ -15,24 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class PayrollScreen extends StatefulWidget {
+class PayrollScreen extends GetView<PayrollController> {
   const PayrollScreen({super.key});
 
-  @override
-  State<PayrollScreen> createState() => _PayrollScreenState();
-}
+  // final PayrollController payrollcontroller = Get.put(PayrollController());
 
-class _PayrollScreenState extends State<PayrollScreen> {
-  final PayrollController payrollcontroller = Get.put(PayrollController());
-  final DashboardController dashboardController = Get.put(DashboardController());
-
-  int selectedIndex = 0;
-
-  void onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
+  // final DashboardController dashboardController = Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -364,6 +352,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) {
+                                        while (Navigator.canPop(context)) {
+                                          Navigator.pop(context);
+                                        }
                                         hideBottomBar.value = false;
                                         dashboardController.getDashboardDataUsingToken();
                                       });
@@ -403,6 +394,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
+                                        while (Navigator.canPop(context)) {
+                                          Navigator.pop(context);
+                                        }
                                         hideBottomBar.value = false;
                                         await dashboardController.getDashboardDataUsingToken();
                                       });

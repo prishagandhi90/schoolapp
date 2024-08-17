@@ -27,7 +27,10 @@ class MispunchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // setCurrentMonthYear();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   setCurrentMonthYear();
+    // });
+    setCurrentMonthYear();
   }
 
   void setCurrentMonthYear() {
@@ -157,7 +160,7 @@ class MispunchController extends GetxController {
       } else if (detailResponse.statusCode == 400) {
         isLoading.value = false;
         mispunchTable = [];
-        Get.rawSnackbar(message: "No data found!");
+        //Get.rawSnackbar(message: "No data found!");
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
