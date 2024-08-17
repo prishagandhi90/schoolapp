@@ -35,7 +35,6 @@ class LoginController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      // String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
       String url = ConstApiUrl.empSendEMPMobileOtpAPI;
 
       var jsonbodyObj = {"mobileNo": numberController.text};
@@ -60,8 +59,10 @@ class LoginController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
+      isLoadingLogin = false;
       return MobileTable();
     } catch (e) {
+      isLoadingLogin = false;
       print('Error: $e');
       return MobileTable();
     } finally {

@@ -24,7 +24,7 @@ class AttendenceController extends GetxController {
   List<AttendanceDetailTable> attendenceDetailTable = [];
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = true;
-  var isLoading1 = false.obs;
+  var isLoader = false.obs;
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
@@ -174,8 +174,7 @@ class AttendenceController extends GetxController {
 
   Future<List<AttendanceDetailTable>> getattendeceinfotable() async {
     try {
-      isLoading1.value = true;
-      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+      isLoader.value = true;
       String url = ConstApiUrl.empAttendanceDtlAPI;
 
       SharedPreferences pref = await SharedPreferences.getInstance();
@@ -190,7 +189,7 @@ class AttendenceController extends GetxController {
 
       if (detailResponse.statusCode == 200) {
         if (detailResponse.data != null && detailResponse.data!.isNotEmpty) {
-          isLoading1.value = false;
+          isLoader.value = false;
           attendenceDetailTable = detailResponse.data!;
           update();
           return attendenceDetailTable;
@@ -209,15 +208,16 @@ class AttendenceController extends GetxController {
       }
       update();
     } catch (e) {
-      isLoading1.value = false;
+      isLoader.value = false;
       update();
     }
+    isLoader.value = false;
     return [];
   }
 
   Future<List<AttendenceSummarytable>> getattendeceprsnttable() async {
     try {
-      isLoading1.value = true;
+      isLoader.value = true;
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
       String url = ConstApiUrl.empAttendanceSummaryAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
@@ -231,7 +231,7 @@ class AttendenceController extends GetxController {
       ResponseAttendenceSummary summaryResponse = ResponseAttendenceSummary.fromJson(jsonDecode(decodedResp));
       if (summaryResponse.statusCode == 200) {
         if (summaryResponse.data != null && summaryResponse.data!.isNotEmpty) {
-          isLoading1.value = false;
+          isLoader.value = false;
           attendenceSummaryTable = summaryResponse.data!;
           update();
           return attendenceSummaryTable;
@@ -250,9 +250,10 @@ class AttendenceController extends GetxController {
       }
       update();
     } catch (e) {
-      isLoading1.value = false;
+      isLoader.value = false;
       update();
     }
+    isLoader.value = false;
     return [];
   }
 

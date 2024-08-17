@@ -49,7 +49,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    controller.isLoading1.value
+                    controller.isLoader.value
                         ? const Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 100),
@@ -223,7 +223,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
@@ -262,7 +263,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -351,7 +353,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -423,7 +426,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [

@@ -171,51 +171,58 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getDashboardDataUsingToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
-      String token = prefs.getString(AppString.keyToken) ?? '';
-      String loginId = prefs.getString(AppString.keyLoginId) ?? '';
-      var jsonbodyObj = {"loginId": loginId};
-      // String url = 'http://117.217.126.127:44166/api/Employee/GetDashboardList';
-      String url = ConstApiUrl.empGetDashboardListAPI;
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
+        String token = prefs.getString(AppString.keyToken) ?? '';
+        String loginId = prefs.getString(AppString.keyLoginId) ?? '';
+        var jsonbodyObj = {"loginId": loginId};
+        String url = ConstApiUrl.empGetDashboardListAPI;
 
-      var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
-      ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
+        var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
+        ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
 
-      if (responseDashboardData.statusCode == 200) {
-        if (responseDashboardData.data != null) {
-          dashboardTable = responseDashboardData.data!;
-          var dashboardController = Get.put(DashboardController());
-          dashboardController.employeeName = dashboardTable.employeeName.toString();
-          dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
-          dashboardController.emailAddress = dashboardTable.emailAddress.toString();
-          dashboardController.empCode = dashboardTable.empCode.toString();
-          dashboardController.empType = dashboardTable.empType.toString();
-          dashboardController.department = dashboardTable.department.toString();
-          dashboardController.designation = dashboardTable.designation.toString();
+        if (responseDashboardData.statusCode == 200) {
+          if (responseDashboardData.data != null) {
+            dashboardTable = responseDashboardData.data!;
+            var dashboardController = Get.put(DashboardController());
+            dashboardController.employeeName = dashboardTable.employeeName.toString();
+            dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
+            dashboardController.emailAddress = dashboardTable.emailAddress.toString();
+            dashboardController.empCode = dashboardTable.empCode.toString();
+            dashboardController.empType = dashboardTable.empType.toString();
+            dashboardController.department = dashboardTable.department.toString();
+            dashboardController.designation = dashboardTable.designation.toString();
 
-          dashboardController.update();
+            dashboardController.update();
+          } else {
+            Get.rawSnackbar(message: "No data found!");
+          }
+          update();
+        } else if (responseDashboardData.statusCode == 401) {
+          prefs.clear();
+          Get.offAll(LoginScreen());
+          Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+        } else if (responseDashboardData.statusCode == 400) {
+          Get.rawSnackbar(message: "Data not found!");
+        } else if (responseDashboardData.statusCode == 404) {
+          Get.rawSnackbar(message: "Not found!");
+        } else if (responseDashboardData.statusCode == 500) {
+          Get.rawSnackbar(message: "Internal server error");
         } else {
-          Get.rawSnackbar(message: "No data found!");
+          Get.rawSnackbar(message: "Something went wrong");
         }
-        update();
-      } else if (responseDashboardData.statusCode == 401) {
+      } else {
         prefs.clear();
         Get.offAll(LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else if (responseDashboardData.statusCode == 400) {
-        Get.rawSnackbar(message: "Data not found!");
-      } else if (responseDashboardData.statusCode == 404) {
-        Get.rawSnackbar(message: "Not found!");
-      } else if (responseDashboardData.statusCode == 500) {
-        Get.rawSnackbar(message: "Internal server error");
-      } else {
-        Get.rawSnackbar(message: "Something went wrong");
       }
-    } else {
-      prefs.clear();
-      Get.offAll(LoginScreen());
-      Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+    } catch (e) {
+      // isLoadingLogin = false;
+      print('Error: $e');
+    } finally {
+      // isLoadingLogin = false;
+      update();
     }
   }
 }
