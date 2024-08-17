@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/app_custom_widget/common_methods.dart';
 import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
 import 'package:emp_app/main.dart';
@@ -183,11 +184,28 @@ class AttendenceController extends GetxController {
 
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseAttendenceDetail detailResponse = ResponseAttendenceDetail.fromJson(jsonDecode(decodedResp));
-      attendenceDetailTable = detailResponse.data!;
 
-      isLoading1.value = false;
+      if (detailResponse.statusCode == 200) {
+        if (detailResponse.data != null && detailResponse.data!.isNotEmpty) {
+          isLoading1.value = false;
+          attendenceDetailTable = detailResponse.data!;
+          update();
+          return attendenceDetailTable;
+        } else {
+          attendenceDetailTable = [];
+        }
+        update();
+      } else if (detailResponse.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        // Get.rawSnackbar(message: finalData.data['message']);
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (detailResponse.statusCode == 400) {
+        attendenceDetailTable = [];
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
       update();
-      return attendenceDetailTable;
     } catch (e) {
       isLoading1.value = false;
       update();
@@ -208,10 +226,27 @@ class AttendenceController extends GetxController {
 
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseAttendenceSummary summaryResponse = ResponseAttendenceSummary.fromJson(jsonDecode(decodedResp));
-      attendenceSummaryTable = summaryResponse.data!;
-      isLoading1.value = false;
+      if (summaryResponse.statusCode == 200) {
+        if (summaryResponse.data != null && summaryResponse.data!.isNotEmpty) {
+          isLoading1.value = false;
+          attendenceSummaryTable = summaryResponse.data!;
+          update();
+          return attendenceSummaryTable;
+        } else {
+          attendenceSummaryTable = [];
+        }
+        update();
+      } else if (summaryResponse.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        // Get.rawSnackbar(message: finalData.data['message']);
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (summaryResponse.statusCode == 400) {
+        attendenceSummaryTable = [];
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
       update();
-      return attendenceSummaryTable;
     } catch (e) {
       isLoading1.value = false;
       update();

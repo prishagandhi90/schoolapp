@@ -68,34 +68,43 @@ class OtpController extends GetxController {
       };
 
       // var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
       dashboardTable = responseDashboardData.data!;
 
-      // print(loginEmp);
-      // if (decodedResp == null) {
-      //   return "false";
-      // }
+      if (responseDashboardData.statusCode == 200) {
+        if (responseDashboardData.data != null && responseDashboardData.isSuccess.toString() == "true") {
+          await prefs.setString('KEY_TOKENNO', dashboardTable.token ?? '');
+          await prefs.setString('KEY_LOGINID', dashboardTable.loginId.toString());
+          await prefs.setString('KEY_EMPID', dashboardTable.employeeId.toString());
 
-      if (responseDashboardData.isSuccess.toString() == "true") {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+          dashboardController.employeeName = dashboardTable.employeeName.toString();
+          dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
+          dashboardController.emailAddress = dashboardTable.emailAddress.toString();
+          dashboardController.empCode = dashboardTable.empCode.toString();
+          dashboardController.empType = dashboardTable.empType.toString();
+          dashboardController.department = dashboardTable.department.toString();
+          dashboardController.designation = dashboardTable.designation.toString();
 
-        await prefs.setString('KEY_TOKENNO', dashboardTable.token ?? '');
-        await prefs.setString('KEY_LOGINID', dashboardTable.loginId.toString());
-        await prefs.setString('KEY_EMPID', dashboardTable.employeeId.toString());
-
-        dashboardController.employeeName = dashboardTable.employeeName.toString();
-        dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
-        dashboardController.emailAddress = dashboardTable.emailAddress.toString();
-        dashboardController.empCode = dashboardTable.empCode.toString();
-        dashboardController.empType = dashboardTable.empType.toString();
-        dashboardController.department = dashboardTable.department.toString();
-        dashboardController.designation = dashboardTable.designation.toString();
-
-        dashboardController.update();
-        return "true";
+          dashboardController.update();
+          return "true";
+        } else {
+          Get.rawSnackbar(message: "No data found!");
+        }
+      } else if (responseDashboardData.statusCode == 401) {
+        prefs.clear();
+        Get.offAll(LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseDashboardData.statusCode == 400) {
+        Get.rawSnackbar(message: "Data not found!");
+      } else if (responseDashboardData.statusCode == 404) {
+        Get.rawSnackbar(message: "Not found!");
+      } else if (responseDashboardData.statusCode == 500) {
+        Get.rawSnackbar(message: "Internal server error");
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
       }
-
       return "false";
     } catch (e) {
       return "false";

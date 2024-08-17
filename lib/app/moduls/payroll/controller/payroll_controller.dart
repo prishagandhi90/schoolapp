@@ -7,6 +7,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/model/empsummdash_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
@@ -69,11 +70,28 @@ class PayrollController extends GetxController {
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseEmpSummDashboardData empSummDashboardDataResponse =
           ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
-      empSummDashboardTable = empSummDashboardDataResponse.data!;
 
-      isLoading.value = false;
+      if (empSummDashboardDataResponse.statusCode == 200) {
+        if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
+          isLoading.value = false;
+          empSummDashboardTable = empSummDashboardDataResponse.data!;
+          update();
+          return empSummDashboardTable;
+        } else {
+          empSummDashboardTable = [];
+        }
+        update();
+      } else if (empSummDashboardDataResponse.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        // Get.rawSnackbar(message: finalData.data['message']);
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (empSummDashboardDataResponse.statusCode == 400) {
+        empSummDashboardTable = [];
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
       update();
-      return empSummDashboardTable;
     } catch (e) {
       isLoading.value = false;
       update();

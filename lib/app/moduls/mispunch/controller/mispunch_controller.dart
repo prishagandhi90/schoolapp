@@ -3,6 +3,7 @@ import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -134,11 +135,28 @@ class MispunchController extends GetxController {
       // var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseMispunchData detailResponse = ResponseMispunchData.fromJson(jsonDecode(decodedResp));
-      mispunchTable = detailResponse.data!;
 
-      isLoading.value = false;
+      if (detailResponse.statusCode == 200) {
+        if (detailResponse.data != null && detailResponse.data!.isNotEmpty) {
+          isLoading.value = false;
+          mispunchTable = detailResponse.data!;
+          update();
+          return mispunchTable;
+        } else {
+          mispunchTable = [];
+        }
+        update();
+      } else if (detailResponse.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        // Get.rawSnackbar(message: finalData.data['message']);
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (detailResponse.statusCode == 400) {
+        mispunchTable = [];
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
       update();
-      return mispunchTable;
     } catch (e) {
       isLoading.value = false;
       update();

@@ -39,11 +39,26 @@ class LoginController extends GetxController {
       var jsonbodyObj = {"mobileNo": numberController.text};
       var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
       ResponseMobileNo responseMobileNo = ResponseMobileNo.fromJson(jsonDecode(decodedResp));
-      mobileTable = responseMobileNo.data!;
 
-      isLoadingLogin = false;
-      update();
-      return mobileTable;
+      if (responseMobileNo.statusCode == 200) {
+        if (responseMobileNo.data != null) {
+          isLoadingLogin = false;
+          mobileTable = responseMobileNo.data!;
+          update();
+          return mobileTable;
+        } else {
+          Get.rawSnackbar(message: "No data found!");
+        }
+      } else if (responseMobileNo.statusCode == 400) {
+        Get.rawSnackbar(message: "Data not found!");
+      } else if (responseMobileNo.statusCode == 404) {
+        Get.rawSnackbar(message: "Not found!");
+      } else if (responseMobileNo.statusCode == 500) {
+        Get.rawSnackbar(message: "Internal server error");
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      return MobileTable();
     } catch (e) {
       print('Error: $e');
       return MobileTable();

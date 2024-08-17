@@ -182,11 +182,10 @@ class DashboardController extends GetxController {
 
       var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
-      dashboardTable = responseDashboardData.data!;
 
       if (responseDashboardData.statusCode == 200) {
-        // var decodedResp = json.decode(empmonthyrtable);
-        if (responseDashboardData.isSuccess.toString() == "true") {
+        if (responseDashboardData.data != null) {
+          dashboardTable = responseDashboardData.data!;
           var dashboardController = Get.put(DashboardController());
           dashboardController.employeeName = dashboardTable.employeeName.toString();
           dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
@@ -197,17 +196,27 @@ class DashboardController extends GetxController {
           dashboardController.designation = dashboardTable.designation.toString();
 
           dashboardController.update();
+        } else {
+          Get.rawSnackbar(message: "No data found!");
         }
         update();
-        // Get.offAll(const BottomBarView());
       } else if (responseDashboardData.statusCode == 401) {
         prefs.clear();
         Get.offAll(LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseDashboardData.statusCode == 400) {
+        Get.rawSnackbar(message: "Data not found!");
+      } else if (responseDashboardData.statusCode == 404) {
+        Get.rawSnackbar(message: "Not found!");
+      } else if (responseDashboardData.statusCode == 500) {
+        Get.rawSnackbar(message: "Internal server error");
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
       }
-      ;
     } else {
-      Get.rawSnackbar(message: "Something went wrong");
+      prefs.clear();
+      Get.offAll(LoginScreen());
+      Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
     }
   }
 }
