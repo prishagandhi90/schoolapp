@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:emp_app/app/core/constant/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -154,7 +155,8 @@ class DashboardController extends GetxController {
 
   Future<dynamic> getProfileData() async {
     try {
-      String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+      String url = ConstApiUrl.empAttendanceDtlAPI;
       var jsonbodyObj = {"loginId": loginId};
 
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
@@ -176,7 +178,8 @@ class DashboardController extends GetxController {
       String token = prefs.getString('KEY_TOKENNO') ?? '';
       String loginId = prefs.getString('KEY_LOGINID') ?? '';
       var jsonbodyObj = {"loginId": loginId};
-      String url = 'http://117.217.126.127:44166/api/Employee/GetDashboardList';
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetDashboardList';
+      String url = ConstApiUrl.empGetDashboardListAPI;
 
       // var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
 

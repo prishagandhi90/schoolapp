@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
+import 'package:emp_app/app/core/constant/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -123,7 +124,8 @@ class MispunchController extends GetxController {
   Future<List<MispunchTable>> getmonthyrempinfotable() async {
     try {
       isLoading.value = true;
-      String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
+      String url = ConstApiUrl.empMispunchDetailAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";

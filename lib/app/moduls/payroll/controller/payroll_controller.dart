@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:emp_app/app/core/constant/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
@@ -54,7 +55,8 @@ class PayrollController extends GetxController {
 
   Future<dynamic> getProfileData() async {
     try {
-      String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+      String url = ConstApiUrl.empDashboardSummaryAPI;
 
       // loginId = await _storage.read(key: "KEY_LOGINID") ?? '';
       // tokenNo = await _storage.read(key: "KEY_TOKENNO") ?? '';

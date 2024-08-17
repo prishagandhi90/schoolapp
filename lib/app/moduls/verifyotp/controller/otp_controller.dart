@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:emp_app/app/core/constant/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -40,7 +41,8 @@ class OtpController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
+      // String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
+      String url = ConstApiUrl.empSendEMPMobileOtpAPI;
       var jsonbodyObj = {"mobileNo": numberController.text};
       var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
       isLoadingLogin = false;
@@ -56,7 +58,8 @@ class OtpController extends GetxController {
 
   Future<String> getDashboardData(String otp, BuildContext context, String deviceToken) async {
     try {
-      String url = 'http://117.217.126.127:44166/api/Employee/authentication';
+      // String url = 'http://117.217.126.127:44166/api/Employee/authentication';
+      String url = ConstApiUrl.loginWithOTP_Pass;
       var jsonbodyObj = {
         "mobileNo": numberController.text,
         "password": "",

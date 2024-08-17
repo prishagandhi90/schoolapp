@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
+import 'package:emp_app/app/core/constant/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/app_custom_widget/common_methods.dart';
 import 'package:emp_app/app/moduls/attendence/model/attendencetable_model.dart';
@@ -173,7 +174,8 @@ class AttendenceController extends GetxController {
   Future<List<AttendanceDetailTable>> getattendeceinfotable() async {
     try {
       isLoading1.value = true;
-      String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
+      String url = ConstApiUrl.empAttendanceDtlAPI;
 
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
@@ -216,7 +218,8 @@ class AttendenceController extends GetxController {
   Future<List<AttendenceSummarytable>> getattendeceprsnttable() async {
     try {
       isLoading1.value = true;
-      String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
+      String url = ConstApiUrl.empAttendanceSummaryAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString('KEY_LOGINID') ?? "";
       tokenNo = await pref.getString('KEY_TOKENNO') ?? "";

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:emp_app/app/core/constant/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -34,7 +35,8 @@ class LoginController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
+      // String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
+      String url = ConstApiUrl.empSendEMPMobileOtpAPI;
 
       var jsonbodyObj = {"mobileNo": numberController.text};
       var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
