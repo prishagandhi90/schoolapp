@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/app_custom_widget/common_methods.dart';
@@ -178,8 +179,8 @@ class AttendenceController extends GetxController {
       String url = ConstApiUrl.empAttendanceDtlAPI;
 
       SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString('KEY_LOGINID') ?? "";
-      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
@@ -200,7 +201,6 @@ class AttendenceController extends GetxController {
       } else if (detailResponse.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
-        // Get.rawSnackbar(message: finalData.data['message']);
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (detailResponse.statusCode == 400) {
         attendenceDetailTable = [];
@@ -221,8 +221,8 @@ class AttendenceController extends GetxController {
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
       String url = ConstApiUrl.empAttendanceSummaryAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString('KEY_LOGINID') ?? "";
-      tokenNo = await pref.getString('KEY_TOKENNO') ?? "";
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
       String monthYr = getMonthYearFromIndex(MonthSel_selIndex.value, YearSel_selIndex);
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "monthYr": monthYr};
@@ -242,7 +242,6 @@ class AttendenceController extends GetxController {
       } else if (summaryResponse.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
-        // Get.rawSnackbar(message: finalData.data['message']);
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (summaryResponse.statusCode == 400) {
         attendenceSummaryTable = [];
@@ -270,9 +269,7 @@ class AttendenceController extends GetxController {
     string1 = string1.replaceAll('\r', ' ');
     List<String> parts = string1.split(' ');
 
-    // If the string has fewer than 3 parts, just return the original string
     if (parts.length < 1) {
-      // print("The string has fewer than 3 parts.");
       return "";
     }
 

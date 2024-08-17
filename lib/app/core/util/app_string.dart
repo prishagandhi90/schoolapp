@@ -59,4 +59,8 @@ class AppString {
   static String plzenterproperotp = "Please enter the proper Mobile/OTP!";
   static String failedtoresendotp = "Failed to resend OTP. Please try again.";
   static String contact = "Contact";
+
+  static String keyToken = "KEY_TOKENNO";
+  static String keyLoginId = "KEY_LOGINID";
+  static String keyEmpId = "KEY_EMPID";
 }

@@ -158,9 +158,7 @@ class DashboardController extends GetxController {
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
       String url = ConstApiUrl.empAttendanceDtlAPI;
       var jsonbodyObj = {"loginId": loginId};
-
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
-      // profiletable = apiController.parseJson_Flag_attendence(empmonthyrtable, 'data');
 
       isLoading = false;
       update();
@@ -174,14 +172,12 @@ class DashboardController extends GetxController {
 
   Future<void> getDashboardDataUsingToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('KEY_TOKENNO') != null && prefs.getString('KEY_TOKENNO') != '') {
-      String token = prefs.getString('KEY_TOKENNO') ?? '';
-      String loginId = prefs.getString('KEY_LOGINID') ?? '';
+    if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
+      String token = prefs.getString(AppString.keyToken) ?? '';
+      String loginId = prefs.getString(AppString.keyLoginId) ?? '';
       var jsonbodyObj = {"loginId": loginId};
       // String url = 'http://117.217.126.127:44166/api/Employee/GetDashboardList';
       String url = ConstApiUrl.empGetDashboardListAPI;
-
-      // var empmonthyrtable = await apiController.getDynamicData(url, token, jsonbodyObj);
 
       var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));

@@ -78,9 +78,9 @@ class OtpController extends GetxController {
 
       if (responseDashboardData.statusCode == 200) {
         if (responseDashboardData.data != null && responseDashboardData.isSuccess.toString() == "true") {
-          await prefs.setString('KEY_TOKENNO', dashboardTable.token ?? '');
-          await prefs.setString('KEY_LOGINID', dashboardTable.loginId.toString());
-          await prefs.setString('KEY_EMPID', dashboardTable.employeeId.toString());
+          await prefs.setString(AppString.keyToken, dashboardTable.token ?? '');
+          await prefs.setString(AppString.keyLoginId, dashboardTable.loginId.toString());
+          await prefs.setString(AppString.keyEmpId, dashboardTable.employeeId.toString());
 
           dashboardController.employeeName = dashboardTable.employeeName.toString();
           dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
@@ -154,9 +154,9 @@ class OtpController extends GetxController {
     hideBottomBar.value = true;
     bottomBarController.update();
     try {
-      await prefs.remove("KEY_TOKENNO");
-      await prefs.remove("KEY_LOGINID");
-      await prefs.remove("KEY_EMPID");
+      await prefs.remove(AppString.keyToken);
+      await prefs.remove(AppString.keyLoginId);
+      await prefs.remove(AppString.keyEmpId);
 
       dashboardController.employeeName = "";
       dashboardController.mobileNumber = "";
