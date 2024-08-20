@@ -25,7 +25,7 @@ class OtpController extends GetxController {
   List<OTPModel> otpmodel = [];
   Timer? timer;
   RxInt secondsRemaining = 10.obs;
-  final DashboardController dashboardController = Get.put(DashboardController());
+
   late DashboardTable dashboardTable;
 
   void clearText() {
@@ -82,6 +82,7 @@ class OtpController extends GetxController {
           await prefs.setString(AppString.keyLoginId, dashboardTable.loginId.toString());
           await prefs.setString(AppString.keyEmpId, dashboardTable.employeeId.toString());
 
+          var dashboardController = Get.put(DashboardController());
           dashboardController.employeeName = dashboardTable.employeeName.toString();
           dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
           dashboardController.emailAddress = dashboardTable.emailAddress.toString();
@@ -158,6 +159,7 @@ class OtpController extends GetxController {
       await prefs.remove(AppString.keyLoginId);
       await prefs.remove(AppString.keyEmpId);
 
+      var dashboardController = Get.put(DashboardController());
       dashboardController.employeeName = "";
       dashboardController.mobileNumber = "";
       dashboardController.emailAddress = "";
@@ -177,20 +179,22 @@ class OtpController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
+      if (otpController.text != otpNo) {
+        print('OTP Controller: ${otpController.text}');
+        print('OTP: $otpNo');
+        Get.snackbar(
+          AppString.otpisincorrect,
+          AppString.plzentercorrectotp,
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
+          duration: const Duration(seconds: 1),
+        );
+        return false;
+      }
+
       if (formKey1.currentState!.validate()) {
-        if (otpController.text != otpNo) {
-          print('OTP Controller: ${otpController.text}');
-          print('OTP: $otpNo');
-          Get.snackbar(
-            AppString.otpisincorrect,
-            AppString.plzentercorrectotp,
-            colorText: AppColor.white,
-            backgroundColor: AppColor.black,
-            duration: const Duration(seconds: 1),
-          );
-          return false;
-        }
         formKey1.currentState!.save();
+
         String isValidLogin = "false";
         isLoadingLogin = true;
         update();

@@ -1,7 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
@@ -65,7 +64,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                   child: DataTable(
                                     headingRowColor: WidgetStateColor.resolveWith(
-                                      (states) => const Color.fromARGB(255, 94, 157, 168),
+                                      (states) => AppColor.primaryColor,
                                     ),
                                     columnSpacing: constraints.maxWidth * 0.05,
                                     columns: [
@@ -171,7 +170,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
         isScrollControlled: true,
         isDismissible: true,
         enableDrag: true,
-        // context: context,
         context: Get.context!,
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.95,
@@ -223,8 +221,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
@@ -263,8 +260,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -353,8 +349,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -426,8 +421,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [

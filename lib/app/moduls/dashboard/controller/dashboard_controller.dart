@@ -20,21 +20,18 @@ class DashboardController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   bool isLoading = true;
   late List<Profiletable> profiletable = [];
-  String employeeName = "",
-      mobileNumber = "",
-      emailAddress = "",
-      empCode = "",
-      empType = "",
-      department = "",
-      designation = "";
+  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
   late DashboardTable dashboardTable;
 
   @override
   void onInit() {
     super.onInit();
-    getDashboardDataUsingToken();
-    hideBottomBar.value = false;
-    update();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getDashboardDataUsingToken();
+
+      hideBottomBar.value = false;
+      update();
+    });
   }
 
   Future<void> gridOnClk(int index, BuildContext context) async {
@@ -179,6 +176,8 @@ class DashboardController extends GetxController {
         var jsonbodyObj = {"loginId": loginId};
         String url = ConstApiUrl.empGetDashboardListAPI;
 
+        print('response 999');
+        debugPrint('Response 555');
         var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
         ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
 

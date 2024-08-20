@@ -112,7 +112,6 @@ class ApiController extends GetxController {
     final body = jsonEncode(jsonBodyObj);
     try {
       final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
-
       return response.body; // This returns a String
     } catch (exception) {
       if (exception.toString().contains('SocketException')) {

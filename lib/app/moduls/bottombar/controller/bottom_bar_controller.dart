@@ -31,19 +31,17 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
     ];
   }
 
+  Future<bool> onWillPop() async {
+    if (persistentController!.index != 2) {
+      persistentController!.jumpToTab(2); // Dashboard tab par le aaye
+      return false; // Back navigation prevent kare
+    } else {
+      return true; // Allow default back navigation to previous screens
+    }
+  }
+
   void onItemTapped(int index, BuildContext context) {
-    // if (persistentController!.index != index) {
-    // Pop all previous screens in the current tab stack
-    // Get.until((route) => route.isFirst);
-    // while (Navigator.canPop(context)) {
-    //   Navigator.pop(context);
-    // }
-    // hideBottomBar.value = false;
-    // Get.offAll(buildScreens1()[index]);
-    // Change the tab
-    // persistentController!.index = index;
     update();
-    // }
   }
 
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
@@ -80,26 +78,4 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
       ),
     ];
   }
-
-  // Future<bool> onWillPop(BuildContext context) async {
-  //   if (Navigator.of(context).canPop()) {
-  //     // If there's anything to pop on the current stack, pop it.
-  //     Navigator.of(context).pop();
-  //     return Future.value(false);
-  //   } else if (persistentController!.index != 2) {
-  //     // If not on the dashboard, navigate back to the dashboard
-  //     persistentController!.jumpToTab(2);
-  //     return Future.value(false);
-  //   } else {
-  //     // Handle exit from the app
-  //     if (lastBackPressed == null ||
-  //         DateTime.now().difference(lastBackPressed!) > Duration(seconds: 2)) {
-  //       lastBackPressed = DateTime.now();
-  //       Get.snackbar("Press Back Again", "to exit the app",
-  //           snackPosition: SnackPosition.BOTTOM);
-  //       return Future.value(false);
-  //     }
-  //     return Future.value(true); // Exit the app
-  //   }
-  // }
 }
