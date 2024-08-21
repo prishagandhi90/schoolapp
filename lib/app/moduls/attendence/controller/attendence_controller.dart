@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
+import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -25,14 +26,14 @@ class AttendenceController extends GetxController {
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = true;
   var isLoader = false.obs;
-  RxInt MonthSel_selIndex = (-1).obs;
+  var MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
 
   List<String> years = getLastTwoYears();
   final ScrollController attendanceScrollController = ScrollController();
-  final ScrollController monthScrollControllerSummary = ScrollController();
-  final ScrollController monthScrollControllerDetail = ScrollController();
+  var monthScrollControllerSummary = ScrollController();
+  var monthScrollControllerDetail = ScrollController();
 
   @override
   void onInit() {
@@ -53,8 +54,29 @@ class AttendenceController extends GetxController {
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
+    // createScrollControllers();
+    monthScrollControllerSummary = ScrollController();
+    monthScrollControllerDetail = ScrollController();
     setCurrentMonthYear("SummaryScreen");
     update();
+  }
+
+  @override
+  void onClose() {
+    // Dispose of controllers when they are no longer needed
+    monthScrollControllerSummary.dispose();
+    monthScrollControllerDetail.dispose();
+    super.onClose();
+  }
+
+  // void closeScrollcontrollers() {
+  //   monthScrollControllerSummary.dispose();
+  //   monthScrollControllerDetail.dispose();
+  // }
+
+  void createScrollControllers() {
+    monthScrollControllerSummary = ScrollController();
+    monthScrollControllerDetail = ScrollController();
   }
 
   ScrollController createScrollController() {
@@ -62,64 +84,74 @@ class AttendenceController extends GetxController {
   }
 
   void setCurrentMonthYear(String screenName) {
-    MonthSelectionScreen(
-      selectedMonthIndex: MonthSel_selIndex.value,
-      scrollController: screenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
-      onPressed: (index) {
-        upd_MonthSelIndex(index);
-        showHideMsg();
-      },
-    );
+    // MonthSelectionScreen(
+    //   selectedMonthIndex: MonthSel_selIndex.value,
+    //   scrollController: screenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
+    //   onPressed: (index) {
+    //     upd_MonthSelIndex(index);
+    //     showHideMsg();
+    //   },
+    // );
+    // MonthPicker(
+    //   controller: ,
+    //   // onPressed: (index) {
+    //   //   controller.upd_MonthSelIndex(index);
+    //   //   controller.showHideMsg();
+    //   // },
+    // );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (monthScrollControllerDetail.hasClients) {
-        double itemWidth = 80; // Adjust this based on your item width
-        double screenWidth = Get.context!.size!.width;
-        double screenCenter = screenWidth / 2;
-        double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // monthScrollControllerSummary.dispose();
+    // monthScrollControllerDetail.dispose();
+    if (monthScrollControllerDetail.hasClients) {
+      // createScrollControllers();
+      double itemWidth = 80; // Adjust this based on your item width
+      double screenWidth = Get.context!.size!.width;
+      double screenCenter = screenWidth / 2;
+      double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
+      double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
 
-        // Ensure the calculated position is within valid scroll range
-        double maxScrollExtent = monthScrollControllerDetail.position.maxScrollExtent;
-        double minScrollExtent = monthScrollControllerDetail.position.minScrollExtent;
-        if (targetScrollPosition < minScrollExtent) {
-          targetScrollPosition = minScrollExtent;
-        } else if (targetScrollPosition > maxScrollExtent) {
-          targetScrollPosition = maxScrollExtent;
-        }
-
-        monthScrollControllerDetail.animateTo(
-          targetScrollPosition,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+      // Ensure the calculated position is within valid scroll range
+      double maxScrollExtent = monthScrollControllerDetail.position.maxScrollExtent;
+      double minScrollExtent = monthScrollControllerDetail.position.minScrollExtent;
+      if (targetScrollPosition < minScrollExtent) {
+        targetScrollPosition = minScrollExtent;
+      } else if (targetScrollPosition > maxScrollExtent) {
+        targetScrollPosition = maxScrollExtent;
       }
-    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (monthScrollControllerSummary.hasClients) {
-        double itemWidth = 80; // Adjust this based on your item width
-        double screenWidth = Get.context!.size!.width;
-        double screenCenter = screenWidth / 2;
-        double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
+      monthScrollControllerDetail.animateTo(
+        targetScrollPosition,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+    // });
 
-        // Ensure the calculated position is within valid scroll range
-        double maxScrollExtent = monthScrollControllerSummary.position.maxScrollExtent;
-        double minScrollExtent = monthScrollControllerSummary.position.minScrollExtent;
-        if (targetScrollPosition < minScrollExtent) {
-          targetScrollPosition = minScrollExtent;
-        } else if (targetScrollPosition > maxScrollExtent) {
-          targetScrollPosition = maxScrollExtent;
-        }
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (monthScrollControllerSummary.hasClients) {
+      double itemWidth = 80; // Adjust this based on your item width
+      double screenWidth = Get.context!.size!.width;
+      double screenCenter = screenWidth / 2;
+      double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
+      double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
 
-        monthScrollControllerSummary.animateTo(
-          targetScrollPosition,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+      // Ensure the calculated position is within valid scroll range
+      double maxScrollExtent = monthScrollControllerSummary.position.maxScrollExtent;
+      double minScrollExtent = monthScrollControllerSummary.position.minScrollExtent;
+      if (targetScrollPosition < minScrollExtent) {
+        targetScrollPosition = minScrollExtent;
+      } else if (targetScrollPosition > maxScrollExtent) {
+        targetScrollPosition = maxScrollExtent;
       }
-    });
+
+      monthScrollControllerSummary.animateTo(
+        targetScrollPosition,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+    // });
 
     CustomDropDown(
       selValue: YearSel_selIndex,

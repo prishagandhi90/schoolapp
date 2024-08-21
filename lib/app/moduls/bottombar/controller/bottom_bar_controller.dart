@@ -31,14 +31,31 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
     ];
   }
 
-  Future<bool> onWillPop() async {
-    if (persistentController!.index != 2) {
-      persistentController!.jumpToTab(2); // Dashboard tab par le aaye
-      return false; // Back navigation prevent kare
+  // Future<bool> onWillPop() async {
+  //   if (persistentController!.index != 2) {
+  //     persistentController!.jumpToTab(2); // Dashboard tab par le aaye
+  //     return false; // Back navigation prevent kare
+  //   } else {
+  //     return true; // Allow default back navigation to previous screens
+  //   }
+  // }
+Future<bool> onWillPop(BuildContext context) async {
+  if (persistentController!.index == 2) {
+    // If on Dashboard
+    if (Navigator.of(context).canPop()) {
+      // If there's anything to pop on the Dashboard stack
+      Navigator.of(context).pop();
+      return false; // Prevent default back navigation
     } else {
-      return true; // Allow default back navigation to previous screens
+      // No more screens to pop, exit app
+      return true; // Exit the app
     }
+  } else {
+    // If on any other tab, go to Dashboard
+    persistentController!.jumpToTab(2); // Jump to Dashboard tab
+    return false; // Prevent default back navigation
   }
+}
 
   void onItemTapped(int index, BuildContext context) {
     update();

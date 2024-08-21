@@ -21,11 +21,13 @@ class AttendanceScreen extends GetView<AttendenceController> {
 // }
 
 // class _AttendanceScreenState extends State<AttendanceScreen> {
-  // final AttendenceController attendenceController = Get.put(AttendenceController());
+  // var attendenceController = Get.put(AttendenceController());
+  // attendenceController.closeScrollcontrollers();
   final scaffoldKey1 = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    Get.put(AttendenceController());
+    // Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return DefaultTabController(

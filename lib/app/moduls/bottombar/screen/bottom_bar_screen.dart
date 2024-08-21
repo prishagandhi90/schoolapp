@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -20,31 +19,7 @@ class BottomBarView extends GetView<BottomBarController> {
       builder: (controller) {
         return Obx(
           () => WillPopScope(
-            onWillPop: () async {
-              if (controller.persistentController!.index == 2) {
-               
-                bool exit = await showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text("Exit App"),
-                    content: Text("Do you want to exit the app?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: Text("No"),
-                      ),
-                      TextButton(
-                        onPressed: () => SystemNavigator.pop(),
-                        child: Text("Yes"),
-                      ),
-                    ],
-                  ),
-                );
-                return exit ?? false;
-              } else {
-                return true; // Allow default back navigation
-              }
-            },
+            onWillPop: () => controller.onWillPop(context),
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: PersistentTabView(

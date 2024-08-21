@@ -1,5 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -7,26 +8,13 @@ import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.d
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreen extends GetView<AttendenceController> {
   const DetailsScreen({super.key});
 
-  @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
-  final AttendenceController attendenceController = Get.put(AttendenceController());
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      attendenceController.setCurrentMonthYear("DetailScreen");
-    });
-  }
-
+  // var attendenceController = Get.put(AttendenceController());
   @override
   Widget build(BuildContext context) {
+    // Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
@@ -39,13 +27,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MonthSelectionScreen(
-                      selectedMonthIndex: controller.MonthSel_selIndex.value,
-                      scrollController: controller.monthScrollControllerDetail,
-                      onPressed: (index) {
-                        controller.upd_MonthSelIndex(index);
-                        controller.showHideMsg();
-                      },
+                    // MonthSelectionScreen(
+                    //   selectedMonthIndex: controller.MonthSel_selIndex.value,
+                    //   scrollController: controller.monthScrollControllerDetail,
+                    //   onPressed: (index) {
+                    //     controller.upd_MonthSelIndex(index);
+                    //     controller.showHideMsg();
+                    //   },
+                    // ),
+                    MonthPicker(
+                      controller: controller,
+                      scrollController: controller.monthScrollControllerSummary,
+                      // onPressed: (index) {
+                      //   controller.upd_MonthSelIndex(index);
+                      //   controller.showHideMsg();
+                      // },
                     ),
                     const SizedBox(height: 20),
                     controller.isLoader.value
@@ -491,26 +487,4 @@ class _DetailsScreenState extends State<DetailsScreen> {
           );
         });
   }
-
-  // String split_go_leftRight(String string1, String flag) {
-  //   if (string1 == "") return '';
-
-  //   string1 = string1.replaceAll('\r', ' ');
-  //   List<String> parts = string1.split(' ');
-
-  //   // If the string has fewer than 3 parts, just return the original string
-  //   if (parts.length < 1) {
-  //     // print("The string has fewer than 3 parts.");
-  //     return "";
-  //   }
-
-  //   String firstPart = parts.sublist(0, 2).join(' ');
-  //   String secondPart = parts.sublist(2).join(' ');
-
-  //   if (flag == 'left')
-  //     return firstPart;
-  //   else if (flag == 'right') return secondPart;
-
-  //   return '';
-  // }
 }

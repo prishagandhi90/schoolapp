@@ -32,7 +32,7 @@ class MispunchScreen extends GetView<MispunchController> {
               leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    controller.clearData();
+                    // controller.clearData();
                   },
                   icon: const Icon(Icons.arrow_back)),
               // centerTitle: true,

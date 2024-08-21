@@ -85,12 +85,12 @@ class MispunchController extends GetxController {
     update();
   }
 
-  void clearData() {
-    MonthSel_selIndex.value = 0;
-    YearSel_selIndex = "";
-    mispunchTable.clear();
-    isLoading.value = false;
-  }
+  // void clearData() {
+  //   MonthSel_selIndex.value = 0;
+  //   YearSel_selIndex = "";
+  //   mispunchTable.clear();
+  //   isLoading.value = false;
+  // }
 
   void upd_MonthSelIndex(int index) async {
     MonthSel_selIndex.value = index;
