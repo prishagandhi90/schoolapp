@@ -340,11 +340,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                   GestureDetector(
                                     onTap: () {
                                       // AttendenceController attendenceController = Get.put(AttendenceController());
-                                      var attendenceController = Get.put(AttendenceController());
-                                      DateTime now = DateTime.now();
-                                      attendenceController.MonthSel_selIndex.value = now.month - 1;
-                                      attendenceController.YearSel_selIndex = now.year.toString();
-                                      attendenceController.update();
+                                      // var attendenceController = Get.put(AttendenceController());
+                                      // DateTime now = DateTime.now();
+                                      // attendenceController.MonthSel_selIndex.value = now.month - 1;
+                                      // attendenceController.YearSel_selIndex = now.year.toString();
+                                      // attendenceController.update();
                                       var dashboardController = Get.put(DashboardController());
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
