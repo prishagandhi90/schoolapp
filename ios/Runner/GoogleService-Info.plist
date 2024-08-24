@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBfhGnC2bQv_GW6Ly0vmewXGy_d5-ou_0Q</string>
+	<key>GCM_SENDER_ID</key>
+	<string>899495948804</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.empApp</string>
+	<key>PROJECT_ID</key>
+	<string>vhempapp-3591e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vhempapp-3591e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:899495948804:ios:850f1a20be4c23b0a37b51</string>
+</dict>
+</plist>

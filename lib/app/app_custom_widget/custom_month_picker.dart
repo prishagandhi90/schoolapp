@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:flutter/material.dart';
 
 class MonthSelectionScreen extends StatelessWidget {
@@ -75,7 +76,7 @@ class MonthSelectionScreen extends StatelessWidget {
                     ? Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         decoration: BoxDecoration(
-                          color: Colors.blue, // Adjust based on your color
+                          color: AppColor.primaryColor, // Adjust based on your color
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(

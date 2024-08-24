@@ -15,7 +15,7 @@ class SummaryScreen extends GetView<AttendenceController> {
   // @override
   @override
   Widget build(BuildContext context) {
-    // Get.put(AttendenceController());
+    Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(builder: (controller) {
       return SingleChildScrollView(
         controller: controller.attendanceScrollController,

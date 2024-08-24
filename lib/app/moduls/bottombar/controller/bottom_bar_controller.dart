@@ -65,7 +65,7 @@ class BottomBarController extends GetxController with WidgetsBindingObserver {
     return [
       PersistentBottomNavBarItem(
         title: AppString.home,
-        icon: Image.asset(AppImage.home, color: AppColor.primaryColor),
+        icon: GestureDetector(onTap: () {}, child: Image.asset(AppImage.home, color: AppColor.primaryColor)),
         inactiveIcon: Image.asset(AppImage.home, color: AppColor.black),
         activeColorPrimary: AppColor.primaryColor,
       ),
