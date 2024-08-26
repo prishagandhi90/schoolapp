@@ -17,7 +17,15 @@ class CustomDatePicker extends StatelessWidget {
             child: TextFormField(
               controller: leaveController.formDateController,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.black),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.black),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                // border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
                 labelText: 'Form',
                 labelStyle: TextStyle(color: AppColor.black),
                 suffixIcon: IconButton(
@@ -34,8 +42,17 @@ class CustomDatePicker extends StatelessWidget {
             child: TextFormField(
               controller: leaveController.toDateController,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.black),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.black),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                // border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
                 labelText: 'To',
+                labelStyle: TextStyle(color: AppColor.black),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () {

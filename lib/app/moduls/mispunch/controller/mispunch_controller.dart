@@ -21,7 +21,6 @@ class MispunchController extends GetxController {
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
-  List<String> years = ['2023', '2024'];
   final ScrollController monthScrollController = ScrollController();
 
   @override
@@ -162,7 +161,7 @@ class MispunchController extends GetxController {
         mispunchTable = [];
         //Get.rawSnackbar(message: "No data found!");
       } else {
-        Get.rawSnackbar(message: "Something went wrong");
+        Get.rawSnackbar(message: "Somethin g went wrong");
       }
       update();
     } catch (e) {
@@ -175,62 +174,9 @@ class MispunchController extends GetxController {
   String getMonthYearFromIndex(int index, String year) {
     List<String> months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    // if (year == '2024') {
-    //   year = '24';
-    // } else {
-    //   year = '23';
-    // }
-
     if (index >= 0 && index < months.length && year.isNotEmpty && year != "") {
       return '${months[index]}${year.substring(year.length - 2)}'; // Format as 'Jan24'
     }
     return 'Select year and month';
-  }
-
-  // List<DataRow> FixedColRowBuilder() {
-  //   // Ensure that the data is not null before proceeding
-  //   if (mispunchTable == null) {
-  //     return []; // Return an empty list if data is null
-  //   }
-
-  //   return mispunchTable.asMap().entries.map((entry) {
-  //     int index = entry.key;
-  //     Data data = entry.value;
-
-  //     return DataRow(
-  //       cells: [
-  //         DataCell(Text((index + 1).toString())), // Row number
-  //         DataCell(
-  //             Text(data.dt!.substring(0, 10))), // Date (first 10 characters)
-  //       ],
-  //     );
-  //   }).toList();
-  // }
-
-  List<DataRow> ScrollableColRowBuilder() {
-    return mispunchTable
-        .map((team) => DataRow(
-              cells: [
-                DataCell(CustomWidthCell(width: 50, child: Text(team.misPunch.toString()))),
-                DataCell(CustomWidthCell(width: 150, child: Text(team.punchTime.toString()))),
-                DataCell(CustomWidthCell(width: 100, child: Text(team.shiftTime.toString()))),
-              ],
-            ))
-        .toList();
-  }
-}
-
-class CustomWidthCell extends StatelessWidget {
-  final Widget child;
-  final double width;
-
-  const CustomWidthCell({super.key, required this.child, required this.width});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: child,
-    );
   }
 }

@@ -4,11 +4,12 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,6 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class PayrollScreen extends GetView<PayrollController> {
   const PayrollScreen({super.key});
-
-  // final PayrollController payrollcontroller = Get.put(PayrollController());
-
-  // final DashboardController dashboardController = Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -394,9 +391,6 @@ class PayrollScreen extends GetView<PayrollController> {
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
-                                        while (Navigator.canPop(context)) {
-                                          Navigator.pop(context);
-                                        }
                                         hideBottomBar.value = false;
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
@@ -427,13 +421,18 @@ class PayrollScreen extends GetView<PayrollController> {
                               child: Column(
                                 children: [
                                   GestureDetector(
-                                    onTap: () => Get.snackbar(
-                                      AppString.comingsoon,
-                                      '',
-                                      colorText: AppColor.white,
-                                      backgroundColor: AppColor.black,
-                                      duration: const Duration(seconds: 1),
-                                    ),
+                                    onTap: () {
+                                      var dashboardController = Get.put(DashboardController());
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: LeaveMainScreen(),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) async {
+                                        hideBottomBar.value = false;
+                                        await dashboardController.getDashboardDataUsingToken();
+                                      });
+                                    },
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.06, //0.07
                                       width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -458,13 +457,25 @@ class PayrollScreen extends GetView<PayrollController> {
                               child: Column(
                                 children: [
                                   GestureDetector(
-                                    onTap: () => Get.snackbar(
-                                      AppString.comingsoon,
-                                      '',
-                                      colorText: AppColor.white,
-                                      backgroundColor: AppColor.black,
-                                      duration: const Duration(seconds: 1),
-                                    ),
+                                    onTap: () {
+                                      var dashboardController = Get.put(DashboardController());
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: OvertimeMainScreen(),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) async {
+                                        hideBottomBar.value = false;
+                                        await dashboardController.getDashboardDataUsingToken();
+                                      });
+                                    },
+                                    // onTap: () => Get.snackbar(
+                                    //   AppString.comingsoon,
+                                    //   '',
+                                    //   colorText: AppColor.white,
+                                    //   backgroundColor: AppColor.black,
+                                    //   duration: const Duration(seconds: 1),
+                                    // ),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.06, //0.07
                                       width: MediaQuery.of(context).size.width * 0.14, //0.17

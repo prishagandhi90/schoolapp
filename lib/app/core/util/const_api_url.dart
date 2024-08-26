@@ -11,4 +11,5 @@ class ConstApiUrl {
   static const empSendEMPMobileOtpAPI = "$empLoginUrl/SendEMPMobileOTP";
   static const empMispunchDetailAPI = "$empUrl/GetMisPunchDtl_EmpInfo";
   static const empDashboardSummaryAPI = "$empUrl/GetEmpSummary_Dashboard";
+  static const empLeaveDaysAPI = "$empUrl/GetLeaveDays";
 }

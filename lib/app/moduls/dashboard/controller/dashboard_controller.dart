@@ -175,9 +175,6 @@ class DashboardController extends GetxController {
         String loginId = prefs.getString(AppString.keyLoginId) ?? '';
         var jsonbodyObj = {"loginId": loginId};
         String url = ConstApiUrl.empGetDashboardListAPI;
-
-        print('response 999');
-        debugPrint('Response 555');
         var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
         ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
 
@@ -202,19 +199,9 @@ class DashboardController extends GetxController {
           prefs.clear();
           Get.offAll(LoginScreen());
           Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-        } else if (responseDashboardData.statusCode == 400) {
-          Get.rawSnackbar(message: "Data not found!");
-        } else if (responseDashboardData.statusCode == 404) {
-          Get.rawSnackbar(message: "Not found!");
-        } else if (responseDashboardData.statusCode == 500) {
-          Get.rawSnackbar(message: "Internal server error");
-        } else {
-          Get.rawSnackbar(message: "Something went wrong");
         }
       } else {
-        prefs.clear();
-        Get.offAll(LoginScreen());
-        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       // isLoadingLogin = false;

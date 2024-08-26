@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
-import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -297,38 +295,5 @@ class AttendenceController extends GetxController {
       return '${months[index]}${year.substring(year.length - 2)}'; // Format as 'Jan24'
     }
     return 'Select year and month';
-  }
-
-  String split_go_leftRight(String string1, String flag) {
-    string1 = string1.replaceAll('\r', ' ');
-    List<String> parts = string1.split(' ');
-
-    if (parts.length < 1) {
-      return "";
-    }
-
-    String firstPart = parts.sublist(0, 2).join(' ');
-    String secondPart = parts.sublist(2).join(' ');
-
-    if (flag == 'left')
-      return firstPart;
-    else if (flag == 'right') return secondPart;
-
-    return '';
-  }
-}
-
-class CustomWidthCell extends StatelessWidget {
-  final Widget child;
-  final double width;
-
-  const CustomWidthCell({super.key, required this.child, required this.width});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: child,
-    );
   }
 }

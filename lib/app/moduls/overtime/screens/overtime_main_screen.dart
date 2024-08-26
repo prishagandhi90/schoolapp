@@ -3,19 +3,20 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
-import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
-import 'package:emp_app/app/moduls/leave/screen/leave_view_screen.dart';
+import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
+import 'package:emp_app/app/moduls/overtime/screens/ot_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/ot_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class LeaveMainScreen extends GetView<LeaveController> {
-  LeaveMainScreen({super.key});
+class OvertimeMainScreen extends GetView<LeaveController> {
+  OvertimeMainScreen({super.key});
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    Get.put(LeaveController());
-    return GetBuilder<LeaveController>(builder: (controller) {
+    Get.put(OvertimeController());
+    return GetBuilder<OvertimeController>(builder: (controller) {
       return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -30,7 +31,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(
-                'Leave',
+                'Over Time',
                 style: TextStyle(
                     color: const Color.fromARGB(255, 94, 157, 168),
                     fontWeight: FontWeight.w700,
@@ -71,15 +72,15 @@ class LeaveMainScreen extends GetView<LeaveController> {
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
-                      tabs: const [Tab(text: 'Leave'), Tab(text: 'View')],
+                      tabs: const [Tab(text: 'OT'), Tab(text: 'View')],
                     ),
                   ),
                 ),
                 const Expanded(
                   child: TabBarView(
                     children: [
-                      LeaveScreen(),
-                      LeaveViewScreen(),
+                      OtScreen(),
+                      OTViewScreen(),
                     ],
                   ),
                 ),

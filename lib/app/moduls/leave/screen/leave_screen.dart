@@ -18,6 +18,7 @@ class LeaveScreen extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
+                controller: controller.leaveScrollController,
                 child: Column(
                   children: [
                     CustomDatePicker(),
@@ -68,7 +69,15 @@ class LeaveScreen extends StatelessWidget {
                         maxLines: 10,
                         decoration: InputDecoration(
                             hintText: 'Notes...',
-                            border: OutlineInputBorder(borderSide: BorderSide(color: AppColor.black), borderRadius: BorderRadius.circular(0))),
+                            hintStyle: TextStyle(color: AppColor.black),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black),
+                              borderRadius: BorderRadius.circular(0),
+                            )),
                       ),
                     ),
                     Padding(
@@ -93,7 +102,7 @@ class LeaveScreen extends StatelessWidget {
                         ),
                         child: Text(
                           'Save',
-                          style: TextStyle(color: AppColor.black,fontSize: 20),
+                          style: TextStyle(color: AppColor.black, fontSize: 20),
                         ),
                       ),
                     ),
