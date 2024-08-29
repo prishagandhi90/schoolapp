@@ -1,19 +1,19 @@
-class LeaveNames {
+class ResponseLeaveNames {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<LeavenamesModel>? data;
+  List<LeaveNamesTable>? data;
 
-  LeaveNames({this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseLeaveNames({this.statusCode, this.isSuccess, this.message, this.data});
 
-  LeaveNames.fromJson(Map<String, dynamic> json) {
+  ResponseLeaveNames.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <LeavenamesModel>[];
+      data = <LeaveNamesTable>[];
       json['data'].forEach((v) {
-        data!.add(new LeavenamesModel.fromJson(v));
+        data!.add(new LeaveNamesTable.fromJson(v));
       });
     }
   }
@@ -30,13 +30,13 @@ class LeaveNames {
   }
 }
 
-class LeavenamesModel {
+class LeaveNamesTable {
   String? value;
   String? name;
 
-  LeavenamesModel({this.value, this.name});
+  LeaveNamesTable({this.value, this.name});
 
-  LeavenamesModel.fromJson(Map<String, dynamic> json) {
+  LeaveNamesTable.fromJson(Map<String, dynamic> json) {
     value = json['value'];
     name = json['name'];
   }

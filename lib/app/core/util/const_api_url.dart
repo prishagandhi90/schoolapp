@@ -12,4 +12,8 @@ class ConstApiUrl {
   static const empMispunchDetailAPI = "$empUrl/GetMisPunchDtl_EmpInfo";
   static const empDashboardSummaryAPI = "$empUrl/GetEmpSummary_Dashboard";
   static const empLeaveDaysAPI = "$empUrl/GetLeaveDays";
+  static const empLeaveNamesAPI = "$empUrl/GetLeaveNames";
+  static const empLeaveReasonAPI = "$empUrl/GetLeaveReason";
+  static const empLeaveDelayReasonAPI = "$empUrl/GetLeaveDelayReason";
+  static const empLeaveReliverNameAPI = "$empUrl/EmpApp_GetLeaveRelieverNm";
 }

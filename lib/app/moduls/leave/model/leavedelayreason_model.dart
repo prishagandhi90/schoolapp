@@ -1,19 +1,19 @@
-class RsponseLeaveReason {
+class ResponseLeaveDelayReason {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<LeaveReasonTable>? data;
+  List<LeaveDelayReason>? data;
 
-  RsponseLeaveReason({this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseLeaveDelayReason({this.statusCode, this.isSuccess, this.message, this.data});
 
-  RsponseLeaveReason.fromJson(Map<String, dynamic> json) {
+  ResponseLeaveDelayReason.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <LeaveReasonTable>[];
+      data = <LeaveDelayReason>[];
       json['data'].forEach((v) {
-        data!.add(new LeaveReasonTable.fromJson(v));
+        data!.add(new LeaveDelayReason.fromJson(v));
       });
     }
   }
@@ -30,17 +30,20 @@ class RsponseLeaveReason {
   }
 }
 
-class LeaveReasonTable {
+class LeaveDelayReason {
+  int? id;
   String? name;
 
-  LeaveReasonTable({this.name});
+  LeaveDelayReason({this.id, this.name});
 
-  LeaveReasonTable.fromJson(Map<String, dynamic> json) {
+  LeaveDelayReason.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['name'] = this.name;
     return data;
   }

@@ -127,7 +127,6 @@ class MispunchController extends GetxController {
   Future<List<MispunchTable>> getmonthyrempinfotable() async {
     try {
       isLoading.value = true;
-      // String url = 'http://117.217.126.127:44166/api/Employee/GetMisPunchDtl_EmpInfo';
       String url = ConstApiUrl.empMispunchDetailAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";

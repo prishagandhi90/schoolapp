@@ -1,11 +1,13 @@
 import 'dart:convert';
-
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/leave/model/leaveReliverName_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedays_model.dart';
+import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
+import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -20,16 +22,25 @@ class LeaveController extends GetxController {
   void increment() => count.value++;
   var isLoading = false.obs;
   List<LeaveDays> leavedays = [];
+  List<LeaveNamesTable> leavename = [];
+  List<LeaveReasonTable> leavereason = [];
+  List<LeaveDelayReason> leavedelayreason = [];
+  List<LeaveReliverName> leaverelivername = [];
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
   TextEditingController formDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
   final ScrollController leaveScrollController = ScrollController();
+  RxString days = ''.obs; // To store the calculated days
+  RxBool isDaysFieldEnabled = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-
+    await fetchLeaveNames();
+    await fetchLeaveReason();
+    await fetchLeaveDelayReason();
+    await fetchLeaveReliverName();
     leaveScrollController.addListener(() {
       if (leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
         hideBottomBar = false.obs;
@@ -41,6 +52,34 @@ class LeaveController extends GetxController {
         bottomBarController.update();
       }
     });
+    formDateController.addListener(_updateDays);
+    toDateController.addListener(_updateDays);
+  }
+
+  void _updateDays() {
+    final String formDateText = formDateController.text;
+    final String toDateText = toDateController.text;
+
+    DateTime? fromDate = formDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(formDateText, true) : null;
+    DateTime? toDate = toDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateText, true) : null;
+
+    if (fromDate != null && toDate != null) {
+      int daysCount = toDate.difference(fromDate).inDays + 1;
+
+      // Set days based on the difference
+      if (daysCount <= 1) {
+        days.value = daysCount.toString(); // Show 1 or 0.5
+      } else {
+        days.value = daysCount.toString(); // Show the actual number of days
+      }
+
+      isDaysFieldEnabled.value = true;
+      //getLeaveDays(); // Fetch leave data based on the new dates
+    } else {
+      days.value = 'Select';
+      isDaysFieldEnabled.value = false;
+    }
+    update();
   }
 
   Future<void> selectDate(BuildContext context, TextEditingController controller) async {
@@ -56,99 +95,191 @@ class LeaveController extends GetxController {
     }
   }
 
-  // Future<void> calculateDaysAndFetchLeaveNames() async {
-  //   DateTime fromDate = DateTime.parse(formDateController.text);
-  //   DateTime toDate = DateTime.parse(toDateController.text);
+  Future<List<Data>> getLeaveDays() async {
+    try {
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveDaysAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-  //   // Validate dates
-  //   if (!toDate.isAfter(fromDate) && !toDate.isAtSameMomentAs(fromDate)) {
-  //     Get.snackbar('Invalid Date', 'To date must be after or equal to From date');
-  //     return;
-  //   }
+      DateTime? fromDate = formDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(formDateController.text, true) : null;
+      DateTime? toDate = toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
 
-  //   try {
-  //     isLoading.value = true;
+      if (fromDate != null && toDate != null) {
+        // Calculate the days difference
+        int daysCount = toDate.difference(fromDate).inDays + 1;
 
-  //     // Fetch leave days
-  //     await fetchLeaveDays(fromDate, toDate);
+        days.value = daysCount.toString();
+        isDaysFieldEnabled.value = true;
 
-  //     // Fetch leave names
-  //     await fetchLeaveNames();
+        var jsonbodyObj = {"loginId": loginId, "empId": empId, "fromDate": fromDate.toIso8601String(), "toDate": toDate.toIso8601String()};
 
-  //     // Logic to enable dropdowns or perform other actions based on the fetched data
-  //     if (leaveDays.isNotEmpty && nameList.isNotEmpty) {
-  //       // Your logic here
-  //     } else {
-  //       // Handle empty or invalid data
-  //     }
-  //   } catch (e) {
-  //     Get.rawSnackbar(message: "Something went wrong");
-  //   } finally {
-  //     isLoading.value = false;
-  //     update();
-  //   }
-  // }
+        var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+        LeaveDays leaveDays = LeaveDays.fromJson(jsonDecode(decodedResp));
+        if (leaveDays.statusCode == 200) {
+          isLoading.value = false;
+          if (leaveDays.data != null) {
+            update();
+            return leaveDays.data!; // Return the days from the API response
+          } else {
+            Get.rawSnackbar(message: "No data found!");
+          }
+        } else if (leaveDays.statusCode == 401) {
+          pref.clear();
+          Get.offAll(const LoginScreen());
+          Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+        } else if (leaveDays.statusCode == 400) {
+          isLoading.value = false;
+        } else {
+          Get.rawSnackbar(message: "Something went wrong");
+        }
+        update();
+      } else {
+        Get.rawSnackbar(message: "Please select both From Date and To Date");
+        // Reset days field and disable it if dates are not selected
+        days.value = '';
+        isDaysFieldEnabled.value = false;
+      }
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
+  }
 
-  // Future<List<Data>> fetchLeaveDays(DateTime fromDate, DateTime toDate) async {
-  //   try {
-  //     SharedPreferences pref = await SharedPreferences.getInstance();
-  //     loginId = pref.getString(AppString.keyLoginId) ?? "";
-  //     tokenNo = pref.getString(AppString.keyToken) ?? "";
-  //     String url = ConstApiUrl.empLeaveDaysAPI;
+  Future<List<LeaveNamesTable>> fetchLeaveNames() async {
+    try {
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveNamesAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-  //     var jsonBody = {
-  //       'loginId': loginId,
-  //       'empId': empId,
-  //       'fromDate': formDateController.text,
-  //       'toDate': toDateController.text,
-  //     };
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
 
-  //     var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonBody);
-  //     LeaveDays leaveDaysResponse = LeaveDays.fromJson(jsonDecode(decodedResp));
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveNames leaveNames = ResponseLeaveNames.fromJson(jsonDecode(response));
 
-  //     if (leaveDaysResponse.statusCode == 200) {
-  //       leavedays = leaveDaysResponse.days;
-  //     } else if (leaveDaysResponse.statusCode == 401) {
-  //       pref.clear();
-  //       Get.offAll(const LoginScreen());
-  //       Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //     } else {
-  //       leaveDays.clear();
-  //       Get.rawSnackbar(message: "Unable to fetch leave days");
-  //     }
-  //   } catch (e) {
-  //     leaveDays.clear();
-  //     Get.rawSnackbar(message: "Error fetching leave days");
-  //   }
-  //   return [];
-  // }
+      if (leaveNames.statusCode == 200) {
+        leavename.clear();
+        leavename = leaveNames.data!;
+        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+      } else if (leaveNames.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (leaveNames.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
+  }
 
-  // Future<List<LeavenamesModel>> fetchLeaveNames() async {
-  //   try {
-  //     String url = "http://117.217.126.127/api/Employee/GetLeaveNames";
-  //     var response = await apiController.getData(url);
+  Future<List<LeaveReasonTable>> fetchLeaveReason() async {
+    try {
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveReasonAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-  //     if (response.statusCode == 200) {
-  //       var data = jsonDecode(response.body);
-  //       nameList.value = List<String>.from(data.map((item) => item['leaveName']));
-  //     } else {
-  //       nameList.clear();
-  //       Get.rawSnackbar(message: "Unable to fetch leave names");
-  //     }
-  //   } catch (e) {
-  //     nameList.clear();
-  //     Get.rawSnackbar(message: "Error fetching leave names");
-  //   }
-  //   return [];
-  // }
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
 
-  final List<String> nameList = [
-    'Privilege Leave',
-    'Casual Leave',
-    'Sick Leave',
-    'Holiday Off',
-    'Covid Off',
-    'Maternity Leave',
-    'Leave Without Pay',
-  ];
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      RsponseLeaveReason rsponseLeaveReason = RsponseLeaveReason.fromJson(jsonDecode(response));
+
+      if (rsponseLeaveReason.statusCode == 200) {
+        leavereason.clear();
+        leavereason = rsponseLeaveReason.data!;
+        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+      } else if (rsponseLeaveReason.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (rsponseLeaveReason.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
+  }
+
+  Future<List<LeaveDelayReason>> fetchLeaveDelayReason() async {
+    try {
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveDelayReasonAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveDelayReason rsponseLeaveDelayReason = ResponseLeaveDelayReason.fromJson(jsonDecode(response));
+
+      if (rsponseLeaveDelayReason.statusCode == 200) {
+        leavedelayreason.clear();
+        leavedelayreason = rsponseLeaveDelayReason.data!;
+        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+      } else if (rsponseLeaveDelayReason.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (rsponseLeaveDelayReason.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
+  }
+
+  Future<List<LeaveDelayReason>> fetchLeaveReliverName() async {
+    try {
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveReliverNameAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveReliverName responseLeaveReliverName = ResponseLeaveReliverName.fromJson(jsonDecode(response));
+
+      if (responseLeaveReliverName.statusCode == 200) {
+        leaverelivername.clear();
+        leaverelivername = responseLeaveReliverName.data!;
+        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+      } else if (responseLeaveReliverName.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseLeaveReliverName.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
+  }
 }
