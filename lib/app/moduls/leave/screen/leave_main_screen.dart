@@ -24,7 +24,35 @@ class LeaveMainScreen extends GetView<LeaveController> {
             endDrawer: Drawer(
                 child: ListView(
               children: [
-                Text('data'),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.23,
+                  decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
+                  child: 
+                  Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        width: double.infinity,
+                        height: 45,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('',
+                                // controller.leaveentryList[index].department.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500, //20
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                ),
+                              )),
+                        ),
+                      ),
+                      Text('data')
+                    ],
+                  ),
+                ),
               ],
             )),
             appBar: AppBar(

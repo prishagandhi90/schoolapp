@@ -6,6 +6,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/leave/model/leaveReliverName_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedays_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
+import 'package:emp_app/app/moduls/leave/model/leaveentrylist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -26,6 +27,7 @@ class LeaveController extends GetxController {
   List<LeaveReasonTable> leavereason = [];
   List<LeaveDelayReason> leavedelayreason = [];
   List<LeaveReliverName> leaverelivername = [];
+  List<LeaveEntryList> leaveentryList = [];
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
   TextEditingController formDateController = TextEditingController();
@@ -41,6 +43,7 @@ class LeaveController extends GetxController {
     await fetchLeaveReason();
     await fetchLeaveDelayReason();
     await fetchLeaveReliverName();
+    update();
     leaveScrollController.addListener(() {
       if (leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
         hideBottomBar = false.obs;
@@ -252,6 +255,7 @@ class LeaveController extends GetxController {
 
   Future<List<LeaveDelayReason>> fetchLeaveReliverName() async {
     try {
+      update();
       isLoading.value = true;
       String url = ConstApiUrl.empLeaveReliverNameAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
@@ -271,6 +275,40 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseLeaveReliverName.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
+  }
+
+  Future<List<LeaveEntryList>> fetchLeaveEntryList() async {
+    try {
+      update();
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveEntryListAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveEntryList responseLeaveEntryList = ResponseLeaveEntryList.fromJson(jsonDecode(response));
+
+      if (responseLeaveEntryList.statusCode == 200) {
+        leaveentryList.clear();
+        leaveentryList = responseLeaveEntryList.data!;
+        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+      } else if (responseLeaveEntryList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseLeaveEntryList.statusCode == 400) {
         isLoading.value = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
