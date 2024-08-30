@@ -4,8 +4,7 @@ class ResponseLeaveEntryList {
   String? message;
   List<LeaveEntryList>? data;
 
-  ResponseLeaveEntryList(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseLeaveEntryList({this.statusCode, this.isSuccess, this.message, this.data});
 
   ResponseLeaveEntryList.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
@@ -40,35 +39,35 @@ class LeaveEntryList {
   String? employeeCodeName;
   String? fromDate;
   String? toDate;
-  Null? overTimeMinutes;
+  double? overTimeMinutes;
   double? leaveDays;
   String? reason;
   String? hrAction;
   String? inchargeAction;
   String? hodAction;
-  Null? hrReason;
-  Null? inchargeReason;
-  Null? hodReason;
+  String? hrReason;
+  String? inchargeReason;
+  String? hodReason;
   String? empType;
   String? department;
-  Null? subDept;
+  String? subDept;
   String? note;
-  Null? deptInc;
+  String? deptInc;
   String? deptHOD;
-  Null? subDeptInc;
-  Null? subDeptHOD;
-  Null? inchargeNote;
-  Null? hoDNote;
-  Null? hrNote;
+  String? subDeptInc;
+  String? subDeptHOD;
+  String? inchargeNote;
+  String? hoDNote;
+  String? hrNote;
   String? enterDate;
   String? relieverEmpCode;
   String? relieverEmpName;
   String? lateReasonId;
   String? lateReasonName;
   String? empEmail;
-  Null? otHours;
+  String? otHours;
   String? empTel;
-  Null? shiftTime;
+  String? shiftTime;
 
   LeaveEntryList(
       {this.leaveId,

@@ -43,6 +43,7 @@ class LeaveController extends GetxController {
     await fetchLeaveReason();
     await fetchLeaveDelayReason();
     await fetchLeaveReliverName();
+    // await fetchLeaveEntryList();
     update();
     leaveScrollController.addListener(() {
       if (leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
@@ -289,7 +290,6 @@ class LeaveController extends GetxController {
 
   Future<List<LeaveEntryList>> fetchLeaveEntryList() async {
     try {
-      update();
       isLoading.value = true;
       String url = ConstApiUrl.empLeaveEntryListAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
@@ -301,9 +301,14 @@ class LeaveController extends GetxController {
       ResponseLeaveEntryList responseLeaveEntryList = ResponseLeaveEntryList.fromJson(jsonDecode(response));
 
       if (responseLeaveEntryList.statusCode == 200) {
-        leaveentryList.clear();
-        leaveentryList = responseLeaveEntryList.data!;
-        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+      if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
+          isLoading.value = false;
+          leaveentryList = responseLeaveEntryList.data!;
+          update();
+          return leaveentryList;
+        } else {
+          leaveentryList = [];
+        }
       } else if (responseLeaveEntryList.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -318,6 +323,7 @@ class LeaveController extends GetxController {
       isLoading.value = false;
       update();
     }
+    isLoading.value = false;
     return [];
   }
 }
