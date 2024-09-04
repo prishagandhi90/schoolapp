@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 class DetailsScreen extends GetView<AttendenceController> {
   const DetailsScreen({super.key});
 
-  // var attendenceController = Get.put(AttendenceController());
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());

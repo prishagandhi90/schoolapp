@@ -62,6 +62,7 @@ class AppString {
   static String from = "From";
   static String to = "To";
   static String days = "Days";
+  static String noleavedata = "No leave data available";
 
   static String keyToken = "KEY_TOKENNO";
   static String keyLoginId = "KEY_LOGINID";

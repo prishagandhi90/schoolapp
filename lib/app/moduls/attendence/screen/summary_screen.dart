@@ -140,7 +140,7 @@ class SummaryScreen extends GetView<AttendenceController> {
                     : const Padding(
                         padding: EdgeInsets.all(15),
                         child: Center(child: Text('No attendance data available')),
-                      )
+                      ),
           ],
         ),
       );
