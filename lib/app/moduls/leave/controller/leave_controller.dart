@@ -19,8 +19,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LeaveController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
-  final count = 0.obs;
-  void increment() => count.value++;
   var isLoading = false.obs;
   List<LeaveDays> leavedays = [];
   List<LeaveNamesTable> leavename = [];
@@ -301,7 +299,7 @@ class LeaveController extends GetxController {
       ResponseLeaveEntryList responseLeaveEntryList = ResponseLeaveEntryList.fromJson(jsonDecode(response));
 
       if (responseLeaveEntryList.statusCode == 200) {
-      if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
+        if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
           isLoading.value = false;
           leaveentryList = responseLeaveEntryList.data!;
           update();

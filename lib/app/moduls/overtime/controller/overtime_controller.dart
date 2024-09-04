@@ -1,37 +1,24 @@
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class OvertimeController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
-  final count = 0.obs;
-  void increment() => count.value++;
+  
+  var isLoading = false.obs;
 
   DateTime? selectedDate;
+  final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+
   TimeOfDay? selectedTime;
+  final DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
 
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != selectedDate) {
-      selectedDate = picked;
-      selectedTime = null; // Reset time when a new date is selected
-      update();
-    }
-  }
-
-  Future<void> selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null && picked != selectedTime) {
-      selectedTime = picked;
-      update();
-    }
+  String formatTimeOfDay(TimeOfDay? time) {
+    if (time == null) return '';
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return timeFormat.format(dt);
   }
 }

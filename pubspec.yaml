@@ -16,7 +16,6 @@ dependencies:
   cupertino_icons: ^1.0.6
   get: ^4.6.6
   pinput: ^5.0.0
-  http: ^1.2.1
   dropdown_button2: ^2.3.9
   flutter_secure_storage: ^9.2.2
   device_preview: ^1.2.0
@@ -31,10 +30,17 @@ dependencies:
   flutter_easyloading: ^3.0.5
   shared_preferences: ^2.2.3
   get_storage: ^2.1.1
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/venus_profile.png"
 
 flutter:
 

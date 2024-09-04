@@ -20,25 +20,24 @@ class LeaveViewScreen extends StatelessWidget {
           backgroundColor: AppColor.white,
           body: LayoutBuilder(
             builder: (context, constraints) {
-              return SingleChildScrollView(
-                controller: controller.leaveScrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20),
-                    controller.isLoading.value
-                        ? const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100),
-                              child: ProgressWithIcon(),
-                            ),
-                          )
-                        : controller.leaveentryList.isNotEmpty
-                            ? Column(
-                                children: [
-                                  // Define the DataTable only once
-                                  SizedBox(
-                                    height: constraints.maxHeight * 0.5, // Half height of the screen
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  controller.isLoading.value
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 100),
+                            child: ProgressWithIcon(),
+                          ),
+                        )
+                      : controller.leaveentryList.isNotEmpty
+                          ? Column(
+                              children: [
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.6, // Half screen height
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: ConstrainedBox(
@@ -46,10 +45,11 @@ class LeaveViewScreen extends StatelessWidget {
                                           minWidth: constraints.maxWidth,
                                         ),
                                         child: DataTable(
+                                          showCheckboxColumn: false,
                                           headingRowColor: WidgetStateColor.resolveWith(
                                             (states) => AppColor.primaryColor,
                                           ),
-                                          columnSpacing: constraints.maxWidth * 0.05,
+                                          columnSpacing: 20, // Adjust column spacing if needed
                                           columns: [
                                             DataColumn(
                                               label: Text(
@@ -71,7 +71,7 @@ class LeaveViewScreen extends StatelessWidget {
                                             ),
                                             DataColumn(
                                               label: Text(
-                                                '', // Use this column for the icon or any action
+                                                '', // Action column
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -79,6 +79,7 @@ class LeaveViewScreen extends StatelessWidget {
                                           rows: List.generate(
                                             controller.leaveentryList.length,
                                             (index) => DataRow(
+                                              onSelectChanged: (selected) {},
                                               cells: [
                                                 DataCell(Text(
                                                   controller.leaveentryList[index].fromDate.toString(),
@@ -107,19 +108,79 @@ class LeaveViewScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                ],
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Center(
-                                  child: Text(
-                                    AppString.noleavedata,
-                                    style: AppStyle.fontfamilyplus,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Status',
+                                      style: AppStyle.plus17w600,
+                                    ),
                                   ),
                                 ),
+                                SizedBox(
+                                  height: constraints.maxHeight * 0.35, // Adjust height accordingly
+                                  child: SingleChildScrollView(
+                                    controller: controller.leaveScrollController,
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          minWidth: constraints.maxWidth,
+                                        ),
+                                        child: DataTable(
+                                          headingRowColor: WidgetStateColor.resolveWith(
+                                            (states) => AppColor.primaryColor,
+                                          ),
+                                          columnSpacing: 20,
+                                          columns: [
+                                            DataColumn(
+                                              label: Text(
+                                                'In-Charge',
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              label: Text(
+                                                'HOD',
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                            DataColumn(
+                                              label: Text(
+                                                'HR',
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          ],
+                                          rows: List.generate(
+                                            1, // Adjust number of rows as needed
+                                            (index) => DataRow(
+                                              cells: [
+                                                DataCell(Image.asset('assets/image/check-mark.png')),
+                                                DataCell(Image.asset("assets/image/cross.png")),
+                                                DataCell(Image.asset("assets/image/hourglass.png")),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Center(
+                                child: Text(
+                                  AppString.noleavedata,
+                                  style: AppStyle.fontfamilyplus,
+                                ),
                               ),
-                  ],
-                ),
+                            ),
+                ],
               );
             },
           ),

@@ -12,17 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AttendanceScreen extends GetView<AttendenceController> {
-// class AttendanceScreen extends StatefulWidget {
   AttendanceScreen({super.key, this.fromDashboard = false});
   final bool fromDashboard;
 
-//   @override
-//   State<AttendanceScreen> createState() => _AttendanceScreenState();
-// }
-
-// class _AttendanceScreenState extends State<AttendanceScreen> {
-  // var attendenceController = Get.put(AttendenceController());
-  // attendenceController.closeScrollcontrollers();
   final scaffoldKey1 = GlobalKey<ScaffoldState>();
 
   @override

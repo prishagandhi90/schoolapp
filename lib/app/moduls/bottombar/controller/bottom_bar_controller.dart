@@ -11,12 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class BottomBarController extends GetxController with WidgetsBindingObserver {
+class BottomBarController extends GetxController {
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
     super.onInit();
-    // persistentController = PersistentTabController(initialIndex: 2);
+    persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
     update();
   }

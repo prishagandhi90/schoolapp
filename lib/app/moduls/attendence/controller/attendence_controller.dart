@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
-  var bottomBarController = Get.put(BottomBarController());
+  final bottomBarController = Get.put(BottomBarController());
   late List<MispunchTable> mispunchtable = [];
   List<AttendenceSummarytable> attendenceSummaryTable = [];
   List<AttendanceDetailTable> attendenceDetailTable = [];
@@ -29,39 +29,49 @@ class AttendenceController extends GetxController {
   var selectedYear = ''.obs;
 
   List<String> years = getLastTwoYears();
-  final ScrollController attendanceScrollController = ScrollController();
   var monthScrollControllerSummary = ScrollController();
   var monthScrollControllerDetail = ScrollController();
+  var attendanceScrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
 
-    attendanceScrollController.addListener(() {
-      if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
-        hideBottomBar = false.obs;
-        update();
-        bottomBarController.update();
-      } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-        hideBottomBar = true.obs;
-        update();
-        bottomBarController.update();
-      }
-    });
-
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
     // createScrollControllers();
-    monthScrollControllerSummary = ScrollController();
-    monthScrollControllerDetail = ScrollController();
+    // attendanceScrollController = ScrollController();
+    // monthScrollControllerSummary = ScrollController();
+    // monthScrollControllerDetail = ScrollController();
     setCurrentMonthYear("SummaryScreen");
     update();
+
+    attendanceScrollController.addListener(() {
+      try {
+        if (attendanceScrollController.hasClients) {
+          if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
+            hideBottomBar = false.obs;
+            update();
+            bottomBarController.update();
+          } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+            hideBottomBar = true.obs;
+            update();
+            bottomBarController.update();
+          }
+        } else {
+          print('ScrollController has no clients');
+        }
+      } catch (e) {
+        print('Error in ScrollController listener: $e');
+      }
+    });
   }
 
   @override
   void onClose() {
     // Dispose of controllers when they are no longer needed
+    attendanceScrollController.dispose();
     monthScrollControllerSummary.dispose();
     monthScrollControllerDetail.dispose();
     super.onClose();
