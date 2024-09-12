@@ -27,7 +27,6 @@ class AttendenceController extends GetxController {
   var MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
-
   List<String> years = getLastTwoYears();
   var monthScrollControllerSummary = ScrollController();
   var monthScrollControllerDetail = ScrollController();
@@ -40,79 +39,33 @@ class AttendenceController extends GetxController {
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
-    // createScrollControllers();
-    // attendanceScrollController = ScrollController();
-    // monthScrollControllerSummary = ScrollController();
-    // monthScrollControllerDetail = ScrollController();
+
     setCurrentMonthYear("SummaryScreen");
     update();
 
     attendanceScrollController.addListener(() {
-      try {
-        if (attendanceScrollController.hasClients) {
-          if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
-            hideBottomBar = false.obs;
-            update();
-            bottomBarController.update();
-          } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-            hideBottomBar = true.obs;
-            update();
-            bottomBarController.update();
-          }
-        } else {
-          print('ScrollController has no clients');
-        }
-      } catch (e) {
-        print('Error in ScrollController listener: $e');
+      if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        hideBottomBar = false.obs;
+        update();
+        bottomBarController.update();
+      } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        hideBottomBar = true.obs;
+        update();
+        bottomBarController.update();
       }
     });
   }
 
   @override
   void onClose() {
-    // Dispose of controllers when they are no longer needed
-    attendanceScrollController.dispose();
+    // attendanceScrollController.dispose(); //
     monthScrollControllerSummary.dispose();
-    monthScrollControllerDetail.dispose();
+    // monthScrollControllerDetail.dispose();
     super.onClose();
   }
 
-  // void closeScrollcontrollers() {
-  //   monthScrollControllerSummary.dispose();
-  //   monthScrollControllerDetail.dispose();
-  // }
-
-  void createScrollControllers() {
-    monthScrollControllerSummary = ScrollController();
-    monthScrollControllerDetail = ScrollController();
-  }
-
-  ScrollController createScrollController() {
-    return ScrollController();
-  }
-
   void setCurrentMonthYear(String screenName) {
-    // MonthSelectionScreen(
-    //   selectedMonthIndex: MonthSel_selIndex.value,
-    //   scrollController: screenName == "DetailScreen" ? monthScrollControllerDetail : monthScrollControllerSummary,
-    //   onPressed: (index) {
-    //     upd_MonthSelIndex(index);
-    //     showHideMsg();
-    //   },
-    // );
-    // MonthPicker(
-    //   controller: ,
-    //   // onPressed: (index) {
-    //   //   controller.upd_MonthSelIndex(index);
-    //   //   controller.showHideMsg();
-    //   // },
-    // );
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    // monthScrollControllerSummary.dispose();
-    // monthScrollControllerDetail.dispose();
     if (monthScrollControllerDetail.hasClients) {
-      // createScrollControllers();
       double itemWidth = 80; // Adjust this based on your item width
       double screenWidth = Get.context!.size!.width;
       double screenCenter = screenWidth / 2;
@@ -134,9 +87,7 @@ class AttendenceController extends GetxController {
         curve: Curves.easeInOut,
       );
     }
-    // });
 
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
     if (monthScrollControllerSummary.hasClients) {
       double itemWidth = 80; // Adjust this based on your item width
       double screenWidth = Get.context!.size!.width;
@@ -159,7 +110,6 @@ class AttendenceController extends GetxController {
         curve: Curves.easeInOut,
       );
     }
-    // });
 
     CustomDropDown(
       selValue: YearSel_selIndex,

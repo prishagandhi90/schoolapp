@@ -10,11 +10,13 @@ class ResponseLeaveEntryList {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <LeaveEntryList>[];
       json['data'].forEach((v) {
         data!.add(new LeaveEntryList.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 
@@ -40,7 +42,7 @@ class LeaveEntryList {
   String? fromDate;
   String? toDate;
   double? overTimeMinutes;
-  double? leaveDays;
+  String? leaveDays;
   String? reason;
   String? hrAction;
   String? inchargeAction;
@@ -68,6 +70,9 @@ class LeaveEntryList {
   String? otHours;
   String? empTel;
   String? shiftTime;
+  String? inchargeDate;
+  String? hodDate;
+  String? hrDate;
 
   LeaveEntryList(
       {this.leaveId,
@@ -106,7 +111,10 @@ class LeaveEntryList {
       this.empEmail,
       this.otHours,
       this.empTel,
-      this.shiftTime});
+      this.shiftTime,
+      this.inchargeDate,
+      this.hodDate,
+      this.hrDate});
 
   LeaveEntryList.fromJson(Map<String, dynamic> json) {
     leaveId = json['leaveId'];
@@ -146,6 +154,9 @@ class LeaveEntryList {
     otHours = json['otHours'];
     empTel = json['empTel'];
     shiftTime = json['shiftTime'];
+    inchargeDate = json['inchargeDate'];
+    hodDate = json['hodDate'];
+    hrDate = json['hrDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -187,6 +198,9 @@ class LeaveEntryList {
     data['otHours'] = this.otHours;
     data['empTel'] = this.empTel;
     data['shiftTime'] = this.shiftTime;
+    data['inchargeDate'] = this.inchargeDate;
+    data['hodDate'] = this.hodDate;
+    data['hrDate'] = this.hrDate;
     return data;
   }
 }

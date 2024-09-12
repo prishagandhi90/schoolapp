@@ -1,3 +1,4 @@
+// import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -13,7 +14,6 @@ class DetailsScreen extends GetView<AttendenceController> {
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
-    // final AttendenceController controller = Get.find<AttendenceController>();
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
@@ -21,141 +21,138 @@ class DetailsScreen extends GetView<AttendenceController> {
           backgroundColor: AppColor.white,
           body: LayoutBuilder(
             builder: (context, constraints) {
-              return SingleChildScrollView(
-                controller: controller.attendanceScrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // MonthSelectionScreen(
-                    //   selectedMonthIndex: controller.MonthSel_selIndex.value,
-                    //   scrollController: controller.monthScrollControllerDetail,
-                    //   onPressed: (index) {
-                    //     controller.upd_MonthSelIndex(index);
-                    //     controller.showHideMsg();
-                    //   },
-                    // ),
-                    MonthPicker(
-                      controller: controller,
-                      scrollController: controller.monthScrollControllerSummary,
-                      // onPressed: (index) {
-                      //   controller.upd_MonthSelIndex(index);
-                      //   controller.showHideMsg();
-                      // },
-                    ),
-                    const SizedBox(height: 20),
-                    controller.isLoader.value
-                        ? const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100),
-                              child: ProgressWithIcon(),
-                            ),
-                          )
-                        : controller.attendenceDetailTable.length > 0
-                            ? SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    minWidth: constraints.maxWidth,
-                                  ),
-                                  child: DataTable(
-                                    headingRowColor: WidgetStateColor.resolveWith(
-                                      (states) => AppColor.primaryColor,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MonthPicker(
+                    controller: controller,
+                    scrollController: controller.monthScrollControllerDetail,
+                  ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: controller.isLoader.value
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 100),
+                            child: ProgressWithIcon(),
+                          ),
+                        )
+                      : controller.attendenceDetailTable.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: constraints.maxWidth,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    color: AppColor.primaryColor,
+                                    child: Row(
+                                      children: [
+                                        _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell('', constraints.maxWidth * 0.2),
+                                      ],
                                     ),
-                                    columnSpacing: constraints.maxWidth * 0.05,
-                                    columns: [
-                                      DataColumn(
-                                        label: Text(
-                                          AppString.date,
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          AppString.iN,
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          AppString.out,
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          AppString.lcegmin,
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                      DataColumn(
-                                        label: Text(
-                                          '',
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    ],
-                                    rows: List.generate(
-                                      controller.attendenceDetailTable.length,
-                                      (index) => DataRow(
-                                        cells: [
-                                          DataCell(
-                                            Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                color: AppColor.lightgrey,
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  controller.attendenceDetailTable[index].atTDATE.toString(),
-                                                  style: AppStyle.fontfamilyplus,
+                                  ),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      controller: controller.attendanceScrollController,
+                                      child: Table(
+                                        columnWidths: {
+                                          0: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          1: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          2: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          3: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          4: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                        },
+                                        children: List.generate(
+                                          controller.attendenceDetailTable.length,
+                                          (index) => TableRow(
+                                            children: [
+                                              _buildCell(
+                                                Container(
+                                                  height: 40,
+                                                  width: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.lightgrey,
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      controller.attendenceDetailTable[index].atTDATE.toString(),
+                                                      style: AppStyle.fontfamilyplus,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                              _buildCell(Text(
+                                                controller.attendenceDetailTable[index].iN.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              )),
+                                              _buildCell(Text(
+                                                controller.attendenceDetailTable[index].out.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              )),
+                                              _buildCell(Text(
+                                                controller.attendenceDetailTable[index].lCEGMIN.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              )),
+                                              _buildCell(
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    detailbottomsheet(context, index);
+                                                  },
+                                                  child: const Icon(Icons.arrow_drop_down_circle),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          DataCell(Text(
-                                            controller.attendenceDetailTable[index].iN.toString(),
-                                            style: AppStyle.fontfamilyplus,
-                                          )),
-                                          DataCell(Text(
-                                            controller.attendenceDetailTable[index].out.toString(),
-                                            style: AppStyle.fontfamilyplus,
-                                          )),
-                                          DataCell(Text(
-                                            controller.attendenceDetailTable[index].lCEGMIN.toString(),
-                                            style: AppStyle.fontfamilyplus,
-                                          )),
-                                          DataCell(
-                                            GestureDetector(
-                                              onTap: () {
-                                                detailbottomsheet(context, index);
-                                              },
-                                              child: const Icon(Icons.arrow_drop_down_circle),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Center(
-                                  child: Text(
-                                    AppString.noattendencedata,
-                                    style: AppStyle.fontfamilyplus,
-                                  ),
-                                ),
+                                ],
                               ),
-                  ],
-                ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Center(
+                              child: Text(
+                                AppString.noattendencedata,
+                                style: AppStyle.fontfamilyplus,
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
               );
             },
           ),
         );
       },
+    );
+  }
+
+  Widget _buildHeaderCell(String text, double width) {
+    return Container(
+      width: width,
+      padding: EdgeInsets.all(8),
+      child: Text(
+        text,
+        style: AppStyle.fontfamilyplus.copyWith(color: AppColor.white),
+      ),
+    );
+  }
+
+  Widget _buildCell(Widget child) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: child,
     );
   }
 

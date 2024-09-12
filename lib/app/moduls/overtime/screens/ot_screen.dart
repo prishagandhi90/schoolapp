@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/custom_dropdown1.dart';
 import 'package:emp_app/app/app_custom_widget/custom_timepicker.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:emp_app/app/app_custom_widget/custom_datepicker.dart';
@@ -12,6 +13,8 @@ class OtScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(OvertimeController());
+    var leaveController = Get.put(LeaveController());
     return GetBuilder<OvertimeController>(
       builder: (controller) {
         return Scaffold(
@@ -25,6 +28,9 @@ class OtScreen extends StatelessWidget {
                       Expanded(
                           child: CustomDatePicker(
                         hintText: "From",
+                        controllerValue: TextEditingController(
+                          text: controller.selectedFromDate != null ? controller.dateFormat.format(controller.selectedFromDate!) : '',
+                        ),
                         onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -33,7 +39,9 @@ class OtScreen extends StatelessWidget {
                             lastDate: DateTime(2101),
                           );
                           if (pickedDate != null) {
-                            controller.selectedDate = pickedDate;
+                            controller.oTMinutes = 0;
+                            controller.selectedFromDate = pickedDate;
+                            controller.onDateTimeTap();
                             controller.update();
                           }
                         },
@@ -42,7 +50,25 @@ class OtScreen extends StatelessWidget {
                         width: 10,
                       ),
                       Expanded(
-                        child: CustomTimepicker(hinttext: "--:--"),
+                        child: CustomTimepicker(
+                          hinttext: "--:--",
+                          controllerValue: TextEditingController(
+                            text: controller.formatTimeOfDay(controller.selectedFromTime),
+                          ),
+                          onTap: () async {
+                            TimeOfDay? pickedTime = await showTimePicker(
+                                context: context,
+                                initialTime: controller.selectedFromTime ?? TimeOfDay.now(),
+                                initialEntryMode: TimePickerEntryMode.input);
+
+                            if (pickedTime != null) {
+                              controller.oTMinutes = 0;
+                              controller.selectedFromTime = pickedTime;
+                              controller.onDateTimeTap();
+                              controller.update();
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -53,6 +79,9 @@ class OtScreen extends StatelessWidget {
                         Expanded(
                             child: CustomDatePicker(
                           hintText: "To",
+                          controllerValue: TextEditingController(
+                            text: controller.selectedToDate != null ? controller.dateFormat.format(controller.selectedToDate!) : '',
+                          ),
                           onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
                               context: context,
@@ -61,7 +90,9 @@ class OtScreen extends StatelessWidget {
                               lastDate: DateTime(2101),
                             );
                             if (pickedDate != null) {
-                              controller.selectedDate = pickedDate;
+                              controller.oTMinutes = 0;
+                              controller.selectedToDate = pickedDate;
+                              controller.onDateTimeTap();
                               controller.update();
                             }
                           },
@@ -70,13 +101,34 @@ class OtScreen extends StatelessWidget {
                           width: 10,
                         ),
                         Expanded(
-                          child: CustomTimepicker(hinttext: "--:--"),
+                          child: CustomTimepicker(
+                            hinttext: "--:--",
+                            controllerValue: TextEditingController(
+                              text: controller.formatTimeOfDay(controller.selectedToTime),
+                            ),
+                            onTap: () async {
+                              TimeOfDay? pickedTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: controller.selectedToTime ?? TimeOfDay.now(),
+                                  initialEntryMode: TimePickerEntryMode.input);
+
+                              if (pickedTime != null) {
+                                controller.oTMinutes = 0;
+                                controller.selectedToTime = pickedTime;
+                                controller.onDateTimeTap();
+                                controller.update();
+                              }
+                            },
+                          ),
                         ),
                       ],
                     ),
                   ),
                   TextFormField(
                     readOnly: true,
+                    controller: TextEditingController(
+                      text: controller.oTMinutes.toString(),
+                    ),
                     decoration: InputDecoration(
                       hintText: "Min",
                       helperStyle: TextStyle(color: AppColor.black),
@@ -108,27 +160,45 @@ class OtScreen extends StatelessWidget {
                           )),
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(vertical: 16),
-                  //   child: CustomDropdown1(
-                  //     text: 'Late Reason',
-                  //     width: double.infinity,
-                  //     items: leaveController.leavedelayreason
-                  //         .map((LeaveDelayReason item) => DropdownMenuItem<String>(
-                  //               value: item.name, // Use the value as the item value
-                  //               child: Text(
-                  //                 item.name ?? '', // Display the name in the dropdown
-                  //                 style: const TextStyle(
-                  //                   fontSize: 14,
-                  //                   fontWeight: FontWeight.bold,
-                  //                   color: Colors.black,
-                  //                 ),
-                  //                 overflow: TextOverflow.ellipsis,
-                  //               ),
-                  //             ))
-                  //         .toList(),
-                  //   ),
-                  // ),
+                  CustomDropdown1(
+                    text: 'Late Reason',
+                    width: double.infinity,
+                    items: leaveController.leavedelayreason
+                        .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
+                              value: {
+                                'value': item.name ?? '', // Use the value as the item value
+                                'text': item.name ?? '', // Display the name in the dropdown
+                              },
+                              child: Text(
+                                item.name ?? '', // Display the name in the dropdown
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width * 0.13,
+                    width: MediaQuery.of(context).size.width * 0.40,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.lightgreen,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: AppColor.black, fontSize: 20),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ));

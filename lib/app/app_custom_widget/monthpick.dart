@@ -7,99 +7,93 @@ class MonthPicker extends StatelessWidget {
   final AttendenceController controller;
   final ScrollController scrollController;
 
-  MonthPicker({required this.controller, required this.scrollController});
+  const MonthPicker({
+    Key? key,
+    required this.controller,
+    required this.scrollController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (scrollController.hasClients) {
-    //     double itemWidth = 80; // Adjust this based on your item width
-    //     double screenWidth = MediaQuery.of(context).size.width;
-    //     double screenCenter = screenWidth / 2;
-    //     double selectedMonthPosition = controller.MonthSel_selIndex.value * itemWidth;
-    //     double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
+    return GetBuilder<AttendenceController>(
+      builder: (controller) {
+        // Use WidgetsBinding.instance.addPostFrameCallback
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.hasClients) {
+            try {
+              // Avoid unnecessary calculations if the scroll position is already correct
+              final index = controller.MonthSel_selIndex;
+              final itemWidth = 100.0;
+              final screenWidth = MediaQuery.of(context).size.width;
+              final offset = (index * itemWidth) - (screenWidth / 2) + (itemWidth / 2);
 
-    //     // Ensure the calculated position is within valid scroll range
-    //     double maxScrollExtent = scrollController.position.maxScrollExtent;
-    //     double minScrollExtent = scrollController.position.minScrollExtent;
-    //     if (targetScrollPosition < minScrollExtent) {
-    //       targetScrollPosition = minScrollExtent;
-    //     } else if (targetScrollPosition > maxScrollExtent) {
-    //       targetScrollPosition = maxScrollExtent;
-    //     }
+              if ((offset - scrollController.offset).abs() > 1) {
+                scrollController.animateTo(
+                  offset,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+            } catch (e) {
+              print('Scroll error: $e');
+            }
+          }
+        });
 
-    //     scrollController.animateTo(
-    //       targetScrollPosition,
-    //       duration: Duration(milliseconds: 500),
-    //       curve: Curves.easeInOut,
-    //     );
-    //   }
-    // });
-    return Obx(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (scrollController.hasClients) {
-          final index = controller.MonthSel_selIndex.value;
-          final itemWidth = 100.0;
-          final offset = index * itemWidth;
-          scrollController.animateTo(
-            offset,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      });
-      return Center(
-        child: SingleChildScrollView(
-          controller: scrollController,
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(12, (index) {
-              return GestureDetector(
-                onTap: () {
-                  controller.upd_MonthSelIndex(index);
-                  controller.showHideMsg();
-                  // setState(() {
-                  //   widget.selectedMonthIndex = index;
-                  // });
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: controller.MonthSel_selIndex.value == index
-                      ? Container(
-                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                          decoration: BoxDecoration(
-                            color: AppColor.primaryColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            '${getMonthName(index)}',
-                            style: TextStyle(
-                              color: AppColor.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        )
-                      : Text(
-                          '${getMonthName(index)}',
-                          style: TextStyle(
-                            color: AppColor.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                          ),
-                        ),
-                ),
-              );
-            }),
+        return Center(
+          child: SizedBox(
+            height: 50,
+            child: ListView.builder(
+              controller: scrollController,
+              scrollDirection: Axis.horizontal,
+              itemCount: 12,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    controller.upd_MonthSelIndex(index);
+                    controller.showHideMsg();
+                  },
+                  child: Container(
+                    width: 100,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: controller.MonthSel_selIndex == index ? AppColor.primaryColor : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      getMonthName(index),
+                      style: TextStyle(
+                        color: controller.MonthSel_selIndex == index ? AppColor.white : AppColor.black,
+                        fontWeight: controller.MonthSel_selIndex == index ? FontWeight.bold : FontWeight.normal,
+                        fontSize: controller.MonthSel_selIndex == index ? 18 : 15,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   String getMonthName(int index) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
     return months[index];
   }
 }

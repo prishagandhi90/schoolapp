@@ -1,19 +1,20 @@
-class ResponseLeaveDelayReason {
+class ResponseSaveLeaveEntryList {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<LeaveDelayReason>? data;
+  List<SaveLeaveEntryList>? data;
 
-  ResponseLeaveDelayReason({this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseSaveLeaveEntryList(
+      {this.statusCode, this.isSuccess, this.message, this.data});
 
-  ResponseLeaveDelayReason.fromJson(Map<String, dynamic> json) {
+  ResponseSaveLeaveEntryList.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <LeaveDelayReason>[];
+      data = <SaveLeaveEntryList>[];
       json['data'].forEach((v) {
-        data!.add(new LeaveDelayReason.fromJson(v));
+        data!.add(new SaveLeaveEntryList.fromJson(v));
       });
     }
   }
@@ -30,21 +31,18 @@ class ResponseLeaveDelayReason {
   }
 }
 
-class LeaveDelayReason {
-  String? id;
-  String? name;
+class SaveLeaveEntryList {
+  String? savedYN;
 
-  LeaveDelayReason({this.id, this.name});
+  SaveLeaveEntryList({this.savedYN});
 
-  LeaveDelayReason.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
+  SaveLeaveEntryList.fromJson(Map<String, dynamic> json) {
+    savedYN = json['savedYN'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    data['savedYN'] = this.savedYN;
     return data;
   }
 }

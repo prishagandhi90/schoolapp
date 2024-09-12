@@ -332,7 +332,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                   return IconButton(
                     onPressed: () async {
                       Scaffold.of(context).openEndDrawer();
-                      if (controller.leaveentryList.isEmpty) await controller.fetchLeaveEntryList();
+                      if (controller.leaveentryList.isEmpty) await controller.fetchLeaveEntryList("LV");
                     },
                     icon: SvgPicture.asset('assets/image/svg/drawer.svg', height: 15, width: 15),
                   );
@@ -361,7 +361,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                       dividerColor: Colors.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,
                       onTap: (value) async {
-                        if (value == 1 && controller.leaveentryList.isEmpty) await controller.fetchLeaveEntryList();
+                        if (value == 1 && controller.leaveentryList.isEmpty) await controller.fetchLeaveEntryList("LV");
                       },
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),

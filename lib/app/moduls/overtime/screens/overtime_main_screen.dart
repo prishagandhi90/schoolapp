@@ -32,7 +32,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                           child: ProgressWithIcon(),
                         ),
                       )
-                    : leaveController.leaveentryList.isNotEmpty
+                    : leaveController.otentryList.isNotEmpty
                         ? ListView(
                             children: [
                               Padding(
@@ -72,8 +72,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.leaveentryList.isNotEmpty
-                                                  ? leaveController.leaveentryList[0].department.toString()
+                                              leaveController.otentryList.isNotEmpty
+                                                  ? leaveController.otentryList[0].department.toString()
                                                   : '--:--',
                                               style: TextStyle(
                                                 fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -135,8 +135,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                             child: Padding(
                                               padding: const EdgeInsets.all(10),
                                               child: Text(
-                                                leaveController.leaveentryList.isNotEmpty
-                                                    ? leaveController.leaveentryList[0].deptInc.toString()
+                                                leaveController.otentryList.isNotEmpty
+                                                    ? leaveController.otentryList[0].deptInc.toString()
                                                     : '--:--',
                                                 style: TextStyle(
                                                   fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -191,8 +191,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.leaveentryList.isNotEmpty
-                                                  ? leaveController.leaveentryList[0].deptHOD.toString()
+                                              leaveController.otentryList.isNotEmpty
+                                                  ? leaveController.otentryList[0].deptHOD.toString()
                                                   : '--:--',
                                               style: TextStyle(
                                                 fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -244,8 +244,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.leaveentryList.isNotEmpty
-                                                  ? leaveController.leaveentryList[0].subDept.toString()
+                                              leaveController.otentryList.isNotEmpty
+                                                  ? leaveController.otentryList[0].subDept.toString()
                                                   : '--:--',
                                               style: TextStyle(
                                                 fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -297,8 +297,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.leaveentryList.isNotEmpty
-                                                  ? leaveController.leaveentryList[0].subDeptInc.toString()
+                                              leaveController.otentryList.isNotEmpty
+                                                  ? leaveController.otentryList[0].subDeptInc.toString()
                                                   : '--:--',
                                               style: TextStyle(
                                                 fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -332,8 +332,9 @@ class OvertimeMainScreen extends GetView<LeaveController> {
               actions: [
                 Builder(builder: (context) {
                   return IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       Scaffold.of(context).openEndDrawer();
+                      if (leaveController.otentryList.isEmpty) await leaveController.fetchLeaveEntryList("OT");
                     },
                     icon: SvgPicture.asset('assets/image/svg/drawer.svg', height: 15, width: 15),
                   );
@@ -361,6 +362,9 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                       unselectedLabelColor: AppColor.black,
                       dividerColor: Colors.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,
+                      onTap: (value) async {
+                        if (value == 1 && leaveController.otentryList.isEmpty) await leaveController.fetchLeaveEntryList("OT");
+                      },
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'OT'), Tab(text: 'View')],

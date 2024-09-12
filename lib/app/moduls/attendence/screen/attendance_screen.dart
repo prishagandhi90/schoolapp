@@ -11,11 +11,12 @@ import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AttendanceScreen extends GetView<AttendenceController> {
-  AttendanceScreen({super.key, this.fromDashboard = false});
-  final bool fromDashboard;
+GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
 
-  final scaffoldKey1 = GlobalKey<ScaffoldState>();
+class AttendanceScreen extends StatelessWidget {
+  const AttendanceScreen({Key? key, this.fromDashboard = false}) : super(key: key);
+
+  final bool fromDashboard;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,6 @@ class AttendanceScreen extends GetView<AttendenceController> {
                 AppString.attendence,
                 style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
               ),
-              // centerTitle: true,
               leading: fromDashboard
                   ? IconButton(
                       icon: const Icon(Icons.menu),

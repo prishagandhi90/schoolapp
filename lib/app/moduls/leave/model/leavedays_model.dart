@@ -31,17 +31,24 @@ class LeaveDays {
 }
 
 class Data {
-  String? outValue;
+  // String? outValue;
+  String? value;
+  String? name;
 
-  Data({this.outValue});
+  // Data({this.outValue});
+  Data({this.value, this.name});
 
   Data.fromJson(Map<String, dynamic> json) {
-    outValue = json['outValue'];
+    // outValue = json['outValue'];
+    value = json['outValue'];
+    name = json['outValue'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['outValue'] = this.outValue;
+    // data['outValue'] = this.outValue;
+    data['value'] = this.value;
+    data['name'] = this.name;
     return data;
   }
 }

@@ -6,8 +6,9 @@ import 'package:get/get.dart';
 class CustomDatePicker extends StatelessWidget {
   final String hintText;
   final Function()? onTap;
+  final TextEditingController controllerValue;
 
-  CustomDatePicker({required this.hintText, this.onTap});
+  CustomDatePicker({required this.hintText, required this.controllerValue, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,7 @@ class CustomDatePicker extends StatelessWidget {
             suffixIcon: Icon(Icons.calendar_today),
           ),
           onTap: onTap,
-          controller: TextEditingController(
-            text: controller.selectedDate != null ? controller.dateFormat.format(controller.selectedDate!) : '',
-          ),
+          controller: controllerValue,
         );
       },
     );

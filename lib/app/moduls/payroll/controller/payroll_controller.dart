@@ -37,12 +37,15 @@ class PayrollController extends GetxController {
   void onInit() {
     super.onInit();
     getProfileData();
-    hideBottomBar.value = false;
-    filteredList = originalList;
-    focusNode.addListener(() {
-      hasFocus = focusNode.hasFocus;
-      update();
+    // hideBottomBar.value = false;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      hideBottomBar.value = false;
     });
+    filteredList = originalList;
+    // focusNode.addListener(() {
+    //   hasFocus = focusNode.hasFocus;
+    //   update();
+    // });
     update();
   }
 
@@ -63,8 +66,7 @@ class PayrollController extends GetxController {
 
       var jsonbodyObj = {"loginId": loginId};
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse =
-          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -101,7 +103,7 @@ class PayrollController extends GetxController {
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: AttendanceScreen(),
+          screen: const AttendanceScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {

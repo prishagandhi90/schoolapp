@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 
 class CustomTimepicker extends StatelessWidget {
   final String hinttext;
-  const CustomTimepicker({super.key, required this.hinttext});
+  final TextEditingController controllerValue;
+  final Function()? onTap;
+  const CustomTimepicker({super.key, required this.hinttext, required this.controllerValue, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +27,8 @@ class CustomTimepicker extends StatelessWidget {
             hintText: hinttext,
             suffixIcon: Icon(Icons.access_time),
           ),
-          onTap: () async {
-            TimeOfDay? pickedTime = await showTimePicker(
-              context: context,
-              initialTime: controller.selectedTime ?? TimeOfDay.now(),
-              initialEntryMode: TimePickerEntryMode.input
-            );
-
-            if (pickedTime != null) {
-              controller.selectedTime = pickedTime;
-              controller.update();
-            }
-          },
-          controller: TextEditingController(
-            text: controller.formatTimeOfDay(controller.selectedTime),
-          ),
+          onTap: onTap,
+          controller: controllerValue,
         );
       },
     );

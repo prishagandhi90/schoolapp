@@ -3,13 +3,16 @@ import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/leave/model/dropdownlist_custom.dart';
 import 'package:emp_app/app/moduls/leave/model/leaveReliverName_model.dart';
+import 'package:emp_app/app/moduls/leave/model/leave_saveentrylist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedays_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leaveentrylist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -21,22 +24,42 @@ class LeaveController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
   List<LeaveDays> leavedays = [];
+
   List<LeaveNamesTable> leavename = [];
+  List<DropdownlstTable> dropdownItems123 = [];
+
   List<LeaveReasonTable> leavereason = [];
   List<LeaveDelayReason> leavedelayreason = [];
   List<LeaveReliverName> leaverelivername = [];
   List<LeaveEntryList> leaveentryList = [];
+  List<LeaveEntryList> otentryList = [];
+  List<SaveLeaveEntryList> saveleaveentrylist = [];
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
   TextEditingController formDateController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+  TextEditingController leaveNameController = TextEditingController();
+  TextEditingController leaveValueController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
+  TextEditingController daysController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
+  TextEditingController relieverNameController = TextEditingController();
+  TextEditingController relieverValueController = TextEditingController();
+  TextEditingController delayreasonController = TextEditingController();
   final ScrollController leaveScrollController = ScrollController();
   RxString days = ''.obs; // To store the calculated days
   RxBool isDaysFieldEnabled = false.obs;
+  var overtimeController = Get.put(OvertimeController());
+  var inchargeAction = ''.obs;
+  var hodAction = ''.obs;
+  var hrAction = ''.obs;
+  List<Map<String, String>> daysOptions = [];
+  // var dropdownItems = <Map<String, String>>[].obs;
 
   @override
   void onInit() async {
     super.onInit();
+    // await getLeaveDays();
     await fetchLeaveNames();
     await fetchLeaveReason();
     await fetchLeaveDelayReason();
@@ -65,22 +88,44 @@ class LeaveController extends GetxController {
     DateTime? fromDate = formDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(formDateText, true) : null;
     DateTime? toDate = toDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateText, true) : null;
 
+    List<Map<String, String>> daysOptions;
+
     if (fromDate != null && toDate != null) {
       int daysCount = toDate.difference(fromDate).inDays + 1;
 
-      // Set days based on the difference
       if (daysCount <= 1) {
-        days.value = daysCount.toString(); // Show 1 or 0.5
+        daysOptions = [
+          {'value': 'Select', 'name': 'Select'},
+          {'value': '0.5', 'name': '0.5'},
+          {'value': '1', 'name': '1'},
+        ];
+        days.value = daysCount <= 1 ? daysCount.toString() : 'Select';
       } else {
-        days.value = daysCount.toString(); // Show the actual number of days
+        daysOptions = [
+          {'value': 'Select', 'name': 'Select'},
+          {'value': daysCount.toString(), 'name': daysCount.toString()},
+        ];
+        days.value = daysCount.toString();
       }
 
       isDaysFieldEnabled.value = true;
-      //getLeaveDays(); // Fetch leave data based on the new dates
     } else {
+      daysOptions = [
+        {'value': 'Select', 'name': 'Select'},
+      ];
       days.value = 'Select';
       isDaysFieldEnabled.value = false;
     }
+
+    daysController.clear();
+    dropdownItems123.clear();
+    dropdownItems123 = daysOptions
+        .map((option) => DropdownlstTable(
+              value: option['value']!,
+              name: option['name']!,
+            ))
+        .toList();
+
     update();
   }
 
@@ -109,7 +154,6 @@ class LeaveController extends GetxController {
       DateTime? toDate = toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
 
       if (fromDate != null && toDate != null) {
-        // Calculate the days difference
         int daysCount = toDate.difference(fromDate).inDays + 1;
 
         days.value = daysCount.toString();
@@ -138,7 +182,7 @@ class LeaveController extends GetxController {
         }
         update();
       } else {
-        Get.rawSnackbar(message: "Please select both From Date and To Date");
+        // Get.rawSnackbar(message: "Please select both From Date and To Date");
         // Reset days field and disable it if dates are not selected
         days.value = '';
         isDaysFieldEnabled.value = false;
@@ -166,6 +210,7 @@ class LeaveController extends GetxController {
       if (leaveNames.statusCode == 200) {
         leavename.clear();
         leavename = leaveNames.data!;
+
         // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
       } else if (leaveNames.statusCode == 401) {
         pref.clear();
@@ -286,7 +331,7 @@ class LeaveController extends GetxController {
     return [];
   }
 
-  Future<List<LeaveEntryList>> fetchLeaveEntryList() async {
+  Future<List<LeaveEntryList>> fetchLeaveEntryList(String flag) async {
     try {
       isLoading.value = true;
       String url = ConstApiUrl.empLeaveEntryListAPI;
@@ -294,18 +339,28 @@ class LeaveController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseLeaveEntryList responseLeaveEntryList = ResponseLeaveEntryList.fromJson(jsonDecode(response));
 
       if (responseLeaveEntryList.statusCode == 200) {
         if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
           isLoading.value = false;
-          leaveentryList = responseLeaveEntryList.data!;
-          update();
-          return leaveentryList;
+          if (flag == "LV") {
+            leaveentryList = responseLeaveEntryList.data!;
+            update();
+            return leaveentryList;
+          } else {
+            otentryList = responseLeaveEntryList.data!;
+            update();
+            overtimeController.update();
+            return otentryList;
+          }
         } else {
-          leaveentryList = [];
+          if (flag == "LV")
+            leaveentryList = [];
+          else
+            otentryList = [];
         }
       } else if (responseLeaveEntryList.statusCode == 401) {
         pref.clear();
@@ -317,11 +372,62 @@ class LeaveController extends GetxController {
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
+      // overtimeController.update();
     } catch (e) {
       isLoading.value = false;
       update();
     }
     isLoading.value = false;
+    return [];
+  }
+
+  Future<List<SaveLeaveEntryList>> saveLeaveEntryList(String flag) async {
+    Map<String, dynamic> leaveentry = {
+      "loginId": loginId,
+      "empId": empId,
+      "entryType": flag,
+      "fromdate": formDateController.text,
+      "todate": toDateController.text,
+      "note": noteController.text,
+      "days": daysController.text,
+      "reason": reasonController.text,
+      "reliever": relieverValueController.text,
+      "delayreason": delayreasonController.text,
+    };
+    try {
+      update();
+      isLoading.value = true;
+      String url = ConstApiUrl.empSaveLeaveEntryList;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag, "leaveentry": leaveentry};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseSaveLeaveEntryList responseSaveLeaveEntryList = ResponseSaveLeaveEntryList.fromJson(jsonDecode(response));
+      print(responseSaveLeaveEntryList.data![0].savedYN);
+      if (responseSaveLeaveEntryList.statusCode == 200) {
+        if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
+          if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
+            Get.rawSnackbar(message: "Data saved successfully");
+          }
+        } else {
+          Get.rawSnackbar(message: "Data not saved");
+        }
+      } else if (responseSaveLeaveEntryList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseSaveLeaveEntryList.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
     return [];
   }
 }

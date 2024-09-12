@@ -24,7 +24,8 @@ class BottomBarController extends GetxController {
   List<Widget> buildScreens() {
     return [
       const PayrollScreen(),
-      AttendanceScreen(fromDashboard: true),
+      // AttendanceScreen(fromDashboard: true),
+      const AttendanceScreen(fromDashboard: true),
       const Dashboard1Screen(),
       Leavedemo(),
       OvertimeScreen(),

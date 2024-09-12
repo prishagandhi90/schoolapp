@@ -20,173 +20,200 @@ class LeaveViewScreen extends StatelessWidget {
           backgroundColor: AppColor.white,
           body: LayoutBuilder(
             builder: (context, constraints) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  controller.isLoading.value
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 100),
-                            child: ProgressWithIcon(),
-                          ),
-                        )
-                      : controller.leaveentryList.isNotEmpty
-                          ? Column(
-                              children: [
-                                SizedBox(
-                                  height: constraints.maxHeight * 0.6, // Half screen height
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    controller.isLoading.value
+                        ? const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 100),
+                              child: ProgressWithIcon(),
+                            ),
+                          )
+                        : controller.leaveentryList.isNotEmpty
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: constraints.maxHeight * 0.6, // Half screen height
                                     child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          minWidth: constraints.maxWidth,
-                                        ),
-                                        child: DataTable(
-                                          showCheckboxColumn: false,
-                                          headingRowColor: WidgetStateColor.resolveWith(
-                                            (states) => AppColor.primaryColor,
+                                      scrollDirection: Axis.vertical,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minWidth: constraints.maxWidth,
                                           ),
-                                          columnSpacing: 20, // Adjust column spacing if needed
-                                          columns: [
-                                            DataColumn(
-                                              label: Text(
-                                                AppString.from,
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
+                                          child: DataTable(
+                                            showCheckboxColumn: false,
+                                            headingRowColor: WidgetStateColor.resolveWith(
+                                              (states) => AppColor.primaryColor,
                                             ),
-                                            DataColumn(
-                                              label: Text(
-                                                AppString.to,
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                            DataColumn(
-                                              label: Text(
-                                                AppString.days,
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                            DataColumn(
-                                              label: Text(
-                                                '', // Action column
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          ],
-                                          rows: List.generate(
-                                            controller.leaveentryList.length,
-                                            (index) => DataRow(
-                                              onSelectChanged: (selected) {},
-                                              cells: [
-                                                DataCell(Text(
-                                                  controller.leaveentryList[index].fromDate.toString(),
+                                            columnSpacing: 20, // Adjust column spacing if needed
+                                            columns: [
+                                              DataColumn(
+                                                label: Text(
+                                                  AppString.from,
                                                   style: AppStyle.fontfamilyplus,
-                                                )),
-                                                DataCell(Text(
-                                                  controller.leaveentryList[index].toDate.toString(),
-                                                  style: AppStyle.fontfamilyplus,
-                                                )),
-                                                DataCell(Text(
-                                                  controller.leaveentryList[index].leaveDays.toString(),
-                                                  style: AppStyle.fontfamilyplus,
-                                                )),
-                                                DataCell(
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      leavebottomsheet(context, index);
-                                                    },
-                                                    child: const Icon(Icons.arrow_drop_down_circle),
-                                                  ),
                                                 ),
-                                              ],
+                                              ),
+                                              DataColumn(
+                                                label: Text(
+                                                  AppString.to,
+                                                  style: AppStyle.fontfamilyplus,
+                                                ),
+                                              ),
+                                              DataColumn(
+                                                label: Text(
+                                                  AppString.days,
+                                                  style: AppStyle.fontfamilyplus,
+                                                ),
+                                              ),
+                                              DataColumn(
+                                                label: Text(
+                                                  '', // Action column
+                                                  style: AppStyle.fontfamilyplus,
+                                                ),
+                                              ),
+                                            ],
+                                            rows: List.generate(
+                                              controller.leaveentryList.length,
+                                              (index) => DataRow(
+                                                onSelectChanged: (selected) {
+                                                  if (selected!) {
+                                                    controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '' ;
+                                                    controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '' ;
+                                                    controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '' ;
+                                                    controller.update();
+                                                  } else {
+                                                    controller.inchargeAction = ''.obs;
+                                                    controller.hodAction = ''.obs;
+                                                    controller.hrAction = ''.obs;
+                                                    controller.update();
+                                                  }
+                                                },
+                                                cells: [
+                                                  DataCell(Text(
+                                                    controller.leaveentryList[index].fromDate.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )),
+                                                  DataCell(Text(
+                                                    controller.leaveentryList[index].toDate.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )),
+                                                  DataCell(Text(
+                                                    controller.leaveentryList[index].leaveDays.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )),
+                                                  DataCell(
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        leavebottomsheet(context, index);
+                                                      },
+                                                      child: const Icon(Icons.arrow_drop_down_circle),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Status',
-                                      style: AppStyle.plus17w600,
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Status',
+                                        style: AppStyle.plus17w600,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: constraints.maxHeight * 0.35, // Adjust height accordingly
-                                  child: SingleChildScrollView(
-                                    controller: controller.leaveScrollController,
+                                  SizedBox(
+                                    height: constraints.maxHeight * 0.35, // Adjust height accordingly
                                     child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          minWidth: constraints.maxWidth,
-                                        ),
-                                        child: DataTable(
-                                          headingRowColor: WidgetStateColor.resolveWith(
-                                            (states) => AppColor.primaryColor,
+                                      controller: controller.leaveScrollController,
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minWidth: constraints.maxWidth,
                                           ),
-                                          columnSpacing: 20,
-                                          columns: [
-                                            DataColumn(
-                                              label: Text(
-                                                'In-Charge',
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
+                                          child: DataTable(
+                                            headingRowColor: WidgetStateColor.resolveWith(
+                                              (states) => AppColor.primaryColor,
                                             ),
-                                            DataColumn(
-                                              label: Text(
-                                                'HOD',
-                                                style: AppStyle.fontfamilyplus,
+                                            columnSpacing: 35,
+                                            columns: [
+                                              DataColumn(
+                                                label: Text(
+                                                  'In-Charge',
+                                                  style: AppStyle.fontfamilyplus,
+                                                ),
                                               ),
-                                            ),
-                                            DataColumn(
-                                              label: Text(
-                                                'HR',
-                                                style: AppStyle.fontfamilyplus,
+                                              DataColumn(
+                                                label: Text(
+                                                  'HOD',
+                                                  style: AppStyle.fontfamilyplus,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                          rows: List.generate(
-                                            1, // Adjust number of rows as needed
-                                            (index) => DataRow(
-                                              cells: [
-                                                DataCell(Image.asset('assets/image/check-mark.png')),
-                                                DataCell(Image.asset("assets/image/cross.png")),
-                                                DataCell(Image.asset("assets/image/hourglass.png")),
-                                              ],
+                                              DataColumn(
+                                                label: Text(
+                                                  'HR',
+                                                  style: AppStyle.fontfamilyplus,
+                                                ),
+                                              ),
+                                            ],
+                                            rows: List.generate(
+                                              1, // Adjust number of rows as needed
+                                              (index) => DataRow(
+                                                cells: [
+                                                  DataCell(getStatusImage(controller.inchargeAction.toString())),
+                                                  DataCell(getStatusImage(controller.hodAction.toString())),
+                                                  DataCell(getStatusImage(controller.hrAction.toString())),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
+                                  )
+                                ],
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Center(
+                                  child: Text(
+                                    AppString.noleavedata,
+                                    style: AppStyle.fontfamilyplus,
                                   ),
-                                )
-                              ],
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Center(
-                                child: Text(
-                                  AppString.noleavedata,
-                                  style: AppStyle.fontfamilyplus,
                                 ),
                               ),
-                            ),
-                ],
+                  ],
+                ),
               );
             },
           ),
         );
       },
     );
+  }
+
+  Widget getStatusImage(String status) {
+    switch (status) {
+      case 'APPROVED':
+        return Image.asset('assets/image/check-mark.png');
+      case 'REJECTED':
+        return Image.asset('assets/image/cross.png');
+      case 'PENDING':
+        return Image.asset('assets/image/hourglass.png');
+      default:
+        return SizedBox(); // If the status is invalid or unknown
+    }
   }
 
   Future<void> leavebottomsheet(BuildContext context, int index) async {
@@ -650,7 +677,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Emp Entry D/T ',
+                                      'Emp Entry D/T : ${controller.leaveentryList[0].enterDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -663,7 +690,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept InC D/T ',
+                                      'Dept InC D/T : ${controller.leaveentryList[0].inchargeDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -676,7 +703,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept HOD D/T ',
+                                      'Dept HOD D/T : ${controller.leaveentryList[0].hodDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -689,7 +716,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept HR D/T ',
+                                      'Dept HR D/T : ${controller.leaveentryList[0].hrDate} ',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20

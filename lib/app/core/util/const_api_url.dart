@@ -17,4 +17,5 @@ class ConstApiUrl {
   static const empLeaveDelayReasonAPI = "$empUrl/GetLeaveDelayReason";
   static const empLeaveReliverNameAPI = "$empUrl/EmpApp_GetLeaveRelieverNm";
   static const empLeaveEntryListAPI = "$empUrl/EmpApp_GetLeaveEntryList";
+  static const empSaveLeaveEntryList = "$empUrl/EmpApp_SaveLeaveEntryList";
 }

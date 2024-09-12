@@ -1,4 +1,5 @@
-import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
+import 'package:emp_app/app/moduls/leave/model/dropdownlist_custom.dart';
+import 'package:emp_app/app/moduls/leave/screen/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown1.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -34,9 +35,19 @@ class LeaveScreen extends StatelessWidget {
                             flex: 2,
                             child: CustomDropdown1(
                               text: 'Name',
+                              controller: controller.leaveNameController,
+                              onChanged: (value) {
+                                controller.leaveValueController.text = value!['value'] ?? '';
+                                controller.leaveNameController.text = value['text'] ?? '';
+                              },
                               items: controller.leavename
-                                  .map((LeaveNamesTable item) => DropdownMenuItem<String>(
-                                        value: item.value, // Use the value as the item value
+                                  // .map((LeaveNamesTable item) => DropdownMenuItem<String>(
+                                  .map((LeaveNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                        // value: item.value, // Use the value as the item value
+                                        value: {
+                                          'value': item.value ?? '',
+                                          'text': item.name ?? '',
+                                        },
                                         child: Text(
                                           item.name ?? '', // Display the name in the dropdown
                                           style: const TextStyle(
@@ -53,29 +64,22 @@ class LeaveScreen extends StatelessWidget {
                           ),
                           const SizedBox(width: 16),
                           Expanded(
-                              flex: 1,
-                              child: Obx(
-                                () => CustomDropdown1(
-                                  text: 'Days',
-                                  width: double.infinity,
-                                  items: [
-                                    DropdownMenuItem<String>(
-                                      value: 'Select Option',
-                                      child: Text(
-                                        'Select Option',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    if (controller.days.value == '1') ...[
-                                      DropdownMenuItem<String>(
-                                        value: '0.5',
+                            flex: 1,
+                            child: CustomDropdown1(
+                              text: 'Days',
+                              controller: controller.daysController,
+                              onChanged: (value) {
+                                controller.daysController.text = value!['text'] ?? '';
+                              },
+                              items: controller.dropdownItems123
+                                  .map((DropdownlstTable item) => DropdownMenuItem<Map<String, String>>(
+                                        // value: item,
+                                        value: {
+                                          'value': item.value ?? '', // Use the value as the item value
+                                          'text': item.name ?? '', // Display the name in the dropdown
+                                        },
                                         child: Text(
-                                          '0.5',
+                                          item.name ?? '',
                                           style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -83,36 +87,12 @@ class LeaveScreen extends StatelessWidget {
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                      ),
-                                      DropdownMenuItem<String>(
-                                        value: '1',
-                                        child: Text(
-                                          '1',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ] else ...[
-                                      DropdownMenuItem<String>(
-                                        value: controller.days.value,
-                                        child: Text(
-                                          controller.days.value,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ))
+                                      ))
+                                  .toList(),
+                              width: double.infinity,
+                            ),
+                            // )
+                          )
                         ],
                       ),
                     ),
@@ -120,10 +100,14 @@ class LeaveScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: CustomDropdown1(
                         text: 'Reason',
+                        controller: controller.reasonController,
                         width: double.infinity,
                         items: controller.leavereason
-                            .map((LeaveReasonTable item) => DropdownMenuItem<String>(
-                                  value: item.name, // Use the value as the item value
+                            .map((LeaveReasonTable item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.name ?? '', // Use the value as the item value
+                                    'text': item.name ?? '', // Display the name in the dropdown
+                                  },
                                   child: Text(
                                     item.name ?? '', // Display the name in the dropdown
                                     style: const TextStyle(
@@ -142,6 +126,7 @@ class LeaveScreen extends StatelessWidget {
                       child: TextFormField(
                         minLines: 3,
                         maxLines: 10,
+                        controller: controller.noteController,
                         decoration: InputDecoration(
                             hintText: 'Notes...',
                             hintStyle: TextStyle(color: AppColor.black),
@@ -159,10 +144,18 @@ class LeaveScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: CustomDropdown1(
                         text: 'Reliever Name',
+                        controller: controller.relieverNameController,
                         width: double.infinity,
+                        onChanged: (value) {
+                          controller.relieverValueController.text = value!['value'] ?? '';
+                          controller.relieverNameController.text = value['text'] ?? '';
+                        },
                         items: controller.leaverelivername
-                            .map((LeaveReliverName item) => DropdownMenuItem<String>(
-                                  value: item.name, // Use the value as the item value
+                            .map((LeaveReliverName item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.id ?? '', // Use the value as the item value
+                                    'text': item.name ?? '', // Display the name in the dropdown
+                                  },
                                   child: Text(
                                     item.name ?? '', // Display the name in the dropdown
                                     style: const TextStyle(
@@ -180,10 +173,14 @@ class LeaveScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: CustomDropdown1(
                         text: 'Late Reason',
+                        controller: controller.delayreasonController,
                         width: double.infinity,
                         items: controller.leavedelayreason
-                            .map((LeaveDelayReason item) => DropdownMenuItem<String>(
-                                  value: item.name, // Use the value as the item value
+                            .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.id ?? '', // Use the value as the item value
+                                    'text': item.name ?? '', // Display the name in the dropdown
+                                  },
                                   child: Text(
                                     item.name ?? '', // Display the name in the dropdown
                                     style: const TextStyle(
@@ -202,7 +199,9 @@ class LeaveScreen extends StatelessWidget {
                       height: MediaQuery.of(context).size.width * 0.13,
                       width: MediaQuery.of(context).size.width * 0.40,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.saveLeaveEntryList('LV');
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.lightgreen,
                           shape: RoundedRectangleBorder(
