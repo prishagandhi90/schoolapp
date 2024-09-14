@@ -199,8 +199,16 @@ class LeaveScreen extends StatelessWidget {
                       height: MediaQuery.of(context).size.width * 0.13,
                       width: MediaQuery.of(context).size.width * 0.40,
                       child: ElevatedButton(
-                        onPressed: () {
-                          controller.saveLeaveEntryList('LV');
+                        onPressed: () async {
+                          if (controller.fromDateController.text.isEmpty ||
+                              controller.toDateController.text.isEmpty ||
+                              controller.leaveNameController.text.isEmpty ||
+                              controller.daysController.text.isEmpty ||
+                              controller.reasonController.text.isEmpty) {
+                            Get.rawSnackbar(message: "Please fill all required fields");
+                          } else {
+                            await controller.saveLeaveEntryList("LV");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.lightgreen,

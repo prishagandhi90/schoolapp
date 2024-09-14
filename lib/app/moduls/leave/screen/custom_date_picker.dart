@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class CustomDatePicker extends StatelessWidget {
   CustomDatePicker({super.key});
+
   final LeaveController leaveController = Get.put(LeaveController());
 
   @override
@@ -15,7 +16,8 @@ class CustomDatePicker extends StatelessWidget {
         children: [
           Expanded(
             child: TextFormField(
-              controller: leaveController.formDateController,
+              readOnly: true,
+              controller: leaveController.fromDateController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.black),
@@ -25,13 +27,13 @@ class CustomDatePicker extends StatelessWidget {
                   borderSide: BorderSide(color: AppColor.black),
                   borderRadius: BorderRadius.circular(0),
                 ),
+                hintText: 'From',
+                hintStyle: TextStyle(color: AppColor.black),
                 // border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
-                labelText: 'Form',
-                labelStyle: TextStyle(color: AppColor.black),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () {
-                    leaveController.selectDate(context, leaveController.formDateController);
+                    leaveController.selectDate(context, leaveController.fromDateController);
                   },
                 ),
               ),
@@ -40,6 +42,7 @@ class CustomDatePicker extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: TextFormField(
+              readOnly: true,
               controller: leaveController.toDateController,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
@@ -50,9 +53,9 @@ class CustomDatePicker extends StatelessWidget {
                   borderSide: BorderSide(color: AppColor.black),
                   borderRadius: BorderRadius.circular(0),
                 ),
+                hintText: 'To',
+                hintStyle: TextStyle(color: AppColor.black),
                 // border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
-                labelText: 'To',
-                labelStyle: TextStyle(color: AppColor.black),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () {

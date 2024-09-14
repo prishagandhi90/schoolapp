@@ -26,9 +26,9 @@ class CustomDatePicker extends StatelessWidget {
               borderRadius: BorderRadius.circular(0),
             ),
             hintText: hintText,
-            suffixIcon: Icon(Icons.calendar_today),
+            hintStyle: TextStyle(color: AppColor.black),
+            suffixIcon: IconButton(icon: Icon(Icons.calendar_today), onPressed: onTap),
           ),
-          onTap: onTap,
           controller: controllerValue,
         );
       },

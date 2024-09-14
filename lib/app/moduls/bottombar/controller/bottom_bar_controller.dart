@@ -65,34 +65,124 @@ class BottomBarController extends GetxController {
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
     return [
       PersistentBottomNavBarItem(
-        title: AppString.home,
-        icon: GestureDetector(onTap: () {}, child: Image.asset(AppImage.home, color: AppColor.primaryColor)),
-        inactiveIcon: Image.asset(AppImage.home, color: AppColor.black),
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.home, color: AppColor.primaryColor, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.home, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.home, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.home, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
         activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
       ),
       PersistentBottomNavBarItem(
-        title: AppString.attendence,
-        icon: Image.asset(AppImage.attendence, color: AppColor.primaryColor),
-        inactiveIcon: Image.asset(AppImage.attendence, color: AppColor.black),
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.attendence, color: AppColor.primaryColor, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.attendence, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.attendence, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.attendence, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
         activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
       ),
       PersistentBottomNavBarItem(
-        icon: Image.asset(AppImage.dashboard, color: AppColor.primaryColor),
-        inactiveIcon: Image.asset(AppImage.dashboard, color: AppColor.black),
-        title: AppString.dashboard,
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.dashboard, color: AppColor.primaryColor, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.dashboard, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.dashboard, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.dashboard, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
         activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
       ),
       PersistentBottomNavBarItem(
-        title: AppString.leave,
-        icon: Image.asset(AppImage.leave, color: AppColor.primaryColor),
-        inactiveIcon: Image.asset(AppImage.leave),
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.leave, color: AppColor.primaryColor, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.leave, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.leave, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.leave, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
         activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
       ),
       PersistentBottomNavBarItem(
-        title: AppString.overtime,
-        icon: Image.asset(AppImage.overtime, color: AppColor.primaryColor),
-        inactiveIcon: Image.asset(AppImage.overtime, color: AppColor.black),
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.overtime, color: AppColor.primaryColor, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.overtime, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.overtime, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.overtime, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
         activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
       ),
     ];
   }

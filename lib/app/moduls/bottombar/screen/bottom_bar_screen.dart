@@ -48,7 +48,7 @@ class BottomBarView extends GetView<BottomBarController> {
               ),
               screens: controller.buildScreens(),
               items: controller.navBarsItems(context),
-              navBarStyle: NavBarStyle.style3,
+              navBarStyle: NavBarStyle.style6,
               stateManagement: false,
               resizeToAvoidBottomInset: true,
               bottomScreenMargin: Sizes.crossLength * 0.020,

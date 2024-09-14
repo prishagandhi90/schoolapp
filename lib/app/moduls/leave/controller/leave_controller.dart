@@ -24,10 +24,8 @@ class LeaveController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
   List<LeaveDays> leavedays = [];
-
   List<LeaveNamesTable> leavename = [];
   List<DropdownlstTable> dropdownItems123 = [];
-
   List<LeaveReasonTable> leavereason = [];
   List<LeaveDelayReason> leavedelayreason = [];
   List<LeaveReliverName> leaverelivername = [];
@@ -36,7 +34,7 @@ class LeaveController extends GetxController {
   List<SaveLeaveEntryList> saveleaveentrylist = [];
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
-  TextEditingController formDateController = TextEditingController();
+  TextEditingController fromDateController = TextEditingController();
   TextEditingController noteController = TextEditingController();
   TextEditingController leaveNameController = TextEditingController();
   TextEditingController leaveValueController = TextEditingController();
@@ -46,6 +44,7 @@ class LeaveController extends GetxController {
   TextEditingController relieverNameController = TextEditingController();
   TextEditingController relieverValueController = TextEditingController();
   TextEditingController delayreasonController = TextEditingController();
+  TextEditingController delayreasonIdController = TextEditingController();
   final ScrollController leaveScrollController = ScrollController();
   RxString days = ''.obs; // To store the calculated days
   RxBool isDaysFieldEnabled = false.obs;
@@ -77,16 +76,16 @@ class LeaveController extends GetxController {
         bottomBarController.update();
       }
     });
-    formDateController.addListener(_updateDays);
+    fromDateController.addListener(_updateDays);
     toDateController.addListener(_updateDays);
   }
 
   void _updateDays() {
-    final String formDateText = formDateController.text;
+    final String formDateText = fromDateController.text;
     final String toDateText = toDateController.text;
 
-    DateTime? fromDate = formDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(formDateText, true) : null;
-    DateTime? toDate = toDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateText, true) : null;
+    DateTime? fromDate = formDateText.isNotEmpty ? DateFormat('yyyy-MM-dd').parse(formDateText, true) : null;
+    DateTime? toDate = toDateText.isNotEmpty ? DateFormat('yyyy-MM-dd').parse(toDateText, true) : null;
 
     List<Map<String, String>> daysOptions;
 
@@ -150,7 +149,7 @@ class LeaveController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      DateTime? fromDate = formDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(formDateController.text, true) : null;
+      DateTime? fromDate = fromDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(fromDateController.text, true) : null;
       DateTime? toDate = toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
 
       if (fromDate != null && toDate != null) {
@@ -253,7 +252,7 @@ class LeaveController extends GetxController {
       } else if (rsponseLeaveReason.statusCode == 400) {
         isLoading.value = false;
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        Get.rawSnackbar(message: "Something went wrong");
       }
       update();
     } catch (e) {
@@ -381,19 +380,12 @@ class LeaveController extends GetxController {
     return [];
   }
 
+  String formatDateWithTime(String date) {
+    DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
+    return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
+  }
+
   Future<List<SaveLeaveEntryList>> saveLeaveEntryList(String flag) async {
-    Map<String, dynamic> leaveentry = {
-      "loginId": loginId,
-      "empId": empId,
-      "entryType": flag,
-      "fromdate": formDateController.text,
-      "todate": toDateController.text,
-      "note": noteController.text,
-      "days": daysController.text,
-      "reason": reasonController.text,
-      "reliever": relieverValueController.text,
-      "delayreason": delayreasonController.text,
-    };
     try {
       update();
       isLoading.value = true;
@@ -402,14 +394,30 @@ class LeaveController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag, "leaveentry": leaveentry};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "entryType": flag,
+        "leaveShortName": leaveValueController.text,
+        "leaveFullName": leaveNameController.text,
+        "fromdate": flag == "LV" ? formatDateWithTime(fromDateController.text) : fromDateController.text,
+        "todate": flag == "LV" ? formatDateWithTime(toDateController.text) : toDateController.text,
+        "reason": reasonController.text,
+        "note": noteController.text,
+        "leaveDays": daysController.text,
+        "overTimeMinutes": 0,
+        "usr_Nm": '',
+        "reliever_Empcode": relieverValueController.text,
+        "delayLVNote": delayreasonIdController.text,
+      };
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      print(response);
       ResponseSaveLeaveEntryList responseSaveLeaveEntryList = ResponseSaveLeaveEntryList.fromJson(jsonDecode(response));
-      print(responseSaveLeaveEntryList.data![0].savedYN);
       if (responseSaveLeaveEntryList.statusCode == 200) {
         if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
             Get.rawSnackbar(message: "Data saved successfully");
+            // resetForm();
           }
         } else {
           Get.rawSnackbar(message: "Data not saved");
@@ -425,9 +433,25 @@ class LeaveController extends GetxController {
       }
       update();
     } catch (e) {
+      print(e);
       isLoading.value = false;
-      update();
     }
     return [];
   }
+
+  void resetForm() {
+  fromDateController.clear();
+  toDateController.clear();
+  leaveNameController.clear();
+  leaveValueController.clear();
+  daysController.clear();
+  reasonController.clear();
+  noteController.clear();
+  relieverNameController.clear();
+  relieverValueController.clear();
+  delayreasonController.clear();
+  delayreasonIdController.clear();
+  _updateDays(); // This will reset the days dropdown
+  update();
+}
 }

@@ -28,22 +28,9 @@ class OtScreen extends StatelessWidget {
                       Expanded(
                           child: CustomDatePicker(
                         hintText: "From",
-                        controllerValue: TextEditingController(
-                          text: controller.selectedFromDate != null ? controller.dateFormat.format(controller.selectedFromDate!) : '',
-                        ),
+                        controllerValue: controller.fromDateController,
                         onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2101),
-                          );
-                          if (pickedDate != null) {
-                            controller.oTMinutes = 0;
-                            controller.selectedFromDate = pickedDate;
-                            controller.onDateTimeTap();
-                            controller.update();
-                          }
+                          await controller.selectDate(context, controller.fromDateController);
                         },
                       )),
                       SizedBox(
@@ -52,21 +39,9 @@ class OtScreen extends StatelessWidget {
                       Expanded(
                         child: CustomTimepicker(
                           hinttext: "--:--",
-                          controllerValue: TextEditingController(
-                            text: controller.formatTimeOfDay(controller.selectedFromTime),
-                          ),
+                          controllerValue: controller.fromTimeController,
                           onTap: () async {
-                            TimeOfDay? pickedTime = await showTimePicker(
-                                context: context,
-                                initialTime: controller.selectedFromTime ?? TimeOfDay.now(),
-                                initialEntryMode: TimePickerEntryMode.input);
-
-                            if (pickedTime != null) {
-                              controller.oTMinutes = 0;
-                              controller.selectedFromTime = pickedTime;
-                              controller.onDateTimeTap();
-                              controller.update();
-                            }
+                            await controller.selectTime(context, controller.fromTimeController);
                           },
                         ),
                       ),
@@ -79,22 +54,9 @@ class OtScreen extends StatelessWidget {
                         Expanded(
                             child: CustomDatePicker(
                           hintText: "To",
-                          controllerValue: TextEditingController(
-                            text: controller.selectedToDate != null ? controller.dateFormat.format(controller.selectedToDate!) : '',
-                          ),
+                          controllerValue: controller.toDateController,
                           onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null) {
-                              controller.oTMinutes = 0;
-                              controller.selectedToDate = pickedDate;
-                              controller.onDateTimeTap();
-                              controller.update();
-                            }
+                            await controller.selectDate(context, controller.toDateController);
                           },
                         )),
                         SizedBox(
@@ -103,21 +65,9 @@ class OtScreen extends StatelessWidget {
                         Expanded(
                           child: CustomTimepicker(
                             hinttext: "--:--",
-                            controllerValue: TextEditingController(
-                              text: controller.formatTimeOfDay(controller.selectedToTime),
-                            ),
+                            controllerValue: controller.toTimeController,
                             onTap: () async {
-                              TimeOfDay? pickedTime = await showTimePicker(
-                                  context: context,
-                                  initialTime: controller.selectedToTime ?? TimeOfDay.now(),
-                                  initialEntryMode: TimePickerEntryMode.input);
-
-                              if (pickedTime != null) {
-                                controller.oTMinutes = 0;
-                                controller.selectedToTime = pickedTime;
-                                controller.onDateTimeTap();
-                                controller.update();
-                              }
+                              await controller.selectTime(context, controller.toTimeController);
                             },
                           ),
                         ),
@@ -126,9 +76,7 @@ class OtScreen extends StatelessWidget {
                   ),
                   TextFormField(
                     readOnly: true,
-                    controller: TextEditingController(
-                      text: controller.oTMinutes.toString(),
-                    ),
+                    controller: controller.otMinutesController,
                     decoration: InputDecoration(
                       hintText: "Min",
                       helperStyle: TextStyle(color: AppColor.black),
@@ -147,6 +95,7 @@ class OtScreen extends StatelessWidget {
                     child: TextFormField(
                       minLines: 3,
                       maxLines: 10,
+                      controller: controller.noteController,
                       decoration: InputDecoration(
                           hintText: 'Notes...',
                           hintStyle: TextStyle(color: AppColor.black),
@@ -163,10 +112,11 @@ class OtScreen extends StatelessWidget {
                   CustomDropdown1(
                     text: 'Late Reason',
                     width: double.infinity,
+                    controller: controller.delayReasonController,
                     items: leaveController.leavedelayreason
                         .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
                               value: {
-                                'value': item.name ?? '', // Use the value as the item value
+                                'value': item.id ?? '', // Use the value as the item value
                                 'text': item.name ?? '', // Display the name in the dropdown
                               },
                               child: Text(
@@ -186,7 +136,15 @@ class OtScreen extends StatelessWidget {
                     height: MediaQuery.of(context).size.width * 0.13,
                     width: MediaQuery.of(context).size.width * 0.40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (controller.fromDateController.text.isEmpty ||
+                            controller.toDateController.text.isEmpty ||
+                            controller.otMinutesController.text.isEmpty) {
+                          Get.rawSnackbar(message: "Please fill all required fields");
+                        } else {
+                          await controller.saveOTEntryList("OT");
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.lightgreen,
                         shape: RoundedRectangleBorder(
