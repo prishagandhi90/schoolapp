@@ -137,13 +137,13 @@ class OtScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.40,
                     child: ElevatedButton(
                       onPressed: () async {
-                        if (controller.fromDateController.text.isEmpty ||
-                            controller.toDateController.text.isEmpty ||
-                            controller.otMinutesController.text.isEmpty) {
-                          Get.rawSnackbar(message: "Please fill all required fields");
-                        } else {
-                          await controller.saveOTEntryList("OT");
-                        }
+                        // if (controller.fromDateController.text.isEmpty ||
+                        //     controller.toDateController.text.isEmpty ||
+                        //     controller.otMinutesController.text.isEmpty) {
+                        //   Get.rawSnackbar(message: "Please fill all required fields");
+                        // } else {
+                        await controller.saveOTEntryList("OT");
+                        // }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.lightgreen,

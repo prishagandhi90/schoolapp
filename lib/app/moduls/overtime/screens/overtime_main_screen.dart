@@ -1,23 +1,30 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:emp_app/app/moduls/overtime/screens/ot_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/ot_view_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
 class OvertimeMainScreen extends GetView<LeaveController> {
-  OvertimeMainScreen({super.key});
+  OvertimeMainScreen({this.fromDashboard = false, super.key});
+  final bool fromDashboard;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   final leaveController = Get.put(LeaveController());
   @override
   Widget build(BuildContext context) {
     Get.put(OvertimeController());
+    controller.setActiveScreen("OTMainScreen");
     return GetBuilder<OvertimeController>(builder: (controller) {
       return DefaultTabController(
         length: 2,
@@ -329,6 +336,19 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                     fontFamily: CommonFontStyle.plusJakartaSans),
               ),
               centerTitle: true,
+              leading: fromDashboard
+                  ? IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        scaffoldKey.currentState!.openDrawer();
+                      },
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
               actions: [
                 Builder(builder: (context) {
                   return IconButton(
@@ -340,12 +360,18 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                   );
                 })
               ],
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back)),
+              // leading: IconButton(
+              //     onPressed: () {
+              //       Navigator.pop(context);
+              //     },
+              //     icon: const Icon(Icons.arrow_back)),
             ),
+            onDrawerChanged: (isop) {
+              var bottomBarController = Get.put(BottomBarController());
+              hideBottomBar.value = isop;
+              bottomBarController.update();
+            },
+            drawer: CustomDrawer(),
             body: Column(
               children: [
                 Container(
@@ -368,11 +394,13 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'OT'), Tab(text: 'View')],
+                      physics: NeverScrollableScrollPhysics(),
                     ),
                   ),
                 ),
                 const Expanded(
                   child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
                       OtScreen(),
                       OTViewScreen(),

@@ -11,11 +11,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class LeaveMainScreen extends GetView<LeaveController> {
-  LeaveMainScreen({super.key});
+  LeaveMainScreen({this.fromDashboard = false, super.key});
+  final bool fromDashboard;
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Get.put(LeaveController());
+    controller.setActiveScreen("LeaveMainScreen");
     return GetBuilder<LeaveController>(builder: (controller) {
       return DefaultTabController(
         length: 2,
@@ -340,6 +342,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
               ],
               leading: IconButton(
                   onPressed: () {
+                    // controller.dispose();
+                    // Get.delete<LeaveController>();
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back)),
@@ -361,7 +365,9 @@ class LeaveMainScreen extends GetView<LeaveController> {
                       dividerColor: Colors.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,
                       onTap: (value) async {
-                        if (value == 1 && controller.leaveentryList.isEmpty) await controller.fetchLeaveEntryList("LV");
+                        if (value == 1 && controller.leaveentryList.isEmpty) {
+                          await controller.fetchLeaveEntryList("LV");
+                        }
                       },
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
@@ -369,11 +375,16 @@ class LeaveMainScreen extends GetView<LeaveController> {
                     ),
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   child: TabBarView(
                     children: [
                       LeaveScreen(),
-                      LeaveViewScreen(),
+                      FutureBuilder(
+                        future: controller.fetchLeaveEntryList("LV"),
+                        builder: (context, snapshot) {
+                          return LeaveViewScreen();
+                        },
+                      ),
                     ],
                   ),
                 ),

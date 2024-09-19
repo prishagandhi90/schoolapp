@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 class CustomDatePicker extends StatelessWidget {
   CustomDatePicker({super.key});
 
-  final LeaveController leaveController = Get.put(LeaveController());
+  // final LeaveController leaveController = Get.put(LeaveController());
+  final LeaveController leaveController = Get.find<LeaveController>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +19,7 @@ class CustomDatePicker extends StatelessWidget {
             child: TextFormField(
               readOnly: true,
               controller: leaveController.fromDateController,
+              // controller: TextEditingController(text: leaveController.fromDate.value),
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.black),
@@ -32,9 +34,11 @@ class CustomDatePicker extends StatelessWidget {
                 // border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
-                  onPressed: () {
-                    leaveController.selectDate(context, leaveController.fromDateController);
+                  onPressed: () async {
+                    await leaveController.selectFromDate(context, leaveController.fromDateController);
+                    FocusScope.of(context).unfocus();
                   },
+                  // onPressed: () => leaveController.selectFromDate(context),
                 ),
               ),
             ),
@@ -44,6 +48,7 @@ class CustomDatePicker extends StatelessWidget {
             child: TextFormField(
               readOnly: true,
               controller: leaveController.toDateController,
+              // controller: TextEditingController(text: leaveController.toDate.value),
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.black),
@@ -58,9 +63,11 @@ class CustomDatePicker extends StatelessWidget {
                 // border: OutlineInputBorder(borderRadius: BorderRadius.circular(0), borderSide: const BorderSide(color: Colors.black)),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
-                  onPressed: () {
-                    leaveController.selectDate(context, leaveController.toDateController);
+                  onPressed: () async {
+                    await leaveController.selectToDate(context, leaveController.toDateController);
+                    FocusScope.of(context).unfocus();
                   },
+                  // onPressed: () => leaveController.selectToDate(context),
                 ),
               ),
             ),

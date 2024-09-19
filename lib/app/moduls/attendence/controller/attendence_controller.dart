@@ -35,7 +35,6 @@ class AttendenceController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();

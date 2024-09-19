@@ -7,8 +7,10 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
 import 'package:emp_app/main.dart';
@@ -429,6 +431,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
+                                        Get.delete<LeaveController>();
                                         hideBottomBar.value = false;
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
@@ -465,6 +468,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
+                                        // Get.delete<LeaveController>();
+                                        Get.delete<OvertimeController>();
                                         hideBottomBar.value = false;
                                         await dashboardController.getDashboardDataUsingToken();
                                       });

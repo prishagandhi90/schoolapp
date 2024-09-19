@@ -86,7 +86,7 @@ class OvertimeController extends GetxController {
       lastDate: DateTime(2101),
     );
     if (picked != null) {
-      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+      controller.text = DateFormat('dd-MM-yyyy').format(picked);
       if (controller == fromDateController) {
         selectedFromDate = picked;
       } else if (controller == toDateController) {
@@ -129,6 +129,7 @@ class OvertimeController extends GetxController {
         selectedFromTime!.hour,
         selectedFromTime!.minute,
       );
+      // String formattedFromDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(fromDateTime);
 
       DateTime toDateTime = DateTime(
         selectedToDate!.year,
@@ -137,10 +138,13 @@ class OvertimeController extends GetxController {
         selectedToTime!.hour,
         selectedToTime!.minute,
       );
+      // String formattedToDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(toDateTime);
 
       double totalMinutes = calculateMinutes(fromDateTime, toDateTime);
       oTMinutes = totalMinutes;
       otMinutesController.text = totalMinutes.toStringAsFixed(0);
+      // fromDateController.text = formattedFromDateTime.toString();
+      // toDateController.text = formattedToDateTime.toString();
       print('Total Minutes: $totalMinutes');
     } else {
       print('Please fill all date and time fields correctly.');
@@ -160,62 +164,68 @@ class OvertimeController extends GetxController {
     return timeFormat.format(dt);
   }
 
-  String formatDateWithTime(String date) {
-    DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
-    return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
-  }
+  // String formatDateWithTime(String date) {
+  //   DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
+  //   return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
+  // }
 
   Future<List<SaveLeaveEntryList>> saveOTEntryList(String flag) async {
-    try {
-      update();
-      isLoading.value = true;
-      String url = ConstApiUrl.empSaveLeaveEntryList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+    // var leaveController = Get.put(LeaveController());
+    var leaveController = Get.find<LeaveController>();
+    await leaveController.saveLeaveEntryList("OT");
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "empId": empId,
-        "entryType": flag,
-        "leaveShortName": "OT",
-        "leaveFullName": "OT",
-        "fromdate": flag == "OT" ? formatDateWithTime(fromDateController.text) : fromDateController.text,
-        "todate": flag == "OT" ? formatDateWithTime(toDateController.text) : toDateController.text,
-        "reason": "OT",
-        "note": noteController.text,
-        "leaveDays": 0,
-        "overTimeMinutes": int.tryParse(otMinutesController.text) ??0,
-        "usr_Nm": '',
-        "reliever_Empcode": '',
-        "delayLVNote": delayReasonController.text,
-      };
-      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      print(response);
-      ResponseSaveLeaveEntryList responseSaveLeaveEntryList = ResponseSaveLeaveEntryList.fromJson(jsonDecode(response));
-      if (responseSaveLeaveEntryList.statusCode == 200) {
-        if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
-          if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
-            Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
-            // resetForm();
-          }
-        } else {
-          Get.rawSnackbar(message: "Data not saved");
-        }
-      } else if (responseSaveLeaveEntryList.statusCode == 401) {
-        pref.clear();
-        Get.offAll(const LoginScreen());
-        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else if (responseSaveLeaveEntryList.statusCode == 400) {
-        isLoading.value = false;
-      } else {
-        Get.rawSnackbar(message: "Something went wrong");
-      }
-      update();
-    } catch (e) {
-      print(e);
-      isLoading.value = false;
-    }
     return [];
+
+    // try {
+    //   // update();
+    //   // isLoading.value = true;
+    //   // String url = ConstApiUrl.empSaveLeaveEntryList;
+    //   // SharedPreferences pref = await SharedPreferences.getInstance();
+    //   // loginId = await pref.getString(AppString.keyLoginId) ?? "";
+    //   // tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+    //   // var jsonbodyObj = {
+    //   //   "loginId": loginId,
+    //   //   "empId": empId,
+    //   //   "entryType": flag,
+    //   //   "leaveShortName": "OT",
+    //   //   "leaveFullName": "OT",
+    //   //   "fromdate": flag == "OT" ? formatDateWithTime(fromDateController.text) : fromDateController.text,
+    //   //   "todate": flag == "OT" ? formatDateWithTime(toDateController.text) : toDateController.text,
+    //   //   "reason": "OT",
+    //   //   "note": noteController.text,
+    //   //   "leaveDays": 0,
+    //   //   "overTimeMinutes": int.tryParse(otMinutesController.text) ??0,
+    //   //   "usr_Nm": '',
+    //   //   "reliever_Empcode": '',
+    //   //   "delayLVNote": delayReasonController.text,
+    //   // };
+    //   // var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+    //   // print(response);
+    //   // ResponseSaveLeaveEntryList responseSaveLeaveEntryList = ResponseSaveLeaveEntryList.fromJson(jsonDecode(response));
+    //   // if (responseSaveLeaveEntryList.statusCode == 200) {
+    //   //   if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
+    //   //     if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
+    //   //       Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
+    //   //       // resetForm();
+    //   //     }
+    //   //   } else {
+    //   //     Get.rawSnackbar(message: "Data not saved");
+    //   //   }
+    //   // } else if (responseSaveLeaveEntryList.statusCode == 401) {
+    //   //   pref.clear();
+    //   //   Get.offAll(const LoginScreen());
+    //   //   Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+    //   // } else if (responseSaveLeaveEntryList.statusCode == 400) {
+    //   //   isLoading.value = false;
+    //   // } else {
+    //   //   Get.rawSnackbar(message: "Something went wrong");
+    //   // }
+    //   // update();
+    // } catch (e) {
+    //   print(e);
+    //   isLoading.value = false;
+    // }
+    // return [];
   }
 }

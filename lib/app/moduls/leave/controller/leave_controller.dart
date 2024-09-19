@@ -17,21 +17,32 @@ import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+// import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaveController extends GetxController {
+class LeaveController extends GetxController with GetSingleTickerProviderStateMixin {
   var bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
-  List<LeaveDays> leavedays = [];
+  var leftleavedays = ''.obs;
   List<LeaveNamesTable> leavename = [];
-  List<DropdownlstTable> dropdownItems123 = [];
-  List<LeaveReasonTable> leavereason = [];
-  List<LeaveDelayReason> leavedelayreason = [];
-  List<LeaveReliverName> leaverelivername = [];
+  // List<DropdownlstTable> dropdownItems123 = [];
+  var dropdownItems123 = <DropdownlstTable>[].obs;
+
+  // List<LeaveReasonTable> leavereason = [];
+  // List<LeaveDelayReason> leavedelayreason = [];
+  // List<LeaveReliverName> leaverelivername = [];
   List<LeaveEntryList> leaveentryList = [];
   List<LeaveEntryList> otentryList = [];
   List<SaveLeaveEntryList> saveleaveentrylist = [];
+
+  var leavereason = <LeaveReasonTable>[].obs;
+  var leavedelayreason = <LeaveDelayReason>[].obs;
+  var leaverelivername = <LeaveReliverName>[].obs;
+  // var leaveentryList = <LeaveEntryList>[].obs;
+  // var otentryList = <LeaveEntryList>[].obs;
+  // var saveleaveentrylist = <SaveLeaveEntryList>[].obs;
+
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
   TextEditingController fromDateController = TextEditingController();
@@ -43,9 +54,8 @@ class LeaveController extends GetxController {
   TextEditingController reasonController = TextEditingController();
   TextEditingController relieverNameController = TextEditingController();
   TextEditingController relieverValueController = TextEditingController();
-  TextEditingController delayreasonController = TextEditingController();
+  TextEditingController delayreasonNameController = TextEditingController();
   TextEditingController delayreasonIdController = TextEditingController();
-  final ScrollController leaveScrollController = ScrollController();
   RxString days = ''.obs; // To store the calculated days
   RxBool isDaysFieldEnabled = false.obs;
   var overtimeController = Get.put(OvertimeController());
@@ -53,6 +63,13 @@ class LeaveController extends GetxController {
   var hodAction = ''.obs;
   var hrAction = ''.obs;
   List<Map<String, String>> daysOptions = [];
+  late TabController tabController;
+  var activeScreen = ''.obs;
+  var leaveScrollController = ScrollController();
+
+  void setActiveScreen(String screenName) {
+    activeScreen.value = screenName;
+  }
   // var dropdownItems = <Map<String, String>>[].obs;
 
   @override
@@ -61,31 +78,51 @@ class LeaveController extends GetxController {
     // await getLeaveDays();
     await fetchLeaveNames();
     await fetchLeaveReason();
-    await fetchLeaveDelayReason();
     await fetchLeaveReliverName();
+    await fetchLeaveDelayReason();
     // await fetchLeaveEntryList();
     update();
     leaveScrollController.addListener(() {
-      if (leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
+      if (leaveScrollController.hasClients &&
+          leaveScrollController.positions.isNotEmpty &&
+          leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
         hideBottomBar = false.obs;
-        update();
         bottomBarController.update();
-      } else if (leaveScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+      } else if (leaveScrollController.hasClients &&
+          leaveScrollController.positions.isNotEmpty &&
+          leaveScrollController.position.userScrollDirection == ScrollDirection.reverse) {
         hideBottomBar = true.obs;
-        update();
         bottomBarController.update();
       }
+      update();
     });
-    fromDateController.addListener(_updateDays);
-    toDateController.addListener(_updateDays);
+    fromDateController.addListener(updateDays);
+    toDateController.addListener(updateDays);
+
+    tabController = TabController(length: 2, vsync: this);
+    tabController.addListener(() async {
+      if (tabController.index == 1) {
+        // Tumhara logic jab 'View' tab pe swipe karke aate ho
+        print("Swiped to View Tab");
+        // Yaha data fetch kar sakte ho
+        await fetchLeaveEntryList(activeScreen.value == "LeaveMainScreen" ? "LV" : "OT");
+      }
+      update();
+    });
   }
 
-  void _updateDays() {
+  @override
+  void onClose() {
+    // leaveScrollController.dispose();
+    super.onClose();
+  }
+
+  void updateDays() async {
     final String formDateText = fromDateController.text;
     final String toDateText = toDateController.text;
 
-    DateTime? fromDate = formDateText.isNotEmpty ? DateFormat('yyyy-MM-dd').parse(formDateText, true) : null;
-    DateTime? toDate = toDateText.isNotEmpty ? DateFormat('yyyy-MM-dd').parse(toDateText, true) : null;
+    DateTime? fromDate = formDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(formDateText, true) : null;
+    DateTime? toDate = toDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateText, true) : null;
 
     List<Map<String, String>> daysOptions;
 
@@ -108,6 +145,11 @@ class LeaveController extends GetxController {
       }
 
       isDaysFieldEnabled.value = true;
+
+      if (leaveNameController.text != '') {
+        await getLeftLeaves();
+        // return;
+      }
     } else {
       daysOptions = [
         {'value': 'Select', 'name': 'Select'},
@@ -116,19 +158,30 @@ class LeaveController extends GetxController {
       isDaysFieldEnabled.value = false;
     }
 
+    // daysController.clear();
+    // dropdownItems123.clear();
+    // dropdownItems123 = daysOptions
+    //     .map((option) => DropdownlstTable(
+    //           value: option['value']!,
+    //           name: option['name']!,
+    //         ))
+    //     .toList();
     daysController.clear();
-    dropdownItems123.clear();
-    dropdownItems123 = daysOptions
-        .map((option) => DropdownlstTable(
+    dropdownItems123.assignAll(
+      daysOptions
+          .map(
+            (option) => DropdownlstTable(
               value: option['value']!,
               name: option['name']!,
-            ))
-        .toList();
+            ),
+          )
+          .toList(),
+    );
 
-    update();
+    // update();
   }
 
-  Future<void> selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> selectFromDate(BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -136,38 +189,65 @@ class LeaveController extends GetxController {
       lastDate: DateTime(2101),
     );
     if (picked != null) {
-      controller.text = DateFormat('dd-MM-yyyy').format(picked);
-      update();
+      fromDateController.text = DateFormat('dd-MM-yyyy').format(picked);
+      // update();
     }
   }
 
-  Future<List<Data>> getLeaveDays() async {
+  Future<void> selectToDate(BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      toDateController.text = DateFormat('dd-MM-yyyy').format(picked);
+      // update();
+    }
+  }
+
+  Future<void> getLeftLeaves() async {
     try {
+      if (toDateController.value == '' || toDateController.value == null || toDateController.text == '') {
+        Get.rawSnackbar(message: "Please select To Date first!");
+        return;
+      }
+
+      if (leaveValueController.text == '' || leaveValueController.text == null) {
+        Get.rawSnackbar(message: "Please select Leave Name first!");
+        return;
+      }
+
       isLoading.value = true;
-      String url = ConstApiUrl.empLeaveDaysAPI;
+      String url = ConstApiUrl.empLeftLeavesAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      DateTime? fromDate = fromDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(fromDateController.text, true) : null;
       DateTime? toDate = toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
 
-      if (fromDate != null && toDate != null) {
-        int daysCount = toDate.difference(fromDate).inDays + 1;
-
-        days.value = daysCount.toString();
+      if (toDate != null) {
         isDaysFieldEnabled.value = true;
 
-        var jsonbodyObj = {"loginId": loginId, "empId": empId, "fromDate": fromDate.toIso8601String(), "toDate": toDate.toIso8601String()};
+        var jsonbodyObj = {
+          "loginId": loginId,
+          "empId": empId,
+          "leaveType": leaveValueController.text,
+          "leaveDate": toDate.toIso8601String()
+        };
 
         var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
         LeaveDays leaveDays = LeaveDays.fromJson(jsonDecode(decodedResp));
         if (leaveDays.statusCode == 200) {
           isLoading.value = false;
-          if (leaveDays.data != null) {
-            update();
-            return leaveDays.data!; // Return the days from the API response
+          if (leaveDays.data != null && leaveDays.data!.isNotEmpty) {
+            leftleavedays.value = leaveDays.data![0].value.toString();
+            // update();
+            return; // Return the first data value
           } else {
+            leftleavedays.value = '';
+            update();
             Get.rawSnackbar(message: "No data found!");
           }
         } else if (leaveDays.statusCode == 401) {
@@ -181,16 +261,15 @@ class LeaveController extends GetxController {
         }
         update();
       } else {
-        // Get.rawSnackbar(message: "Please select both From Date and To Date");
-        // Reset days field and disable it if dates are not selected
-        days.value = '';
+        // leftleavedays.value = '';
         isDaysFieldEnabled.value = false;
       }
     } catch (e) {
       isLoading.value = false;
       update();
     }
-    return [];
+    leftleavedays.value = '';
+    update();
   }
 
   Future<List<LeaveNamesTable>> fetchLeaveNames() async {
@@ -228,6 +307,23 @@ class LeaveController extends GetxController {
     return [];
   }
 
+  LeaveNameChangeMethod(Map<String, String>? value) async {
+    leaveValueController.text = value!['value'] ?? '';
+    leaveNameController.text = value['text'] ?? '';
+    await getLeftLeaves();
+  }
+
+  RelieverNameChangeMethod(Map<String, String>? value) async {
+    relieverValueController.text = value!['value'] ?? '';
+    relieverNameController.text = value['text'] ?? '';
+    // update();
+  }
+
+  LeaveDaysOnChange(Map<String, String>? value) async {
+    daysController.text = value!['text'] ?? '';
+    // update();
+  }
+
   Future<List<LeaveReasonTable>> fetchLeaveReason() async {
     try {
       isLoading.value = true;
@@ -243,13 +339,46 @@ class LeaveController extends GetxController {
 
       if (rsponseLeaveReason.statusCode == 200) {
         leavereason.clear();
-        leavereason = rsponseLeaveReason.data!;
-        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+        leavereason.assignAll(rsponseLeaveReason.data ?? []);
+        print(leavereason);
       } else if (rsponseLeaveReason.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponseLeaveReason.statusCode == 400) {
+        isLoading.value = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return leavereason.toList();
+  }
+
+  Future<List<LeaveDelayReason>> fetchLeaveReliverName() async {
+    try {
+      update();
+      isLoading.value = true;
+      String url = ConstApiUrl.empLeaveReliverNameAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveReliverName responseLeaveReliverName = ResponseLeaveReliverName.fromJson(jsonDecode(response));
+
+      if (responseLeaveReliverName.statusCode == 200) {
+        leaverelivername.clear();
+        leaverelivername.assignAll(responseLeaveReliverName.data ?? []);
+      } else if (responseLeaveReliverName.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseLeaveReliverName.statusCode == 400) {
         isLoading.value = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
@@ -277,47 +406,12 @@ class LeaveController extends GetxController {
 
       if (rsponseLeaveDelayReason.statusCode == 200) {
         leavedelayreason.clear();
-        leavedelayreason = rsponseLeaveDelayReason.data!;
-        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
+        leavedelayreason.assignAll(rsponseLeaveDelayReason.data ?? []);
       } else if (rsponseLeaveDelayReason.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponseLeaveDelayReason.statusCode == 400) {
-        isLoading.value = false;
-      } else {
-        Get.rawSnackbar(message: "Something went wrong");
-      }
-      update();
-    } catch (e) {
-      isLoading.value = false;
-      update();
-    }
-    return [];
-  }
-
-  Future<List<LeaveDelayReason>> fetchLeaveReliverName() async {
-    try {
-      update();
-      isLoading.value = true;
-      String url = ConstApiUrl.empLeaveReliverNameAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
-      var jsonbodyObj = {"loginId": loginId, "empId": empId};
-      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseLeaveReliverName responseLeaveReliverName = ResponseLeaveReliverName.fromJson(jsonDecode(response));
-
-      if (responseLeaveReliverName.statusCode == 200) {
-        leaverelivername.clear();
-        leaverelivername = responseLeaveReliverName.data!;
-        // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
-      } else if (responseLeaveReliverName.statusCode == 401) {
-        pref.clear();
-        Get.offAll(const LoginScreen());
-        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else if (responseLeaveReliverName.statusCode == 400) {
         isLoading.value = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
@@ -347,11 +441,11 @@ class LeaveController extends GetxController {
           isLoading.value = false;
           if (flag == "LV") {
             leaveentryList = responseLeaveEntryList.data!;
-            update();
+            // update();
             return leaveentryList;
           } else {
             otentryList = responseLeaveEntryList.data!;
-            update();
+            // update();
             overtimeController.update();
             return otentryList;
           }
@@ -380,14 +474,143 @@ class LeaveController extends GetxController {
     return [];
   }
 
-  String formatDateWithTime(String date) {
-    DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
-    return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
+  // String formatDateWithTime(String dateString) {
+  //   String jsonDateTime = "";
+  //   if (dateString != "") {
+  //     // DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
+  //     // return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
+  //     DateFormat dateFormat = DateFormat("dd-MM-yyyy");
+
+  //     // Parse karke DateTime me convert karo aur time append karo
+  //     DateTime dateTime = dateFormat.parse(dateString).add(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
+
+  //     // Convert karo JSON format (ISO 8601) me
+  //     jsonDateTime = dateTime.toIso8601String();
+  //   }
+  //   return jsonDateTime;
+  // }
+
+  String formatDateWithTime(String dateString, String flag) {
+    String jsonDateTime = "";
+    if (dateString != "") {
+      DateFormat dateFormat = DateFormat("dd-MM-yyyy");
+      DateTime dateTime = dateFormat.parse(dateString);
+
+      if (flag.toLowerCase() == 'ot' && dateString != null) {
+        // OT ke liye, manually passed time ka use karein
+        DateFormat dateTimeFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+        dateTime = dateTimeFormat.parse(dateString);
+      } else {
+        // LV ke liye, default 00:00:00 time use karein
+        dateTime = dateTime.add(Duration(hours: 0, minutes: 0, seconds: 0));
+      }
+
+      jsonDateTime = dateTime.toIso8601String();
+    }
+    return jsonDateTime;
+  }
+
+  String formatOTDateTime(OvertimeController overtimeController, String flag) {
+    String jsonDateTime = "";
+
+    if (flag == "FromDateTime") {
+      if (overtimeController.selectedFromDate != null && overtimeController.selectedFromTime != null) {
+        DateTime fromDateTime = DateTime(
+          overtimeController.selectedFromDate!.year,
+          overtimeController.selectedFromDate!.month,
+          overtimeController.selectedFromDate!.day,
+          overtimeController.selectedFromTime!.hour,
+          overtimeController.selectedFromTime!.minute,
+        );
+
+        // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
+        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+      } else {
+        throw Exception("FromDateTime or FromTime is null");
+      }
+    } else if (flag == "ToDateTime") {
+      if (overtimeController.selectedToDate != null && overtimeController.selectedToTime != null) {
+        DateTime toDateTime = DateTime(
+          overtimeController.selectedToDate!.year,
+          overtimeController.selectedToDate!.month,
+          overtimeController.selectedToDate!.day,
+          overtimeController.selectedToTime!.hour,
+          overtimeController.selectedToTime!.minute,
+        );
+
+        // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
+        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+      } else {
+        throw Exception("ToDateTime or ToTime is null");
+      }
+    } else {
+      throw Exception("Invalid flag provided. Use 'FromDateTime' or 'ToDateTime'.");
+    }
+
+    return jsonDateTime; // Return the formatted datetime string
+  }
+
+  bool validateSaveLeaveEntry(String flag) {
+    if (flag.toLowerCase() == 'lv') {
+      if (fromDateController.text.isEmpty || fromDateController.text == null) {
+        Get.rawSnackbar(message: "Please enter start date");
+        return false;
+      }
+      if (toDateController.text.isEmpty || toDateController.text == null) {
+        Get.rawSnackbar(message: "Please enter end date");
+        return false;
+      }
+      if (reasonController.text.isEmpty || reasonController.text == null) {
+        Get.rawSnackbar(message: "Please enter reason");
+        return false;
+      }
+      if (leaveValueController.text.isEmpty || leaveValueController.text == null) {
+        Get.rawSnackbar(message: "Please select leave type");
+        return false;
+      }
+      if (leaveNameController.text.isEmpty || leaveNameController.text == null) {
+        Get.rawSnackbar(message: "Please enter leave name");
+        return false;
+      }
+      if (daysController.text.isEmpty || daysController.text == null) {
+        Get.rawSnackbar(message: "Please enter number of days");
+        return false;
+      }
+
+      // if (reasonController.text.isEmpty || reasonController.text == null) {
+      //   Get.rawSnackbar(message: "Please enter leave reason!");
+      //   return false;
+      // }
+
+      if (leaverelivername.length > 0 && relieverValueController.text.isEmpty) {
+        Get.rawSnackbar(message: "Please enter reliver name!");
+        return false;
+      }
+    } else if (flag.toLowerCase() == 'ot') {
+      if (overtimeController.fromDateController.text.isEmpty || overtimeController.fromDateController.text == null) {
+        Get.rawSnackbar(message: "Please enter start date");
+        return false;
+      }
+      if (overtimeController.toDateController.text.isEmpty || overtimeController.toDateController.text == null) {
+        Get.rawSnackbar(message: "Please enter end date");
+        return false;
+      }
+      if (overtimeController.otMinutesController.text.isEmpty || overtimeController.otMinutesController.text == null) {
+        Get.rawSnackbar(message: "Please select date");
+        return false;
+      }
+    }
+    return true;
   }
 
   Future<List<SaveLeaveEntryList>> saveLeaveEntryList(String flag) async {
     try {
-      update();
+      if (!validateSaveLeaveEntry(flag)) {
+        return [];
+      }
+      // var overtimeController = Get.put(OvertimeController());
+      var overtimeController = Get.find<OvertimeController>();
+      // update();
       isLoading.value = true;
       String url = ConstApiUrl.empSaveLeaveEntryList;
       SharedPreferences pref = await SharedPreferences.getInstance();
@@ -398,17 +621,17 @@ class LeaveController extends GetxController {
         "loginId": loginId,
         "empId": empId,
         "entryType": flag,
-        "leaveShortName": leaveValueController.text,
-        "leaveFullName": leaveNameController.text,
-        "fromdate": flag == "LV" ? formatDateWithTime(fromDateController.text) : fromDateController.text,
-        "todate": flag == "LV" ? formatDateWithTime(toDateController.text) : toDateController.text,
-        "reason": reasonController.text,
+        "leaveShortName": flag == "LV" ? leaveValueController.text : "OT",
+        "leaveFullName": flag == "LV" ? leaveNameController.text : "OT",
+        "fromdate": flag == "LV" ? formatDateWithTime(fromDateController.text, 'lv') : formatOTDateTime(overtimeController, 'FromDateTime'),
+        "todate": flag == "LV" ? formatDateWithTime(toDateController.text, 'lv') : formatOTDateTime(overtimeController, 'ToDateTime'),
+        "reason": flag == "LV" ? reasonController.text : "OT",
         "note": noteController.text,
-        "leaveDays": daysController.text,
-        "overTimeMinutes": 0,
+        "leaveDays": flag == "LV" ? daysController.text : 0,
+        "overTimeMinutes": flag == "LV" ? 0 : int.tryParse(overtimeController.otMinutesController.text) ?? 0,
         "usr_Nm": '',
-        "reliever_Empcode": relieverValueController.text,
-        "delayLVNote": delayreasonIdController.text,
+        "reliever_Empcode": flag == "LV" ? relieverValueController.text : '',
+        "delayLVNote": flag == "LV" ? delayreasonNameController.text : overtimeController.delayReasonController.text,
       };
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       print(response);
@@ -416,11 +639,13 @@ class LeaveController extends GetxController {
       if (responseSaveLeaveEntryList.statusCode == 200) {
         if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
+            await fetchLeaveEntryList(flag);
             Get.rawSnackbar(message: "Data saved successfully");
-            // resetForm();
+            resetForm();
+            // update();
           }
         } else {
-          Get.rawSnackbar(message: "Data not saved");
+          Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
         }
       } else if (responseSaveLeaveEntryList.statusCode == 401) {
         pref.clear();
@@ -428,10 +653,11 @@ class LeaveController extends GetxController {
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseSaveLeaveEntryList.statusCode == 400) {
         isLoading.value = false;
+        Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
       } else {
-        Get.rawSnackbar(message: "Something went wrong");
+        Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
       }
-      update();
+      // update();
     } catch (e) {
       print(e);
       isLoading.value = false;
@@ -440,18 +666,26 @@ class LeaveController extends GetxController {
   }
 
   void resetForm() {
-  fromDateController.clear();
-  toDateController.clear();
-  leaveNameController.clear();
-  leaveValueController.clear();
-  daysController.clear();
-  reasonController.clear();
-  noteController.clear();
-  relieverNameController.clear();
-  relieverValueController.clear();
-  delayreasonController.clear();
-  delayreasonIdController.clear();
-  _updateDays(); // This will reset the days dropdown
-  update();
-}
+    fromDateController.clear();
+    toDateController.clear();
+    leaveNameController.clear();
+    leaveValueController.clear();
+    daysController.clear();
+    reasonController.clear();
+    noteController.clear();
+    relieverNameController.clear();
+    relieverValueController.clear();
+    delayreasonNameController.clear();
+    delayreasonIdController.clear();
+    leftleavedays.value = '';
+    overtimeController.fromDateController.clear();
+    overtimeController.toDateController.clear();
+    overtimeController.fromTimeController.clear();
+    overtimeController.toTimeController.clear();
+    overtimeController.noteController.clear();
+    overtimeController.otMinutesController.clear();
+    overtimeController.delayReasonController.clear();
+    // updateDays(); // This will reset the days dropdown
+    update();
+  }
 }
