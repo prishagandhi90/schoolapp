@@ -84,9 +84,10 @@ class OTViewScreen extends StatelessWidget {
                                               (index) => DataRow(
                                                 onSelectChanged: (selected) {
                                                   if (selected!) {
-                                                    leaveController.inchargeAction.value = leaveController.otentryList[index].inchargeAction ?? '' ;
-                                                    leaveController.hodAction.value = leaveController.otentryList[index].hodAction ?? '' ;
-                                                    leaveController.hrAction.value = leaveController.otentryList[index].hrAction ?? '' ;
+                                                    leaveController.inchargeAction.value =
+                                                        leaveController.otentryList[index].inchargeAction ?? '';
+                                                    leaveController.hodAction.value = leaveController.otentryList[index].hodAction ?? '';
+                                                    leaveController.hrAction.value = leaveController.otentryList[index].hrAction ?? '';
                                                     leaveController.update();
                                                   } else {
                                                     leaveController.inchargeAction = ''.obs;
@@ -173,9 +174,9 @@ class OTViewScreen extends StatelessWidget {
                                               1, // Adjust number of rows as needed
                                               (index) => DataRow(
                                                 cells: [
-                                                  DataCell(getStatusImage(leaveController.otentryList[0].inchargeAction.toString())),
-                                                  DataCell(getStatusImage(leaveController.otentryList[0].hodAction.toString())),
-                                                  DataCell(getStatusImage(leaveController.otentryList[0].hrAction.toString())),
+                                                  DataCell(getStatusImage(leaveController.otentryList[index].inchargeAction.toString())),
+                                                  DataCell(getStatusImage(leaveController.otentryList[index].hodAction.toString())),
+                                                  DataCell(getStatusImage(leaveController.otentryList[index].hrAction.toString())),
                                                 ],
                                               ),
                                             ),
@@ -291,7 +292,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].otHours.toString(),
+                                          leaveController.otentryList[index].otHours.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -334,7 +335,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].note.toString(),
+                                          leaveController.otentryList[index].note.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -377,7 +378,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].inchargeNote.toString(),
+                                          leaveController.otentryList[index].inchargeNote.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -420,7 +421,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].inchargeReason.toString(),
+                                          leaveController.otentryList[index].inchargeReason.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -463,7 +464,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].hodReason.toString(),
+                                          leaveController.otentryList[index].hodReason.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -506,7 +507,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].hoDNote.toString(),
+                                          leaveController.otentryList[index].hoDNote.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -549,7 +550,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].hrNote.toString(),
+                                          leaveController.otentryList[index].hrNote.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -592,7 +593,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].hrReason.toString(),
+                                          leaveController.otentryList[index].hrReason.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -635,7 +636,7 @@ class OTViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          leaveController.otentryList[0].lateReasonName.toString(),
+                                          leaveController.otentryList[index].lateReasonName.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -661,7 +662,7 @@ class OTViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Emp Entry D/T : ${leaveController.otentryList[0].enterDate}',
+                                      'Emp Entry D/T : ${leaveController.otentryList[index].enterDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -674,7 +675,7 @@ class OTViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept InC D/T : ${leaveController.otentryList[0].inchargeDate}',
+                                      'Dept InC D/T : ${leaveController.otentryList[index].inchargeDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -687,7 +688,7 @@ class OTViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept HOD D/T : ${leaveController.otentryList[0].hodDate}',
+                                      'Dept HOD D/T : ${leaveController.otentryList[index].hodDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -700,7 +701,7 @@ class OTViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept HR D/T : ${leaveController.otentryList[0].hrDate}',
+                                      'Dept HR D/T : ${leaveController.otentryList[index].hrDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20

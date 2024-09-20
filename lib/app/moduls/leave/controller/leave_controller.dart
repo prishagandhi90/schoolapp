@@ -441,7 +441,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
           isLoading.value = false;
           if (flag == "LV") {
             leaveentryList = responseLeaveEntryList.data!;
-            // update();
+            update();
             return leaveentryList;
           } else {
             otentryList = responseLeaveEntryList.data!;
@@ -464,7 +464,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
-      update();
+      // update();
       // overtimeController.update();
     } catch (e) {
       isLoading.value = false;

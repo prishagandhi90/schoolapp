@@ -31,103 +31,103 @@ class DetailsScreen extends GetView<AttendenceController> {
                   const SizedBox(height: 20),
                   Expanded(
                     child: controller.isLoader.value
-                      ? const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 100),
-                            child: ProgressWithIcon(),
-                          ),
-                        )
-                      : controller.attendenceDetailTable.isNotEmpty
-                        ? SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: constraints.maxWidth,
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    color: AppColor.primaryColor,
-                                    child: Row(
-                                      children: [
-                                        _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
-                                        _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
-                                        _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
-                                        _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
-                                        _buildHeaderCell('', constraints.maxWidth * 0.2),
-                                      ],
-                                    ),
+                        ? const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 100),
+                              child: ProgressWithIcon(),
+                            ),
+                          )
+                        : controller.attendenceDetailTable.isNotEmpty
+                            ? SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minWidth: constraints.maxWidth,
                                   ),
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      controller: controller.attendanceScrollController,
-                                      child: Table(
-                                        columnWidths: {
-                                          0: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                          1: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                          2: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                          3: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                          4: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                        },
-                                        children: List.generate(
-                                          controller.attendenceDetailTable.length,
-                                          (index) => TableRow(
-                                            children: [
-                                              _buildCell(
-                                                Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: AppColor.lightgrey,
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      controller.attendenceDetailTable[index].atTDATE.toString(),
-                                                      style: AppStyle.fontfamilyplus,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        color: AppColor.primaryColor,
+                                        child: Row(
+                                          children: [
+                                            _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
+                                            _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
+                                            _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
+                                            _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
+                                            _buildHeaderCell('', constraints.maxWidth * 0.2),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          controller: controller.attendanceScrollController,
+                                          child: Table(
+                                            columnWidths: {
+                                              0: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                              1: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                              2: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                              3: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                              4: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                            },
+                                            children: List.generate(
+                                              controller.attendenceDetailTable.length,
+                                              (index) => TableRow(
+                                                children: [
+                                                  _buildCell(
+                                                    Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(
+                                                        color: AppColor.lightgrey,
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          controller.attendenceDetailTable[index].atTDATE.toString(),
+                                                          style: AppStyle.fontfamilyplus,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
+                                                  _buildCell(Text(
+                                                    controller.attendenceDetailTable[index].iN.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )),
+                                                  _buildCell(Text(
+                                                    controller.attendenceDetailTable[index].out.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )),
+                                                  _buildCell(Text(
+                                                    controller.attendenceDetailTable[index].lCEGMIN.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )),
+                                                  _buildCell(
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        detailbottomsheet(context, index);
+                                                      },
+                                                      child: const Icon(Icons.arrow_drop_down_circle),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              _buildCell(Text(
-                                                controller.attendenceDetailTable[index].iN.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              )),
-                                              _buildCell(Text(
-                                                controller.attendenceDetailTable[index].out.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              )),
-                                              _buildCell(Text(
-                                                controller.attendenceDetailTable[index].lCEGMIN.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              )),
-                                              _buildCell(
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    detailbottomsheet(context, index);
-                                                  },
-                                                  child: const Icon(Icons.arrow_drop_down_circle),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                ],
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Center(
+                                  child: Text(
+                                    AppString.noattendencedata,
+                                    style: AppStyle.fontfamilyplus,
+                                  ),
+                                ),
                               ),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Center(
-                              child: Text(
-                                AppString.noattendencedata,
-                                style: AppStyle.fontfamilyplus,
-                              ),
-                            ),
-                          ),
                   ),
                 ],
               );
@@ -144,7 +144,10 @@ class DetailsScreen extends GetView<AttendenceController> {
       padding: EdgeInsets.all(8),
       child: Text(
         text,
-        style: AppStyle.fontfamilyplus.copyWith(color: AppColor.white),
+        style: AppStyle.fontfamilyplus.copyWith(
+          color: AppColor.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

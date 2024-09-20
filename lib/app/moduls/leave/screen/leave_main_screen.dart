@@ -372,19 +372,16 @@ class LeaveMainScreen extends GetView<LeaveController> {
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
                       indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'Leave'), Tab(text: 'View')],
+                      physics: NeverScrollableScrollPhysics(),
                     ),
                   ),
                 ),
                 Expanded(
                   child: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
                       LeaveScreen(),
-                      FutureBuilder(
-                        future: controller.fetchLeaveEntryList("LV"),
-                        builder: (context, snapshot) {
-                          return LeaveViewScreen();
-                        },
-                      ),
+                      LeaveViewScreen(),
                     ],
                   ),
                 ),

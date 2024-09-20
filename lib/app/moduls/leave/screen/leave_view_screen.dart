@@ -82,9 +82,9 @@ class LeaveViewScreen extends StatelessWidget {
                                               (index) => DataRow(
                                                 onSelectChanged: (selected) {
                                                   if (selected!) {
-                                                    controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '' ;
-                                                    controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '' ;
-                                                    controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '' ;
+                                                    controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '';
+                                                    controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '';
+                                                    controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '';
                                                     controller.update();
                                                   } else {
                                                     controller.inchargeAction = ''.obs;
@@ -350,7 +350,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].note.toString(),
+                                          controller.leaveentryList[index].note.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -393,7 +393,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].inchargeNote.toString(),
+                                          controller.leaveentryList[index].inchargeNote.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -436,7 +436,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].inchargeReason.toString(),
+                                          controller.leaveentryList[index].inchargeReason.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -479,7 +479,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].hodReason.toString(),
+                                          controller.leaveentryList[index].hodReason.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -522,7 +522,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].hoDNote.toString(),
+                                          controller.leaveentryList[index].hoDNote.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -565,7 +565,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].hrNote.toString(),
+                                          controller.leaveentryList[index].hrNote.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -608,7 +608,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].hrReason.toString(),
+                                          controller.leaveentryList[index].hrReason.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -651,7 +651,7 @@ class LeaveViewScreen extends StatelessWidget {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          controller.leaveentryList[0].lateReasonName.toString(),
+                                          controller.leaveentryList[index].lateReasonName.toString(),
                                           style: AppStyle.fontfamilyplus,
                                         ),
                                       ),
@@ -677,7 +677,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Emp Entry D/T : ${controller.leaveentryList[0].enterDate}',
+                                      'Emp Entry D/T : ${controller.leaveentryList[index].enterDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -690,7 +690,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept InC D/T : ${controller.leaveentryList[0].inchargeDate}',
+                                      'Dept InC D/T : ${controller.leaveentryList[index].inchargeDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -703,7 +703,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept HOD D/T : ${controller.leaveentryList[0].hodDate}',
+                                      'Dept HOD D/T : ${controller.leaveentryList[index].hodDate}',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
@@ -716,7 +716,7 @@ class LeaveViewScreen extends StatelessWidget {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Dept HR D/T : ${controller.leaveentryList[0].hrDate} ',
+                                      'Dept HR D/T : ${controller.leaveentryList[index].hrDate} ',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500, //20
