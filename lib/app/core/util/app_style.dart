@@ -44,4 +44,8 @@ class AppStyle {
     overflow: TextOverflow.ellipsis,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
+   static TextStyle redfontfamilyplus = TextStyle(
+    fontFamily: CommonFontStyle.plusJakartaSans,
+    color: AppColor.red,
+  );
 }

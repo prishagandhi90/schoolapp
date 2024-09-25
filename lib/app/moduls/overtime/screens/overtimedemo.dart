@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';

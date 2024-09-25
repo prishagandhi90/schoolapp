@@ -109,27 +109,29 @@ class OtScreen extends StatelessWidget {
                           )),
                     ),
                   ),
-                  CustomDropdown1(
-                    text: 'Late Reason',
-                    width: double.infinity,
-                    controller: controller.delayReasonController,
-                    items: leaveController.leavedelayreason
-                        .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
-                              value: {
-                                'value': item.id ?? '', // Use the value as the item value
-                                'text': item.name ?? '', // Display the name in the dropdown
-                              },
-                              child: Text(
-                                item.name ?? '', // Display the name in the dropdown
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                  Obx(
+                    () => CustomDropdown1(
+                      text: 'Late Reason',
+                      width: double.infinity,
+                      controller: controller.delayReasonController,
+                      items: leaveController.leavedelayreason
+                          .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
+                                value: {
+                                  'value': item.id ?? '', // Use the value as the item value
+                                  'text': item.name ?? '', // Display the name in the dropdown
+                                },
+                                child: Text(
+                                  item.name ?? '', // Display the name in the dropdown
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ))
-                        .toList(),
+                              ))
+                          .toList(),
+                    ),
                   ),
                   const SizedBox(height: 30),
                   SizedBox(

@@ -48,7 +48,7 @@ class BottomBarView extends GetView<BottomBarController> {
               ),
               screens: controller.buildScreens(),
               items: controller.navBarsItems(context),
-              navBarStyle: NavBarStyle.style6,
+              navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
               stateManagement: false,
               resizeToAvoidBottomInset: true,
               bottomScreenMargin: Sizes.crossLength * 0.020,
@@ -56,6 +56,7 @@ class BottomBarView extends GetView<BottomBarController> {
               //   controller.onItemTapped(value, context);
               // },
               onItemSelected: (index) => controller.onItemTapped(index, context),
+              // isVisible: controller.currentIndex.value == -1,
               // popAllScreensOnTapOfSelectedTab: true,
             ),
           ),

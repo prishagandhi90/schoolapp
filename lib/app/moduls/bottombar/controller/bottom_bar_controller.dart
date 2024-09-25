@@ -12,13 +12,21 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
+  RxInt currentIndex = (-1).obs;
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   @override
   void onInit() {
     super.onInit();
-    persistentController = PersistentTabController(initialIndex: 2);
+    // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
+    currentIndex.value = 2;
     update();
+  }
+
+  @override
+  void dispose() {
+    persistentController?.dispose();
+    super.dispose();
   }
 
   List<Widget> buildScreens() {
@@ -59,8 +67,58 @@ class BottomBarController extends GetxController {
 // }
 
   void onItemTapped(int index, BuildContext context) {
+    // if (index >= 0 && index < buildScreens().length) {
+    //   currentIndex.value = index;
+    // } else {
+    //   currentIndex.value = -1; // No screen selected
+    // }
+    // update();
+    currentIndex.value = index;
+    persistentController!.jumpToTab(index);
+    if (index == 1) {
+      // var attendenceController = Get.find<AttendenceController>();
+      // if (attendenceController.attendanceScrollController.hasClients) {
+      // } else {
+      //   // attendenceController.attendanceScrollController.dispose();
+      //   // attendenceController.update();
+      // }
+    }
     update();
   }
+
+  // List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
+  //   return [
+  //     _buildNavBarItem(0, AppImage.home, AppString.home),
+  //     _buildNavBarItem(1, AppImage.attendence, AppString.attendence),
+  //     _buildNavBarItem(2, AppImage.dashboard, AppString.dashboard),
+  //     _buildNavBarItem(3, AppImage.leave, AppString.leave),
+  //     _buildNavBarItem(4, AppImage.overtime, AppString.overtime),
+  //   ];
+  // }
+
+  // PersistentBottomNavBarItem _buildNavBarItem(int index, String iconPath, String title) {
+  //   return PersistentBottomNavBarItem(
+  //     icon: Container(
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Image.asset(iconPath,
+  //               color: currentIndex.value == index && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+  //               height: 32,
+  //               width: 32),
+  //           SizedBox(height: 4),
+  //           Text(
+  //             title,
+  //             style: TextStyle(
+  //                 color: currentIndex.value == index && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     activeColorPrimary: AppColor.primaryColor,
+  //     inactiveColorPrimary: AppColor.black,
+  //   );
+  // }
 
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
     return [
@@ -87,6 +145,11 @@ class BottomBarController extends GetxController {
         ),
         activeColorPrimary: AppColor.primaryColor,
         inactiveColorPrimary: AppColor.black,
+        onPressed: (index) {
+          if (index != 0) {
+            // Add your functionality here
+          }
+        },
       ),
       PersistentBottomNavBarItem(
         icon: Container(

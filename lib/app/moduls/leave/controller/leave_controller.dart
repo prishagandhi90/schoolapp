@@ -67,9 +67,9 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
   var activeScreen = ''.obs;
   var leaveScrollController = ScrollController();
 
-  void setActiveScreen(String screenName) {
-    activeScreen.value = screenName;
-  }
+  // void setActiveScreen(String screenName) {
+  //   activeScreen.value = screenName;
+  // }
   // var dropdownItems = <Map<String, String>>[].obs;
 
   @override
@@ -572,6 +572,10 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
         Get.rawSnackbar(message: "Please enter leave name");
         return false;
       }
+         if (noteController.text.isEmpty || noteController.text == null) {
+        Get.rawSnackbar(message: "Please enter note");
+        return false;
+      }
       if (daysController.text.isEmpty || daysController.text == null) {
         Get.rawSnackbar(message: "Please enter number of days");
         return false;
@@ -641,7 +645,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
             await fetchLeaveEntryList(flag);
             Get.rawSnackbar(message: "Data saved successfully");
-            resetForm();
+            // resetForm();
             // update();
           }
         } else {

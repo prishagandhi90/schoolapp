@@ -105,7 +105,9 @@ class PayrollController extends GetxController {
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: const AttendanceScreen(),
+          screen: const AttendanceScreen(
+            fromDashboard: false,
+          ),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
@@ -116,6 +118,7 @@ class PayrollController extends GetxController {
       case 1:
         hideBottomBar.value = false;
         var bottomBarController = Get.put(BottomBarController());
+        // bottomBarController.persistentController!.jumpToTab(index = -1);
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,

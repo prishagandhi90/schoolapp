@@ -50,13 +50,15 @@ class MispunchScreen extends GetView<MispunchController> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 children: [
-                  MonthSelectionScreen(
+                  FlexibleMonthPicker(
                     selectedMonthIndex: controller.MonthSel_selIndex.value,
-                    scrollController: controller.monthScrollController,
-                    onPressed: (index) {
+                    onMonthSelected: (index) {
                       controller.upd_MonthSelIndex(index);
                       controller.showHideMsg();
                     },
+                    scrollController: controller.monthScrollController,
+                    useGetX: true,
+                    controller: controller,
                   ),
                   const SizedBox(height: 20),
                   Padding(

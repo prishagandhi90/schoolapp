@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -338,23 +339,33 @@ class PayrollScreen extends GetView<PayrollController> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // AttendenceController attendenceController = Get.put(AttendenceController());
-                                      // var attendenceController = Get.put(AttendenceController());
-                                      // DateTime now = DateTime.now();
-                                      // attendenceController.MonthSel_selIndex.value = now.month - 1;
-                                      // attendenceController.YearSel_selIndex = now.year.toString();
-                                      // attendenceController.update();
-                                      var dashboardController = Get.put(DashboardController());
+                                      // var bottomBarController = Get.find<BottomBarController>();
+                                      // bottomBarController.currentIndex = 1.obs;
+                                      // bottomBarController.persistentController!.jumpToTab(bottomBarController.currentIndex.value);
+                                      // bottomBarController.update();
+
+                                      // bottomBarController.currentIndex.value = 1;
+                                      // bottomBarController.persistentController!.jumpToTab(1);
+                                      // bottomBarController.update();
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
-                                        screen: AttendanceScreen(),
+                                        screen: const AttendanceScreen(
+                                          fromDashboard: false,
+                                        ),
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) {
                                         while (Navigator.canPop(context)) {
                                           Navigator.pop(context);
                                         }
-                                        hideBottomBar.value = false;
+                                        // hideBottomBar.value = false;
+                                        // bottomBarController.update();
+                                        var attendenceController = Get.find<AttendenceController>();
+                                        if (!attendenceController.attendanceScrollController.hasClients) {
+                                          attendenceController.attendanceScrollController.dispose();
+                                        } 
+                                          attendenceController.update();
+                                        var dashboardController = Get.put(DashboardController());
                                         dashboardController.getDashboardDataUsingToken();
                                       });
                                     }, //Get.to(const AttendanceScreen()),
@@ -387,6 +398,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                   GestureDetector(
                                     onTap: () {
                                       var dashboardController = Get.put(DashboardController());
+                                      var bottomBarController = Get.put(BottomBarController());
+                                      bottomBarController.currentIndex = (-1).obs;
+                                      bottomBarController.update();
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
                                         screen: const MispunchScreen(),
@@ -394,6 +408,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
                                         hideBottomBar.value = false;
+                                        bottomBarController.update();
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
                                     }, //Get.to(MispunchScreen()),
@@ -425,14 +440,25 @@ class PayrollScreen extends GetView<PayrollController> {
                                   GestureDetector(
                                     onTap: () {
                                       var dashboardController = Get.put(DashboardController());
+                                      // var bottomBarController = Get.put(BottomBarController());
+                                      var bottomBarController = Get.find<BottomBarController>();
+                                      bottomBarController.currentIndex.value = 3;
+                                      bottomBarController.persistentController!.jumpToTab(3);
+                                      bottomBarController.update();
+                                      // bottomBarController.currentIndex = 3.obs;
+                                      // bottomBarController.persistentController!.jumpToTab(bottomBarController.currentIndex.value);
+                                      // bottomBarController.update();
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
                                         screen: LeaveMainScreen(),
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
-                                        Get.delete<LeaveController>();
+                                        // if (Get.isRegistered<LeaveController>()) {
+                                        //   Get.delete<LeaveController>();
+                                        // }
                                         hideBottomBar.value = false;
+                                        bottomBarController.update();
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
                                     },
@@ -462,6 +488,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                   GestureDetector(
                                     onTap: () {
                                       var dashboardController = Get.put(DashboardController());
+                                      var bottomBarController = Get.find<BottomBarController>();
+                                      bottomBarController.currentIndex.value = 4;
+                                      bottomBarController.persistentController!.jumpToTab(4);
+                                      bottomBarController.update();
+                                      // bottomBarController.currentIndex = 4.obs;
+                                      // bottomBarController.persistentController!.jumpToTab(bottomBarController.currentIndex.value);
+                                      // bottomBarController.update();
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
                                         screen: OvertimeMainScreen(),
@@ -469,8 +502,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
                                         // Get.delete<LeaveController>();
-                                        Get.delete<OvertimeController>();
+                                        // Get.delete<OvertimeController>();
                                         hideBottomBar.value = false;
+                                        bottomBarController.update();
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
                                     },

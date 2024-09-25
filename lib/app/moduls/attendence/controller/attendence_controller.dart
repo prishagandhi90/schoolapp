@@ -17,7 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendenceController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
-  final bottomBarController = Get.put(BottomBarController());
+  var bottomBarController = Get.put(BottomBarController());
+
   late List<MispunchTable> mispunchtable = [];
   List<AttendenceSummarytable> attendenceSummaryTable = [];
   List<AttendanceDetailTable> attendenceDetailTable = [];
@@ -38,7 +39,9 @@ class AttendenceController extends GetxController {
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
-
+    // monthScrollControllerSummary = ScrollController();
+    // monthScrollControllerDetail = ScrollController();
+    // attendanceScrollController = ScrollController();
     setCurrentMonthYear("SummaryScreen");
     update();
 
@@ -57,8 +60,9 @@ class AttendenceController extends GetxController {
 
   @override
   void onClose() {
-    // attendanceScrollController.dispose(); //
+    // attendanceScrollController.dispose(); 
     monthScrollControllerSummary.dispose();
+    monthScrollControllerDetail.dispose();
     // monthScrollControllerDetail.dispose();
     super.onClose();
   }

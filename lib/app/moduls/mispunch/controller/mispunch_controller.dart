@@ -35,15 +35,24 @@ class MispunchController extends GetxController {
   void setCurrentMonthYear() {
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
-
-    MonthSelectionScreen(
+    FlexibleMonthPicker(
       selectedMonthIndex: MonthSel_selIndex.value,
-      scrollController: monthScrollController,
-      onPressed: (index) {
+      onMonthSelected: (index) {
         upd_MonthSelIndex(index);
         showHideMsg();
       },
+      scrollController: monthScrollController,
+      useGetX: true,
+      // controller: controller,
     );
+    // MonthSelectionScreen(
+    //   selectedMonthIndex: MonthSel_selIndex.value,
+    //   scrollController: monthScrollController,
+    //   onPressed: (index) {
+    //     upd_MonthSelIndex(index);
+    //     showHideMsg();
+    //   },
+    // );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (monthScrollController.hasClients) {

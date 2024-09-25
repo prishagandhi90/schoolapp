@@ -110,12 +110,16 @@ class CustomDrawer extends StatelessWidget {
                                 height: Sizes.crossLength * 0.010,
                               ),
                               if (dashboardController.emailAddress.isNotEmpty)
-                                Text(dashboardController.emailAddress.toString(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                      overflow: TextOverflow.ellipsis,
-                                    ))
+                                Text(
+                                  dashboardController.emailAddress.toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                  ),
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                )
                               else
                                 Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                               SizedBox(

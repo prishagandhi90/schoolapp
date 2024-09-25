@@ -100,9 +100,9 @@ class DashboardController extends GetxController {
         );
         break;
       case 7:
-        hideBottomBar.value = false;
-        var bottomBarController = Get.put(BottomBarController());
-        bottomBarController.update();
+        // hideBottomBar.value = false;
+        // var bottomBarController = Get.put(BottomBarController());
+        // bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: const PayrollScreen(),

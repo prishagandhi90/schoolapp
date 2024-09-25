@@ -194,12 +194,12 @@ class _OtpScreenState extends State<OtpScreen> {
                                 keyboardType: TextInputType.number,
                                 defaultPinTheme: defaultPinTheme,
                                 separatorBuilder: (index) => const SizedBox(width: 8),
-                                onCompleted: (pin) async {
-                                  print('onCompOTP: ${loginController.responseOTPNo}');
-                                  otpController.isLoadingLogin
-                                      ? null
-                                      : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
-                                },
+                                // onCompleted: (pin) async {
+                                //   print('onCompOTP: ${loginController.responseOTPNo}');
+                                //   otpController.isLoadingLogin
+                                //       ? null
+                                //       : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
+                                // },
                                 onChanged: (value) {},
                               ),
                               const SizedBox(height: 20),
@@ -222,7 +222,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                               AppString.plzentervalidotp,
                                               colorText: AppColor.white,
                                               backgroundColor: AppColor.black,
-                                              duration: const Duration(seconds: 1),
+                                              duration: const Duration(seconds: 1), 
                                             );
                                           } else {
                                             await otpController.otpOnClk(

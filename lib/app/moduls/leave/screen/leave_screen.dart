@@ -15,8 +15,8 @@ class LeaveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(LeaveController());
-    Get.find<LeaveController>();
+    Get.put(LeaveController());
+    // Get.find<LeaveController>();
     return GetBuilder<LeaveController>(
       builder: (controller) {
         return Scaffold(
@@ -164,8 +164,19 @@ class LeaveScreen extends StatelessWidget {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: AppColor.black),
-                              borderRadius: BorderRadius.circular(0),
+                              borderRadius: BorderRadius.circular(0),   
                             )),
+                        // onTap: () {
+                        //   // Make sure it does not lose focus unnecessarily
+                        //   FocusScope.of(context).requestFocus(FocusNode());
+                        // },
+                        // onChanged: (value) {
+                        //   // Update the note field without clearing other fields
+                        //   controller.noteController.text = value;
+                        //   controller.noteController.selection = TextSelection.fromPosition(
+                        //     TextPosition(offset: controller.noteController.text.length),
+                        //   );
+                        // },
                       ),
                     ),
                     Obx(

@@ -1,4 +1,4 @@
-import 'package:emp_app/app/app_custom_widget/custom_drawer.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -11,7 +11,7 @@ import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
+// GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({Key? key, this.fromDashboard = false}) : super(key: key);
@@ -21,12 +21,13 @@ class AttendanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
+    // Get.find<AttendenceController>();
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            key: scaffoldKey1,
+            // key: scaffoldKey1,
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -38,13 +39,15 @@ class AttendanceScreen extends StatelessWidget {
                   ? IconButton(
                       icon: const Icon(Icons.menu),
                       onPressed: () {
-                        scaffoldKey1.currentState!.openDrawer();
+                        // scaffoldKey1.currentState!.openDrawer();
+                        Scaffold.of(context).openDrawer();
                       },
                     )
                   : IconButton(
                       icon: const Icon(Icons.arrow_back),
                       onPressed: () {
                         Navigator.pop(context);
+                        Get.back();
                       },
                     ),
               actions: [

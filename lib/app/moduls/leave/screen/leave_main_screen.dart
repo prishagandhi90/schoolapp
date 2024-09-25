@@ -17,7 +17,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
   @override
   Widget build(BuildContext context) {
     Get.put(LeaveController());
-    controller.setActiveScreen("LeaveMainScreen");
+    // controller.setActiveScreen("LeaveMainScreen");
     return GetBuilder<LeaveController>(builder: (controller) {
       return DefaultTabController(
         length: 2,

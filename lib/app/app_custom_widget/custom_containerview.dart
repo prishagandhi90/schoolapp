@@ -13,6 +13,7 @@ class CustomContainerview extends StatelessWidget {
       child: Column(children: [
         Text(
           text,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 12, //15
             fontWeight: FontWeight.w600,
@@ -22,6 +23,7 @@ class CustomContainerview extends StatelessWidget {
         Divider(color: AppColor.lightwhite),
         Text(
           text1,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontFamily: CommonFontStyle.plusJakartaSans,
           ),

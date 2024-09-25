@@ -14,6 +14,7 @@ class DetailsScreen extends GetView<AttendenceController> {
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
+    // final controller = Get.find<AttendenceController>();
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
@@ -50,11 +51,11 @@ class DetailsScreen extends GetView<AttendenceController> {
                                         color: AppColor.primaryColor,
                                         child: Row(
                                           children: [
-                                            _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell('', constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
+                                            buildHeaderCell('', constraints.maxWidth * 0.2),
                                           ],
                                         ),
                                       ),
@@ -73,7 +74,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                               controller.attendenceDetailTable.length,
                                               (index) => TableRow(
                                                 children: [
-                                                  _buildCell(
+                                                  buildCell(
                                                     Container(
                                                       height: 40,
                                                       width: 40,
@@ -84,24 +85,28 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       child: Center(
                                                         child: Text(
                                                           controller.attendenceDetailTable[index].atTDATE.toString(),
+                                                          textAlign: TextAlign.center,
                                                           style: AppStyle.fontfamilyplus,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                  _buildCell(Text(
+                                                  buildCell(Text(
                                                     controller.attendenceDetailTable[index].iN.toString(),
+                                                    textAlign: TextAlign.center,
                                                     style: AppStyle.fontfamilyplus,
                                                   )),
-                                                  _buildCell(Text(
+                                                  buildCell(Text(
                                                     controller.attendenceDetailTable[index].out.toString(),
+                                                    textAlign: TextAlign.center,
                                                     style: AppStyle.fontfamilyplus,
                                                   )),
-                                                  _buildCell(Text(
+                                                  buildCell(Text(
                                                     controller.attendenceDetailTable[index].lCEGMIN.toString(),
-                                                    style: AppStyle.fontfamilyplus,
+                                                    textAlign: TextAlign.center,
+                                                    style: AppStyle.redfontfamilyplus,
                                                   )),
-                                                  _buildCell(
+                                                  buildCell(
                                                     GestureDetector(
                                                       onTap: () {
                                                         detailbottomsheet(context, index);
@@ -138,12 +143,13 @@ class DetailsScreen extends GetView<AttendenceController> {
     );
   }
 
-  Widget _buildHeaderCell(String text, double width) {
+  Widget buildHeaderCell(String text, double width) {
     return Container(
       width: width,
       padding: EdgeInsets.all(8),
       child: Text(
         text,
+        textAlign: TextAlign.center,
         style: AppStyle.fontfamilyplus.copyWith(
           color: AppColor.white,
           fontWeight: FontWeight.bold,
@@ -152,7 +158,7 @@ class DetailsScreen extends GetView<AttendenceController> {
     );
   }
 
-  Widget _buildCell(Widget child) {
+  Widget buildCell(Widget child) {
     return Container(
       padding: EdgeInsets.all(8),
       child: child,
