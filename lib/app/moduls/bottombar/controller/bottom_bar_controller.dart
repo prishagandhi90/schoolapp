@@ -24,62 +24,32 @@ class BottomBarController extends GetxController {
     super.onInit();
     // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
-
     update();
   }
 
-  @override
-  void dispose() {
-    persistentController?.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   persistentController?.dispose();
+  //   super.dispose();
+  // }
 
   List<Widget> buildScreens() {
     return [
       PayrollScreen(),
       attendanceScreen,
-      // AttendanceScreen(fromDashboard: true),
-      // GetBuilder<AttendenceController>(
-      //   init: AttendenceController(),
-      //   builder: (controller) => AttendanceScreen(fromDashboard: true),
-      // ),
       const Dashboard1Screen(),
       LeaveMainScreen(),
       OvertimeMainScreen(fromDashboard: true),
     ];
   }
 
-  // Future<bool> onWillPop() async {
-  //   if (persistentController!.index != 2) {
-  //     persistentController!.jumpToTab(2); // Dashboard tab par le aaye
-  //     return false; // Back navigation prevent kare
-  //   } else {
-  //     return true; // Allow default back navigation to previous screens
-  //   }
-  // }
-// Future<bool> onWillPop(BuildContext context) async {
-//   if (persistentController!.index == 2) {
-//     // If on Dashboard
-//     if (Navigator.of(context).canPop()) {
-//       // If there's anything to pop on the Dashboard stack
-//       Navigator.of(context).pop();
-//       return false; // Prevent default back navigation
-//     } else {
-//       // No more screens to pop, exit app
-//       return true; // Exit the app
-//     }
-//   } else {
-//     // If on any other tab, go to Dashboard
-//     persistentController!.jumpToTab(2); // Jump to Dashboard tab
-//     return false; // Prevent default back navigation
-//   }
-// }
-
   void onItemTapped(int index, BuildContext context) {
-    if (index == 1 && persistentController!.index == 1) {
-      // Already on AttendanceScreen, do not change anything
-      return;
-    }
+    // if (index == 1 && persistentController!.index == 1) {
+    //   // Already on AttendanceScreen, do not change anything
+    //   persistentController!.index = 2;
+    //   update();
+    //   return;
+    // }
 
     // Update the persistent controller index
     persistentController!.index = index;

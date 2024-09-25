@@ -230,7 +230,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 border: Border.all(color: AppColor.primaryColor),
                                                 borderRadius: BorderRadius.circular(20)),
                                             child: controller.empSummDashboardTable.isNotEmpty &&
-                                                    controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
+                                                    controller.empSummDashboardTable[0].inPunchTime
+                                                        .toString()
+                                                        .isNotEmpty
                                                 ? Text(
                                                     'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                     style: TextStyle(
@@ -259,7 +261,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 border: Border.all(color: AppColor.primaryColor),
                                                 borderRadius: BorderRadius.circular(20)),
                                             child: controller.empSummDashboardTable.isNotEmpty &&
-                                                    controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
+                                                    controller.empSummDashboardTable[0].outPunchTime
+                                                        .toString()
+                                                        .isNotEmpty
                                                 ? Text(
                                                     'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                     style: AppStyle.plus10,
@@ -295,7 +299,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                         children: [
                                           Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                           if (controller.empSummDashboardTable.isNotEmpty)
-                                            Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                            Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                style: AppStyle.plus16w600)
                                           else
                                             Text('-- ', style: AppStyle.plus16w600),
                                         ],
@@ -357,28 +362,36 @@ class PayrollScreen extends GetView<PayrollController> {
                                     //     ModalRoute.of(context)?.settings.name == AttendanceScreen.routeName;
 
                                     if (bottomBarController.persistentController!.index != 1) {
-                                      // Get.off(() => AttendanceScreen(fromDashboard: true))?.then((value) {
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        // screen: AttendanceScreen(
-                                        //   fromDashboard: true,
-                                        // ),
-                                        screen: attendanceScreen,
-                                        withNavBar: true,
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      ).then((value) {
-                                        // bool isCurrentScreenAttendance = Navigator.of(context).canPop() &&
-                                        //     ModalRoute.of(context)!.settings.name == AttendanceScreen.routeName;
+                                      bottomBarController.persistentController!.index = 1;
+                                      // PersistentNavBarNavigator.pushNewScreen(
+                                      //   context,
+                                      //   // screen: AttendanceScreen(
+                                      //   //   fromDashboard: true,
+                                      //   // ),
+                                      //   screen: attendanceScreen,
+                                      //   withNavBar: true,
+                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      // ).then((value) {
+                                      // bool isCurrentScreenAttendance = Navigator.of(context).canPop() &&
+                                      //     ModalRoute.of(context)!.settings.name == AttendanceScreen.routeName;
 
-                                        // if (!isCurrentScreenAttendance) {
-                                        //   while (Navigator.canPop(context)) {
-                                        //     Navigator.pop(context);
-                                        //   }
-                                        // }
+                                      // if (!isCurrentScreenAttendance) {
+                                      //   while (Navigator.canPop(context)) {
+                                      //     Navigator.pop(context);
+                                      //   }
+                                      // }
 
-                                        hideBottomBar.value = false;
-                                        dashboardController.getDashboardDataUsingToken();
+                                      Future.delayed(Duration.zero, () {
+                                        // Add a back button listener or handle navigation result
+                                        Navigator.of(context).maybePop().then((value) {
+                                          if (value) {
+                                            // Perform actions when coming back from AttendanceScreen
+                                            hideBottomBar.value = false;
+                                            dashboardController.getDashboardDataUsingToken();
+                                          }
+                                        });
                                       });
+                                      // });
                                       // });
                                     }
                                   }, //Get.to(const AttendanceScreen()),

@@ -10,7 +10,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 class CustomDropDown extends StatefulWidget {
   CustomDropDown({super.key, this.selValue, required this.onPressed});
   final Function(String) onPressed;
-  String? selValue = "";
+  String? selValue;
 
   @override
   State<CustomDropDown> createState() => CustomDropDownState();
@@ -19,6 +19,12 @@ class CustomDropDown extends StatefulWidget {
 class CustomDropDownState extends State<CustomDropDown> {
   String? selectedValue;
   List<String> years = getLastTwoYears();
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.selValue; // Initialize local selectedValue
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,8 @@ class CustomDropDownState extends State<CustomDropDown> {
           onChanged: (String? value) {
             widget.onPressed(value!);
             setState(() {
-              widget.selValue = value;
+              // widget.selValue = value;
+              selectedValue = value;
             });
           },
           buttonStyleData: ButtonStyleData(
