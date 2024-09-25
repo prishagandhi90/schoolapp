@@ -17,10 +17,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DashboardController extends GetxController {
   String tokenNo = '', loginId = '';
   final ApiController apiController = Get.put(ApiController());
-  var bottomBarController = Get.put(BottomBarController());
+
+  final payrollScreen = Get.isRegistered<PayrollScreen>()
+      ? Get.find<PayrollScreen>() // If already registered, find it
+      : Get.put(PayrollScreen());
+  // var bottomBarController = Get.put(BottomBarController());
+  final bottomBarController = Get.isRegistered<BottomBarController>()
+      ? Get.find<BottomBarController>() // If already registered, find it
+      : Get.put(BottomBarController());
   bool isLoading = true;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -101,11 +114,15 @@ class DashboardController extends GetxController {
         break;
       case 7:
         hideBottomBar.value = false;
-        var bottomBarController = Get.put(BottomBarController());
+        // var bottomBarController = Get.put(BottomBarController());
+        final bottomBarController = Get.isRegistered<BottomBarController>()
+            ? Get.find<BottomBarController>() // If already registered, find it
+            : Get.put(BottomBarController());
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: const PayrollScreen(),
+          // screen: PayrollScreen(),
+          screen: payrollScreen,
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {

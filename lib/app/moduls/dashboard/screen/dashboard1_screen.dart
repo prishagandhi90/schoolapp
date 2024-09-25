@@ -15,14 +15,22 @@ class Dashboard1Screen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(DashboardController());
-    return GetBuilder<DashboardController>(builder: (controller) {
-      return SafeArea(
+    // Get.put(DashboardController());
+    // final DashboardController controller = Get.find<DashboardController>();
+    Get.isRegistered<DashboardController>()
+        ? Get.find<DashboardController>() // If already registered, find it
+        : Get.put(DashboardController());
+    // return GetBuilder<DashboardController>(builder: (controller) {
+    return Obx(
+      () => SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: true,
           backgroundColor: AppColor.white,
           onDrawerChanged: (isop) {
-            var bottomBarController = Get.put(BottomBarController());
+            // var bottomBarController = Get.put(BottomBarController());
+            final bottomBarController = Get.isRegistered<BottomBarController>()
+                ? Get.find<BottomBarController>() // If already registered, find it
+                : Get.put(BottomBarController());
             hideBottomBar.value = isop;
             bottomBarController.update();
           },
@@ -72,7 +80,8 @@ class Dashboard1Screen extends GetView<DashboardController> {
           ),
           body: const CustomGridview(),
         ),
-      );
-    });
+      ),
+    );
+    // });
   }
 }

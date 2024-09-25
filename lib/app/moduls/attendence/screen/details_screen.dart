@@ -13,129 +13,133 @@ class DetailsScreen extends GetView<AttendenceController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AttendenceController());
-    return GetBuilder<AttendenceController>(
-      builder: (controller) {
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          backgroundColor: AppColor.white,
-          body: LayoutBuilder(
-            builder: (context, constraints) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MonthPicker(
-                    controller: controller,
-                    scrollController: controller.monthScrollControllerDetail,
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: controller.isLoader.value
-                        ? const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100),
-                              child: ProgressWithIcon(),
-                            ),
-                          )
-                        : controller.attendenceDetailTable.isNotEmpty
-                            ? SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    minWidth: constraints.maxWidth,
+    // Get.put(AttendenceController());
+    // final controller = Get.find<AttendenceController>();
+    final controller = Get.isRegistered<AttendenceController>()
+        ? Get.find<AttendenceController>() // If already registered, find it
+        : Get.put(AttendenceController());
+    // return GetBuilder<AttendenceController>(
+    //   builder: (controller) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      backgroundColor: AppColor.white,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MonthPicker(
+                controller: controller,
+                scrollController: controller.monthScrollControllerDetail,
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: controller.isLoader.value
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 100),
+                          child: ProgressWithIcon(),
+                        ),
+                      )
+                    : controller.attendenceDetailTable.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: constraints.maxWidth,
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    color: AppColor.primaryColor,
+                                    child: Row(
+                                      children: [
+                                        _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
+                                        _buildHeaderCell('', constraints.maxWidth * 0.2),
+                                      ],
+                                    ),
                                   ),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        color: AppColor.primaryColor,
-                                        child: Row(
-                                          children: [
-                                            _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell('', constraints.maxWidth * 0.2),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: SingleChildScrollView(
-                                          controller: controller.attendanceScrollController,
-                                          child: Table(
-                                            columnWidths: {
-                                              0: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              1: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              2: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              3: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              4: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                            },
-                                            children: List.generate(
-                                              controller.attendenceDetailTable.length,
-                                              (index) => TableRow(
-                                                children: [
-                                                  _buildCell(
-                                                    Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: AppColor.lightgrey,
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          controller.attendenceDetailTable[index].atTDATE.toString(),
-                                                          style: AppStyle.fontfamilyplus,
-                                                        ),
-                                                      ),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      controller: controller.attendanceScrollController,
+                                      child: Table(
+                                        columnWidths: {
+                                          0: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          1: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          2: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          3: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                          4: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                        },
+                                        children: List.generate(
+                                          controller.attendenceDetailTable.length,
+                                          (index) => TableRow(
+                                            children: [
+                                              _buildCell(
+                                                Container(
+                                                  height: 40,
+                                                  width: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.lightgrey,
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      controller.attendenceDetailTable[index].atTDATE.toString(),
+                                                      style: AppStyle.fontfamilyplus,
                                                     ),
                                                   ),
-                                                  _buildCell(Text(
-                                                    controller.attendenceDetailTable[index].iN.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  _buildCell(Text(
-                                                    controller.attendenceDetailTable[index].out.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  _buildCell(Text(
-                                                    controller.attendenceDetailTable[index].lCEGMIN.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  _buildCell(
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        detailbottomsheet(context, index);
-                                                      },
-                                                      child: const Icon(Icons.arrow_drop_down_circle),
-                                                    ),
-                                                  ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
+                                              _buildCell(Text(
+                                                controller.attendenceDetailTable[index].iN.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              )),
+                                              _buildCell(Text(
+                                                controller.attendenceDetailTable[index].out.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              )),
+                                              _buildCell(Text(
+                                                controller.attendenceDetailTable[index].lCEGMIN.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              )),
+                                              _buildCell(
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    detailbottomsheet(context, index);
+                                                  },
+                                                  child: const Icon(Icons.arrow_drop_down_circle),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Center(
-                                  child: Text(
-                                    AppString.noattendencedata,
-                                    style: AppStyle.fontfamilyplus,
-                                  ),
-                                ),
+                                ],
                               ),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Center(
+                              child: Text(
+                                AppString.noattendencedata,
+                                style: AppStyle.fontfamilyplus,
+                              ),
+                            ),
+                          ),
+              ),
+            ],
+          );
+        },
+      ),
     );
+    //   },
+    // );
   }
 
   Widget _buildHeaderCell(String text, double width) {
@@ -216,7 +220,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
@@ -255,7 +260,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -344,7 +350,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -416,7 +423,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [

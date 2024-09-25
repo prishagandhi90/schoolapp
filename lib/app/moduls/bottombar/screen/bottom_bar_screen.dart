@@ -14,53 +14,56 @@ class BottomBarView extends GetView<BottomBarController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(BottomBarController());
-    return GetBuilder<BottomBarController>(
-      builder: (controller) {
-        return Obx(
-          () => Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: PersistentTabView(
-              padding: const EdgeInsets.only(bottom: 4, top: 0),
-              context,
-              confineToSafeArea: Platform.isAndroid ? true : false,
-              controller: controller.persistentController,
-              handleAndroidBackButtonPress: true,
-              hideNavigationBarWhenKeyboardAppears: true,
-              // popBehaviorOnSelectedNavBarItemPress: PopBehavior.none,
-              backgroundColor: AppColor.white,
-              navBarHeight: hideBottomBar.value ? 0 : 70.0,
-              decoration: NavBarDecoration(
-                colorBehindNavBar: AppColor.trasparent,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColor.originalgrey.withOpacity(0.1),
-                    spreadRadius: 3.0,
-                  ),
-                ],
+    // Get.put(BottomBarController());
+    final bottomBarController = Get.isRegistered<BottomBarController>()
+        ? Get.find<BottomBarController>() // If already registered, find it
+        : Get.put(BottomBarController());
+    // return GetBuilder<BottomBarController>(
+    //   builder: (controller) {
+    return Obx(
+      () => Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: PersistentTabView(
+          context,
+          controller: controller.persistentController,
+          padding: const EdgeInsets.only(bottom: 4, top: 0),
+          confineToSafeArea: Platform.isAndroid ? true : false,
+          handleAndroidBackButtonPress: true,
+          hideNavigationBarWhenKeyboardAppears: true,
+          // popBehaviorOnSelectedNavBarItemPress: PopBehavior.none,
+          backgroundColor: AppColor.white,
+          navBarHeight: hideBottomBar.value ? 0 : 70.0,
+          decoration: NavBarDecoration(
+            colorBehindNavBar: AppColor.trasparent,
+            boxShadow: [
+              BoxShadow(
+                color: AppColor.originalgrey.withOpacity(0.1),
+                spreadRadius: 3.0,
               ),
-              animationSettings: const NavBarAnimationSettings(
-                screenTransitionAnimation: ScreenTransitionAnimationSettings(
-                  animateTabTransition: false,
-                  curve: Curves.ease,
-                  duration: Duration(milliseconds: 100),
-                ),
-              ),
-              screens: controller.buildScreens(),
-              items: controller.navBarsItems(context),
-              navBarStyle: NavBarStyle.style6,
-              stateManagement: false,
-              resizeToAvoidBottomInset: true,
-              bottomScreenMargin: Sizes.crossLength * 0.020,
-              // onItemSelected: (value) {
-              //   controller.onItemTapped(value, context);
-              // },
-              onItemSelected: (index) => controller.onItemTapped(index, context),
-              // popAllScreensOnTapOfSelectedTab: true,
+            ],
+          ),
+          animationSettings: const NavBarAnimationSettings(
+            screenTransitionAnimation: ScreenTransitionAnimationSettings(
+              animateTabTransition: false,
+              curve: Curves.ease,
+              duration: Duration(milliseconds: 100),
             ),
           ),
-        );
-      },
+          screens: controller.buildScreens(),
+          items: controller.navBarsItems(context),
+          navBarStyle: NavBarStyle.style6,
+          stateManagement: false,
+          resizeToAvoidBottomInset: true,
+          bottomScreenMargin: Sizes.crossLength * 0.020,
+          // onItemSelected: (value) {
+          //   controller.onItemTapped(value, context);
+          // },
+          onItemSelected: (index) => controller.onItemTapped(index, context),
+          // popAllScreensOnTapOfSelectedTab: true,
+        ),
+      ),
     );
+    //   },
+    // );
   }
 }

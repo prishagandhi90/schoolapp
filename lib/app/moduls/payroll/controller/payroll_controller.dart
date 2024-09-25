@@ -24,15 +24,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PayrollController extends GetxController {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
-  var bottomBarController = Get.put(BottomBarController());
+  // var bottomBarController = Get.put(BottomBarController());
+  final BottomBarController bottomBarController = Get.find<BottomBarController>();
+  final ApiController apiController = Get.find<ApiController>();
+  final DashboardController dashboardController = Get.find<DashboardController>();
+  // final ApiController apiController = Get.put(ApiController());
+  // var dashboardController = Get.put(DashboardController());
   var isLoading = false.obs;
   late List<Payroll> payrolltable = [];
-  final ApiController apiController = Get.put(ApiController());
   TextEditingController textEditingController = TextEditingController();
   String tokenNo = '', loginId = '';
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
-  var dashboardController = Get.put(DashboardController());
   List<EmpSummDashboardTable> empSummDashboardTable = [];
 
   @override
@@ -68,7 +71,8 @@ class PayrollController extends GetxController {
 
       var jsonbodyObj = {"loginId": loginId};
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse =
+          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -101,11 +105,16 @@ class PayrollController extends GetxController {
     switch (index) {
       case 0:
         hideBottomBar.value = false;
-        var bottomBarController = Get.put(BottomBarController());
+        // var bottomBarController = Get.put(BottomBarController());
+        final bottomBarController = Get.isRegistered<BottomBarController>()
+            ? Get.find<BottomBarController>() // If already registered, find it
+            : Get.put(BottomBarController());
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: const AttendanceScreen(),
+          screen: AttendanceScreen(
+            fromDashboard: true,
+          ),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
@@ -115,7 +124,10 @@ class PayrollController extends GetxController {
         break;
       case 1:
         hideBottomBar.value = false;
-        var bottomBarController = Get.put(BottomBarController());
+        // var bottomBarController = Get.put(BottomBarController());
+        final bottomBarController = Get.isRegistered<BottomBarController>()
+            ? Get.find<BottomBarController>() // If already registered, find it
+            : Get.put(BottomBarController());
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
@@ -129,7 +141,10 @@ class PayrollController extends GetxController {
         break;
       case 2:
         hideBottomBar.value = false;
-        var bottomBarController = Get.put(BottomBarController());
+        // var bottomBarController = Get.put(BottomBarController());
+        final bottomBarController = Get.isRegistered<BottomBarController>()
+            ? Get.find<BottomBarController>() // If already registered, find it
+            : Get.put(BottomBarController());
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
@@ -150,7 +165,10 @@ class PayrollController extends GetxController {
         break;
       case 3:
         hideBottomBar.value = false;
-        var bottomBarController = Get.put(BottomBarController());
+        // var bottomBarController = Get.put(BottomBarController());
+        final bottomBarController = Get.isRegistered<BottomBarController>()
+            ? Get.find<BottomBarController>() // If already registered, find it
+            : Get.put(BottomBarController());
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,

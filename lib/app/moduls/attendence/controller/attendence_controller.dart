@@ -16,8 +16,14 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendenceController extends GetxController {
-  final ApiController apiController = Get.put(ApiController());
-  final bottomBarController = Get.put(BottomBarController());
+  // final ApiController apiController = Get.put(ApiController());
+  final apiController = Get.isRegistered<ApiController>()
+      ? Get.find<ApiController>() // If already registered, find it
+      : Get.put(ApiController());
+  // final bottomBarController = Get.put(BottomBarController());
+  final bottomBarController = Get.isRegistered<BottomBarController>()
+      ? Get.find<BottomBarController>() // If already registered, find it
+      : Get.put(BottomBarController());
   late List<MispunchTable> mispunchtable = [];
   List<AttendenceSummarytable> attendenceSummaryTable = [];
   List<AttendanceDetailTable> attendenceDetailTable = [];
@@ -30,7 +36,8 @@ class AttendenceController extends GetxController {
   List<String> years = getLastTwoYears();
   var monthScrollControllerSummary = ScrollController();
   var monthScrollControllerDetail = ScrollController();
-  var attendanceScrollController = ScrollController();
+  // var attendanceScrollController = ScrollController();
+  final ScrollController attendanceScrollController = ScrollController();
 
   @override
   void onInit() {
@@ -42,22 +49,36 @@ class AttendenceController extends GetxController {
     setCurrentMonthYear("SummaryScreen");
     update();
 
+    // attendanceScrollController.addListener(() {
+    //   if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
+    //     hideBottomBar = false.obs;
+    //     update();
+    //     bottomBarController.update();
+    //   } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    //     hideBottomBar = true.obs;
+    //     update();
+    //     bottomBarController.update();
+    //   }
+    // });
+
     attendanceScrollController.addListener(() {
       if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
-        hideBottomBar = false.obs;
-        update();
-        bottomBarController.update();
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
       } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-        hideBottomBar = true.obs;
-        update();
-        bottomBarController.update();
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
       }
     });
   }
 
   @override
   void onClose() {
-    // attendanceScrollController.dispose(); //
+    attendanceScrollController.dispose(); //
     monthScrollControllerSummary.dispose();
     // monthScrollControllerDetail.dispose();
     super.onClose();

@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
@@ -13,19 +14,28 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
+  // final AttendanceScreen attendanceScreen = AttendanceScreen(fromDashboard: true);
+  final attendanceScreen = Get.isRegistered<AttendanceScreen>()
+      ? Get.find<AttendanceScreen>() // If already registered, find it
+      : Get.put(AttendanceScreen());
   @override
   void onInit() {
     super.onInit();
     persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
+
     update();
   }
 
   List<Widget> buildScreens() {
     return [
-      const PayrollScreen(),
+      PayrollScreen(),
+      attendanceScreen,
       // AttendanceScreen(fromDashboard: true),
-      const AttendanceScreen(fromDashboard: true),
+      // GetBuilder<AttendenceController>(
+      //   init: AttendenceController(),
+      //   builder: (controller) => AttendanceScreen(fromDashboard: true),
+      // ),
       const Dashboard1Screen(),
       LeaveMainScreen(),
       OvertimeMainScreen(fromDashboard: true),
@@ -59,6 +69,13 @@ class BottomBarController extends GetxController {
 // }
 
   void onItemTapped(int index, BuildContext context) {
+    if (index == 1 && persistentController!.index == 1) {
+      // Already on AttendanceScreen, do not change anything
+      return;
+    }
+
+    // Update the persistent controller index
+    persistentController!.index = index;
     update();
   }
 

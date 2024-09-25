@@ -7,7 +7,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class OvertimeController extends GetxController {
-  var bottomBarController = Get.put(BottomBarController());
+  // var bottomBarController = Get.put(BottomBarController());
+  final bottomBarController = Get.isRegistered<BottomBarController>()
+      ? Get.find<BottomBarController>() // If already registered, find it
+      : Get.put(BottomBarController());
   // var leaveController = Get.put(LeaveController());
   var isLoading = false.obs;
   String tokenNo = '', loginId = '', empId = '';
