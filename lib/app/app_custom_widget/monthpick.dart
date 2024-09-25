@@ -7,6 +7,10 @@ class MonthPicker extends StatelessWidget {
   final AttendenceController controller;
   final ScrollController scrollController;
 
+  // final controller = Get.isRegistered<AttendenceController>()
+  //     ? Get.find<AttendenceController>() // If already registered, find it
+  //     : Get.put(AttendenceController());
+
   const MonthPicker({
     Key? key,
     required this.controller,

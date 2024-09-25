@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
@@ -14,12 +15,16 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 class BottomBarController extends GetxController {
   RxInt currentIndex = (-1).obs;
   PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
+  // final AttendanceScreen attendanceScreen = AttendanceScreen(fromDashboard: true);
+  final attendanceScreen = Get.isRegistered<AttendanceScreen>()
+      ? Get.find<AttendanceScreen>() // If already registered, find it
+      : Get.put(AttendanceScreen());
   @override
   void onInit() {
     super.onInit();
     // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
-    currentIndex.value = 2;
+
     update();
   }
 
@@ -31,9 +36,13 @@ class BottomBarController extends GetxController {
 
   List<Widget> buildScreens() {
     return [
-      const PayrollScreen(),
+      PayrollScreen(),
+      attendanceScreen,
       // AttendanceScreen(fromDashboard: true),
-      const AttendanceScreen(fromDashboard: true),
+      // GetBuilder<AttendenceController>(
+      //   init: AttendenceController(),
+      //   builder: (controller) => AttendanceScreen(fromDashboard: true),
+      // ),
       const Dashboard1Screen(),
       LeaveMainScreen(),
       OvertimeMainScreen(fromDashboard: true),
@@ -67,22 +76,13 @@ class BottomBarController extends GetxController {
 // }
 
   void onItemTapped(int index, BuildContext context) {
-    // if (index >= 0 && index < buildScreens().length) {
-    //   currentIndex.value = index;
-    // } else {
-    //   currentIndex.value = -1; // No screen selected
-    // }
-    // update();
-    currentIndex.value = index;
-    persistentController!.jumpToTab(index);
-    if (index == 1) {
-      // var attendenceController = Get.find<AttendenceController>();
-      // if (attendenceController.attendanceScrollController.hasClients) {
-      // } else {
-      //   // attendenceController.attendanceScrollController.dispose();
-      //   // attendenceController.update();
-      // }
+    if (index == 1 && persistentController!.index == 1) {
+      // Already on AttendanceScreen, do not change anything
+      return;
     }
+
+    // Update the persistent controller index
+    persistentController!.index = index;
     update();
   }
 

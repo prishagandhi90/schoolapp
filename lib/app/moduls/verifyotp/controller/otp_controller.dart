@@ -16,7 +16,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
-  var bottomBarController = Get.put(BottomBarController());
+  // var bottomBarController = Get.put(BottomBarController());
+  final bottomBarController = Get.isRegistered<BottomBarController>()
+      ? Get.find<BottomBarController>() // If already registered, find it
+      : Get.put(BottomBarController());
   final formKey1 = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   final TextEditingController otpController = TextEditingController(); //text: '1234'
@@ -82,7 +85,8 @@ class OtpController extends GetxController {
           await prefs.setString(AppString.keyLoginId, dashboardTable.loginId.toString());
           await prefs.setString(AppString.keyEmpId, dashboardTable.employeeId.toString());
 
-          var dashboardController = Get.put(DashboardController());
+          // var dashboardController = Get.put(DashboardController());
+          final DashboardController dashboardController = Get.put(DashboardController());
           dashboardController.employeeName = dashboardTable.employeeName.toString();
           dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
           dashboardController.emailAddress = dashboardTable.emailAddress.toString();
@@ -159,7 +163,7 @@ class OtpController extends GetxController {
       await prefs.remove(AppString.keyLoginId);
       await prefs.remove(AppString.keyEmpId);
 
-      var dashboardController = Get.put(DashboardController());
+      final DashboardController dashboardController = Get.find<DashboardController>();
       dashboardController.employeeName = "";
       dashboardController.mobileNumber = "";
       dashboardController.emailAddress = "";

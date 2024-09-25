@@ -13,7 +13,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MispunchController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
-  var bottomBarController = Get.put(BottomBarController());
+  // var bottomBarController = Get.put(BottomBarController());
+  final bottomBarController = Get.isRegistered<BottomBarController>()
+      ? Get.find<BottomBarController>() // If already registered, find it
+      : Get.put(BottomBarController());
   String tokenNo = '', loginId = '', empId = '';
   var isLoading = false.obs;
   // late List<MispunchTable> mispunchtable = [];

@@ -42,7 +42,10 @@ class OvertimeScreen extends GetView<OvertimeController> {
         ),
         backgroundColor: Colors.white,
         onDrawerChanged: (isop) {
-          var bottomBarController = Get.put(BottomBarController());
+          // var bottomBarController = Get.put(BottomBarController());
+          final bottomBarController = Get.isRegistered<BottomBarController>()
+              ? Get.find<BottomBarController>() // If already registered, find it
+              : Get.put(BottomBarController());
           hideBottomBar.value = isop;
           bottomBarController.update();
         },
