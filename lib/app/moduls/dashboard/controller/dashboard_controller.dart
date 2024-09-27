@@ -25,7 +25,7 @@ class DashboardController extends GetxController {
   final bottomBarController = Get.isRegistered<BottomBarController>()
       ? Get.find<BottomBarController>() // If already registered, find it
       : Get.put(BottomBarController());
-  bool isLoading = true;
+  RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
   String employeeName = "",
       mobileNumber = "",
@@ -118,7 +118,9 @@ class DashboardController extends GetxController {
         final bottomBarController = Get.isRegistered<BottomBarController>()
             ? Get.find<BottomBarController>() // If already registered, find it
             : Get.put(BottomBarController());
-        bottomBarController.update();
+        bottomBarController.persistentController.value.index = 0;
+        bottomBarController.currentIndex.value = 0;
+        // bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
           // screen: PayrollScreen(),
@@ -174,11 +176,11 @@ class DashboardController extends GetxController {
       var jsonbodyObj = {"loginId": loginId};
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
 
-      isLoading = false;
+      isLoading.value = false;
       update();
       return profiletable;
     } catch (e) {
-      isLoading = false;
+      isLoading.value = false;
       update();
     }
     return [];
@@ -186,6 +188,7 @@ class DashboardController extends GetxController {
 
   Future<void> getDashboardDataUsingToken() async {
     try {
+      isLoading.value = true;
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
         String token = prefs.getString(AppString.keyToken) ?? '';
@@ -221,10 +224,10 @@ class DashboardController extends GetxController {
         Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
-      // isLoadingLogin = false;
+      isLoading.value = false;
       print('Error: $e');
     } finally {
-      // isLoadingLogin = false;
+      isLoading.value = false;
       update();
     }
   }

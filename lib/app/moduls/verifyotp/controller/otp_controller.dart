@@ -163,7 +163,10 @@ class OtpController extends GetxController {
       await prefs.remove(AppString.keyLoginId);
       await prefs.remove(AppString.keyEmpId);
 
-      final DashboardController dashboardController = Get.find<DashboardController>();
+      // final DashboardController dashboardController = Get.find<DashboardController>();
+      final dashboardController = Get.isRegistered<DashboardController>()
+          ? Get.find<DashboardController>() // If already registered, find it
+          : Get.put(DashboardController());
       dashboardController.employeeName = "";
       dashboardController.mobileNumber = "";
       dashboardController.emailAddress = "";
@@ -181,7 +184,7 @@ class OtpController extends GetxController {
 
   Future otpOnClk(BuildContext context, String otpNo, String deviceToken) async {
     isLoadingLogin = true;
-    update();
+    // update();
     try {
       if (otpController.text != otpNo) {
         print('OTP Controller: ${otpController.text}');
@@ -201,15 +204,21 @@ class OtpController extends GetxController {
 
         String isValidLogin = "false";
         isLoadingLogin = true;
-        update();
+        // update();
         isValidLogin = await getDashboardData(otpNo, context, deviceToken);
-        update();
+        // update();
         if (isValidLogin == "true") {
           otpController.text = "";
-          hideBottomBar.value = false;
-          bottomBarController.update();
-          update();
-          Get.offAll(BottomBarView());
+          // hideBottomBar.value = false;
+          // bottomBarController.update();
+          // update();
+          // Get.offAll(BottomBarView());
+          final bottomBarController = Get.put(BottomBarController());
+          bottomBarController.resetAndInitialize();
+
+          Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+            Get.put(BottomBarController());
+          }));
         } else {
           Get.snackbar(
             AppString.otpincorrect,
@@ -232,7 +241,7 @@ class OtpController extends GetxController {
       print(e);
     } finally {
       isLoadingLogin = false;
-      update();
+      // update();
     }
   }
 
