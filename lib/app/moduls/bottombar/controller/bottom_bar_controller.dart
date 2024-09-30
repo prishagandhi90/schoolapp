@@ -28,12 +28,6 @@ class BottomBarController extends GetxController {
     update();
   }
 
-  // @override
-  // void dispose() {
-  //   persistentController?.dispose();
-  //   super.dispose();
-  // }
-
   List<Widget> buildScreens() {
     return [
       PayrollScreen(),
@@ -45,20 +39,11 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  // void onItemTapped(int index, BuildContext context) {
-  //   // Update the persistent controller index
-  //   if (persistentController?.index != index) {
-  //     persistentController!.index = index;
-  //     currentIndex.value = index;
-  //   }
-  //   // else {
-  //   //   // If the same tab is clicked, reset the stack or reinitialize the screen
-  //   //   persistentController?.jumpToTab(index); // This will reinitialize the screen
-  //   // }
-  //   update();
-  // }
-
   void onItemTapped(int index, BuildContext context) {
+    while (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+
     persistentController.update((val) {
       val?.index = index;
     });
@@ -106,6 +91,11 @@ class BottomBarController extends GetxController {
       ),
       activeColorPrimary: AppColor.primaryColor,
       inactiveColorPrimary: AppColor.black,
+      // onPressed: (index) {
+      //   if (index != 0) {
+      //     // Add your functionality here
+      //   }
+      // },
     );
   }
 

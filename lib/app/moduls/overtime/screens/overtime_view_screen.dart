@@ -8,8 +8,8 @@ import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OTViewScreen extends StatelessWidget {
-  const OTViewScreen({Key? key}) : super(key: key);
+class OvertimeViewScreen extends StatelessWidget {
+  const OvertimeViewScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +86,10 @@ class OTViewScreen extends StatelessWidget {
                                                   if (selected!) {
                                                     leaveController.inchargeAction.value =
                                                         leaveController.otentryList[index].inchargeAction ?? '';
-                                                    leaveController.hodAction.value = leaveController.otentryList[index].hodAction ?? '';
-                                                    leaveController.hrAction.value = leaveController.otentryList[index].hrAction ?? '';
+                                                    leaveController.hodAction.value =
+                                                        leaveController.otentryList[index].hodAction ?? '';
+                                                    leaveController.hrAction.value =
+                                                        leaveController.otentryList[index].hrAction ?? '';
                                                     leaveController.update();
                                                   } else {
                                                     leaveController.inchargeAction = ''.obs;
@@ -174,9 +176,12 @@ class OTViewScreen extends StatelessWidget {
                                               1, // Adjust number of rows as needed
                                               (index) => DataRow(
                                                 cells: [
-                                                  DataCell(getStatusImage(leaveController.otentryList[index].inchargeAction.toString())),
-                                                  DataCell(getStatusImage(leaveController.otentryList[index].hodAction.toString())),
-                                                  DataCell(getStatusImage(leaveController.otentryList[index].hrAction.toString())),
+                                                  DataCell(getStatusImage(
+                                                      leaveController.otentryList[index].inchargeAction.toString())),
+                                                  DataCell(getStatusImage(
+                                                      leaveController.otentryList[index].hodAction.toString())),
+                                                  DataCell(getStatusImage(
+                                                      leaveController.otentryList[index].hrAction.toString())),
                                                 ],
                                               ),
                                             ),
@@ -299,7 +304,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -342,7 +349,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -385,7 +394,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -428,7 +439,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -471,7 +484,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -514,7 +529,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -557,7 +574,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -600,7 +619,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),
@@ -643,7 +664,9 @@ class OTViewScreen extends StatelessWidget {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text('--:--', style: AppStyle.plus16w600)),
                                     ),
                             ],
                           ),

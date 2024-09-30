@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarView extends GetView<BottomBarController> {
+  const BottomBarView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final BottomBarController controller = Get.isRegistered<BottomBarController>()
@@ -51,6 +53,8 @@ class BottomBarView extends GetView<BottomBarController> {
           resizeToAvoidBottomInset: true,
           onItemSelected: (index) => controller.onItemTapped(index, context),
           bottomScreenMargin: Sizes.crossLength * 0.020,
+          popBehaviorOnSelectedNavBarItemPress: PopBehavior.once,
+          // popAllScreensOnTapOfSelectedTab: true,
         ),
       ),
     );

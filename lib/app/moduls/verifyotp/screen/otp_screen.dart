@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
-  OtpScreen({super.key, required this.mobileNumber, required this.deviceToken});
+  const OtpScreen({super.key, required this.mobileNumber, required this.deviceToken});
   final String mobileNumber;
   final String deviceToken;
 
@@ -222,7 +222,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                               AppString.plzentervalidotp,
                                               colorText: AppColor.white,
                                               backgroundColor: AppColor.black,
-                                              duration: const Duration(seconds: 1), 
+                                              duration: const Duration(seconds: 1),
                                             );
                                           } else {
                                             await otpController.otpOnClk(

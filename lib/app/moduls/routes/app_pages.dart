@@ -1,0 +1,124 @@
+import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
+import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
+import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
+import 'package:emp_app/app/moduls/bottombar/bindings/bottombar_binding.dart';
+import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
+import 'package:emp_app/app/moduls/dashboard/bindings/DashboardBinding.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
+import 'package:emp_app/app/moduls/internetconnection/view/nointernet_screen.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_view_screen.dart';
+import 'package:emp_app/app/moduls/login/bindings/login_binding.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_view_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtimedemo.dart';
+import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
+import 'package:emp_app/app/moduls/verifyotp/bindings/verifyotp_binding.dart';
+import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
+import 'package:get/get.dart';
+
+part 'app_routes.dart';
+
+class AppPages {
+  AppPages._();
+
+  // static const initial = Routes.SPLASH;
+  static String getInitialRoute(bool isLoggedIn) {
+    return isLoggedIn ? _Paths.BOTTOMBAR : _Paths.LOGIN; // Redirect based on login status
+  }
+
+  static final routes = [
+    GetPage(
+      name: _Paths.NoInterNet,
+      page: () => const NoInternetView(),
+      binding: NoInternetBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginScreen(),
+      binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.VERIFYOTP,
+      // page: () => const OtpScreen(),
+      page: () {
+        // You can retrieve parameters from the route here
+        final arguments = Get.arguments; // This will get any arguments passed
+        return OtpScreen(
+          mobileNumber: arguments['mobileNumber'],
+          deviceToken: arguments['deviceToken'],
+        ); // Pass the required parameter
+      },
+      binding: VerifyotpBinding(),
+    ),
+    GetPage(
+      name: _Paths.DASHBOARD,
+      page: () => const Dashboard1Screen(),
+      binding: DashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOTTOMBAR,
+      page: () => const BottomBarView(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYROLL,
+      page: () => PayrollScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.ATTENDANCESCREEN,
+      page: () => AttendanceScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.ATTENDANCESUMMARY,
+      page: () => const SummaryScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.ATTENDANCEDETAIL,
+      page: () => const DetailsScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.MISPUNCHSCREEN,
+      page: () => const MispunchScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.LEAVEMAINSCREEN,
+      page: () => LeaveMainScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.LEAVEENTRY,
+      page: () => const LeaveScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.LEAVEVIEW,
+      page: () => const LeaveViewScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.OVERTIMEMAINSCREEN,
+      page: () => OvertimeMainScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.OVERTIMEENTRY,
+      page: () => OvertimeScreen(),
+      binding: BottomBarBinding(),
+    ),
+    GetPage(
+      name: _Paths.OVERTIMEVIEW,
+      page: () => const OvertimeViewScreen(),
+      binding: BottomBarBinding(),
+    ),
+  ];
+}

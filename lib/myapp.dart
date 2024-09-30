@@ -1,9 +1,8 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +74,9 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
+      // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
+      initialRoute: AppPages.getInitialRoute(widget.isLoggedIn),
+      getPages: AppPages.routes,
       navigatorObservers: [
         NavigatorObserver(),
       ],

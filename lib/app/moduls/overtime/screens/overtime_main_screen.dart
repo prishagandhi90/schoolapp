@@ -7,8 +7,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/app/moduls/overtime/screens/ot_screen.dart';
-import 'package:emp_app/app/moduls/overtime/screens/ot_view_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -410,7 +409,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                     physics: NeverScrollableScrollPhysics(),
                     children: [
                       OtScreen(),
-                      OTViewScreen(),
+                      OvertimeMainScreen(),
                     ],
                   ),
                 ),

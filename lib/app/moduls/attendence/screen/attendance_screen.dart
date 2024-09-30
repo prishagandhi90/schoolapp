@@ -17,7 +17,7 @@ class AttendanceScreen extends StatelessWidget {
   AttendanceScreen({Key? key, this.fromDashboard = false}) : super(key: key);
 
   final bool fromDashboard;
-  static const routeName = '/attendance';
+  // static const routeName = '/attendance';
   final GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();
 
   // static final GlobalKey<ScaffoldState> scaffoldKey1 = GlobalKey<ScaffoldState>();

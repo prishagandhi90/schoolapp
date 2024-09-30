@@ -40,7 +40,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +51,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -169,7 +171,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -212,7 +215,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +226,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -265,7 +270,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,7 +281,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -370,7 +377,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                         }
                       },
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
-                      indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
+                      indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'Leave'), Tab(text: 'View')],
                       physics: NeverScrollableScrollPhysics(),
                     ),
