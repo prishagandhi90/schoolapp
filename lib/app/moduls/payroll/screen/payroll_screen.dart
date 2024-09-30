@@ -12,6 +12,7 @@ import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -438,6 +439,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                   withNavBar: true,
                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                 ).then((value) async {
+                                  // bool isCurrentScreenAttendance = Navigator.of(context).canPop() &&
+                                  //       ModalRoute.of(context)!.settings.name == Routes.AttendanceScreen;
+
+                                  //   if (!isCurrentScreenAttendance) {
+                                  //     while (Navigator.canPop(context)) {
+                                  //       Navigator.pop(context);
+                                  //     }
                                   hideBottomBar.value = false;
                                   await dashboardController.getDashboardDataUsingToken();
                                 });

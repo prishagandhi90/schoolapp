@@ -344,7 +344,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
       if (rsponseLeaveReason.statusCode == 200) {
         leavereason.clear();
         leavereason.assignAll(rsponseLeaveReason.data ?? []);
-        print(leavereason);
+        // print(leavereason);
       } else if (rsponseLeaveReason.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -578,7 +578,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
         Get.rawSnackbar(message: "Please enter leave name");
         return false;
       }
-         if (noteController.text.isEmpty || noteController.text == null) {
+      if (noteController.text.isEmpty || noteController.text == null) {
         Get.rawSnackbar(message: "Please enter note");
         return false;
       }
