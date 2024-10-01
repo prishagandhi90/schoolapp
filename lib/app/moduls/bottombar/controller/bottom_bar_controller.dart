@@ -42,7 +42,7 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  void onItemTapped(int index) {
+  void onItemTapped(int index, BuildContext context) {
     // while (Navigator.of(context).canPop()) {
     //   Navigator.of(context).pop();
     // }

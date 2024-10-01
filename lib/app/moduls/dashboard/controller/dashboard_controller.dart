@@ -24,13 +24,7 @@ class DashboardController extends GetxController {
       : Get.put(BottomBarController());
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "",
-      mobileNumber = "",
-      emailAddress = "",
-      empCode = "",
-      empType = "",
-      department = "",
-      designation = "";
+  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
   late DashboardTable dashboardTable;
 
   @override
