@@ -7,12 +7,8 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
-import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,9 +16,6 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class PayrollScreen extends GetView<PayrollController> {
   PayrollScreen({super.key});
-  final attendanceScreen = Get.isRegistered<AttendanceScreen>()
-      ? Get.find<AttendanceScreen>() // If already registered<,> find it
-      : Get.put(AttendanceScreen());
 
   @override
   Widget build(BuildContext context) {
@@ -350,19 +343,23 @@ class PayrollScreen extends GetView<PayrollController> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  final dashboardController = Get.isRegistered<DashboardController>()
-                                      ? Get.find<DashboardController>() // If already registered, find it
-                                      : Get.put(DashboardController());
+                                  final attendanceScreen = Get.isRegistered<AttendanceScreen>()
+                                      ? Get.find<AttendanceScreen>() // If already registered<,> find it
+                                      : Get.put(AttendanceScreen());
+
+                                  // final dashboardController = Get.isRegistered<DashboardController>()
+                                  //     ? Get.find<DashboardController>() // If already registered, find it
+                                  //     : Get.put(DashboardController());
                                   final bottomBarController = Get.isRegistered<BottomBarController>()
                                       ? Get.find<BottomBarController>() // If already registered, find it
                                       : Get.put(BottomBarController());
-
                                   // bool isCurrentScreenAttendance =
                                   //     ModalRoute.of(context)?.settings.name == AttendanceScreen.routeName;
 
                                   if (bottomBarController.persistentController.value.index != 1) {
-                                    bottomBarController.persistentController.value.index = 1;
-                                    bottomBarController.currentIndex.value = 1;
+                                    // bottomBarController.currentIndex.value = 1;
+                                    // bottomBarController.persistentController.value.index = 1;
+                                    bottomBarController.onItemTapped(1);
                                   }
                                 }, //Get.to(const AttendanceScreen()),
                                 child: Container(

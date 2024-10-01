@@ -8,10 +8,8 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
-import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/model/empsummdash_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
 import 'package:emp_app/main.dart';
@@ -43,9 +41,9 @@ class PayrollController extends GetxController {
     super.onInit();
     getProfileData();
     // hideBottomBar.value = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      hideBottomBar.value = false;
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    hideBottomBar.value = false;
+    // });
     filteredList = originalList;
     // focusNode.addListener(() {
     //   hasFocus = focusNode.hasFocus;

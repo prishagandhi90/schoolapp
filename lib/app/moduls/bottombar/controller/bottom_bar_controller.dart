@@ -9,6 +9,7 @@ import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
@@ -45,7 +46,7 @@ class BottomBarController extends GetxController {
     // while (Navigator.of(context).canPop()) {
     //   Navigator.of(context).pop();
     // }
-
+    hideBottomBar.value = false;
     persistentController.update((val) {
       val?.index = index;
     });
