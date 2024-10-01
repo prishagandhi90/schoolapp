@@ -26,6 +26,7 @@ class MispunchScreen extends GetView<MispunchController> {
         return DefaultTabController(
           length: 2,
           child: Scaffold(
+            backgroundColor: AppColor.white,
             appBar: AppBar(
               title: Text(
                 AppString.mispunch,
