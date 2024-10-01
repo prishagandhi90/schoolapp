@@ -39,10 +39,10 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  void onItemTapped(int index, BuildContext context) {
-    while (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    }
+  void onItemTapped(int index) {
+    // while (Navigator.of(context).canPop()) {
+    //   Navigator.of(context).pop();
+    // }
 
     persistentController.update((val) {
       val?.index = index;

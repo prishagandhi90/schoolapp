@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -12,7 +11,9 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MispunchController extends GetxController {
-  final ApiController apiController = Get.put(ApiController());
+  final apiController = Get.isRegistered<ApiController>()
+      ? Get.find<ApiController>() // If already registered, find it
+      : Get.put(ApiController());
   // var bottomBarController = Get.put(BottomBarController());
   final bottomBarController = Get.isRegistered<BottomBarController>()
       ? Get.find<BottomBarController>() // If already registered, find it
@@ -24,7 +25,7 @@ class MispunchController extends GetxController {
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
   var selectedYear = ''.obs;
-  final ScrollController monthScrollController = ScrollController();
+  var monthScrollController_mispunch = ScrollController();
 
   @override
   void onInit() {
@@ -38,16 +39,16 @@ class MispunchController extends GetxController {
   void setCurrentMonthYear() {
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
-    FlexibleMonthPicker(
-      selectedMonthIndex: MonthSel_selIndex.value,
-      onMonthSelected: (index) {
-        upd_MonthSelIndex(index);
-        showHideMsg();
-      },
-      scrollController: monthScrollController,
-      useGetX: true,
-      // controller: controller,
-    );
+    // FlexibleMonthPicker(
+    //   selectedMonthIndex: MonthSel_selIndex.value,
+    //   // onMonthSelected: (index) {
+    //   //   upd_MonthSelIndex(index);
+    //   //   showHideMsg();
+    //   // },
+    //   scrollController_mispunch: monthScrollController_mispunch,
+    //   useGetX: true,
+    //   // controller: controller,
+    // );
     // MonthSelectionScreen(
     //   selectedMonthIndex: MonthSel_selIndex.value,
     //   scrollController: monthScrollController,
@@ -57,28 +58,28 @@ class MispunchController extends GetxController {
     //   },
     // );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (monthScrollController.hasClients) {
-        double itemWidth = 80;
-        double screenWidth = Get.context!.size!.width;
-        double screenCenter = screenWidth / 2;
-        double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
-        double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
-        double maxScrollExtent = monthScrollController.position.maxScrollExtent;
-        double minScrollExtent = monthScrollController.position.minScrollExtent;
-        if (targetScrollPosition < minScrollExtent) {
-          targetScrollPosition = minScrollExtent;
-        } else if (targetScrollPosition > maxScrollExtent) {
-          targetScrollPosition = maxScrollExtent;
-        }
-
-        monthScrollController.animateTo(
-          targetScrollPosition,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (monthScrollController_mispunch.hasClients) {
+      double itemWidth = 80;
+      double screenWidth = Get.context!.size!.width;
+      double screenCenter = screenWidth / 2;
+      double selectedMonthPosition = MonthSel_selIndex.value * itemWidth;
+      double targetScrollPosition = selectedMonthPosition - screenCenter + itemWidth / 2;
+      double maxScrollExtent = monthScrollController_mispunch.position.maxScrollExtent;
+      double minScrollExtent = monthScrollController_mispunch.position.minScrollExtent;
+      if (targetScrollPosition < minScrollExtent) {
+        targetScrollPosition = minScrollExtent;
+      } else if (targetScrollPosition > maxScrollExtent) {
+        targetScrollPosition = maxScrollExtent;
       }
-    });
+
+      monthScrollController_mispunch.animateTo(
+        targetScrollPosition,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+    // });
     YearSel_selIndex = now.year.toString();
 
     CustomDropDown(
@@ -96,6 +97,11 @@ class MispunchController extends GetxController {
     update();
   }
 
+  @override
+  void onClose() {
+    monthScrollController_mispunch.dispose(); //
+    super.onClose();
+  }
   // void clearData() {
   //   MonthSel_selIndex.value = 0;
   //   YearSel_selIndex = "";

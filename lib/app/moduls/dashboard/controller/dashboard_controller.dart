@@ -18,9 +18,6 @@ class DashboardController extends GetxController {
   String tokenNo = '', loginId = '';
   final ApiController apiController = Get.put(ApiController());
 
-  final payrollScreen = Get.isRegistered<PayrollScreen>()
-      ? Get.find<PayrollScreen>() // If already registered, find it
-      : Get.put(PayrollScreen());
   // var bottomBarController = Get.put(BottomBarController());
   final bottomBarController = Get.isRegistered<BottomBarController>()
       ? Get.find<BottomBarController>() // If already registered, find it
@@ -113,6 +110,9 @@ class DashboardController extends GetxController {
         );
         break;
       case 7:
+        final payrollScreen = Get.isRegistered<PayrollScreen>()
+            ? Get.find<PayrollScreen>() // If already registered, find it
+            : Get.put(PayrollScreen());
         hideBottomBar.value = false;
         // var bottomBarController = Get.put(BottomBarController());
         final bottomBarController = Get.isRegistered<BottomBarController>()

@@ -17,118 +17,54 @@ class BottomBarView extends GetView<BottomBarController> {
         ? Get.find<BottomBarController>() // If already registered, find it
         : Get.put(BottomBarController());
 
+    // Get.put(BottomBarController());
+
     // return GetX<BottomBarController>(
     //   init: BottomBarController(),
     //   builder: (controller) {
-    return Scaffold(
-      body: Obx(
-        () => PersistentTabView(
-          context,
-          controller: controller.persistentController.value,
-          padding: const EdgeInsets.only(bottom: 4, top: 0),
-          confineToSafeArea: Platform.isAndroid ? true : false,
-          handleAndroidBackButtonPress: true,
-          hideNavigationBarWhenKeyboardAppears: true,
-          backgroundColor: AppColor.white,
-          navBarHeight: hideBottomBar.value ? 0 : 70.0,
-          decoration: NavBarDecoration(
-            colorBehindNavBar: AppColor.trasparent,
-            boxShadow: [
-              BoxShadow(
-                color: AppColor.originalgrey.withOpacity(0.1),
-                spreadRadius: 3.0,
+    return GetBuilder<BottomBarController>(
+      builder: (controller) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Obx(
+            () => PersistentTabView(
+              padding: const EdgeInsets.only(bottom: 4, top: 0),
+              context,
+              confineToSafeArea: Platform.isAndroid ? true : false,
+              controller: controller.persistentController.value,
+              handleAndroidBackButtonPress: true,
+              hideNavigationBarWhenKeyboardAppears: true,
+              backgroundColor: AppColor.white,
+              navBarHeight: hideBottomBar.value ? 0 : 70.0,
+              decoration: NavBarDecoration(
+                colorBehindNavBar: AppColor.trasparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.originalgrey.withOpacity(0.1),
+                    spreadRadius: 3.0,
+                  ),
+                ],
               ),
-            ],
-          ),
-          animationSettings: const NavBarAnimationSettings(
-            screenTransitionAnimation: ScreenTransitionAnimationSettings(
-              animateTabTransition: false,
-              curve: Curves.ease,
-              duration: Duration(milliseconds: 100),
+              animationSettings: const NavBarAnimationSettings(
+                screenTransitionAnimation: ScreenTransitionAnimationSettings(
+                  animateTabTransition: false,
+                  curve: Curves.ease,
+                  duration: Duration(milliseconds: 100),
+                ),
+              ),
+              screens: controller.buildScreens(),
+              items: controller.navBarsItems(context),
+              navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
+              stateManagement: false,
+              resizeToAvoidBottomInset: true,
+              bottomScreenMargin: Sizes.crossLength * 0.020,
+              onItemSelected: (index) => controller.onItemTapped(index),
+              // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
+              // popAllScreensOnTapOfSelectedTab: true,
             ),
           ),
-          screens: controller.buildScreens(),
-          items: controller.navBarsItems(context),
-          navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
-          resizeToAvoidBottomInset: true,
-          onItemSelected: (index) => controller.onItemTapped(index, context),
-          bottomScreenMargin: Sizes.crossLength * 0.020,
-          popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
-          // popAllScreensOnTapOfSelectedTab: true,
-        ),
-      ),
+        );
+      },
     );
-    //   },
-    // );
   }
 }
-// // ignore_for_file: deprecated_member_use
-
-// import 'dart:io';
-// import 'package:emp_app/app/core/util/app_color.dart';
-// import 'package:emp_app/main.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:emp_app/app/core/util/sizer_constant.dart';
-// import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-// import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-
-// class BottomBarView extends GetView<BottomBarController> {
-//   const BottomBarView({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Get.put(BottomBarController());
-//     // return GetBuilder<BottomBarController>(
-//     //   builder: (controller) {
-
-//     // Get.isRegistered<BottomBarController>()
-//     //     ? Get.find<BottomBarController>() // If already registered, find it
-//     //     : Get.put(BottomBarController());
-//     return Obx(
-//       () => Scaffold(
-//         resizeToAvoidBottomInset: false,
-//         body: PersistentTabView(
-//           context,
-//           controller: controller.persistentController.value,
-//           padding: const EdgeInsets.only(bottom: 4, top: 0),
-//           confineToSafeArea: Platform.isAndroid ? true : false,
-//           handleAndroidBackButtonPress: true,
-//           hideNavigationBarWhenKeyboardAppears: true,
-//           // popBehaviorOnSelectedNavBarItemPress: PopBehavior.none,
-//           backgroundColor: AppColor.white,
-//           navBarHeight: hideBottomBar.value ? 0 : 70.0,
-//           decoration: NavBarDecoration(
-//             colorBehindNavBar: AppColor.trasparent,
-//             boxShadow: [
-//               BoxShadow(
-//                 color: AppColor.originalgrey.withOpacity(0.1),
-//                 spreadRadius: 3.0,
-//               ),
-//             ],
-//           ),
-//           animationSettings: const NavBarAnimationSettings(
-//             screenTransitionAnimation: ScreenTransitionAnimationSettings(
-//               animateTabTransition: false,
-//               curve: Curves.ease,
-//               duration: Duration(milliseconds: 100),
-//             ),
-//           ),
-//           screens: controller.buildScreens(),
-//           items: controller.navBarsItems(context),
-//           navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
-//           stateManagement: false,
-//           resizeToAvoidBottomInset: true,
-//           bottomScreenMargin: Sizes.crossLength * 0.020,
-//           // onItemSelected: (value) {
-//           //   controller.onItemTapped(value, context);
-//           // },
-//           onItemSelected: (index) => controller.onItemTapped(index, context),
-//           // popAllScreensOnTapOfSelectedTab: true,
-//         ),
-//       ),
-//     );
-//     //   },
-//     // );
-//   }
-// }

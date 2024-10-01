@@ -1,3 +1,4 @@
+import 'package:emp_app/app/app_custom_widget/monthpicker_mispunch.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
@@ -14,7 +15,10 @@ class MispunchScreen extends GetView<MispunchController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(MispunchController());
+    // Get.put(MispunchController());
+    final MispunchController controller = Get.isRegistered<MispunchController>()
+        ? Get.find<MispunchController>() // If already registered, find it
+        : Get.put(MispunchController());
     return GetBuilder<MispunchController>(
       builder: (controller) {
         return DefaultTabController(
@@ -50,15 +54,9 @@ class MispunchScreen extends GetView<MispunchController> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 children: [
-                  FlexibleMonthPicker(
-                    selectedMonthIndex: controller.MonthSel_selIndex.value,
-                    onMonthSelected: (index) {
-                      controller.upd_MonthSelIndex(index);
-                      controller.showHideMsg();
-                    },
-                    scrollController: controller.monthScrollController,
-                    useGetX: true,
+                  MonthPicker_mispunch(
                     controller: controller,
+                    scrollController: controller.monthScrollController_mispunch,
                   ),
                   const SizedBox(height: 20),
                   Padding(
@@ -74,15 +72,16 @@ class MispunchScreen extends GetView<MispunchController> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.23,
-                                      decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
+                                      decoration: BoxDecoration(
+                                          color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
                                       child: Column(
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             width: double.infinity,
                                             height: 45,
-                                            decoration:
-                                                BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 15),
                                               child: Align(
@@ -104,7 +103,8 @@ class MispunchScreen extends GetView<MispunchController> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                 children: [
                                                   CustomContainerview(
-                                                      text: AppString.type, text1: controller.mispunchTable[index].misPunch.toString()),
+                                                      text: AppString.type,
+                                                      text1: controller.mispunchTable[index].misPunch.toString()),
                                                   CustomContainerview(
                                                       text: AppString.punchtime,
                                                       text1: controller.mispunchTable[index].punchTime.toString()),

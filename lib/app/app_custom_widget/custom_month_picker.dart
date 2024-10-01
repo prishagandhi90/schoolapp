@@ -19,8 +19,18 @@ class FlexibleMonthPicker extends StatelessWidget {
   }) : super(key: key);
 
   static const List<String> months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
 
   @override
