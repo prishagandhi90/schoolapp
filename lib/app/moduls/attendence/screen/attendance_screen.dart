@@ -85,6 +85,7 @@ class AttendanceScreen extends StatelessWidget {
                   color: AppColor.lightblue,
                 ),
                 child: TabBar(
+                  physics: NeverScrollableScrollPhysics(),
                   labelColor: AppColor.white,
                   unselectedLabelColor: AppColor.black,
                   dividerColor: Colors.transparent,
@@ -98,6 +99,7 @@ class AttendanceScreen extends StatelessWidget {
             ),
             const Expanded(
               child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   SummaryScreen(),
                   DetailsScreen(),

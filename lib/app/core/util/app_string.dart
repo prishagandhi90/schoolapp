@@ -46,8 +46,8 @@ class AppString {
   static String clockin = "Clock In";
   static String notyet = "Not Yet";
   static String clockout = "Clock Out";
-  static String lcEgmin = "LC/EG MIN";
-  static String lcegcnt = "LC/EG CNT";
+  static String lcEgmin = "LC/EG MINUTES";
+  static String lcegcnt = "LC/EG COUNT";
   static String mispunchinfo = "Mispunch Info";
   static String leaveentry = "Leave Entry";
   static String areyousuretologout = "Are you sure you want to log out?";

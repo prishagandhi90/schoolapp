@@ -35,6 +35,7 @@ class PayrollScreen extends GetView<PayrollController> {
     //   init: PayrollController(),
     //   builder: (controller) {
     return Scaffold(
+      backgroundColor: AppColor.white,
       onDrawerChanged: (isop) {
         // var bottomBarController = Get.put(BottomBarController());
         final bottomBarController = Get.isRegistered<BottomBarController>()
@@ -346,6 +347,7 @@ class PayrollScreen extends GetView<PayrollController> {
                       children: [
                         Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -412,6 +414,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 5),
                               Text(AppString.attendence, style: AppStyle.plus12),
                             ],
                           ),
@@ -419,6 +422,7 @@ class PayrollScreen extends GetView<PayrollController> {
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
                         Expanded(
                             child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
                               onTap: () {
@@ -467,12 +471,14 @@ class PayrollScreen extends GetView<PayrollController> {
                                 ),
                               ),
                             ),
+                            const SizedBox(height: 5),
                             Text(AppString.mispunchinfo, style: AppStyle.plus12),
                           ],
                         )),
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
                         Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -514,6 +520,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 5),
                               Text(AppString.leaveentry, style: AppStyle.plus12),
                             ],
                           ),
@@ -521,6 +528,7 @@ class PayrollScreen extends GetView<PayrollController> {
                         const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
                         Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -559,6 +567,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 5),
                               Text(AppString.overtime, style: AppStyle.plus12),
                             ],
                           ),

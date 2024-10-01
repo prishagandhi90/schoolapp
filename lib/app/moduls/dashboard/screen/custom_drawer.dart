@@ -38,15 +38,13 @@ class CustomDrawer extends StatelessWidget {
                 children: [
                   SizedBox(height: topPadding + 15),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15,
-                        top: 10,
-                        bottom: 5),
+                    padding: const EdgeInsets.only(left: 15, top: 10, bottom: 5),
                     child: Row(
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: AppColor.darkgery), borderRadius: const BorderRadius.all(Radius.circular(10))),
+                              border: Border.all(width: 1, color: AppColor.darkgery),
+                              borderRadius: const BorderRadius.all(Radius.circular(10))),
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 30),
@@ -121,7 +119,9 @@ class CustomDrawer extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 )
                               else
-                                Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                                Text('-- ',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                               SizedBox(
                                 height: Sizes.crossLength * 0.010,
                               ),
@@ -148,25 +148,36 @@ class CustomDrawer extends StatelessWidget {
                           ],
                         ),
                         borderRadius: BorderRadius.circular(40),
-                        boxShadow: const [BoxShadow(color: Colors.white70, blurRadius: 0.0, offset: Offset(0, 4), spreadRadius: 2)]),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.white70, blurRadius: 0.0, offset: Offset(0, 4), spreadRadius: 2)
+                        ]),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         if (dashboardController.department.isNotEmpty)
-                          Text(dashboardController.department.toString(),
-                              style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
+                          Text(dashboardController.department.toString().capitalizeFirst ?? '',
+                              style:
+                                  TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                         else
-                          Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                          Text('-- ',
+                              style:
+                                  TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                         if (dashboardController.empCode.isNotEmpty)
                           Text(dashboardController.empCode.toString(),
-                              style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
+                              style:
+                                  TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                         else
-                          Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                          Text('-- ',
+                              style:
+                                  TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                         if (dashboardController.empType.isNotEmpty)
-                          Text(dashboardController.empType.toString(),
-                              style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
+                          Text(dashboardController.empType.toString().capitalizeFirst ?? '',
+                              style:
+                                  TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                         else
-                          Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                          Text('-- ',
+                              style:
+                                  TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                       ],
                     ),
                   ),
@@ -213,7 +224,8 @@ class CustomDrawer extends StatelessWidget {
                       width: 120,
                       height: 40,
                       child: ElevatedButton(
-                          style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color.fromARGB(204, 244, 67, 54))),
+                          style: const ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(Color.fromARGB(204, 244, 67, 54))),
                           onPressed: () {
                             otpController.showLogoutDialog(context);
                           },

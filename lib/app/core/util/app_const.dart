@@ -5,12 +5,12 @@ class AppConst {
     {'image': 'assets/image/HIMS.png', 'label': 'HIMS'},
     {'image': 'assets/image/OPD.png', 'label': 'OPD'},
     {'image': 'assets/image/IPD.png', 'label': 'IPD'},
-    {'image': 'assets/image/stores.png', 'label': 'STORE'},
-    {'image': 'assets/image/radio.png', 'label': 'RADIOLOGY'},
-    {'image': 'assets/image/patho.png', 'label': 'PATHOLOGY'},
-    {'image': 'assets/image/pharma.png', 'label': 'PHARMACY'},
-    {'image': 'assets/image/payroll.png', 'label': 'PAYROLL'},
-    {'image': 'assets/image/OT.png', 'label': 'OPERATION THEATER'},
+    {'image': 'assets/image/stores.png', 'label': 'Store'},
+    {'image': 'assets/image/radio.png', 'label': 'Radiology'},
+    {'image': 'assets/image/patho.png', 'label': 'Pathology'},
+    {'image': 'assets/image/pharma.png', 'label': 'Pharmacy'},
+    {'image': 'assets/image/payroll.png', 'label': 'Payroll'},
+    {'image': 'assets/image/OT.png', 'label': 'Operation Theater'},
   ];
 
   static const List<Map<String, dynamic>> gridview = [
