@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
@@ -70,8 +71,7 @@ class PayrollController extends GetxController {
 
       var jsonbodyObj = {"loginId": loginId};
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse =
-          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -111,9 +111,7 @@ class PayrollController extends GetxController {
         bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: AttendanceScreen(
-            fromDashboard: true,
-          ),
+          screen: AttendanceScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
@@ -139,52 +137,52 @@ class PayrollController extends GetxController {
         });
         break;
       case 2:
-        hideBottomBar.value = false;
-        // var bottomBarController = Get.put(BottomBarController());
-        final bottomBarController = Get.isRegistered<BottomBarController>()
-            ? Get.find<BottomBarController>() // If already registered, find it
-            : Get.put(BottomBarController());
-        bottomBarController.update();
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: LeaveMainScreen(),
-          withNavBar: true,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) async {
-          hideBottomBar.value = false;
-          await dashboardController.getDashboardDataUsingToken();
-        });
-        // Get.snackbar(
-        //   AppString.comingsoon,
-        //   '',
-        //   colorText: AppColor.white,
-        //   backgroundColor: AppColor.black,
-        //   duration: const Duration(seconds: 1),
-        // );
+        // hideBottomBar.value = false;
+        // // var bottomBarController = Get.put(BottomBarController());
+        // final bottomBarController = Get.isRegistered<BottomBarController>()
+        //     ? Get.find<BottomBarController>() // If already registered, find it
+        //     : Get.put(BottomBarController());
+        // bottomBarController.update();
+        // PersistentNavBarNavigator.pushNewScreen(
+        //   context,
+        //   screen: LeaveMainScreen(),
+        //   withNavBar: true,
+        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        // ).then((value) async {
+        //   hideBottomBar.value = false;
+        //   await dashboardController.getDashboardDataUsingToken();
+        // });
+        Get.snackbar(
+          AppString.comingsoon,
+          '',
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 3:
-        hideBottomBar.value = false;
-        // var bottomBarController = Get.put(BottomBarController());
-        final bottomBarController = Get.isRegistered<BottomBarController>()
-            ? Get.find<BottomBarController>() // If already registered, find it
-            : Get.put(BottomBarController());
-        bottomBarController.update();
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: OvertimeMainScreen(),
-          withNavBar: true,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) async {
-          hideBottomBar.value = false;
-          await dashboardController.getDashboardDataUsingToken();
-        });
-        // Get.snackbar(
-        //   AppString.comingsoon,
-        //   '',
-        //   colorText: AppColor.white,
-        //   backgroundColor: AppColor.black,
-        //   duration: const Duration(seconds: 1),
-        // );
+        // hideBottomBar.value = false;
+        // // var bottomBarController = Get.put(BottomBarController());
+        // final bottomBarController = Get.isRegistered<BottomBarController>()
+        //     ? Get.find<BottomBarController>() // If already registered, find it
+        //     : Get.put(BottomBarController());
+        // bottomBarController.update();
+        // PersistentNavBarNavigator.pushNewScreen(
+        //   context,
+        //   screen: OvertimeMainScreen(),
+        //   withNavBar: true,
+        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        // ).then((value) async {
+        //   hideBottomBar.value = false;
+        //   await dashboardController.getDashboardDataUsingToken();
+        // });
+        Get.snackbar(
+          AppString.comingsoon,
+          '',
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       default:
     }

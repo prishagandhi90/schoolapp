@@ -129,8 +129,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '',
-          colorText: AppColor.white, backgroundColor: AppColor.black);
+      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
     });
   }
 
@@ -194,12 +193,12 @@ class _OtpScreenState extends State<OtpScreen> {
                                 keyboardType: TextInputType.number,
                                 defaultPinTheme: defaultPinTheme,
                                 separatorBuilder: (index) => const SizedBox(width: 8),
-                                // onCompleted: (pin) async {
-                                //   print('onCompOTP: ${loginController.responseOTPNo}');
-                                //   otpController.isLoadingLogin
-                                //       ? null
-                                //       : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
-                                // },
+                                onCompleted: (pin) async {
+                                  print('onCompOTP: ${loginController.responseOTPNo}');
+                                  otpController.isLoadingLogin
+                                      ? null
+                                      : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
+                                },
                                 onChanged: (value) {},
                               ),
                               const SizedBox(height: 20),
@@ -215,8 +214,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   onPressed: otpController.isLoadingLogin
                                       ? null
                                       : () async {
-                                          if (otpController.otpController.text.isEmpty ||
-                                              otpController.otpController.text.length < 6) {
+                                          if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
                                             Get.snackbar(
                                               AppString.error,
                                               AppString.plzentervalidotp,
@@ -225,8 +223,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                               duration: const Duration(seconds: 1),
                                             );
                                           } else {
-                                            await otpController.otpOnClk(
-                                                context, loginController.responseOTPNo, widget.deviceToken);
+                                            await otpController.otpOnClk(context, loginController.responseOTPNo, widget.deviceToken);
                                           }
                                         },
                                   style: ElevatedButton.styleFrom(
