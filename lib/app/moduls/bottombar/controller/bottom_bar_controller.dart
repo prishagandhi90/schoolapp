@@ -42,7 +42,7 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  void onItemTapped(int index, BuildContext context) {
+  void onItemTapped(int index) {
     // while (Navigator.of(context).canPop()) {
     //   Navigator.of(context).pop();
     // }
@@ -63,170 +63,146 @@ class BottomBarController extends GetxController {
 
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
     return [
-      _buildNavBarItem(0, AppImage.home, AppString.home),
-      _buildNavBarItem(1, AppImage.attendence, AppString.attendence),
-      _buildNavBarItem(2, AppImage.dashboard, AppString.dashboard),
-      _buildNavBarItem(3, AppImage.leave, AppString.leave),
-      _buildNavBarItem(4, AppImage.overtime, AppString.overtime),
+      PersistentBottomNavBarItem(
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.home,
+                  color: currentIndex.value == 0 && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  height: 32,
+                  width: 32),
+              SizedBox(height: 4),
+              Text(AppString.home, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.home, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.home, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
+        activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
+        onPressed: (index) {
+          if (index != 0) {
+            // Add your functionality here
+          }
+        },
+      ),
+      PersistentBottomNavBarItem(
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.attendence,
+                  color: currentIndex.value == 1 && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  height: 32,
+                  width: 32),
+              SizedBox(height: 4),
+              Text(AppString.attendence, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.attendence, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.attendence, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
+        activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.dashboard,
+                  color: currentIndex.value == 2 && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  height: 32,
+                  width: 32),
+              SizedBox(height: 4),
+              Text(AppString.dashboard, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.dashboard, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.dashboard, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
+        activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.leave,
+                  color: currentIndex.value == 3 && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  height: 32,
+                  width: 32),
+              SizedBox(height: 4),
+              Text(AppString.leave, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.leave, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.leave, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
+        activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.overtime,
+                  color: currentIndex.value == 4 && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  height: 32,
+                  width: 32),
+              SizedBox(height: 4),
+              Text(AppString.overtime, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
+            ],
+          ),
+        ),
+        inactiveIcon: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImage.overtime, color: AppColor.black, height: 32, width: 32),
+              SizedBox(height: 4),
+              Text(AppString.overtime, style: TextStyle(color: AppColor.black, fontSize: 12)),
+            ],
+          ),
+        ),
+        activeColorPrimary: AppColor.primaryColor,
+        inactiveColorPrimary: AppColor.black,
+      ),
     ];
   }
-
-  PersistentBottomNavBarItem _buildNavBarItem(int index, String iconPath, String title) {
-    return PersistentBottomNavBarItem(
-      icon: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(iconPath,
-                color: currentIndex.value == index && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                height: 32,
-                width: 32),
-            SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(
-                  color: currentIndex.value == index && currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12),
-            ),
-          ],
-        ),
-      ),
-      activeColorPrimary: AppColor.primaryColor,
-      inactiveColorPrimary: AppColor.black,
-      // onPressed: (index) {
-      //   if (index != 0) {
-      //     // Add your functionality here
-      //   }
-      // },
-    );
-  }
-
-  // List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
-  //   return [
-  //     PersistentBottomNavBarItem(
-  //       icon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.home, color: AppColor.primaryColor, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.home, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       inactiveIcon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.home, color: AppColor.black, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.home, style: TextStyle(color: AppColor.black, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       activeColorPrimary: AppColor.primaryColor,
-  //       inactiveColorPrimary: AppColor.black,
-  //       onPressed: (index) {
-  //         if (index != 0) {
-  //           // Add your functionality here
-  //         }
-  //       },
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       icon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.attendence, color: AppColor.primaryColor, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.attendence, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       inactiveIcon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.attendence, color: AppColor.black, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.attendence, style: TextStyle(color: AppColor.black, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       activeColorPrimary: AppColor.primaryColor,
-  //       inactiveColorPrimary: AppColor.black,
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       icon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.dashboard, color: AppColor.primaryColor, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.dashboard, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       inactiveIcon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.dashboard, color: AppColor.black, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.dashboard, style: TextStyle(color: AppColor.black, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       activeColorPrimary: AppColor.primaryColor,
-  //       inactiveColorPrimary: AppColor.black,
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       icon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.leave, color: AppColor.primaryColor, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.leave, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       inactiveIcon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.leave, color: AppColor.black, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.leave, style: TextStyle(color: AppColor.black, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       activeColorPrimary: AppColor.primaryColor,
-  //       inactiveColorPrimary: AppColor.black,
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       icon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.overtime, color: AppColor.primaryColor, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.overtime, style: TextStyle(color: AppColor.primaryColor, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       inactiveIcon: Container(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Image.asset(AppImage.overtime, color: AppColor.black, height: 32, width: 32),
-  //             SizedBox(height: 4),
-  //             Text(AppString.overtime, style: TextStyle(color: AppColor.black, fontSize: 12)),
-  //           ],
-  //         ),
-  //       ),
-  //       activeColorPrimary: AppColor.primaryColor,
-  //       inactiveColorPrimary: AppColor.black,
-  //     ),
-  //   ];
-  // }
 }

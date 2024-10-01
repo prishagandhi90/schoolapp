@@ -58,7 +58,7 @@ class BottomBarView extends GetView<BottomBarController> {
               stateManagement: false,
               resizeToAvoidBottomInset: true,
               bottomScreenMargin: Sizes.crossLength * 0.020,
-              onItemSelected: (index) => controller.onItemTapped(index, context),
+              onItemSelected: (index) => controller.onItemTapped(index),
               // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
               // popAllScreensOnTapOfSelectedTab: true,
             ),

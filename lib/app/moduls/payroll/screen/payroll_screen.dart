@@ -359,7 +359,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                   if (bottomBarController.persistentController.value.index != 1) {
                                     // bottomBarController.currentIndex.value = 1;
                                     // bottomBarController.persistentController.value.index = 1;
-                                    bottomBarController.onItemTapped(1, context);
+                                    bottomBarController.onItemTapped(1);
                                     // Get.to(attendanceScreen);
                                   }
                                 }, //Get.to(const AttendanceScreen()),
