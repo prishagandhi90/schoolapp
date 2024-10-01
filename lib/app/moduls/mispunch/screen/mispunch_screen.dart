@@ -6,9 +6,11 @@ import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class MispunchScreen extends GetView<MispunchController> {
   const MispunchScreen({super.key});
@@ -35,8 +37,12 @@ class MispunchScreen extends GetView<MispunchController> {
               ),
               leading: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    // controller.clearData();
+                    // Navigator.pop(context);
+                    // // controller.clearData();
+                    final bottomBarController = Get.find<BottomBarController>();
+                    bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                    bottomBarController.currentIndex.value = 0;
+                    Navigator.of(context).pop();
                   },
                   icon: const Icon(Icons.arrow_back)),
               // centerTitle: true,
@@ -72,16 +78,15 @@ class MispunchScreen extends GetView<MispunchController> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.23,
-                                      decoration: BoxDecoration(
-                                          color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
+                                      decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
                                       child: Column(
                                         children: [
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             width: double.infinity,
                                             height: 45,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
+                                            decoration:
+                                                BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 15),
                                               child: Align(
@@ -103,8 +108,7 @@ class MispunchScreen extends GetView<MispunchController> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                                 children: [
                                                   CustomContainerview(
-                                                      text: AppString.type,
-                                                      text1: controller.mispunchTable[index].misPunch.toString()),
+                                                      text: AppString.type, text1: controller.mispunchTable[index].misPunch.toString()),
                                                   CustomContainerview(
                                                       text: AppString.punchtime,
                                                       text1: controller.mispunchTable[index].punchTime.toString()),

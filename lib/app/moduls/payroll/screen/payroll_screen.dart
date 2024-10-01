@@ -298,8 +298,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                       children: [
                                         Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                         if (controller.empSummDashboardTable.isNotEmpty)
-                                          Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
-                                              style: AppStyle.plus16w600)
+                                          Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
                                         else
                                           Text('-- ', style: AppStyle.plus16w600),
                                       ],
@@ -364,36 +363,6 @@ class PayrollScreen extends GetView<PayrollController> {
                                   if (bottomBarController.persistentController.value.index != 1) {
                                     bottomBarController.persistentController.value.index = 1;
                                     bottomBarController.currentIndex.value = 1;
-                                    // PersistentNavBarNavigator.pushNewScreen(
-                                    //   context,
-                                    //   // screen: AttendanceScreen(
-                                    //   //   fromDashboard: true,
-                                    //   // ),
-                                    //   screen: attendanceScreen,
-                                    //   withNavBar: true,
-                                    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    // ).then((value) {
-                                    // bool isCurrentScreenAttendance = Navigator.of(context).canPop() &&
-                                    //     ModalRoute.of(context)!.settings.name == AttendanceScreen.routeName;
-
-                                    // if (!isCurrentScreenAttendance) {
-                                    //   while (Navigator.canPop(context)) {
-                                    //     Navigator.pop(context);
-                                    //   }
-                                    // }
-
-                                    // Future.delayed(Duration.zero, () {
-                                    //   // Add a back button listener or handle navigation result
-                                    //   Navigator.of(context).maybePop().then((value) {
-                                    //     if (value) {
-                                    //       // Perform actions when coming back from AttendanceScreen
-                                    //       hideBottomBar.value = false;
-                                    //       dashboardController.getDashboardDataUsingToken();
-                                    //     }
-                                    //   });
-                                    // });
-                                    // });
-                                    // });
                                   }
                                 }, //Get.to(const AttendanceScreen()),
                                 child: Container(
@@ -450,6 +419,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                   //     while (Navigator.canPop(context)) {
                                   //       Navigator.pop(context);
                                   //     }
+                                  final bottomBarController = Get.find<BottomBarController>();
+                                  bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                                  bottomBarController.currentIndex.value = 0;
                                   hideBottomBar.value = false;
                                   await dashboardController.getDashboardDataUsingToken();
                                 });
@@ -481,30 +453,37 @@ class PayrollScreen extends GetView<PayrollController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  var dashboardController = Get.put(DashboardController());
-                                  // var bottomBarController = Get.put(BottomBarController());
-                                  var bottomBarController = Get.find<BottomBarController>();
-                                  bottomBarController.currentIndex.value = 3;
-                                  bottomBarController.persistentController.value.jumpToTab(3);
-                                  bottomBarController.update();
-                                  // bottomBarController.currentIndex = 3.obs;
-                                  // bottomBarController.persistentController!.jumpToTab(bottomBarController.currentIndex.value);
-                                  // bottomBarController.update();
-                                  PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: LeaveMainScreen(),
-                                    withNavBar: true,
-                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                  ).then((value) async {
-                                    // if (Get.isRegistered<LeaveController>()) {
-                                    //   Get.delete<LeaveController>();
-                                    // }
-                                    hideBottomBar.value = false;
-                                    bottomBarController.update();
-                                    await dashboardController.getDashboardDataUsingToken();
-                                  });
-                                },
+                                // onTap: () {
+                                //   var dashboardController = Get.put(DashboardController());
+                                //   // var bottomBarController = Get.put(BottomBarController());
+                                //   var bottomBarController = Get.find<BottomBarController>();
+                                //   bottomBarController.currentIndex.value = 3;
+                                //   bottomBarController.persistentController.value.jumpToTab(3);
+                                //   bottomBarController.update();
+                                //   // bottomBarController.currentIndex = 3.obs;
+                                //   // bottomBarController.persistentController!.jumpToTab(bottomBarController.currentIndex.value);
+                                //   // bottomBarController.update();
+                                //   PersistentNavBarNavigator.pushNewScreen(
+                                //     context,
+                                //     screen: LeaveMainScreen(),
+                                //     withNavBar: true,
+                                //     pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                //   ).then((value) async {
+                                //     // if (Get.isRegistered<LeaveController>()) {
+                                //     //   Get.delete<LeaveController>();
+                                //     // }
+                                //     hideBottomBar.value = false;
+                                //     bottomBarController.update();
+                                //     await dashboardController.getDashboardDataUsingToken();
+                                //   });
+                                // },
+                                onTap: () => Get.snackbar(
+                                  AppString.comingsoon,
+                                  '',
+                                  colorText: AppColor.white,
+                                  backgroundColor: AppColor.black,
+                                  duration: const Duration(seconds: 1),
+                                ),
                                 child: Container(
                                   height: MediaQuery.of(context).size.height * 0.06, //0.07
                                   width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -531,27 +510,27 @@ class PayrollScreen extends GetView<PayrollController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               GestureDetector(
-                                onTap: () {
-                                  var dashboardController = Get.put(DashboardController());
-                                  PersistentNavBarNavigator.pushNewScreen(
-                                    context,
-                                    screen: OvertimeMainScreen(),
-                                    withNavBar: true,
-                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                  ).then((value) async {
-                                    // Get.delete<LeaveController>();
-                                    Get.delete<OvertimeController>();
-                                    hideBottomBar.value = false;
-                                    await dashboardController.getDashboardDataUsingToken();
-                                  });
-                                },
-                                // onTap: () => Get.snackbar(
-                                //   AppString.comingsoon,
-                                //   '',
-                                //   colorText: AppColor.white,
-                                //   backgroundColor: AppColor.black,
-                                //   duration: const Duration(seconds: 1),
-                                // ),
+                                // onTap: () {
+                                //   var dashboardController = Get.put(DashboardController());
+                                //   PersistentNavBarNavigator.pushNewScreen(
+                                //     context,
+                                //     screen: OvertimeMainScreen(),
+                                //     withNavBar: true,
+                                //     pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                //   ).then((value) async {
+                                //     // Get.delete<LeaveController>();
+                                //     Get.delete<OvertimeController>();
+                                //     hideBottomBar.value = false;
+                                //     await dashboardController.getDashboardDataUsingToken();
+                                //   });
+                                // },
+                                onTap: () => Get.snackbar(
+                                  AppString.comingsoon,
+                                  '',
+                                  colorText: AppColor.white,
+                                  backgroundColor: AppColor.black,
+                                  duration: const Duration(seconds: 1),
+                                ),
                                 child: Container(
                                   height: MediaQuery.of(context).size.height * 0.06, //0.07
                                   width: MediaQuery.of(context).size.width * 0.14, //0.17
