@@ -115,6 +115,12 @@ class DashboardController extends GetxController {
         bottomBarController.persistentController.value.index = 0;
         bottomBarController.currentIndex.value = 0;
         // bottomBarController.update();
+        // Get.offAll(() => payrollScreen);
+        // Get.offAllNamed(Routes.Payroll)!.then((value) {
+        //   hideBottomBar.value = false;
+        //   getDashboardDataUsingToken();
+        // });
+
         PersistentNavBarNavigator.pushNewScreen(
           context,
           // screen: PayrollScreen(),
@@ -122,7 +128,8 @@ class DashboardController extends GetxController {
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {
-          hideBottomBar.value = false;
+          // bottomBarController.resetAndInitialize();
+          // hideBottomBar.value = false;
           getDashboardDataUsingToken();
         });
 

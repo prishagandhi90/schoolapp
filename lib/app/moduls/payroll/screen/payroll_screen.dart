@@ -29,13 +29,17 @@ class PayrollScreen extends GetView<PayrollController> {
     //   builder: (controller) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      onDrawerChanged: (isop) {
+      onDrawerChanged: (isOpened) {
         // var bottomBarController = Get.put(BottomBarController());
         final bottomBarController = Get.isRegistered<BottomBarController>()
             ? Get.find<BottomBarController>() // If already registered, find it
             : Get.put(BottomBarController());
-        hideBottomBar.value = isop;
+        hideBottomBar.value = isOpened;
         bottomBarController.update();
+        if (isOpened) {
+          controller.filterSearchResults(''); // Reset the filter
+          controller.textEditingController.clear();
+        }
       },
       drawer: Drawer(
           backgroundColor: AppColor.white,
@@ -68,6 +72,7 @@ class PayrollScreen extends GetView<PayrollController> {
                             ),
                             onPressed: () {
                               controller.textEditingController.clear();
+                            controller.filterSearchResults('');
                             },
                           )
                         : null,
@@ -88,7 +93,9 @@ class PayrollScreen extends GetView<PayrollController> {
                   },
                 ),
               ),
-              ListView.builder(
+            GetBuilder<PayrollController>(
+              builder: (controller) {
+                return ListView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 shrinkWrap: true,
                 itemCount: controller.filteredList.length,
@@ -114,11 +121,18 @@ class PayrollScreen extends GetView<PayrollController> {
                             fontFamily: CommonFontStyle.plusJakartaSans,
                           ),
                         ),
-                        trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_forward_ios)),
+                          trailing: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                controller.payrolListOnClk(index, context);
+                              },
+                              icon: const Icon(Icons.arrow_forward_ios)),
                       ),
                     ),
                   );
                 },
+                );
+              },
               )
             ],
           )),
@@ -359,7 +373,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                   if (bottomBarController.persistentController.value.index != 1) {
                                     // bottomBarController.currentIndex.value = 1;
                                     // bottomBarController.persistentController.value.index = 1;
-                                    bottomBarController.onItemTapped(1);
+                                    bottomBarController.onItemTapped(1, context);
                                     // Get.to(attendanceScreen);
                                   }
                                 }, //Get.to(const AttendanceScreen()),
