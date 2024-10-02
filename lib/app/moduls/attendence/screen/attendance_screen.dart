@@ -23,7 +23,6 @@ class AttendanceScreen extends StatelessWidget {
     final AttendenceController controller = Get.isRegistered<AttendenceController>()
         ? Get.find<AttendenceController>() // If already registered, find it
         : Get.put(AttendenceController());
-
     // return GetBuilder<AttendenceController>(
     //   builder: (controller) {
     return DefaultTabController(

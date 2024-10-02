@@ -1,4 +1,3 @@
-// import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -67,9 +66,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                           controller: controller.attendanceScrollController,
                                           child: Table(
                                             columnWidths: {
-                                              0: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              1: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              2: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                              0: FixedColumnWidth(constraints.maxWidth * 0.15),
+                                              1: FixedColumnWidth(constraints.maxWidth * 0.22),
+                                              2: FixedColumnWidth(constraints.maxWidth * 0.22),
                                               3: FixedColumnWidth(constraints.maxWidth * 0.2),
                                               4: FixedColumnWidth(constraints.maxWidth * 0.2),
                                             },
@@ -80,7 +79,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                   buildCell(
                                                     Container(
                                                       height: 40,
-                                                      width: 40,
+                                                      width: 30, // Width ko kam kiya gaya hai
                                                       decoration: BoxDecoration(
                                                         color: AppColor.lightgrey,
                                                         borderRadius: BorderRadius.circular(10),
