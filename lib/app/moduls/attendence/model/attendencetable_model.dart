@@ -47,6 +47,9 @@ class AttendanceDetailTable {
   String? lc;
   String? eg;
   String? lCEGMIN;
+  String? redYNLCEGMIN;
+  String? redYNINTM;
+  String? redYNOUTTM;
 
   AttendanceDetailTable(
       {this.mntHYR,
@@ -62,7 +65,10 @@ class AttendanceDetailTable {
       this.oTMIN,
       this.lc,
       this.eg,
-      this.lCEGMIN});
+      this.lCEGMIN,
+      this.redYNLCEGMIN,
+      this.redYNINTM,
+      this.redYNOUTTM});
 
   AttendanceDetailTable.fromJson(Map<String, dynamic> json) {
     mntHYR = json['mntH_YR'];
@@ -79,6 +85,9 @@ class AttendanceDetailTable {
     lc = json['lc'];
     eg = json['eg'];
     lCEGMIN = json['lC_EG_MIN'];
+    redYNLCEGMIN = json['redYN_LC_EG_MIN'];
+    redYNINTM = json['redYN_IN_TM'];
+    redYNOUTTM = json['redYN_OUT_TM'];
   }
 
   Map<String, dynamic> toJson() {
@@ -97,6 +106,9 @@ class AttendanceDetailTable {
     data['lc'] = this.lc;
     data['eg'] = this.eg;
     data['lC_EG_MIN'] = this.lCEGMIN;
+    data['redYN_LC_EG_MIN'] = this.redYNLCEGMIN;
+    data['redYN_IN_TM'] = this.redYNINTM;
+    data['redYN_OUT_TM'] = this.redYNOUTTM;
     return data;
   }
 }

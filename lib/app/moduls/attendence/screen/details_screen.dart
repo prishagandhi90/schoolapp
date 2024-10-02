@@ -54,11 +54,11 @@ class DetailsScreen extends GetView<AttendenceController> {
                                         color: AppColor.primaryColor,
                                         child: Row(
                                           children: [
-                                            _buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
-                                            _buildHeaderCell('', constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.date, constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.iN, constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.out, constraints.maxWidth * 0.2),
+                                            buildHeaderCell(AppString.lcegmin, constraints.maxWidth * 0.2),
+                                            buildHeaderCell('', constraints.maxWidth * 0.2),
                                           ],
                                         ),
                                       ),
@@ -77,7 +77,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                               controller.attendenceDetailTable.length,
                                               (index) => TableRow(
                                                 children: [
-                                                  _buildCell(
+                                                  buildCell(
                                                     Container(
                                                       height: 40,
                                                       width: 40,
@@ -93,19 +93,32 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       ),
                                                     ),
                                                   ),
-                                                  _buildCell(Text(
-                                                    controller.attendenceDetailTable[index].iN.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  _buildCell(Text(
-                                                    controller.attendenceDetailTable[index].out.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  _buildCell(Text(
-                                                    controller.attendenceDetailTable[index].lCEGMIN.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  _buildCell(
+                                                  buildCell(
+                                                    Text(
+                                                      controller.attendenceDetailTable[index].iN.toString(),
+                                                      style: AppStyle.fontfamilyplus.copyWith(
+                                                        color: controller.attendenceDetailTable[index].redYNINTM == 'Y' ? Colors.red : Colors.black, // redYNINTM se color set kiya
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  buildCell(
+                                                    Text(
+                                                      controller.attendenceDetailTable[index].out.toString(),
+                                                      style: AppStyle.fontfamilyplus.copyWith(
+                                                        color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y' ? Colors.red : Colors.black, // redYNOUTTM se color set kiya
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  buildCell(
+                                                    Text(
+                                                      controller.attendenceDetailTable[index].lCEGMIN.toString(),
+                                                      textAlign: TextAlign.center,
+                                                      style: AppStyle.fontfamilyplus.copyWith(
+                                                        color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y' ? Colors.red : Colors.black, // redYNLCEGMIN se color set kiya
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  buildCell(
                                                     GestureDetector(
                                                       onTap: () {
                                                         detailbottomsheet(context, index);
@@ -142,7 +155,7 @@ class DetailsScreen extends GetView<AttendenceController> {
     );
   }
 
-  Widget _buildHeaderCell(String text, double width) {
+  Widget buildHeaderCell(String text, double width) {
     return Container(
       width: width,
       padding: EdgeInsets.all(8),
@@ -157,7 +170,7 @@ class DetailsScreen extends GetView<AttendenceController> {
     );
   }
 
-  Widget _buildCell(Widget child) {
+  Widget buildCell(Widget child) {
     return Container(
       padding: EdgeInsets.all(8),
       child: child,
