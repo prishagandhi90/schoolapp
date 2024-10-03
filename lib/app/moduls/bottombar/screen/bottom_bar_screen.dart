@@ -13,21 +13,13 @@ class BottomBarView extends GetView<BottomBarController> {
 
   @override
   Widget build(BuildContext context) {
-    final BottomBarController controller = Get.isRegistered<BottomBarController>()
-        ? Get.find<BottomBarController>() // If already registered, find it
-        : Get.put(BottomBarController());
-
-    // Get.put(BottomBarController());
-
-    // return GetX<BottomBarController>(
-    //   init: BottomBarController(),
-    //   builder: (controller) {
+    Get.put(BottomBarController());
     return GetBuilder<BottomBarController>(
       builder: (controller) {
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Obx(
-            () => PersistentTabView(
+        return Obx(
+          () => Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: PersistentTabView(
               padding: const EdgeInsets.only(bottom: 4, top: 0),
               context,
               confineToSafeArea: Platform.isAndroid ? true : false,
@@ -62,8 +54,10 @@ class BottomBarView extends GetView<BottomBarController> {
               // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
               // popAllScreensOnTapOfSelectedTab: true,
             ),
+            // ),
           ),
         );
+        // );
       },
     );
   }

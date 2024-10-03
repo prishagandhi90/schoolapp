@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Get.put(BottomBarController());
+    // Get.put(BottomBarController());
     _firebaseMessaging.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Received a message while in the foreground!');

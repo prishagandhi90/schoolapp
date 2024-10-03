@@ -1,40 +1,22 @@
 import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
-// import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SummaryScreen extends GetView<AttendenceController> {
   const SummaryScreen({super.key});
 
-  // final AttendenceController attendenceController = Get.put(AttendenceController());
-
-  // @override
   @override
   Widget build(BuildContext context) {
-    // Get.put(AttendenceController());
-    final controller = Get.isRegistered<AttendenceController>()
-        ? Get.find<AttendenceController>() // If already registered, find it
-        : Get.put(AttendenceController());
-    
+    Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(builder: (controller) {
       return SingleChildScrollView(
         controller: controller.attendanceScrollController,
         child: Column(
           children: [
-            // MonthSelectionScreen(
-            //   selectedMonthIndex: controller.MonthSel_selIndex.value,
-            //   scrollController: controller.monthScrollControllerSummary,
-            //   onPressed: (index) {
-            //     controller.upd_MonthSelIndex(index);
-            //     controller.showHideMsg();
-            //   },
-            // ),
-
             MonthPicker(
               controller: controller,
               scrollController: controller.monthScrollControllerSummary,

@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leavedemo.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
@@ -13,10 +14,8 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
-  // PersistentTabController? persistentController = PersistentTabController(initialIndex: 2);
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
 
-  // final AttendanceScreen attendanceScreen = AttendanceScreen(fromDashboard: true);
   final attendanceScreen = Get.isRegistered<AttendanceScreen>()
       ? Get.find<AttendanceScreen>() // If already registered, find it
       : Get.put(AttendanceScreen());
@@ -41,7 +40,7 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  void onItemTapped(int index,  BuildContext context) {
+  void onItemTapped(int index, BuildContext context) {
     while (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
     }
@@ -50,6 +49,13 @@ class BottomBarController extends GetxController {
       val?.index = index;
     });
     currentIndex.value = index;
+
+    if (index == 1) {
+      final attendanceController =
+          Get.isRegistered<AttendenceController>() ? Get.find<AttendenceController>() : Get.put(AttendenceController());
+      attendanceController.resetData(); // Call resetData or any other method to reset the state
+      attendanceController.initialIndex.value = 0;
+    }
     update();
   }
 

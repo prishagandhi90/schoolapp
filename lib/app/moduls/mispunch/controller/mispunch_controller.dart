@@ -11,16 +11,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MispunchController extends GetxController {
-  final apiController = Get.isRegistered<ApiController>()
-      ? Get.find<ApiController>() // If already registered, find it
-      : Get.put(ApiController());
-  // var bottomBarController = Get.put(BottomBarController());
-  final bottomBarController = Get.isRegistered<BottomBarController>()
-      ? Get.find<BottomBarController>() // If already registered, find it
-      : Get.put(BottomBarController());
+  final ApiController apiController = Get.put(ApiController());
+  var bottomBarController = Get.put(BottomBarController());
   String tokenNo = '', loginId = '', empId = '';
   var isLoading = false.obs;
-  // late List<MispunchTable> mispunchtable = [];
   List<MispunchTable> mispunchTable = [];
   RxInt MonthSel_selIndex = (-1).obs;
   String YearSel_selIndex = "";
@@ -33,31 +27,13 @@ class MispunchController extends GetxController {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   setCurrentMonthYear();
     // });
+    DateTime now = DateTime.now();
+    MonthSel_selIndex.value = now.month - 1;
+    YearSel_selIndex = now.year.toString();
     setCurrentMonthYear();
   }
 
   void setCurrentMonthYear() {
-    DateTime now = DateTime.now();
-    MonthSel_selIndex.value = now.month - 1;
-    // FlexibleMonthPicker(
-    //   selectedMonthIndex: MonthSel_selIndex.value,
-    //   // onMonthSelected: (index) {
-    //   //   upd_MonthSelIndex(index);
-    //   //   showHideMsg();
-    //   // },
-    //   scrollController_mispunch: monthScrollController_mispunch,
-    //   useGetX: true,
-    //   // controller: controller,
-    // );
-    // MonthSelectionScreen(
-    //   selectedMonthIndex: MonthSel_selIndex.value,
-    //   scrollController: monthScrollController,
-    //   onPressed: (index) {
-    //     upd_MonthSelIndex(index);
-    //     showHideMsg();
-    //   },
-    // );
-
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     if (monthScrollController_mispunch.hasClients) {
       double itemWidth = 80;
@@ -80,7 +56,6 @@ class MispunchController extends GetxController {
       );
     }
     // });
-    YearSel_selIndex = now.year.toString();
 
     CustomDropDown(
       selValue: YearSel_selIndex,

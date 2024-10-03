@@ -102,11 +102,6 @@ class PayrollController extends GetxController {
     switch (index) {
       case 0:
         hideBottomBar.value = false;
-        // var bottomBarController = Get.put(BottomBarController());
-        final bottomBarController = Get.isRegistered<BottomBarController>()
-            ? Get.find<BottomBarController>() // If already registered, find it
-            : Get.put(BottomBarController());
-        bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: AttendanceScreen(),
@@ -119,11 +114,6 @@ class PayrollController extends GetxController {
         break;
       case 1:
         hideBottomBar.value = false;
-        // var bottomBarController = Get.put(BottomBarController());
-        final bottomBarController = Get.isRegistered<BottomBarController>()
-            ? Get.find<BottomBarController>() // If already registered, find it
-            : Get.put(BottomBarController());
-        bottomBarController.update();
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: const MispunchScreen(),

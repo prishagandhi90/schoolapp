@@ -5,16 +5,12 @@ import 'package:get/get.dart';
 
 class MonthPicker_mispunch extends StatelessWidget {
   final MispunchController controller;
-  final ScrollController scrollController;
-
-  // final controller = Get.isRegistered<AttendenceController>()
-  //     ? Get.find<AttendenceController>() // If already registered, find it
-  //     : Get.put(AttendenceController());
+  final ScrollController scrollController_Mispunch;
 
   const MonthPicker_mispunch({
     Key? key,
     required this.controller,
-    required this.scrollController,
+    required this.scrollController_Mispunch,
   }) : super(key: key);
 
   @override
@@ -23,7 +19,7 @@ class MonthPicker_mispunch extends StatelessWidget {
       builder: (controller) {
         // Use WidgetsBinding.instance.addPostFrameCallback
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (scrollController.hasClients) {
+          if (scrollController_Mispunch.hasClients) {
             try {
               // Avoid unnecessary calculations if the scroll position is already correct
               final index = controller.MonthSel_selIndex;
@@ -31,8 +27,8 @@ class MonthPicker_mispunch extends StatelessWidget {
               final screenWidth = MediaQuery.of(context).size.width;
               final offset = (index * itemWidth) - (screenWidth / 2) + (itemWidth / 2);
 
-              if ((offset - scrollController.offset).abs() > 1) {
-                scrollController.animateTo(
+              if ((offset - scrollController_Mispunch.offset).abs() > 1) {
+                scrollController_Mispunch.animateTo(
                   offset,
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
@@ -48,7 +44,7 @@ class MonthPicker_mispunch extends StatelessWidget {
           child: SizedBox(
             height: 50,
             child: ListView.builder(
-              controller: scrollController,
+              controller: scrollController_Mispunch,
               scrollDirection: Axis.horizontal,
               itemCount: 12,
               itemBuilder: (context, index) {

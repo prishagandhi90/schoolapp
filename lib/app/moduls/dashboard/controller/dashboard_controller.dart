@@ -18,10 +18,6 @@ class DashboardController extends GetxController {
   String tokenNo = '', loginId = '';
   final ApiController apiController = Get.put(ApiController());
 
-  // var bottomBarController = Get.put(BottomBarController());
-  final bottomBarController = Get.isRegistered<BottomBarController>()
-      ? Get.find<BottomBarController>() // If already registered, find it
-      : Get.put(BottomBarController());
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
   String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
@@ -104,17 +100,10 @@ class DashboardController extends GetxController {
         );
         break;
       case 7:
-        final payrollScreen = Get.isRegistered<PayrollScreen>()
-            ? Get.find<PayrollScreen>() // If already registered, find it
-            : Get.put(PayrollScreen());
+        var bottomBarController = Get.put(BottomBarController());
         hideBottomBar.value = false;
-        // var bottomBarController = Get.put(BottomBarController());
-        final bottomBarController = Get.isRegistered<BottomBarController>()
-            ? Get.find<BottomBarController>() // If already registered, find it
-            : Get.put(BottomBarController());
         bottomBarController.persistentController.value.index = 0;
         bottomBarController.currentIndex.value = 0;
-        // bottomBarController.update();
         // Get.offAll(() => payrollScreen);
         // Get.offAllNamed(Routes.Payroll)!.then((value) {
         //   hideBottomBar.value = false;
@@ -123,8 +112,8 @@ class DashboardController extends GetxController {
 
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          // screen: PayrollScreen(),
-          screen: payrollScreen,
+          screen: PayrollScreen(),
+          // screen: payrollScreen,
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) {

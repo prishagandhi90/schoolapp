@@ -16,14 +16,8 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AttendenceController extends GetxController {
-  // final ApiController apiController = Get.put(ApiController());
-  final apiController = Get.isRegistered<ApiController>()
-      ? Get.find<ApiController>() // If already registered, find it
-      : Get.put(ApiController());
-  // final bottomBarController = Get.put(BottomBarController());
-  final bottomBarController = Get.isRegistered<BottomBarController>()
-      ? Get.find<BottomBarController>() // If already registered, find it
-      : Get.put(BottomBarController());
+  final ApiController apiController = Get.put(ApiController());
+  final bottomBarController = Get.put(BottomBarController());
   late List<MispunchTable> mispunchtable = [];
   List<AttendenceSummarytable> attendenceSummaryTable = [];
   List<AttendanceDetailTable> attendenceDetailTable = [];
@@ -38,6 +32,7 @@ class AttendenceController extends GetxController {
   var monthScrollControllerDetail = ScrollController();
   // var attendanceScrollController = ScrollController();
   final ScrollController attendanceScrollController = ScrollController();
+  var initialIndex = 0.obs;
 
   @override
   void onInit() {
@@ -278,5 +273,18 @@ class AttendenceController extends GetxController {
       return '${months[index]}${year.substring(year.length - 2)}'; // Format as 'Jan24'
     }
     return 'Select year and month';
+  }
+
+  void resetData() {
+    attendenceDetailTable.clear(); // Clear the attendance detail table
+    attendenceSummaryTable.clear(); // Clear the summary table
+    isLoader.value = false; // Reset loader state
+    DateTime now = DateTime.now();
+    MonthSel_selIndex.value = now.month - 1; // Month index is 0-based
+    initialIndex.value = 0;
+    // Reset year selection if needed
+    YearSel_selIndex = now.year.toString();
+    // Add any other variables you want to reset
+    update(); // Notify listeners
   }
 }

@@ -3,24 +3,19 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/app_custom_widget/custom_month_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class MispunchScreen extends GetView<MispunchController> {
   const MispunchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(MispunchController());
-    final MispunchController controller = Get.isRegistered<MispunchController>()
-        ? Get.find<MispunchController>() // If already registered, find it
-        : Get.put(MispunchController());
+    Get.put(MispunchController());
     return GetBuilder<MispunchController>(
       builder: (controller) {
         return DefaultTabController(
@@ -63,7 +58,7 @@ class MispunchScreen extends GetView<MispunchController> {
                 children: [
                   MonthPicker_mispunch(
                     controller: controller,
-                    scrollController: controller.monthScrollController_mispunch,
+                    scrollController_Mispunch: controller.monthScrollController_mispunch,
                   ),
                   const SizedBox(height: 20),
                   Padding(

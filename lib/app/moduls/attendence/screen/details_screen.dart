@@ -12,11 +12,8 @@ class DetailsScreen extends GetView<AttendenceController> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(AttendenceController());
-    // final controller = Get.find<AttendenceController>();
-    final controller = Get.isRegistered<AttendenceController>()
-        ? Get.find<AttendenceController>() // If already registered, find it
-        : Get.put(AttendenceController());
+    Get.put(AttendenceController());
+    
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
@@ -96,7 +93,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                     Text(
                                                       controller.attendenceDetailTable[index].iN.toString(),
                                                       style: AppStyle.fontfamilyplus.copyWith(
-                                                        color: controller.attendenceDetailTable[index].redYNINTM == 'Y' ? Colors.red : Colors.black, // redYNINTM se color set kiya
+                                                        color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
+                                                            ? Colors.red
+                                                            : Colors.black, // redYNINTM se color set kiya
                                                       ),
                                                     ),
                                                   ),
@@ -104,7 +103,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                     Text(
                                                       controller.attendenceDetailTable[index].out.toString(),
                                                       style: AppStyle.fontfamilyplus.copyWith(
-                                                        color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y' ? Colors.red : Colors.black, // redYNOUTTM se color set kiya
+                                                        color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
+                                                            ? Colors.red
+                                                            : Colors.black, // redYNOUTTM se color set kiya
                                                       ),
                                                     ),
                                                   ),
@@ -113,7 +114,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       controller.attendenceDetailTable[index].lCEGMIN.toString(),
                                                       textAlign: TextAlign.center,
                                                       style: AppStyle.fontfamilyplus.copyWith(
-                                                        color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y' ? Colors.red : Colors.black, // redYNLCEGMIN se color set kiya
+                                                        color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y'
+                                                            ? Colors.red
+                                                            : Colors.black, // redYNLCEGMIN se color set kiya
                                                       ),
                                                     ),
                                                   ),
@@ -233,8 +236,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
@@ -273,8 +275,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -363,8 +364,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -436,8 +436,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [

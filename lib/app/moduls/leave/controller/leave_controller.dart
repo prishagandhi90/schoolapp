@@ -22,19 +22,12 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LeaveController extends GetxController with GetSingleTickerProviderStateMixin {
-  // var bottomBarController = Get.put(BottomBarController());
-  final bottomBarController = Get.isRegistered<BottomBarController>()
-      ? Get.find<BottomBarController>() // If already registered, find it
-      : Get.put(BottomBarController());
+  var bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
   var leftleavedays = ''.obs;
   List<LeaveNamesTable> leavename = [];
-  // List<DropdownlstTable> dropdownItems123 = [];
   var dropdownItems123 = <DropdownlstTable>[].obs;
 
-  // List<LeaveReasonTable> leavereason = [];
-  // List<LeaveDelayReason> leavedelayreason = [];
-  // List<LeaveReliverName> leaverelivername = [];
   List<LeaveEntryList> leaveentryList = [];
   List<LeaveEntryList> otentryList = [];
   List<SaveLeaveEntryList> saveleaveentrylist = [];
@@ -42,9 +35,6 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
   var leavereason = <LeaveReasonTable>[].obs;
   var leavedelayreason = <LeaveDelayReason>[].obs;
   var leaverelivername = <LeaveReliverName>[].obs;
-  // var leaveentryList = <LeaveEntryList>[].obs;
-  // var otentryList = <LeaveEntryList>[].obs;
-  // var saveleaveentrylist = <SaveLeaveEntryList>[].obs;
 
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
@@ -69,11 +59,6 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
   late TabController tabController;
   var activeScreen = ''.obs;
   var leaveScrollController = ScrollController();
-
-  // void setActiveScreen(String screenName) {
-  //   activeScreen.value = screenName;
-  // }
-  // var dropdownItems = <Map<String, String>>[].obs;
 
   @override
   void onInit() async {
@@ -228,8 +213,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      DateTime? toDate =
-          toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
+      DateTime? toDate = toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
 
       if (toDate != null) {
         isDaysFieldEnabled.value = true;
@@ -528,8 +512,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime =
-            "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("FromDateTime or FromTime is null");
       }
@@ -544,8 +527,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime =
-            "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("ToDateTime or ToTime is null");
       }
@@ -633,12 +615,8 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
         "entryType": flag,
         "leaveShortName": flag == "LV" ? leaveValueController.text : "OT",
         "leaveFullName": flag == "LV" ? leaveNameController.text : "OT",
-        "fromdate": flag == "LV"
-            ? formatDateWithTime(fromDateController.text, 'lv')
-            : formatOTDateTime(overtimeController, 'FromDateTime'),
-        "todate": flag == "LV"
-            ? formatDateWithTime(toDateController.text, 'lv')
-            : formatOTDateTime(overtimeController, 'ToDateTime'),
+        "fromdate": flag == "LV" ? formatDateWithTime(fromDateController.text, 'lv') : formatOTDateTime(overtimeController, 'FromDateTime'),
+        "todate": flag == "LV" ? formatDateWithTime(toDateController.text, 'lv') : formatOTDateTime(overtimeController, 'ToDateTime'),
         "reason": flag == "LV" ? reasonController.text : "OT",
         "note": noteController.text,
         "leaveDays": flag == "LV" ? daysController.text : 0,
