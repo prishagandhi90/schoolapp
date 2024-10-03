@@ -234,7 +234,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
+                                                      controller.empSummDashboardTable[0].inPunchTime
+                                                          .toString()
+                                                          .isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                       style: TextStyle(
@@ -263,7 +265,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
+                                                      controller.empSummDashboardTable[0].outPunchTime
+                                                          .toString()
+                                                          .isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                       style: AppStyle.plus10,
@@ -299,7 +303,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                           children: [
                                             Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                             if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                  style: AppStyle.plus16w600)
                                             else
                                               Text('-- ', style: AppStyle.plus16w600),
                                           ],
@@ -398,9 +403,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                     bottomBarController.currentIndex.value = -1;
 
                                     // Get.delete<MispunchController>();
-                                    final mispunchController = Get.put(MispunchController());
-                                    mispunchController.resetData();
-                                    mispunchController.update();
+                                    // final mispunchController = Get.put(MispunchController());
+                                    // mispunchController.resetData();
+                                    // mispunchController.update();
                                     // Get.put(MispunchScreen());
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
@@ -409,7 +414,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ).then((value) async {
                                       // final bottomBarController = Get.find<BottomBarController>();
-                                      bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                                      bottomBarController.persistentController.value.index = 0;
                                       bottomBarController.currentIndex.value = 0;
                                       hideBottomBar.value = false;
                                       var dashboardController = Get.put(DashboardController());
