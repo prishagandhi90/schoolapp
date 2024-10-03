@@ -16,9 +16,9 @@ class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
 
-  final attendanceScreen = Get.isRegistered<AttendanceScreen>()
-      ? Get.find<AttendanceScreen>() // If already registered, find it
-      : Get.put(AttendanceScreen());
+  // final attendanceScreen = Get.isRegistered<AttendanceScreen>()
+  //     ? Get.find<AttendanceScreen>() // If already registered, find it
+  //     : Get.put(AttendanceScreen());
   @override
   void onInit() {
     super.onInit();
@@ -30,8 +30,8 @@ class BottomBarController extends GetxController {
   List<Widget> buildScreens() {
     return [
       PayrollScreen(),
-      attendanceScreen,
-      // AttendanceScreen(),
+      // attendanceScreen,
+      AttendanceScreen(),
       const Dashboard1Screen(),
       // LeaveMainScreen(),
       Leavedemo(),

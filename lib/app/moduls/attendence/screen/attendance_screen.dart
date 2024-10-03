@@ -14,8 +14,7 @@ class AttendanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AttendenceController());
-    controller.resetData();
+    Get.put(AttendenceController());
     return GetBuilder<AttendenceController>(builder: (controller) {
       return Scaffold(
         body: DefaultTabController(
