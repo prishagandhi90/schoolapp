@@ -17,10 +17,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
-  // var bottomBarController = Get.put(BottomBarController());
-  // final bottomBarController = Get.isRegistered<BottomBarController>()
-  //     ? Get.find<BottomBarController>() // If already registered, find it
-  //     : Get.put(BottomBarController());
   final formKey1 = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   final TextEditingController otpController = TextEditingController(); //text: '1234'

@@ -7,6 +7,7 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
 import 'package:emp_app/main.dart';
@@ -27,11 +28,8 @@ class PayrollScreen extends GetView<PayrollController> {
             backgroundColor: AppColor.white,
             onDrawerChanged: (isOpened) {
               // var bottomBarController = Get.put(BottomBarController());
-              final bottomBarController = Get.isRegistered<BottomBarController>()
-                  ? Get.find<BottomBarController>() // If already registered, find it
-                  : Get.put(BottomBarController());
               hideBottomBar.value = isOpened;
-              bottomBarController.update();
+              // bottomBarController.update();
               if (isOpened) {
                 controller.filterSearchResults(''); // Reset the filter
                 controller.textEditingController.clear();
@@ -352,24 +350,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // final attendanceScreen = Get.isRegistered<AttendanceScreen>()
-                                      //     ? Get.find<AttendanceScreen>() // If already registered<,> find it
-                                      //     : Get.put(AttendanceScreen());
-
-                                      // final dashboardController = Get.isRegistered<DashboardController>()
-                                      //     ? Get.find<DashboardController>() // If already registered, find it
-                                      //     : Get.put(DashboardController());
-                                      // final bottomBarController = Get.isRegistered<BottomBarController>()
-                                      // final bottomBarController = Get.find<BottomBarController>();
                                       final bottomBarController = Get.put(BottomBarController());
-
-                                      //     ? Get.find<BottomBarController>() // If already registered, find it
-                                      //     : Get.put(BottomBarController());
-                                      // bool isCurrentScreenAttendance =
-                                      //     ModalRoute.of(context)?.settings.name == AttendanceScreen.routeName;
-                                      // final attendanceController = Get.isRegistered<AttendenceController>()
-                                      //     ? Get.find<AttendenceController>()
-                                      //     : Get.put(AttendenceController());
                                       final attendanceController = Get.put(AttendenceController());
                                       // final attendanceController = Get.find<AttendenceController>();
                                       attendanceController.initialIndex.value = 0;
@@ -414,7 +395,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                   onTap: () {
                                     final bottomBarController = Get.put(BottomBarController());
                                     bottomBarController.currentIndex.value = -1;
-                                    Get.put(MispunchScreen());
+
+                                    // Get.delete<MispunchController>();
+                                    final mispunchController = Get.put(MispunchController());
+                                    mispunchController.resetData();
+                                    mispunchController.update();
+                                    // Get.put(MispunchScreen());
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen: const MispunchScreen(),

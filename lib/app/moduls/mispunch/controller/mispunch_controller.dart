@@ -171,4 +171,13 @@ class MispunchController extends GetxController {
     }
     return 'Select year and month';
   }
+
+  void resetData() {
+    mispunchTable.clear(); // Clear the attendance detail table
+    isLoading.value = false; // Reset loader state
+    DateTime now = DateTime.now();
+    MonthSel_selIndex.value = now.month - 1; // Month index is 0-based
+    YearSel_selIndex = now.year.toString();
+    update(); // Notify listeners
+  }
 }

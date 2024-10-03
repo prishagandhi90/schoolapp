@@ -31,12 +31,14 @@ class MispunchScreen extends GetView<MispunchController> {
             ),
             leading: IconButton(
                 onPressed: () {
-                  // Navigator.pop(context);
-                  // // controller.clearData();
-                  Navigator.of(context).pop();
                   final bottomBarController = Get.put(BottomBarController());
                   bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
                   bottomBarController.currentIndex.value = 0;
+                  Navigator.of(context).pop();
+
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // Get.back();
+                  // });
                 },
                 icon: const Icon(Icons.arrow_back)),
             // centerTitle: true,

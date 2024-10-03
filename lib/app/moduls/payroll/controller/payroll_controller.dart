@@ -126,11 +126,7 @@ class PayrollController extends GetxController {
         break;
       case 2:
         // hideBottomBar.value = false;
-        // // var bottomBarController = Get.put(BottomBarController());
-        // final bottomBarController = Get.isRegistered<BottomBarController>()
-        //     ? Get.find<BottomBarController>() // If already registered, find it
-        //     : Get.put(BottomBarController());
-        // bottomBarController.update();
+        // var bottomBarController = Get.put(BottomBarController());
         // PersistentNavBarNavigator.pushNewScreen(
         //   context,
         //   screen: LeaveMainScreen(),

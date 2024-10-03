@@ -5,6 +5,7 @@ import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.d
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leavedemo.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtimedemo.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/main.dart';
@@ -16,15 +17,12 @@ class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
 
-  // final attendanceScreen = Get.isRegistered<AttendanceScreen>()
-  //     ? Get.find<AttendanceScreen>() // If already registered, find it
-  //     : Get.put(AttendanceScreen());
   @override
   void onInit() {
     super.onInit();
     // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
-    update();
+    // update();
   }
 
   List<Widget> buildScreens() {
@@ -44,6 +42,7 @@ class BottomBarController extends GetxController {
     while (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
     }
+    // Get.delete<MispunchController>();
     hideBottomBar.value = false;
     persistentController.update((val) {
       val?.index = index;
@@ -64,7 +63,7 @@ class BottomBarController extends GetxController {
     currentIndex.value = 2;
     persistentController.value = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
-    update();
+    // update();
   }
 
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
