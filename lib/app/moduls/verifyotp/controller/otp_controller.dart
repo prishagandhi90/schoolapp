@@ -8,6 +8,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
@@ -163,10 +164,7 @@ class OtpController extends GetxController {
       await prefs.remove(AppString.keyLoginId);
       await prefs.remove(AppString.keyEmpId);
 
-      // final DashboardController dashboardController = Get.find<DashboardController>();
-      // final dashboardController = Get.isRegistered<DashboardController>()
-      //     ? Get.find<DashboardController>() // If already registered, find it
-      //     : Get.put(DashboardController());
+      Get.delete<MispunchController>();
       final dashboardController = Get.put(DashboardController());
       dashboardController.employeeName = "";
       dashboardController.mobileNumber = "";

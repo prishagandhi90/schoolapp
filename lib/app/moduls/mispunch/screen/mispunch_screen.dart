@@ -18,118 +18,112 @@ class MispunchScreen extends GetView<MispunchController> {
     Get.put(MispunchController());
     return GetBuilder<MispunchController>(
       builder: (controller) {
-        return DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            backgroundColor: AppColor.white,
-            appBar: AppBar(
-              title: Text(
-                AppString.mispunch,
-                style: TextStyle(
-                  color: AppColor.primaryColor,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: CommonFontStyle.plusJakartaSans,
-                ),
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          appBar: AppBar(
+            title: Text(
+              AppString.mispunch,
+              style: TextStyle(
+                color: AppColor.primaryColor,
+                fontWeight: FontWeight.w700,
+                fontFamily: CommonFontStyle.plusJakartaSans,
               ),
-              leading: IconButton(
-                  onPressed: () {
-                    // Navigator.pop(context);
-                    // // controller.clearData();
-                    final bottomBarController = Get.find<BottomBarController>();
-                    bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
-                    bottomBarController.currentIndex.value = 0;
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back)),
-              // centerTitle: true,
-              actions: [
-                CustomDropDown(
-                  selValue: controller.YearSel_selIndex,
-                  onPressed: (index) {
-                    controller.upd_YearSelIndex(index);
-                    controller.showHideMsg();
-                  },
-                )
-              ],
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                children: [
-                  MonthPicker_mispunch(
-                    controller: controller,
-                    scrollController_Mispunch: controller.monthScrollController_mispunch,
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: controller.isLoading.value
-                        ? const Center(child: ProgressWithIcon())
-                        : controller.mispunchTable.isNotEmpty
-                            ? ListView.builder(
-                                itemCount: controller.mispunchTable.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.23,
-                                      decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            width: double.infinity,
-                                            height: 45,
-                                            decoration:
-                                                BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 15),
-                                              child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    controller.mispunchTable[index].dt.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight: FontWeight.w500, //20
-                                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                                    ),
-                                                  )),
+            leading: IconButton(
+                onPressed: () {
+                  // Navigator.pop(context);
+                  // // controller.clearData();
+                  Navigator.of(context).pop();
+                  final bottomBarController = Get.put(BottomBarController());
+                  bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                  bottomBarController.currentIndex.value = 0;
+                },
+                icon: const Icon(Icons.arrow_back)),
+            // centerTitle: true,
+            actions: [
+              CustomDropDown(
+                selValue: controller.YearSel_selIndex,
+                onPressed: (index) {
+                  controller.upd_YearSelIndex(index);
+                  controller.showHideMsg();
+                },
+              )
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              children: [
+                MonthPicker_mispunch(
+                  controller: controller,
+                  scrollController_Mispunch: controller.monthScrollController_mispunch,
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: controller.isLoading.value
+                      ? const Center(child: ProgressWithIcon())
+                      : controller.mispunchTable.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: controller.mispunchTable.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height * 0.23,
+                                    decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          width: double.infinity,
+                                          height: 45,
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  controller.mispunchTable[index].dt.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w500, //20
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                )),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(vertical: 10),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                              children: [
+                                                CustomContainerview(
+                                                    text: AppString.type, text1: controller.mispunchTable[index].misPunch.toString()),
+                                                CustomContainerview(
+                                                    text: AppString.punchtime, text1: controller.mispunchTable[index].punchTime.toString()),
+                                                CustomContainerview(
+                                                    text: AppString.shifttime, text1: controller.mispunchTable[index].shiftTime.toString()),
+                                              ],
                                             ),
                                           ),
-                                          Flexible(
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 10),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  CustomContainerview(
-                                                      text: AppString.type, text1: controller.mispunchTable[index].misPunch.toString()),
-                                                  CustomContainerview(
-                                                      text: AppString.punchtime,
-                                                      text1: controller.mispunchTable[index].punchTime.toString()),
-                                                  CustomContainerview(
-                                                      text: AppString.shifttime,
-                                                      text1: controller.mispunchTable[index].shiftTime.toString()),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     ),
-                                  );
-                                },
-                              )
-                            : Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Center(
-                                  child: Text(AppString.nomispunchinthismonth),
-                                ),
+                                  ),
+                                );
+                              },
+                            )
+                          : Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Center(
+                                child: Text(AppString.nomispunchinthismonth),
                               ),
-                  ),
-                ],
-              ),
+                            ),
+                ),
+              ],
             ),
           ),
         );

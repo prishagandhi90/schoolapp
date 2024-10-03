@@ -55,6 +55,7 @@ class BottomBarController extends GetxController {
           Get.isRegistered<AttendenceController>() ? Get.find<AttendenceController>() : Get.put(AttendenceController());
       attendanceController.resetData(); // Call resetData or any other method to reset the state
       attendanceController.initialIndex.value = 0;
+      attendanceController.update();
     }
     update();
   }

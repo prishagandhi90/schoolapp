@@ -414,7 +414,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                   onTap: () {
                                     final bottomBarController = Get.put(BottomBarController());
                                     bottomBarController.currentIndex.value = -1;
-
+                                    Get.put(MispunchScreen());
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen: const MispunchScreen(),
