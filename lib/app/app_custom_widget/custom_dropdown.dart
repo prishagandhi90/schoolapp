@@ -63,7 +63,7 @@ class CustomDropDownState extends State<CustomDropDown> {
           },
           buttonStyleData: ButtonStyleData(
             height: 50,
-            width: 140,
+            width: 120,
             padding: const EdgeInsets.only(left: 14, right: 14),
             decoration: BoxDecoration(
               border: Border.all(color: AppColor.black),

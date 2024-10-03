@@ -21,6 +21,7 @@ class MispunchScreen extends GetView<MispunchController> {
         return Scaffold(
           backgroundColor: AppColor.white,
           appBar: AppBar(
+            backgroundColor: AppColor.white,
             title: Text(
               AppString.mispunch,
               style: TextStyle(

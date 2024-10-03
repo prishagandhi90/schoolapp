@@ -131,6 +131,7 @@ class PayrollScreen extends GetView<PayrollController> {
                   ],
                 )),
             appBar: AppBar(
+              backgroundColor: Colors.white,
               title: Text(
                 AppString.payroll,
                 style: TextStyle(
