@@ -22,12 +22,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PayrollController extends GetxController {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
-  // var bottomBarController = Get.put(BottomBarController());
-  final BottomBarController bottomBarController = Get.find<BottomBarController>();
-  final ApiController apiController = Get.find<ApiController>();
-  final DashboardController dashboardController = Get.find<DashboardController>();
-  // final ApiController apiController = Get.put(ApiController());
-  // var dashboardController = Get.put(DashboardController());
+  var bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
   late List<Payroll> payrolltable = [];
   TextEditingController textEditingController = TextEditingController();
@@ -68,8 +63,11 @@ class PayrollController extends GetxController {
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
       var jsonbodyObj = {"loginId": loginId};
+
+      final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse =
+          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -109,6 +107,7 @@ class PayrollController extends GetxController {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           hideBottomBar.value = false;
+          final DashboardController dashboardController = Get.find<DashboardController>();
           await dashboardController.getDashboardDataUsingToken();
         });
         break;
@@ -121,6 +120,8 @@ class PayrollController extends GetxController {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           hideBottomBar.value = false;
+
+          final DashboardController dashboardController = Get.find<DashboardController>();
           await dashboardController.getDashboardDataUsingToken();
         });
         break;

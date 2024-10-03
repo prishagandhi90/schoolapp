@@ -16,11 +16,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController {
   String tokenNo = '', loginId = '';
-  final ApiController apiController = Get.put(ApiController());
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -164,6 +169,8 @@ class DashboardController extends GetxController {
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendDtl_EmpInfo';
       String url = ConstApiUrl.empAttendanceDtlAPI;
       var jsonbodyObj = {"loginId": loginId};
+
+      final ApiController apiController = Get.put(ApiController());
       var empmonthyrtable = await apiController.getDynamicData(url, tokenNo, jsonbodyObj);
 
       isLoading.value = false;
@@ -185,6 +192,7 @@ class DashboardController extends GetxController {
         String loginId = prefs.getString(AppString.keyLoginId) ?? '';
         var jsonbodyObj = {"loginId": loginId};
         String url = ConstApiUrl.empGetDashboardListAPI;
+        final ApiController apiController = Get.put(ApiController());
         var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
         ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
 

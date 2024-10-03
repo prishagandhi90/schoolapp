@@ -12,7 +12,6 @@ class CustomGridview extends StatefulWidget {
 }
 
 class _CustomGridviewState extends State<CustomGridview> {
-  final DashboardController dashboardController = Get.put(DashboardController());
   int selectedIndex = -1;
   List<Container> containers = [];
 
@@ -46,6 +45,8 @@ class _CustomGridviewState extends State<CustomGridview> {
     setState(() {
       selectedIndex = index;
     });
+
+    final DashboardController dashboardController = Get.put(DashboardController());
     dashboardController.gridOnClk(index, context);
   }
 

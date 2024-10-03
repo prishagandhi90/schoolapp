@@ -18,7 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
   final formKey1 = GlobalKey<FormState>();
-  final ApiController apiController = Get.put(ApiController());
   final TextEditingController otpController = TextEditingController(); //text: '1234'
   final TextEditingController numberController = TextEditingController(); //text: '8780917338'
   bool isLoadingLogin = false;
@@ -44,6 +43,8 @@ class OtpController extends GetxController {
       // String url = 'http://117.217.126.127:44166/api/EmpLogin/SendEMPMobileOTP';
       String url = ConstApiUrl.empSendEMPMobileOtpAPI;
       var jsonbodyObj = {"mobileNo": numberController.text};
+
+      final ApiController apiController = Get.put(ApiController());
       var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
       isLoadingLogin = false;
       update();
@@ -72,6 +73,7 @@ class OtpController extends GetxController {
 
       // var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      final ApiController apiController = Get.put(ApiController());
       var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
       dashboardTable = responseDashboardData.data!;
