@@ -1,14 +1,14 @@
 import 'dart:convert';
-
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/model/empsummdash_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
@@ -66,8 +66,7 @@ class PayrollController extends GetxController {
 
       final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse =
-          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -100,28 +99,50 @@ class PayrollController extends GetxController {
     switch (index) {
       case 0:
         hideBottomBar.value = false;
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: AttendanceScreen(),
-          withNavBar: true,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) async {
-          hideBottomBar.value = false;
-          final DashboardController dashboardController = Get.find<DashboardController>();
-          await dashboardController.getDashboardDataUsingToken();
-        });
+        final bottomBarController = Get.put(BottomBarController());
+        final attendanceController = Get.put(AttendenceController());
+        // final attendanceController = Get.find<AttendenceController>();
+        attendanceController.initialIndex.value = 0;
+        attendanceController.resetData();
+        attendanceController.update();
+        if (bottomBarController.persistentController.value.index != 1) {
+          bottomBarController.currentIndex.value = 1;
+          bottomBarController.persistentController.value.index = 1;
+          // bottomBarController.onItemTapped(1, context);
+          // Get.to(attendanceScreen);
+        }
+        // PersistentNavBarNavigator.pushNewScreen(
+        //   context,
+        //   screen: AttendanceScreen(),
+        //   withNavBar: true,
+        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        // ).then((value) async {
+        //   hideBottomBar.value = false;
+        //   final DashboardController dashboardController = Get.find<DashboardController>();
+        //   await dashboardController.getDashboardDataUsingToken();
+        // });
         break;
       case 1:
         hideBottomBar.value = false;
+        final bottomBarController = Get.put(BottomBarController());
+        bottomBarController.currentIndex.value = -1;
+
+        // Get.delete<MispunchController>();
+        final mispunchController = Get.put(MispunchController());
+        mispunchController.resetData();
+        mispunchController.update();
+        // Get.put(MispunchScreen());
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: const MispunchScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
+          // final bottomBarController = Get.find<BottomBarController>();
+          bottomBarController.persistentController.value.index = 0;
+          bottomBarController.currentIndex.value = 0;
           hideBottomBar.value = false;
-
-          final DashboardController dashboardController = Get.find<DashboardController>();
+          var dashboardController = Get.put(DashboardController());
           await dashboardController.getDashboardDataUsingToken();
         });
         break;

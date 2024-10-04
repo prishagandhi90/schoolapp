@@ -1,5 +1,4 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
