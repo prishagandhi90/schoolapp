@@ -355,19 +355,15 @@ class PayrollScreen extends GetView<PayrollController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
                                       final bottomBarController = Get.put(BottomBarController());
                                       final attendanceController = Get.put(AttendenceController());
-                                      // final attendanceController = Get.find<AttendenceController>();
-                                      attendanceController.initialIndex.value = 0;
-                                      attendanceController.resetData();
-                                      attendanceController.update();
+                                      await attendanceController.resetData();
                                       if (bottomBarController.persistentController.value.index != 1) {
                                         bottomBarController.currentIndex.value = 1;
                                         bottomBarController.persistentController.value.index = 1;
-                                        // bottomBarController.onItemTapped(1, context);
-                                        // Get.to(attendanceScreen);
                                       }
+                                      bottomBarController.update();
                                     }, //Get.to(const AttendanceScreen()),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.06, //0.07

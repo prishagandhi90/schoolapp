@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -15,7 +17,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AttendenceController extends GetxController {
+class AttendenceController extends GetxController with SingleGetTickerProviderMixin {
   final ApiController apiController = Get.put(ApiController());
   final bottomBarController = Get.put(BottomBarController());
   late List<MispunchTable> mispunchtable = [];
@@ -33,10 +35,16 @@ class AttendenceController extends GetxController {
   // var attendanceScrollController = ScrollController();
   final ScrollController attendanceScrollController = ScrollController();
   var initialIndex = 0.obs;
+  late TabController tabController;
+  RxInt currentTabIndex = 0.obs;
 
   @override
   void onInit() {
     super.onInit();
+    tabController = TabController(length: 2, vsync: this);
+    tabController.addListener(_handleTabSelection);
+    currentTabIndex.value = 0;
+    changeTab(currentTabIndex.value);
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
@@ -73,11 +81,24 @@ class AttendenceController extends GetxController {
     });
   }
 
+  void _handleTabSelection() async {
+    if (tabController.indexIsChanging) {
+      initialIndex.value = tabController.index;
+      if (tabController.index == 0) {
+        await getattendeceprsnttable(); // Summary के लिए
+        // } else {
+        await getattendeceinfotable(); // Detail के लिए
+      }
+      update();
+    }
+  }
+
   @override
   void onClose() {
     attendanceScrollController.dispose(); //
     monthScrollControllerSummary.dispose();
     monthScrollControllerDetail.dispose();
+    tabController.dispose();
     // monthScrollControllerDetail.dispose();
     super.onClose();
   }
@@ -275,16 +296,29 @@ class AttendenceController extends GetxController {
     return 'Select year and month';
   }
 
-  void resetData() {
+  void changeTab(int index) {
+    tabController.animateTo(index);
+    currentTabIndex.value = index;
+    if (index == 0) {
+      getattendeceprsnttable();
+    } else {
+      getattendeceinfotable();
+    }
+    update();
+  }
+
+  resetData() async {
     attendenceDetailTable.clear(); // Clear the attendance detail table
     attendenceSummaryTable.clear(); // Clear the summary table
     isLoader.value = false; // Reset loader state
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1; // Month index is 0-based
-    initialIndex.value = 0;
-    // Reset year selection if needed
     YearSel_selIndex = now.year.toString();
-    // Add any other variables you want to reset
+    upd_YearSelIndex(YearSel_selIndex);
+    tabController.animateTo(0);
+    // changeTab(0);
+    // currentTabIndex.value = 0;
+    // await getattendeceprsnttable();
     update(); // Notify listeners
   }
 }

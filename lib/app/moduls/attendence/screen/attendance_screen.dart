@@ -7,6 +7,7 @@ import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
 import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,19 +16,24 @@ class AttendanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AttendenceController());
+    // Get.put(AttendenceController());
+    final AttendenceController controller = Get.put(AttendenceController()); // Always create a new instance
+    controller.currentTabIndex.value = 0;
     return GetBuilder<AttendenceController>(builder: (controller) {
       return Scaffold(
         body: DefaultTabController(
           length: 2,
-          initialIndex: controller.initialIndex.value,
+          initialIndex: 0,
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Text(
                 AppString.attendence,
-                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
+                style: TextStyle(
+                    color: AppColor.primaryColor,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: CommonFontStyle.plusJakartaSans),
               ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -41,6 +47,9 @@ class AttendanceScreen extends StatelessWidget {
                   });
                 },
               ),
+              // bottom: TabBar(
+              //   controller: controller.tabController,
+              // ),
               actions: [
                 CustomDropDown(
                   selValue: controller.YearSel_selIndex,
@@ -63,19 +72,26 @@ class AttendanceScreen extends StatelessWidget {
                       color: AppColor.lightblue,
                     ),
                     child: TabBar(
+                      onTap: (index) {
+                        controller.changeTab(index);
+                      },
+                      controller: controller.tabController,
                       physics: NeverScrollableScrollPhysics(),
                       labelColor: AppColor.white,
                       unselectedLabelColor: AppColor.black,
                       dividerColor: Colors.transparent,
+                      // dragStartBehavior: DragStartBehavior.start,
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
-                      indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
+                      indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'Summary'), Tab(text: 'Details')],
                     ),
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   child: TabBarView(
+                    controller: controller.tabController,
                     physics: NeverScrollableScrollPhysics(),
                     children: [
                       SummaryScreen(),

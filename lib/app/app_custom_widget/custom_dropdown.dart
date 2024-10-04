@@ -53,10 +53,11 @@ class CustomDropDownState extends State<CustomDropDown> {
                     ),
                   ))
               .toList(),
-          value: selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
+          value: widget
+              .selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
           onChanged: (String? value) {
             setState(() {
-              // widget.selValue = value;
+              widget.selValue = value;
               selectedValue = value;
             });
             widget.onPressed(value!);

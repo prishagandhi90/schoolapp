@@ -37,7 +37,7 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  void onItemTapped(int index, BuildContext context) {
+  onItemTapped(int index, BuildContext context) async {
     while (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
     }
@@ -49,11 +49,10 @@ class BottomBarController extends GetxController {
     currentIndex.value = index;
 
     if (index == 1) {
-      final attendanceController =
-          Get.isRegistered<AttendenceController>() ? Get.find<AttendenceController>() : Get.put(AttendenceController());
-      attendanceController.resetData(); // Call resetData or any other method to reset the state
-      attendanceController.initialIndex.value = 0;
-      attendanceController.update();
+      final attendanceController = Get.put(AttendenceController());
+      await attendanceController.resetData(); // Call resetData or any other method to reset the state
+      // attendanceController.initialIndex.value = 0;
+      // attendanceController.update();
     }
     update();
   }
@@ -72,10 +71,12 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home, color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.home,
+                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.home,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -106,7 +107,8 @@ class BottomBarController extends GetxController {
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.attendence,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -132,7 +134,8 @@ class BottomBarController extends GetxController {
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.dashboard,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -154,10 +157,12 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.leave, color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.leave,
+                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.leave,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -183,7 +188,8 @@ class BottomBarController extends GetxController {
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.overtime,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),

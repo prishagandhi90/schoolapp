@@ -6,12 +6,10 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController {
@@ -19,7 +17,13 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "";
   late DashboardTable dashboardTable;
 
   @override
