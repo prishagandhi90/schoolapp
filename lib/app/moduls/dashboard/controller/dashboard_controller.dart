@@ -19,13 +19,7 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "",
-      mobileNumber = "",
-      emailAddress = "",
-      empCode = "",
-      empType = "",
-      department = "",
-      designation = "";
+  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -115,17 +109,17 @@ class DashboardController extends GetxController {
         //   getDashboardDataUsingToken();
         // });
 
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: PayrollScreen(),
-          // screen: payrollScreen,
-          withNavBar: true,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) {
-          // bottomBarController.resetAndInitialize();
-          // hideBottomBar.value = false;
-          getDashboardDataUsingToken();
-        });
+        // PersistentNavBarNavigator.pushNewScreen(
+        //   context,
+        //   screen: PayrollScreen(),
+        //   // screen: payrollScreen,
+        //   withNavBar: true,
+        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        // ).then((value) {
+        //   // bottomBarController.resetAndInitialize();
+        //   // hideBottomBar.value = false;
+        //   getDashboardDataUsingToken();
+        // });
 
         break;
       case 8:
