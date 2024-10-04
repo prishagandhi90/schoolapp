@@ -6,6 +6,7 @@ import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
 import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,6 +36,7 @@ class AttendanceScreen extends StatelessWidget {
                     final bottomBarController = Get.find<BottomBarController>();
                     bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
                     bottomBarController.currentIndex.value = 0;
+                    hideBottomBar.value = false;
                     Get.back();
                   });
                 },
