@@ -7,8 +7,11 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -439,37 +442,44 @@ class PayrollScreen extends GetView<PayrollController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    // onTap: () {
-                                    //   var dashboardController = Get.put(DashboardController());
-                                    //   // var bottomBarController = Get.put(BottomBarController());
-                                    //   var bottomBarController = Get.find<BottomBarController>();
-                                    //   bottomBarController.currentIndex.value = 3;
-                                    //   bottomBarController.persistentController.value.jumpToTab(3);
-                                    //   bottomBarController.update();
-                                    //   // bottomBarController.currentIndex = 3.obs;
-                                    //   // bottomBarController.persistentController!.jumpToTab(bottomBarController.currentIndex.value);
-                                    //   // bottomBarController.update();
-                                    //   PersistentNavBarNavigator.pushNewScreen(
-                                    //     context,
-                                    //     screen: LeaveMainScreen(),
-                                    //     withNavBar: true,
-                                    //     pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    //   ).then((value) async {
-                                    //     // if (Get.isRegistered<LeaveController>()) {
-                                    //     //   Get.delete<LeaveController>();
-                                    //     // }
-                                    //     hideBottomBar.value = false;
-                                    //     bottomBarController.update();
-                                    //     await dashboardController.getDashboardDataUsingToken();
-                                    //   });
-                                    // },
-                                    onTap: () => Get.snackbar(
-                                      AppString.comingsoon,
-                                      '',
-                                      colorText: AppColor.white,
-                                      backgroundColor: AppColor.black,
-                                      duration: const Duration(seconds: 1),
-                                    ),
+                                    onTap: () async {
+                                      final bottomBarController = Get.put(BottomBarController());
+                                      // final attendanceController = Get.put(AttendenceController());
+                                      // await attendanceController.resetData();
+                                      if (bottomBarController.persistentController.value.index != 3) {
+                                        bottomBarController.currentIndex.value = 3;
+                                        bottomBarController.persistentController.value.index = 3;
+                                      }
+                                      bottomBarController.update();
+
+                                      // var dashboardController = Get.put(DashboardController());
+
+                                      // var bottomBarController = Get.find<BottomBarController>();
+                                      // bottomBarController.currentIndex.value = 3;
+                                      // bottomBarController.persistentController.value.jumpToTab(3);
+                                      // bottomBarController.update();
+
+                                      // PersistentNavBarNavigator.pushNewScreen(
+                                      //   context,
+                                      //   screen: LeaveMainScreen(),
+                                      //   withNavBar: true,
+                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      // ).then((value) async {
+                                      //   // if (Get.isRegistered<LeaveController>()) {
+                                      //   //   Get.delete<LeaveController>();
+                                      //   // }
+                                      //   hideBottomBar.value = false;
+                                      //   bottomBarController.update();
+                                      //   await dashboardController.getDashboardDataUsingToken();
+                                      // });
+                                    },
+                                    // onTap: () => Get.snackbar(
+                                    //   AppString.comingsoon,
+                                    //   '',
+                                    //   colorText: AppColor.white,
+                                    //   backgroundColor: AppColor.black,
+                                    //   duration: const Duration(seconds: 1),
+                                    // ),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.06, //0.07
                                       width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -496,27 +506,35 @@ class PayrollScreen extends GetView<PayrollController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    // onTap: () {
-                                    //   var dashboardController = Get.put(DashboardController());
-                                    //   PersistentNavBarNavigator.pushNewScreen(
-                                    //     context,
-                                    //     screen: OvertimeMainScreen(),
-                                    //     withNavBar: true,
-                                    //     pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    //   ).then((value) async {
-                                    //     // Get.delete<LeaveController>();
-                                    //     Get.delete<OvertimeController>();
-                                    //     hideBottomBar.value = false;
-                                    //     await dashboardController.getDashboardDataUsingToken();
-                                    //   });
-                                    // },
-                                    onTap: () => Get.snackbar(
-                                      AppString.comingsoon,
-                                      '',
-                                      colorText: AppColor.white,
-                                      backgroundColor: AppColor.black,
-                                      duration: const Duration(seconds: 1),
-                                    ),
+                                    onTap: () {
+                                      final bottomBarController = Get.put(BottomBarController());
+                                      // final attendanceController = Get.put(AttendenceController());
+                                      // await attendanceController.resetData();
+                                      if (bottomBarController.persistentController.value.index != 4) {
+                                        bottomBarController.currentIndex.value = 4;
+                                        bottomBarController.persistentController.value.index = 4;
+                                      }
+                                      bottomBarController.update();
+                                      // var dashboardController = Get.put(DashboardController());
+                                      // PersistentNavBarNavigator.pushNewScreen(
+                                      //   context,
+                                      //   screen: OvertimeMainScreen(),
+                                      //   withNavBar: true,
+                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      // ).then((value) async {
+                                      //   // Get.delete<LeaveController>();
+                                      //   Get.delete<OvertimeController>();
+                                      //   hideBottomBar.value = false;
+                                      //   await dashboardController.getDashboardDataUsingToken();
+                                      // });
+                                    },
+                                    // onTap: () => Get.snackbar(
+                                    //   AppString.comingsoon,
+                                    //   '',
+                                    //   colorText: AppColor.white,
+                                    //   backgroundColor: AppColor.black,
+                                    //   duration: const Duration(seconds: 1),
+                                    // ),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.06, //0.07
                                       width: MediaQuery.of(context).size.width * 0.14, //0.17

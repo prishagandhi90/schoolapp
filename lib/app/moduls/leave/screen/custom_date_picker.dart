@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 class CustomDatePicker extends StatelessWidget {
   CustomDatePicker({super.key});
 
-  // final LeaveController leaveController = Get.put(LeaveController());
-  final LeaveController leaveController = Get.find<LeaveController>();
+  final LeaveController leaveController = Get.put(LeaveController());
+  // final LeaveController leaveController = Get.find<LeaveController>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class CustomDatePicker extends StatelessWidget {
         children: [
           Expanded(
             child: TextFormField(
-              readOnly: true,
+              // readOnly: true,
               controller: leaveController.fromDateController,
               // controller: TextEditingController(text: leaveController.fromDate.value),
               decoration: InputDecoration(
@@ -46,7 +46,7 @@ class CustomDatePicker extends StatelessWidget {
           const SizedBox(width: 16),
           Expanded(
             child: TextFormField(
-              readOnly: true,
+              // readOnly: true,
               controller: leaveController.toDateController,
               // controller: TextEditingController(text: leaveController.toDate.value),
               decoration: InputDecoration(

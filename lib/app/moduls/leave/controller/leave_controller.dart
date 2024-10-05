@@ -13,15 +13,12 @@ import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaveController extends GetxController with GetSingleTickerProviderStateMixin {
+class LeaveController extends GetxController {
   var bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
   var leftleavedays = ''.obs;
@@ -37,6 +34,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
   var leaverelivername = <LeaveReliverName>[].obs;
 
   String tokenNo = '', loginId = '', empId = '';
+
   final ApiController apiController = Get.put(ApiController());
   TextEditingController fromDateController = TextEditingController();
   TextEditingController noteController = TextEditingController();
@@ -56,47 +54,50 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
   var hodAction = ''.obs;
   var hrAction = ''.obs;
   List<Map<String, String>> daysOptions = [];
-  late TabController tabController;
+  // late TabController tabController;
   var activeScreen = ''.obs;
   var leaveScrollController = ScrollController();
+
+  TextEditingController leftLeaveDaysController = TextEditingController();
 
   @override
   void onInit() async {
     super.onInit();
+    noteController.text = "";
     // await getLeaveDays();
     await fetchLeaveNames();
     await fetchLeaveReason();
     await fetchLeaveReliverName();
     await fetchLeaveDelayReason();
     // await fetchLeaveEntryList();
-    update();
-    leaveScrollController.addListener(() {
-      if (leaveScrollController.hasClients &&
-          leaveScrollController.positions.isNotEmpty &&
-          leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
-        hideBottomBar = false.obs;
-        bottomBarController.update();
-      } else if (leaveScrollController.hasClients &&
-          leaveScrollController.positions.isNotEmpty &&
-          leaveScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-        hideBottomBar = true.obs;
-        bottomBarController.update();
-      }
-      update();
-    });
+    // update();
+    // leaveScrollController.addListener(() {
+    //   if (leaveScrollController.hasClients &&
+    //       leaveScrollController.positions.isNotEmpty &&
+    //       leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
+    //     hideBottomBar = false.obs;
+    //     bottomBarController.update();
+    //   } else if (leaveScrollController.hasClients &&
+    //       leaveScrollController.positions.isNotEmpty &&
+    //       leaveScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    //     hideBottomBar = true.obs;
+    //     bottomBarController.update();
+    //   }
+    //   update();
+    // });
     fromDateController.addListener(updateDays);
     toDateController.addListener(updateDays);
-
-    tabController = TabController(length: 2, vsync: this);
-    tabController.addListener(() async {
-      if (tabController.index == 1) {
-        // Tumhara logic jab 'View' tab pe swipe karke aate ho
-        print("Swiped to View Tab");
-        // Yaha data fetch kar sakte ho
-        await fetchLeaveEntryList(activeScreen.value == "LeaveMainScreen" ? "LV" : "OT");
-      }
-      update();
-    });
+    // leaveValueController.addListener(updateDays);
+    // tabController = TabController(length: 2, vsync: this);
+    // tabController.addListener(() async {
+    //   if (tabController.index == 1) {
+    //     // Tumhara logic jab 'View' tab pe swipe karke aate ho
+    //     print("Swiped to View Tab");
+    //     // Yaha data fetch kar sakte ho
+    //     await fetchLeaveEntryList(activeScreen.value == "LeaveMainScreen" ? "LV" : "OT");
+    //   }
+    //   update();
+    // });
   }
 
   @override
@@ -135,7 +136,8 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
       isDaysFieldEnabled.value = true;
 
       if (leaveNameController.text != '') {
-        await getLeftLeaves();
+        // await getLeftLeaves();
+        // update();
         // return;
       }
     } else {
@@ -191,18 +193,18 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
     );
     if (picked != null) {
       toDateController.text = DateFormat('dd-MM-yyyy').format(picked);
-      // update();
+      update();
     }
   }
 
   Future<void> getLeftLeaves() async {
     try {
-      if (toDateController.value == '' || toDateController.value == null || toDateController.text == '') {
+      if (toDateController.value == '' || toDateController.text == '') {
         Get.rawSnackbar(message: "Please select To Date first!");
         return;
       }
 
-      if (leaveValueController.text == '' || leaveValueController.text == null) {
+      if (leaveValueController.text == '') {
         Get.rawSnackbar(message: "Please select Leave Name first!");
         return;
       }
@@ -231,11 +233,14 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
           isLoading.value = false;
           if (leaveDays.data != null && leaveDays.data!.isNotEmpty) {
             leftleavedays.value = leaveDays.data![0].value.toString();
+            leftLeaveDaysController.text = leftleavedays.value;
+            // leaveNameController.text = leaveNameController.text;
+            // leaveValueController.text = leaveValueController.text;
             // update();
             return; // Return the first data value
           } else {
             leftleavedays.value = '';
-            update();
+            // update();
             Get.rawSnackbar(message: "No data found!");
           }
         } else if (leaveDays.statusCode == 401) {
@@ -247,9 +252,9 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
         } else {
           Get.rawSnackbar(message: "Something went wrong");
         }
-        update();
+        // update();
       } else {
-        // leftleavedays.value = '';
+        leftleavedays.value = '';
         isDaysFieldEnabled.value = false;
       }
     } catch (e) {
@@ -298,7 +303,7 @@ class LeaveController extends GetxController with GetSingleTickerProviderStateMi
   LeaveNameChangeMethod(Map<String, String>? value) async {
     leaveValueController.text = value!['value'] ?? '';
     leaveNameController.text = value['text'] ?? '';
-    await getLeftLeaves();
+    // await getLeftLeaves();
   }
 
   RelieverNameChangeMethod(Map<String, String>? value) async {

@@ -45,7 +45,7 @@ class _CustomDropdown1State extends State<CustomDropdown1> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      controller: leaveController.leaveScrollController,
+      // controller: leaveController.leaveScrollController,
       child: DropdownButtonFormField2<Map<String, String>>(
         isExpanded: true,
         decoration: InputDecoration(
