@@ -13,7 +13,7 @@ class DetailsScreen extends GetView<AttendenceController> {
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
-    
+
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
@@ -59,76 +59,81 @@ class DetailsScreen extends GetView<AttendenceController> {
                                         ),
                                       ),
                                       Expanded(
-                                        child: SingleChildScrollView(
-                                          controller: controller.attendanceScrollController,
-                                          child: Table(
-                                            columnWidths: {
-                                              0: FixedColumnWidth(constraints.maxWidth * 0.15),
-                                              1: FixedColumnWidth(constraints.maxWidth * 0.22),
-                                              2: FixedColumnWidth(constraints.maxWidth * 0.22),
-                                              3: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                              4: FixedColumnWidth(constraints.maxWidth * 0.2),
-                                            },
-                                            children: List.generate(
-                                              controller.attendenceDetailTable.length,
-                                              (index) => TableRow(
-                                                children: [
-                                                  buildCell(
-                                                    Container(
-                                                      height: 40,
-                                                      width: 30, // Width ko kam kiya gaya hai
-                                                      decoration: BoxDecoration(
-                                                        color: AppColor.lightgrey,
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          controller.attendenceDetailTable[index].atTDATE.toString(),
-                                                          style: AppStyle.fontfamilyplus,
+                                        child: RefreshIndicator(
+                                          onRefresh: () async {
+                                            await await controller.getattendeceinfotable();
+                                          },
+                                          child: SingleChildScrollView(
+                                            controller: controller.attendanceScrollController,
+                                            child: Table(
+                                              columnWidths: {
+                                                0: FixedColumnWidth(constraints.maxWidth * 0.15),
+                                                1: FixedColumnWidth(constraints.maxWidth * 0.22),
+                                                2: FixedColumnWidth(constraints.maxWidth * 0.22),
+                                                3: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                                4: FixedColumnWidth(constraints.maxWidth * 0.2),
+                                              },
+                                              children: List.generate(
+                                                controller.attendenceDetailTable.length,
+                                                (index) => TableRow(
+                                                  children: [
+                                                    buildCell(
+                                                      Container(
+                                                        height: 40,
+                                                        width: 30, // Width ko kam kiya gaya hai
+                                                        decoration: BoxDecoration(
+                                                          color: AppColor.lightgrey,
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            controller.attendenceDetailTable[index].atTDATE.toString(),
+                                                            style: AppStyle.fontfamilyplus,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  buildCell(
-                                                    Text(
-                                                      controller.attendenceDetailTable[index].iN.toString(),
-                                                      style: AppStyle.fontfamilyplus.copyWith(
-                                                        color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
-                                                            ? Colors.red
-                                                            : Colors.black, // redYNINTM se color set kiya
+                                                    buildCell(
+                                                      Text(
+                                                        controller.attendenceDetailTable[index].iN.toString(),
+                                                        style: AppStyle.fontfamilyplus.copyWith(
+                                                          color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
+                                                              ? Colors.red
+                                                              : Colors.black, // redYNINTM se color set kiya
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  buildCell(
-                                                    Text(
-                                                      controller.attendenceDetailTable[index].out.toString(),
-                                                      style: AppStyle.fontfamilyplus.copyWith(
-                                                        color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
-                                                            ? Colors.red
-                                                            : Colors.black, // redYNOUTTM se color set kiya
+                                                    buildCell(
+                                                      Text(
+                                                        controller.attendenceDetailTable[index].out.toString(),
+                                                        style: AppStyle.fontfamilyplus.copyWith(
+                                                          color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
+                                                              ? Colors.red
+                                                              : Colors.black, // redYNOUTTM se color set kiya
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  buildCell(
-                                                    Text(
-                                                      controller.attendenceDetailTable[index].lCEGMIN.toString(),
-                                                      textAlign: TextAlign.center,
-                                                      style: AppStyle.fontfamilyplus.copyWith(
-                                                        color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y'
-                                                            ? Colors.red
-                                                            : Colors.black, // redYNLCEGMIN se color set kiya
+                                                    buildCell(
+                                                      Text(
+                                                        controller.attendenceDetailTable[index].lCEGMIN.toString(),
+                                                        textAlign: TextAlign.center,
+                                                        style: AppStyle.fontfamilyplus.copyWith(
+                                                          color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y'
+                                                              ? Colors.red
+                                                              : Colors.black, // redYNLCEGMIN se color set kiya
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  buildCell(
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        detailbottomsheet(context, index);
-                                                      },
-                                                      child: const Icon(Icons.arrow_drop_down_circle),
+                                                    buildCell(
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          detailbottomsheet(context, index);
+                                                        },
+                                                        child: const Icon(Icons.arrow_drop_down_circle),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),

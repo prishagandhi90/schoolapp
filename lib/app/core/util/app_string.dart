@@ -65,6 +65,8 @@ class AppString {
   static String noleavedata = "No leave data available";
   static String min = "Min";
 
+  static String dutyschedule = "Duty Schedule";
+
   static String keyToken = "KEY_TOKENNO";
   static String keyLoginId = "KEY_LOGINID";
   static String keyEmpId = "KEY_EMPID";

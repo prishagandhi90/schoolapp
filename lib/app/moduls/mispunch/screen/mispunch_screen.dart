@@ -16,6 +16,7 @@ class MispunchScreen extends GetView<MispunchController> {
   @override
   Widget build(BuildContext context) {
     Get.put(MispunchController());
+
     return GetBuilder<MispunchController>(
       builder: (controller) {
         return Scaffold(
@@ -41,7 +42,7 @@ class MispunchScreen extends GetView<MispunchController> {
                   // Get.back();
                   // });
                 },
-                icon: const Icon(Icons.arrow_back)),
+                icon: const Icon(Icons.arrow_back_ios)),
             // centerTitle: true,
             actions: [
               CustomDropDown(

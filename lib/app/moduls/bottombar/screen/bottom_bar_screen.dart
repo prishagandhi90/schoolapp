@@ -47,7 +47,7 @@ class BottomBarView extends GetView<BottomBarController> {
                 screens: controller.buildScreens(),
                 items: controller.navBarsItems(context),
                 navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
-                stateManagement: false,
+                stateManagement: true,
                 resizeToAvoidBottomInset: true,
                 bottomScreenMargin: Sizes.crossLength * 0.020, onItemSelected: (index) async {
               await controller.onItemTapped(index, context);
