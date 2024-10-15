@@ -24,15 +24,13 @@ class LeaveController extends GetxController {
   var leftleavedays = ''.obs;
   List<LeaveNamesTable> leavename = [];
   var dropdownItems123 = <DropdownlstTable>[].obs;
-
+  
   List<LeaveEntryList> leaveentryList = [];
   List<LeaveEntryList> otentryList = [];
   List<SaveLeaveEntryList> saveleaveentrylist = [];
-
   var leavereason = <LeaveReasonTable>[].obs;
   var leavedelayreason = <LeaveDelayReason>[].obs;
   var leaverelivername = <LeaveReliverName>[].obs;
-
   String tokenNo = '', loginId = '', empId = '';
 
   final ApiController apiController = Get.put(ApiController());

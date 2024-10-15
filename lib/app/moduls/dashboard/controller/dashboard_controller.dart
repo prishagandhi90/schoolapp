@@ -17,13 +17,7 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "",
-      mobileNumber = "",
-      emailAddress = "",
-      empCode = "",
-      empType = "",
-      department = "",
-      designation = "";
+  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -105,8 +99,9 @@ class DashboardController extends GetxController {
       case 7:
         var bottomBarController = Get.put(BottomBarController());
         hideBottomBar.value = false;
-        bottomBarController.persistentController.value.index = 0;
-        bottomBarController.currentIndex.value = 0;
+        bottomBarController.onItemTapped(0, context);
+        // bottomBarController.persistentController.value.index = 0;
+        // bottomBarController.currentIndex.value = 0;
         // Get.offAll(() => payrollScreen);
         // Get.offAllNamed(Routes.Payroll)!.then((value) {
         //   hideBottomBar.value = false;

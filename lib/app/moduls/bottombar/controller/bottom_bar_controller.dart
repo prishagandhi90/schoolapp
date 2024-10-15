@@ -1,13 +1,10 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
-import 'package:emp_app/app/moduls/leave/screen/leavedemo.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
-import 'package:emp_app/app/moduls/overtime/screens/overtimedemo.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -39,22 +36,33 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  onItemTapped(int index, BuildContext context) async {
-    while (Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
-    }
-    // Get.delete<MispunchController>();
-    hideBottomBar.value = false;
-    persistentController.update((val) {
-      val?.index = index;
-    });
-    currentIndex.value = index;
+  // onItemTapped(int index, BuildContext context) async {
+  //   // Get.delete<MispunchController>();
+  //   hideBottomBar.value = false;
+  //   persistentController.update((val) {
+  //     val?.index = index;
+  //   });
+  //   currentIndex.value = index;
 
-    if (index == 1) {
-      final attendanceController = Get.put(AttendenceController());
-      await attendanceController.resetData(); // Call resetData or any other method to reset the state
-      // attendanceController.initialIndex.value = 0;
-      // attendanceController.update();
+  //   if (index == 1) {
+  //     final attendanceController = Get.put(AttendenceController());
+  //     await attendanceController.resetData(); // Call resetData or any other method to reset the state
+  //     // attendanceController.initialIndex.value = 0;
+  //     // attendanceController.update();
+  //   }
+  //   update();
+  // }
+
+  onItemTapped(int index, BuildContext context) async {
+    currentIndex.value = index;
+    if (index == 0) {
+      // Navigate to PayrollScreen
+      // Ensure MispunchScreen is popped before navigating to PayrollScreen
+      Get.until((route) => route.isFirst); // This pops all routes until the first one (PayrollScreen)
+      persistentController.value.index = 0; // This sets PayrollScreen tab
+    } else {
+      // Navigate to other screens
+      persistentController.value.index = index;
     }
     update();
   }
@@ -92,11 +100,11 @@ class BottomBarController extends GetxController {
         ),
         activeColorPrimary: AppColor.primaryColor,
         inactiveColorPrimary: AppColor.black,
-        onPressed: (index) {
-          if (index != 0) {
-            // Add your functionality here
-          }
-        },
+        // onPressed: (index) {
+        //   if (index != 0) {
+        //     // Add your functionality here
+        //   }
+        // },
       ),
       PersistentBottomNavBarItem(
         icon: Container(
