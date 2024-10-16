@@ -24,7 +24,7 @@ class LeaveController extends GetxController {
   var leftleavedays = ''.obs;
   List<LeaveNamesTable> leavename = [];
   var dropdownItems123 = <DropdownlstTable>[].obs;
-  
+
   List<LeaveEntryList> leaveentryList = [];
   List<LeaveEntryList> otentryList = [];
   List<SaveLeaveEntryList> saveleaveentrylist = [];
@@ -55,6 +55,7 @@ class LeaveController extends GetxController {
   // late TabController tabController;
   var activeScreen = ''.obs;
   var leaveScrollController = ScrollController();
+  final FocusNode notesFocusNode = FocusNode();
 
   TextEditingController leftLeaveDaysController = TextEditingController();
 
@@ -62,6 +63,7 @@ class LeaveController extends GetxController {
   void onInit() async {
     super.onInit();
     noteController.text = "";
+    // notesFocusNode = FocusNode();
     // await getLeaveDays();
     await fetchLeaveNames();
     await fetchLeaveReason();
@@ -101,6 +103,8 @@ class LeaveController extends GetxController {
   @override
   void onClose() {
     // leaveScrollController.dispose();
+    noteController.dispose();
+    notesFocusNode.dispose();
     super.onClose();
   }
 
@@ -169,7 +173,7 @@ class LeaveController extends GetxController {
     // update();
   }
 
-  Future<void> selectFromDate(BuildContext context, TextEditingController controller) async {
+  Future<void> selectFromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -182,7 +186,7 @@ class LeaveController extends GetxController {
     }
   }
 
-  Future<void> selectToDate(BuildContext context, TextEditingController controller) async {
+  Future<void> selectToDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -313,6 +317,11 @@ class LeaveController extends GetxController {
   LeaveDaysOnChange(Map<String, String>? value) async {
     daysController.text = value!['text'] ?? '';
     // update();
+  }
+
+  DelayReasonChangeMethod(Map<String, String>? value) async {
+    delayreasonIdController.text = value!['value'] ?? '';
+    delayreasonNameController.text = value['text'] ?? '';
   }
 
   Future<List<LeaveReasonTable>> fetchLeaveReason() async {
@@ -563,19 +572,19 @@ class LeaveController extends GetxController {
         Get.rawSnackbar(message: "Please enter leave name");
         return false;
       }
-      if (noteController.text.isEmpty || noteController.text == null) {
-        Get.rawSnackbar(message: "Please enter note");
-        return false;
-      }
+      // if (noteController.text.isEmpty || noteController.text == null) {
+      //   Get.rawSnackbar(message: "Please enter note");
+      //   return false;
+      // }
       if (daysController.text.isEmpty || daysController.text == null) {
         Get.rawSnackbar(message: "Please enter number of days");
         return false;
       }
 
-      // if (reasonController.text.isEmpty || reasonController.text == null) {
-      //   Get.rawSnackbar(message: "Please enter leave reason!");
-      //   return false;
-      // }
+      if (reasonController.text.isEmpty || reasonController.text == null) {
+        Get.rawSnackbar(message: "Please enter leave reason!");
+        return false;
+      }
 
       if (leaverelivername.length > 0 && relieverValueController.text.isEmpty) {
         Get.rawSnackbar(message: "Please enter reliver name!");
@@ -611,6 +620,7 @@ class LeaveController extends GetxController {
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      // delayreasonIdController.text = delayreasonNameController.text == '' ? '0' : delayreasonIdController.text;
 
       var jsonbodyObj = {
         "loginId": loginId,
@@ -626,7 +636,7 @@ class LeaveController extends GetxController {
         "overTimeMinutes": flag == "LV" ? 0 : int.tryParse(overtimeController.otMinutesController.text) ?? 0,
         "usr_Nm": '',
         "reliever_Empcode": flag == "LV" ? relieverValueController.text : '',
-        "delayLVNote": flag == "LV" ? delayreasonNameController.text : overtimeController.delayReasonController.text,
+        "delayLVNote": flag == "LV" ? delayreasonIdController.text : overtimeController.delayReasonController.text,
       };
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       print(response);

@@ -7,6 +7,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_screen.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_view_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,7 +18,7 @@ import 'package:get/get.dart';
 class OvertimeMainScreen extends GetView<LeaveController> {
   OvertimeMainScreen({this.fromDashboard = false, super.key});
   final bool fromDashboard;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
   final leaveController = Get.put(LeaveController());
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
         length: 2,
         child: Scaffold(
             backgroundColor: Colors.white,
-            key: scaffoldKey,
+            // key: scaffoldKey,
             endDrawer: Drawer(
                 child: controller.isLoading.value
                     ? const Center(
@@ -334,19 +335,12 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                     fontFamily: CommonFontStyle.plusJakartaSans),
               ),
               centerTitle: true,
-              leading: fromDashboard
-                  ? IconButton(
-                      icon: const Icon(Icons.menu),
-                      onPressed: () {
-                        scaffoldKey.currentState!.openDrawer();
-                      },
-                    )
-                  : IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               actions: [
                 Builder(builder: (context) {
                   return IconButton(
@@ -394,7 +388,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                     physics: NeverScrollableScrollPhysics(),
                     children: [
                       OtScreen(),
-                      OvertimeMainScreen(),
+                      OvertimeViewScreen(),
                     ],
                   ),
                 ),

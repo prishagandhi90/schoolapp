@@ -2,7 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/dropdown_attendance.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
 import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -29,10 +29,7 @@ class AttendanceScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               title: Text(
                 AppString.attendence,
-                style: TextStyle(
-                    color: AppColor.primaryColor,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: CommonFontStyle.plusJakartaSans),
+                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
               ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -50,7 +47,7 @@ class AttendanceScreen extends StatelessWidget {
               //   controller: controller.tabController,
               // ),
               actions: [
-                CustomDropDown(
+                DropDownAttendance(
                   selValue: controller.YearSel_selIndex,
                   onPressed: (index) {
                     controller.upd_YearSelIndex(index);
@@ -82,8 +79,7 @@ class AttendanceScreen extends StatelessWidget {
                       // dragStartBehavior: DragStartBehavior.start,
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
-                      indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
+                      indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
                       tabs: const [Tab(text: 'Summary'), Tab(text: 'Details')],
                     ),
                   ),

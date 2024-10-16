@@ -1,6 +1,8 @@
+import 'package:emp_app/app/app_custom_widget/custom_stepper.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/moduls/dutyschedule/screen/dutyschedule_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class DutyscheduleScreen extends StatelessWidget {
@@ -27,9 +29,36 @@ class DutyscheduleScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: DutyscheduleDropdown(),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(199, 255, 255, 255),
+                        border: Border.all(color: Colors.grey), // Border add kiya
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Text Here',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            )
+            ),
+            CustomStepper()
           ],
         ));
   }

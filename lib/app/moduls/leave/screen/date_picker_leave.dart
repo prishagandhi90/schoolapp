@@ -35,7 +35,7 @@ class CustomDatePicker extends StatelessWidget {
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () async {
-                    await leaveController.selectFromDate(context, leaveController.fromDateController);
+                    await leaveController.selectFromDate(context);
                     FocusScope.of(context).unfocus();
                   },
                   // onPressed: () => leaveController.selectFromDate(context),
@@ -64,7 +64,7 @@ class CustomDatePicker extends StatelessWidget {
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () async {
-                    await leaveController.selectToDate(context, leaveController.toDateController);
+                    await leaveController.selectToDate(context);
                     FocusScope.of(context).unfocus();
                   },
                   // onPressed: () => leaveController.selectToDate(context),

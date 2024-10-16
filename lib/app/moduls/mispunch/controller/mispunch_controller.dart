@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/dropdown_attendance.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -57,7 +57,7 @@ class MispunchController extends GetxController {
     }
     // });
 
-    CustomDropDown(
+    DropDownAttendance(
       selValue: YearSel_selIndex,
       onPressed: (index) {
         upd_YearSelIndex(index);

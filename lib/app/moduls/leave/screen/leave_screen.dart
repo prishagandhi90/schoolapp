@@ -1,12 +1,13 @@
 import 'package:emp_app/app/moduls/leave/model/dropdownlist_custom.dart';
-import 'package:emp_app/app/moduls/leave/screen/custom_date_picker.dart';
-import 'package:emp_app/app/moduls/leave/screen/custom_dropdown1.dart';
+import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/model/leaveReliverName_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
+import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/moduls/leave/screen/custom_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,8 +17,6 @@ class LeaveScreen extends GetView<LeaveController> {
   @override
   Widget build(BuildContext context) {
     Get.put(LeaveController());
-    // final LeaveController controller = Get.put(LeaveController());
-    // Get.find<LeaveController>();
 
     return Scaffold(
       backgroundColor: AppColor.white,
@@ -27,15 +26,38 @@ class LeaveScreen extends GetView<LeaveController> {
           controller: controller.leaveScrollController,
           child: Column(
             children: [
-              CustomDatePicker(),
+              // CustomDatePicker(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 3,
-                      child: CustomDropdown1(
+                      child: CustomDatePicker(
+                        dateController: controller.fromDateController,
+                        hintText: 'From',
+                        onDateSelected: () async => await controller.selectFromDate(context),
+                      ),
+                    ),
+                    Expanded(
+                      child: CustomDatePicker(
+                        dateController: controller.toDateController,
+                        hintText: 'To',
+                        onDateSelected: () async => await controller.selectToDate(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: CustomDropdown(
                         text: 'Name',
+                        
                         controller: controller.leaveNameController,
                         onChanged: (value) async {
                           await controller.LeaveNameChangeMethod(value);
@@ -70,7 +92,7 @@ class LeaveScreen extends GetView<LeaveController> {
                       flex: 1,
                       child: SizedBox(
                         height: 48,
-                        child: TextFormField(
+                        child: CustomTextFormField(
                           readOnly: true,
                           controller: controller.leftLeaveDaysController,
                           style: TextStyle(color: AppColor.white),
@@ -94,7 +116,7 @@ class LeaveScreen extends GetView<LeaveController> {
                     SizedBox(width: 5),
                     Expanded(
                       flex: 2,
-                      child: CustomDropdown1(
+                      child: CustomDropdown(
                         text: 'Days',
                         controller: controller.daysController,
                         onChanged: (value) async {
@@ -125,9 +147,10 @@ class LeaveScreen extends GetView<LeaveController> {
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: CustomDropdown1(
+                child: CustomDropdown(
                   text: 'Reason',
                   controller: controller.reasonController,
+                  onChanged: (value) async {},
                   width: double.infinity,
                   items: controller.leavereason
                       .map((LeaveReasonTable item) => DropdownMenuItem<Map<String, String>>(
@@ -150,26 +173,30 @@ class LeaveScreen extends GetView<LeaveController> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextFormField(
+                child: CustomTextFormField(
+                  label: 'Notes',
+                  hint: 'Enter Notes',
                   controller: controller.noteController,
-                  minLines: 3,
-                  maxLines: 10,
-                  decoration: InputDecoration(
-                      hintText: 'Notes...',
-                      hintStyle: TextStyle(color: AppColor.black),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black),
-                        borderRadius: BorderRadius.circular(0),
-                      )),
+                  focusNode: controller.notesFocusNode,
+                  // keyboardType: TextInputType.name,
+                  onChanged: (value) {
+                    print('Password changed: $value');
+                  },
+                  // onFieldSubmitted: (value) {
+                  //   // Move focus to the next field
+                  //   // FocusScope.of(context).requestFocus(passwordFocusNode);
+                  // },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Notes is required';
+                    }
+                    return null;
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: CustomDropdown1(
+                child: CustomDropdown(
                   text: 'Reliever Name',
                   controller: controller.relieverNameController,
                   width: double.infinity,
@@ -197,9 +224,10 @@ class LeaveScreen extends GetView<LeaveController> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CustomDropdown1(
+                child: CustomDropdown(
                   text: 'Late Reason',
                   controller: controller.delayreasonNameController,
+                  onChanged: (value) async {},
                   width: double.infinity,
                   items: controller.leavedelayreason
                       .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(

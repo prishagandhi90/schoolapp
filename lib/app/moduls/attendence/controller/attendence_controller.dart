@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/dropdown_attendance.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -150,7 +150,7 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
       );
     }
 
-    CustomDropDown(
+    DropDownAttendance(
       selValue: YearSel_selIndex,
       onPressed: (index) {
         upd_YearSelIndex(index);
