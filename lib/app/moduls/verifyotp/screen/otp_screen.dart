@@ -115,7 +115,7 @@ class _OtpScreenState extends State<OtpScreen> {
     super.initState();
     print('RespOTP: ${loginController.responseOTPNo}');
     otpController.numberController.text = widget.mobileNumber;
-    showSnackBar();
+    // showSnackBar();
     _firebaseMessaging.requestPermission();
 
     _firebaseMessaging.getToken().then((String? token) {
