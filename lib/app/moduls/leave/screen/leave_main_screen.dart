@@ -3,9 +3,11 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_view_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -342,9 +344,13 @@ class LeaveMainScreen extends GetView<LeaveController> {
               ],
               leading: IconButton(
                   onPressed: () {
-                    // controller.dispose();
-                    // Get.delete<LeaveController>();
-                    Navigator.pop(context);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final bottomBarController = Get.find<BottomBarController>();
+                      bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                      bottomBarController.currentIndex.value = 0;
+                      hideBottomBar.value = false;
+                      Get.back();
+                    });
                   },
                   icon: const Icon(Icons.arrow_back)),
             ),

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -16,8 +17,7 @@ import 'package:get/get.dart';
 // GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class OvertimeMainScreen extends GetView<LeaveController> {
-  OvertimeMainScreen({this.fromDashboard = false, super.key});
-  final bool fromDashboard;
+  OvertimeMainScreen({super.key});
   // var scaffoldKey = GlobalKey<ScaffoldState>();
   final leaveController = Get.put(LeaveController());
   @override
@@ -338,7 +338,13 @@ class OvertimeMainScreen extends GetView<LeaveController> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
-                  Navigator.pop(context);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    final bottomBarController = Get.find<BottomBarController>();
+                    bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                    bottomBarController.currentIndex.value = 0;
+                    hideBottomBar.value = false;
+                    Get.back();
+                  });
                 },
               ),
               actions: [

@@ -1,10 +1,11 @@
+import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_timepicker.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
 import 'package:emp_app/app/moduls/leave/screen/custom_dropdown1.dart';
+import 'package:emp_app/app/moduls/leave/screen/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/app/app_custom_widget/datepicker_overtime.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,15 +27,21 @@ class OtScreen extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                          child: CustomDatePicker(
-                        hintText: "From",
-                        controllerValue: controller.fromDateController,
-                        onTap: () async {
-                          await controller.selectDate(context, controller.fromDateController);
-                        },
-                      )),
+                        child: CustomDatePicker(
+                          dateController: controller.fromDateController,
+                          hintText: 'From',
+                          onDateSelected: () async => await controller.selectDate(context, controller.fromDateController),
+                        ),
+                        //     child: CustomDatePicker(
+                        //   hintText: "From",
+                        //   controllerValue: controller.fromDateController,
+                        //   onTap: () async {
+                        //     await controller.selectDate(context, controller.fromDateController);
+                        //   },
+                        // )
+                      ),
                       SizedBox(
-                        width: 10,
+                        width: 10.0,
                       ),
                       Expanded(
                         child: CustomTimepicker(
@@ -47,32 +54,41 @@ class OtScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: CustomDatePicker(
-                          hintText: "To",
-                          controllerValue: controller.toDateController,
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomDatePicker(
+                          dateController: controller.toDateController,
+                          hintText: 'To',
+                          onDateSelected: () async => await controller.selectDate(context, controller.toDateController),
+                        ),
+                        //     child: CustomDatePicker(
+                        //   hintText: "To",
+                        //   controllerValue: controller.toDateController,
+                        //   onTap: () async {
+                        //     await controller.selectDate(context, controller.toDateController);
+                        //   },
+                        // )
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: CustomTimepicker(
+                          hinttext: "--:--",
+                          controllerValue: controller.toTimeController,
                           onTap: () async {
-                            await controller.selectDate(context, controller.toDateController);
+                            await controller.selectTime(context, controller.toTimeController);
                           },
-                        )),
-                        SizedBox(
-                          width: 10,
                         ),
-                        Expanded(
-                          child: CustomTimepicker(
-                            hinttext: "--:--",
-                            controllerValue: controller.toTimeController,
-                            onTap: () async {
-                              await controller.selectTime(context, controller.toTimeController);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.0,
                   ),
                   TextFormField(
                     readOnly: true,
@@ -92,21 +108,25 @@ class OtScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: TextFormField(
+                    child: CustomTextFormField(
+                      hint: 'Notes...',
                       minLines: 3,
-                      maxLines: 10,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
                       controller: controller.noteController,
-                      decoration: InputDecoration(
-                          hintText: 'Notes...',
-                          hintStyle: TextStyle(color: AppColor.black),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.black),
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.black),
-                            borderRadius: BorderRadius.circular(0),
-                          )),
+                      scrollPhysics: BouncingScrollPhysics(),
+                      // decoration: InputDecoration(
+                      //   hintText: 'Notes...',
+                      //   hintStyle: TextStyle(color: AppColor.black),
+                      //   enabledBorder: OutlineInputBorder(
+                      //     borderSide: BorderSide(color: AppColor.black),
+                      //     borderRadius: BorderRadius.circular(0),
+                      //   ),
+                      //   focusedBorder: OutlineInputBorder(
+                      //     borderSide: BorderSide(color: AppColor.black),
+                      //     borderRadius: BorderRadius.circular(0),
+                      //   ),
+                      // ),
                     ),
                   ),
                   Obx(

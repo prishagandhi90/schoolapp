@@ -1,4 +1,6 @@
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:get/get.dart';
 
 class CustomDropdown extends StatelessWidget {
@@ -22,20 +24,43 @@ class CustomDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      child: DropdownButtonFormField<Map<String, String>>(
-        decoration: decoration ??
-            InputDecoration(
-              labelText: text,
-              border: OutlineInputBorder(),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2<Map<String, String>>(
+          isExpanded: true,
+          hint: Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
-        value: items.firstWhereOrNull((item) => item.value!['text'] == controller.text)?.value,
-        items: items,
-        onChanged: (value) {
-          if (value != null) {
-            controller.text = value['text'] ?? ''; // Update the TextEditingController with selected text
-          }
-          onChanged(value); // Call the custom onChanged method passed from parent
-        },
+          ),
+          items: items,
+          value: items
+              .firstWhereOrNull(
+                (item) => item.value!['text'] == controller.text,
+              )
+              ?.value, // Get selected value from the controller
+          onChanged: (value) {
+            if (value != null) {
+              controller.text = value['text'] ?? ''; // Update the controller with selected value
+            }
+            onChanged(value); // Call the custom onChanged method
+          },
+          buttonStyleData: ButtonStyleData(
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColor.black),
+              borderRadius: BorderRadius.circular(0),
+              color: Colors.white,
+            ),
+          ),
+
+          menuItemStyleData: const MenuItemStyleData(
+            height: 40,
+          ),
+        ),
       ),
     );
   }

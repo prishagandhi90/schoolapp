@@ -85,8 +85,8 @@ class LeaveController extends GetxController {
     //   }
     //   update();
     // });
-    fromDateController.addListener(updateDays);
-    toDateController.addListener(updateDays);
+    fromDateController.addListener(updateLeaveDays);
+    toDateController.addListener(updateLeaveDays);
     // leaveValueController.addListener(updateDays);
     // tabController = TabController(length: 2, vsync: this);
     // tabController.addListener(() async {
@@ -108,7 +108,7 @@ class LeaveController extends GetxController {
     super.onClose();
   }
 
-  void updateDays() async {
+  updateLeaveDays() async {
     final String formDateText = fromDateController.text;
     final String toDateText = toDateController.text;
 
@@ -138,8 +138,8 @@ class LeaveController extends GetxController {
       isDaysFieldEnabled.value = true;
 
       if (leaveNameController.text != '') {
-        // await getLeftLeaves();
-        // update();
+        await getLeftLeaves();
+        update();
         // return;
       }
     } else {
@@ -150,14 +150,6 @@ class LeaveController extends GetxController {
       isDaysFieldEnabled.value = false;
     }
 
-    // daysController.clear();
-    // dropdownItems123.clear();
-    // dropdownItems123 = daysOptions
-    //     .map((option) => DropdownlstTable(
-    //           value: option['value']!,
-    //           name: option['name']!,
-    //         ))
-    //     .toList();
     daysController.clear();
     dropdownItems123.assignAll(
       daysOptions
@@ -169,8 +161,21 @@ class LeaveController extends GetxController {
           )
           .toList(),
     );
-
     // update();
+  }
+
+  clearLeaveDays() async {
+    daysController.clear();
+    dropdownItems123.assignAll(
+      daysOptions
+          .map(
+            (option) => DropdownlstTable(
+              value: option['value']!,
+              name: option['name']!,
+            ),
+          )
+          .toList(),
+    );
   }
 
   Future<void> selectFromDate(BuildContext context) async {
@@ -195,7 +200,7 @@ class LeaveController extends GetxController {
     );
     if (picked != null) {
       toDateController.text = DateFormat('dd-MM-yyyy').format(picked);
-      update();
+      // update();
     }
   }
 
@@ -305,18 +310,32 @@ class LeaveController extends GetxController {
   LeaveNameChangeMethod(Map<String, String>? value) async {
     leaveValueController.text = value!['value'] ?? '';
     leaveNameController.text = value['text'] ?? '';
+    await updateLeaveDays();
+    update();
     // await getLeftLeaves();
   }
 
   RelieverNameChangeMethod(Map<String, String>? value) async {
     relieverValueController.text = value!['value'] ?? '';
     relieverNameController.text = value['text'] ?? '';
-    // update();
+    update();
   }
 
   LeaveDaysOnChange(Map<String, String>? value) async {
     daysController.text = value!['text'] ?? '';
-    // update();
+    if (leftleavedays.value.isNotEmpty && daysController.text.isNotEmpty) {
+      // Converting to double
+      double leftLeaveDaysValue = double.tryParse(leftleavedays.value) ?? 0.0;
+      double daysControllerValue = double.tryParse(daysController.text) ?? 0.0;
+
+      // Check if leftLeaveDaysValue is more or equal to daysControllerValue
+      if (leftLeaveDaysValue < daysControllerValue) {
+        // Call your method here
+        await updateLeaveDays();
+        Get.rawSnackbar(message: 'Insufficient Balance!');
+      }
+    }
+    update();
   }
 
   DelayReasonChangeMethod(Map<String, String>? value) async {
@@ -646,7 +665,7 @@ class LeaveController extends GetxController {
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
             await fetchLeaveEntryList(flag);
             Get.rawSnackbar(message: "Data saved successfully");
-            // resetForm();
+            resetForm();
             // update();
           }
         } else {
@@ -683,6 +702,7 @@ class LeaveController extends GetxController {
     delayreasonNameController.clear();
     delayreasonIdController.clear();
     leftleavedays.value = '';
+    leftLeaveDaysController.text = '';
     overtimeController.fromDateController.clear();
     overtimeController.toDateController.clear();
     overtimeController.fromTimeController.clear();

@@ -16,6 +16,7 @@ class CustomTextFormField extends StatelessWidget {
   final InputDecoration? decoration;
   final TextInputAction? textInputAction;
   final int? maxLength;
+  final int? minLines;
   final int? maxLines;
   final FocusNode? focusNode;
   final bool enabled;
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
   final Color? fillColor;
   final bool? filled;
   final TextStyle? style;
+  final ScrollPhysics? scrollPhysics;
 
   CustomTextFormField({
     this.label,
@@ -50,6 +52,8 @@ class CustomTextFormField extends StatelessWidget {
     this.fillColor,
     this.filled,
     this.style,
+    this.minLines,
+    this.scrollPhysics,
   });
 
   @override
@@ -58,6 +62,8 @@ class CustomTextFormField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      minLines: minLines, // Use the correct minLines
+      maxLines: maxLines, // Set maxLines to null for dynamic height
       autofocus: autoFocus,
       readOnly: readOnly,
       validator: validator,
@@ -66,10 +72,10 @@ class CustomTextFormField extends StatelessWidget {
       onFieldSubmitted: onFieldSubmitted,
       textInputAction: textInputAction,
       maxLength: maxLength,
-      maxLines: maxLines,
       focusNode: focusNode,
       enabled: enabled,
       style: style,
+      scrollPhysics: scrollPhysics,
       decoration: decoration ??
           InputDecoration(
             labelText: label,
