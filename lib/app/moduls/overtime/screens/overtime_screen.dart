@@ -1,9 +1,11 @@
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
+import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_timepicker.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
-import 'package:emp_app/app/moduls/leave/screen/custom_dropdown1.dart';
 import 'package:emp_app/app/moduls/leave/screen/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:flutter/material.dart';
@@ -90,69 +92,105 @@ class OtScreen extends StatelessWidget {
                   SizedBox(
                     height: 15.0,
                   ),
-                  TextFormField(
+                  CustomTextFormField(
                     readOnly: true,
                     controller: controller.otMinutesController,
-                    decoration: InputDecoration(
-                      hintText: "Min",
-                      helperStyle: TextStyle(color: AppColor.black),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
+                    hint: "Min",
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      // fontWeight: FontWeight.bold,
+                      color: AppColor.black,
                     ),
                   ),
+                  // TextFormField(
+                  //   readOnly: true,
+                  //   controller: controller.otMinutesController,
+                  //   decoration: InputDecoration(
+                  //     hintText: "Min",
+                  //      hintStyle: TextStyle(
+                  //   fontSize: 14,
+                  //   // fontWeight: FontWeight.bold,
+                  //   color: Colors.black,
+                  // ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderSide: BorderSide(color: AppColor.black),
+                  //       borderRadius: BorderRadius.circular(0),
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderSide: BorderSide(color: AppColor.black),
+                  //       borderRadius: BorderRadius.circular(0),
+                  //     ),
+                  //   ),
+                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: CustomTextFormField(
                       hint: 'Notes...',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        // fontWeight: FontWeight.bold,
+                        color: AppColor.black,
+                      ),
                       minLines: 3,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       controller: controller.noteController,
+                      focusNode: controller.notesFocusNode,
                       scrollPhysics: BouncingScrollPhysics(),
-                      // decoration: InputDecoration(
-                      //   hintText: 'Notes...',
-                      //   hintStyle: TextStyle(color: AppColor.black),
-                      //   enabledBorder: OutlineInputBorder(
-                      //     borderSide: BorderSide(color: AppColor.black),
-                      //     borderRadius: BorderRadius.circular(0),
-                      //   ),
-                      //   focusedBorder: OutlineInputBorder(
-                      //     borderSide: BorderSide(color: AppColor.black),
-                      //     borderRadius: BorderRadius.circular(0),
-                      //   ),
-                      // ),
+                      onChanged: (value) {
+                        print('Password changed: $value');
+                      },
                     ),
                   ),
-                  Obx(
-                    () => CustomDropdown1(
-                      text: 'Late Reason',
-                      width: double.infinity,
-                      controller: controller.delayReasonController,
-                      items: leaveController.leavedelayreason
-                          .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
-                                value: {
-                                  'value': item.id ?? '', // Use the value as the item value
-                                  'text': item.name ?? '', // Display the name in the dropdown
-                                },
-                                child: Text(
-                                  item.name ?? '', // Display the name in the dropdown
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                  CustomDropdown(
+                    text: 'Late Reason',
+                    controller: controller.delayreasonName_OT_Controller,
+                    onChanged: (value) async {
+                      await controller.DelayReasonChangeMethod(value);
+                      controller.update();
+                    },
+                    width: double.infinity,
+                    items: leaveController.leavedelayreason
+                        .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
+                              value: {
+                                'value': item.id ?? '', // Use the value as the item value
+                                'text': item.name ?? '', // Display the name in the dropdown
+                              },
+                              child: Text(
+                                item.name ?? '', // Display the name in the dropdown
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  // fontWeight: FontWeight.bold,
+                                  color: AppColor.black,
                                 ),
-                              ))
-                          .toList(),
-                    ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))
+                        .toList(),
                   ),
+                  // CustomDropdown1(
+                  //   text: 'Late Reason',
+                  //   width: double.infinity,
+                  //   controller: controller.delayReasonController,
+                  //   items: leaveController.leavedelayreason
+                  //       .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
+                  //             value: {
+                  //               'value': item.id ?? '', // Use the value as the item value
+                  //               'text': item.name ?? '', // Display the name in the dropdown
+                  //             },
+                  //             child: Text(
+                  //               item.name ?? '', // Display the name in the dropdown
+                  //               style: const TextStyle(
+                  //                 fontSize: 14,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 color: Colors.black,
+                  //               ),
+                  //               overflow: TextOverflow.ellipsis,
+                  //             ),
+                  //           ))
+                  //       .toList(),
+                  // ),
+
                   const SizedBox(height: 30),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.13,
@@ -173,10 +211,7 @@ class OtScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Text(
-                        'Save',
-                        style: TextStyle(color: AppColor.black, fontSize: 20),
-                      ),
+                      child: Text(AppString.save, style: AppStyle.black.copyWith(fontSize: 20)),
                     ),
                   ),
                 ],

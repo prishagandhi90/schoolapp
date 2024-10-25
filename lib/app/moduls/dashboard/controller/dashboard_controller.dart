@@ -25,7 +25,6 @@ class DashboardController extends GetxController {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getDashboardDataUsingToken();
-
       hideBottomBar.value = false;
       update();
     });

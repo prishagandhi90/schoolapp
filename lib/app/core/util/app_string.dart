@@ -65,6 +65,34 @@ class AppString {
   static String noleavedata = "No leave data available";
   static String min = "Min";
 
+  //Leave
+  static String department = "Department";
+  static String departmentincharge = "Department In-charge";
+  static String departmentHOD = "Department HOD";
+  static String subdepartment = "Sub Department";
+  static String subdepartmentincharge = "Sub Department In-charge";
+  static String nodataavailable = "No data available";
+  static String name = "Name";
+  static String reason = "Reason";
+  static String note = "Notes...";
+  static String notesisrequired = "Notes is required";
+  static String relieverName = "Reliever Name";
+  static String lateReason = "Late Reason";
+  static String save = "Save";
+  static String status = "Status";
+  static String inCharge = "In-Charge";
+  static String hod = "HOD";
+  static String hr = "HR";
+  static String employeeNotes = "Employee Notes";
+  static String inChargeNotes = "In-Charge Notes";
+  static String inchargerejectreason = "In-Charge Reject Reason";
+  static String hodRejectReason = "HOD Reject Reason";
+  static String hodNotes = "HOD Notes";
+  static String hrnotes = "HR Notes";
+  static String hrRejectReason = "HR Reject Reason";
+  static String hours = "Hours";
+  
+  //Duty Schedule
   static String dutyschedule = "Duty Schedule";
 
   static String keyToken = "KEY_TOKENNO";

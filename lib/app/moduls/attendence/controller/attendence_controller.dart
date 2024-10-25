@@ -296,13 +296,13 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
     return 'Select year and month';
   }
 
-  void changeTab(int index) {
+  changeTab(int index) async {
     tabController.animateTo(index);
     currentTabIndex.value = index;
     if (index == 0) {
-      getattendeceprsnttable();
+      await getattendeceprsnttable();
     } else {
-      getattendeceinfotable();
+      await getattendeceinfotable();
     }
     update();
   }

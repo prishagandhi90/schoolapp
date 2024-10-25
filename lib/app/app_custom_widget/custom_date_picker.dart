@@ -29,7 +29,11 @@ class CustomDatePicker extends StatelessWidget {
           borderRadius: BorderRadius.circular(0),
         ),
         hintText: hintText,
-        hintStyle: TextStyle(color: AppColor.black),
+        hintStyle: TextStyle(
+          fontSize: 14,
+          // fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.calendar_today),
           onPressed: () async {

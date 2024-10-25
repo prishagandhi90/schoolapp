@@ -8,11 +8,9 @@ import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.d
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/screen/dutyschedule_screen.dart';
-import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
-import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -447,6 +445,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                       final bottomBarController = Get.put(BottomBarController());
                                       // final attendanceController = Get.put(AttendenceController());
                                       // await attendanceController.resetData();
+                                      final leaveController = Get.put(LeaveController());
+                                      await leaveController.resetForm();
                                       if (bottomBarController.persistentController.value.index != 3) {
                                         bottomBarController.currentIndex.value = 3;
                                         bottomBarController.persistentController.value.index = 3;
@@ -507,10 +507,10 @@ class PayrollScreen extends GetView<PayrollController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
                                       final bottomBarController = Get.put(BottomBarController());
-                                      // final attendanceController = Get.put(AttendenceController());
-                                      // await attendanceController.resetData();
+                                      final leaveController = Get.put(LeaveController());
+                                      await leaveController.resetForm();
                                       if (bottomBarController.persistentController.value.index != 4) {
                                         bottomBarController.currentIndex.value = 4;
                                         bottomBarController.persistentController.value.index = 4;

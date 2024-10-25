@@ -98,8 +98,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         controller.attendenceDetailTable[index].iN.toString(),
                                                         style: AppStyle.fontfamilyplus.copyWith(
                                                           color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
-                                                              ? Colors.red
-                                                              : Colors.black, // redYNINTM se color set kiya
+                                                              ? AppColor.red
+                                                              : AppColor.black, // redYNINTM se color set kiya
                                                         ),
                                                       ),
                                                     ),
@@ -108,8 +108,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         controller.attendenceDetailTable[index].out.toString(),
                                                         style: AppStyle.fontfamilyplus.copyWith(
                                                           color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
-                                                              ? Colors.red
-                                                              : Colors.black, // redYNOUTTM se color set kiya
+                                                              ? AppColor.red
+                                                              : AppColor.black, // redYNOUTTM se color set kiya
                                                         ),
                                                       ),
                                                     ),
@@ -119,8 +119,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         textAlign: TextAlign.center,
                                                         style: AppStyle.fontfamilyplus.copyWith(
                                                           color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y'
-                                                              ? Colors.red
-                                                              : Colors.black, // redYNLCEGMIN se color set kiya
+                                                              ? AppColor.red
+                                                              : AppColor.black, // redYNLCEGMIN se color set kiya
                                                         ),
                                                       ),
                                                     ),

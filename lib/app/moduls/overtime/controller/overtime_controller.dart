@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -6,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class OvertimeController extends GetxController {
-  var bottomBarController = Get.put(BottomBarController());
+class OvertimeController extends GetxController with SingleGetTickerProviderMixin {
+  final bottomBarController = Get.put(BottomBarController());
   var isLoading = false.obs;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
@@ -16,8 +18,11 @@ class OvertimeController extends GetxController {
 
   DateTime? selectedToDate;
   TimeOfDay? selectedToTime;
-
+  final FocusNode notesFocusNode = FocusNode();
   double oTMinutes = 0;
+  var initialIndex = 0.obs;
+  late TabController tabController_OT;
+  RxInt currentTabIndex = 0.obs;
 
   final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
   final DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
@@ -28,12 +33,61 @@ class OvertimeController extends GetxController {
   TextEditingController toTimeController = TextEditingController();
   TextEditingController noteController = TextEditingController();
   TextEditingController otMinutesController = TextEditingController();
-  TextEditingController delayReasonController = TextEditingController();
+  TextEditingController delayreasonName_OT_Controller = TextEditingController();
+  TextEditingController delayreasonId_OT_Controller = TextEditingController();
   @override
   void onInit() {
-    //var leaveController = Get.put(LeaveController());
-    //leaveController.fetchLeaveEntryList("OT");
+    tabController_OT = TabController(length: 2, vsync: this);
+    tabController_OT.addListener(_handleTabSelection);
+    currentTabIndex.value = 0;
+    // changeTab(0);
+    noteController.text = "";
     super.onInit();
+  }
+
+  // @override
+  // void onReady() {
+  //   super.onReady();
+
+  //   // Ensure drawer is closed when screen is initialized
+  //   if (Scaffold.of(Get.context!).isDrawerOpen) {
+  //     Navigator.pop(Get.context!); // Close the drawer if it's open
+  //   }
+  // }
+
+  @override
+  void onClose() {
+    // leaveScrollController.dispose();
+    noteController.dispose();
+    notesFocusNode.dispose();
+    tabController_OT.dispose();
+    super.onClose();
+  }
+
+  DelayReasonChangeMethod(Map<String, String>? value) async {
+    delayreasonId_OT_Controller.text = value!['value'] ?? '';
+    delayreasonName_OT_Controller.text = value['text'] ?? '';
+  }
+
+  void _handleTabSelection() async {
+    if (tabController_OT.indexIsChanging) {
+      initialIndex.value = tabController_OT.index;
+      if (tabController_OT.index == 1) {
+        final leaveController = Get.put(LeaveController());
+        await leaveController.fetchLeaveEntryList("OT");
+      }
+      update();
+    }
+  }
+
+  changeTab(int index) async {
+    tabController_OT.animateTo(index);
+    currentTabIndex.value = index;
+    final leaveController = Get.put(LeaveController());
+    if (index == 1 && leaveController.leaveentryList.isEmpty) {
+      await leaveController.fetchLeaveEntryList("OT"); // Fetch list only if not already fetched
+    }
+    update();
   }
 
   // Function to validate and combine date and time
@@ -166,59 +220,8 @@ class OvertimeController extends GetxController {
     // var leaveController = Get.put(LeaveController());
     var leaveController = Get.find<LeaveController>();
     await leaveController.saveLeaveEntryList("OT");
-
+    leaveController.resetForm();
+    Get.rawSnackbar(message: "Data saved successfully");
     return [];
-
-    // try {
-    //   // update();
-    //   // isLoading.value = true;
-    //   // String url = ConstApiUrl.empSaveLeaveEntryList;
-    //   // SharedPreferences pref = await SharedPreferences.getInstance();
-    //   // loginId = await pref.getString(AppString.keyLoginId) ?? "";
-    //   // tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
-    //   // var jsonbodyObj = {
-    //   //   "loginId": loginId,
-    //   //   "empId": empId,
-    //   //   "entryType": flag,
-    //   //   "leaveShortName": "OT",
-    //   //   "leaveFullName": "OT",
-    //   //   "fromdate": flag == "OT" ? formatDateWithTime(fromDateController.text) : fromDateController.text,
-    //   //   "todate": flag == "OT" ? formatDateWithTime(toDateController.text) : toDateController.text,
-    //   //   "reason": "OT",
-    //   //   "note": noteController.text,
-    //   //   "leaveDays": 0,
-    //   //   "overTimeMinutes": int.tryParse(otMinutesController.text) ??0,
-    //   //   "usr_Nm": '',
-    //   //   "reliever_Empcode": '',
-    //   //   "delayLVNote": delayReasonController.text,
-    //   // };
-    //   // var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-    //   // print(response);
-    //   // ResponseSaveLeaveEntryList responseSaveLeaveEntryList = ResponseSaveLeaveEntryList.fromJson(jsonDecode(response));
-    //   // if (responseSaveLeaveEntryList.statusCode == 200) {
-    //   //   if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
-    //   //     if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
-    //   //       Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
-    //   //       // resetForm();
-    //   //     }
-    //   //   } else {
-    //   //     Get.rawSnackbar(message: "Data not saved");
-    //   //   }
-    //   // } else if (responseSaveLeaveEntryList.statusCode == 401) {
-    //   //   pref.clear();
-    //   //   Get.offAll(const LoginScreen());
-    //   //   Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-    //   // } else if (responseSaveLeaveEntryList.statusCode == 400) {
-    //   //   isLoading.value = false;
-    //   // } else {
-    //   //   Get.rawSnackbar(message: "Something went wrong");
-    //   // }
-    //   // update();
-    // } catch (e) {
-    //   print(e);
-    //   isLoading.value = false;
-    // }
-    // return [];
   }
 }

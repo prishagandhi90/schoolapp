@@ -10,4 +10,9 @@ class AppImage {
   static String drawer = "assets/image/drawer.png";
   static String notification = "assets/image/notification.png";
   static String mispunch = "assets/image/mispunch.png";
+  static String checkmark = "assets/image/check-mark.png";
+  static String cross = "assets/image/cross.png";
+  static String hourglass = "assets/image/hourglass.png";
+  //svg
+  static String drawersvg = "assets/image/svg/drawer.svg";
 }

@@ -1,13 +1,14 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LeaveViewScreen extends StatelessWidget {
+class LeaveViewScreen extends GetView<LeaveController> {
   const LeaveViewScreen({super.key});
 
   @override
@@ -25,7 +26,7 @@ class LeaveViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    controller.isLoading.value
+                    controller.isLoading
                         ? const Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 100),
@@ -127,7 +128,7 @@ class LeaveViewScreen extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Status',
+                                        AppString.status,
                                         style: AppStyle.plus17w600,
                                       ),
                                     ),
@@ -150,19 +151,19 @@ class LeaveViewScreen extends StatelessWidget {
                                             columns: [
                                               DataColumn(
                                                 label: Text(
-                                                  'In-Charge',
+                                                  AppString.inCharge,
                                                   style: AppStyle.fontfamilyplus,
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
-                                                  'HOD',
+                                                  AppString.hod,
                                                   style: AppStyle.fontfamilyplus,
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
-                                                  'HR',
+                                                  AppString.hr,
                                                   style: AppStyle.fontfamilyplus,
                                                 ),
                                               ),
@@ -206,11 +207,11 @@ class LeaveViewScreen extends StatelessWidget {
   Widget getStatusImage(String status) {
     switch (status) {
       case 'APPROVED':
-        return Image.asset('assets/image/check-mark.png');
+        return Image.asset(AppImage.checkmark);
       case 'REJECTED':
-        return Image.asset('assets/image/cross.png');
+        return Image.asset(AppImage.cross);
       case 'PENDING':
-        return Image.asset('assets/image/hourglass.png');
+        return Image.asset(AppImage.hourglass);
       default:
         return SizedBox(); // If the status is invalid or unknown
     }
@@ -223,545 +224,470 @@ class LeaveViewScreen extends StatelessWidget {
       isDismissible: true,
       enableDrag: true,
       context: Get.context!,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.90,
-        width: Get.width,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: GetBuilder<LeaveController>(
-          builder: (controller) {
-            return controller.leaveentryList.isNotEmpty
-                ? SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const SizedBox(width: 30),
-                            const Spacer(),
-                            Container(
-                              width: 90,
-                              child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(Icons.close),
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.12,
+      builder: (context) => DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          minChildSize: 0.0,
+          maxChildSize: 1,
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.90,
+              width: Get.width,
+              decoration: BoxDecoration(
+                color: AppColor.white,
+              ),
+              child: GetBuilder<LeaveController>(
+                builder: (controller) {
+                  return controller.leaveentryList.isNotEmpty
+                      ? SingleChildScrollView(
+                          controller: scrollController,
                           child: Column(
                             children: [
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  const SizedBox(width: 30),
+                                  const Spacer(),
+                                  Container(
+                                    width: 90,
+                                    child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                                  ),
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Icon(Icons.close),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.12,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: Container(
+                                                // height: 100,
+                                                width: MediaQuery.of(context).size.height * 0.4,
+                                                alignment: Alignment.center,
+                                                child: Text(AppString.name, style: AppStyle.w50018)),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: Container(
+                                                // height: 100,
+                                                width: MediaQuery.of(context).size.height * 0.4,
+                                                alignment: Alignment.center,
+                                                child: Text(AppString.reason, style: AppStyle.w50018)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                            width: MediaQuery.of(context).size.height * 0.5,
+                                            alignment: Alignment.center,
+                                            child: controller.leaveentryList.length > 0
+                                                ? Text(
+                                                    controller.leaveentryList[index].leaveFullName.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )
+                                                : Text('--:-- ', style: AppStyle.plus16w600),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 1,
+                                          child: Container(
+                                            // height: 100,
+                                            width: MediaQuery.of(context).size.height * 0.5,
+                                            alignment: Alignment.center,
+                                            child: controller.leaveentryList.length > 0
+                                                ? Text(
+                                                    controller.leaveentryList[index].reason.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  )
+                                                : Text('--:-- ', style: AppStyle.plus16w600),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              AppString.employeeNotes,
+                                              style: AppStyle.w50018,
+                                            )),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].note.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft, child: Text(AppString.inChargeNotes, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].inchargeNote.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(AppString.inchargerejectreason, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].inchargeReason.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(AppString.hodRejectReason, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].hodReason.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child:
+                                            Align(alignment: Alignment.centerLeft, child: Text(AppString.hodNotes, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].hoDNote.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child:
+                                            Align(alignment: Alignment.centerLeft, child: Text(AppString.hrnotes, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].hrNote.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft, child: Text(AppString.hrRejectReason, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].hrReason.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(10),
+                                      width: double.infinity,
+                                      height: 45,
+                                      decoration: BoxDecoration(color: AppColor.primaryColor),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft, child: Text(AppString.lateReason, style: AppStyle.w50018)),
+                                      ),
+                                    ),
+                                    controller.leaveentryList.isNotEmpty
+                                        ? Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.leaveentryList[index].lateReasonName.toString(),
+                                                style: AppStyle.fontfamilyplus,
+                                              ),
+                                            ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                          ),
+                                  ],
+                                ),
+                              ),
                               Container(
                                 padding: const EdgeInsets.all(10),
+                                width: double.infinity,
+                                // height: MediaQuery.of(context).size.height*0.2,
                                 decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Row(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Flexible(
-                                      flex: 1,
-                                      child: Container(
-                                          // height: 100,
-                                          width: MediaQuery.of(context).size.height * 0.4,
-                                          alignment: Alignment.center,
-                                          child: Text('Name', style: AppStyle.w50018)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Emp Entry D/T : ${controller.leaveentryList[index].enterDate}',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500, //20
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          )),
                                     ),
-                                    Flexible(
-                                      flex: 1,
-                                      child: Container(
-                                          // height: 100,
-                                          width: MediaQuery.of(context).size.height * 0.4,
-                                          alignment: Alignment.center,
-                                          child: Text('Reason', style: AppStyle.w50018)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Dept InC D/T : ${controller.leaveentryList[index].inchargeDate}',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500, //20
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Dept HOD D/T : ${controller.leaveentryList[index].hodDate}',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500, //20
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          )),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Dept HR D/T : ${controller.leaveentryList[index].hrDate} ',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500, //20
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          )),
                                     ),
                                   ],
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.height * 0.5,
-                                      alignment: Alignment.center,
-                                      child: controller.leaveentryList.length > 0
-                                          ? Text(
-                                              controller.leaveentryList[index].leaveFullName.toString(),
-                                              style: AppStyle.fontfamilyplus,
-                                            )
-                                          : Text('--:-- ', style: AppStyle.plus16w600),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Container(
-                                      // height: 100,
-                                      width: MediaQuery.of(context).size.height * 0.5,
-                                      alignment: Alignment.center,
-                                      child: controller.leaveentryList.length > 0
-                                          ? Text(
-                                              controller.leaveentryList[index].reason.toString(),
-                                              style: AppStyle.fontfamilyplus,
-                                            )
-                                          : Text('--:-- ', style: AppStyle.plus16w600),
-                                    ),
-                                  ),
-                                ],
-                              )
                             ],
                           ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Employee Notes',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].note.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'In-Charge Notes',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].inchargeNote.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'In-Charge Reject Reason',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].inchargeReason.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'HOD Reject Reason',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].hodReason.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'HOD Notes',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].hoDNote.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'HR Notes',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].hrNote.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'HR Reject Reason',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].hrReason.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                width: double.infinity,
-                                height: 45,
-                                decoration: BoxDecoration(color: AppColor.primaryColor),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Late Reason',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w500, //20
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      )),
-                                ),
-                              ),
-                              controller.leaveentryList.isNotEmpty
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          controller.leaveentryList[index].lateReasonName.toString(),
-                                          style: AppStyle.fontfamilyplus,
-                                        ),
-                                      ),
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                    ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          width: double.infinity,
-                          // height: MediaQuery.of(context).size.height*0.2,
-                          decoration: BoxDecoration(color: AppColor.primaryColor),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Emp Entry D/T : ${controller.leaveentryList[index].enterDate}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500, //20
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                      ),
-                                    )),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Dept InC D/T : ${controller.leaveentryList[index].inchargeDate}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500, //20
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                      ),
-                                    )),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Dept HOD D/T : ${controller.leaveentryList[index].hodDate}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500, //20
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                      ),
-                                    )),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Dept HR D/T : ${controller.leaveentryList[index].hrDate} ',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500, //20
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                      ),
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Column(
-                        //   mainAxisSize: MainAxisSize.min,
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: [
-                        //     Container(
-                        //       padding: const EdgeInsets.all(10),
-                        //       width: double.infinity,
-                        //       height: MediaQuery.of(context).size.height,
-                        //       decoration: BoxDecoration(color: AppColor.primaryColor),
-                        //       child: Padding(
-                        //         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        //         child: Align(
-                        //             alignment: Alignment.centerLeft,
-                        //             child: Text(
-                        //               'Employee Notes',
-                        //               style: TextStyle(
-                        //                 fontSize: 18,
-                        //                 fontWeight: FontWeight.w500, //20
-                        //                 fontFamily: CommonFontStyle.plusJakartaSans,
-                        //               ),
-                        //             )),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
-                    ),
-                  )
-                : Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Center(child: Text(AppString.noleavedata)),
-                  );
-          },
-        ),
-      ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Center(child: Text(AppString.noleavedata)),
+                        );
+                },
+              ),
+            );
+          }),
     );
   }
 }

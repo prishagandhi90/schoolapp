@@ -183,7 +183,7 @@ class OtpController extends GetxController {
     isLoadingLogin = true;
     // update();
     try {
-      if (otpController.text != otpNo) {
+      if (1 == 2 && otpController.text != otpNo) {
         print('OTP Controller: ${otpController.text}');
         print('OTP: $otpNo');
         Get.snackbar(

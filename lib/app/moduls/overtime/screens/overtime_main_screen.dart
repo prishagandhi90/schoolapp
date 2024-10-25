@@ -1,5 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
@@ -20,15 +23,30 @@ class OvertimeMainScreen extends GetView<LeaveController> {
   OvertimeMainScreen({super.key});
   // var scaffoldKey = GlobalKey<ScaffoldState>();
   final leaveController = Get.put(LeaveController());
+
   @override
   Widget build(BuildContext context) {
+    // @override
+    // void onReady() {
+    //   // super.onReady();
+    //   // Ensure drawer is closed when this screen is re-opened
+    //   if (Scaffold.of(context).isDrawerOpen) {
+    //     Navigator.pop(context); // Close drawer if it's open
+    //   }
+    // }
+
     Get.put(OvertimeController());
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (Scaffold.of(context).isDrawerOpen) {
+    //     Navigator.pop(context); // Close the drawer if it's open
+    //   }
+    // });
     // controller.setActiveScreen("OTMainScreen");
     return GetBuilder<OvertimeController>(builder: (controller) {
       return DefaultTabController(
         length: 2,
         child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.white,
             // key: scaffoldKey,
             endDrawer: Drawer(
                 child: controller.isLoading.value
@@ -38,7 +56,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                           child: ProgressWithIcon(),
                         ),
                       )
-                    : leaveController.otentryList.isNotEmpty
+                    : leaveController.otHeaderList.isNotEmpty
                         ? ListView(
                             children: [
                               Padding(
@@ -60,15 +78,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Department',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500, //20
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              )),
+                                              alignment: Alignment.centerLeft, child: Text(AppString.department, style: AppStyle.w50018)),
                                         ),
                                       ),
                                       Padding(
@@ -78,15 +88,10 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.otentryList.isNotEmpty
-                                                  ? leaveController.otentryList[0].department.toString()
-                                                  : '--:--',
-                                              style: TextStyle(
-                                                fontSize: MediaQuery.of(context).size.width * 0.04,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
-                                            ),
+                                                leaveController.otentryList.isNotEmpty
+                                                    ? leaveController.otHeaderList[0].department.toString()
+                                                    : '--:--',
+                                                style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
                                         ),
                                       ),
@@ -122,15 +127,10 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                             padding: const EdgeInsets.symmetric(horizontal: 15),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Department In-charge',
-                                                style: TextStyle(
-                                                  // fontSize: 18,
-                                                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              ),
+                                              child: Text(AppString.departmentincharge,
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  )),
                                             ),
                                           ),
                                         ),
@@ -141,15 +141,12 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                             child: Padding(
                                               padding: const EdgeInsets.all(10),
                                               child: Text(
-                                                leaveController.otentryList.isNotEmpty
-                                                    ? leaveController.otentryList[0].deptInc.toString()
-                                                    : '--:--',
-                                                style: TextStyle(
-                                                  fontSize: MediaQuery.of(context).size.width * 0.04,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              ),
+                                                  leaveController.otHeaderList.isNotEmpty
+                                                      ? leaveController.otHeaderList[0].deptInc.toString()
+                                                      : '--:--',
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  )),
                                             ),
                                           ),
                                         ),
@@ -180,14 +177,10 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Department HOD',
-                                                style: TextStyle(
-                                                  fontSize: MediaQuery.of(context).size.width * 0.05,
-                                                  fontWeight: FontWeight.w500, //20
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              )),
+                                              child: Text(AppString.departmentHOD,
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  ))),
                                         ),
                                       ),
                                       Padding(
@@ -197,15 +190,12 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.otentryList.isNotEmpty
-                                                  ? leaveController.otentryList[0].deptHOD.toString()
-                                                  : '--:--',
-                                              style: TextStyle(
-                                                fontSize: MediaQuery.of(context).size.width * 0.04,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
-                                            ),
+                                                leaveController.otHeaderList.isNotEmpty
+                                                    ? leaveController.otHeaderList[0].deptHOD.toString()
+                                                    : '--:--',
+                                                style: AppStyle.plus500.copyWith(
+                                                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                )),
                                           ),
                                         ),
                                       ),
@@ -233,14 +223,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Sub Department',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500, //20
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              )),
+                                              child: Text(AppString.subdepartment, style: AppStyle.w50018)),
                                         ),
                                       ),
                                       Padding(
@@ -250,15 +233,10 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.otentryList.isNotEmpty
-                                                  ? leaveController.otentryList[0].subDept.toString()
-                                                  : '--:--',
-                                              style: TextStyle(
-                                                fontSize: MediaQuery.of(context).size.width * 0.04,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
-                                            ),
+                                                leaveController.otHeaderList.isNotEmpty
+                                                    ? leaveController.otHeaderList[0].subDept.toString()
+                                                    : '--:--',
+                                                style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
                                         ),
                                       ),
@@ -286,14 +264,7 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                'Sub Department In-Charge',
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500, //20
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              )),
+                                              child: Text(AppString.subdepartmentincharge, style: AppStyle.w50018)),
                                         ),
                                       ),
                                       Padding(
@@ -303,15 +274,10 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                              leaveController.otentryList.isNotEmpty
-                                                  ? leaveController.otentryList[0].subDeptInc.toString()
-                                                  : '--:--',
-                                              style: TextStyle(
-                                                fontSize: MediaQuery.of(context).size.width * 0.04,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
-                                            ),
+                                                leaveController.otHeaderList.isNotEmpty
+                                                    ? leaveController.otHeaderList[0].subDeptInc.toString()
+                                                    : '--:--',
+                                                style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
                                         ),
                                       ),
@@ -321,19 +287,13 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                               )
                             ],
                           )
-                        : const Padding(
+                        : Padding(
                             padding: EdgeInsets.all(15),
-                            child: Center(child: Text('No data available')),
+                            child: Center(child: Text(AppString.nodataavailable)),
                           )),
             appBar: AppBar(
-              backgroundColor: Colors.white,
-              title: Text(
-                'Over Time',
-                style: TextStyle(
-                    color: const Color.fromARGB(255, 94, 157, 168),
-                    fontWeight: FontWeight.w700,
-                    fontFamily: CommonFontStyle.plusJakartaSans),
-              ),
+              backgroundColor: AppColor.white,
+              title: Text(AppString.overtime, style: AppStyle.primaryplusw700),
               centerTitle: true,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -352,9 +312,9 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                   return IconButton(
                     onPressed: () async {
                       Scaffold.of(context).openEndDrawer();
-                      if (leaveController.otentryList.isEmpty) await leaveController.fetchLeaveEntryList("OT");
+                      if (leaveController.otHeaderList.isEmpty) await leaveController.fetchHeaderList("OT");
                     },
-                    icon: SvgPicture.asset('assets/image/svg/drawer.svg', height: 15, width: 15),
+                    icon: SvgPicture.asset(AppImage.drawersvg, height: 15, width: 15),
                   );
                 })
               ],
@@ -372,18 +332,19 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: const Color.fromARGB(255, 223, 239, 241),
+                      color: AppColor.lightblue,
                     ),
                     child: TabBar(
-                      labelColor: Colors.white,
+                      labelColor: AppColor.white,
                       unselectedLabelColor: AppColor.black,
-                      dividerColor: Colors.transparent,
+                      dividerColor: AppColor.trasparent,
                       indicatorSize: TabBarIndicatorSize.tab,
                       onTap: (value) async {
-                        if (value == 1 && leaveController.otentryList.isEmpty) await leaveController.fetchLeaveEntryList("OT");
+                        if (leaveController.otHeaderList.isEmpty) await leaveController.fetchHeaderList("OT");
+                        await controller.changeTab(value);
                       },
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
-                      indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: const Color.fromARGB(255, 94, 157, 168)),
+                      indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
                       tabs: const [Tab(text: 'OT'), Tab(text: 'View')],
                       physics: NeverScrollableScrollPhysics(),
                     ),

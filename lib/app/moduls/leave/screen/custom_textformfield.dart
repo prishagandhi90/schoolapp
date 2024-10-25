@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String? label;
@@ -27,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool? filled;
   final TextStyle? style;
   final ScrollPhysics? scrollPhysics;
+  final TextStyle? hintStyle;
 
   CustomTextFormField({
     this.label,
@@ -54,6 +54,7 @@ class CustomTextFormField extends StatelessWidget {
     this.style,
     this.minLines,
     this.scrollPhysics,
+    this.hintStyle,
   });
 
   @override
@@ -80,11 +81,15 @@ class CustomTextFormField extends StatelessWidget {
           InputDecoration(
             labelText: label,
             hintText: hint,
+            hintStyle: hintStyle,
             filled: filled ?? false,
             fillColor: fillColor,
             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
             suffixIcon: (showSuffixIcon ?? false) && suffixIcon != null ? Icon(suffixIcon) : null,
-            border: OutlineInputBorder(),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+              borderRadius: BorderRadius.circular(0),
+            ),
           ),
     );
   }

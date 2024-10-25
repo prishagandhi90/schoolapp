@@ -49,4 +49,14 @@ class AppStyle {
     fontFamily: CommonFontStyle.plusJakartaSans,
     color: AppColor.red,
   );
+  static TextStyle plus500 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontFamily: CommonFontStyle.plusJakartaSans,
+  );
+  static TextStyle primaryplusw700 = TextStyle(
+    color: AppColor.primaryColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: CommonFontStyle.plusJakartaSans,
+  );
+  static TextStyle black = TextStyle(color: AppColor.black);
 }

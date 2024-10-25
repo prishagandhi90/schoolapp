@@ -24,9 +24,9 @@ class AttendanceScreen extends StatelessWidget {
           length: 2,
           initialIndex: 0,
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppColor.white,
               title: Text(
                 AppString.attendence,
                 style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
@@ -68,8 +68,8 @@ class AttendanceScreen extends StatelessWidget {
                       color: AppColor.lightblue,
                     ),
                     child: TabBar(
-                      onTap: (index) {
-                        controller.changeTab(index);
+                      onTap: (index) async {
+                        await controller.changeTab(index);
                       },
                       controller: controller.tabController,
                       physics: NeverScrollableScrollPhysics(),

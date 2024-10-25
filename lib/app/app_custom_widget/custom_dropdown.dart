@@ -1,6 +1,6 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:get/get.dart';
 
 class CustomDropdown extends StatelessWidget {
@@ -10,15 +10,16 @@ class CustomDropdown extends StatelessWidget {
   final List<DropdownMenuItem<Map<String, String>>> items; // List of items with Map<String, String>
   final double width; // To set width dynamically
   final InputDecoration? decoration; // Custom decoration if needed
+  final Function(bool)? onMenuStateChange; // Menu state change callback
 
-  CustomDropdown({
-    required this.text,
-    required this.controller,
-    required this.onChanged,
-    required this.items,
-    this.width = double.infinity,
-    this.decoration,
-  });
+  CustomDropdown(
+      {required this.text,
+      required this.controller,
+      required this.onChanged,
+      required this.items,
+      this.width = double.infinity,
+      this.decoration,
+      this.onMenuStateChange});
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +32,21 @@ class CustomDropdown extends StatelessWidget {
             text,
             style: const TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
           ),
           items: items,
           value: items
               .firstWhereOrNull(
-                (item) => item.value!['text'] == controller.text,
+                (item) => item.value?['text'] == controller.text,
               )
               ?.value, // Get selected value from the controller
           onChanged: (value) {
             if (value != null) {
               controller.text = value['text'] ?? ''; // Update the controller with selected value
+              onChanged(value); // Call the custom onChanged method
+              print("Selected value: ${value['text']}"); // Debugging line to check selected value
             }
-            onChanged(value); // Call the custom onChanged method
           },
           buttonStyleData: ButtonStyleData(
             height: 50,
@@ -56,10 +57,23 @@ class CustomDropdown extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
           ),
+          // dropdownStyleData: DropdownStyleData(
+          //   maxHeight: MediaQuery.of(context).size.height * 0.5,
+          //   padding: EdgeInsets.only(
+          //     bottom: MediaQuery.of(context).viewInsets.bottom + 60,
+          //   ),
+          //   elevation: 2,
+          // ),
+          onMenuStateChange: (isOpen) {
+            // Null check before invoking
+            if (onMenuStateChange != null) {
+              print("Dropdown Menu State Changed: $isOpen");
+              onMenuStateChange!(isOpen); // Call only if it's not null
+            }
+          },
         ),
       ),
     );

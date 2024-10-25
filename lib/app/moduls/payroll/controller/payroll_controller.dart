@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
@@ -7,6 +6,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
@@ -147,48 +147,40 @@ class PayrollController extends GetxController {
         });
         break;
       case 2:
-        // hideBottomBar.value = false;
-        // var bottomBarController = Get.put(BottomBarController());
-        // PersistentNavBarNavigator.pushNewScreen(
-        //   context,
-        //   screen: LeaveMainScreen(),
-        //   withNavBar: true,
-        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        // ).then((value) async {
-        //   hideBottomBar.value = false;
-        //   await dashboardController.getDashboardDataUsingToken();
-        // });
-        Get.snackbar(
-          AppString.comingsoon,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        final bottomBarController = Get.put(BottomBarController());
+        // final attendanceController = Get.put(AttendenceController());
+        // await attendanceController.resetData();
+        final leaveController = Get.put(LeaveController());
+        await leaveController.resetForm();
+        if (bottomBarController.persistentController.value.index != 3) {
+          bottomBarController.currentIndex.value = 3;
+          bottomBarController.persistentController.value.index = 3;
+        }
+        bottomBarController.update();
+        // Get.snackbar(
+        //   AppString.comingsoon,
+        //   '',
+        //   colorText: AppColor.white,
+        //   backgroundColor: AppColor.black,
+        //   duration: const Duration(seconds: 1),
+        // );
         break;
       case 3:
-        // hideBottomBar.value = false;
-        // // var bottomBarController = Get.put(BottomBarController());
-        // final bottomBarController = Get.isRegistered<BottomBarController>()
-        //     ? Get.find<BottomBarController>() // If already registered, find it
-        //     : Get.put(BottomBarController());
-        // bottomBarController.update();
-        // PersistentNavBarNavigator.pushNewScreen(
-        //   context,
-        //   screen: OvertimeMainScreen(),
-        //   withNavBar: true,
-        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        // ).then((value) async {
-        //   hideBottomBar.value = false;
-        //   await dashboardController.getDashboardDataUsingToken();
-        // });
-        Get.snackbar(
-          AppString.comingsoon,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        final bottomBarController = Get.put(BottomBarController());
+        final leaveController = Get.put(LeaveController());
+        await leaveController.resetForm();
+        if (bottomBarController.persistentController.value.index != 4) {
+          bottomBarController.currentIndex.value = 4;
+          bottomBarController.persistentController.value.index = 4;
+        }
+        bottomBarController.update();
+        // Get.snackbar(
+        //   AppString.comingsoon,
+        //   '',
+        //   colorText: AppColor.white,
+        //   backgroundColor: AppColor.black,
+        //   duration: const Duration(seconds: 1),
+        // );
         break;
       default:
     }

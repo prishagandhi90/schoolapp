@@ -1,9 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/model/dropdownlist_custom.dart';
+import 'package:emp_app/app/moduls/leave/model/headerlist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leaveReliverName_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leave_saveentrylist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavedays_model.dart';
@@ -13,27 +16,46 @@ import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LeaveController extends GetxController {
-  var bottomBarController = Get.put(BottomBarController());
-  var isLoading = false.obs;
-  var leftleavedays = ''.obs;
+class LeaveController extends GetxController with SingleGetTickerProviderMixin {
+  final bottomBarController = Get.put(BottomBarController());
+  final ApiController apiController = Get.put(ApiController());
   List<LeaveNamesTable> leavename = [];
-  var dropdownItems123 = <DropdownlstTable>[].obs;
-
   List<LeaveEntryList> leaveentryList = [];
   List<LeaveEntryList> otentryList = [];
+  List<HeaderList> leaveHeaderList = [];
+  List<HeaderList> otHeaderList = [];
   List<SaveLeaveEntryList> saveleaveentrylist = [];
+  String tokenNo = '', loginId = '', empId = '';
+  bool isLoading = false;
+  var leftleavedays = ''.obs;
+  var dropdownItems123 = <DropdownlstTable>[].obs;
+
   var leavereason = <LeaveReasonTable>[].obs;
   var leavedelayreason = <LeaveDelayReason>[].obs;
   var leaverelivername = <LeaveReliverName>[].obs;
-  String tokenNo = '', loginId = '', empId = '';
 
-  final ApiController apiController = Get.put(ApiController());
+  RxString days = ''.obs; // To store the calculated days
+  RxBool isDaysFieldEnabled = false.obs;
+  final overtimeController = Get.put(OvertimeController());
+  var inchargeAction = ''.obs;
+  var hodAction = ''.obs;
+  var hrAction = ''.obs;
+  List<Map<String, String>> daysOptions = [];
+  final ScrollController leaveScrollController = ScrollController();
+  final FocusNode notesFocusNode = FocusNode();
+
+  var initialIndex = 0.obs;
+  late TabController tabController_Leave;
+  RxInt currentTabIndex = 0.obs;
+
+  TextEditingController leftLeaveDaysController = TextEditingController();
   TextEditingController fromDateController = TextEditingController();
   TextEditingController noteController = TextEditingController();
   TextEditingController leaveNameController = TextEditingController();
@@ -45,23 +67,14 @@ class LeaveController extends GetxController {
   TextEditingController relieverValueController = TextEditingController();
   TextEditingController delayreasonNameController = TextEditingController();
   TextEditingController delayreasonIdController = TextEditingController();
-  RxString days = ''.obs; // To store the calculated days
-  RxBool isDaysFieldEnabled = false.obs;
-  var overtimeController = Get.put(OvertimeController());
-  var inchargeAction = ''.obs;
-  var hodAction = ''.obs;
-  var hrAction = ''.obs;
-  List<Map<String, String>> daysOptions = [];
-  // late TabController tabController;
-  var activeScreen = ''.obs;
-  var leaveScrollController = ScrollController();
-  final FocusNode notesFocusNode = FocusNode();
-
-  TextEditingController leftLeaveDaysController = TextEditingController();
 
   @override
   void onInit() async {
     super.onInit();
+    tabController_Leave = TabController(length: 2, vsync: this);
+    tabController_Leave.addListener(_handleTabSelection);
+    currentTabIndex.value = 0;
+    changeTab(0);
     noteController.text = "";
     // notesFocusNode = FocusNode();
     // await getLeaveDays();
@@ -69,43 +82,74 @@ class LeaveController extends GetxController {
     await fetchLeaveReason();
     await fetchLeaveReliverName();
     await fetchLeaveDelayReason();
-    // await fetchLeaveEntryList();
-    // update();
-    // leaveScrollController.addListener(() {
-    //   if (leaveScrollController.hasClients &&
-    //       leaveScrollController.positions.isNotEmpty &&
-    //       leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
-    //     hideBottomBar = false.obs;
-    //     bottomBarController.update();
-    //   } else if (leaveScrollController.hasClients &&
-    //       leaveScrollController.positions.isNotEmpty &&
-    //       leaveScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-    //     hideBottomBar = true.obs;
-    //     bottomBarController.update();
-    //   }
-    //   update();
-    // });
+
     fromDateController.addListener(updateLeaveDays);
     toDateController.addListener(updateLeaveDays);
-    // leaveValueController.addListener(updateDays);
-    // tabController = TabController(length: 2, vsync: this);
-    // tabController.addListener(() async {
-    //   if (tabController.index == 1) {
-    //     // Tumhara logic jab 'View' tab pe swipe karke aate ho
-    //     print("Swiped to View Tab");
-    //     // Yaha data fetch kar sakte ho
-    //     await fetchLeaveEntryList(activeScreen.value == "LeaveMainScreen" ? "LV" : "OT");
-    //   }
-    //   update();
-    // });
+    update();
+
+    leaveScrollController.addListener(() {
+      if (leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (leaveScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
+
+  // @override
+  // void onReady() {
+  //   super.onReady();
+
+  //   // Ensure drawer is closed when screen is initialized
+  //   if (Scaffold.of(Get.context!).isDrawerOpen) {
+  //     Navigator.pop(Get.context!); // Close the drawer if it's open
+  //   }
+  // }
 
   @override
   void onClose() {
     // leaveScrollController.dispose();
     noteController.dispose();
     notesFocusNode.dispose();
+    tabController_Leave.dispose();
     super.onClose();
+  }
+
+  void hideBottomNavBar() {
+    hideBottomBar.value = true;
+    // bottomBarController.update();
+  }
+
+  void showBottomNavBar() {
+    hideBottomBar.value = false;
+    // bottomBarController.update();
+  }
+
+  void _handleTabSelection() async {
+    if (tabController_Leave.indexIsChanging) {
+      initialIndex.value = tabController_Leave.index;
+      if (tabController_Leave.index == 1) {
+        // await getattendeceprsnttable(); // Summary के लिए
+        // } else {
+        await fetchLeaveEntryList("LV");
+      }
+      update();
+    }
+  }
+
+  changeTab(int index) async {
+    tabController_Leave.animateTo(index);
+    currentTabIndex.value = index;
+    if (index == 1 && leaveentryList.isEmpty) {
+      await fetchLeaveEntryList("LV"); // Fetch list only if not already fetched
+    }
+    update();
   }
 
   updateLeaveDays() async {
@@ -216,7 +260,7 @@ class LeaveController extends GetxController {
         return;
       }
 
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empLeftLeavesAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -237,7 +281,7 @@ class LeaveController extends GetxController {
         var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
         LeaveDays leaveDays = LeaveDays.fromJson(jsonDecode(decodedResp));
         if (leaveDays.statusCode == 200) {
-          isLoading.value = false;
+          isLoading = false;
           if (leaveDays.data != null && leaveDays.data!.isNotEmpty) {
             leftleavedays.value = leaveDays.data![0].value.toString();
             leftLeaveDaysController.text = leftleavedays.value;
@@ -255,7 +299,7 @@ class LeaveController extends GetxController {
           Get.offAll(const LoginScreen());
           Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
         } else if (leaveDays.statusCode == 400) {
-          isLoading.value = false;
+          isLoading = false;
         } else {
           Get.rawSnackbar(message: "Something went wrong");
         }
@@ -265,7 +309,7 @@ class LeaveController extends GetxController {
         isDaysFieldEnabled.value = false;
       }
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
     }
     leftleavedays.value = '';
@@ -274,7 +318,7 @@ class LeaveController extends GetxController {
 
   Future<List<LeaveNamesTable>> fetchLeaveNames() async {
     try {
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empLeaveNamesAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -295,13 +339,13 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (leaveNames.statusCode == 400) {
-        isLoading.value = false;
+        isLoading = false;
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
       update();
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
     }
     return [];
@@ -345,7 +389,7 @@ class LeaveController extends GetxController {
 
   Future<List<LeaveReasonTable>> fetchLeaveReason() async {
     try {
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empLeaveReasonAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -365,13 +409,13 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponseLeaveReason.statusCode == 400) {
-        isLoading.value = false;
+        isLoading = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
     }
     return leavereason.toList();
@@ -380,7 +424,7 @@ class LeaveController extends GetxController {
   Future<List<LeaveDelayReason>> fetchLeaveReliverName() async {
     try {
       update();
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empLeaveReliverNameAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -398,13 +442,13 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseLeaveReliverName.statusCode == 400) {
-        isLoading.value = false;
+        isLoading = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
     }
     return [];
@@ -412,7 +456,7 @@ class LeaveController extends GetxController {
 
   Future<List<LeaveDelayReason>> fetchLeaveDelayReason() async {
     try {
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empLeaveDelayReasonAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -431,21 +475,71 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponseLeaveDelayReason.statusCode == 400) {
-        isLoading.value = false;
+        isLoading = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
     }
     return [];
   }
 
+  Future<List<HeaderList>> fetchHeaderList(String flag) async {
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empLeaveHeaderList;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseHeaderList responseHeaderList = ResponseHeaderList.fromJson(jsonDecode(response));
+
+      if (responseHeaderList.statusCode == 200) {
+        if (responseHeaderList.data != null && responseHeaderList.data!.isNotEmpty) {
+          isLoading = false;
+          if (flag == "LV") {
+            leaveHeaderList = responseHeaderList.data!;
+            update();
+            return leaveHeaderList;
+          } else {
+            otHeaderList = responseHeaderList.data!;
+            // update();
+            overtimeController.update();
+            return otHeaderList;
+          }
+        } else {
+          if (flag == "LV")
+            leaveentryList = [];
+          else
+            otentryList = [];
+        }
+      } else if (responseHeaderList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseHeaderList.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+      // overtimeController.update();
+    } catch (e) {
+      isLoading = false;
+      update();
+    }
+    isLoading = false;
+    return [];
+  }
+
   Future<List<LeaveEntryList>> fetchLeaveEntryList(String flag) async {
     try {
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empLeaveEntryListAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -457,7 +551,7 @@ class LeaveController extends GetxController {
 
       if (responseLeaveEntryList.statusCode == 200) {
         if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
-          isLoading.value = false;
+          isLoading = false;
           if (flag == "LV") {
             leaveentryList = responseLeaveEntryList.data!;
             update();
@@ -479,17 +573,17 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseLeaveEntryList.statusCode == 400) {
-        isLoading.value = false;
+        isLoading = false;
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
-      // update();
+      update();
       // overtimeController.update();
     } catch (e) {
-      isLoading.value = false;
+      isLoading = false;
       update();
     }
-    isLoading.value = false;
+    isLoading = false;
     return [];
   }
 
@@ -634,7 +728,7 @@ class LeaveController extends GetxController {
       // var overtimeController = Get.put(OvertimeController());
       var overtimeController = Get.find<OvertimeController>();
       // update();
-      isLoading.value = true;
+      isLoading = true;
       String url = ConstApiUrl.empSaveLeaveEntryList;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -650,12 +744,12 @@ class LeaveController extends GetxController {
         "fromdate": flag == "LV" ? formatDateWithTime(fromDateController.text, 'lv') : formatOTDateTime(overtimeController, 'FromDateTime'),
         "todate": flag == "LV" ? formatDateWithTime(toDateController.text, 'lv') : formatOTDateTime(overtimeController, 'ToDateTime'),
         "reason": flag == "LV" ? reasonController.text : "OT",
-        "note": noteController.text,
+        "note": flag == "LV" ? noteController.text : overtimeController.noteController.text,
         "leaveDays": flag == "LV" ? daysController.text : 0,
         "overTimeMinutes": flag == "LV" ? 0 : int.tryParse(overtimeController.otMinutesController.text) ?? 0,
         "usr_Nm": '',
         "reliever_Empcode": flag == "LV" ? relieverValueController.text : '',
-        "delayLVNote": flag == "LV" ? delayreasonIdController.text : overtimeController.delayReasonController.text,
+        "delayLVNote": flag == "LV" ? delayreasonIdController.text : overtimeController.delayreasonId_OT_Controller.text,
       };
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       print(response);
@@ -664,8 +758,10 @@ class LeaveController extends GetxController {
         if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
             await fetchLeaveEntryList(flag);
-            Get.rawSnackbar(message: "Data saved successfully");
-            resetForm();
+            if (flag == 'LV') {
+              resetForm();
+              Get.rawSnackbar(message: "Data saved successfully");
+            }
             // update();
           }
         } else {
@@ -676,7 +772,7 @@ class LeaveController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseSaveLeaveEntryList.statusCode == 400) {
-        isLoading.value = false;
+        isLoading = false;
         Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
       } else {
         Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
@@ -684,12 +780,15 @@ class LeaveController extends GetxController {
       // update();
     } catch (e) {
       print(e);
-      isLoading.value = false;
+      isLoading = false;
     }
     return [];
   }
 
-  void resetForm() {
+  resetForm() {
+    // Scaffold.of(context).openEndDrawer();
+    // Scaffold.of(context).closeEndDrawer();
+    Get.back();
     fromDateController.clear();
     toDateController.clear();
     leaveNameController.clear();
@@ -709,7 +808,9 @@ class LeaveController extends GetxController {
     overtimeController.toTimeController.clear();
     overtimeController.noteController.clear();
     overtimeController.otMinutesController.clear();
-    overtimeController.delayReasonController.clear();
+    overtimeController.delayreasonName_OT_Controller.clear();
+    overtimeController.delayreasonId_OT_Controller.clear();
+    tabController_Leave.animateTo(0);
     // updateDays(); // This will reset the days dropdown
     update();
   }

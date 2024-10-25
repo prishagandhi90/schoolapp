@@ -1,7 +1,9 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
+import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
@@ -55,6 +57,17 @@ class BottomBarController extends GetxController {
 
   onItemTapped(int index, BuildContext context) async {
     currentIndex.value = index;
+    hideBottomBar.value = false;
+    if (index == 1) {
+      final attendanceController = Get.put(AttendenceController());
+      await attendanceController.resetData();
+    }
+
+    if (index == 3 || index == 4) {
+      final leaveController = Get.put(LeaveController());
+      await leaveController.resetForm();
+    }
+
     if (index == 0) {
       // Navigate to PayrollScreen
       // Ensure MispunchScreen is popped before navigating to PayrollScreen
