@@ -14,13 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LeaveScreen extends GetView<LeaveController> {
-  const LeaveScreen({super.key});
+  LeaveScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.put(LeaveController());
     return GetBuilder<LeaveController>(builder: (controller) {
       return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: AppColor.white,
         body: Padding(
           padding: const EdgeInsets.all(8.0),

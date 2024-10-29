@@ -108,7 +108,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LEAVEENTRY,
-      page: () => const LeaveScreen(),
+      page: () => LeaveScreen(),
       binding: LeaveFormBinding(),
     ),
     GetPage(

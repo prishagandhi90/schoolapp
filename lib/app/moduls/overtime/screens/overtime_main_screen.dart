@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-// GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+final GlobalKey<ScaffoldState> _scaffoldKeyOT = GlobalKey<ScaffoldState>();
 
 class OvertimeMainScreen extends GetView<LeaveController> {
   OvertimeMainScreen({super.key});
@@ -26,28 +26,22 @@ class OvertimeMainScreen extends GetView<LeaveController> {
 
   @override
   Widget build(BuildContext context) {
-    // @override
-    // void onReady() {
-    //   // super.onReady();
-    //   // Ensure drawer is closed when this screen is re-opened
-    //   if (Scaffold.of(context).isDrawerOpen) {
-    //     Navigator.pop(context); // Close drawer if it's open
-    //   }
-    // }
-
     Get.put(OvertimeController());
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (Scaffold.of(context).isDrawerOpen) {
-    //     Navigator.pop(context); // Close the drawer if it's open
-    //   }
-    // });
-    // controller.setActiveScreen("OTMainScreen");
+    final LeaveController controller = Get.put(LeaveController()); // Always create a new instance
+    controller.currentTabIndex.value = 0;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scaffoldKeyOT.currentState?.isEndDrawerOpen ?? false) {
+        Navigator.pop(context);
+      }
+    });
+
     return GetBuilder<OvertimeController>(builder: (controller) {
       return DefaultTabController(
         length: 2,
         child: Scaffold(
             backgroundColor: AppColor.white,
-            // key: scaffoldKey,
+            key: _scaffoldKeyOT,
             endDrawer: Drawer(
                 child: controller.isLoading.value
                     ? const Center(
@@ -64,7 +58,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,11 +69,13 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
-                                              alignment: Alignment.centerLeft, child: Text(AppString.department, style: AppStyle.w50018)),
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(AppString.department, style: AppStyle.w50018)),
                                         ),
                                       ),
                                       Padding(
@@ -91,7 +88,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                                 leaveController.otentryList.isNotEmpty
                                                     ? leaveController.otHeaderList[0].department.toString()
                                                     : '--:--',
-                                                style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
+                                                style: AppStyle.plus500
+                                                    .copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
                                         ),
                                       ),
@@ -172,7 +170,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -208,7 +207,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +218,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -236,7 +237,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                                 leaveController.otHeaderList.isNotEmpty
                                                     ? leaveController.otHeaderList[0].subDept.toString()
                                                     : '--:--',
-                                                style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
+                                                style: AppStyle.plus500
+                                                    .copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
                                         ),
                                       ),
@@ -249,7 +251,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
                                   decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,7 +262,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                         width: double.infinity,
                                         height: 45,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
+                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
+                                            color: AppColor.primaryColor),
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
@@ -277,7 +281,8 @@ class OvertimeMainScreen extends GetView<LeaveController> {
                                                 leaveController.otHeaderList.isNotEmpty
                                                     ? leaveController.otHeaderList[0].subDeptInc.toString()
                                                     : '--:--',
-                                                style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
+                                                style: AppStyle.plus500
+                                                    .copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
                                         ),
                                       ),
