@@ -67,13 +67,13 @@ class FlexibleMonthPicker extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
-                  color: selectedMonthIndex == index ? AppColor.primaryColor : Colors.transparent,
+                  color: selectedMonthIndex == index ? AppColor.primaryColor : AppColor.trasparent,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   months[index],
                   style: TextStyle(
-                    color: selectedMonthIndex == index ? Colors.white : Colors.black,
+                    color: selectedMonthIndex == index ? AppColor.white : AppColor.black,
                     fontWeight: selectedMonthIndex == index ? FontWeight.bold : FontWeight.normal,
                     fontSize: selectedMonthIndex == index ? 18 : 15,
                   ),

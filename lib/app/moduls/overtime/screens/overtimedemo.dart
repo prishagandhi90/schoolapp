@@ -12,13 +12,13 @@ import 'package:get/get.dart';
 
 class OvertimeScreen extends GetView<OvertimeController> {
   OvertimeScreen({super.key});
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Get.put(OvertimeController());
     return GetBuilder<OvertimeController>(builder: (controller) {
       return Scaffold(
-        key: scaffoldKey,
+        // key: scaffoldKey,
         appBar: AppBar(
           title: AppText(
             text: 'Contact',
@@ -33,12 +33,13 @@ class OvertimeScreen extends GetView<OvertimeController> {
           surfaceTintColor: Colors.white,
           shadowColor: Colors.grey,
           leading: IconButton(
-              icon: Image.asset(
-                'assets/image/drawer.png',
-                width: 20,
-                color: AppColor.black,
-              ),
-              onPressed: () => scaffoldKey.currentState!.openDrawer()),
+            icon: Image.asset(
+              'assets/image/drawer.png',
+              width: 20,
+              color: AppColor.black,
+            ),
+            onPressed: () {},
+          ),
         ),
         backgroundColor: Colors.white,
         onDrawerChanged: (isop) {
