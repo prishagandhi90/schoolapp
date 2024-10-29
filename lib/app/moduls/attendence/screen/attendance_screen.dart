@@ -2,7 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/app_custom_widget/dropdown_attendance.dart';
+import 'package:emp_app/app/moduls/attendence/screen/dropdown_attendance.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
 import 'package:emp_app/app/moduls/attendence/screen/summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -29,7 +29,11 @@ class AttendanceScreen extends StatelessWidget {
               backgroundColor: AppColor.white,
               title: Text(
                 AppString.attendence,
-                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
+                style: TextStyle(
+                  color: AppColor.primaryColor,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: CommonFontStyle.plusJakartaSans,
+                ),
               ),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),

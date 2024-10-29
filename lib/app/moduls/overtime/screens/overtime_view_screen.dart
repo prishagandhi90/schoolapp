@@ -28,7 +28,7 @@ class OvertimeViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    controller.isLoading.value
+                    controller.isLoading
                         ? const Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 100),

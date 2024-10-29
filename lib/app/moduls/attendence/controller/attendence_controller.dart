@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
-import 'package:emp_app/app/app_custom_widget/dropdown_attendance.dart';
+import 'package:emp_app/app/moduls/attendence/screen/dropdown_attendance.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';

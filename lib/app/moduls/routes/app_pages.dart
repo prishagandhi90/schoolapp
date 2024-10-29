@@ -73,7 +73,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.BOTTOMBAR,
-      page: () => const BottomBarView(),
+      page: () => BottomBarView(),
       binding: BottomBarBinding(),
     ),
     GetPage(

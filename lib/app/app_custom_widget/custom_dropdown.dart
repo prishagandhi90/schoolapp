@@ -30,9 +30,9 @@ class CustomDropdown extends StatelessWidget {
           isExpanded: true,
           hint: Text(
             text,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
-              color: Colors.black,
+              color: AppColor.black,
             ),
           ),
           items: items,
@@ -54,7 +54,7 @@ class CustomDropdown extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: AppColor.black),
               borderRadius: BorderRadius.circular(0),
-              color: Colors.white,
+              color: AppColor.white,
             ),
           ),
           menuItemStyleData: const MenuItemStyleData(

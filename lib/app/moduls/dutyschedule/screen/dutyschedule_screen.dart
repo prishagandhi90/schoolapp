@@ -27,9 +27,18 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
               ),
               title: Text(
                 'Duty Schedule',
-                style: TextStyle(color: AppColor.primaryColor, fontWeight: FontWeight.w700, fontFamily: CommonFontStyle.plusJakartaSans),
+                style: TextStyle(
+                  color: AppColor.primaryColor,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: CommonFontStyle.plusJakartaSans,
+                ),
               ),
-              actions: [IconButton(onPressed: () {}, icon: Image.asset(AppImage.notification, width: 20))],
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Image.asset(AppImage.notification, width: 20),
+                )
+              ],
               centerTitle: true,
             ),
             body: Column(

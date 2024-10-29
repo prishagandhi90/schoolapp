@@ -58,6 +58,7 @@ class BottomBarController extends GetxController {
   onItemTapped(int index, BuildContext context) async {
     currentIndex.value = index;
     hideBottomBar.value = false;
+
     if (index == 1) {
       final attendanceController = Get.put(AttendenceController());
       await attendanceController.resetData();

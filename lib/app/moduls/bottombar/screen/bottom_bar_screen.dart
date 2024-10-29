@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarView extends GetView<BottomBarController> {
-  const BottomBarView({super.key});
+  BottomBarView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,41 +19,42 @@ class BottomBarView extends GetView<BottomBarController> {
           () => Scaffold(
             resizeToAvoidBottomInset: false,
             body: PersistentTabView(
-                padding: const EdgeInsets.only(bottom: 4, top: 0),
-                context,
-                confineToSafeArea: Platform.isAndroid ? true : false,
-                controller: controller.persistentController.value,
-                handleAndroidBackButtonPress: true,
-                hideNavigationBarWhenKeyboardAppears: true,
-                backgroundColor: AppColor.white,
-                navBarHeight: hideBottomBar.value ? 0 : 70.0,
-                decoration: NavBarDecoration(
-                  colorBehindNavBar: AppColor.trasparent,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColor.originalgrey.withOpacity(0.1),
-                      spreadRadius: 3.0,
-                    ),
-                  ],
-                ),
-                animationSettings: const NavBarAnimationSettings(
-                  screenTransitionAnimation: ScreenTransitionAnimationSettings(
-                    animateTabTransition: false,
-                    curve: Curves.ease,
-                    duration: Duration(milliseconds: 100),
+              padding: const EdgeInsets.only(bottom: 4, top: 0),
+              context,
+              confineToSafeArea: Platform.isAndroid ? true : false,
+              controller: controller.persistentController.value,
+              handleAndroidBackButtonPress: true,
+              hideNavigationBarWhenKeyboardAppears: true,
+              backgroundColor: AppColor.white,
+              navBarHeight: hideBottomBar.value ? 0 : 70.0,
+              decoration: NavBarDecoration(
+                colorBehindNavBar: AppColor.trasparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.originalgrey.withOpacity(0.1),
+                    spreadRadius: 3.0,
                   ),
+                ],
+              ),
+              animationSettings: const NavBarAnimationSettings(
+                screenTransitionAnimation: ScreenTransitionAnimationSettings(
+                  animateTabTransition: false,
+                  curve: Curves.ease,
+                  duration: Duration(milliseconds: 100),
                 ),
-                screens: controller.buildScreens(),
-                items: controller.navBarsItems(context),
-                navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
-                stateManagement: true,
-                resizeToAvoidBottomInset: true,
-                bottomScreenMargin: Sizes.crossLength * 0.020, onItemSelected: (index) async {
-              await controller.onItemTapped(index, context);
-            }
-                // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
-                // popAllScreensOnTapOfSelectedTab: true,
-                ),
+              ),
+              screens: controller.buildScreens(),
+              items: controller.navBarsItems(context),
+              navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
+              stateManagement: true,
+              resizeToAvoidBottomInset: true,
+              bottomScreenMargin: Sizes.crossLength * 0.020,
+              onItemSelected: (index) async {
+                await controller.onItemTapped(index, context);
+              },
+              // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
+              // popAllScreensOnTapOfSelectedTab: true,
+            ),
             // ),
           ),
         );
