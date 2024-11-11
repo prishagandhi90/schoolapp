@@ -35,6 +35,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   TextEditingController otMinutesController = TextEditingController();
   TextEditingController delayreasonName_OT_Controller = TextEditingController();
   TextEditingController delayreasonId_OT_Controller = TextEditingController();
+
   @override
   void onInit() {
     tabController_OT = TabController(length: 2, vsync: this);
@@ -146,57 +147,111 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     }
   }
 
+  // Future<void> selectTime(BuildContext context, TextEditingController controller) async {
+  //   final TimeOfDay? picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: TimeOfDay.now(),
+  //     initialEntryMode: TimePickerEntryMode.input,
+  //   );
+  //   if (picked != null) {
+  //     final now = DateTime.now();
+  //     final dt = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+  //     controller.text = timeFormat.format(dt);
+  //     if (controller == fromTimeController) {
+  //       selectedFromTime = picked;
+  //     } else if (controller == toTimeController) {
+  //       selectedToTime = picked;
+  //     }
+  //     oTMinutes = 0;
+  //     onDateTimeTap();
+  //     update();
+  //   }
+  // }
+
+  // void onDateTimeTap() {
+  //   if (validateAndCombineDateTime()) {
+  //     DateTime fromDateTime = DateTime(
+  //       selectedFromDate!.year,
+  //       selectedFromDate!.month,
+  //       selectedFromDate!.day,
+  //       selectedFromTime!.hour,
+  //       selectedFromTime!.minute,
+  //     );
+  //     // String formattedFromDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(fromDateTime);
+
+  //     DateTime toDateTime = DateTime(
+  //       selectedToDate!.year,
+  //       selectedToDate!.month,
+  //       selectedToDate!.day,
+  //       selectedToTime!.hour,
+  //       selectedToTime!.minute,
+  //     );
+  //     // String formattedToDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(toDateTime);
+
+  //     double totalMinutes = calculateMinutes(fromDateTime, toDateTime);
+  //     oTMinutes = totalMinutes;
+  //     otMinutesController.text = totalMinutes.toStringAsFixed(0);
+  //     // fromDateController.text = formattedFromDateTime.toString();
+  //     // toDateController.text = formattedToDateTime.toString();
+  //     print('Total Minutes: $totalMinutes');
+  //   } else {
+  //     print('Please fill all date and time fields correctly.');
+  //   }
+  // }
+
   Future<void> selectTime(BuildContext context, TextEditingController controller) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      initialEntryMode: TimePickerEntryMode.input,
+  final TimeOfDay? picked = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+    initialEntryMode: TimePickerEntryMode.input,
+  );
+  
+  if (picked != null) {
+    // Set minutes to 00
+    final adjustedTime = TimeOfDay(hour: picked.hour, minute: 0);
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, adjustedTime.hour, adjustedTime.minute);
+
+    controller.text = timeFormat.format(dt);
+
+    if (controller == fromTimeController) {
+      selectedFromTime = adjustedTime;
+    } else if (controller == toTimeController) {
+      selectedToTime = adjustedTime;
+    }
+
+    oTMinutes = 0;
+    onDateTimeTap(); // Recalculate OT minutes with adjusted time
+    update();
+  }
+}
+
+void onDateTimeTap() {
+  if (validateAndCombineDateTime()) {
+    DateTime fromDateTime = DateTime(
+      selectedFromDate!.year,
+      selectedFromDate!.month,
+      selectedFromDate!.day,
+      selectedFromTime!.hour,
+      0, // Set minutes to 00
     );
-    if (picked != null) {
-      final now = DateTime.now();
-      final dt = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
-      controller.text = timeFormat.format(dt);
-      if (controller == fromTimeController) {
-        selectedFromTime = picked;
-      } else if (controller == toTimeController) {
-        selectedToTime = picked;
-      }
-      oTMinutes = 0;
-      onDateTimeTap();
-      update();
-    }
+
+    DateTime toDateTime = DateTime(
+      selectedToDate!.year,
+      selectedToDate!.month,
+      selectedToDate!.day,
+      selectedToTime!.hour,
+      0, // Set minutes to 00
+    );
+
+    double totalMinutes = calculateMinutes(fromDateTime, toDateTime);
+    oTMinutes = totalMinutes;
+    otMinutesController.text = totalMinutes.toStringAsFixed(0);
+    print('Total Minutes: $totalMinutes');
+  } else {
+    print('Please fill all date and time fields correctly.');
   }
-
-  void onDateTimeTap() {
-    if (validateAndCombineDateTime()) {
-      DateTime fromDateTime = DateTime(
-        selectedFromDate!.year,
-        selectedFromDate!.month,
-        selectedFromDate!.day,
-        selectedFromTime!.hour,
-        selectedFromTime!.minute,
-      );
-      // String formattedFromDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(fromDateTime);
-
-      DateTime toDateTime = DateTime(
-        selectedToDate!.year,
-        selectedToDate!.month,
-        selectedToDate!.day,
-        selectedToTime!.hour,
-        selectedToTime!.minute,
-      );
-      // String formattedToDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(toDateTime);
-
-      double totalMinutes = calculateMinutes(fromDateTime, toDateTime);
-      oTMinutes = totalMinutes;
-      otMinutesController.text = totalMinutes.toStringAsFixed(0);
-      // fromDateController.text = formattedFromDateTime.toString();
-      // toDateController.text = formattedToDateTime.toString();
-      print('Total Minutes: $totalMinutes');
-    } else {
-      print('Please fill all date and time fields correctly.');
-    }
-  }
+}
 
   double calculateMinutes(DateTime fromDateTime, DateTime toDateTime) {
     Duration difference = toDateTime.difference(fromDateTime);

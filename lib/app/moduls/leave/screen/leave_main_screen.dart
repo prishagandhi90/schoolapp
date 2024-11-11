@@ -18,8 +18,6 @@ final GlobalKey<ScaffoldState> _scaffoldKeyLeave = GlobalKey<ScaffoldState>();
 class LeaveMainScreen extends GetView<LeaveController> {
   LeaveMainScreen({super.key});
 
-  // Define a GlobalKey for the scaffold
-
   @override
   Widget build(BuildContext context) {
     // Get.put(LeaveController());

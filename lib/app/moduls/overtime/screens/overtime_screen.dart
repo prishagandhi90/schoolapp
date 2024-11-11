@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_timepicker.dart';
@@ -145,6 +146,15 @@ class OtScreen extends StatelessWidget {
                   CustomDropdown(
                     text: 'Late Reason',
                     controller: controller.delayreasonName_OT_Controller,
+                    buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
                     onChanged: (value) async {
                       await controller.DelayReasonChangeMethod(value);
                       controller.update();

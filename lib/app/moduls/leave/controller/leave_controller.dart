@@ -786,8 +786,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   resetForm() {
-    // Scaffold.of(context).openEndDrawer();
-    // Scaffold.of(context).closeEndDrawer();
     Get.back();
     fromDateController.clear();
     toDateController.clear();
@@ -811,7 +809,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     overtimeController.delayreasonName_OT_Controller.clear();
     overtimeController.delayreasonId_OT_Controller.clear();
     tabController_Leave.animateTo(0);
-    // updateDays(); // This will reset the days dropdown
     update();
   }
 }

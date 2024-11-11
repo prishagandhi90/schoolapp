@@ -11,6 +11,7 @@ class CustomDropdown extends StatelessWidget {
   final double width; // To set width dynamically
   final InputDecoration? decoration; // Custom decoration if needed
   final Function(bool)? onMenuStateChange; // Menu state change callback
+  final ButtonStyleData? buttonStyleData;
 
   CustomDropdown(
       {required this.text,
@@ -19,7 +20,8 @@ class CustomDropdown extends StatelessWidget {
       required this.items,
       this.width = double.infinity,
       this.decoration,
-      this.onMenuStateChange});
+      this.onMenuStateChange,
+      this.buttonStyleData});
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +50,16 @@ class CustomDropdown extends StatelessWidget {
               print("Selected value: ${value['text']}"); // Debugging line to check selected value
             }
           },
-          buttonStyleData: ButtonStyleData(
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColor.black),
-              borderRadius: BorderRadius.circular(0),
-              color: AppColor.white,
-            ),
-          ),
+          buttonStyleData: buttonStyleData,
+          // ButtonStyleData(
+          //   height: 50,
+          //   padding: const EdgeInsets.symmetric(horizontal: 0),
+          //   decoration: BoxDecoration(
+          //     border: Border.all(color: AppColor.black),
+          //     borderRadius: BorderRadius.circular(0),
+          //     color: AppColor.white,
+          //   ),
+          // ),
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
           ),

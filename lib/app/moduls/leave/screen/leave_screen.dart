@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/leave/model/dropdownlist_custom.dart';
@@ -19,7 +20,6 @@ class LeaveScreen extends GetView<LeaveController> {
   @override
   Widget build(BuildContext context) {
     Get.put(LeaveController());
-
     return GetBuilder<LeaveController>(builder: (controller) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -61,6 +61,15 @@ class LeaveScreen extends GetView<LeaveController> {
                       child: CustomDropdown(
                         text: AppString.name,
                         controller: controller.leaveNameController,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
                         onChanged: (value) async {
                           await controller.LeaveNameChangeMethod(value);
                           // controller.leaveNameController.text = value?['text'] ?? '';
@@ -117,6 +126,15 @@ class LeaveScreen extends GetView<LeaveController> {
                       child: CustomDropdown(
                         text: AppString.days,
                         controller: controller.daysController,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
                         onChanged: (value) async {
                           await controller.LeaveDaysOnChange(value);
                         },
@@ -144,6 +162,15 @@ class LeaveScreen extends GetView<LeaveController> {
                 child: CustomDropdown(
                   text: AppString.reason,
                   controller: controller.reasonController,
+                  buttonStyleData: ButtonStyleData(
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColor.black),
+                      borderRadius: BorderRadius.circular(0),
+                      color: AppColor.white,
+                    ),
+                  ),
                   onChanged: (value) async {
                     controller.update();
                   },
@@ -202,6 +229,15 @@ class LeaveScreen extends GetView<LeaveController> {
                 child: CustomDropdown(
                   text: AppString.relieverName,
                   controller: controller.relieverNameController,
+                  buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
                   width: double.infinity,
                   onChanged: (value) async {
                     await controller.RelieverNameChangeMethod(value);
@@ -226,6 +262,15 @@ class LeaveScreen extends GetView<LeaveController> {
                 child: CustomDropdown(
                   text: AppString.lateReason,
                   controller: controller.delayreasonNameController,
+                  buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
                   onChanged: (value) async {
                     await controller.DelayReasonChangeMethod(value);
                     controller.update();

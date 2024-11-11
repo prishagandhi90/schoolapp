@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_stepper.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -45,46 +46,55 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
               children: [
                 Row(
                   children: [
-                    Expanded(
-                      flex: 1,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5, // 60% width for the dropdown
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
                         child: CustomDropdown(
                           text: controller.DutyDropdownNameController.text.isNotEmpty
                               ? controller.DutyDropdownNameController.text
                               : controller.getCurrentWeekDate(),
                           controller: controller.DutyDropdownNameController,
+                          buttonStyleData: ButtonStyleData(
+                            height: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(199, 255, 255, 255),
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                           onChanged: (value) async {
                             await controller.DutyScheduleChangeMethod(value);
                           },
-                          items: controller.Sheduledrpdwnlst.isNotEmpty // Check if the list is not empty
-                              ? controller.Sheduledrpdwnlst
-                                  //.where((item) => item.value != null && item.name != null) // Null check added
-                                  .map((sheduledrpdwnlst item) => DropdownMenuItem<Map<String, String>>(
-                                        value: {
-                                          'value': item.value ?? '',
-                                          'text': item.name ?? '',
-                                        },
-                                        child: Text(
-                                          item.name ?? '',
-                                          style: AppStyle.black.copyWith(fontSize: 14),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      )).toList()
-                              : [], // Return an empty list if the original list is empty
+                          items: controller.Sheduledrpdwnlst.isNotEmpty
+                              ? controller.Sheduledrpdwnlst.map(
+                                  (sheduledrpdwnlst item) => DropdownMenuItem<Map<String, String>>(
+                                    value: {
+                                      'value': item.value ?? '',
+                                      'text': item.name ?? '',
+                                    },
+                                    child: Text(
+                                      item.name ?? '',
+                                      style: AppStyle.black.copyWith(fontSize: 14),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ).toList()
+                              : [],
                           width: double.infinity,
                         ),
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5, // 40% width for the text field
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
                         child: Container(
                           height: 40,
                           decoration: BoxDecoration(
                             color: Color.fromARGB(199, 255, 255, 255),
-                            border: Border.all(color: Colors.grey), // Border add kiya
+                            border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Center(
