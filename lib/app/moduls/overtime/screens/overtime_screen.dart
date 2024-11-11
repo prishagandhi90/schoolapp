@@ -12,13 +12,14 @@ import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OtScreen extends StatelessWidget {
+class OtScreen extends GetView<OvertimeController> {
   const OtScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Get.put(OvertimeController());
-    var leaveController = Get.put(LeaveController());
+    // var leaveController = Get.put(LeaveController());
+    final leaveController = Get.find<LeaveController>();
     return GetBuilder<OvertimeController>(
       builder: (controller) {
         return Scaffold(
@@ -147,14 +148,14 @@ class OtScreen extends StatelessWidget {
                     text: 'Late Reason',
                     controller: controller.delayreasonName_OT_Controller,
                     buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColor.black),
-                            borderRadius: BorderRadius.circular(0),
-                            color: AppColor.white,
-                          ),
-                        ),
+                      height: 50,
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColor.black),
+                        borderRadius: BorderRadius.circular(0),
+                        color: AppColor.white,
+                      ),
+                    ),
                     onChanged: (value) async {
                       await controller.DelayReasonChangeMethod(value);
                       controller.update();

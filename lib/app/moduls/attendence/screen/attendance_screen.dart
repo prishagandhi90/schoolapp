@@ -73,6 +73,7 @@ class AttendanceScreen extends StatelessWidget {
                     ),
                     child: TabBar(
                       onTap: (index) async {
+                        hideBottomBar.value = false;
                         await controller.changeTab(index);
                       },
                       controller: controller.tabController,

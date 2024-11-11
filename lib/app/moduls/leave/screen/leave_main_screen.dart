@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_view_screen.dart';
@@ -30,7 +31,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
       }
     });
 
-    // return GetBuilder<LeaveController>(builder: (controller) {
+    return GetBuilder<LeaveController>(builder: (controller) {
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
@@ -53,8 +54,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                               child: Container(
                                 // height: MediaQuery.of(context).size.height * 0.12,
                                 decoration: BoxDecoration(
-                                    color: AppColor.lightblue1,
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                    color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,13 +64,11 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                       width: double.infinity,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
-                                          color: AppColor.primaryColor),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(AppString.department, style: AppStyle.w50018)),
+                                            alignment: Alignment.centerLeft, child: Text(AppString.department, style: AppStyle.w50018)),
                                       ),
                                     ),
                                     Padding(
@@ -166,8 +164,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                       width: double.infinity,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
-                                          color: AppColor.primaryColor),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
@@ -203,8 +200,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                               child: Container(
                                 // height: MediaQuery.of(context).size.height * 0.12,
                                 decoration: BoxDecoration(
-                                    color: AppColor.lightblue1,
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                    color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,13 +210,11 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                       width: double.infinity,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
-                                          color: AppColor.primaryColor),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(AppString.subdepartment, style: AppStyle.w50018)),
+                                            alignment: Alignment.centerLeft, child: Text(AppString.subdepartment, style: AppStyle.w50018)),
                                       ),
                                     ),
                                     Padding(
@@ -261,8 +255,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                       width: double.infinity,
                                       height: 45,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)),
-                                          color: AppColor.primaryColor),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
@@ -300,19 +293,6 @@ class LeaveMainScreen extends GetView<LeaveController> {
             backgroundColor: AppColor.white,
             title: Text(AppString.leave, style: AppStyle.primaryplusw700),
             centerTitle: true,
-            actions: [
-              Builder(builder: (context) {
-                return IconButton(
-                  onPressed: () async {
-                    // Scaffold.of(context).openEndDrawer();
-                    // await Future.delayed(Duration(milliseconds: 50));
-                    _scaffoldKeyLeave.currentState?.openEndDrawer();
-                    if (controller.leaveHeaderList.isEmpty) await controller.fetchHeaderList("LV");
-                  },
-                  icon: SvgPicture.asset(AppImage.drawersvg, height: 15, width: 15),
-                );
-              })
-            ],
             leading: IconButton(
                 onPressed: () {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -324,7 +304,22 @@ class LeaveMainScreen extends GetView<LeaveController> {
                   });
                 },
                 icon: const Icon(Icons.arrow_back)),
+            actions: [
+              Builder(builder: (context) {
+                return IconButton(
+                  onPressed: () async {
+                    Scaffold.of(context).openEndDrawer();
+                    if (controller.leaveHeaderList.isEmpty) await controller.fetchHeaderList("LV");
+                  },
+                  icon: SvgPicture.asset(AppImage.drawersvg, height: 15, width: 15),
+                );
+              })
+            ],
           ),
+          onDrawerChanged: (isop) {
+            hideBottomBar.value = isop;
+          },
+          drawer: CustomDrawer(),
           body: Column(
             children: [
               Container(
@@ -368,6 +363,6 @@ class LeaveMainScreen extends GetView<LeaveController> {
             ],
           )),
     );
-    // });
+    });
   }
 }

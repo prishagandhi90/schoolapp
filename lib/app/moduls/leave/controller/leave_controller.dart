@@ -758,10 +758,12 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
             await fetchLeaveEntryList(flag);
-            if (flag == 'LV') {
-              resetForm();
-              Get.rawSnackbar(message: "Data saved successfully");
-            }
+            // if (flag == 'LV') {
+            resetForm();
+            Get.rawSnackbar(message: "Data saved successfully");
+            // }
+            // else
+            //   resetForm();
             // update();
           }
         } else {
@@ -774,6 +776,10 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       } else if (responseSaveLeaveEntryList.statusCode == 400) {
         isLoading = false;
         Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
+        // overtimeController.fromDateController.clear();
+        // overtimeController.toDateController.clear();
+        // overtimeController.fromTimeController.clear();
+        // overtimeController.toTimeController.clear();
       } else {
         Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
       }
