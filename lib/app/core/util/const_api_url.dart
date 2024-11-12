@@ -21,4 +21,5 @@ class ConstApiUrl {
   static const empLeaveEntryListAPI = "$empUrl/EmpApp_GetLeaveEntryList";
   static const empSaveLeaveEntryList = "$empUrl/EmpApp_SaveLeaveEntryList";
   static const empdutyscheduledrpdwnList = "$empUrl/GetShiftWeekList";
+  static const empDutyScheduleShiftReport = "$empUrl/GetEmpShiftReport";
 }

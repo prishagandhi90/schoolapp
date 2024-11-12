@@ -3,6 +3,7 @@ import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/dropdown_model.dart';
+import 'package:emp_app/app/moduls/dutyschedule/model/shiftDuty_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class DutyscheduleController extends GetxController {
   bool isLoading = false;
   final ApiController apiController = Get.put(ApiController());
   List<sheduledrpdwnlst> Sheduledrpdwnlst = [];
+  List<DutySchSftData> dutySchSftData = [];
   TextEditingController DutyDropdownNameController = TextEditingController();
   TextEditingController DutyDropdownValueController = TextEditingController();
 
@@ -21,6 +23,7 @@ class DutyscheduleController extends GetxController {
   void onInit() {
     super.onInit();
     fetchdutyScheduledrpdwn();
+    // getShiftData();
   }
 
   Future<List<sheduledrpdwnlst>> fetchdutyScheduledrpdwn() async {
@@ -43,7 +46,7 @@ class DutyscheduleController extends GetxController {
         sheduledrpdwnlst? currentWeek = getCurrentWeek(Sheduledrpdwnlst);
         DutyDropdownNameController.text = currentWeek!.name ?? '';
         DutyDropdownValueController.text = currentWeek.value ?? '';
-
+        await getShiftData();
         // update(); // UI refresh karna
       } else if (rsponsedropden.statusCode == 401) {
         pref.clear();
@@ -66,6 +69,7 @@ class DutyscheduleController extends GetxController {
     DutyDropdownValueController.text = value!['value'] ?? '';
     DutyDropdownNameController.text = value['text'] ?? '';
     update();
+    getShiftData();
   }
 
   String getCurrentWeekDate() {
@@ -111,5 +115,55 @@ class DutyscheduleController extends GetxController {
       }
     }
     return null; // No matching week found
+  }
+
+  Future<List<DutySchSftData>> getShiftData() async {
+    // List<Map<String, String>> _getCurrentWeekData() {
+    DateTime now = DateTime.now();
+    DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Monday
+    List<Map<String, String>> weekData = [];
+
+    for (int i = 0; i < 7; i++) {
+      DateTime date = startOfWeek.add(Duration(days: i));
+      String formattedDate = DateFormat('d\nMMM').format(date); // Format: day \n month
+      weekData.add({
+        'date': formattedDate,
+        'name': 'Subhash Chandra Shukla',
+        'occupation': 'Flutter Developer',
+      });
+      try {
+        isLoading = true;
+        String url = ConstApiUrl.empDutyScheduleShiftReport;
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        loginId = await pref.getString(AppString.keyLoginId) ?? "";
+        tokenNo = await pref.getString(AppString.keyToken) ?? "";
+        empId = await pref.getString(AppString.keyEmpId) ?? "";
+
+        var jsonbodyObj = {"loginId": loginId, "empId": empId, "DtRange": DutyDropdownNameController.text};
+
+        var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+        ResponseGetDutyScheduleShift responseGetDutyScheduleShift = ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
+
+        if (responseGetDutyScheduleShift.statusCode == 200) {
+          dutySchSftData = responseGetDutyScheduleShift.data!;
+          isLoading = false;
+        } else if (responseGetDutyScheduleShift.statusCode == 401) {
+          pref.clear();
+          Get.offAll(const LoginScreen());
+          Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+        } else if (responseGetDutyScheduleShift.statusCode == 400) {
+          isLoading = false;
+        } else {
+          Get.rawSnackbar(message: "Something went wrong");
+        }
+        update();
+      } catch (e) {
+        isLoading = false;
+        update();
+      }
+      return [];
+    }
+    return [];
+    // return weekData;
   }
 }

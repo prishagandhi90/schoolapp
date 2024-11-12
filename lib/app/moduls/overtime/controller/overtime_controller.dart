@@ -46,16 +46,6 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     super.onInit();
   }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-
-  //   // Ensure drawer is closed when screen is initialized
-  //   if (Scaffold.of(Get.context!).isDrawerOpen) {
-  //     Navigator.pop(Get.context!); // Close the drawer if it's open
-  //   }
-  // }
-
   @override
   void onClose() {
     // leaveScrollController.dispose();
@@ -146,58 +136,6 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
       update();
     }
   }
-
-  // Future<void> selectTime(BuildContext context, TextEditingController controller) async {
-  //   final TimeOfDay? picked = await showTimePicker(
-  //     context: context,
-  //     initialTime: TimeOfDay.now(),
-  //     initialEntryMode: TimePickerEntryMode.input,
-  //   );
-  //   if (picked != null) {
-  //     final now = DateTime.now();
-  //     final dt = DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
-  //     controller.text = timeFormat.format(dt);
-  //     if (controller == fromTimeController) {
-  //       selectedFromTime = picked;
-  //     } else if (controller == toTimeController) {
-  //       selectedToTime = picked;
-  //     }
-  //     oTMinutes = 0;
-  //     onDateTimeTap();
-  //     update();
-  //   }
-  // }
-
-  // void onDateTimeTap() {
-  //   if (validateAndCombineDateTime()) {
-  //     DateTime fromDateTime = DateTime(
-  //       selectedFromDate!.year,
-  //       selectedFromDate!.month,
-  //       selectedFromDate!.day,
-  //       selectedFromTime!.hour,
-  //       selectedFromTime!.minute,
-  //     );
-  //     // String formattedFromDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(fromDateTime);
-
-  //     DateTime toDateTime = DateTime(
-  //       selectedToDate!.year,
-  //       selectedToDate!.month,
-  //       selectedToDate!.day,
-  //       selectedToTime!.hour,
-  //       selectedToTime!.minute,
-  //     );
-  //     // String formattedToDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(toDateTime);
-
-  //     double totalMinutes = calculateMinutes(fromDateTime, toDateTime);
-  //     oTMinutes = totalMinutes;
-  //     otMinutesController.text = totalMinutes.toStringAsFixed(0);
-  //     // fromDateController.text = formattedFromDateTime.toString();
-  //     // toDateController.text = formattedToDateTime.toString();
-  //     print('Total Minutes: $totalMinutes');
-  //   } else {
-  //     print('Please fill all date and time fields correctly.');
-  //   }
-  // }
 
   Future<void> selectTime(BuildContext context, TextEditingController controller) async {
     final TimeOfDay? picked = await showTimePicker(
