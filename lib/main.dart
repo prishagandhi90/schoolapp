@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/core/common/common_firebase.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/myapp.dart';
@@ -26,11 +25,8 @@ void main() async {
       if (kReleaseMode) exit(1);
     };
 
-    runApp(DevicePreview(
-      enabled: true,
-      builder: (context) => MyApp(
-        isLoggedIn: isLoggedIn,
-      ),
+    runApp(MyApp(
+      isLoggedIn: isLoggedIn,
     ));
   } catch (e) {
     print('An error occurred: $e');
