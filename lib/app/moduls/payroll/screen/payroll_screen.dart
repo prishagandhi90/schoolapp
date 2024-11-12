@@ -558,60 +558,60 @@ class PayrollScreen extends GetView<PayrollController> {
                             ),
                           ],
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.start,
-                        //   children: [
-                        //     Expanded(
-                        //         child: Column(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         GestureDetector(
-                        //           onTap: () {
-                        //             final bottomBarController = Get.put(BottomBarController());
-                        //             bottomBarController.currentIndex.value = -1;
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    final bottomBarController = Get.put(BottomBarController());
+                                    bottomBarController.currentIndex.value = -1;
 
-                        //             // Get.delete<MispunchController>();
-                        //             final mispunchController = Get.put(MispunchController());
-                        //             mispunchController.resetData();
-                        //             mispunchController.update();
-                        //             // Get.put(MispunchScreen());
-                        //             PersistentNavBarNavigator.pushNewScreen(
-                        //               context,
-                        //               screen: const DutyscheduleScreen(),
-                        //               withNavBar: true,
-                        //               pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                        //             ).then((value) async {
-                        //               // final bottomBarController = Get.find<BottomBarController>();
-                        //               bottomBarController.persistentController.value.index = 0;
-                        //               bottomBarController.currentIndex.value = 0;
-                        //               hideBottomBar.value = false;
-                        //               var dashboardController = Get.put(DashboardController());
-                        //               await dashboardController.getDashboardDataUsingToken();
-                        //             });
-                        //           }, //Get.to(MispunchScreen()),
-                        //           child: Container(
-                        //             height: MediaQuery.of(context).size.height * 0.06, //0.07
-                        //             width: MediaQuery.of(context).size.width * 0.14, //0.17
-                        //             margin: const EdgeInsets.only(top: 15),
-                        //             decoration: BoxDecoration(
-                        //                 border: Border.all(
-                        //                   color: AppColor.primaryColor,
-                        //                 ),
-                        //                 borderRadius: BorderRadius.circular(10)),
-                        //             child: Image.asset(
-                        //               AppImage.mispunch,
-                        //               // height: 35, //50
-                        //               // width: 35, //50
-                        //               color: AppColor.primaryColor,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //         const SizedBox(height: 5),
-                        //         Text(AppString.dutyschedule, style: AppStyle.plus12),
-                        //       ],
-                        //     )),
-                        //   ],
-                        // )
+                                    // Get.delete<MispunchController>();
+                                    final mispunchController = Get.put(MispunchController());
+                                    mispunchController.resetData();
+                                    mispunchController.update();
+                                    // Get.put(MispunchScreen());
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: const DutyscheduleScreen(),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ).then((value) async {
+                                      // final bottomBarController = Get.find<BottomBarController>();
+                                      bottomBarController.persistentController.value.index = 0;
+                                      bottomBarController.currentIndex.value = 0;
+                                      hideBottomBar.value = false;
+                                      var dashboardController = Get.put(DashboardController());
+                                      await dashboardController.getDashboardDataUsingToken();
+                                    });
+                                  }, //Get.to(MispunchScreen()),
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                    width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                    margin: const EdgeInsets.only(top: 15),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: AppColor.primaryColor,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Image.asset(
+                                      AppImage.mispunch,
+                                      // height: 35, //50
+                                      // width: 35, //50
+                                      color: AppColor.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(AppString.dutyschedule, style: AppStyle.plus12),
+                              ],
+                            )),
+                          ],
+                        )
                       ]),
               ),
             ),

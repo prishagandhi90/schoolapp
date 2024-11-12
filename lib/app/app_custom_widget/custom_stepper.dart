@@ -97,10 +97,18 @@ class _CustomStepperState extends State<CustomStepper> {
               });
             },
             child: Container(
-              margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10), // Adjust the outer space
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColor.lightblue1, // Set light blue background color here
+                borderRadius: BorderRadius.circular(0),
+                // border: Border.all(
+                //   color: isActive ? AppColor.primaryColor : Theme.of(context).dividerColor,
+                //   width: 1.0,
+                // ),
+              ),
               child: ListTile(
-                contentPadding: const EdgeInsets.all(5),
+                contentPadding: const EdgeInsets.all(3),
                 visualDensity: VisualDensity(vertical: -1, horizontal: -1),
                 title: Text(
                   stepData.content['name'] ?? '',
@@ -120,13 +128,13 @@ class _CustomStepperState extends State<CustomStepper> {
                     ),
                   ],
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide(
-                    color: isActive ? AppColor.primaryColor : theme.dividerColor, // Highlight active step border
-                    width: 1.0,
-                  ),
-                ),
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(0),
+                //   side: BorderSide(
+                //     color: isActive ? AppColor.primaryColor : theme.dividerColor, // Highlight active step border
+                //     width: 1.0,
+                //   ),
+                // ),
               ),
             ),
           );

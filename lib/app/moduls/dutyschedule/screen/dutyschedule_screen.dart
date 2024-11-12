@@ -49,7 +49,7 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.5, // 60% width for the dropdown
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                         child: CustomDropdown(
                           text: controller.DutyDropdownNameController.text.isNotEmpty
                               ? controller.DutyDropdownNameController.text
@@ -57,7 +57,6 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                           controller: controller.DutyDropdownNameController,
                           buttonStyleData: ButtonStyleData(
                             height: 40,
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
                             decoration: BoxDecoration(
                               color: Color.fromARGB(199, 255, 255, 255),
                               border: Border.all(color: Colors.grey),
