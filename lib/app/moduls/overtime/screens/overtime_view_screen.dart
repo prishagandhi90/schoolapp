@@ -28,7 +28,7 @@ class OvertimeViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    controller.isLoading.value
+                    controller.isLoading
                         ? const Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 100),
@@ -87,10 +87,8 @@ class OvertimeViewScreen extends StatelessWidget {
                                                   if (selected!) {
                                                     leaveController.inchargeAction.value =
                                                         leaveController.otentryList[index].inchargeAction ?? '';
-                                                    leaveController.hodAction.value =
-                                                        leaveController.otentryList[index].hodAction ?? '';
-                                                    leaveController.hrAction.value =
-                                                        leaveController.otentryList[index].hrAction ?? '';
+                                                    leaveController.hodAction.value = leaveController.otentryList[index].hodAction ?? '';
+                                                    leaveController.hrAction.value = leaveController.otentryList[index].hrAction ?? '';
                                                     leaveController.update();
                                                   } else {
                                                     leaveController.inchargeAction = ''.obs;
@@ -177,12 +175,9 @@ class OvertimeViewScreen extends StatelessWidget {
                                               1, // Adjust number of rows as needed
                                               (index) => DataRow(
                                                 cells: [
-                                                  DataCell(getStatusImage(
-                                                      leaveController.otentryList[index].inchargeAction.toString())),
-                                                  DataCell(getStatusImage(
-                                                      leaveController.otentryList[index].hodAction.toString())),
-                                                  DataCell(getStatusImage(
-                                                      leaveController.otentryList[index].hrAction.toString())),
+                                                  DataCell(getStatusImage(leaveController.otentryList[index].inchargeAction.toString())),
+                                                  DataCell(getStatusImage(leaveController.otentryList[index].hodAction.toString())),
+                                                  DataCell(getStatusImage(leaveController.otentryList[index].hrAction.toString())),
                                                 ],
                                               ),
                                             ),
@@ -308,9 +303,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -349,9 +342,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -390,9 +381,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -431,9 +420,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -472,9 +459,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -513,9 +498,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -554,9 +537,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -595,9 +576,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -636,9 +615,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),

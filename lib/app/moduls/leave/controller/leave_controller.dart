@@ -815,6 +815,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     overtimeController.delayreasonName_OT_Controller.clear();
     overtimeController.delayreasonId_OT_Controller.clear();
     tabController_Leave.animateTo(0);
+    overtimeController.tabController_OT.animateTo(0);
     update();
   }
 }

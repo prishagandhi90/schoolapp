@@ -128,8 +128,6 @@ class DutyscheduleController extends GetxController {
       String formattedDate = DateFormat('d\nMMM').format(date); // Format: day \n month
       weekData.add({
         'date': formattedDate,
-        'name': 'Subhash Chandra Shukla',
-        'occupation': 'Flutter Developer',
       });
       try {
         isLoading = true;
@@ -152,6 +150,7 @@ class DutyscheduleController extends GetxController {
           Get.offAll(const LoginScreen());
           Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
         } else if (responseGetDutyScheduleShift.statusCode == 400) {
+          dutySchSftData = []; // Set to empty list to show "No Data Found"
           isLoading = false;
         } else {
           Get.rawSnackbar(message: "Something went wrong");

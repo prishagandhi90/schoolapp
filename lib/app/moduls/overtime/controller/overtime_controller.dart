@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 
 class OvertimeController extends GetxController with SingleGetTickerProviderMixin {
   final bottomBarController = Get.put(BottomBarController());
-  var isLoading = false.obs;
+  bool isLoading = false;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
   DateTime? selectedFromDate;
@@ -41,7 +41,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     tabController_OT = TabController(length: 2, vsync: this);
     tabController_OT.addListener(_handleTabSelection);
     currentTabIndex.value = 0;
-    // changeTab(0);
+    changeTab(0);
     noteController.text = "";
     super.onInit();
   }
@@ -75,7 +75,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     tabController_OT.animateTo(index);
     currentTabIndex.value = index;
     final leaveController = Get.put(LeaveController());
-    if (index == 1 && leaveController.leaveentryList.isEmpty) {
+    if (index == 1 && leaveController.otentryList.isEmpty) {
       await leaveController.fetchLeaveEntryList("OT"); // Fetch list only if not already fetched
     }
     update();
