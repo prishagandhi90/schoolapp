@@ -230,14 +230,14 @@ class LeaveScreen extends GetView<LeaveController> {
                   text: AppString.relieverName,
                   controller: controller.relieverNameController,
                   buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColor.black),
-                            borderRadius: BorderRadius.circular(0),
-                            color: AppColor.white,
-                          ),
-                        ),
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColor.black),
+                      borderRadius: BorderRadius.circular(0),
+                      color: AppColor.white,
+                    ),
+                  ),
                   width: double.infinity,
                   onChanged: (value) async {
                     await controller.RelieverNameChangeMethod(value);
@@ -263,14 +263,14 @@ class LeaveScreen extends GetView<LeaveController> {
                   text: AppString.lateReason,
                   controller: controller.delayreasonNameController,
                   buttonStyleData: ButtonStyleData(
-                          height: 50,
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColor.black),
-                            borderRadius: BorderRadius.circular(0),
-                            color: AppColor.white,
-                          ),
-                        ),
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColor.black),
+                      borderRadius: BorderRadius.circular(0),
+                      color: AppColor.white,
+                    ),
+                  ),
                   onChanged: (value) async {
                     await controller.DelayReasonChangeMethod(value);
                     controller.update();
@@ -296,24 +296,24 @@ class LeaveScreen extends GetView<LeaveController> {
                 height: MediaQuery.of(context).size.width * 0.13,
                 width: MediaQuery.of(context).size.width * 0.40,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    await controller.saveLeaveEntryList("LV");
-                  },
-                  // onPressed: controller.isLoading.value
-                  //     ? null
-                  //     : () async {
-                  //         await controller.saveLeaveEntryList("LV");
-                  //       },
+                  onPressed: controller.isSaveBtnLoading
+                      ? null
+                      : () async {
+                          await controller.saveLeaveEntryList("LV");
+                          controller.update();
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.lightgreen,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text(
-                    AppString.save,
-                    style: AppStyle.black.copyWith(fontSize: 20),
-                  ),
+                  child: controller.isSaveBtnLoading
+                      ? const CircularProgressIndicator()
+                      : Text(
+                          AppString.save,
+                          style: AppStyle.black.copyWith(fontSize: 20),
+                        ),
                 ),
               ),
             ],

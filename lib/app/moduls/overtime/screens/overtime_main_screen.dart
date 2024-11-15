@@ -39,6 +39,7 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
     return GetBuilder<OvertimeController>(builder: (controller) {
       return DefaultTabController(
         length: 2,
+        initialIndex: 0,
         child: Scaffold(
             backgroundColor: AppColor.white,
             key: _scaffoldKeyOT,
@@ -50,7 +51,7 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                           child: ProgressWithIcon(),
                         ),
                       )
-                    : leaveController.otHeaderList.isNotEmpty
+                    : controller.otHeaderList.isNotEmpty
                         ? ListView(
                             children: [
                               Padding(
@@ -82,8 +83,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                                leaveController.otentryList.isNotEmpty
-                                                    ? leaveController.otHeaderList[0].department.toString()
+                                                controller.otHeaderList.isNotEmpty
+                                                    ? controller.otHeaderList[0].department.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
@@ -135,8 +136,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                             child: Padding(
                                               padding: const EdgeInsets.all(10),
                                               child: Text(
-                                                  leaveController.otHeaderList.isNotEmpty
-                                                      ? leaveController.otHeaderList[0].deptInc.toString()
+                                                  controller.otHeaderList.isNotEmpty
+                                                      ? controller.otHeaderList[0].deptInc.toString()
                                                       : '--:--',
                                                   style: AppStyle.plus500.copyWith(
                                                     fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -184,8 +185,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                                leaveController.otHeaderList.isNotEmpty
-                                                    ? leaveController.otHeaderList[0].deptHOD.toString()
+                                                controller.otHeaderList.isNotEmpty
+                                                    ? controller.otHeaderList[0].deptHOD.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(
                                                   fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -227,8 +228,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                                leaveController.otHeaderList.isNotEmpty
-                                                    ? leaveController.otHeaderList[0].subDept.toString()
+                                                controller.otHeaderList.isNotEmpty
+                                                    ? controller.otHeaderList[0].subDept.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
@@ -268,8 +269,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: Text(
-                                                leaveController.otHeaderList.isNotEmpty
-                                                    ? leaveController.otHeaderList[0].subDeptInc.toString()
+                                                controller.otHeaderList.isNotEmpty
+                                                    ? controller.otHeaderList[0].subDeptInc.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(fontSize: MediaQuery.of(context).size.width * 0.04)),
                                           ),
@@ -306,7 +307,9 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                   return IconButton(
                     onPressed: () async {
                       Scaffold.of(context).openEndDrawer();
-                      if (leaveController.otHeaderList.isEmpty) await leaveController.fetchHeaderList("OT");
+                      if (controller.otHeaderList.isEmpty) {
+                        await controller.fetchHeaderList("OT");
+                      }
                     },
                     icon: SvgPicture.asset(AppImage.drawersvg, height: 15, width: 15),
                   );
@@ -334,8 +337,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                       dividerColor: AppColor.trasparent,
                       indicatorSize: TabBarIndicatorSize.tab,
                       onTap: (value) async {
-                        if (leaveController.otHeaderList.isEmpty) {
-                          await leaveController.fetchHeaderList("OT");
+                        if (controller.otHeaderList.isEmpty) {
+                          await controller.fetchHeaderList("OT");
                         }
                         await controller.changeTab(value);
                       },

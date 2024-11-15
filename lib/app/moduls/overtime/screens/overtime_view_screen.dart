@@ -9,7 +9,7 @@ import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OvertimeViewScreen extends StatelessWidget {
+class OvertimeViewScreen extends GetView<OvertimeController> {
   const OvertimeViewScreen({Key? key}) : super(key: key);
 
   @override
@@ -35,7 +35,7 @@ class OvertimeViewScreen extends StatelessWidget {
                               child: ProgressWithIcon(),
                             ),
                           )
-                        : leaveController.otentryList.isNotEmpty
+                        : controller.otentryList.isNotEmpty
                             ? Column(
                                 children: [
                                   SizedBox(
@@ -81,33 +81,32 @@ class OvertimeViewScreen extends StatelessWidget {
                                               ),
                                             ],
                                             rows: List.generate(
-                                              leaveController.otentryList.length,
+                                              controller.otentryList.length,
                                               (index) => DataRow(
                                                 onSelectChanged: (selected) {
                                                   if (selected!) {
-                                                    leaveController.inchargeAction.value =
-                                                        leaveController.otentryList[index].inchargeAction ?? '';
-                                                    leaveController.hodAction.value = leaveController.otentryList[index].hodAction ?? '';
-                                                    leaveController.hrAction.value = leaveController.otentryList[index].hrAction ?? '';
-                                                    leaveController.update();
+                                                    controller.inchargeAction.value = controller.otentryList[index].inchargeAction ?? '';
+                                                    controller.hodAction.value = controller.otentryList[index].hodAction ?? '';
+                                                    controller.hrAction.value = controller.otentryList[index].hrAction ?? '';
+                                                    controller.update();
                                                   } else {
-                                                    leaveController.inchargeAction = ''.obs;
-                                                    leaveController.hodAction = ''.obs;
-                                                    leaveController.hrAction = ''.obs;
-                                                    leaveController.update();
+                                                    controller.inchargeAction = ''.obs;
+                                                    controller.hodAction = ''.obs;
+                                                    controller.hrAction = ''.obs;
+                                                    controller.update();
                                                   }
                                                 },
                                                 cells: [
                                                   DataCell(Text(
-                                                    leaveController.otentryList[index].fromDate.toString(),
+                                                    controller.otentryList[index].fromDate.toString(),
                                                     style: AppStyle.fontfamilyplus,
                                                   )),
                                                   DataCell(Text(
-                                                    leaveController.otentryList[index].toDate.toString(),
+                                                    controller.otentryList[index].toDate.toString(),
                                                     style: AppStyle.fontfamilyplus,
                                                   )),
                                                   DataCell(Text(
-                                                    leaveController.otentryList[index].overTimeMinutes.toString(),
+                                                    controller.otentryList[index].overTimeMinutes.toString(),
                                                     style: AppStyle.fontfamilyplus,
                                                   )),
                                                   DataCell(
@@ -175,9 +174,9 @@ class OvertimeViewScreen extends StatelessWidget {
                                               1, // Adjust number of rows as needed
                                               (index) => DataRow(
                                                 cells: [
-                                                  DataCell(getStatusImage(leaveController.otentryList[index].inchargeAction.toString())),
-                                                  DataCell(getStatusImage(leaveController.otentryList[index].hodAction.toString())),
-                                                  DataCell(getStatusImage(leaveController.otentryList[index].hrAction.toString())),
+                                                  DataCell(getStatusImage(controller.inchargeAction.toString())),
+                                                  DataCell(getStatusImage(controller.hodAction.toString())),
+                                                  DataCell(getStatusImage(controller.hrAction.toString())),
                                                 ],
                                               ),
                                             ),
@@ -242,7 +241,7 @@ class OvertimeViewScreen extends StatelessWidget {
               ),
               child: GetBuilder<OvertimeController>(
                 builder: (controller) {
-                  return leaveController.otentryList.isNotEmpty
+                  return controller.otentryList.isNotEmpty
                       ? SingleChildScrollView(
                           controller: scrollController,
                           child: Column(
@@ -290,13 +289,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].otHours.toString(),
+                                                controller.otentryList[index].otHours.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -329,13 +328,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].note.toString(),
+                                                controller.otentryList[index].note.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -368,13 +367,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].inchargeNote.toString(),
+                                                controller.otentryList[index].inchargeNote.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -407,13 +406,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].inchargeReason.toString(),
+                                                controller.otentryList[index].inchargeReason.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -446,13 +445,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].hodReason.toString(),
+                                                controller.otentryList[index].hodReason.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -485,13 +484,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].hoDNote.toString(),
+                                                controller.otentryList[index].hoDNote.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -524,13 +523,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].hrNote.toString(),
+                                                controller.otentryList[index].hrNote.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -563,13 +562,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].hrReason.toString(),
+                                                controller.otentryList[index].hrReason.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -602,13 +601,13 @@ class OvertimeViewScreen extends StatelessWidget {
                                             )),
                                       ),
                                     ),
-                                    leaveController.otentryList.isNotEmpty
+                                    controller.otentryList.isNotEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                             child: Align(
                                               alignment: Alignment.centerLeft,
                                               child: Text(
-                                                leaveController.otentryList[index].lateReasonName.toString(),
+                                                controller.otentryList[index].lateReasonName.toString(),
                                                 style: AppStyle.fontfamilyplus,
                                               ),
                                             ),
@@ -634,7 +633,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                       child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            'Emp Entry D/T : ${leaveController.otentryList[index].enterDate}',
+                                            'Emp Entry D/T : ${controller.otentryList[index].enterDate}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500, //20
@@ -647,7 +646,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                       child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            'Dept InC D/T : ${leaveController.otentryList[index].inchargeDate}',
+                                            'Dept InC D/T : ${controller.otentryList[index].inchargeDate}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500, //20
@@ -660,7 +659,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                       child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            'Dept HOD D/T : ${leaveController.otentryList[index].hodDate}',
+                                            'Dept HOD D/T : ${controller.otentryList[index].hodDate}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500, //20
@@ -673,7 +672,7 @@ class OvertimeViewScreen extends StatelessWidget {
                                       child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            'Dept HR D/T : ${leaveController.otentryList[index].hrDate}',
+                                            'Dept HR D/T : ${controller.otentryList[index].hrDate}',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500, //20

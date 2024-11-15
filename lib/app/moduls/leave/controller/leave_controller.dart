@@ -28,12 +28,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   final ApiController apiController = Get.put(ApiController());
   List<LeaveNamesTable> leavename = [];
   List<LeaveEntryList> leaveentryList = [];
-  List<LeaveEntryList> otentryList = [];
   List<HeaderList> leaveHeaderList = [];
-  List<HeaderList> otHeaderList = [];
   List<SaveLeaveEntryList> saveleaveentrylist = [];
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = false;
+  bool isSaveBtnLoading = false;
   var leftleavedays = ''.obs;
   var dropdownItems123 = <DropdownlstTable>[].obs;
 
@@ -76,8 +75,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     currentTabIndex.value = 0;
     changeTab(0);
     noteController.text = "";
-    // notesFocusNode = FocusNode();
-    // await getLeaveDays();
     await fetchLeaveNames();
     await fetchLeaveReason();
     await fetchLeaveReliverName();
@@ -85,6 +82,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
 
     fromDateController.addListener(updateLeaveDays);
     toDateController.addListener(updateLeaveDays);
+    // isLoading = false;
     update();
 
     leaveScrollController.addListener(() {
@@ -117,7 +115,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     // leaveScrollController.dispose();
     noteController.dispose();
     notesFocusNode.dispose();
-    tabController_Leave.dispose();
+    // tabController_Leave.dispose();
     super.onClose();
   }
 
@@ -332,7 +330,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (leaveNames.statusCode == 200) {
         leavename.clear();
         leavename = leaveNames.data!;
-
+        isLoading = false;
         // leavename.addAll(leaveNames.data?.map((e) => e.name ?? "").toList() ?? []);
       } else if (leaveNames.statusCode == 401) {
         pref.clear();
@@ -348,6 +346,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       isLoading = false;
       update();
     }
+    isLoading = false;
     return [];
   }
 
@@ -403,7 +402,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (rsponseLeaveReason.statusCode == 200) {
         leavereason.clear();
         leavereason.assignAll(rsponseLeaveReason.data ?? []);
-        // print(leavereason);
+        isLoading = false;
       } else if (rsponseLeaveReason.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -418,6 +417,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       isLoading = false;
       update();
     }
+    isLoading = false;
     return leavereason.toList();
   }
 
@@ -437,6 +437,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (responseLeaveReliverName.statusCode == 200) {
         leaverelivername.clear();
         leaverelivername.assignAll(responseLeaveReliverName.data ?? []);
+        isLoading = false;
       } else if (responseLeaveReliverName.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -451,6 +452,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       isLoading = false;
       update();
     }
+    isLoading = false;
     return [];
   }
 
@@ -470,6 +472,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (rsponseLeaveDelayReason.statusCode == 200) {
         leavedelayreason.clear();
         leavedelayreason.assignAll(rsponseLeaveDelayReason.data ?? []);
+        isLoading = false;
       } else if (rsponseLeaveDelayReason.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -484,6 +487,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       isLoading = false;
       update();
     }
+    isLoading = false;
     return [];
   }
 
@@ -502,21 +506,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (responseHeaderList.statusCode == 200) {
         if (responseHeaderList.data != null && responseHeaderList.data!.isNotEmpty) {
           isLoading = false;
-          if (flag == "LV") {
-            leaveHeaderList = responseHeaderList.data!;
-            update();
-            return leaveHeaderList;
-          } else {
-            otHeaderList = responseHeaderList.data!;
-            // update();
-            overtimeController.update();
-            return otHeaderList;
-          }
+          leaveHeaderList = responseHeaderList.data!;
+          update();
+          return leaveHeaderList;
         } else {
-          if (flag == "LV")
-            leaveentryList = [];
-          else
-            otentryList = [];
+          leaveentryList = [];
         }
       } else if (responseHeaderList.statusCode == 401) {
         pref.clear();
@@ -528,7 +522,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
-      // overtimeController.update();
     } catch (e) {
       isLoading = false;
       update();
@@ -552,21 +545,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (responseLeaveEntryList.statusCode == 200) {
         if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
           isLoading = false;
-          if (flag == "LV") {
-            leaveentryList = responseLeaveEntryList.data!;
-            update();
-            return leaveentryList;
-          } else {
-            otentryList = responseLeaveEntryList.data!;
-            // update();
-            overtimeController.update();
-            return otentryList;
-          }
+          leaveentryList = responseLeaveEntryList.data!;
+          update();
+          return leaveentryList;
         } else {
-          if (flag == "LV")
-            leaveentryList = [];
-          else
-            otentryList = [];
+          leaveentryList = [];
         }
       } else if (responseLeaveEntryList.statusCode == 401) {
         pref.clear();
@@ -578,7 +561,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
-      // overtimeController.update();
     } catch (e) {
       isLoading = false;
       update();
@@ -713,7 +695,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         return false;
       }
       if (overtimeController.otMinutesController.text.isEmpty || overtimeController.otMinutesController.text == null) {
-        Get.rawSnackbar(message: "Please select date");
+        Get.rawSnackbar(message: "Please select proper date & time");
         return false;
       }
     }
@@ -725,10 +707,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (!validateSaveLeaveEntry(flag)) {
         return [];
       }
-      // var overtimeController = Get.put(OvertimeController());
-      var overtimeController = Get.find<OvertimeController>();
-      // update();
-      isLoading = true;
+      isSaveBtnLoading = true;
+      update();
       String url = ConstApiUrl.empSaveLeaveEntryList;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -757,37 +737,31 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (responseSaveLeaveEntryList.statusCode == 200) {
         if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
           if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
+            isSaveBtnLoading = false;
             await fetchLeaveEntryList(flag);
-            // if (flag == 'LV') {
             resetForm();
             Get.rawSnackbar(message: "Data saved successfully");
-            // }
-            // else
-            //   resetForm();
-            // update();
           }
         } else {
           Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
         }
+        isSaveBtnLoading = false;
       } else if (responseSaveLeaveEntryList.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseSaveLeaveEntryList.statusCode == 400) {
-        isLoading = false;
+        isSaveBtnLoading = false;
         Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
-        // overtimeController.fromDateController.clear();
-        // overtimeController.toDateController.clear();
-        // overtimeController.fromTimeController.clear();
-        // overtimeController.toTimeController.clear();
       } else {
+        isSaveBtnLoading = false;
         Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
       }
-      // update();
     } catch (e) {
       print(e);
-      isLoading = false;
+      isSaveBtnLoading = false;
     }
+    isSaveBtnLoading = false;
     return [];
   }
 

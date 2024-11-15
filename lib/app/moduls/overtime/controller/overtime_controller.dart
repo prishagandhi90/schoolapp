@@ -1,16 +1,25 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
+
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
+import 'package:emp_app/app/moduls/leave/model/headerlist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leave_saveentrylist_model.dart';
+import 'package:emp_app/app/moduls/leave/model/leaveentrylist_model.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OvertimeController extends GetxController with SingleGetTickerProviderMixin {
   final bottomBarController = Get.put(BottomBarController());
   bool isLoading = false;
+  bool isSaveBtnLoading = false;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
   DateTime? selectedFromDate;
@@ -36,14 +45,25 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   TextEditingController delayreasonName_OT_Controller = TextEditingController();
   TextEditingController delayreasonId_OT_Controller = TextEditingController();
 
+  List<HeaderList> otHeaderList = [];
+  List<LeaveEntryList> otentryList = [];
+
+  var inchargeAction = ''.obs;
+  var hodAction = ''.obs;
+  var hrAction = ''.obs;
+
   @override
   void onInit() {
+    super.onInit();
     tabController_OT = TabController(length: 2, vsync: this);
     tabController_OT.addListener(_handleTabSelection);
     currentTabIndex.value = 0;
     changeTab(0);
     noteController.text = "";
-    super.onInit();
+    isLoading = true;
+    // isSaveBtnLoading = false;
+
+    update();
   }
 
   @override
@@ -51,7 +71,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     // leaveScrollController.dispose();
     noteController.dispose();
     notesFocusNode.dispose();
-    tabController_OT.dispose();
+    // tabController_OT.dispose();
     super.onClose();
   }
 
@@ -64,8 +84,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     if (tabController_OT.indexIsChanging) {
       initialIndex.value = tabController_OT.index;
       if (tabController_OT.index == 1) {
-        final leaveController = Get.put(LeaveController());
-        await leaveController.fetchLeaveEntryList("OT");
+        // final leaveController = Get.put(LeaveController());
+        await fetchLeaveEntryList("OT");
       }
       update();
     }
@@ -74,9 +94,9 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   changeTab(int index) async {
     tabController_OT.animateTo(index);
     currentTabIndex.value = index;
-    final leaveController = Get.put(LeaveController());
-    if (index == 1 && leaveController.otentryList.isEmpty) {
-      await leaveController.fetchLeaveEntryList("OT"); // Fetch list only if not already fetched
+    // final leaveController = Get.put(LeaveController());
+    if (index == 1 && otentryList.isEmpty) {
+      await fetchLeaveEntryList("OT"); // Fetch list only if not already fetched
     }
     update();
   }
@@ -112,6 +132,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
       return true;
     } else {
       // If selectedFromDateTime is after selectedToDateTime, return false
+      otMinutesController.text = "";
       return false;
     }
   }
@@ -209,12 +230,199 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   //   return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
   // }
 
-  Future<List<SaveLeaveEntryList>> saveOTEntryList(String flag) async {
-    // var leaveController = Get.put(LeaveController());
-    var leaveController = Get.find<LeaveController>();
-    await leaveController.saveLeaveEntryList("OT");
-    // leaveController.resetForm();
-    // Get.rawSnackbar(message: "Data saved successfully");
+  // Future<List<SaveLeaveEntryList>> saveOTEntryList(String flag) async {
+  //   // var leaveController = Get.find<LeaveController>();
+  //   isSaveBtnLoading = true;
+  //   await saveLeaveEntryList("OT");
+  //   isSaveBtnLoading = false;
+  //   // leaveController.resetForm();
+  //   // Get.rawSnackbar(message: "Data saved successfully");
+  //   return [];
+  // }
+
+  Future<List<HeaderList>> fetchHeaderList(String flag) async {
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empLeaveHeaderList;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseHeaderList responseHeaderList = ResponseHeaderList.fromJson(jsonDecode(response));
+
+      if (responseHeaderList.statusCode == 200) {
+        if (responseHeaderList.data != null && responseHeaderList.data!.isNotEmpty) {
+          isLoading = false;
+          otHeaderList = responseHeaderList.data!;
+          update();
+          return otHeaderList;
+        } else {
+          otentryList = [];
+        }
+      } else if (responseHeaderList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseHeaderList.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+    }
+    isLoading = false;
     return [];
+  }
+
+  Future<List<LeaveEntryList>> fetchLeaveEntryList(String flag) async {
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empLeaveEntryListAPI;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveEntryList responseLeaveEntryList = ResponseLeaveEntryList.fromJson(jsonDecode(response));
+
+      if (responseLeaveEntryList.statusCode == 200) {
+        if (responseLeaveEntryList.data != null && responseLeaveEntryList.data!.isNotEmpty) {
+          isLoading = false;
+          otentryList = responseLeaveEntryList.data!;
+          update();
+          return otentryList;
+        } else {
+          otentryList = [];
+        }
+      } else if (responseLeaveEntryList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseLeaveEntryList.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+      // overtimeController.update();
+    } catch (e) {
+      isLoading = false;
+      update();
+    }
+    isLoading = false;
+    return [];
+  }
+
+  Future<List<SaveLeaveEntryList>> saveLeaveEntryList(String flag) async {
+    try {
+      var leaveController = Get.find<LeaveController>();
+      if (!leaveController.validateSaveLeaveEntry(flag)) {
+        return [];
+      }
+
+      isSaveBtnLoading = true;
+      update();
+      String url = ConstApiUrl.empSaveLeaveEntryList;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "entryType": flag,
+        "leaveShortName": "OT",
+        "leaveFullName": "OT",
+        "fromdate": formatOTDateTime('FromDateTime'),
+        "todate": formatOTDateTime('ToDateTime'),
+        "reason": "OT",
+        "note": noteController.text,
+        "leaveDays": 0,
+        "overTimeMinutes": int.tryParse(otMinutesController.text) ?? 0,
+        "usr_Nm": '',
+        "reliever_Empcode": '',
+        "delayLVNote": delayreasonId_OT_Controller.text,
+      };
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      print(response);
+      ResponseSaveLeaveEntryList responseSaveLeaveEntryList = ResponseSaveLeaveEntryList.fromJson(jsonDecode(response));
+      if (responseSaveLeaveEntryList.statusCode == 200) {
+        if (responseSaveLeaveEntryList.isSuccess == "true" && responseSaveLeaveEntryList.data?.isNotEmpty == true) {
+          if (responseSaveLeaveEntryList.data![0].savedYN == "Y") {
+            isSaveBtnLoading = false;
+            await fetchLeaveEntryList(flag);
+            leaveController.resetForm();
+            Get.rawSnackbar(message: "Data saved successfully");
+          }
+        } else {
+          Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
+        }
+        isSaveBtnLoading = false;
+      } else if (responseSaveLeaveEntryList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseSaveLeaveEntryList.statusCode == 400) {
+        isSaveBtnLoading = false;
+        Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
+      } else {
+        isSaveBtnLoading = false;
+        Get.rawSnackbar(message: responseSaveLeaveEntryList.message);
+      }
+      // update();
+    } catch (e) {
+      print(e);
+      // isLoading = false;
+      isSaveBtnLoading = false;
+    }
+    // isLoading = false;
+    isSaveBtnLoading = false;
+    return [];
+  }
+
+  String formatOTDateTime(String flag) {
+    String jsonDateTime = "";
+
+    if (flag == "FromDateTime") {
+      if (selectedFromDate != null && selectedFromTime != null) {
+        DateTime fromDateTime = DateTime(
+          selectedFromDate!.year,
+          selectedFromDate!.month,
+          selectedFromDate!.day,
+          selectedFromTime!.hour,
+          selectedFromTime!.minute,
+        );
+
+        // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
+        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+      } else {
+        throw Exception("FromDateTime or FromTime is null");
+      }
+    } else if (flag == "ToDateTime") {
+      if (selectedToDate != null && selectedToTime != null) {
+        DateTime toDateTime = DateTime(
+          selectedToDate!.year,
+          selectedToDate!.month,
+          selectedToDate!.day,
+          selectedToTime!.hour,
+          selectedToTime!.minute,
+        );
+
+        // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
+        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+      } else {
+        throw Exception("ToDateTime or ToTime is null");
+      }
+    } else {
+      throw Exception("Invalid flag provided. Use 'FromDateTime' or 'ToDateTime'.");
+    }
+
+    return jsonDateTime; // Return the formatted datetime string
   }
 }

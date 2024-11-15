@@ -36,13 +36,6 @@ class OtScreen extends GetView<OvertimeController> {
                           hintText: 'From',
                           onDateSelected: () async => await controller.selectDate(context, controller.fromDateController),
                         ),
-                        //     child: CustomDatePicker(
-                        //   hintText: "From",
-                        //   controllerValue: controller.fromDateController,
-                        //   onTap: () async {
-                        //     await controller.selectDate(context, controller.fromDateController);
-                        //   },
-                        // )
                       ),
                       SizedBox(
                         width: 10.0,
@@ -69,13 +62,6 @@ class OtScreen extends GetView<OvertimeController> {
                           hintText: 'To',
                           onDateSelected: () async => await controller.selectDate(context, controller.toDateController),
                         ),
-                        //     child: CustomDatePicker(
-                        //   hintText: "To",
-                        //   controllerValue: controller.toDateController,
-                        //   onTap: () async {
-                        //     await controller.selectDate(context, controller.toDateController);
-                        //   },
-                        // )
                       ),
                       SizedBox(
                         width: 10,
@@ -104,26 +90,6 @@ class OtScreen extends GetView<OvertimeController> {
                       color: AppColor.black,
                     ),
                   ),
-                  // TextFormField(
-                  //   readOnly: true,
-                  //   controller: controller.otMinutesController,
-                  //   decoration: InputDecoration(
-                  //     hintText: "Min",
-                  //      hintStyle: TextStyle(
-                  //   fontSize: 14,
-                  //   // fontWeight: FontWeight.bold,
-                  //   color: Colors.black,
-                  // ),
-                  //     enabledBorder: OutlineInputBorder(
-                  //       borderSide: BorderSide(color: AppColor.black),
-                  //       borderRadius: BorderRadius.circular(0),
-                  //     ),
-                  //     focusedBorder: OutlineInputBorder(
-                  //       borderSide: BorderSide(color: AppColor.black),
-                  //       borderRadius: BorderRadius.circular(0),
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: CustomTextFormField(
@@ -179,50 +145,29 @@ class OtScreen extends GetView<OvertimeController> {
                             ))
                         .toList(),
                   ),
-                  // CustomDropdown1(
-                  //   text: 'Late Reason',
-                  //   width: double.infinity,
-                  //   controller: controller.delayReasonController,
-                  //   items: leaveController.leavedelayreason
-                  //       .map((LeaveDelayReason item) => DropdownMenuItem<Map<String, String>>(
-                  //             value: {
-                  //               'value': item.id ?? '', // Use the value as the item value
-                  //               'text': item.name ?? '', // Display the name in the dropdown
-                  //             },
-                  //             child: Text(
-                  //               item.name ?? '', // Display the name in the dropdown
-                  //               style: const TextStyle(
-                  //                 fontSize: 14,
-                  //                 fontWeight: FontWeight.bold,
-                  //                 color: Colors.black,
-                  //               ),
-                  //               overflow: TextOverflow.ellipsis,
-                  //             ),
-                  //           ))
-                  //       .toList(),
-                  // ),
-
                   const SizedBox(height: 30),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.13,
                     width: MediaQuery.of(context).size.width * 0.40,
                     child: ElevatedButton(
-                      onPressed: () async {
-                        // if (controller.fromDateController.text.isEmpty ||
-                        //     controller.toDateController.text.isEmpty ||
-                        //     controller.otMinutesController.text.isEmpty) {
-                        //   Get.rawSnackbar(message: "Please fill all required fields");
-                        // } else {
-                        await controller.saveOTEntryList("OT");
-                        // }
-                      },
+                      onPressed: controller.isSaveBtnLoading
+                          ? null
+                          : () async {
+                              await controller.saveLeaveEntryList("OT");
+                              controller.update();
+                            },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.lightgreen,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Text(AppString.save, style: AppStyle.black.copyWith(fontSize: 20)),
+                      child: controller.isSaveBtnLoading
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              AppString.save,
+                              style: AppStyle.black.copyWith(fontSize: 20),
+                            ),
                     ),
                   ),
                 ],
