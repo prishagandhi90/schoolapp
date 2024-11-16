@@ -91,11 +91,16 @@ class AppString {
   static String hrnotes = "HR Notes";
   static String hrRejectReason = "HR Reject Reason";
   static String hours = "Hours";
-  
+
   //Duty Schedule
   static String dutyschedule = "Duty Schedule";
 
   static String keyToken = "KEY_TOKENNO";
   static String keyLoginId = "KEY_LOGINID";
   static String keyEmpId = "KEY_EMPID";
+
+  //pharmacy
+  static String pharmacy = "Pharmacy";
+  static String prescriptionviewer = "Prescription Viewer";
+  static String searchpatient = "Search Patient";
 }

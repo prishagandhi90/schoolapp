@@ -87,37 +87,21 @@ class DashboardController extends GetxController {
         );
         break;
       case 6:
-        Get.snackbar(
-          AppString.comingsoon,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        var bottomBarController = Get.put(BottomBarController());
+        hideBottomBar.value = false;
+        bottomBarController.onItemTapped(0, context);
+        // Get.snackbar(
+        //   AppString.comingsoon,
+        //   '',
+        //   colorText: AppColor.white,
+        //   backgroundColor: AppColor.black,
+        //   duration: const Duration(seconds: 1),
+        // );
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
         hideBottomBar.value = false;
         bottomBarController.onItemTapped(0, context);
-        // bottomBarController.persistentController.value.index = 0;
-        // bottomBarController.currentIndex.value = 0;
-        // Get.offAll(() => payrollScreen);
-        // Get.offAllNamed(Routes.Payroll)!.then((value) {
-        //   hideBottomBar.value = false;
-        //   getDashboardDataUsingToken();
-        // });
-
-        // PersistentNavBarNavigator.pushNewScreen(
-        //   context,
-        //   screen: PayrollScreen(),
-        //   // screen: payrollScreen,
-        //   withNavBar: true,
-        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        // ).then((value) {
-        //   // bottomBarController.resetAndInitialize();
-        //   // hideBottomBar.value = false;
-        //   getDashboardDataUsingToken();
-        // });
 
         break;
       case 8:

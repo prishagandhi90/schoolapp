@@ -1,0 +1,77 @@
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/pharmacy/controller/pharmacy_controller.dart';
+import 'package:emp_app/app/pharmacy/screen/presviewer_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class PharmacyScreen extends StatelessWidget {
+  const PharmacyScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Get.put(PharmacyController());
+    return Scaffold(
+      backgroundColor: AppColor.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          AppString.pharmacy,
+          style: TextStyle(
+            color: AppColor.primaryColor,
+            fontWeight: FontWeight.w700,
+            fontFamily: CommonFontStyle.plusJakartaSans,
+          ),
+        ),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Image.asset(
+                AppImage.drawer,
+                width: 20,
+                color: AppColor.black,
+              ),
+            );
+          },
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                AppImage.notification,
+                width: 20,
+              ))
+        ],
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: GestureDetector(
+              onTap: () => Get.to(PresviewerScreen()),
+              child: Container(
+                height: 70,
+                width: double.infinity,
+                decoration: BoxDecoration(color: AppColor.lightblue),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text(
+                    'Prescription Viewer',
+                    style: AppStyle.plus17w600,
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
