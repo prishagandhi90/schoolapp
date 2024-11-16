@@ -17,6 +17,7 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
+  RxBool isPharmacyHome = false.obs;
 
   @override
   void onInit() {
@@ -28,7 +29,8 @@ class BottomBarController extends GetxController {
 
   List<Widget> buildScreens() {
     return [
-      PharmacyScreen(),
+      // PharmacyScreen(),
+      Obx(() => isPharmacyHome.value ? PharmacyScreen() : PayrollScreen()), // Use condition here
       // attendanceScreen,
       AttendanceScreen(),
       const Dashboard1Screen(),
@@ -39,26 +41,15 @@ class BottomBarController extends GetxController {
     ];
   }
 
-  // onItemTapped(int index, BuildContext context) async {
-  //   // Get.delete<MispunchController>();
-  //   hideBottomBar.value = false;
-  //   persistentController.update((val) {
-  //     val?.index = index;
-  //   });
-  //   currentIndex.value = index;
-
-  //   if (index == 1) {
-  //     final attendanceController = Get.put(AttendenceController());
-  //     await attendanceController.resetData(); // Call resetData or any other method to reset the state
-  //     // attendanceController.initialIndex.value = 0;
-  //     // attendanceController.update();
-  //   }
-  //   update();
+  // void toggleHomeScreen(bool showPharmacy) {
+  //   isPharmacyHome.value = showPharmacy; // Update condition dynamically
+  //   update(); // Refresh UI
   // }
 
-  onItemTapped(int index, BuildContext context) async {
+  onItemTapped(int index, bool showPharmacy, BuildContext context) async {
     currentIndex.value = index;
     hideBottomBar.value = false;
+    isPharmacyHome.value = showPharmacy;
 
     if (index == 1) {
       final attendanceController = Get.put(AttendenceController());
@@ -96,10 +87,12 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home, color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.home,
+                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.home,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -130,7 +123,8 @@ class BottomBarController extends GetxController {
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.attendence,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -156,7 +150,8 @@ class BottomBarController extends GetxController {
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.dashboard,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -178,10 +173,12 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.leave, color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.leave,
+                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.leave,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),
@@ -207,7 +204,8 @@ class BottomBarController extends GetxController {
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.overtime,
-                  style: TextStyle(color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                  style: TextStyle(
+                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/pharmacy/controller/pharmacy_controller.dart';
 import 'package:emp_app/app/pharmacy/screen/presdetails_screen.dart';
 import 'package:emp_app/main.dart';
@@ -32,13 +33,16 @@ class PresviewerScreen extends StatelessWidget {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    final bottomBarController = Get.find<BottomBarController>();
-                    bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
-                    bottomBarController.currentIndex.value = 0;
-                    hideBottomBar.value = false;
-                    Get.back();
-                  });
+                  const a = 1;
+                  // WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final bottomBarController = Get.find<BottomBarController>();
+                  bottomBarController.isPharmacyHome.value = true;
+                  bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                  bottomBarController.currentIndex.value = 0;
+                  hideBottomBar.value = false;
+                  // Get.back();
+                  Get.offAll(() => BottomBarView());
+                  // });
                 },
               ),
               actions: [

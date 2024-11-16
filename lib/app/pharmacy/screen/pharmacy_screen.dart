@@ -3,10 +3,14 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/pharmacy/controller/pharmacy_controller.dart';
 import 'package:emp_app/app/pharmacy/screen/presviewer_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class PharmacyScreen extends StatelessWidget {
   const PharmacyScreen({Key? key}) : super(key: key);
@@ -55,7 +59,31 @@ class PharmacyScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: GestureDetector(
-              onTap: () => Get.to(PresviewerScreen()),
+              // onTap: () => Get.to(PresviewerScreen()),
+              onTap: () {
+                final bottomBarController = Get.put(BottomBarController());
+                bottomBarController.currentIndex.value = -1;
+
+                // // Get.delete<MispunchController>();
+                // final presviewerScreen = Get.put(PresviewerScreen());
+                // presviewerScreen.resetData();
+                // presviewerScreen.update();
+                // // Get.put(MispunchScreen());
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: PresviewerScreen(),
+                  withNavBar: true,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                ).then((value) async {
+                  // final bottomBarController = Get.find<BottomBarController>();
+                  bottomBarController.persistentController.value.index = 0;
+                  bottomBarController.currentIndex.value = 0;
+                  bottomBarController.isPharmacyHome.value = true;
+                  hideBottomBar.value = false;
+                  var dashboardController = Get.put(DashboardController());
+                  await dashboardController.getDashboardDataUsingToken();
+                });
+              },
               child: Container(
                 height: 70,
                 width: double.infinity,
