@@ -53,6 +53,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   var initialIndex = 0.obs;
   late TabController tabController_Leave;
   RxInt currentTabIndex = 0.obs;
+  int? selectedRowIndex; // Track the selected row index
 
   TextEditingController leftLeaveDaysController = TextEditingController();
   TextEditingController fromDateController = TextEditingController();
@@ -218,6 +219,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
           )
           .toList(),
     );
+  }
+
+  void setSelectedRow(int index) {
+    selectedRowIndex = index;
+    // update(); // Notify the UI to rebuild
   }
 
   Future<void> selectFromDate(BuildContext context) async {

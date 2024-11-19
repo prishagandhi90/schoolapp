@@ -4,6 +4,7 @@ import 'package:emp_app/app/app_custom_widget/custom_stepper.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/dropdown_model.dart';
@@ -36,7 +37,15 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.snackbar(
+                      AppString.comingsoon,
+                      '',
+                      colorText: AppColor.white,
+                      backgroundColor: AppColor.black,
+                      duration: const Duration(seconds: 1),
+                    );
+                  },
                   icon: Image.asset(AppImage.notification, width: 20),
                 )
               ],

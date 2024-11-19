@@ -53,6 +53,10 @@ class PresviewerList {
   String? printUserName;
   String? printDateTime;
   String? rxCtgr;
+  String? doctor;
+  String? mop;
+  String? dte;
+  String? intercom;
 
   PresviewerList(
       {this.srNo,
@@ -74,7 +78,11 @@ class PresviewerList {
       this.printStatus,
       this.printUserName,
       this.printDateTime,
-      this.rxCtgr});
+      this.rxCtgr,
+      this.doctor,
+      this.mop,
+      this.dte,
+      this.intercom});
 
   PresviewerList.fromJson(Map<String, dynamic> json) {
     srNo = json['srNo'];
@@ -97,6 +105,10 @@ class PresviewerList {
     printUserName = json['printUserName'];
     printDateTime = json['printDateTime'];
     rxCtgr = json['rxCtgr'];
+    doctor = json['doctor'];
+    mop = json['mop'];
+    dte = json['dte'];
+    intercom = json['intercom'];
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +133,10 @@ class PresviewerList {
     data['printUserName'] = this.printUserName;
     data['printDateTime'] = this.printDateTime;
     data['rxCtgr'] = this.rxCtgr;
+    data['doctor'] = this.doctor;
+    data['mop'] = this.mop;
+    data['dte'] = this.dte;
+    data['intercom'] = this.intercom;
     return data;
   }
 }

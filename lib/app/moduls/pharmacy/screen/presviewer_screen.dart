@@ -4,11 +4,13 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
-import 'package:emp_app/app/pharmacy/controller/pharmacy_controller.dart';
-import 'package:emp_app/app/pharmacy/screen/presdetails_screen.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
+import 'package:emp_app/app/moduls/pharmacy/screen/presdetails_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class PresviewerScreen extends StatelessWidget {
   PresviewerScreen({Key? key}) : super(key: key);
@@ -33,7 +35,6 @@ class PresviewerScreen extends StatelessWidget {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  const a = 1;
                   // WidgetsBinding.instance.addPostFrameCallback((_) {
                   final bottomBarController = Get.find<BottomBarController>();
                   bottomBarController.isPharmacyHome.value = true;
@@ -47,7 +48,15 @@ class PresviewerScreen extends StatelessWidget {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.snackbar(
+                        AppString.comingsoon,
+                        '',
+                        colorText: AppColor.white,
+                        backgroundColor: AppColor.black,
+                        duration: const Duration(seconds: 1),
+                      );
+                    },
                     icon: Image.asset(
                       AppImage.notification,
                       width: 20,
@@ -136,7 +145,7 @@ class PresviewerScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          // margin: const EdgeInsets.symmetric(vertical: 8.0),
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                           decoration: BoxDecoration(
                             color: AppColor.lightblue,
@@ -175,8 +184,26 @@ class PresviewerScreen extends StatelessWidget {
                                         ),
                                         child: IconButton(
                                           icon: Icon(Icons.shopping_cart, size: 18),
-                                          onPressed: () {
-                                            Get.to(PresdetailsScreen());
+                                          onPressed: () async {
+                                            controller.SelectedIndex = index;
+                                            await controller.fetchpresDetailList(controller.presviewerList[index].mstId.toString());
+
+                                            final bottomBarController = Get.put(BottomBarController());
+                                            bottomBarController.currentIndex.value = -1;
+                                            PersistentNavBarNavigator.pushNewScreen(
+                                              context,
+                                              screen: PresdetailsScreen(),
+                                              withNavBar: true,
+                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            ).then((value) async {
+                                              // final bottomBarController = Get.find<BottomBarController>();
+                                              bottomBarController.persistentController.value.index = 0;
+                                              bottomBarController.currentIndex.value = 0;
+                                              bottomBarController.isPharmacyHome.value = true;
+                                              hideBottomBar.value = false;
+                                              var dashboardController = Get.put(DashboardController());
+                                              await dashboardController.getDashboardDataUsingToken();
+                                            });
                                           },
                                         ),
                                       ),
@@ -189,23 +216,51 @@ class PresviewerScreen extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Print St: ${controller.presviewerList[index].printStatus.toString()}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Print St: ', // Heading
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold, // Bold style for heading
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: controller.presviewerList[index].printStatus.toString(), // Data
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500, // Normal weight for data
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Expanded(
                                       child: Align(
                                         alignment: Alignment.center,
-                                        child: Text(
-                                          'Priority: ${controller.presviewerList[index].priority.toString()}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: 'Priority: ', // Heading
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold, // Bold style for heading
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: controller.presviewerList[index].priority.toString(), // Data
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500, // Normal weight for data
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
@@ -217,12 +272,26 @@ class PresviewerScreen extends StatelessWidget {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
-                                    Text(
-                                      'Last User: ${controller.presviewerList[index].lastUser.toString()}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Last User: ', // Heading
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold, // Bold style for heading
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: controller.presviewerList[index].lastUser.toString(), // Data
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500, // Normal weight for data
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -231,28 +300,53 @@ class PresviewerScreen extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    // 'Print St: ${data[index]['priority']}' ko as it is rakha gaya hai
-                                    Text(
-                                      'IPD No: ${controller.presviewerList[index].ipd.toString()}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'IPD No: ', // Heading
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold, // Bold style for heading
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: controller.presviewerList[index].ipd.toString(), // Data
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500, // Normal weight for data
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-
-                                    // Second text ko thoda center align karna hai, isliye use Expanded kiya hai
                                     Expanded(
                                       child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'RX Status: ${controller.presviewerList[index].rxStatus.toString()}',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                        alignment: Alignment.topRight,
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: 'RX Status: ', // Heading
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold, // Bold style for heading
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: controller.presviewerList[index].rxStatus.toString(), // Data
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w500, // Normal weight for data
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
@@ -260,16 +354,6 @@ class PresviewerScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              // Padding(
-                              //   padding: const EdgeInsets.all(8.0),
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              //       Text('IPD No: ${data[index]['ipdNo']}'),
-                              //       Text('RX Status: ${data[index]['rxStatus']}'),
-                              //     ],
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),

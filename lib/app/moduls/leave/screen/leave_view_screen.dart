@@ -36,91 +36,81 @@ class LeaveViewScreen extends GetView<LeaveController> {
                         : controller.leaveentryList.isNotEmpty
                             ? Column(
                                 children: [
+                                  // Sticky Header
+                                  Container(
+                                    color: AppColor.primaryColor,
+                                    child: Row(
+                                      children: [
+                                        buildHeaderCell(AppString.from, constraints.maxWidth * 0.3),
+                                        buildHeaderCell(AppString.to, constraints.maxWidth * 0.3),
+                                        buildHeaderCell(AppString.days, constraints.maxWidth * 0.2),
+                                        buildHeaderCell('', constraints.maxWidth * 0.2),
+                                      ],
+                                    ),
+                                  ),
+                                  // Scrollable Table Rows
                                   SizedBox(
-                                    height: constraints.maxHeight * 0.6, // Half screen height
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            minWidth: constraints.maxWidth,
-                                          ),
-                                          child: DataTable(
-                                            showCheckboxColumn: false,
-                                            headingRowColor: WidgetStateColor.resolveWith(
-                                              (states) => AppColor.primaryColor,
+                                    height: constraints.maxHeight * 0.5, // Set a fixed height for the table
+                                    child: ListView.builder(
+                                      itemCount: controller.leaveentryList.length,
+                                      itemBuilder: (context, index) {
+                                        final row = controller.leaveentryList[index];
+                                        final isSelected = controller.selectedRowIndex == index; // Check if row is selected
+
+                                        return GestureDetector(
+                                          onTap: () {
+                                            // Trigger API Call here
+                                            // controller.callApiForRow(row);
+                                            controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '';
+                                            controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '';
+                                            controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '';
+                                            controller.setSelectedRow(index);
+                                            controller.update();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: isSelected ? AppColor.lightblue : AppColor.white,
+                                              border: Border(
+                                                bottom: BorderSide(color: AppColor.lightgrey, width: 0.5),
+                                              ),
                                             ),
-                                            columnSpacing: 20, // Adjust column spacing if needed
-                                            columns: [
-                                              DataColumn(
-                                                label: Text(
-                                                  AppString.from,
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                              DataColumn(
-                                                label: Text(
-                                                  AppString.to,
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                              DataColumn(
-                                                label: Text(
-                                                  AppString.days,
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                              DataColumn(
-                                                label: Text(
-                                                  '', // Action column
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                            ],
-                                            rows: List.generate(
-                                              controller.leaveentryList.length,
-                                              (index) => DataRow(
-                                                onSelectChanged: (selected) {
-                                                  if (selected!) {
-                                                    controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '';
-                                                    controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '';
-                                                    controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '';
-                                                    controller.update();
-                                                  } else {
-                                                    controller.inchargeAction = ''.obs;
-                                                    controller.hodAction = ''.obs;
-                                                    controller.hrAction = ''.obs;
-                                                    controller.update();
-                                                  }
-                                                },
-                                                cells: [
-                                                  DataCell(Text(
-                                                    controller.leaveentryList[index].fromDate.toString(),
+                                            child: Row(
+                                              children: [
+                                                buildCell(
+                                                  Text(
+                                                    row.fromDate.toString(),
                                                     style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  DataCell(Text(
-                                                    controller.leaveentryList[index].toDate.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  DataCell(Text(
-                                                    controller.leaveentryList[index].leaveDays.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  DataCell(
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        leavebottomsheet(context, index);
-                                                      },
-                                                      child: const Icon(Icons.arrow_drop_down_circle),
-                                                    ),
                                                   ),
-                                                ],
-                                              ),
+                                                  constraints.maxWidth * 0.3,
+                                                ),
+                                                buildCell(
+                                                  Text(
+                                                    row.toDate.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  ),
+                                                  constraints.maxWidth * 0.3,
+                                                ),
+                                                buildCell(
+                                                  Text(
+                                                    row.leaveDays.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  ),
+                                                  constraints.maxWidth * 0.2,
+                                                ),
+                                                buildCell(
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      leavebottomsheet(context, index);
+                                                    },
+                                                    child: const Icon(Icons.arrow_drop_down_circle),
+                                                  ),
+                                                  constraints.maxWidth * 0.2,
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ),
                                   Padding(
@@ -152,19 +142,28 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                               DataColumn(
                                                 label: Text(
                                                   AppString.inCharge,
-                                                  style: AppStyle.fontfamilyplus,
+                                                  style: AppStyle.fontfamilyplus.copyWith(
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   AppString.hod,
-                                                  style: AppStyle.fontfamilyplus,
+                                                  style: AppStyle.fontfamilyplus.copyWith(
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   AppString.hr,
-                                                  style: AppStyle.fontfamilyplus,
+                                                  style: AppStyle.fontfamilyplus.copyWith(
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -182,7 +181,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         ),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               )
                             : Padding(
@@ -215,6 +214,35 @@ class LeaveViewScreen extends GetView<LeaveController> {
       default:
         return SizedBox(); // If the status is invalid or unknown
     }
+  }
+
+  Widget buildHeaderCell(String text, double width) {
+    return Container(
+      width: width,
+      padding: EdgeInsets.all(8),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: AppStyle.fontfamilyplus.copyWith(
+          color: AppColor.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  // Widget buildCell(Widget child) {
+  //   return Container(
+  //     padding: EdgeInsets.all(8),
+  //     child: child,
+  //   );
+  // }
+  Widget buildCell(Widget child, double width) {
+    return Container(
+      width: width,
+      padding: const EdgeInsets.all(8),
+      child: child,
+    );
   }
 
   Future<void> leavebottomsheet(BuildContext context, int index) async {

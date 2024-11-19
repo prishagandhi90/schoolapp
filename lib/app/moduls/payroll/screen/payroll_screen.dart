@@ -158,7 +158,15 @@ class PayrollScreen extends GetView<PayrollController> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.snackbar(
+                        AppString.comingsoon,
+                        '',
+                        colorText: AppColor.white,
+                        backgroundColor: AppColor.black,
+                        duration: const Duration(seconds: 1),
+                      );
+                    },
                     icon: Image.asset(
                       AppImage.notification,
                       width: 20,

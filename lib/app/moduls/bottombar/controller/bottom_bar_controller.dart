@@ -8,7 +8,7 @@ import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
-import 'package:emp_app/app/pharmacy/screen/pharmacy_screen.dart';
+import 'package:emp_app/app/moduls/pharmacy/screen/pharmacy_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
