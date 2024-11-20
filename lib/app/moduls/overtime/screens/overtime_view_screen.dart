@@ -38,91 +38,85 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                         : controller.otentryList.isNotEmpty
                             ? Column(
                                 children: [
+                                  Container(
+                                    color: AppColor.primaryColor,
+                                    child: Row(
+                                      children: [
+                                        buildHeaderCell(AppString.from, constraints.maxWidth * 0.3),
+                                        buildHeaderCell(AppString.to, constraints.maxWidth * 0.3),
+                                        buildHeaderCell(AppString.min, constraints.maxWidth * 0.2),
+                                        buildHeaderCell('', constraints.maxWidth * 0.2),
+                                      ],
+                                    ),
+                                  ),
                                   SizedBox(
-                                    height: constraints.maxHeight * 0.6, // Half screen height
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.vertical,
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            minWidth: constraints.maxWidth,
-                                          ),
-                                          child: DataTable(
-                                            showCheckboxColumn: false,
-                                            headingRowColor: WidgetStateColor.resolveWith(
-                                              (states) => AppColor.primaryColor,
+                                    height: constraints.maxHeight * 0.5, // Half screen height
+                                    child: ListView.builder(
+                                      itemCount: controller.otentryList.length,
+                                      itemBuilder: (context, index) {
+                                        final row = controller.otentryList[index];
+                                        final isSelected =
+                                            controller.selectedRowIndex == index; // Check if row is selected
+
+                                        return GestureDetector(
+                                          onTap: () {
+                                            controller.inchargeAction.value =
+                                                controller.otentryList[index].inchargeAction ?? '';
+                                            controller.hodAction.value = controller.otentryList[index].hodAction ?? '';
+                                            controller.hrAction.value = controller.otentryList[index].hrAction ?? '';
+                                            controller.setSelectedRow(index);
+                                            controller.update();
+                                            //   else {
+                                            //   controller.inchargeAction = ''.obs;
+                                            //   controller.hodAction = ''.obs;
+                                            //   controller.hrAction = ''.obs;
+                                            //   controller.update();
+                                            // }
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: isSelected ? AppColor.lightblue : AppColor.white,
+                                              border: Border(
+                                                bottom: BorderSide(color: AppColor.lightgrey, width: 0.5),
+                                              ),
                                             ),
-                                            columnSpacing: 20, // Adjust column spacing if needed
-                                            columns: [
-                                              DataColumn(
-                                                label: Text(
-                                                  AppString.from,
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                              DataColumn(
-                                                label: Text(
-                                                  AppString.to,
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                              DataColumn(
-                                                label: Text(
-                                                  AppString.min,
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                              DataColumn(
-                                                label: Text(
-                                                  '', // Action column
-                                                  style: AppStyle.fontfamilyplus,
-                                                ),
-                                              ),
-                                            ],
-                                            rows: List.generate(
-                                              controller.otentryList.length,
-                                              (index) => DataRow(
-                                                onSelectChanged: (selected) {
-                                                  if (selected!) {
-                                                    controller.inchargeAction.value = controller.otentryList[index].inchargeAction ?? '';
-                                                    controller.hodAction.value = controller.otentryList[index].hodAction ?? '';
-                                                    controller.hrAction.value = controller.otentryList[index].hrAction ?? '';
-                                                    controller.update();
-                                                  } else {
-                                                    controller.inchargeAction = ''.obs;
-                                                    controller.hodAction = ''.obs;
-                                                    controller.hrAction = ''.obs;
-                                                    controller.update();
-                                                  }
-                                                },
-                                                cells: [
-                                                  DataCell(Text(
-                                                    controller.otentryList[index].fromDate.toString(),
+                                            child: Row(
+                                              children: [
+                                                buildCell(
+                                                  Text(
+                                                    row.fromDate.toString(),
                                                     style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  DataCell(Text(
-                                                    controller.otentryList[index].toDate.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  DataCell(Text(
-                                                    controller.otentryList[index].overTimeMinutes.toString(),
-                                                    style: AppStyle.fontfamilyplus,
-                                                  )),
-                                                  DataCell(
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        oTbottomsheet(context, index);
-                                                      },
-                                                      child: const Icon(Icons.arrow_drop_down_circle),
-                                                    ),
                                                   ),
-                                                ],
-                                              ),
+                                                  constraints.maxWidth * 0.3,
+                                                ),
+                                                buildCell(
+                                                  Text(
+                                                    row.toDate.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  ),
+                                                  constraints.maxWidth * 0.3,
+                                                ),
+                                                buildCell(
+                                                  Text(
+                                                    row.overTimeMinutes.toString(),
+                                                    style: AppStyle.fontfamilyplus,
+                                                  ),
+                                                  constraints.maxWidth * 0.2,
+                                                ),
+                                                buildCell(
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      oTbottomsheet(context, index);
+                                                    },
+                                                    child: const Icon(Icons.arrow_drop_down_circle),
+                                                  ),
+                                                  constraints.maxWidth * 0.2,
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ),
                                   Padding(
@@ -154,19 +148,28 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                               DataColumn(
                                                 label: Text(
                                                   AppString.inCharge,
-                                                  style: AppStyle.fontfamilyplus,
+                                                  style: AppStyle.fontfamilyplus.copyWith(
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   AppString.hod,
-                                                  style: AppStyle.fontfamilyplus,
+                                                  style: AppStyle.fontfamilyplus.copyWith(
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                               DataColumn(
                                                 label: Text(
                                                   AppString.hr,
-                                                  style: AppStyle.fontfamilyplus,
+                                                  style: AppStyle.fontfamilyplus.copyWith(
+                                                    color: AppColor.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -188,7 +191,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                 ],
                               )
                             : Padding(
-                                padding: const EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(10),
                                 child: Center(
                                   child: Text(
                                     AppString.noleavedata,
@@ -217,6 +220,29 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
       default:
         return SizedBox(); // If the status is invalid or unknown
     }
+  }
+
+  Widget buildHeaderCell(String text, double width) {
+    return Container(
+      width: width,
+      padding: EdgeInsets.all(8),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: AppStyle.fontfamilyplus.copyWith(
+          color: AppColor.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget buildCell(Widget child, double width) {
+    return Container(
+      width: width,
+      padding: const EdgeInsets.all(8),
+      child: child,
+    );
   }
 
   Future<void> oTbottomsheet(BuildContext context, int index) async {
@@ -285,7 +311,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.hours,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -302,7 +330,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -324,7 +354,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.employeeNotes,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -341,7 +373,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -363,7 +397,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.inChargeNotes,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -380,7 +416,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -402,7 +440,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.inchargerejectreason,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -419,7 +459,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -441,7 +483,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.hodRejectReason,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -458,7 +502,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -480,7 +526,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.hodNotes,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -497,7 +545,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -519,7 +569,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.hrnotes,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -536,7 +588,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -558,7 +612,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.hrRejectReason,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -575,7 +631,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -597,7 +655,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.lateReason,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -614,7 +674,9 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -631,54 +693,105 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15),
                                       child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Emp Entry D/T : ${controller.otentryList[index].enterDate}',
+                                        alignment: Alignment.centerLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'Emp Entry D/T : ',
                                             style: TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
+                                              fontWeight: FontWeight.w700, // 20
                                               fontFamily: CommonFontStyle.plusJakartaSans,
+                                              color: Colors.white60, // Main text color
                                             ),
-                                          )),
+                                            children: [
+                                              TextSpan(
+                                                text: controller.otentryList[index].enterDate,
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500, // Slightly lighter
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  color: Colors.white38, // Lighter color for right side text
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Dept InC D/T : ${controller.otentryList[index].inchargeDate}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Dept Inc D/T : ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700, // 20
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            color: Colors.white60, // Main text color
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller.otentryList[index].inchargeDate,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500, // Slightly lighter
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                color: Colors.white38, // Lighter color for right side text
+                                              ),
                                             ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Dept HOD D/T : ${controller.otentryList[index].hodDate}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Dept HOD D/T : ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700, // 20
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            color: Colors.white60, // Main text color
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller.otentryList[index].hodDate,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500, // Slightly lighter
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                color: Colors.white38, // Lighter color for right side text
+                                              ),
                                             ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Dept HR D/T : ${controller.otentryList[index].hrDate}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Dept HR D/T : ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700, // 20
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            color: Colors.white60, // Main text color
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller.otentryList[index].hrDate,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500, // Slightly lighter
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                color: Colors.white38, // Lighter color for right side text
+                                              ),
                                             ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),

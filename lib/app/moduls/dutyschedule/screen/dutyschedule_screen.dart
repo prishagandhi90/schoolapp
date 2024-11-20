@@ -107,7 +107,10 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                           ),
                           child: Center(
                             child: Text(
-                              'Sp Ward(1st Floor)',
+                              controller.dutySchSftData.isNotEmpty &&
+                                      controller.dutySchSftData[0].dateColumnsValue != null
+                                  ? controller.dutySchSftData[0].subDepartment!
+                                  : "",
                               textAlign: TextAlign.center,
                             ),
                           ),

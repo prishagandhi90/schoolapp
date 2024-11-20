@@ -35,6 +35,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
 
   final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
   final DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
+  int? selectedRowIndex; // Track the selected row index
 
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
@@ -73,6 +74,10 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     notesFocusNode.dispose();
     // tabController_OT.dispose();
     super.onClose();
+  }
+
+  void setSelectedRow(int index) {
+    selectedRowIndex = index;
   }
 
   DelayReasonChangeMethod(Map<String, String>? value) async {
@@ -400,7 +405,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("FromDateTime or FromTime is null");
       }
@@ -415,7 +421,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("ToDateTime or ToTime is null");
       }

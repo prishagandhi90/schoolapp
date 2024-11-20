@@ -35,6 +35,7 @@ class ResponseGetDutyScheduleShift {
 class DutySchSftData {
   String? code;
   String? name;
+  String? subDepartment;
   List<DateColumnsValue>? dateColumnsValue;
 
   DutySchSftData({this.code, this.name, this.dateColumnsValue});
@@ -42,6 +43,7 @@ class DutySchSftData {
   DutySchSftData.fromJson(Map<String, dynamic> json) {
     code = json['Code'];
     name = json['Name'];
+    subDepartment = json['SubDepartment'];
     if (json['DateColumnsValue'] != null) {
       dateColumnsValue = <DateColumnsValue>[];
       json['DateColumnsValue'].forEach((v) {
@@ -54,6 +56,7 @@ class DutySchSftData {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Code'] = this.code;
     data['Name'] = this.name;
+    data['SubDepartment'] = this.subDepartment;
     if (this.dateColumnsValue != null) {
       data['DateColumnsValue'] = this.dateColumnsValue!.map((v) => v.toJson()).toList();
     }

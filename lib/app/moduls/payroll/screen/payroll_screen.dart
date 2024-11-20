@@ -7,6 +7,7 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/screen/dutyschedule_screen.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
@@ -244,7 +245,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
+                                                      controller.empSummDashboardTable[0].inPunchTime
+                                                          .toString()
+                                                          .isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                       style: TextStyle(
@@ -273,7 +276,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
+                                                      controller.empSummDashboardTable[0].outPunchTime
+                                                          .toString()
+                                                          .isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                       style: AppStyle.plus10,
@@ -309,7 +314,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                           children: [
                                             Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                             if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                  style: AppStyle.plus16w600)
                                             else
                                               Text('-- ', style: AppStyle.plus16w600),
                                           ],
@@ -574,15 +580,13 @@ class PayrollScreen extends GetView<PayrollController> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 GestureDetector(
-                                  onTap: () {
+                                  onTap: () async {
                                     final bottomBarController = Get.put(BottomBarController());
                                     bottomBarController.currentIndex.value = -1;
 
-                                    // Get.delete<MispunchController>();
-                                    final mispunchController = Get.put(MispunchController());
-                                    mispunchController.resetData();
-                                    mispunchController.update();
-                                    // Get.put(MispunchScreen());
+                                    DutyscheduleController dc = Get.put(DutyscheduleController());
+                                    await dc.fetchdutyScheduledrpdwn();
+
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen: const DutyscheduleScreen(),

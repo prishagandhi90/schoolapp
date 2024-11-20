@@ -55,14 +55,17 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       itemCount: controller.leaveentryList.length,
                                       itemBuilder: (context, index) {
                                         final row = controller.leaveentryList[index];
-                                        final isSelected = controller.selectedRowIndex == index; // Check if row is selected
+                                        final isSelected =
+                                            controller.selectedRowIndex == index; // Check if row is selected
 
                                         return GestureDetector(
                                           onTap: () {
                                             // Trigger API Call here
                                             // controller.callApiForRow(row);
-                                            controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '';
-                                            controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '';
+                                            controller.inchargeAction.value =
+                                                controller.leaveentryList[index].inchargeAction ?? '';
+                                            controller.hodAction.value =
+                                                controller.leaveentryList[index].hodAction ?? '';
                                             controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '';
                                             controller.setSelectedRow(index);
                                             controller.update();
@@ -308,7 +311,12 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                                 // height: 100,
                                                 width: MediaQuery.of(context).size.height * 0.4,
                                                 alignment: Alignment.center,
-                                                child: Text(AppString.name, style: AppStyle.w50018)),
+                                                child: Text(
+                                                  AppString.name,
+                                                  style: AppStyle.w50018.copyWith(
+                                                    color: Colors.white, // Set text color to white
+                                                  ),
+                                                )),
                                           ),
                                           Flexible(
                                             flex: 1,
@@ -316,7 +324,12 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                                 // height: 100,
                                                 width: MediaQuery.of(context).size.height * 0.4,
                                                 alignment: Alignment.center,
-                                                child: Text(AppString.reason, style: AppStyle.w50018)),
+                                                child: Text(
+                                                  AppString.reason,
+                                                  style: AppStyle.w50018.copyWith(
+                                                    color: Colors.white, // Set text color to white
+                                                  ),
+                                                )),
                                           ),
                                         ],
                                       ),
@@ -372,7 +385,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                             alignment: Alignment.centerLeft,
                                             child: Text(
                                               AppString.employeeNotes,
-                                              style: AppStyle.w50018,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
                                             )),
                                       ),
                                     ),
@@ -389,7 +404,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -408,7 +425,13 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
-                                            alignment: Alignment.centerLeft, child: Text(AppString.inChargeNotes, style: AppStyle.w50018)),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              AppString.inChargeNotes,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -424,7 +447,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -444,7 +469,12 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
                                             alignment: Alignment.centerLeft,
-                                            child: Text(AppString.inchargerejectreason, style: AppStyle.w50018)),
+                                            child: Text(
+                                              AppString.inchargerejectreason,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -460,7 +490,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -480,7 +512,12 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
                                             alignment: Alignment.centerLeft,
-                                            child: Text(AppString.hodRejectReason, style: AppStyle.w50018)),
+                                            child: Text(
+                                              AppString.hodRejectReason,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -496,7 +533,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -514,8 +553,14 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       decoration: BoxDecoration(color: AppColor.primaryColor),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child:
-                                            Align(alignment: Alignment.centerLeft, child: Text(AppString.hodNotes, style: AppStyle.w50018)),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              AppString.hodNotes,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -531,7 +576,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -549,8 +596,14 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       decoration: BoxDecoration(color: AppColor.primaryColor),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child:
-                                            Align(alignment: Alignment.centerLeft, child: Text(AppString.hrnotes, style: AppStyle.w50018)),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              AppString.hrnotes,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -566,7 +619,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -585,7 +640,13 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
-                                            alignment: Alignment.centerLeft, child: Text(AppString.hrRejectReason, style: AppStyle.w50018)),
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              AppString.hrRejectReason,
+                                              style: AppStyle.w50018.copyWith(
+                                                color: Colors.white, // Set text color to white
+                                              ),
+                                            )),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -601,7 +662,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -620,7 +683,14 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 15),
                                         child: Align(
-                                            alignment: Alignment.centerLeft, child: Text(AppString.lateReason, style: AppStyle.w50018)),
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            AppString.lateReason,
+                                            style: AppStyle.w50018.copyWith(
+                                              color: Colors.white, // Set text color to white
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     controller.leaveentryList.isNotEmpty
@@ -636,7 +706,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -653,54 +725,105 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15),
                                       child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Emp Entry D/T : ${controller.leaveentryList[index].enterDate}',
+                                        alignment: Alignment.centerLeft,
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'Emp Entry D/T : ',
                                             style: TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
+                                              fontWeight: FontWeight.w700, // 20
                                               fontFamily: CommonFontStyle.plusJakartaSans,
+                                              color: Colors.white60, // Main text color
                                             ),
-                                          )),
+                                            children: [
+                                              TextSpan(
+                                                text: controller.leaveentryList[index].enterDate,
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500, // Slightly lighter
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  color: Colors.white38, // Lighter color for right side text
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Dept InC D/T : ${controller.leaveentryList[index].inchargeDate}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Dept InC D/T : ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700, // 20
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            color: Colors.white60, // Main text color
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller.leaveentryList[index].inchargeDate,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500, // Slightly lighter
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                color: Colors.white38, // Lighter color for right side text
+                                              ),
                                             ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Dept HOD D/T : ${controller.leaveentryList[index].hodDate}',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Dept HOD D/T : ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700, // 20
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            color: Colors.white60, // Main text color
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller.leaveentryList[index].hodDate,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500, // Slightly lighter
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                color: Colors.white38, // Lighter color for right side text
+                                              ),
                                             ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                                      child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            'Dept HR D/T : ${controller.leaveentryList[index].hrDate} ',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500, //20
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Dept HR D/T : ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700, // 20
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                            color: Colors.white60, // Main text color
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: controller.leaveentryList[index].hrDate,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500, // Slightly lighter
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                color: Colors.white38, // Lighter color for right side text
+                                              ),
                                             ),
-                                          )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -127,9 +127,9 @@ class _CustomStepperState extends State<CustomStepper> {
 
               return GestureDetector(
                 onTap: () {
-                  setState(() {
-                    // No need to change _activeStep dynamically because we only highlight the current date
-                  });
+                  // setState(() {
+                  //   // No need to change _activeStep dynamically because we only highlight the current date
+                  // });
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10), // Adjust the outer space
