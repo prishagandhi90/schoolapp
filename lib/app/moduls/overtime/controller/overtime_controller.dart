@@ -70,9 +70,11 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   @override
   void onClose() {
     // leaveScrollController.dispose();
-    noteController.dispose();
-    notesFocusNode.dispose();
     // tabController_OT.dispose();
+
+    //below working code noteController.dispose(), notesFocusNode commented temporarily
+    // noteController.dispose();
+    // notesFocusNode.dispose();
     super.onClose();
   }
 

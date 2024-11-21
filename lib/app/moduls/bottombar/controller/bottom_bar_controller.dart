@@ -80,6 +80,15 @@ class BottomBarController extends GetxController {
     // update();
   }
 
+  void resetAndInitializeToScreen(int index) {
+    currentIndex.value = index;
+    //deliberately commented below to eliminate onItemtapped in dashboardscreen to go to payroll screen
+    // persistentController.value = PersistentTabController(initialIndex: index);
+    persistentController.value.index = index;
+    hideBottomBar.value = false;
+    // update();
+  }
+
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
     return [
       PersistentBottomNavBarItem(

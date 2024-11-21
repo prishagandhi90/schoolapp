@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
@@ -106,8 +107,14 @@ class DashboardController extends GetxController {
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
-        hideBottomBar.value = false;
-        bottomBarController.onItemTapped(0, false, context);
+        // hideBottomBar.value = false;
+        // bottomBarController.onItemTapped(0, false, context);
+        // bottomBarController.resetAndInitialize();
+        bottomBarController.resetAndInitializeToScreen(0);
+
+        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+          Get.put(BottomBarController());
+        }));
 
         break;
       case 8:

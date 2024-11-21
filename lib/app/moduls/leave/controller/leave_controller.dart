@@ -114,9 +114,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onClose() {
     // leaveScrollController.dispose();
-    noteController.dispose();
-    notesFocusNode.dispose();
     // tabController_Leave.dispose();
+
+    //below working code noteController.dispose(), notesFocusNode commented temporarily
+    // noteController.dispose();
+    // notesFocusNode.dispose();
     super.onClose();
   }
 
@@ -270,7 +272,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      DateTime? toDate = toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
+      DateTime? toDate =
+          toDateController.text.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateController.text, true) : null;
 
       if (toDate != null) {
         isDaysFieldEnabled.value = true;
@@ -625,7 +628,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("FromDateTime or FromTime is null");
       }
@@ -640,7 +644,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("ToDateTime or ToTime is null");
       }
@@ -727,15 +732,20 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         "entryType": flag,
         "leaveShortName": flag == "LV" ? leaveValueController.text : "OT",
         "leaveFullName": flag == "LV" ? leaveNameController.text : "OT",
-        "fromdate": flag == "LV" ? formatDateWithTime(fromDateController.text, 'lv') : formatOTDateTime(overtimeController, 'FromDateTime'),
-        "todate": flag == "LV" ? formatDateWithTime(toDateController.text, 'lv') : formatOTDateTime(overtimeController, 'ToDateTime'),
+        "fromdate": flag == "LV"
+            ? formatDateWithTime(fromDateController.text, 'lv')
+            : formatOTDateTime(overtimeController, 'FromDateTime'),
+        "todate": flag == "LV"
+            ? formatDateWithTime(toDateController.text, 'lv')
+            : formatOTDateTime(overtimeController, 'ToDateTime'),
         "reason": flag == "LV" ? reasonController.text : "OT",
         "note": flag == "LV" ? noteController.text : overtimeController.noteController.text,
         "leaveDays": flag == "LV" ? daysController.text : 0,
         "overTimeMinutes": flag == "LV" ? 0 : int.tryParse(overtimeController.otMinutesController.text) ?? 0,
         "usr_Nm": '',
         "reliever_Empcode": flag == "LV" ? relieverValueController.text : '',
-        "delayLVNote": flag == "LV" ? delayreasonIdController.text : overtimeController.delayreasonId_OT_Controller.text,
+        "delayLVNote":
+            flag == "LV" ? delayreasonIdController.text : overtimeController.delayreasonId_OT_Controller.text,
       };
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       print(response);
