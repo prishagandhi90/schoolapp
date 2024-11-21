@@ -59,7 +59,8 @@ class _CustomStepperState extends State<CustomStepper> {
           ),
         );
       } else {
-        return Expanded(
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.75,
           child: StepperListView(
             showStepperInLast: true,
             stepperData: List.generate(
