@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/dropdown_model.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/shiftDuty_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,12 +19,28 @@ class DutyscheduleController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
   List<sheduledrpdwnlst> Sheduledrpdwnlst = [];
   List<DutySchSftData> dutySchSftData = [];
+  final bottomBarController = Get.put(BottomBarController());
   TextEditingController DutyDropdownNameController = TextEditingController();
   TextEditingController DutyDropdownValueController = TextEditingController();
+  final ScrollController dutyScrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
+
+    dutyScrollController.addListener(() {
+      if (dutyScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (dutyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
 
   Future<List<sheduledrpdwnlst>> fetchdutyScheduledrpdwn() async {
@@ -138,8 +157,7 @@ class DutyscheduleController extends GetxController {
         var jsonbodyObj = {"loginId": loginId, "empId": empId, "DtRange": DutyDropdownNameController.text};
 
         var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-        ResponseGetDutyScheduleShift responseGetDutyScheduleShift =
-            ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
+        ResponseGetDutyScheduleShift responseGetDutyScheduleShift = ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
 
         if (responseGetDutyScheduleShift.statusCode == 200) {
           dutySchSftData = responseGetDutyScheduleShift.data!;

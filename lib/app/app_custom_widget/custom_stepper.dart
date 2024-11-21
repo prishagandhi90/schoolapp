@@ -13,33 +13,11 @@ class CustomStepper extends StatefulWidget {
 }
 
 class _CustomStepperState extends State<CustomStepper> {
-  // final int _activeStep = DateTime.now().weekday - 1; // Active step based on current day of the week
-
-  // Get the current week's dates (from Monday to Sunday)
-  // List<Map<String, String>> _getCurrentWeekData() {
-  //   DateTime now = DateTime.now();
-  //   DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Monday
-  //   List<Map<String, String>> weekData = [];
-
-  //   for (int i = 0; i < 7; i++) {
-  //     DateTime date = startOfWeek.add(Duration(days: i));
-  //     String formattedDate = DateFormat('d\nMMM').format(date); // Format: day \n month
-  //     weekData.add({
-  //       'date': formattedDate,
-  //       'name': 'Subhash Chandra Shukla',
-  //       'occupation': 'Flutter Developer',
-  //     });
-  //   }
-  //   return weekData;
-  // }
-
   @override
   Widget build(BuildContext context) {
     Get.put(DutyscheduleController());
-    // final weekData = controller.getShiftData();
     return GetBuilder<DutyscheduleController>(builder: (controller) {
       if (controller.isLoading) {
-        // Show loading indicator
         return Center(
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 100),
@@ -47,7 +25,6 @@ class _CustomStepperState extends State<CustomStepper> {
           ),
         );
       } else if (controller.dutySchSftData.isEmpty) {
-        // Show "No Data Found" message if data is empty
         return Center(
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 100),
