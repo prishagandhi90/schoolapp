@@ -49,8 +49,8 @@ class PayrollController extends GetxController {
 
   @override
   void onClose() {
-    focusNode.dispose();
-    textEditingController.dispose();
+    // focusNode.dispose();
+    // textEditingController.dispose();
     super.onClose();
   }
 

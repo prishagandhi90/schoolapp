@@ -18,13 +18,7 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "",
-      mobileNumber = "",
-      emailAddress = "",
-      empCode = "",
-      empType = "",
-      department = "",
-      designation = "";
+  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -95,6 +89,7 @@ class DashboardController extends GetxController {
         break;
       case 6:
         var bottomBarController = Get.put(BottomBarController());
+        bottomBarController.isPharmacyHome.value = true;
         hideBottomBar.value = false;
         bottomBarController.onItemTapped(0, true, context);
         // Get.snackbar(
@@ -107,6 +102,7 @@ class DashboardController extends GetxController {
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
+        bottomBarController.isPharmacyHome.value = false;
         // hideBottomBar.value = false;
         // bottomBarController.onItemTapped(0, false, context);
         // bottomBarController.resetAndInitialize();
