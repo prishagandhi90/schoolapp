@@ -39,6 +39,8 @@ class _CustomStepperState extends State<CustomStepper> {
         return SizedBox(
           height: MediaQuery.of(context).size.height * 0.75,
           child: StepperListView(
+            controller: controller.dutyScrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             showStepperInLast: true,
             stepperData: List.generate(
                 // weekData.length,
@@ -156,7 +158,6 @@ class _CustomStepperState extends State<CustomStepper> {
               lineColor: AppColor.primaryColor,
               lineWidth: 2,
             ),
-            physics: const BouncingScrollPhysics(),
           ),
         );
       }
