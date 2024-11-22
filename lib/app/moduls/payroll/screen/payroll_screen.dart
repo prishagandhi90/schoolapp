@@ -245,9 +245,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].inPunchTime
-                                                          .toString()
-                                                          .isNotEmpty
+                                                      controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                       style: TextStyle(
@@ -276,9 +274,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].outPunchTime
-                                                          .toString()
-                                                          .isNotEmpty
+                                                      controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                       style: AppStyle.plus10,
@@ -314,8 +310,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                           children: [
                                             Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                             if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
-                                                  style: AppStyle.plus16w600)
+                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
                                             else
                                               Text('-- ', style: AppStyle.plus16w600),
                                           ],
@@ -575,8 +570,7 @@ class PayrollScreen extends GetView<PayrollController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Expanded(
-                                child: Column(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 GestureDetector(
@@ -621,7 +615,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                 const SizedBox(height: 5),
                                 Text(AppString.dutyschedule, style: AppStyle.plus12),
                               ],
-                            )),
+                            ),
                           ],
                         )
                       ]),
