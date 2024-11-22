@@ -30,7 +30,8 @@ class BottomBarController extends GetxController {
   List<Widget> buildScreens() {
     return [
       // PharmacyScreen(),
-      Obx(() => isPharmacyHome.value ? PharmacyScreen() : PayrollScreen()), // Use condition here
+      PayrollScreen(),
+      // Obx(() => isPharmacyHome.value ? PharmacyScreen() : PayrollScreen()), // Use condition here
       // attendanceScreen,
       AttendanceScreen(),
       const Dashboard1Screen(),
