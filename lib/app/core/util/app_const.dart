@@ -46,4 +46,6 @@ class AppConst {
     {'image': 'assets/image/leave.png', 'label': 'Leave Entry'},
     {'image': 'assets/image/overtime.png', 'label': 'Over Time Entry'},
   ];
+
+  static const OTPTimer = 60;
 }

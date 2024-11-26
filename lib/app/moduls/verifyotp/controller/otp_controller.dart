@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -23,7 +24,7 @@ class OtpController extends GetxController {
   bool isLoadingLogin = false;
   List<OTPModel> otpmodel = [];
   Timer? timer;
-  RxInt secondsRemaining = 10.obs;
+  RxInt secondsRemaining = AppConst.OTPTimer.obs;
 
   late DashboardTable dashboardTable;
 
