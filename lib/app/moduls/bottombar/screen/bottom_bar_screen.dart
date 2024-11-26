@@ -13,6 +13,7 @@ class BottomBarView extends GetView<BottomBarController> {
   @override
   Widget build(BuildContext context) {
     Get.put(BottomBarController());
+    final bottomBarController = Get.put(BottomBarController());
     return GetBuilder<BottomBarController>(
       builder: (controller) {
         return Obx(
@@ -21,14 +22,16 @@ class BottomBarView extends GetView<BottomBarController> {
             body: WillPopScope(
               onWillPop: () async {
                 if (controller.currentIndex.value == 0) {
-                  // controller.onItemTapped(2, false, context);
                   // final bottomBarController = Get.find<BottomBarController>();
                   // bottomBarController.resetAndInitialize();
-                  final bottomBarController = Get.put(BottomBarController());
-                  bottomBarController.resetAndInitialize();
-                  Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-                    Get.put(BottomBarController());
-                  }));
+                  hideBottomBar.value = false;
+                  // bottomBarController.onItemTapped(2, false, context);
+                  controller.resetAndInitializeToScreen(2);
+                  return false;
+                  // bottomBarController.resetAndInitialize();
+                  // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+                  //   Get.put(BottomBarController());
+                  // }));
                   // controller.currentIndex.value = 2;
                 } else if (controller.currentIndex.value == 2) {
                   return false;

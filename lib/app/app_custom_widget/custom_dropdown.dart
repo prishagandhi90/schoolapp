@@ -25,10 +25,12 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
       width: width,
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<Map<String, String>>(
+          key: UniqueKey(),
           isExpanded: true,
           hint: Text(
             text,
@@ -70,6 +72,18 @@ class CustomDropdown extends StatelessWidget {
           //   ),
           //   elevation: 2,
           // ),
+          dropdownStyleData: DropdownStyleData(
+            maxHeight: screenHeight * 0.5, // Set dropdown max height to 50% of screen
+            // padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+            ),
+            scrollbarTheme: ScrollbarThemeData(
+              thumbVisibility: MaterialStateProperty.all(true),
+            ),
+          ),
           onMenuStateChange: (isOpen) {
             // Null check before invoking
             if (onMenuStateChange != null) {

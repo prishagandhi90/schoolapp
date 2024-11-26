@@ -7,6 +7,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,13 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -102,15 +109,23 @@ class DashboardController extends GetxController {
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
-        bottomBarController.isPharmacyHome.value = false;
-        // hideBottomBar.value = false;
-        // bottomBarController.onItemTapped(0, false, context);
-        // bottomBarController.resetAndInitialize();
-        bottomBarController.resetAndInitializeToScreen(0);
+        hideBottomBar.value = false;
+        // Get.until((route) {
+        //   print(route.settings); // This will print the route settings to debug
+        //   return route.settings == Routes.Payroll;
+        // });
+        bottomBarController.onItemTapped(0, false, context);
 
-        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-          Get.put(BottomBarController());
-        }));
+        // var bottomBarController = Get.put(BottomBarController());
+        // bottomBarController.isPharmacyHome.value = false;
+        // // hideBottomBar.value = false;
+        // // bottomBarController.onItemTapped(0, false, context);
+        // // bottomBarController.resetAndInitialize();
+        // bottomBarController.resetAndInitializeToScreen(0);
+
+        // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+        //   Get.put(BottomBarController());
+        // }));
 
         break;
       case 8:

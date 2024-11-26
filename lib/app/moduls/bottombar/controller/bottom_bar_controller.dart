@@ -65,9 +65,14 @@ class BottomBarController extends GetxController {
     if (index == 0) {
       // Navigate to PayrollScreen
       // Ensure MispunchScreen is popped before navigating to PayrollScreen
-      Get.until((route) => route.isFirst); // This pops all routes until the first one (PayrollScreen)
-      persistentController.value.index = 0; // This sets PayrollScreen tab
-    } else {
+      Get.until((route) => route.isFirst); // This pops all routes until the first one (PayrollScreen)S
+      persistentController.value.index = 0;
+      return; // This sets PayrollScreen tab
+    } else if (index == 2) {
+      persistentController.value.index = index;
+      return;
+    }
+    {
       // Navigate to other screens
       persistentController.value.index = index;
     }

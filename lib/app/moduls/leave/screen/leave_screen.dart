@@ -174,14 +174,19 @@ class LeaveScreen extends GetView<LeaveController> {
                   onChanged: (value) async {
                     controller.update();
                   },
-                  onMenuStateChange: (isOpen) async {
-                    // Bottom navigation bar ko hide/show karna
-                    if (isOpen) {
-                      controller.hideBottomNavBar();
-                    } else {
-                      controller.showBottomNavBar();
-                    }
-                  },
+                  // onMenuStateChange: (isOpen) async {
+                  //   // Bottom navigation bar ko hide/show karna
+                  //   if (isOpen) {
+                  //     // Delay to ensure dropdown opens properly before hiding navbar
+                  //     Future.delayed(Duration(milliseconds: 100), () {
+                  //       controller.hideBottomNavBar();
+                  //     });
+                  //   } else {
+                  //     Future.delayed(Duration(milliseconds: 100), () {
+                  //       controller.showBottomNavBar();
+                  //     });
+                  //   }
+                  // },
                   width: double.infinity,
                   items: controller.leavereason
                       .map((LeaveReasonTable item) => DropdownMenuItem<Map<String, String>>(
