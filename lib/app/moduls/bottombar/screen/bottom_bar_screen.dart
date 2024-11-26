@@ -13,7 +13,6 @@ class BottomBarView extends GetView<BottomBarController> {
   @override
   Widget build(BuildContext context) {
     Get.put(BottomBarController());
-    final bottomBarController = Get.put(BottomBarController());
     return GetBuilder<BottomBarController>(
       builder: (controller) {
         return Obx(
