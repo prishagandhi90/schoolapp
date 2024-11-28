@@ -246,7 +246,6 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
   }
 
   Future<void> oTbottomsheet(BuildContext context, int index) async {
-    final leaveController = Get.put(LeaveController());
     showModalBottomSheet(
       backgroundColor: AppColor.white,
       isScrollControlled: true,

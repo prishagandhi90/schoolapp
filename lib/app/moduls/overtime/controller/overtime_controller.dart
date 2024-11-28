@@ -174,15 +174,35 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   }
 
   Future<void> selectTime(BuildContext context, TextEditingController controller) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-      initialEntryMode: TimePickerEntryMode.input,
-    );
+    TimeOfDay? picked;
+    if (controller.text == null || controller.text == "") {
+      picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        initialEntryMode: TimePickerEntryMode.input,
+      );
+    } else {
+      try {
+        final DateFormat timeFormat = DateFormat('hh:mm a'); // Define the input format
+        final DateTime parsedTime = timeFormat.parse(controller.text.trim()); // Parse the time string
+        final initialTime = TimeOfDay(hour: parsedTime.hour, minute: parsedTime.minute);
+
+        // Show picker with parsed time as initial time
+        picked = await showTimePicker(
+          context: context,
+          initialTime: initialTime,
+          initialEntryMode: TimePickerEntryMode.input,
+        );
+      } catch (e) {
+        // Handle invalid time format
+        print("Error parsing time: $e");
+        picked = null; // Reset picked if parsing fails
+      }
+    }
 
     if (picked != null) {
       // Set minutes to 00
-      final adjustedTime = TimeOfDay(hour: picked.hour, minute: 0);
+      final adjustedTime = TimeOfDay(hour: picked.hour, minute: picked.minute);
       final now = DateTime.now();
       final dt = DateTime(now.year, now.month, now.day, adjustedTime.hour, adjustedTime.minute);
 
@@ -207,7 +227,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         selectedFromDate!.month,
         selectedFromDate!.day,
         selectedFromTime!.hour,
-        0, // Set minutes to 00
+        selectedFromTime!.minute,
       );
 
       DateTime toDateTime = DateTime(
@@ -215,7 +235,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         selectedToDate!.month,
         selectedToDate!.day,
         selectedToTime!.hour,
-        0, // Set minutes to 00
+        selectedToTime!.minute,
       );
 
       double totalMinutes = calculateMinutes(fromDateTime, toDateTime);
@@ -415,8 +435,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime =
-            "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("FromDateTime or FromTime is null");
       }
@@ -431,8 +450,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime =
-            "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("ToDateTime or ToTime is null");
       }

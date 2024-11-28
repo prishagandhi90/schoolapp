@@ -18,8 +18,7 @@ void main() async {
   try {
     await InitFirebaseSettings();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn =
-        prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' ? true : false;
+    bool isLoggedIn = prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' ? true : false;
 
     FlutterError.onError = (FlutterErrorDetails details) {
       FlutterError.dumpErrorToConsole(details);

@@ -62,11 +62,11 @@ class CustomDropdown extends StatelessWidget {
             // padding: const EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(0),
               color: Colors.white,
             ),
             scrollbarTheme: ScrollbarThemeData(
-              thumbVisibility: MaterialStateProperty.all(true),
+              thumbVisibility: WidgetStateProperty.all(true),
             ),
           ),
           onMenuStateChange: (isOpen) {
