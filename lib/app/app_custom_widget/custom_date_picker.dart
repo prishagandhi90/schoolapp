@@ -42,6 +42,9 @@ class CustomDatePicker extends StatelessWidget {
           },
         ),
       ),
+      onTap: () {
+        FocusScope.of(context).unfocus(); // Close keyboard when tapping on the TextFormField
+      },
     );
   }
 }

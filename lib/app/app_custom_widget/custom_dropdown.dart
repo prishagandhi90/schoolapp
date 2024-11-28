@@ -46,6 +46,7 @@ class CustomDropdown extends StatelessWidget {
               )
               ?.value, // Get selected value from the controller
           onChanged: (value) {
+            FocusScope.of(context).unfocus();
             if (value != null) {
               controller.text = value['text'] ?? ''; // Update the controller with selected value
               onChanged(value); // Call the custom onChanged method
@@ -53,25 +54,9 @@ class CustomDropdown extends StatelessWidget {
             }
           },
           buttonStyleData: buttonStyleData,
-          // ButtonStyleData(
-          //   height: 50,
-          //   padding: const EdgeInsets.symmetric(horizontal: 0),
-          //   decoration: BoxDecoration(
-          //     border: Border.all(color: AppColor.black),
-          //     borderRadius: BorderRadius.circular(0),
-          //     color: AppColor.white,
-          //   ),
-          // ),
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
           ),
-          // dropdownStyleData: DropdownStyleData(
-          //   maxHeight: MediaQuery.of(context).size.height * 0.5,
-          //   padding: EdgeInsets.only(
-          //     bottom: MediaQuery.of(context).viewInsets.bottom + 60,
-          //   ),
-          //   elevation: 2,
-          // ),
           dropdownStyleData: DropdownStyleData(
             maxHeight: screenHeight * 0.5, // Set dropdown max height to 50% of screen
             // padding: const EdgeInsets.symmetric(horizontal: 14),
