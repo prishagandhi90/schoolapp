@@ -34,7 +34,6 @@ class OtScreen extends GetView<OvertimeController> {
                 padding: const EdgeInsets.all(15),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    minHeight: availableHeight,
                     maxHeight: availableHeight,
                   ),
                   child: Column(

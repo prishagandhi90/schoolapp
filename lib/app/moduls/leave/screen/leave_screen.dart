@@ -34,7 +34,6 @@ class LeaveScreen extends GetView<LeaveController> {
               controller: controller.leaveScrollController,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minHeight: availableHeight,
                   maxHeight: availableHeight,
                 ),
                 child: Column(
