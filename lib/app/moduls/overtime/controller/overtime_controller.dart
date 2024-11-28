@@ -37,6 +37,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   final DateFormat timeFormat = DateFormat('hh:mm a'); // 12-hour format with AM/PM
   int? selectedRowIndex; // Track the selected row index
 
+  RxBool isNotesFieldFocused = false.obs;
+
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
   TextEditingController fromTimeController = TextEditingController();
@@ -62,9 +64,16 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     changeTab(0);
     noteController.text = "";
     isLoading = true;
-    // isSaveBtnLoading = false;
+    notesFocusNode.addListener(_onNotesFocusChange);
 
     update();
+  }
+
+  void _onNotesFocusChange() {
+    if (!notesFocusNode.hasFocus) {
+      isNotesFieldFocused.value = notesFocusNode.hasFocus;
+      update();
+    }
   }
 
   @override
@@ -72,9 +81,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     // leaveScrollController.dispose();
     // tabController_OT.dispose();
 
-    //below working code noteController.dispose(), notesFocusNode commented temporarily
-    // noteController.dispose();
-    // notesFocusNode.dispose();
+    notesFocusNode.removeListener(_onNotesFocusChange);
+    notesFocusNode.dispose();
     super.onClose();
   }
 

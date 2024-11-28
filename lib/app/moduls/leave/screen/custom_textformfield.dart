@@ -27,6 +27,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? style;
   final ScrollPhysics? scrollPhysics;
   final TextStyle? hintStyle;
+  final TapRegionCallback? onTapOutside;
 
   CustomTextFormField({
     this.label,
@@ -55,6 +56,7 @@ class CustomTextFormField extends StatelessWidget {
     this.minLines,
     this.scrollPhysics,
     this.hintStyle,
+    this.onTapOutside,
   });
 
   @override
@@ -91,6 +93,10 @@ class CustomTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(0),
             ),
           ),
+      onTapOutside: onTapOutside ??
+          (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
     );
   }
 }

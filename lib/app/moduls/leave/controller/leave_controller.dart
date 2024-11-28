@@ -68,6 +68,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   TextEditingController delayreasonNameController = TextEditingController();
   TextEditingController delayreasonIdController = TextEditingController();
 
+  RxBool isNotesFieldFocused = false.obs;
+
   @override
   void onInit() async {
     super.onInit();
@@ -83,6 +85,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
 
     fromDateController.addListener(updateLeaveDays);
     toDateController.addListener(updateLeaveDays);
+    notesFocusNode.addListener(_onNotesFocusChange);
     // isLoading = false;
     update();
 
@@ -101,24 +104,20 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     });
   }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-
-  //   // Ensure drawer is closed when screen is initialized
-  //   if (Scaffold.of(Get.context!).isDrawerOpen) {
-  //     Navigator.pop(Get.context!); // Close the drawer if it's open
-  //   }
-  // }
+  void _onNotesFocusChange() {
+    if (!notesFocusNode.hasFocus) {
+      isNotesFieldFocused.value = notesFocusNode.hasFocus;
+      update();
+    }
+  }
 
   @override
   void onClose() {
     // leaveScrollController.dispose();
     // tabController_Leave.dispose();
 
-    //below working code noteController.dispose(), notesFocusNode commented temporarily
-    // noteController.dispose();
-    // notesFocusNode.dispose();
+    notesFocusNode.removeListener(_onNotesFocusChange);
+    notesFocusNode.dispose();
     super.onClose();
   }
 

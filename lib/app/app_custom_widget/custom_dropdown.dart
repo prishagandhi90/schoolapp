@@ -46,7 +46,7 @@ class CustomDropdown extends StatelessWidget {
               )
               ?.value, // Get selected value from the controller
           onChanged: (value) {
-            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
             if (value != null) {
               controller.text = value['text'] ?? ''; // Update the controller with selected value
               onChanged(value); // Call the custom onChanged method
@@ -70,10 +70,11 @@ class CustomDropdown extends StatelessWidget {
             ),
           ),
           onMenuStateChange: (isOpen) {
-            // Null check before invoking
-            if (onMenuStateChange != null) {
-              print("Dropdown Menu State Changed: $isOpen");
-              onMenuStateChange!(isOpen); // Call only if it's not null
+            if (isOpen) {
+              print("Dropdown is open");
+              FocusManager.instance.primaryFocus?.unfocus();
+            } else {
+              print("Dropdown is closed");
             }
           },
         ),
