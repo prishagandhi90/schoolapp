@@ -340,6 +340,7 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                         if (controller.otHeaderList.isEmpty) {
                           await controller.fetchHeaderList("OT");
                         }
+                        hideBottomBar.value = false;
                         await controller.changeTab(value);
                       },
                       controller: controller.tabController_OT,

@@ -30,7 +30,7 @@ class LeaveScreen extends GetView<LeaveController> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
+              // physics: AlwaysScrollableScrollPhysics(),
               controller: controller.leaveScrollController,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -40,7 +40,7 @@ class LeaveScreen extends GetView<LeaveController> {
                   children: [
                     // CustomDatePicker(),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0), 
                       child: Row(
                         children: [
                           Expanded(

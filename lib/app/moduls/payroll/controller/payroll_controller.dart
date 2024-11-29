@@ -14,6 +14,7 @@ import 'package:emp_app/app/moduls/payroll/model/empsummdash_model.dart';
 import 'package:emp_app/app/moduls/payroll/model/payroll_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -30,6 +31,7 @@ class PayrollController extends GetxController {
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   List<EmpSummDashboardTable> empSummDashboardTable = [];
+  final ScrollController payrollScrollController = ScrollController();
 
   @override
   void onInit() {
@@ -44,6 +46,19 @@ class PayrollController extends GetxController {
     //   hasFocus = focusNode.hasFocus;
     //   update();
     // });
+    payrollScrollController.addListener(() {
+      if (payrollScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (payrollScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
     update();
   }
 
