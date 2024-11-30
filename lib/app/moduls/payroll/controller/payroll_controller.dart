@@ -32,6 +32,7 @@ class PayrollController extends GetxController {
   bool hasFocus = false;
   List<EmpSummDashboardTable> empSummDashboardTable = [];
   final ScrollController payrollScrollController = ScrollController();
+  var isDutyScheduleNavigating = false.obs;
 
   @override
   void onInit() {
@@ -81,7 +82,8 @@ class PayrollController extends GetxController {
 
       final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse =
+          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
