@@ -99,7 +99,10 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     if (tabController_OT.indexIsChanging) {
       initialIndex.value = tabController_OT.index;
       if (tabController_OT.index == 1) {
-        // final leaveController = Get.put(LeaveController());
+        inchargeAction.value = "";
+        hodAction.value = "";
+        hrAction.value = "";
+        selectedRowIndex = -1;
         await fetchLeaveEntryList("OT");
       }
       update();
@@ -109,8 +112,11 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   changeTab(int index) async {
     tabController_OT.animateTo(index);
     currentTabIndex.value = index;
-    // final leaveController = Get.put(LeaveController());
     if (index == 1 && otentryList.isEmpty) {
+      inchargeAction.value = "";
+      hodAction.value = "";
+      hrAction.value = "";
+      selectedRowIndex = -1;
       await fetchLeaveEntryList("OT"); // Fetch list only if not already fetched
     }
     update();
@@ -435,7 +441,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("FromDateTime or FromTime is null");
       }
@@ -450,7 +457,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("ToDateTime or ToTime is null");
       }

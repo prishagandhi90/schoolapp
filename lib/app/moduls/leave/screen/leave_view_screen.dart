@@ -258,7 +258,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
       builder: (context) => DraggableScrollableSheet(
           initialChildSize: 0.9,
           minChildSize: 0.0,
-          maxChildSize: 1,
+          maxChildSize: 0.95,
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(

@@ -135,8 +135,10 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     if (tabController_Leave.indexIsChanging) {
       initialIndex.value = tabController_Leave.index;
       if (tabController_Leave.index == 1) {
-        // await getattendeceprsnttable(); // Summary के लिए
-        // } else {
+        inchargeAction.value = "";
+        hodAction.value = "";
+        hrAction.value = "";
+        selectedRowIndex = -1;
         await fetchLeaveEntryList("LV");
       }
       update();
@@ -147,6 +149,10 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     tabController_Leave.animateTo(index);
     currentTabIndex.value = index;
     if (index == 1 && leaveentryList.isEmpty) {
+      inchargeAction.value = "";
+      hodAction.value = "";
+      hrAction.value = "";
+      selectedRowIndex = -1;
       await fetchLeaveEntryList("LV"); // Fetch list only if not already fetched
     }
     update();
@@ -160,6 +166,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     DateTime? toDate = toDateText.isNotEmpty ? DateFormat('dd-MM-yyyy').parse(toDateText, true) : null;
 
     List<Map<String, String>> daysOptions;
+    bool daysMoreThanOne = false;
+    String tempDaysCount = "";
 
     if (fromDate != null && toDate != null) {
       int daysCount = toDate.difference(fromDate).inDays + 1;
@@ -177,6 +185,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
           {'value': daysCount.toString(), 'name': daysCount.toString()},
         ];
         days.value = daysCount.toString();
+        daysMoreThanOne = true;
+        tempDaysCount = daysCount.toString();
       }
 
       isDaysFieldEnabled.value = true;
@@ -205,6 +215,13 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
           )
           .toList(),
     );
+
+    if (daysMoreThanOne == true) {
+      daysController.text = tempDaysCount;
+    }
+
+    daysMoreThanOne = false;
+
     // update();
   }
 
