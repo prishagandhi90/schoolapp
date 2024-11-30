@@ -26,4 +26,5 @@ class ConstApiUrl {
   //pharmacy
   static const empPresViewerListAPI = "$empUrl/GetDrPrescriptionViewer";
   static const empPresDetailListAPI = "$empUrl/GetDrPrescriptionMedicines";
+  static const empPharmaFilterDataApi = "$empUrl/GetPharmaDashboardFilters";
 }

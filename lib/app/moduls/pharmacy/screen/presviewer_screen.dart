@@ -130,7 +130,15 @@ class PresviewerScreen extends StatelessWidget {
                         child: IconButton(
                           icon: Icon(Icons.filter_alt, color: AppColor.black),
                           onPressed: () {
-                            // Add functionality here
+                             controller.callFilterAPi = false;
+                          controller.tempWardList = List.unmodifiable(
+                              controller.selectedWardList);
+                          controller.tempFloorsList =
+                              List.unmodifiable((controller.selectedFloorList));
+                          controller.tempBedList =
+                              List.unmodifiable(controller.selectedBedList);
+
+                          controller.pharmacyFiltterBottomSheet();
                           },
                         ),
                       ),
