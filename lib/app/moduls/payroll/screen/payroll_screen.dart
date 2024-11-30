@@ -23,6 +23,7 @@ class PayrollScreen extends GetView<PayrollController> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDutyScheduleNavigating = false; // Declare this flag at class level.
     Get.put(PayrollController());
     return GetBuilder<PayrollController>(
         init: PayrollController(),
@@ -245,7 +246,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
+                                                      controller.empSummDashboardTable[0].inPunchTime
+                                                          .toString()
+                                                          .isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                       style: TextStyle(
@@ -274,7 +277,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   border: Border.all(color: AppColor.primaryColor),
                                                   borderRadius: BorderRadius.circular(20)),
                                               child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
+                                                      controller.empSummDashboardTable[0].outPunchTime
+                                                          .toString()
+                                                          .isNotEmpty
                                                   ? Text(
                                                       'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                       style: AppStyle.plus10,
@@ -310,7 +315,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                           children: [
                                             Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                             if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                  style: AppStyle.plus16w600)
                                             else
                                               Text('-- ', style: AppStyle.plus16w600),
                                           ],
@@ -576,11 +582,14 @@ class PayrollScreen extends GetView<PayrollController> {
                                 children: [
                                   GestureDetector(
                                     onTap: () async {
+                                      if (controller.isDutyScheduleNavigating.value) return;
+                                      controller.isDutyScheduleNavigating.value = true;
+
                                       final bottomBarController = Get.put(BottomBarController());
                                       bottomBarController.currentIndex.value = -1;
 
                                       DutyscheduleController dc = Get.put(DutyscheduleController());
-                                      await dc.fetchdutyScheduledrpdwn();
+                                      dc.fetchdutyScheduledrpdwn();
 
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
@@ -595,6 +604,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                         var dashboardController = Get.put(DashboardController());
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
+                                      controller.isDutyScheduleNavigating.value = false;
                                     }, //Get.to(MispunchScreen()),
                                     child: Container(
                                       height: MediaQuery.of(context).size.height * 0.06, //0.07

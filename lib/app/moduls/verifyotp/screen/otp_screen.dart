@@ -75,7 +75,7 @@ class _OtpScreenState extends State<OtpScreen> {
         // widget.otpNo = respOTP;
         loginController.responseOTPNo = respOTP;
       });
-      Get.snackbar('RespOTP: $respOTP', '', colorText: AppColor.white, backgroundColor: AppColor.black);
+      // Get.snackbar('RespOTP: $respOTP', '', colorText: AppColor.white, backgroundColor: AppColor.black);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

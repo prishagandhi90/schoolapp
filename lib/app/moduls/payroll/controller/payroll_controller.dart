@@ -6,6 +6,8 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
+import 'package:emp_app/app/moduls/dutyschedule/screen/dutyschedule_screen.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
@@ -32,6 +34,7 @@ class PayrollController extends GetxController {
   bool hasFocus = false;
   List<EmpSummDashboardTable> empSummDashboardTable = [];
   final ScrollController payrollScrollController = ScrollController();
+  var isDutyScheduleNavigating = false.obs;
 
   @override
   void onInit() {
@@ -81,7 +84,8 @@ class PayrollController extends GetxController {
 
       final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse =
+          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -196,6 +200,34 @@ class PayrollController extends GetxController {
         //   backgroundColor: AppColor.black,
         //   duration: const Duration(seconds: 1),
         // );
+        break;
+      case 4:
+        final bottomBarController = Get.put(BottomBarController());
+        final dutyScheduleController = Get.put(DutyscheduleController());
+        await dutyScheduleController.resetForm();
+
+        if (isDutyScheduleNavigating.value) return;
+        isDutyScheduleNavigating.value = true;
+
+        bottomBarController.currentIndex.value = -1;
+
+        DutyscheduleController dc = Get.put(DutyscheduleController());
+        dc.fetchdutyScheduledrpdwn();
+
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: const DutyscheduleScreen(),
+          withNavBar: true,
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        ).then((value) async {
+          // final bottomBarController = Get.find<BottomBarController>();
+          bottomBarController.persistentController.value.index = 0;
+          bottomBarController.currentIndex.value = 0;
+          hideBottomBar.value = false;
+          var dashboardController = Get.put(DashboardController());
+          await dashboardController.getDashboardDataUsingToken();
+        });
+        isDutyScheduleNavigating.value = false;
         break;
       default:
     }
