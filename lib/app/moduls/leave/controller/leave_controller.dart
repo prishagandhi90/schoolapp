@@ -116,8 +116,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     // leaveScrollController.dispose();
     // tabController_Leave.dispose();
 
-    notesFocusNode.removeListener(_onNotesFocusChange);
-    notesFocusNode.dispose();
+    // notesFocusNode.removeListener(_onNotesFocusChange);
+    // notesFocusNode.dispose();
     super.onClose();
   }
 

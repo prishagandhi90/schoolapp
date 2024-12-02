@@ -95,6 +95,13 @@ class BottomBarController extends GetxController {
     // update();
   }
 
+  void resetAndInitialize_new(int index) {
+    currentIndex.value = index;
+    persistentController.value = PersistentTabController(initialIndex: index);
+    hideBottomBar.value = false;
+    // update();
+  }
+
   List<PersistentBottomNavBarItem> navBarsItems(BuildContext? ctx) {
     return [
       PersistentBottomNavBarItem(
