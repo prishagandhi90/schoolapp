@@ -22,7 +22,7 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PayrollController extends GetxController {
+class PayrollController extends GetxController with SingleGetTickerProviderMixin {
   DateTime now = DateTime.now();
   String formattedDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
   var bottomBarController = Get.put(BottomBarController());
@@ -49,6 +49,7 @@ class PayrollController extends GetxController {
     //   hasFocus = focusNode.hasFocus;
     //   update();
     // });
+    update();
     payrollScrollController.addListener(() {
       if (payrollScrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (hideBottomBar.value) {
@@ -62,7 +63,6 @@ class PayrollController extends GetxController {
         }
       }
     });
-    update();
   }
 
   @override

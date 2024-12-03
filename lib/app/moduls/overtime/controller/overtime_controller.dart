@@ -11,7 +11,9 @@ import 'package:emp_app/app/moduls/leave/model/headerlist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leave_saveentrylist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leaveentrylist_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +50,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   TextEditingController delayreasonName_OT_Controller = TextEditingController();
   TextEditingController delayreasonId_OT_Controller = TextEditingController();
 
+  final ScrollController overtimeScrollController = ScrollController();
+
   List<HeaderList> otHeaderList = [];
   List<LeaveEntryList> otentryList = [];
 
@@ -67,6 +71,19 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     notesFocusNode.addListener(_onNotesFocusChange);
 
     update();
+    overtimeScrollController.addListener(() {
+      if (overtimeScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (overtimeScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
 
   void _onNotesFocusChange() {

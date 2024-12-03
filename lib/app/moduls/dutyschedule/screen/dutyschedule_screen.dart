@@ -82,20 +82,23 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                                     'value': item.value ?? '',
                                     'text': item.name ?? '',
                                   },
-                                  child: Text(
-                                    item.name ?? '',
-                                    style: item.name != controller.CurrentWeekItem
-                                        ? AppStyle.black.copyWith(fontSize: 13)
-                                        : TextStyle(
-                                            fontSize: 13,
-                                            color: item.name == controller.CurrentWeekItem
-                                                ? AppColor.primaryColor
-                                                : Colors.black, // Custom color
-                                            // fontWeight: item.name == controller.CurrentWeekItem
-                                            //     ? FontWeight.bold
-                                            //     : FontWeight.normal,
-                                          ),
-                                    overflow: TextOverflow.ellipsis,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      item.name ?? '',
+                                      style: item.name != controller.CurrentWeekItem
+                                          ? AppStyle.black.copyWith(fontSize: 13)
+                                          : TextStyle(
+                                              fontSize: 13,
+                                              color: item.name == controller.CurrentWeekItem
+                                                  ? AppColor.primaryColor
+                                                  : Colors.black, // Custom color
+                                              // fontWeight: item.name == controller.CurrentWeekItem
+                                              //     ? FontWeight.bold
+                                              //     : FontWeight.normal,
+                                            ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                               ).toList()

@@ -97,9 +97,10 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       Text(
                                                         controller.attendenceDetailTable[index].iN.toString(),
                                                         style: AppStyle.fontfamilyplus.copyWith(
-                                                          color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
-                                                              ? AppColor.red
-                                                              : AppColor.black, // redYNINTM se color set kiya
+                                                          color:
+                                                              controller.attendenceDetailTable[index].redYNINTM == 'Y'
+                                                                  ? AppColor.red
+                                                                  : AppColor.black, // redYNINTM se color set kiya
                                                         ),
                                                       ),
                                                     ),
@@ -107,9 +108,10 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       Text(
                                                         controller.attendenceDetailTable[index].out.toString(),
                                                         style: AppStyle.fontfamilyplus.copyWith(
-                                                          color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
-                                                              ? AppColor.red
-                                                              : AppColor.black, // redYNOUTTM se color set kiya
+                                                          color:
+                                                              controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
+                                                                  ? AppColor.red
+                                                                  : AppColor.black, // redYNOUTTM se color set kiya
                                                         ),
                                                       ),
                                                     ),
@@ -118,7 +120,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         controller.attendenceDetailTable[index].lCEGMIN.toString(),
                                                         textAlign: TextAlign.center,
                                                         style: AppStyle.fontfamilyplus.copyWith(
-                                                          color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y'
+                                                          color: controller.attendenceDetailTable[index].redYNLCEGMIN ==
+                                                                  'Y'
                                                               ? AppColor.red
                                                               : AppColor.black, // redYNLCEGMIN se color set kiya
                                                         ),
@@ -241,7 +244,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
@@ -280,7 +284,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -369,7 +374,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -441,7 +447,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
