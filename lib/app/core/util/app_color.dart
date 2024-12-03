@@ -10,6 +10,8 @@ class AppColor {
   static Color red = Colors.red;
   static Color red1 = Color.fromRGBO(241, 31, 31, 1);
 
+  static Color green = Colors.green;
+  static Color darkGreen = Colors.green.shade900;
   static Color trasparent = Colors.transparent;
 
   static Color lightwhite = Color.fromARGB(255, 230, 229, 229);

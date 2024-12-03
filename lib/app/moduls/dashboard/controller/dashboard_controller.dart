@@ -7,6 +7,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
@@ -95,17 +96,17 @@ class DashboardController extends GetxController {
         );
         break;
       case 6:
-        var bottomBarController = Get.put(BottomBarController());
-        bottomBarController.isPharmacyHome.value = true;
-        hideBottomBar.value = false;
-        bottomBarController.onItemTapped(0, true, context);
-        // Get.snackbar(
-        //   AppString.comingsoon,
-        //   '',
-        //   colorText: AppColor.white,
-        //   backgroundColor: AppColor.black,
-        //   duration: const Duration(seconds: 1),
-        // );
+        // var bottomBarController = Get.put(BottomBarController());
+        // bottomBarController.isPharmacyHome.value = true;
+        // hideBottomBar.value = false;
+        // bottomBarController.onItemTapped(0, true, context);
+        Get.snackbar(
+          AppString.comingsoon,
+          '',
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
@@ -114,20 +115,18 @@ class DashboardController extends GetxController {
         //   print(route.settings); // This will print the route settings to debug
         //   return route.settings == Routes.Payroll;
         // });
-        bottomBarController.onItemTapped(0, false, context);
 
-        // var bottomBarController = Get.put(BottomBarController());
-        // bottomBarController.isPharmacyHome.value = false;
-        // // hideBottomBar.value = false;
-        // // bottomBarController.onItemTapped(0, false, context);
-        // // bottomBarController.resetAndInitialize();
+        // bottomBarController.onItemTapped(0, false, context);
+        bottomBarController.isPharmacyHome.value = false;
+        bottomBarController.resetAndInitialize_new(0);
+
+        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+          Get.put(BottomBarController());
+        }));
+        // Get.until((route) => route.isFirst);
         // bottomBarController.resetAndInitializeToScreen(0);
-
-        // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-        //   Get.put(BottomBarController());
-        // }));
-
         break;
+
       case 8:
         Get.snackbar(
           AppString.comingsoon,

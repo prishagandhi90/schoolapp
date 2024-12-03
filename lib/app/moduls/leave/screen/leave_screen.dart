@@ -40,7 +40,7 @@ class LeaveScreen extends GetView<LeaveController> {
                   children: [
                     // CustomDatePicker(),
                     Padding(
-                      padding: const EdgeInsets.all(16.0), 
+                      padding: const EdgeInsets.all(16.0),
                       child: Row(
                         children: [
                           Expanded(
@@ -119,14 +119,14 @@ class LeaveScreen extends GetView<LeaveController> {
                                     hintStyle: TextStyle(color: AppColor.white, fontSize: 15),
                                     contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColor.red),
+                                      borderSide: BorderSide(color: AppColor.darkGreen),
                                       borderRadius: BorderRadius.circular(0),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColor.red),
+                                      borderSide: BorderSide(color: AppColor.darkGreen),
                                       borderRadius: BorderRadius.circular(0),
                                     ),
-                                    fillColor: AppColor.red,
+                                    fillColor: AppColor.darkGreen,
                                     filled: true),
                               ),
                             ),

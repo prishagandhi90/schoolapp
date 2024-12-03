@@ -11,7 +11,9 @@ import 'package:emp_app/app/moduls/leave/model/headerlist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leave_saveentrylist_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leaveentrylist_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +50,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   TextEditingController delayreasonName_OT_Controller = TextEditingController();
   TextEditingController delayreasonId_OT_Controller = TextEditingController();
 
+  final ScrollController overtimeScrollController = ScrollController();
+
   List<HeaderList> otHeaderList = [];
   List<LeaveEntryList> otentryList = [];
 
@@ -67,6 +71,19 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     notesFocusNode.addListener(_onNotesFocusChange);
 
     update();
+    overtimeScrollController.addListener(() {
+      if (overtimeScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (overtimeScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
 
   void _onNotesFocusChange() {
@@ -81,8 +98,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     // leaveScrollController.dispose();
     // tabController_OT.dispose();
 
-    notesFocusNode.removeListener(_onNotesFocusChange);
-    notesFocusNode.dispose();
+    // notesFocusNode.removeListener(_onNotesFocusChange);
+    // notesFocusNode.dispose();
     super.onClose();
   }
 
@@ -99,7 +116,10 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     if (tabController_OT.indexIsChanging) {
       initialIndex.value = tabController_OT.index;
       if (tabController_OT.index == 1) {
-        // final leaveController = Get.put(LeaveController());
+        inchargeAction.value = "";
+        hodAction.value = "";
+        hrAction.value = "";
+        selectedRowIndex = -1;
         await fetchLeaveEntryList("OT");
       }
       update();
@@ -109,8 +129,11 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   changeTab(int index) async {
     tabController_OT.animateTo(index);
     currentTabIndex.value = index;
-    // final leaveController = Get.put(LeaveController());
     if (index == 1 && otentryList.isEmpty) {
+      inchargeAction.value = "";
+      hodAction.value = "";
+      hrAction.value = "";
+      selectedRowIndex = -1;
       await fetchLeaveEntryList("OT"); // Fetch list only if not already fetched
     }
     update();
@@ -435,7 +458,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${fromDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("FromDateTime or FromTime is null");
       }
@@ -450,7 +474,8 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
         );
 
         // Format to "YYYY-MM-DDTHH:MM:SS" (local time, no UTC conversion)
-        jsonDateTime = "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
+        jsonDateTime =
+            "${toDateTime.toLocal().toIso8601String().substring(0, 19)}"; // Ensuring format with "T" and no milliseconds
       } else {
         throw Exception("ToDateTime or ToTime is null");
       }

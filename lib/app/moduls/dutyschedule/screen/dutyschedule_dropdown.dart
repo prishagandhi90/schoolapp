@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/dropdown_model.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,17 @@ class DutyscheduleDropdownState extends State<DutyscheduleDropdown> {
             items: controller.Sheduledrpdwnlst.map((sheduledrpdwnlst item) {
               return DropdownMenuItem<sheduledrpdwnlst>(
                 value: item,
-                child: Text(item.name ?? ''), // Display the item name
+                child: Container(
+                  // color: isCurrentWeek ? Colors.yellow : Colors.transparent,
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    item.name ?? '',
+                    style: TextStyle(
+                      color: item == controller.CurrentWeekItem ? AppColor.primaryColor : Colors.black, // Custom color
+                      fontWeight: item == controller.CurrentWeekItem ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                ), // Display the item name
               );
             }).toList(),
             onChanged: (sheduledrpdwnlst? value) {

@@ -23,6 +23,7 @@ class DutyscheduleController extends GetxController {
   TextEditingController DutyDropdownNameController = TextEditingController();
   TextEditingController DutyDropdownValueController = TextEditingController();
   final ScrollController dutyScrollController = ScrollController();
+  String CurrentWeekItem = "";
 
   @override
   void onInit() {
@@ -63,6 +64,7 @@ class DutyscheduleController extends GetxController {
         sheduledrpdwnlst? currentWeek = getCurrentWeek(Sheduledrpdwnlst);
         DutyDropdownNameController.text = currentWeek!.name ?? '';
         DutyDropdownValueController.text = currentWeek.value ?? '';
+        CurrentWeekItem = currentWeek.name ?? '';
         await getShiftData();
         // update(); // UI refresh karna
       } else if (rsponsedropden.statusCode == 401) {

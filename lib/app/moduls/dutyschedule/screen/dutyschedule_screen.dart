@@ -82,10 +82,23 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                                     'value': item.value ?? '',
                                     'text': item.name ?? '',
                                   },
-                                  child: Text(
-                                    item.name ?? '',
-                                    style: AppStyle.black.copyWith(fontSize: 14),
-                                    overflow: TextOverflow.ellipsis,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      item.name ?? '',
+                                      style: item.name != controller.CurrentWeekItem
+                                          ? AppStyle.black.copyWith(fontSize: 13)
+                                          : TextStyle(
+                                              fontSize: 13,
+                                              color: item.name == controller.CurrentWeekItem
+                                                  ? AppColor.primaryColor
+                                                  : Colors.black, // Custom color
+                                              // fontWeight: item.name == controller.CurrentWeekItem
+                                              //     ? FontWeight.bold
+                                              //     : FontWeight.normal,
+                                            ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                               ).toList()
@@ -107,7 +120,8 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                         ),
                         child: Center(
                           child: Text(
-                            controller.dutySchSftData.isNotEmpty && controller.dutySchSftData[0].dateColumnsValue != null
+                            controller.dutySchSftData.isNotEmpty &&
+                                    controller.dutySchSftData[0].dateColumnsValue != null
                                 ? controller.dutySchSftData[0].subDepartment!
                                 : "",
                             textAlign: TextAlign.center,

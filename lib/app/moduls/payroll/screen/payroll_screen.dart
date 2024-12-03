@@ -23,8 +23,11 @@ class PayrollScreen extends GetView<PayrollController> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDutyScheduleNavigating = false; // Declare this flag at class level.
     Get.put(PayrollController());
+
+    double screenHeight = MediaQuery.of(context).size.height;
+    double availableHeight = screenHeight - 85.0; // 70.0 is the height of BottomNavigationBar
+
     return GetBuilder<PayrollController>(
         init: PayrollController(),
         builder: (controller) {
@@ -176,467 +179,483 @@ class PayrollScreen extends GetView<PayrollController> {
               ],
               centerTitle: true,
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(15),
-              child: SingleChildScrollView(
-                child: controller.isLoading.value
-                    ? const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 100),
-                        child: Center(child: ProgressWithIcon()),
-                      )
-                    : Column(children: [
-                        Container(
-                            padding: const EdgeInsets.all(20),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              gradient: LinearGradient(
-                                begin: Alignment.centerRight,
-                                end: Alignment.centerLeft,
-                                colors: [
-                                  const Color.fromARGB(192, 198, 238, 243).withOpacity(0.3),
-                                  const Color.fromARGB(162, 94, 157, 168).withOpacity(0.4),
-                                ],
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+            body: LayoutBuilder(
+              builder: (context, constraints) {
+                // Check if content height exceeds available height
+                bool isScrollable = constraints.maxHeight > availableHeight;
+
+                return Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: SingleChildScrollView(
+                    controller: isScrollable ? controller.payrollScrollController : null,
+                    physics:
+                        isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: availableHeight,
+                      ),
+                      child: controller.isLoading.value
+                          ? const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 100),
+                              child: Center(child: ProgressWithIcon()),
+                            )
+                          : Column(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(AppString.todaysoverview, style: AppStyle.blackplus16),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Text(controller.formattedDate, style: AppStyle.plus17w600),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Container(
+                                Container(
                                     padding: const EdgeInsets.all(20),
+                                    width: double.infinity,
                                     decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: AppColor.originalgrey,
-                                            blurRadius: 2.0, // soften the shadow
-                                            spreadRadius: 1.0, //extend the shadow
-                                            offset: Offset(3.0, 3.0))
-                                      ],
-                                      color: AppColor.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: AppColor.primaryColor),
+                                      borderRadius: BorderRadius.circular(30),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.centerRight,
+                                        end: Alignment.centerLeft,
+                                        colors: [
+                                          const Color.fromARGB(192, 198, 238, 243).withOpacity(0.3),
+                                          const Color.fromARGB(162, 94, 157, 168).withOpacity(0.4),
+                                        ],
+                                      ),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          children: [
-                                            Text(AppString.clockin, style: AppStyle.plus16),
-                                            if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(
-                                                controller.empSummDashboardTable[0].inPunchTime.toString(),
-                                                style: AppStyle.plus16w600,
-                                              )
-                                            else
-                                              Text('--:-- ', style: AppStyle.plus16w600),
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                              decoration: BoxDecoration(
-                                                  color: AppColor.lightblue2,
-                                                  border: Border.all(color: AppColor.primaryColor),
-                                                  borderRadius: BorderRadius.circular(20)),
-                                              child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].inPunchTime
-                                                          .toString()
-                                                          .isNotEmpty
-                                                  ? Text(
-                                                      'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
-                                                      style: TextStyle(
-                                                        fontSize: 10, //12
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                                      ),
-                                                    )
-                                                  : Text(AppString.notyet),
-                                            )
-                                          ],
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text(AppString.todaysoverview, style: AppStyle.blackplus16),
                                         ),
-                                        Column(
-                                          children: [
-                                            Text(AppString.clockout, style: AppStyle.plus16),
-                                            if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(
-                                                controller.empSummDashboardTable[0].outPunchTime.toString(),
-                                                style: AppStyle.plus16w600,
-                                              )
-                                            else
-                                              Text('--:-- ', style: AppStyle.plus16w600),
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                              decoration: BoxDecoration(
-                                                  color: AppColor.lightblue2,
-                                                  border: Border.all(color: AppColor.primaryColor),
-                                                  borderRadius: BorderRadius.circular(20)),
-                                              child: controller.empSummDashboardTable.isNotEmpty &&
-                                                      controller.empSummDashboardTable[0].outPunchTime
-                                                          .toString()
-                                                          .isNotEmpty
-                                                  ? Text(
-                                                      'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
-                                                      style: AppStyle.plus10,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          child: Text(controller.formattedDate, style: AppStyle.plus17w600),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(20),
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: AppColor.originalgrey,
+                                                    blurRadius: 2.0, // soften the shadow
+                                                    spreadRadius: 1.0, //extend the shadow
+                                                    offset: Offset(3.0, 3.0))
+                                              ],
+                                              color: AppColor.white,
+                                              borderRadius: BorderRadius.circular(20),
+                                              border: Border.all(color: AppColor.primaryColor),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Text(AppString.clockin, style: AppStyle.plus16),
+                                                    if (controller.empSummDashboardTable.isNotEmpty)
+                                                      Text(
+                                                        controller.empSummDashboardTable[0].inPunchTime.toString(),
+                                                        style: AppStyle.plus16w600,
+                                                      )
+                                                    else
+                                                      Text('--:-- ', style: AppStyle.plus16w600),
+                                                    Container(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                          color: AppColor.lightblue2,
+                                                          border: Border.all(color: AppColor.primaryColor),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty &&
+                                                              controller.empSummDashboardTable[0].inPunchTime
+                                                                  .toString()
+                                                                  .isNotEmpty
+                                                          ? Text(
+                                                              'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
+                                                              style: TextStyle(
+                                                                fontSize: 10, //12
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                              ),
+                                                            )
+                                                          : Text(AppString.notyet),
                                                     )
-                                                  : Text(AppString.notyet),
-                                            )
-                                          ],
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    Text(AppString.clockout, style: AppStyle.plus16),
+                                                    if (controller.empSummDashboardTable.isNotEmpty)
+                                                      Text(
+                                                        controller.empSummDashboardTable[0].outPunchTime.toString(),
+                                                        style: AppStyle.plus16w600,
+                                                      )
+                                                    else
+                                                      Text('--:-- ', style: AppStyle.plus16w600),
+                                                    Container(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                          color: AppColor.lightblue2,
+                                                          border: Border.all(color: AppColor.primaryColor),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty &&
+                                                              controller.empSummDashboardTable[0].outPunchTime
+                                                                  .toString()
+                                                                  .isNotEmpty
+                                                          ? Text(
+                                                              'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
+                                                              style: AppStyle.plus10,
+                                                            )
+                                                          : Text(AppString.notyet),
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                          child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: AppColor.white,
+                                                borderRadius: BorderRadius.circular(20),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: AppColor.originalgrey,
+                                                      blurRadius: 2.0, // soften the shadow
+                                                      spreadRadius: 1.0, //extend the shadow
+                                                      offset: Offset(3.0, 3.0))
+                                                ],
+                                                border: Border.all(color: AppColor.primaryColor),
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(AppString.lcEgmin, style: AppStyle.plus14w500),
+                                                    if (controller.empSummDashboardTable.isNotEmpty)
+                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                          style: AppStyle.plus16w600)
+                                                    else
+                                                      Text('-- ', style: AppStyle.plus16w600),
+                                                  ],
+                                                ),
+                                              )),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: AppColor.white,
+                                              borderRadius: BorderRadius.circular(20),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: AppColor.originalgrey,
+                                                    blurRadius: 2.0, // soften the shadow
+                                                    spreadRadius: 1.0, //extend the shadow
+                                                    offset: Offset(3.0, 3.0))
+                                              ],
+                                              border: Border.all(color: AppColor.primaryColor),
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(AppString.lcegcnt, style: AppStyle.plus14w500),
+                                                  if (controller.empSummDashboardTable.isNotEmpty)
+                                                    Text(
+                                                      controller.empSummDashboardTable[0].cnt.toString(),
+                                                      style: AppStyle.plus16w600,
+                                                    )
+                                                  else
+                                                    Text('--', style: AppStyle.plus16w600),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: AppColor.white,
-                                        borderRadius: BorderRadius.circular(20),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: AppColor.originalgrey,
-                                              blurRadius: 2.0, // soften the shadow
-                                              spreadRadius: 1.0, //extend the shadow
-                                              offset: Offset(3.0, 3.0))
-                                        ],
-                                        border: Border.all(color: AppColor.primaryColor),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(AppString.lcEgmin, style: AppStyle.plus14w500),
-                                            if (controller.empSummDashboardTable.isNotEmpty)
-                                              Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
-                                                  style: AppStyle.plus16w600)
-                                            else
-                                              Text('-- ', style: AppStyle.plus16w600),
-                                          ],
-                                        ),
-                                      )),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: AppColor.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: AppColor.originalgrey,
-                                            blurRadius: 2.0, // soften the shadow
-                                            spreadRadius: 1.0, //extend the shadow
-                                            offset: Offset(3.0, 3.0))
-                                      ],
-                                      border: Border.all(color: AppColor.primaryColor),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    )),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Text(AppString.lcegcnt, style: AppStyle.plus14w500),
-                                          if (controller.empSummDashboardTable.isNotEmpty)
-                                            Text(
-                                              controller.empSummDashboardTable[0].cnt.toString(),
-                                              style: AppStyle.plus16w600,
-                                            )
-                                          else
-                                            Text('--', style: AppStyle.plus16w600),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              final bottomBarController = Get.put(BottomBarController());
+                                              final attendanceController = Get.put(AttendenceController());
+                                              await attendanceController.resetData();
+                                              if (bottomBarController.persistentController.value.index != 1) {
+                                                bottomBarController.currentIndex.value = 1;
+                                                bottomBarController.persistentController.value.index = 1;
+                                              }
+                                              bottomBarController.update();
+                                            }, //Get.to(const AttendanceScreen()),
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                              margin: const EdgeInsets.only(
+                                                top: 15,
+                                                left: 10,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: AppColor.primaryColor,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(10)),
+                                              child: Image.asset(
+                                                AppImage.attendence,
+                                                color: AppColor.primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(AppString.attendence, style: AppStyle.plus12),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final bottomBarController = Get.put(BottomBarController());
-                                      final attendanceController = Get.put(AttendenceController());
-                                      await attendanceController.resetData();
-                                      if (bottomBarController.persistentController.value.index != 1) {
-                                        bottomBarController.currentIndex.value = 1;
-                                        bottomBarController.persistentController.value.index = 1;
-                                      }
-                                      bottomBarController.update();
-                                    }, //Get.to(const AttendanceScreen()),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.06, //0.07
-                                      width: MediaQuery.of(context).size.width * 0.14, //0.17
-                                      margin: const EdgeInsets.only(
-                                        top: 15,
-                                        left: 10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        AppImage.attendence,
-                                        color: AppColor.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(AppString.attendence, style: AppStyle.plus12),
-                                ],
-                              ),
-                            ),
-                            const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
-                            Expanded(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    final bottomBarController = Get.put(BottomBarController());
-                                    bottomBarController.currentIndex.value = -1;
+                                    const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                                    Expanded(
+                                        child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            final bottomBarController = Get.put(BottomBarController());
+                                            bottomBarController.currentIndex.value = -1;
 
-                                    // Get.delete<MispunchController>();
-                                    final mispunchController = Get.put(MispunchController());
-                                    mispunchController.resetData();
-                                    mispunchController.update();
-                                    // Get.put(MispunchScreen());
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: const MispunchScreen(),
-                                      withNavBar: true,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ).then((value) async {
-                                      // final bottomBarController = Get.find<BottomBarController>();
-                                      bottomBarController.persistentController.value.index = 0;
-                                      bottomBarController.currentIndex.value = 0;
-                                      hideBottomBar.value = false;
-                                      var dashboardController = Get.put(DashboardController());
-                                      await dashboardController.getDashboardDataUsingToken();
-                                    });
-                                  }, //Get.to(MispunchScreen()),
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height * 0.06, //0.07
-                                    width: MediaQuery.of(context).size.width * 0.14, //0.17
-                                    margin: const EdgeInsets.only(top: 15),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: AppColor.primaryColor,
+                                            // Get.delete<MispunchController>();
+                                            final mispunchController = Get.put(MispunchController());
+                                            mispunchController.resetData();
+                                            mispunchController.update();
+                                            // Get.put(MispunchScreen());
+                                            PersistentNavBarNavigator.pushNewScreen(
+                                              context,
+                                              screen: const MispunchScreen(),
+                                              withNavBar: true,
+                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            ).then((value) async {
+                                              // final bottomBarController = Get.find<BottomBarController>();
+                                              bottomBarController.persistentController.value.index = 0;
+                                              bottomBarController.currentIndex.value = 0;
+                                              hideBottomBar.value = false;
+                                              var dashboardController = Get.put(DashboardController());
+                                              await dashboardController.getDashboardDataUsingToken();
+                                            });
+                                          }, //Get.to(MispunchScreen()),
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                            width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                            margin: const EdgeInsets.only(top: 15),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: AppColor.primaryColor,
+                                                ),
+                                                borderRadius: BorderRadius.circular(10)),
+                                            child: Image.asset(
+                                              AppImage.mispunch,
+                                              // height: 35, //50
+                                              // width: 35, //50
+                                              color: AppColor.primaryColor,
+                                            ),
+                                          ),
                                         ),
-                                        borderRadius: BorderRadius.circular(10)),
-                                    child: Image.asset(
-                                      AppImage.mispunch,
-                                      // height: 35, //50
-                                      // width: 35, //50
-                                      color: AppColor.primaryColor,
+                                        const SizedBox(height: 5),
+                                        Text(AppString.mispunchinfo, style: AppStyle.plus12),
+                                      ],
+                                    )),
+                                    const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () async {
+                                              final bottomBarController = Get.put(BottomBarController());
+                                              // final attendanceController = Get.put(AttendenceController());
+                                              // await attendanceController.resetData();
+                                              final leaveController = Get.put(LeaveController());
+                                              await leaveController.resetForm();
+                                              if (bottomBarController.persistentController.value.index != 3) {
+                                                bottomBarController.currentIndex.value = 3;
+                                                bottomBarController.persistentController.value.index = 3;
+                                              }
+                                              bottomBarController.update();
+
+                                              // var dashboardController = Get.put(DashboardController());
+
+                                              // var bottomBarController = Get.find<BottomBarController>();
+                                              // bottomBarController.currentIndex.value = 3;
+                                              // bottomBarController.persistentController.value.jumpToTab(3);
+                                              // bottomBarController.update();
+
+                                              // PersistentNavBarNavigator.pushNewScreen(
+                                              //   context,
+                                              //   screen: LeaveMainScreen(),
+                                              //   withNavBar: true,
+                                              //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                              // ).then((value) async {
+                                              //   // if (Get.isRegistered<LeaveController>()) {
+                                              //   //   Get.delete<LeaveController>();
+                                              //   // }
+                                              //   hideBottomBar.value = false;
+                                              //   bottomBarController.update();
+                                              //   await dashboardController.getDashboardDataUsingToken();
+                                              // });
+                                            },
+                                            // onTap: () => Get.snackbar(
+                                            //   AppString.comingsoon,
+                                            //   '',
+                                            //   colorText: AppColor.white,
+                                            //   backgroundColor: AppColor.black,
+                                            //   duration: const Duration(seconds: 1),
+                                            // ),
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                              margin: const EdgeInsets.only(top: 15),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: AppColor.primaryColor,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(10)),
+                                              child: Image.asset(
+                                                AppImage.leave,
+                                                color: AppColor.primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(AppString.leaveentry, style: AppStyle.plus12),
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                    const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () async {
+                                              final bottomBarController = Get.put(BottomBarController());
+                                              final leaveController = Get.put(LeaveController());
+                                              await leaveController.resetForm();
+                                              if (bottomBarController.persistentController.value.index != 4) {
+                                                bottomBarController.currentIndex.value = 4;
+                                                bottomBarController.persistentController.value.index = 4;
+                                              }
+                                              bottomBarController.update();
+                                              // var dashboardController = Get.put(DashboardController());
+                                              // PersistentNavBarNavigator.pushNewScreen(
+                                              //   context,
+                                              //   screen: OvertimeMainScreen(),
+                                              //   withNavBar: true,
+                                              //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                              // ).then((value) async {
+                                              //   // Get.delete<LeaveController>();
+                                              //   Get.delete<OvertimeController>();
+                                              //   hideBottomBar.value = false;
+                                              //   await dashboardController.getDashboardDataUsingToken();
+                                              // });
+                                            },
+                                            // onTap: () => Get.snackbar(
+                                            //   AppString.comingsoon,
+                                            //   '',
+                                            //   colorText: AppColor.white,
+                                            //   backgroundColor: AppColor.black,
+                                            //   duration: const Duration(seconds: 1),
+                                            // ),
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                              margin: const EdgeInsets.only(top: 15),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: AppColor.primaryColor,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(10)),
+                                              child: Image.asset(
+                                                AppImage.overtime,
+                                                color: AppColor.primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(AppString.overtime, style: AppStyle.plus12),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 5),
-                                Text(AppString.mispunchinfo, style: AppStyle.plus12),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () async {
+                                              if (controller.isDutyScheduleNavigating.value) return;
+                                              controller.isDutyScheduleNavigating.value = true;
+
+                                              final bottomBarController = Get.put(BottomBarController());
+                                              bottomBarController.currentIndex.value = -1;
+
+                                              DutyscheduleController dc = Get.put(DutyscheduleController());
+                                              dc.fetchdutyScheduledrpdwn();
+
+                                              PersistentNavBarNavigator.pushNewScreen(
+                                                context,
+                                                screen: const DutyscheduleScreen(),
+                                                withNavBar: true,
+                                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                              ).then((value) async {
+                                                // final bottomBarController = Get.find<BottomBarController>();
+                                                bottomBarController.persistentController.value.index = 0;
+                                                bottomBarController.currentIndex.value = 0;
+                                                hideBottomBar.value = false;
+                                                var dashboardController = Get.put(DashboardController());
+                                                await dashboardController.getDashboardDataUsingToken();
+                                              });
+                                              controller.isDutyScheduleNavigating.value = false;
+                                            }, //Get.to(MispunchScreen()),
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                              margin: const EdgeInsets.only(top: 15),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: AppColor.primaryColor,
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(10)),
+                                              child: Image.asset(
+                                                AppImage.dutySchedule,
+                                                // height: 35, //50
+                                                // width: 35, //50
+                                                color: AppColor.primaryColor,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Text(AppString.dutyschedule, style: AppStyle.plus12),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(child: SizedBox()),
+                                    Expanded(child: SizedBox()),
+                                    Expanded(child: SizedBox()),
+                                  ],
+                                ),
                               ],
-                            )),
-                            const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final bottomBarController = Get.put(BottomBarController());
-                                      // final attendanceController = Get.put(AttendenceController());
-                                      // await attendanceController.resetData();
-                                      final leaveController = Get.put(LeaveController());
-                                      await leaveController.resetForm();
-                                      if (bottomBarController.persistentController.value.index != 3) {
-                                        bottomBarController.currentIndex.value = 3;
-                                        bottomBarController.persistentController.value.index = 3;
-                                      }
-                                      bottomBarController.update();
-
-                                      // var dashboardController = Get.put(DashboardController());
-
-                                      // var bottomBarController = Get.find<BottomBarController>();
-                                      // bottomBarController.currentIndex.value = 3;
-                                      // bottomBarController.persistentController.value.jumpToTab(3);
-                                      // bottomBarController.update();
-
-                                      // PersistentNavBarNavigator.pushNewScreen(
-                                      //   context,
-                                      //   screen: LeaveMainScreen(),
-                                      //   withNavBar: true,
-                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      // ).then((value) async {
-                                      //   // if (Get.isRegistered<LeaveController>()) {
-                                      //   //   Get.delete<LeaveController>();
-                                      //   // }
-                                      //   hideBottomBar.value = false;
-                                      //   bottomBarController.update();
-                                      //   await dashboardController.getDashboardDataUsingToken();
-                                      // });
-                                    },
-                                    // onTap: () => Get.snackbar(
-                                    //   AppString.comingsoon,
-                                    //   '',
-                                    //   colorText: AppColor.white,
-                                    //   backgroundColor: AppColor.black,
-                                    //   duration: const Duration(seconds: 1),
-                                    // ),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.06, //0.07
-                                      width: MediaQuery.of(context).size.width * 0.14, //0.17
-                                      margin: const EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        AppImage.leave,
-                                        color: AppColor.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(AppString.leaveentry, style: AppStyle.plus12),
-                                ],
-                              ),
                             ),
-                            const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final bottomBarController = Get.put(BottomBarController());
-                                      final leaveController = Get.put(LeaveController());
-                                      await leaveController.resetForm();
-                                      if (bottomBarController.persistentController.value.index != 4) {
-                                        bottomBarController.currentIndex.value = 4;
-                                        bottomBarController.persistentController.value.index = 4;
-                                      }
-                                      bottomBarController.update();
-                                      // var dashboardController = Get.put(DashboardController());
-                                      // PersistentNavBarNavigator.pushNewScreen(
-                                      //   context,
-                                      //   screen: OvertimeMainScreen(),
-                                      //   withNavBar: true,
-                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      // ).then((value) async {
-                                      //   // Get.delete<LeaveController>();
-                                      //   Get.delete<OvertimeController>();
-                                      //   hideBottomBar.value = false;
-                                      //   await dashboardController.getDashboardDataUsingToken();
-                                      // });
-                                    },
-                                    // onTap: () => Get.snackbar(
-                                    //   AppString.comingsoon,
-                                    //   '',
-                                    //   colorText: AppColor.white,
-                                    //   backgroundColor: AppColor.black,
-                                    //   duration: const Duration(seconds: 1),
-                                    // ),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.06, //0.07
-                                      width: MediaQuery.of(context).size.width * 0.14, //0.17
-                                      margin: const EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        AppImage.overtime,
-                                        color: AppColor.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(AppString.overtime, style: AppStyle.plus12),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      if (controller.isDutyScheduleNavigating.value) return;
-                                      controller.isDutyScheduleNavigating.value = true;
-
-                                      final bottomBarController = Get.put(BottomBarController());
-                                      bottomBarController.currentIndex.value = -1;
-
-                                      DutyscheduleController dc = Get.put(DutyscheduleController());
-                                      dc.fetchdutyScheduledrpdwn();
-
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: const DutyscheduleScreen(),
-                                        withNavBar: true,
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      ).then((value) async {
-                                        // final bottomBarController = Get.find<BottomBarController>();
-                                        bottomBarController.persistentController.value.index = 0;
-                                        bottomBarController.currentIndex.value = 0;
-                                        hideBottomBar.value = false;
-                                        var dashboardController = Get.put(DashboardController());
-                                        await dashboardController.getDashboardDataUsingToken();
-                                      });
-                                      controller.isDutyScheduleNavigating.value = false;
-                                    }, //Get.to(MispunchScreen()),
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.06, //0.07
-                                      width: MediaQuery.of(context).size.width * 0.14, //0.17
-                                      margin: const EdgeInsets.only(top: 15),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColor.primaryColor,
-                                          ),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Image.asset(
-                                        AppImage.dutySchedule,
-                                        // height: 35, //50
-                                        // width: 35, //50
-                                        color: AppColor.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(AppString.dutyschedule, style: AppStyle.plus12),
-                                ],
-                              ),
-                            ),
-                            Expanded(child: SizedBox()),
-                            Expanded(child: SizedBox()),
-                            Expanded(child: SizedBox()),
-                          ],
-                        )
-                      ]),
-              ),
+                    ),
+                  ),
+                );
+              },
             ),
-            // ),
           );
         });
   }
