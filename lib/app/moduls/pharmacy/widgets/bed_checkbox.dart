@@ -1,6 +1,4 @@
-import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +7,7 @@ BedsCheckBoxes({required PharmacyController controller}) {
       itemCount: controller.beds.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 4),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 4),
       itemBuilder: (context, i) {
         return Row(
           children: [
@@ -27,32 +25,38 @@ BedsCheckBoxes({required PharmacyController controller}) {
                   children: [
                     controller.selectedBedList.contains(controller.beds[i].bedName)
                         ? Container(
-                            height: getDynamicHeight(size: 0.020),
-                            width: getDynamicHeight(size: 0.020),
+                            height: 20,
+                            width: 20,
                             decoration: BoxDecoration(
                                 color: AppColor.originalgrey,
                                 border: Border.all(width: 1, color: AppColor.originalgrey),
                                 borderRadius: const BorderRadius.all(Radius.circular(3))),
                             child: Center(
-                              child: Icon(Icons.check, color: AppColor.white, size: getDynamicHeight(size: 0.016)),
+                              child: Icon(Icons.check, color: AppColor.white, size: 16),
                             ),
                           )
                         : Container(
-                            height: getDynamicHeight(size: 0.020),
-                            width: getDynamicHeight(size: 0.020),
+                            height: 20,
+                            width: 20,
                             decoration: BoxDecoration(
                                 border: Border.all(width: 1, color: AppColor.originalgrey),
                                 borderRadius: const BorderRadius.all(Radius.circular(3))),
                           ),
-                    SizedBox(
-                      width: Sizes.crossLength * 0.010,
+                    SizedBox(width: 10),
+                    Text(
+                      controller.beds[i].bedName ?? '',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColor.black,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    AppText(
-                      text: controller.beds[i].bedName ?? '',
-                      fontSize: Sizes.px14,
-                      fontColor: AppColor.black,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    // AppText(
+                    //   text: controller.beds[i].bedName ?? '',
+                    //   fontSize: Sizes.px14,
+                    //   fontColor: AppColor.black,
+                    //   fontWeight: FontWeight.w600,
+                    // ),
                   ],
                 ),
               ),

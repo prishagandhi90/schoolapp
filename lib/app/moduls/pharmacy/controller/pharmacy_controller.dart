@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'package:emp_app/app/app_custom_widget/common_elevated_button.dart';
-import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/pharmafilter_model.dart';
@@ -26,6 +23,7 @@ class PharmacyController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   List<PresviewerList> presviewerList = [];
   List<PresdetailList> presdetailList = [];
+  List<PresviewerList> filterpresviewerList = [];
   int SelectedIndex = -1;
   List<bool> blurState = []; // Track blur states for each row
   List<Wards> wards = [];
@@ -38,10 +36,11 @@ class PharmacyController extends GetxController {
   List<String> tempWardList = [];
   List<String> tempFloorsList = [];
   List<String> tempBedList = [];
+  bool showShortButton = true;
   @override
   void onInit() {
     super.onInit();
-    fetchpresViewer(searchController.text);
+    fetchpresViewer();
     GetPharmaFilterData();
   }
 
@@ -50,7 +49,7 @@ class PharmacyController extends GetxController {
     update();
   }
 
-  Future<List<PresviewerList>> fetchpresViewer(String? searchPrefix) async {
+  Future<List<PresviewerList>> fetchpresViewer({String? searchPrefix, bool isLoader = true}) async {
     try {
       isLoading = true;
       String url = ConstApiUrl.empPresViewerListAPI;
@@ -72,6 +71,11 @@ class PharmacyController extends GetxController {
       if (rsponsedrpresviewer.statusCode == 200) {
         presviewerList.clear();
         presviewerList.assignAll(rsponsedrpresviewer.data ?? []);
+        if (rsponsedrpresviewer.data != null && rsponsedrpresviewer.data!.isNotEmpty) {
+          filterpresviewerList = rsponsedrpresviewer.data!;
+        } else {
+          filterpresviewerList = [];
+        }
         isLoading = false;
       } else if (rsponsedrpresviewer.statusCode == 401) {
         pref.clear();
@@ -157,6 +161,15 @@ class PharmacyController extends GetxController {
     return [];
   }
 
+  void filterSearchResults(String query) {
+    if (query.isEmpty) {
+      filterpresviewerList = presviewerList; // Show all data if search is empty
+    } else {
+      filterpresviewerList = presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
+    }
+    update();
+  }
+
   Future<void> pharmacyFiltterBottomSheet() async {
     showModalBottomSheet(
         context: Get.context!,
@@ -176,13 +189,13 @@ class PharmacyController extends GetxController {
               ),
               child: GetBuilder<PharmacyController>(builder: (controller) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Sizes.crossLength * 0.020),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: Sizes.crossLength * 0.025,
+                        height: 25,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -193,7 +206,7 @@ class PharmacyController extends GetxController {
                           Text(
                             'Filter by',
                             style: TextStyle(
-                              fontSize: Sizes.px20,
+                              fontSize: 25,
                               color: AppColor.black,
                               fontWeight: FontWeight.w700,
                             ),
@@ -215,42 +228,54 @@ class PharmacyController extends GetxController {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: Sizes.crossLength * 0.025,
+                                height: 25,
                               ),
-                              AppText(
-                                text: 'Wards',
-                                fontSize: Sizes.px15,
-                                fontColor: AppColor.black,
-                                fontWeight: FontWeight.w800,
+                              Text(
+                                'Select Wards Name',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               SizedBox(
-                                height: Sizes.crossLength * 0.010,
+                                height: 10,
                               ),
                               WardsCheckBoxes(controller: controller),
                               SizedBox(
-                                height: Sizes.crossLength * 0.015,
+                                height: 15,
                               ),
-                              AppText(
-                                text: 'Floor',
-                                fontSize: Sizes.px15,
-                                fontColor: AppColor.black,
-                                fontWeight: FontWeight.w800,
+                              Text(
+                                'Floor',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               SizedBox(
-                                height: Sizes.crossLength * 0.010,
+                                height: 10,
                               ),
                               FloorsCheckBoxes(controller: controller),
                               SizedBox(
-                                height: Sizes.crossLength * 0.015,
+                                height: 15,
                               ),
-                              AppText(
-                                text: 'Ward',
-                                fontSize: Sizes.px15,
-                                fontColor: AppColor.black,
-                                fontWeight: FontWeight.w800,
+                              Text(
+                                'Select Bed',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
+                              // AppText(
+                              //   text: 'Ward',
+                              //   fontSize: Sizes.px15,
+                              //   fontColor: AppColor.black,
+                              //   fontWeight: FontWeight.w800,
+                              // ),
                               SizedBox(
-                                height: getDynamicHeight(size: 0.010),
+                                height: 10,
                               ),
                               BedsCheckBoxes(controller: controller),
                               const SizedBox(
@@ -260,7 +285,7 @@ class PharmacyController extends GetxController {
                           ),
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 20,
                       ),
                       Align(
@@ -269,57 +294,110 @@ class PharmacyController extends GetxController {
                           children: [
                             Expanded(
                                 child: SizedBox(
-                              height: getDynamicHeight(size: 0.050),
-                              child: AppButton(
-                                  radius: 50,
-                                  text: 'Apply',
+                              height: 50,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      backgroundColor: AppColor.primaryColor),
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
                                     if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
-                                      // getFilterData();
+                                      fetchpresViewer();
                                     } else {
                                       Get.rawSnackbar(message: "Please select options to short");
                                     }
-                                  }),
+                                  },
+                                  child: Text(
+                                    'Apply',
+                                    style: TextStyle(color: AppColor.white, fontSize: 15),
+                                  )),
+                              // AppButton(
+                              //     radius: 50,
+                              //     text: 'Apply',
+                              //     onPressed: () {
+                              //       FocusScope.of(context).unfocus();
+                              //       callFilterAPi = true;
+                              //       if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
+                              //         Navigator.pop(context);
+                              //         // getFilterData();
+                              //       } else {
+                              //         Get.rawSnackbar(message: "Please select options to short");
+                              //       }
+                              //     }),
                             )),
                             SizedBox(
-                              width: getDynamicHeight(size: 0.020),
+                              width: 20,
                             ),
                             Expanded(
                               child: SizedBox(
-                                height: getDynamicHeight(size: 0.050),
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    // padding: const EdgeInsets.only(top: 1),
-                                    backgroundColor: AppColor.white,
-                                    side: BorderSide(width: 1.0, color: AppColor.black),
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        backgroundColor: AppColor.primaryColor),
+                                    onPressed: () {
+                                      callFilterAPi = true;
+                                      FocusScope.of(context).unfocus();
+                                      selectedWardList = [];
+                                      selectedFloorList = [];
+                                      selectedBedList = [];
+                                      fetchpresViewer();
+                                      Navigator.pop(context);
+                                      controller.update();
+                                    },
+                                    child: Text(
+                                      'Reset All',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: AppColor.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  )
+                                  // OutlinedButton(
+                                  //   style: OutlinedButton.styleFrom(
+                                  //     // padding: const EdgeInsets.only(top: 1),
+                                  //     backgroundColor: AppColor.white,
+                                  //     side: BorderSide(width: 1.0, color: AppColor.black),
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     callFilterAPi = true;
+                                  //     FocusScope.of(context).unfocus();
+                                  //     selectedWardList = [];
+                                  //     selectedFloorList = [];
+                                  //     selectedBedList = [];
+                                  //     fetchpresViewer(searchController.text);
+                                  //     Navigator.pop(context);
+                                  //     controller.update();
+                                  //   },
+                                  //   child: Text(
+                                  //     'Reset All',
+                                  //     style: TextStyle(
+                                  //       fontSize: 16,
+                                  //       color: AppColor.black,
+                                  //       fontWeight: FontWeight.w500,
+                                  //     ),
+                                  //   ),
+                                  //   // AppText(
+                                  //   //   text: 'Reset All',
+                                  //   //   fontSize: Sizes.px16,
+                                  //   //   fontWeight: FontWeight.w500,
+                                  //   //   fontColor: AppColor.white,
+                                  //   // ),
+                                  // ),
                                   ),
-                                  onPressed: () {
-                                    callFilterAPi = true;
-                                    FocusScope.of(context).unfocus();
-                                    selectedWardList = [];
-                                    selectedFloorList = [];
-                                    selectedBedList = [];
-                                    fetchpresViewer(searchController.text);
-                                    Navigator.pop(context);
-                                    controller.update();
-                                  },
-                                  child: AppText(
-                                    text: 'Reset All',
-                                    fontSize: Sizes.px16,
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: AppColor.white,
-                                  ),
-                                ),
-                              ),
                             )
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: getDynamicHeight(size: 0.025),
+                        height: 25,
                       ),
                     ],
                   ),
@@ -327,7 +405,7 @@ class PharmacyController extends GetxController {
               }),
             )).whenComplete(() {
       if (!callFilterAPi) {
-        fetchpresViewer(searchController.text);
+        fetchpresViewer();
         selectedWardList = List.from(tempWardList);
         selectedFloorList = List.from(tempFloorsList);
         selectedBedList = List.from(tempBedList);

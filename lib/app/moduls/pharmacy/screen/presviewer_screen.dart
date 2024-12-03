@@ -86,6 +86,15 @@ class PresviewerScreen extends StatelessWidget {
                               color: AppColor.black,
                             ),
                           ),
+                          suffixIcon: controller.searchController.text.trim().isNotEmpty
+                              ? GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    controller.searchController.clear();
+                                    controller.fetchpresViewer(isLoader: false);
+                                  },
+                                  child: const Icon(Icons.cancel_outlined))
+                              : const SizedBox(),
                           prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                           hintText: AppString.searchpatient,
                           hintStyle: TextStyle(
@@ -98,7 +107,30 @@ class PresviewerScreen extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(25)),
                           ),
                         ),
-                        onChanged: (value) {},
+                        onTap: () {
+                          controller.showShortButton = false;
+                          controller.update();
+                        },
+                        onChanged: (value) {
+                          controller.filterSearchResults(value);
+                        },
+                        onTapOutside: (event) {
+                          FocusScope.of(context).unfocus();
+                          // Future.delayed(const Duration(milliseconds: 300));
+                          controller.showShortButton = true;
+                          controller.update();
+                        },
+                        onFieldSubmitted: (v) {
+                          if (controller.searchController.text.trim().isNotEmpty) {
+                            controller.fetchpresViewer(
+                              searchPrefix: controller.searchController.text.trim(),
+                              isLoader: false,
+                            );
+                          }
+                          Future.delayed(const Duration(milliseconds: 800));
+                          controller.showShortButton = true;
+                          controller.update();
+                        },
                       ),
                     ),
                     const SizedBox(width: 8), // Space between items
@@ -130,15 +162,12 @@ class PresviewerScreen extends StatelessWidget {
                         child: IconButton(
                           icon: Icon(Icons.filter_alt, color: AppColor.black),
                           onPressed: () {
-                             controller.callFilterAPi = false;
-                          controller.tempWardList = List.unmodifiable(
-                              controller.selectedWardList);
-                          controller.tempFloorsList =
-                              List.unmodifiable((controller.selectedFloorList));
-                          controller.tempBedList =
-                              List.unmodifiable(controller.selectedBedList);
+                            controller.callFilterAPi = false;
+                            controller.tempWardList = List.unmodifiable(controller.selectedWardList);
+                            controller.tempFloorsList = List.unmodifiable((controller.selectedFloorList));
+                            controller.tempBedList = List.unmodifiable(controller.selectedBedList);
 
-                          controller.pharmacyFiltterBottomSheet();
+                            controller.pharmacyFiltterBottomSheet();
                           },
                         ),
                       ),
@@ -148,12 +177,11 @@ class PresviewerScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                    itemCount: controller.presviewerList.length,
+                    itemCount: controller.filterpresviewerList.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          // margin: const EdgeInsets.symmetric(vertical: 8.0),
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                           decoration: BoxDecoration(
                             color: AppColor.lightblue,
@@ -170,7 +198,7 @@ class PresviewerScreen extends StatelessWidget {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        controller.presviewerList[index].patientName.toString(),
+                                        controller.filterpresviewerList[index].patientName.toString(),
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -194,7 +222,7 @@ class PresviewerScreen extends StatelessWidget {
                                           icon: Icon(Icons.shopping_cart, size: 18),
                                           onPressed: () async {
                                             controller.SelectedIndex = index;
-                                            await controller.fetchpresDetailList(controller.presviewerList[index].mstId.toString());
+                                            await controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
 
                                             final bottomBarController = Get.put(BottomBarController());
                                             bottomBarController.currentIndex.value = -1;
@@ -236,7 +264,7 @@ class PresviewerScreen extends StatelessWidget {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: controller.presviewerList[index].printStatus.toString(), // Data
+                                            text: controller.filterpresviewerList[index].printStatus.toString(), // Data
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500, // Normal weight for data
@@ -261,7 +289,7 @@ class PresviewerScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: controller.presviewerList[index].priority.toString(), // Data
+                                                text: controller.filterpresviewerList[index].priority.toString(), // Data
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500, // Normal weight for data
@@ -292,7 +320,7 @@ class PresviewerScreen extends StatelessWidget {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: controller.presviewerList[index].lastUser.toString(), // Data
+                                            text: controller.filterpresviewerList[index].lastUser.toString(), // Data
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500, // Normal weight for data
@@ -322,7 +350,7 @@ class PresviewerScreen extends StatelessWidget {
                                             ),
                                           ),
                                           TextSpan(
-                                            text: controller.presviewerList[index].ipd.toString(), // Data
+                                            text: controller.filterpresviewerList[index].ipd.toString(), // Data
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500, // Normal weight for data
@@ -347,7 +375,7 @@ class PresviewerScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: controller.presviewerList[index].rxStatus.toString(), // Data
+                                                text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500, // Normal weight for data
