@@ -124,7 +124,7 @@ class LoginScreen extends GetView<LoginController> {
                                 : Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Image.asset(
-                                      AppImage.logo,
+                                      'assets/Venus_Hospital_New_Logo-removebg-preview.png',
                                       width: MediaQuery.of(context).size.width * 0.8,
                                     ),
                                   ),
