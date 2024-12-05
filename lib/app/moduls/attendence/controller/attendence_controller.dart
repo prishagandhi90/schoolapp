@@ -95,10 +95,10 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
 
   @override
   void onClose() {
-    attendanceScrollController.dispose(); //
-    monthScrollControllerSummary.dispose();
-    monthScrollControllerDetail.dispose();
-    tabController.dispose();
+    // attendanceScrollController.dispose(); //
+    // monthScrollControllerSummary.dispose();
+    // monthScrollControllerDetail.dispose();
+    // tabController.dispose();
     // monthScrollControllerDetail.dispose();
 
     super.onClose();

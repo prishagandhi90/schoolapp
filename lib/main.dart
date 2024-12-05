@@ -26,20 +26,20 @@ void main() async {
       if (kReleaseMode) exit(1);
     };
 
-    runApp(
-      MyApp(
-        isLoggedIn: isLoggedIn,
-      ),
-    );
-
     // runApp(
-    //   DevicePreview(
-    //     enabled: !kReleaseMode,
-    //     builder: (context) => MyApp(
-    //       isLoggedIn: isLoggedIn,
-    //     ),
+    //   MyApp(
+    //     isLoggedIn: isLoggedIn,
     //   ),
     // );
+
+    runApp(
+      DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(
+          isLoggedIn: isLoggedIn,
+        ),
+      ),
+    );
   } catch (e) {
     print('An error occurred: $e');
     // You can add additional code here to handle the error
