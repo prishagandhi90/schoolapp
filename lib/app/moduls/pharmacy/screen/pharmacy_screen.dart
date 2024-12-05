@@ -93,46 +93,58 @@ class PharmacyScreen extends StatelessWidget {
                   });
                 },
                 child: Container(
-                  height: 100,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColor.lightblue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      bottomRight: Radius.circular(30.0),
+                    height: 100,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColor.lightblue,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        bottomRight: Radius.circular(30.0),
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'Prescription Viewer',
-                          style: AppStyle.plus17w600.copyWith(fontSize: 19),
-                        ),
-                      ),
-                      // Image Section
-                      SizedBox(
-                        width: 150,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Positioned(
-                              top: -40, // To show half the image outside the container
-                              child: Image.asset(
-                                'assets/image/medicine.png', // Replace with your image path
-                                height: 100,
-                                width: 100,
-                                fit: BoxFit.contain,
-                              ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Title Section
+                        Flexible(
+                          flex: 2,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20, // 4% of screen width
                             ),
-                          ],
+                            child: Text(
+                              'Prescription Viewer',
+                              style: AppStyle.plus17w600.copyWith(
+                                fontSize: 19, // 4.5% of screen width
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )),
+                        // Image Section
+                        Flexible(
+                          flex: 1,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.height * 0.150,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  top: -40, // 4% of screen height
+                                  right: 0,
+                                  child: Image.asset(
+                                    'assets/image/medicine.png',
+                                    height: 100, // 10% of screen height
+                                    width: 100, // 20% of screen width
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ))),
           )
         ],
       ),

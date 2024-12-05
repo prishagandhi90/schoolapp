@@ -304,7 +304,7 @@ class PharmacyController extends GetxController {
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
+                                    if (  selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       fetchpresViewer();
                                     } else {
@@ -413,4 +413,5 @@ class PharmacyController extends GetxController {
       }
     });
   }
+  
 }
