@@ -123,13 +123,14 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         // final attendanceController = Get.find<AttendenceController>();
         attendanceController.initialIndex.value = 0;
         attendanceController.resetData();
-        attendanceController.update();
+        // attendanceController.update();
         if (bottomBarController.persistentController.value.index != 1) {
           bottomBarController.currentIndex.value = 1;
           bottomBarController.persistentController.value.index = 1;
           // bottomBarController.onItemTapped(1, context);
           // Get.to(attendanceScreen);
         }
+        bottomBarController.update();
         // PersistentNavBarNavigator.pushNewScreen(
         //   context,
         //   screen: AttendanceScreen(),

@@ -74,7 +74,7 @@ class MispunchController extends GetxController {
 
   @override
   void onClose() {
-    monthScrollController_mispunch.dispose(); //
+    // monthScrollController_mispunch.dispose(); //
     super.onClose();
   }
   // void clearData() {

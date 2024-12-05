@@ -30,7 +30,7 @@ class LoginController extends GetxController {
   //   await dashboardController.getDashboardDataUsingToken();
   // }
 
-  Future<MobileTable> sendotp() async {
+  Future<MobileTable?> sendotp() async {
     isLoadingLogin = true;
     update();
     try {
@@ -50,20 +50,21 @@ class LoginController extends GetxController {
           Get.rawSnackbar(message: "No data found!");
         }
       } else if (responseMobileNo.statusCode == 400) {
-        Get.rawSnackbar(message: "Data not found!");
+        Get.rawSnackbar(message: responseMobileNo.message.toString());
       } else if (responseMobileNo.statusCode == 404) {
         Get.rawSnackbar(message: "Not found!");
       } else if (responseMobileNo.statusCode == 500) {
         Get.rawSnackbar(message: "Internal server error");
       } else {
-        Get.rawSnackbar(message: "Something went wrong");
+        Get.rawSnackbar(message: AppString.failedtorequestotp);
       }
-      isLoadingLogin = false;
-      return MobileTable();
+      // isLoadingLogin = false;
+      // return MobileTable();
+      return null;
     } catch (e) {
       isLoadingLogin = false;
       print('Error: $e');
-      return MobileTable();
+      return null;
     } finally {
       isLoadingLogin = false;
       update();
@@ -75,9 +76,8 @@ class LoginController extends GetxController {
     update();
     try {
       if (formKey.currentState!.validate()) {
-        MobileTable response = await sendotp();
-        if (response != null) {
-          // final respOTP = json.decode(response)["data"]["otpNo"].toString();
+        MobileTable? response = await sendotp();
+        if (response != null && response.otpNo != null && response.otpNo != "") {
           final respOTP = response.otpNo.toString();
           var loginController = Get.put(LoginController());
           loginController.responseOTPNo = respOTP;
@@ -92,11 +92,12 @@ class LoginController extends GetxController {
             ),
           );
           // }
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppString.failedtorequestotp)),
-          );
         }
+        // else {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     SnackBar(content: Text(AppString.failedtorequestotp)),
+        //   );
+        // }
       }
     } catch (e) {
       // Handle exception

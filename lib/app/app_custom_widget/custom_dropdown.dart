@@ -46,37 +46,56 @@ class CustomDropdown extends StatelessWidget {
               )
               ?.value, // Get selected value from the controller
           onChanged: (value) {
-            FocusManager.instance.primaryFocus?.unfocus();
+            // FocusManager.instance.primaryFocus?.unfocus();
             if (value != null) {
               controller.text = value['text'] ?? ''; // Update the controller with selected value
               onChanged(value); // Call the custom onChanged method
               print("Selected value: ${value['text']}"); // Debugging line to check selected value
             }
           },
+
           buttonStyleData: buttonStyleData,
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
           ),
+
+          // dropdownStyleData: DropdownStyleData(
+          //   // maxHeight: screenHeight * 0.5, // Set dropdown max height to 50% of screen
+          //   maxHeight: screenHeight - 100.0,
+          //   // padding: const EdgeInsets.symmetric(horizontal: 14),
+          //   padding: items.length * 40.0 > screenHeight - 70.0 // Each item's height approx. 40
+          //       ? const EdgeInsets.only(bottom: 70.0) // Add padding if items exceed height
+          //       : null,
+          //   decoration: BoxDecoration(
+          //     border: Border.all(color: Colors.black),
+          //     borderRadius: BorderRadius.circular(0),
+          //     color: Colors.white,
+          //   ),
+          //   scrollbarTheme: ScrollbarThemeData(
+          //     thumbVisibility: WidgetStateProperty.all(true),
+          //   ),
+          // ),
           dropdownStyleData: DropdownStyleData(
-            // maxHeight: screenHeight * 0.5, // Set dropdown max height to 50% of screen
-            maxHeight: screenHeight - 100.0,
-            // padding: const EdgeInsets.symmetric(horizontal: 14),
-            padding: items.length * 40.0 > screenHeight - 70.0 // Each item's height approx. 40
-                ? const EdgeInsets.only(bottom: 70.0) // Add padding if items exceed height
-                : null,
+            useSafeArea: false, // यह dropdown को safe area से बाहर जाने की अनुमति देगा
+            useRootNavigator: true,
+            maxHeight: screenHeight * 0.4, // स्क्रीन की ऊंचाई का 40% तक सीमित करें
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(0),
               color: Colors.white,
             ),
             scrollbarTheme: ScrollbarThemeData(
-              thumbVisibility: WidgetStateProperty.all(true),
+              radius: const Radius.circular(8),
+              thickness: MaterialStateProperty.all(6),
+              thumbVisibility: MaterialStateProperty.all(true),
+              thumbColor: MaterialStateProperty.all(AppColor.black.withOpacity(0.5)),
             ),
+            offset: const Offset(0, -4), // ड्रॉपडाउन को थोड़ा ऊपर शिफ्ट करें
           ),
           onMenuStateChange: (isOpen) {
             if (isOpen) {
               print("Dropdown is open");
-              FocusManager.instance.primaryFocus?.unfocus();
+              // FocusManager.instance.primaryFocus?.unfocus();
             } else {
               print("Dropdown is closed");
             }

@@ -68,9 +68,9 @@ class _OtpScreenState extends State<OtpScreen> {
     try {
       // final response = await otpController.sendotp();
       var loginController = Get.put(LoginController());
-      MobileTable response = await loginController.sendotp();
+      MobileTable? response = await loginController.sendotp();
       // final respOTP = json.decode(response)["data"]["otpNo"].toString();
-      final respOTP = response.otpNo.toString();
+      final respOTP = response!.otpNo.toString();
       setState(() {
         // widget.otpNo = respOTP;
         loginController.responseOTPNo = respOTP;
