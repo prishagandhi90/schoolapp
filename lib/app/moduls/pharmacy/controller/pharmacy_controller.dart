@@ -11,7 +11,9 @@ import 'package:emp_app/app/moduls/pharmacy/model/presviewer_model.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/bed_checkbox.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/ward_checkbox.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +26,8 @@ class PharmacyController extends GetxController {
   List<PresviewerList> presviewerList = [];
   List<PresdetailList> presdetailList = [];
   List<PresviewerList> filterpresviewerList = [];
+  final ScrollController pharmacyScrollController = ScrollController();
+  final ScrollController pharmacyviewScrollController = ScrollController();
   int SelectedIndex = -1;
   List<bool> blurState = []; // Track blur states for each row
   List<Wards> wards = [];
@@ -42,6 +46,34 @@ class PharmacyController extends GetxController {
     super.onInit();
     fetchpresViewer();
     GetPharmaFilterData();
+
+    pharmacyScrollController.addListener(() {
+      if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
+
+    pharmacyviewScrollController.addListener(() {
+      if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
 
   void toggleBlur(int index) {
@@ -304,7 +336,7 @@ class PharmacyController extends GetxController {
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (  selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       fetchpresViewer();
                                     } else {
@@ -413,5 +445,4 @@ class PharmacyController extends GetxController {
       }
     });
   }
-  
 }

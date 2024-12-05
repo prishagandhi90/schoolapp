@@ -150,147 +150,146 @@ class PresdetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                   child: ListView.builder(
                       itemCount: controller.presdetailList.length,
+                      controller: controller.pharmacyScrollController,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
+                        bool isLastItem = index == controller.presdetailList.length - 1;
                         return GestureDetector(
                           onTap: () {
-                            // if (index <= controller.blurState.length) {
                             controller.toggleBlur(index);
                             checkAllBlurred();
-                            // } else {
-                            //   print("Blur state not initialized for index: $index");
-                            // }
                           },
                           child: Stack(
                             children: [
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                                 child: Container(
-                                  height: 150, // Centered container height
                                   width: double.infinity, // Centered container width
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(70),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(70),
-                                              bottomLeft: Radius.circular(70),
+                                  child: IntrinsicHeight(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(70),
+                                                bottomLeft: Radius.circular(70),
+                                              ),
                                             ),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Text(
-                                                  controller.presdetailList[index].formBrand.toString(),
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 15,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Text(
+                                                    controller.presdetailList[index].formBrand.toString(),
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 15,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Generic Drug: ', // Heading
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.bold, // Bold style for heading
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  const SizedBox(height: 5),
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Generic Drug: ',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: controller.presdetailList[index].genericName.toString(), // Data
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w500, // Normal weight for data
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        TextSpan(
+                                                          text: controller.presdetailList[index].genericName.toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: AppColor.lightblue, // Replace with your blue color
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(70),
-                                              bottomRight: Radius.circular(70),
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Quantity: ', // Heading
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.bold, // Bold style for heading
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: controller.presdetailList[index].qty.toString(), // Data
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w500, // Normal weight for data
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Pkg: ', // Heading
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.bold, // Bold style for heading
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                        text: controller.presdetailList[index].pkg.toString(), // Data
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.w500, // Normal weight for data
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppColor.lightblue, // Replace with your blue color
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(70),
+                                                bottomRight: Radius.circular(70),
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Quantity: ',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: controller.presdetailList[index].qty.toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 5),
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Pkg: ',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.bold,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: controller.presdetailList[index].pkg.toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -305,6 +304,17 @@ class PresdetailsScreen extends StatelessWidget {
                                         color: Colors.black.withOpacity(0.2), // Add a slight overlay
                                       ),
                                     ),
+                                  ),
+                                ),
+                              // Divider only below the last item
+                              if (isLastItem)
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  child: Divider(
+                                    color: AppColor.red,
+                                    thickness: 2,
                                   ),
                                 ),
                             ],
