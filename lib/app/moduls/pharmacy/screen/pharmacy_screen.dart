@@ -131,7 +131,7 @@ class PharmacyScreen extends StatelessWidget {
                               children: [
                                 Positioned(
                                   top: -40, // 4% of screen height
-                                  right: 0,
+                                  right: 30,
                                   child: Image.asset(
                                     'assets/image/medicine.png',
                                     height: 100, // 10% of screen height

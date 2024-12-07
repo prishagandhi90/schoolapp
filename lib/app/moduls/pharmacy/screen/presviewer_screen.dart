@@ -146,14 +146,14 @@ class PresviewerScreen extends StatelessWidget {
                         child: IconButton(
                           icon: Icon(Icons.sort, color: AppColor.black),
                           onPressed: () {
-                            // Add functionality here
+                            controller.sortBy();
                           },
                         ),
                       ),
                     ),
                     const SizedBox(width: 8), // Space between items
                     Expanded(
-                      flex: 1.5.toInt(),
+                      flex: 1.toInt(),
                       child: Container(
                         // height: 50, // Adjust height as needed
                         decoration: BoxDecoration(
@@ -161,7 +161,7 @@ class PresviewerScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: IconButton(
-                          icon: Icon(Icons.filter_alt, color: AppColor.black),
+                          icon: Icon(Icons.filter_alt, color: AppColor.black,size: 25),
                           onPressed: () {
                             controller.callFilterAPi = false;
                             controller.tempWardList = List.unmodifiable(controller.selectedWardList);
@@ -182,227 +182,253 @@ class PresviewerScreen extends StatelessWidget {
                       child: Center(child: ProgressWithIcon()),
                     )
                   : Expanded(
-                      child: ListView.builder(
-                          itemCount: controller.filterpresviewerList.length,
-                          controller: controller.pharmacyviewScrollController,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColor.lightblue,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Scrollbar(
+                        controller: controller.pharmacyScrollController,
+                        thickness: 5, //According to your choice
+                        thumbVisibility: false, //
+                        radius: Radius.circular(10),
+                        child: ListView.builder(
+                            itemCount: controller.filterpresviewerList.length,
+                            controller: controller.pharmacyviewScrollController,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    controller.SelectedIndex = index;
+                                    await controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
+
+                                    final bottomBarController = Get.put(BottomBarController());
+                                    bottomBarController.currentIndex.value = -1;
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: PresdetailsScreen(),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ).then((value) async {
+                                      // final bottomBarController = Get.find<BottomBarController>();
+                                      bottomBarController.persistentController.value.index = 0;
+                                      bottomBarController.currentIndex.value = 0;
+                                      bottomBarController.isPharmacyHome.value = true;
+                                      hideBottomBar.value = false;
+                                      var dashboardController = Get.put(DashboardController());
+                                      await dashboardController.getDashboardDataUsingToken();
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      color: AppColor.lightblue,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
-                                          flex: 6,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              controller.filterpresviewerList[index].patientName.toString(),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              flex: 6,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  controller.filterpresviewerList[index].patientName.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
                                               ),
                                             ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                height: 35, // Small container size
+                                                margin: const EdgeInsets.only(bottom: 5), // Moves container a bit left and down
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[200],
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(Icons.shopping_cart, size: 18),
+                                                  onPressed: () async {
+                                                    controller.SelectedIndex = index;
+                                                    await controller
+                                                        .fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
+
+                                                    final bottomBarController = Get.put(BottomBarController());
+                                                    bottomBarController.currentIndex.value = -1;
+                                                    PersistentNavBarNavigator.pushNewScreen(
+                                                      context,
+                                                      screen: PresdetailsScreen(),
+                                                      withNavBar: true,
+                                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                    ).then((value) async {
+                                                      // final bottomBarController = Get.find<BottomBarController>();
+                                                      bottomBarController.persistentController.value.index = 0;
+                                                      bottomBarController.currentIndex.value = 0;
+                                                      bottomBarController.isPharmacyHome.value = true;
+                                                      hideBottomBar.value = false;
+                                                      var dashboardController = Get.put(DashboardController());
+                                                      await dashboardController.getDashboardDataUsingToken();
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'Print St: ', // Heading
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold, // Bold style for heading
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: controller.filterpresviewerList[index].printStatus.toString(), // Data
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w500, // Normal weight for data
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Priority: ', // Heading
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.bold, // Bold style for heading
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: controller.filterpresviewerList[index].priority.toString(), // Data
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w500, // Normal weight for data
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: GestureDetector(
-                                            onTap: () => Get.to(PresdetailsScreen()),
-                                            child: Container(
-                                              height: 35, // Small container size
-                                              margin: const EdgeInsets.only(bottom: 5), // Moves container a bit left and down
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[200],
-                                                borderRadius: BorderRadius.circular(8),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'Last User: ', // Heading
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold, // Bold style for heading
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: controller.filterpresviewerList[index].lastUser.toString(), // Data
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w500, // Normal weight for data
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              child: IconButton(
-                                                icon: Icon(Icons.shopping_cart, size: 18),
-                                                onPressed: () async {
-                                                  controller.SelectedIndex = index;
-                                                  await controller
-                                                      .fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
-
-                                                  final bottomBarController = Get.put(BottomBarController());
-                                                  bottomBarController.currentIndex.value = -1;
-                                                  PersistentNavBarNavigator.pushNewScreen(
-                                                    context,
-                                                    screen: PresdetailsScreen(),
-                                                    withNavBar: true,
-                                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                                  ).then((value) async {
-                                                    // final bottomBarController = Get.find<BottomBarController>();
-                                                    bottomBarController.persistentController.value.index = 0;
-                                                    bottomBarController.currentIndex.value = 0;
-                                                    bottomBarController.isPharmacyHome.value = true;
-                                                    hideBottomBar.value = false;
-                                                    var dashboardController = Get.put(DashboardController());
-                                                    await dashboardController.getDashboardDataUsingToken();
-                                                  });
-                                                },
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'IPD No: ', // Heading
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.bold, // Bold style for heading
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: controller.filterpresviewerList[index].ipd.toString(), // Data
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w500, // Normal weight for data
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
+                                              Expanded(
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'RX Status: ', // Heading
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.bold, // Bold style for heading
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                          text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w500, // Normal weight for data
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Print St: ', // Heading
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold, // Bold style for heading
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: controller.filterpresviewerList[index].printStatus.toString(), // Data
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500, // Normal weight for data
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: 'Priority: ', // Heading
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold, // Bold style for heading
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: controller.filterpresviewerList[index].priority.toString(), // Data
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w500, // Normal weight for data
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Last User: ', // Heading
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold, // Bold style for heading
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: controller.filterpresviewerList[index].lastUser.toString(), // Data
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500, // Normal weight for data
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: 'IPD No: ', // Heading
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold, // Bold style for heading
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: controller.filterpresviewerList[index].ipd.toString(), // Data
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500, // Normal weight for data
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: Alignment.topRight,
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: 'RX Status: ', // Heading
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold, // Bold style for heading
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w500, // Normal weight for data
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                      ),
                     )
             ]));
       },
