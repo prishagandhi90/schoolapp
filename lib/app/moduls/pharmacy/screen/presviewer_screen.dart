@@ -138,38 +138,50 @@ class PresviewerScreen extends StatelessWidget {
                     Expanded(
                       flex: 1.5.toInt(),
                       child: Container(
-                        // height: 50, // Adjust height as needed
+                        height: 50, // Adjust height as needed
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColor.black),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: IconButton(
-                          icon: Icon(Icons.sort, color: AppColor.black),
-                          onPressed: () {
-                            controller.sortBy();
-                          },
-                        ),
+                        child: Center(
+                            child: GestureDetector(
+                                onTap: () {
+                                  controller.sortBy();
+                                },
+                                child: Image.asset(
+                                  'assets/image/Vector.png',
+                                ))
+
+                            // IconButton(
+                            //   icon: Icon(Icons.sort, color: AppColor.black),
+                            //   onPressed: () {
+                            //     controller.sortBy();
+                            //   },
+                            // ),
+                            ),
                       ),
                     ),
                     const SizedBox(width: 8), // Space between items
                     Expanded(
-                      flex: 1.toInt(),
+                      flex: 1.5.toInt(),
                       child: Container(
                         // height: 50, // Adjust height as needed
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColor.black),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: IconButton(
-                          icon: Icon(Icons.filter_alt, color: AppColor.black,size: 25),
-                          onPressed: () {
-                            controller.callFilterAPi = false;
-                            controller.tempWardList = List.unmodifiable(controller.selectedWardList);
-                            controller.tempFloorsList = List.unmodifiable((controller.selectedFloorList));
-                            controller.tempBedList = List.unmodifiable(controller.selectedBedList);
+                        child: Center(
+                          child: IconButton(
+                            icon: Icon(Icons.filter_alt, color: AppColor.black, size: 25),
+                            onPressed: () {
+                              controller.callFilterAPi = false;
+                              controller.tempWardList = List.unmodifiable(controller.selectedWardList);
+                              controller.tempFloorsList = List.unmodifiable((controller.selectedFloorList));
+                              controller.tempBedList = List.unmodifiable(controller.selectedBedList);
 
-                            controller.pharmacyFiltterBottomSheet();
-                          },
+                              controller.pharmacyFiltterBottomSheet();
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -183,13 +195,15 @@ class PresviewerScreen extends StatelessWidget {
                     )
                   : Expanded(
                       child: Scrollbar(
-                        controller: controller.pharmacyScrollController,
+                        // controller: controller.pharmacyScrollController,
                         thickness: 5, //According to your choice
                         thumbVisibility: false, //
                         radius: Radius.circular(10),
                         child: ListView.builder(
                             itemCount: controller.filterpresviewerList.length,
                             controller: controller.pharmacyviewScrollController,
+                            shrinkWrap: true,
+                            physics: AlwaysScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
