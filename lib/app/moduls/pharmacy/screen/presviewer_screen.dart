@@ -195,7 +195,6 @@ class PresviewerScreen extends StatelessWidget {
                     )
                   : Expanded(
                       child: Scrollbar(
-                        // controller: controller.pharmacyScrollController,
                         thickness: 5, //According to your choice
                         thumbVisibility: false, //
                         radius: Radius.circular(10),
@@ -210,7 +209,8 @@ class PresviewerScreen extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () async {
                                     controller.SelectedIndex = index;
-                                    await controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
+                                    await controller
+                                        .fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
 
                                     final bottomBarController = Get.put(BottomBarController());
                                     bottomBarController.currentIndex.value = -1;
@@ -259,7 +259,8 @@ class PresviewerScreen extends StatelessWidget {
                                               flex: 1,
                                               child: Container(
                                                 height: 35, // Small container size
-                                                margin: const EdgeInsets.only(bottom: 5), // Moves container a bit left and down
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 5), // Moves container a bit left and down
                                                 decoration: BoxDecoration(
                                                   color: Colors.grey[200],
                                                   borderRadius: BorderRadius.circular(8),
@@ -268,8 +269,8 @@ class PresviewerScreen extends StatelessWidget {
                                                   icon: Icon(Icons.shopping_cart, size: 18),
                                                   onPressed: () async {
                                                     controller.SelectedIndex = index;
-                                                    await controller
-                                                        .fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
+                                                    await controller.fetchpresDetailList(
+                                                        controller.filterpresviewerList[index].mstId.toString());
 
                                                     final bottomBarController = Get.put(BottomBarController());
                                                     bottomBarController.currentIndex.value = -1;
@@ -310,7 +311,8 @@ class PresviewerScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: controller.filterpresviewerList[index].printStatus.toString(), // Data
+                                                      text: controller.filterpresviewerList[index].printStatus
+                                                          .toString(), // Data
                                                       style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w500, // Normal weight for data
@@ -335,7 +337,8 @@ class PresviewerScreen extends StatelessWidget {
                                                           ),
                                                         ),
                                                         TextSpan(
-                                                          text: controller.filterpresviewerList[index].priority.toString(), // Data
+                                                          text: controller.filterpresviewerList[index].priority
+                                                              .toString(), // Data
                                                           style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight: FontWeight.w500, // Normal weight for data
@@ -366,7 +369,8 @@ class PresviewerScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: controller.filterpresviewerList[index].lastUser.toString(), // Data
+                                                      text: controller.filterpresviewerList[index].lastUser
+                                                          .toString(), // Data
                                                       style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w500, // Normal weight for data
@@ -396,7 +400,8 @@ class PresviewerScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: controller.filterpresviewerList[index].ipd.toString(), // Data
+                                                      text:
+                                                          controller.filterpresviewerList[index].ipd.toString(), // Data
                                                       style: TextStyle(
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w500, // Normal weight for data
@@ -421,7 +426,8 @@ class PresviewerScreen extends StatelessWidget {
                                                           ),
                                                         ),
                                                         TextSpan(
-                                                          text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
+                                                          text: controller.filterpresviewerList[index].rxStatus
+                                                              .toString(), // Data
                                                           style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight: FontWeight.w500, // Normal weight for data

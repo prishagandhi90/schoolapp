@@ -17,7 +17,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PharmacyController extends GetxController {
+class PharmacyController extends GetxController with SingleGetTickerProviderMixin {
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
@@ -47,6 +47,7 @@ class PharmacyController extends GetxController {
     super.onInit();
     fetchpresViewer();
     GetPharmaFilterData();
+    update();
 
     pharmacyScrollController.addListener(() {
       if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
@@ -75,6 +76,11 @@ class PharmacyController extends GetxController {
         }
       }
     });
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 
   void toggleBlur(int index) {
@@ -198,7 +204,8 @@ class PharmacyController extends GetxController {
     if (query.isEmpty) {
       filterpresviewerList = presviewerList; // Show all data if search is empty
     } else {
-      filterpresviewerList = presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
+      filterpresviewerList =
+          presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
     }
     update();
   }
@@ -367,7 +374,9 @@ class PharmacyController extends GetxController {
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty ||
+                                        selectedFloorList.isNotEmpty ||
+                                        selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       fetchpresViewer();
                                     } else {
