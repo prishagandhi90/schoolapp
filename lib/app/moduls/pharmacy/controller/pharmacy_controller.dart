@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -78,11 +80,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     });
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   void toggleBlur(int index) {
     blurState[index] = !blurState[index];
     update();
@@ -91,6 +88,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   Future<List<PresviewerList>> fetchpresViewer({String? searchPrefix, bool isLoader = true}) async {
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empPresViewerListAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -210,39 +208,45 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   }
 
   getSortData({bool isLoader = true}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    loginId = await prefs.getString(AppString.keyLoginId) ?? "";
-    tokenNo = await prefs.getString(AppString.keyToken) ?? "";
-    Map data = {
-      "loginId": loginId,
-      "sortType": sortBySelected == 0
-          ? "Patient Name[A to Z]"
-          : sortBySelected == 1
-              ? "Patient Name[Z to A]"
-              : sortBySelected == 2
-                  ? "Stay Days [Low - High]"
-                  : "Stay Days [High - Low]"
-    };
-    String url = ConstApiUrl.empPatientsortDataApi;
-    var response = await apiController.parseJsonBody(url, tokenNo, data);
-    Rsponsedrpresviewer rsponsedrpresviewer = Rsponsedrpresviewer.fromJson(jsonDecode(response));
-    if (rsponsedrpresviewer.statusCode == 200) {
-      if (rsponsedrpresviewer.data != null && rsponsedrpresviewer.data!.isNotEmpty) {
-        filterpresviewerList = rsponsedrpresviewer.data!;
+    try {
+      isLoading = isLoader;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      loginId = await prefs.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await prefs.getString(AppString.keyToken) ?? "";
+      Map data = {
+        "loginId": loginId,
+        "sortType": sortBySelected == 0
+            ? "Patient Name[A to Z]"
+            : sortBySelected == 1
+                ? "Patient Name[Z to A]"
+                : sortBySelected == 2
+                    ? "Stay Days [Low - High]"
+                    : "Stay Days [High - Low]"
+      };
+      String url = ConstApiUrl.empPatientsortDataApi;
+      var response = await apiController.parseJsonBody(url, tokenNo, data);
+      Rsponsedrpresviewer rsponsedrpresviewer = Rsponsedrpresviewer.fromJson(jsonDecode(response));
+      if (rsponsedrpresviewer.statusCode == 200) {
+        if (rsponsedrpresviewer.data != null && rsponsedrpresviewer.data!.isNotEmpty) {
+          filterpresviewerList = rsponsedrpresviewer.data!;
+        } else {
+          filterpresviewerList = [];
+        }
+        isLoading = false;
+      } else if (rsponsedrpresviewer.statusCode == 401) {
+        prefs.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (rsponsedrpresviewer.statusCode == 400) {
+        isLoading = false;
       } else {
-        filterpresviewerList = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
+      update();
+    } catch (e) {
       isLoading = false;
-    } else if (rsponsedrpresviewer.statusCode == 401) {
-      prefs.clear();
-      Get.offAll(const LoginScreen());
-      Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-    } else if (rsponsedrpresviewer.statusCode == 400) {
-      isLoading = false;
-    } else {
-      Get.rawSnackbar(message: "Something went wrong");
+      update();
     }
-    update();
   }
 
   Future<void> pharmacyFiltterBottomSheet() async {
@@ -290,11 +294,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                             onPressed: () => Navigator.pop(context),
                             icon: Icon(Icons.cancel),
                           )
-                          // GestureDetector(
-                          //     onTap: () {
-                          //       Navigator.pop(context);
-                          //     },
-                          //     child: SvgPicture.asset(ConstAsset.closeIcon))
                         ],
                       ),
                       Expanded(
@@ -375,7 +374,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     callFilterAPi = true;
                                     if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
-                                      fetchpresViewer();
+                                      fetchpresViewer(isLoader: false);
                                     } else {
                                       Get.rawSnackbar(message: "Please select options to short");
                                     }
@@ -384,19 +383,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     'Apply',
                                     style: TextStyle(color: AppColor.white, fontSize: 15),
                                   )),
-                              // AppButton(
-                              //     radius: 50,
-                              //     text: 'Apply',
-                              //     onPressed: () {
-                              //       FocusScope.of(context).unfocus();
-                              //       callFilterAPi = true;
-                              //       if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
-                              //         Navigator.pop(context);
-                              //         // getFilterData();
-                              //       } else {
-                              //         Get.rawSnackbar(message: "Please select options to short");
-                              //       }
-                              //     }),
                             )),
                             SizedBox(
                               width: 20,
@@ -428,39 +414,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                  )
-                                  // OutlinedButton(
-                                  //   style: OutlinedButton.styleFrom(
-                                  //     // padding: const EdgeInsets.only(top: 1),
-                                  //     backgroundColor: AppColor.white,
-                                  //     side: BorderSide(width: 1.0, color: AppColor.black),
-                                  //   ),
-                                  //   onPressed: () {
-                                  //     callFilterAPi = true;
-                                  //     FocusScope.of(context).unfocus();
-                                  //     selectedWardList = [];
-                                  //     selectedFloorList = [];
-                                  //     selectedBedList = [];
-                                  //     fetchpresViewer(searchController.text);
-                                  //     Navigator.pop(context);
-                                  //     controller.update();
-                                  //   },
-                                  //   child: Text(
-                                  //     'Reset All',
-                                  //     style: TextStyle(
-                                  //       fontSize: 16,
-                                  //       color: AppColor.black,
-                                  //       fontWeight: FontWeight.w500,
-                                  //     ),
-                                  //   ),
-                                  //   // AppText(
-                                  //   //   text: 'Reset All',
-                                  //   //   fontSize: Sizes.px16,
-                                  //   //   fontWeight: FontWeight.w500,
-                                  //   //   fontColor: AppColor.white,
-                                  //   // ),
-                                  // ),
-                                  ),
+                                  )),
                             )
                           ],
                         ),
@@ -529,17 +483,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 Navigator.pop(context);
                               },
                               icon: Icon(Icons.cancel))
-                          // AppText(
-                          //   text: 'Sort by',
-                          //   fontSize: Sizes.px20,
-                          //   fontColor: ConstColor.blackTextColor,
-                          //   fontWeight: FontWeight.w700,
-                          // ),
-                          // GestureDetector(
-                          //     onTap: () {
-                          //       Navigator.pop(context);
-                          //     },
-                          //     child: SvgPicture.asset(ConstAsset.closeIcon))
                         ],
                       ),
                       Expanded(
@@ -568,12 +511,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         color: sortBySelected == 0 ? AppColor.primaryColor : AppColor.black,
                                       ),
                                     )
-                                    // AppText(
-                                    //   text: 'Patient Name [A-Z]',
-                                    //   fontSize: Sizes.px14,
-                                    //   fontColor: sortBySelected == 0 ? ConstColor.buttonColor : ConstColor.blackTextColor,
-                                    //   fontWeight: FontWeight.w500,
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -605,12 +542,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         color: sortBySelected == 1 ? AppColor.primaryColor : AppColor.black,
                                       ),
                                     )
-                                    // AppText(
-                                    //   text: 'Patient Name [Z-A]',
-                                    //   fontSize: Sizes.px14,
-                                    //   fontColor: sortBySelected == 1 ? ConstColor.buttonColor : ConstColor.blackTextColor,
-                                    //   fontWeight: FontWeight.w500,
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -642,12 +573,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         color: sortBySelected == 2 ? AppColor.primaryColor : AppColor.black,
                                       ),
                                     )
-                                    // AppText(
-                                    //   text: 'Stay Days [Low - High]',
-                                    //   fontSize: Sizes.px14,
-                                    //   fontColor: sortBySelected == 2 ? ConstColor.buttonColor : ConstColor.blackTextColor,
-                                    //   fontWeight: FontWeight.w500,
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -679,12 +604,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         color: sortBySelected == 3 ? AppColor.primaryColor : AppColor.black,
                                       ),
                                     )
-                                    // AppText(
-                                    //   text: 'Stay Days [High-Low]',
-                                    //   fontSize: Sizes.px14,
-                                    //   fontColor: sortBySelected == 3 ? ConstColor.buttonColor : ConstColor.blackTextColor,
-                                    //   fontWeight: FontWeight.w500,
-                                    // ),
                                   ],
                                 ),
                               ),

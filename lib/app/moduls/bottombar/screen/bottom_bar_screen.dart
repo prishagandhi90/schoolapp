@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';

@@ -146,6 +146,7 @@ class PresviewerScreen extends StatelessWidget {
                         child: Center(
                             child: GestureDetector(
                                 onTap: () {
+                                  
                                   controller.sortBy();
                                 },
                                 child: Image.asset(

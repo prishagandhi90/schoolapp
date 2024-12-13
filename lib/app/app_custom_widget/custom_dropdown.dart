@@ -86,9 +86,9 @@ class CustomDropdown extends StatelessWidget {
             ),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(8),
-              thickness: MaterialStateProperty.all(6),
-              thumbVisibility: MaterialStateProperty.all(true),
-              thumbColor: MaterialStateProperty.all(AppColor.black.withOpacity(0.5)),
+              thickness: WidgetStateProperty.all(6),
+              thumbVisibility: WidgetStateProperty.all(true),
+              thumbColor: WidgetStateProperty.all(AppColor.black.withOpacity(0.5)),
             ),
             offset: const Offset(0, -4), // ड्रॉपडाउन को थोड़ा ऊपर शिफ्ट करें
           ),
