@@ -204,8 +204,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     if (query.isEmpty) {
       filterpresviewerList = presviewerList; // Show all data if search is empty
     } else {
-      filterpresviewerList =
-          presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
+      filterpresviewerList = presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
     }
     update();
   }
@@ -374,9 +373,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                   onPressed: () {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty ||
-                                        selectedFloorList.isNotEmpty ||
-                                        selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       fetchpresViewer();
                                     } else {
@@ -710,8 +707,9 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                       onPressed: () {
                                         FocusScope.of(context).unfocus();
 
-                                        getSortData();
+                                        // getSortData();
                                         sortBySelected = null;
+                                        fetchpresViewer();
                                         Navigator.pop(context);
                                         controller.update();
                                       },
