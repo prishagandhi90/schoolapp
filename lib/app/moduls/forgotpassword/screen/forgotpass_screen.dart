@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ForgotpassScreen extends GetView<ForgotpassController> {
-  const ForgotpassScreen({Key? key}) : super(key: key);
+  final String mobileNumber;
+
+  const ForgotpassScreen({Key? key, required this.mobileNumber}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                 ),
                                 const SizedBox(height: 40),
                                 TextFormField(
-                                  controller: controller.numberController,
+                                  controller: controller.numberController..text = mobileNumber,
                                   keyboardType: TextInputType.number,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {

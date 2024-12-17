@@ -143,7 +143,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FORGOTPASSWORD,
-      page: () => const ForgotpassScreen(),
+      page: () => const ForgotpassScreen(mobileNumber: '',),
       binding: ForgotpasswordBinding(),
     ),
   ];
