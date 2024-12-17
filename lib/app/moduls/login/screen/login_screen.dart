@@ -29,7 +29,7 @@ class LoginScreen extends GetView<LoginController> {
                     padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
                     child: IntrinsicHeight(
                       child: Form(
-                        key: loginController.formKey,
+                        key: controller.formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -135,7 +135,8 @@ class LoginScreen extends GetView<LoginController> {
                                               controller.hidePassword = !controller.hidePassword;
                                               controller.update();
                                             },
-                                            child: Icon(controller.hidePassword ? Icons.visibility : Icons.visibility_off),
+                                            child:
+                                                Icon(controller.hidePassword ? Icons.visibility : Icons.visibility_off),
                                           ),
                                         ),
                                       )
@@ -165,7 +166,10 @@ class LoginScreen extends GetView<LoginController> {
                                           ),
                                           child: Text(
                                             controller.withPaasword ? 'With OTP' : 'With Password',
-                                            style: TextStyle(color: AppColor.primaryColor, fontSize: 14, fontWeight: FontWeight.w700),
+                                            style: TextStyle(
+                                                color: AppColor.primaryColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700),
                                           )
                                           //  AppText(
                                           //   text: controller.withPaasword ? 'With OTP' : 'With Password',
@@ -213,7 +217,8 @@ class LoginScreen extends GetView<LoginController> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              Get.to(() => const ForgotpassScreen(), duration: const Duration(milliseconds: 700));
+                                              Get.to(() => const ForgotpassScreen(),
+                                                  duration: const Duration(milliseconds: 700));
                                             },
                                             child: Container(
                                                 padding: const EdgeInsets.only(
@@ -229,7 +234,10 @@ class LoginScreen extends GetView<LoginController> {
                                                 ),
                                                 child: Text(
                                                   'Forgot Password?',
-                                                  style: TextStyle(color: AppColor.primaryColor, fontSize: 14, fontWeight: FontWeight.w700),
+                                                  style: TextStyle(
+                                                      color: AppColor.primaryColor,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w700),
                                                 )
                                                 // AppText(
                                                 //   text: 'Forgot Password?',

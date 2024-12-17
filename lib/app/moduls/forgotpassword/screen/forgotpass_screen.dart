@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class ForgotpassScreen extends StatelessWidget {
+class ForgotpassScreen extends GetView<ForgotpassController> {
   const ForgotpassScreen({Key? key}) : super(key: key);
 
   @override
@@ -50,7 +50,6 @@ class ForgotpassScreen extends StatelessWidget {
                                 TextFormField(
                                   controller: controller.numberController,
                                   keyboardType: TextInputType.number,
-                                  
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return AppString.plzentermobileno;
@@ -118,15 +117,26 @@ class ForgotpassScreen extends StatelessWidget {
                                   width: MediaQuery.of(context).size.width * 0.40,
                                   child: ElevatedButton(
                                     onPressed: () async {
-                                      Get.delete<ForgotpassController>();
-                                      Get.delete<LoginController>();
-                                      Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
+                                      // Purane controllers ko delete karo
+                                      if (Get.isRegistered<ForgotpassController>()) {
+                                        Get.delete<ForgotpassController>();
+                                      }
+                                      if (Get.isRegistered<LoginController>()) {
+                                        Get.delete<LoginController>();
+                                      }
+
+                                      Get.put(LoginController());
+                                      Get.put(ForgotpassController());
+                                      // Nayi LoginScreen load karo
+                                      Get.offAll(() => const LoginScreen(),
+                                          duration: const Duration(milliseconds: 700));
                                       // Get.back();
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColor.white,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                                          borderRadius: BorderRadius.circular(10),
+                                          side: BorderSide(color: AppColor.primaryColor)),
                                     ),
                                     child: Text(
                                       'Cancel',

@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 class ForgotpassController extends GetxController {
   final passFormKey = GlobalKey<FormState>();
+  // static final passFormKey = GlobalKey<FormState>();
   final TextEditingController numberController = TextEditingController();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;

@@ -17,6 +17,7 @@ class LoginController extends GetxController {
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  // static final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;
   String responseOTPNo = "";
