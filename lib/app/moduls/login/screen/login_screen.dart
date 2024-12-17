@@ -213,7 +213,7 @@ class LoginScreen extends GetView<LoginController> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              Get.to(() => const ForgotpassScreen(), duration: const Duration(milliseconds: 700));
+                                              Get.to(() => ForgotpassScreen(mobileNumber: loginController.numberController.text), duration: const Duration(milliseconds: 700));
                                             },
                                             child: Container(
                                                 padding: const EdgeInsets.only(
