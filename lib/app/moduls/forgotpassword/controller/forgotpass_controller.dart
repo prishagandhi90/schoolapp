@@ -1,37 +1,21 @@
 import 'dart:convert';
-import 'package:emp_app/app/core/util/const_api_url.dart';
+
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LoginController extends GetxController {
-  bool isObscured = true;
-  bool isVerifyingOtp = false;
-  String devToken = "";
-  bool isLoadingLogin = false;
-  bool withPaasword = false;
-  bool hidePassword = true;
+class ForgotpassController extends GetxController {
+  final passFormKey = GlobalKey<FormState>();
   final TextEditingController numberController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;
-  String responseOTPNo = "";
-
-  @override
-  void onInit() {
-    super.onInit();
-    // saveLoginStatus();
-    // update();
-  }
-
-  // Future<void> saveLoginStatus() async {
-  //   var dashboardController = Get.put(DashboardController());
-  //   await dashboardController.getDashboardDataUsingToken();
-  // }
+  bool isLoadingLogin = false;
+  String devToken = "";
 
   Future<MobileTable?> sendotp() async {
     isLoadingLogin = true;
@@ -78,7 +62,7 @@ class LoginController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      if (formKey.currentState!.validate()) {
+      if (passFormKey.currentState!.validate()) {
         MobileTable? response = await sendotp();
         if (response != null && response.otpNo != null && response.otpNo != "") {
           final respOTP = response.otpNo.toString();
@@ -91,7 +75,7 @@ class LoginController extends GetxController {
               builder: (context) => OtpScreen(
                 mobileNumber: numberController.text,
                 deviceToken: devToken,
-                fromLogin: true,
+                fromLogin: false,
               ),
             ),
           );

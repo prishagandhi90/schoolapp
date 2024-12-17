@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,8 @@ class LoginScreen extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     Get.put(LoginController());
+    // Get.lazyPut(() => LoginController());
+
     return GetBuilder<LoginController>(builder: (loginController) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -89,10 +92,95 @@ class LoginScreen extends GetView<LoginController> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 55),
+                                // const SizedBox(height: 20),
+                                loginController.withPaasword
+                                    ? SizedBox(
+                                        height: 20,
+                                      )
+                                    : SizedBox(),
+                                loginController.withPaasword
+                                    ? TextFormField(
+                                        controller: loginController.passwordController,
+                                        keyboardType: TextInputType.emailAddress,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'enter password';
+                                          }
+                                          if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                                            return AppString.entervalidmobileno;
+                                          }
+                                          return null;
+                                        },
+                                        obscureText: loginController.hidePassword,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.digitsOnly,
+                                          LengthLimitingTextInputFormatter(10),
+                                        ],
+                                        decoration: InputDecoration(
+                                          hintText: 'Enter Password',
+                                          hintStyle: TextStyle(
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppColor.primaryColor),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppColor.primaryColor),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppColor.primaryColor),
+                                          ),
+                                          suffixIcon: GestureDetector(
+                                            onTap: () {
+                                              controller.hidePassword = !controller.hidePassword;
+                                              controller.update();
+                                            },
+                                            child: Icon(controller.hidePassword ? Icons.visibility : Icons.visibility_off),
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.withPaasword = !controller.withPaasword;
+                                        controller.update();
+                                      },
+                                      child: Container(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 1, // Space between underline and text
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                color: AppColor.primaryColor,
+                                                width: 1.0, // Underline thickness
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            controller.withPaasword ? 'With OTP' : 'With Password',
+                                            style: TextStyle(color: AppColor.primaryColor, fontSize: 14, fontWeight: FontWeight.w700),
+                                          )
+                                          //  AppText(
+                                          //   text: controller.withPaasword ? 'With OTP' : 'With Password',
+                                          //   fontColor: ConstColor.headingTexColor,
+                                          //   fontSize: Sizes.px14,
+                                          //   fontWeight: FontWeight.w700,
+                                          // ),
+                                          ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 40),
                                 SizedBox(
                                   height: MediaQuery.of(context).size.width * 0.13,
-                                  width: double.infinity,
+                                  width: MediaQuery.of(context).size.width * 0.40,
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       loginController.isLoadingLogin ? null : loginController.requestOTP(context);
@@ -116,6 +204,44 @@ class LoginScreen extends GetView<LoginController> {
                                           ),
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                controller.withPaasword
+                                    ? Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => const ForgotpassScreen(), duration: const Duration(milliseconds: 700));
+                                            },
+                                            child: Container(
+                                                padding: const EdgeInsets.only(
+                                                  bottom: 1, // Space between underline and text
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  border: Border(
+                                                    bottom: BorderSide(
+                                                      color: AppColor.primaryColor,
+                                                      width: 1.0, // Underline thickness
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  'Forgot Password?',
+                                                  style: TextStyle(color: AppColor.primaryColor, fontSize: 14, fontWeight: FontWeight.w700),
+                                                )
+                                                // AppText(
+                                                //   text: 'Forgot Password?',
+                                                //   fontColor: ConstColor.headingTexColor,
+                                                //   fontSize: Sizes.px14,
+                                                //   fontWeight: FontWeight.w700,
+                                                // ),
+                                                ),
+                                          )
+                                        ],
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                             MediaQuery.of(context).viewInsets.bottom > 0

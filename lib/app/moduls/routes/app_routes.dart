@@ -25,6 +25,9 @@ abstract class Routes {
   static const OvertimeMainScreen = _Paths.OVERTIMEMAINSCREEN;
   static const OvertimeEntry = _Paths.OVERTIMEENTRY;
   static const OvertimeView = _Paths.OVERTIMEVIEW;
+
+  static const FORGOTPASSWORD = _Paths.FORGOTPASSWORD;
+  static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
 }
 
 abstract class _Paths {
@@ -49,4 +52,7 @@ abstract class _Paths {
   static const OVERTIMEMAINSCREEN = '/overtime-main-screen';
   static const OVERTIMEENTRY = '/overtime-entry';
   static const OVERTIMEVIEW = '/overtime-view';
+
+  static const FORGOTPASSWORD = '/forgotpassword';
+  static const RESET_PASSWORD = '/reset-password';
 }

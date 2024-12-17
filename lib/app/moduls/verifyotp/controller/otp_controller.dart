@@ -8,8 +8,10 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
+import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
@@ -25,8 +27,9 @@ class OtpController extends GetxController {
   List<OTPModel> otpmodel = [];
   Timer? timer;
   RxInt secondsRemaining = AppConst.OTPTimer.obs;
-
+  RxBool enableResendOtp = false.obs;
   late DashboardTable dashboardTable;
+  bool fromLogin = false;
 
   void clearText() {
     otpController.clear();
@@ -198,29 +201,39 @@ class OtpController extends GetxController {
         return false;
       }
 
-      if (formKey1.currentState!.validate()) {
-        formKey1.currentState!.save();
+      if (fromLogin) {
+        if (formKey1.currentState!.validate()) {
+          formKey1.currentState!.save();
 
-        String isValidLogin = "false";
-        isLoadingLogin = true;
-        // update();
-        isValidLogin = await getDashboardData(otpNo, context, deviceToken);
-        // update();
-        if (isValidLogin == "true") {
-          otpController.text = "";
-          // hideBottomBar.value = false;
-          // bottomBarController.update();
+          String isValidLogin = "false";
+          isLoadingLogin = true;
           // update();
-          // Get.offAll(BottomBarView());
-          final bottomBarController = Get.put(BottomBarController());
-          bottomBarController.resetAndInitialize();
+          isValidLogin = await getDashboardData(otpNo, context, deviceToken);
+          // update();
+          if (isValidLogin == "true") {
+            otpController.text = "";
+            // hideBottomBar.value = false;
+            // bottomBarController.update();
+            // update();
+            // Get.offAll(BottomBarView());
+            final bottomBarController = Get.put(BottomBarController());
+            bottomBarController.resetAndInitialize();
 
-          Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-            Get.put(BottomBarController());
-          }));
+            Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+              Get.put(BottomBarController());
+            }));
+          } else {
+            Get.snackbar(
+              AppString.otpincorrect,
+              '',
+              colorText: AppColor.white,
+              backgroundColor: AppColor.black,
+              duration: const Duration(seconds: 1),
+            );
+          }
         } else {
           Get.snackbar(
-            AppString.otpincorrect,
+            AppString.plzenterproperotp,
             '',
             colorText: AppColor.white,
             backgroundColor: AppColor.black,
@@ -228,13 +241,13 @@ class OtpController extends GetxController {
           );
         }
       } else {
-        Get.snackbar(
-          AppString.plzenterproperotp,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        timer?.cancel();
+        secondsRemaining = 150.obs;
+        enableResendOtp.value = true;
+        Get.to(() => ResetpassScreen(),
+            // const ResetPasswordView(),
+            duration: const Duration(milliseconds: 700),
+            arguments: {"otp": otpNo, 'mobileNo': numberController.text});
       }
     } catch (e) {
       print(e);
@@ -249,5 +262,25 @@ class OtpController extends GetxController {
     String start = mobileNumber.substring(0, 3);
     String end = mobileNumber.substring(mobileNumber.length - 3);
     return '$start****$end';
+  }
+
+  verifyOtp() async {
+    var loginController = Get.put(LoginController());
+    if (loginController.responseOTPNo == otpController.text.trim()) {
+      if (fromLogin) {
+        await getDashboardData(loginController.responseOTPNo, Get.context!, "");
+        return;
+      } else {
+        timer?.cancel();
+        secondsRemaining = 150.obs;
+        enableResendOtp.value = true;
+        Get.to(() => ResetpassScreen(),
+            // const ResetPasswordView(),
+            duration: const Duration(milliseconds: 700),
+            arguments: {"otp": loginController.responseOTPNo, 'mobileNo': numberController.text});
+      }
+    } else {
+      Get.rawSnackbar(message: "Otp didn't match");
+    }
   }
 }

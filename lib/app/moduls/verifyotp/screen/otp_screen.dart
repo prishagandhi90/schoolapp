@@ -15,9 +15,10 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.mobileNumber, required this.deviceToken});
+  const OtpScreen({super.key, required this.mobileNumber, required this.deviceToken, required this.fromLogin});
   final String mobileNumber;
   final String deviceToken;
+  final bool fromLogin;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -129,8 +130,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '',
-          colorText: AppColor.white, backgroundColor: AppColor.black);
+      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
     });
   }
 
@@ -215,8 +215,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   onPressed: otpController.isLoadingLogin
                                       ? null
                                       : () async {
-                                          if (otpController.otpController.text.isEmpty ||
-                                              otpController.otpController.text.length < 6) {
+                                          if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
                                             Get.snackbar(
                                               AppString.error,
                                               AppString.plzentervalidotp,
@@ -225,8 +224,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                               duration: const Duration(seconds: 1),
                                             );
                                           } else {
-                                            await otpController.otpOnClk(
-                                                context, loginController.responseOTPNo, widget.deviceToken);
+                                            otpController.fromLogin = widget.fromLogin;
+                                            otpController.update();
+                                            await otpController.otpOnClk(context, loginController.responseOTPNo, widget.deviceToken);
                                           }
                                         },
                                   style: ElevatedButton.styleFrom(

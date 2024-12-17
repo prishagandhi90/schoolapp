@@ -8,6 +8,8 @@ import 'package:emp_app/app/moduls/bottombar/bindings/bottombar_binding.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/bindings/DashboardBinding.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/forgotpassword/binding/forgotpassword_binding.dart';
+import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/view/nointernet_screen.dart';
 import 'package:emp_app/app/moduls/leave/bindings/leave_form_binding.dart';
@@ -28,6 +30,8 @@ import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtimedemo.dart';
 import 'package:emp_app/app/moduls/payroll/bindings/payroll_binding.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
+import 'package:emp_app/app/moduls/resetpassword/binding/reset_password_binding.dart';
+import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/bindings/verifyotp_binding.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
 import 'package:get/get.dart';
@@ -62,6 +66,7 @@ class AppPages {
         return OtpScreen(
           mobileNumber: arguments['mobileNumber'],
           deviceToken: arguments['deviceToken'],
+          fromLogin: true,
         ); // Pass the required parameter
       },
       binding: VerifyotpBinding(),
@@ -130,6 +135,16 @@ class AppPages {
       name: _Paths.OVERTIMEVIEW,
       page: () => const OvertimeViewScreen(),
       binding: OvertimeViewBinding(),
+    ),
+    GetPage(
+      name: _Paths.RESET_PASSWORD,
+      page: () => const ResetpassScreen(),
+      binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGOTPASSWORD,
+      page: () => const ForgotpassScreen(),
+      binding: ForgotpasswordBinding(),
     ),
   ];
 }
