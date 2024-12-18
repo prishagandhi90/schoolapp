@@ -15,6 +15,7 @@ import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +31,8 @@ class OtpController extends GetxController {
   RxBool enableResendOtp = false.obs;
   late DashboardTable dashboardTable;
   bool fromLogin = false;
+  String deviceTok = "";
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   void clearText() {
     otpController.clear();
@@ -38,6 +41,14 @@ class OtpController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _firebaseMessaging.requestPermission();
+
+    _firebaseMessaging.getToken().then((String? token) {
+      assert(token != null);
+      print("FCM Token: $token");
+      deviceTok = token.toString();
+      update();
+    });
   }
 
   Future<dynamic> sendotp() async {
@@ -61,13 +72,13 @@ class OtpController extends GetxController {
     }
   }
 
-  Future<String> getDashboardData(String otp, BuildContext context, String deviceToken) async {
+  Future<String> getDashboardData(String otp, BuildContext context, String deviceToken, String Password) async {
     try {
       // String url = 'http://117.217.126.127:44166/api/Employee/authentication';
       String url = ConstApiUrl.loginWithOTP_Pass;
       var jsonbodyObj = {
         "mobileNo": numberController.text,
-        "password": "",
+        "password": Password,
         "otp": otp,
         "deviceType": "1",
         "deviceName": "string",
@@ -102,7 +113,7 @@ class OtpController extends GetxController {
           dashboardController.update();
           return "true";
         } else {
-          Get.rawSnackbar(message: "No data found!");
+          Get.rawSnackbar(message: responseDashboardData.message.toString());
         }
       } else if (responseDashboardData.statusCode == 401) {
         prefs.clear();
@@ -209,7 +220,7 @@ class OtpController extends GetxController {
           String isValidLogin = "false";
           isLoadingLogin = true;
           // update();
-          isValidLogin = await getDashboardData(otpNo, context, deviceToken);
+          isValidLogin = await getDashboardData(otpNo, context, deviceToken, "");
           // update();
           if (isValidLogin == "true") {
             otpController.text = "";
@@ -269,7 +280,7 @@ class OtpController extends GetxController {
     var loginController = Get.put(LoginController());
     if (loginController.responseOTPNo == otpController.text.trim()) {
       if (fromLogin) {
-        await getDashboardData(loginController.responseOTPNo, Get.context!, "");
+        await getDashboardData(loginController.responseOTPNo, Get.context!, "", "");
         return;
       } else {
         timer?.cancel();

@@ -8,7 +8,6 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,8 +29,6 @@ class _OtpScreenState extends State<OtpScreen> {
   bool isButtonEnabled = false;
   bool isTimerOver = false;
   bool isDropdownEnabled = true;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  String deviceTok = "";
 
   @override
   void dispose() {
@@ -118,15 +115,6 @@ class _OtpScreenState extends State<OtpScreen> {
     otpController.numberController.text = widget.mobileNumber;
     // otpController.update();
     // showSnackBar();
-    _firebaseMessaging.requestPermission();
-
-    _firebaseMessaging.getToken().then((String? token) {
-      assert(token != null);
-      print("FCM Token: $token");
-      setState(() {
-        deviceTok = token.toString();
-      });
-    });
   }
 
   showSnackBar() {
@@ -232,7 +220,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                   } else {
                                     otpController.fromLogin = widget.fromLogin;
                                     otpController.update();
-                                    await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
+                                    await otpController.otpOnClk(
+                                        context, loginController.responseOTPNo, otpController.deviceTok);
                                   }
                                 },
                           style: ElevatedButton.styleFrom(

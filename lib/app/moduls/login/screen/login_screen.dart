@@ -127,7 +127,7 @@ class LoginScreen extends GetView<LoginController> {
                                   },
                                   obscureText: loginController.hidePassword,
                                   inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.digitsOnly,
+                                    // FilteringTextInputFormatter.digitsOnly,
                                     LengthLimitingTextInputFormatter(10),
                                   ],
                                   decoration: InputDecoration(
@@ -198,7 +198,7 @@ class LoginScreen extends GetView<LoginController> {
                             width: MediaQuery.of(context).size.width * 0.40,
                             child: ElevatedButton(
                               onPressed: () async {
-                                loginController.isLoadingLogin ? null : await loginController.requestOTP(context);
+                                loginController.isLoadingLogin ? null : await loginController.requestLogin(context);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.lightgreen,
