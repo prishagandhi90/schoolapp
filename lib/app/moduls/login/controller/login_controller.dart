@@ -80,6 +80,11 @@ class LoginController extends GetxController {
   }
 
   Future<void> requestLogin(BuildContext context) async {
+    if (withPaasword && passwordController.text.isEmpty) {
+      Get.rawSnackbar(message: "Password can not be empty");
+      return;
+    }
+
     isLoadingLogin = true;
     update();
     try {
