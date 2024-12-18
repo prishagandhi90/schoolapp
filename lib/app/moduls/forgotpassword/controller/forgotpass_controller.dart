@@ -61,6 +61,7 @@ class ForgotpassController extends GetxController {
 
   Future<void> requestOTP(BuildContext context) async {
     isLoadingLogin = true;
+    String mobNo = numberController.text;
     update();
     try {
       if (passFormKey.currentState!.validate()) {
@@ -74,7 +75,7 @@ class ForgotpassController extends GetxController {
             context,
             MaterialPageRoute(
               builder: (context) => OtpScreen(
-                mobileNumber: numberController.text,
+                mobileNumber: mobNo,
                 deviceToken: devToken,
                 fromLogin: false,
               ),

@@ -116,6 +116,7 @@ class _OtpScreenState extends State<OtpScreen> {
     super.initState();
     print('RespOTP: ${loginController.responseOTPNo}');
     otpController.numberController.text = widget.mobileNumber;
+    // otpController.update();
     // showSnackBar();
     _firebaseMessaging.requestPermission();
 
@@ -130,7 +131,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
+      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '',
+          colorText: AppColor.white, backgroundColor: AppColor.black);
     });
   }
 
@@ -150,124 +152,126 @@ class _OtpScreenState extends State<OtpScreen> {
     );
     String maskedNumber = otpController.maskMobileNumber(widget.mobileNumber);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColor.backgroundcolor,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Form(
-                          key: otpController.formKey1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                              Text(
-                                AppString.verifyyiurnumber,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 22,
-                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                ),
-                              ),
-                              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                              Text(
-                                "Please enter the 6 digit code we sent to \n+91 $maskedNumber",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                ),
-                              ),
-                              const SizedBox(height: 50),
-                              Pinput(
-                                controller: otpController.isLoadingLogin ? null : otpController.otpController,
-                                showCursor: true,
-                                length: 6,
-                                keyboardType: TextInputType.number,
-                                defaultPinTheme: defaultPinTheme,
-                                separatorBuilder: (index) => const SizedBox(width: 8),
-                                // onCompleted: (pin) async {
-                                //   print('onCompOTP: ${loginController.responseOTPNo}');
-                                //   otpController.isLoadingLogin
-                                //       ? null
-                                //       : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
-                                // },
-                                onChanged: (value) {},
-                              ),
-                              const SizedBox(height: 20),
-                              Container(
-                                alignment: AlignmentDirectional.centerStart,
-                                child: textWidgetInfo(),
-                              ),
-                              const SizedBox(height: 50),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.width * 0.11,
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: otpController.isLoadingLogin
-                                      ? null
-                                      : () async {
-                                          if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
-                                            Get.snackbar(
-                                              AppString.error,
-                                              AppString.plzentervalidotp,
-                                              colorText: AppColor.white,
-                                              backgroundColor: AppColor.black,
-                                              duration: const Duration(seconds: 1),
-                                            );
-                                          } else {
-                                            otpController.fromLogin = widget.fromLogin;
-                                            otpController.update();
-                                            await otpController.otpOnClk(context, loginController.responseOTPNo, widget.deviceToken);
-                                          }
-                                        },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColor.lightgreen,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  child: otpController.isLoadingLogin
-                                      ? const CircularProgressIndicator()
-                                      : Text(
-                                          AppString.verify,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: AppColor.black,
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ],
-                          ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Form(
+                  key: otpController.formKey1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                          // scale: 2,
+                          // width: Sizes.crossLength * 0.260,
+                          width: MediaQuery.of(context).size.width * 0.8,
                         ),
-                        MediaQuery.of(context).viewInsets.bottom > 0
-                            ? const Spacer()
-                            : Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Image.asset(
-                                  'assets/Venus_Hospital_New_Logo-removebg-preview.png',
-                                  width: MediaQuery.of(context).size.width * 0.8,
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                      Text(
+                        AppString.verifyyiurnumber,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 22,
+                          fontFamily: CommonFontStyle.plusJakartaSans,
+                        ),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      Text(
+                        "Please enter the 6 digit code we sent to \n+91 $maskedNumber",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: CommonFontStyle.plusJakartaSans,
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                      Pinput(
+                        controller: otpController.isLoadingLogin ? null : otpController.otpController,
+                        showCursor: true,
+                        length: 6,
+                        keyboardType: TextInputType.number,
+                        defaultPinTheme: defaultPinTheme,
+                        separatorBuilder: (index) => const SizedBox(width: 8),
+                        // onCompleted: (pin) async {
+                        //   print('onCompOTP: ${loginController.responseOTPNo}');
+                        //   otpController.isLoadingLogin
+                        //       ? null
+                        //       : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
+                        // },
+                        onChanged: (value) {},
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: textWidgetInfo(),
+                      ),
+                      const SizedBox(height: 50),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.11,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: otpController.isLoadingLogin
+                              ? null
+                              : () async {
+                                  if (otpController.otpController.text.isEmpty ||
+                                      otpController.otpController.text.length < 6) {
+                                    Get.snackbar(
+                                      AppString.error,
+                                      AppString.plzentervalidotp,
+                                      colorText: AppColor.white,
+                                      backgroundColor: AppColor.black,
+                                      duration: const Duration(seconds: 1),
+                                    );
+                                  } else {
+                                    otpController.fromLogin = widget.fromLogin;
+                                    otpController.update();
+                                    await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.lightgreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: otpController.isLoadingLogin
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  AppString.verify,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColor.black,
+                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            );
-          },
+                // MediaQuery.of(context).viewInsets.bottom > 0
+                //     ? const Spacer()
+                //     : Align(
+                //         alignment: Alignment.bottomCenter,
+                //         child: Image.asset(
+                //           'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                //           width: MediaQuery.of(context).size.width * 0.8,
+                //         ),
+                //       ),
+              ],
+            ),
+          ),
         ),
+        //   },
+        // ),
       ),
     );
   }

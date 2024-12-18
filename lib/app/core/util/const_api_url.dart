@@ -1,4 +1,5 @@
 class ConstApiUrl {
+  String initailUrl = 'http://117.217.126.127:44166/api';
   static const empUrl = "http://117.217.126.127:44166/api/Employee";
   static const empLoginUrl = 'http://117.217.126.127:44166/api/EmpLogin';
 

@@ -16,7 +16,7 @@ class LoginController extends GetxController {
   bool hidePassword = true;
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final loginFormKey = GlobalKey<FormState>();
   // static final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;
@@ -79,7 +79,7 @@ class LoginController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      if (formKey.currentState!.validate()) {
+      if (loginFormKey.currentState!.validate()) {
         MobileTable? response = await sendotp();
         if (response != null && response.otpNo != null && response.otpNo != "") {
           final respOTP = response.otpNo.toString();

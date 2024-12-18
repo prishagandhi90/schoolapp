@@ -72,7 +72,8 @@ class OtpController extends GetxController {
         "deviceType": "1",
         "deviceName": "string",
         "osType": "string",
-        "deviceToken": deviceToken
+        "deviceToken": deviceToken,
+        "firebaseId": deviceToken,
       };
 
       // var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);

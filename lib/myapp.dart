@@ -1,4 +1,4 @@
-import 'package:device_preview/device_preview.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
@@ -66,23 +66,23 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Get.put(NoInternetController());
     return GetMaterialApp(
-      initialBinding: NoInternetBinding(),
-      debugShowCheckedModeBanner: false,
-      // useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      // builder: DevicePreview.appBuilder,
-      builder: EasyLoading.init(),
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-        useMaterial3: true,
-      ),
-      // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
-      initialRoute: AppPages.getInitialRoute(widget.isLoggedIn),
-      getPages: AppPages.routes,
-      navigatorObservers: [
-        NavigatorObserver(),
-      ],
-    );
+        // initialBinding: NoInternetBinding(),
+        // debugShowCheckedModeBanner: false,
+        // // useInheritedMediaQuery: true,
+        // // locale: DevicePreview.locale(context),
+        // // builder: DevicePreview.appBuilder,
+        // builder: EasyLoading.init(),
+        // title: 'Flutter Demo',
+        // theme: ThemeData(
+        //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        //   useMaterial3: true,
+        // ),
+        // // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
+        // initialRoute: AppPages.getInitialRoute(widget.isLoggedIn),
+        // getPages: AppPages.routes,
+        // navigatorObservers: [
+        //   NavigatorObserver(),
+        // ],
+        );
   }
 }

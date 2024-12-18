@@ -3,6 +3,8 @@ class AppString {
   static String hithere = "Hi there!";
   static String pleaselogin = "Please log in to continue";
   static String login = "LOG IN";
+  static String submit = "Submit";
+  static String resetPassword = "Reset Password";
   static String entermobileno = "Enter Mobile Number";
   static String plzentermobileno = "Please enter a mobile number";
   static String entervalidmobileno = "Please enter a valid 10-digit mobile number";
