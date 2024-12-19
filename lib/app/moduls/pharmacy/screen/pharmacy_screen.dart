@@ -1,5 +1,4 @@
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -95,6 +94,22 @@ class PharmacyScreen extends StatelessWidget {
                             onTap: () {
                               Navigator.pop(context);
                               // controller.payrolListOnClk(index, context);
+                              final bottomBarController = Get.put(BottomBarController());
+                              bottomBarController.currentIndex.value = -1;
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: PresviewerScreen(),
+                                withNavBar: true,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              ).then((value) async {
+                                // final bottomBarController = Get.find<BottomBarController>();
+                                bottomBarController.persistentController.value.index = 0;
+                                bottomBarController.currentIndex.value = 0;
+                                bottomBarController.isPharmacyHome.value = true;
+                                hideBottomBar.value = false;
+                                var dashboardController = Get.put(DashboardController());
+                                await dashboardController.getDashboardDataUsingToken();
+                              });
                             },
                             child: SizedBox(
                               height: 40,
@@ -116,6 +131,22 @@ class PharmacyScreen extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                       // controller.payrolListOnClk(index, context);
+                                      final bottomBarController = Get.put(BottomBarController());
+                                      bottomBarController.currentIndex.value = -1;
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: PresviewerScreen(),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) async {
+                                        // final bottomBarController = Get.find<BottomBarController>();
+                                        bottomBarController.persistentController.value.index = 0;
+                                        bottomBarController.currentIndex.value = 0;
+                                        bottomBarController.isPharmacyHome.value = true;
+                                        hideBottomBar.value = false;
+                                        var dashboardController = Get.put(DashboardController());
+                                        await dashboardController.getDashboardDataUsingToken();
+                                      });
                                     },
                                     icon: const Icon(Icons.arrow_forward_ios)),
                               ),

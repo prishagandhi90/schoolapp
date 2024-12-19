@@ -129,20 +129,8 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         if (bottomBarController.persistentController.value.index != 1) {
           bottomBarController.currentIndex.value = 1;
           bottomBarController.persistentController.value.index = 1;
-          // bottomBarController.onItemTapped(1, context);
-          // Get.to(attendanceScreen);
         }
         bottomBarController.update();
-        // PersistentNavBarNavigator.pushNewScreen(
-        //   context,
-        //   screen: AttendanceScreen(),
-        //   withNavBar: true,
-        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        // ).then((value) async {
-        //   hideBottomBar.value = false;
-        //   final DashboardController dashboardController = Get.find<DashboardController>();
-        //   await dashboardController.getDashboardDataUsingToken();
-        // });
         break;
       case 1:
         hideBottomBar.value = false;
