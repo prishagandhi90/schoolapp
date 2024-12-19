@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -17,7 +16,7 @@ class LoginController extends GetxController {
   String devToken = "";
   bool isLoadingLogin = false;
   bool withPaasword = false;
-  bool hidePassword = true;
+  bool hidePassword = false;
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final loginFormKey = GlobalKey<FormState>();

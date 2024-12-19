@@ -49,4 +49,8 @@ class AppConst {
   ];
 
   static const OTPTimer = 60;
+
+   static const List<Map<String, dynamic>> pharmacygrid = [
+    {'image': 'assets/image/pharma.png', 'label': 'Prescription Viewer'},
+  ];
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';

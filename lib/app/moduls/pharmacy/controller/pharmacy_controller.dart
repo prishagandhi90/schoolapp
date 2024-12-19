@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -30,6 +31,9 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   List<PresviewerList> filterpresviewerList = [];
   final ScrollController pharmacyScrollController = ScrollController();
   final ScrollController pharmacyviewScrollController = ScrollController();
+  FocusNode focusNode = FocusNode();
+  TextEditingController textEditingController = TextEditingController();
+  bool hasFocus = false;
   int SelectedIndex = -1;
   List<bool> blurState = []; // Track blur states for each row
   List<Wards> wards = [];
@@ -247,6 +251,21 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       isLoading = false;
       update();
     }
+  }
+
+  List<Map<String, dynamic>> originalList = AppConst.pharmacygrid;
+  List<Map<String, dynamic>> filteredList = [];
+
+  void filterSearchpharmaResults(String query) {
+    List<Map<String, dynamic>> tempList = [];
+    if (query.isNotEmpty) {
+      tempList = originalList.where((item) => item['label'].toLowerCase().contains(query.toLowerCase())).toList();
+    } else {
+      tempList = originalList;
+    }
+
+    filteredList = tempList;
+    update();
   }
 
   Future<void> pharmacyFiltterBottomSheet() async {
