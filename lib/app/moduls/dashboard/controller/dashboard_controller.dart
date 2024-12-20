@@ -18,13 +18,7 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "",
-      mobileNumber = "",
-      emailAddress = "",
-      empCode = "",
-      empType = "",
-      department = "",
-      designation = "";
+  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -94,29 +88,22 @@ class DashboardController extends GetxController {
         );
         break;
       case 6:
-        var bottomBarController = Get.put(BottomBarController());
-        bottomBarController.isPharmacyHome.value = true;
-        hideBottomBar.value = false;
-        // bottomBarController.onItemTapped(0, true, context);
-        bottomBarController.resetAndInitialize_new(0);
-        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-          Get.put(BottomBarController());
-        }));
-        // Get.offAll(
-        //   () => BottomBarView(),
-        //   binding: BindingsBuilder(
-        //     () {
-        //       Get.put(BottomBarController());
-        //     },
-        //   ),
-        // );
-        // Get.snackbar(
-        //   AppString.comingsoon,
-        //   '',
-        //   colorText: AppColor.white,
-        //   backgroundColor: AppColor.black,
-        //   duration: const Duration(seconds: 1),
-        // );
+        // var bottomBarController = Get.put(BottomBarController());
+        // bottomBarController.isPharmacyHome.value = true;
+        // hideBottomBar.value = false;
+        // // bottomBarController.onItemTapped(0, true, context);
+        // bottomBarController.resetAndInitialize_new(0);
+        // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+        //   Get.put(BottomBarController());
+        // }));
+
+        Get.snackbar(
+          AppString.comingsoon,
+          '',
+          colorText: AppColor.white,
+          backgroundColor: AppColor.black,
+          duration: const Duration(seconds: 1),
+        );
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
