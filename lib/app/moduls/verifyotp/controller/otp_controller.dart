@@ -162,8 +162,8 @@ class OtpController extends GetxController {
       },
     );
     if (shouldLogout == true) {
-      final OtpController otpController = Get.find();
-      await otpController.logout();
+      // final OtpController otpController = Get.find();
+      await logout();
     }
   }
 

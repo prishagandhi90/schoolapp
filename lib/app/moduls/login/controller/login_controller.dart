@@ -16,7 +16,7 @@ class LoginController extends GetxController {
   String devToken = "";
   bool isLoadingLogin = false;
   bool withPaasword = false;
-  bool hidePassword = false;
+  bool hidePassword = true;
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final loginFormKey = GlobalKey<FormState>();
