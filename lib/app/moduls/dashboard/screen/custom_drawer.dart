@@ -88,7 +88,7 @@ class CustomDrawer extends StatelessWidget {
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                   )),
                             SizedBox(
-                              height: Sizes.crossLength * 0.010,
+                              height: Sizes.crossLength * 0.002,
                             ),
                             if (dashboardController.mobileNumber.isNotEmpty)
                               Text(dashboardController.mobileNumber.toString(),
@@ -103,7 +103,7 @@ class CustomDrawer extends StatelessWidget {
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                   )),
                             SizedBox(
-                              height: Sizes.crossLength * 0.010,
+                              height: Sizes.crossLength * 0.002,
                             ),
                             if (dashboardController.emailAddress.isNotEmpty)
                               Text(

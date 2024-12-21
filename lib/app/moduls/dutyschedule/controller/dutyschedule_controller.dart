@@ -159,8 +159,7 @@ class DutyscheduleController extends GetxController {
         var jsonbodyObj = {"loginId": loginId, "empId": empId, "DtRange": DutyDropdownNameController.text};
 
         var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-        ResponseGetDutyScheduleShift responseGetDutyScheduleShift =
-            ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
+        ResponseGetDutyScheduleShift responseGetDutyScheduleShift = ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
 
         if (responseGetDutyScheduleShift.statusCode == 200) {
           dutySchSftData = responseGetDutyScheduleShift.data!;

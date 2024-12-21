@@ -58,8 +58,8 @@ class Dashboard1Screen extends GetView<DashboardController> {
                     Get.snackbar(
                       AppString.comingsoon,
                       '',
-                      colorText: Colors.white,
-                      backgroundColor: Colors.black,
+                      colorText: AppColor.white,
+                      backgroundColor: AppColor.black,
                       duration: const Duration(seconds: 1),
                     );
                   },

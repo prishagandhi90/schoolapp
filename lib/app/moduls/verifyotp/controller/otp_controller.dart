@@ -126,7 +126,7 @@ class OtpController extends GetxController {
       } else if (responseDashboardData.statusCode == 500) {
         Get.rawSnackbar(message: "Internal server error");
       } else {
-        Get.rawSnackbar(message: "Something went wrong");
+        // Get.rawSnackbar(message: "Something went wrong");
       }
       return "false";
     } catch (e) {

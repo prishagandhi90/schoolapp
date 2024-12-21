@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/core/common/common_firebase.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
-import 'package:emp_app/myapp.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
