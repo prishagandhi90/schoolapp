@@ -146,7 +146,6 @@ class PresviewerScreen extends StatelessWidget {
                         child: Center(
                             child: GestureDetector(
                                 onTap: () {
-                                  
                                   controller.sortBy();
                                 },
                                 child: Image.asset(
@@ -362,27 +361,57 @@ class PresviewerScreen extends StatelessWidget {
                                               Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Text.rich(
-                                                      TextSpan(
-                                                        children: [
-                                                          TextSpan(
-                                                            text: 'Last User: ', // Heading
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.bold, // Bold style for heading
-                                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    Expanded(
+                                                      child: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: 'Last User: ', // Heading
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.bold, // Bold style for heading
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          TextSpan(
-                                                            text: controller.filterpresviewerList[index].lastUser.toString(), // Data
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight: FontWeight.w500, // Normal weight for data
-                                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                                            TextSpan(
+                                                              text: controller.filterpresviewerList[index].lastUser.toString(), // Data
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight: FontWeight.w500, // Normal weight for data
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                              ),
                                                             ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Align(
+                                                        alignment: Alignment.centerRight,
+                                                        child: Text.rich(
+                                                          TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                text: 'RX Status: ', // Heading
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.bold, // Bold style for heading
+                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                ),
+                                                              ),
+                                                              TextSpan(
+                                                                text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w500, // Normal weight for data
+                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -424,7 +453,7 @@ class PresviewerScreen extends StatelessWidget {
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: 'RX Status: ', // Heading
+                                                                text: 'Token No: ', // Heading
                                                                 style: TextStyle(
                                                                   fontSize: 16,
                                                                   fontWeight: FontWeight.bold, // Bold style for heading
@@ -432,10 +461,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                 ),
                                                               ),
                                                               TextSpan(
-                                                                text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
+                                                                text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
                                                                 style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w500, // Normal weight for data
+                                                                  fontSize: 30,
+                                                                  fontWeight: FontWeight.bold, // Normal weight for data
                                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                                 ),
                                                               ),

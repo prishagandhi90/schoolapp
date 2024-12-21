@@ -112,7 +112,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             LengthLimitingTextInputFormatter(10),
                           ],
                           decoration: InputDecoration(
-                            hintText: 'Enter Confirm Password',
+                            hintText: AppString.enterConfirmPassword,
                             hintStyle: TextStyle(
                               fontFamily: CommonFontStyle.plusJakartaSans,
                             ),
@@ -181,7 +181,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                                   side: BorderSide(color: AppColor.primaryColor)),
                             ),
                             child: Text(
-                              'Cancel',
+                              AppString.cancel,
                               style: TextStyle(
                                 color: AppColor.black,
                                 fontSize: 20,

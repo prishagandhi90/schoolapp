@@ -88,22 +88,22 @@ class DashboardController extends GetxController {
         );
         break;
       case 6:
-        // var bottomBarController = Get.put(BottomBarController());
-        // bottomBarController.isPharmacyHome.value = true;
-        // hideBottomBar.value = false;
-        // // bottomBarController.onItemTapped(0, true, context);
-        // bottomBarController.resetAndInitialize_new(0);
-        // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-        //   Get.put(BottomBarController());
-        // }));
+        var bottomBarController = Get.put(BottomBarController());
+        bottomBarController.isPharmacyHome.value = true;
+        hideBottomBar.value = false;
+        // bottomBarController.onItemTapped(0, true, context);
+        bottomBarController.resetAndInitialize_new(0);
+        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+          Get.put(BottomBarController());
+        }));
 
-        Get.snackbar(
-          AppString.comingsoon,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        // Get.snackbar(
+        //   AppString.comingsoon,
+        //   '',
+        //   colorText: AppColor.white,
+        //   backgroundColor: AppColor.black,
+        //   duration: const Duration(seconds: 1),
+        // );
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
@@ -215,7 +215,7 @@ class DashboardController extends GetxController {
           Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
         }
       } else {
-        Get.rawSnackbar(message: "Something went wrong");
+        // Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading.value = false;

@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/forgotpassword/controller/forgotpass_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -37,7 +38,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                         children: [
                           Center(
                             child: Image.asset(
-                              'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                              AppImage.venuslogo,
                               // scale: 2,
                               // width: Sizes.crossLength * 0.260,
                               width: MediaQuery.of(context).size.width * 0.8,
@@ -47,7 +48,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              'Generate OTP',
+                              AppString.generateotp,
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 22,
@@ -110,7 +111,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                               child: controller.isLoadingLogin
                                   ? const CircularProgressIndicator()
                                   : Text(
-                                      'Continue',
+                                      AppString.continue1,
                                       style: TextStyle(
                                         color: AppColor.black,
                                         fontSize: 20,
@@ -150,7 +151,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                     borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                               ),
                               child: Text(
-                                'Cancel',
+                                AppString.cancel,
                                 style: TextStyle(
                                   color: AppColor.black,
                                   fontSize: 20,
