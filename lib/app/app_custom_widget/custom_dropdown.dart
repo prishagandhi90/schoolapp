@@ -12,6 +12,7 @@ class CustomDropdown extends StatelessWidget {
   final InputDecoration? decoration; // Custom decoration if needed
   final Function(bool)? onMenuStateChange; // Menu state change callback
   final ButtonStyleData? buttonStyleData;
+  final DropdownSearchData<Map<String, String>>? dropdownSearchData;
 
   CustomDropdown(
       {required this.text,
@@ -21,7 +22,8 @@ class CustomDropdown extends StatelessWidget {
       this.width = double.infinity,
       this.decoration,
       this.onMenuStateChange,
-      this.buttonStyleData});
+      this.buttonStyleData,
+      this.dropdownSearchData});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class CustomDropdown extends StatelessWidget {
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
           ),
-
+          dropdownSearchData: dropdownSearchData,
           // dropdownStyleData: DropdownStyleData(
           //   // maxHeight: screenHeight * 0.5, // Set dropdown max height to 50% of screen
           //   maxHeight: screenHeight - 100.0,

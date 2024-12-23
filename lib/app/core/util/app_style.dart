@@ -58,5 +58,20 @@ class AppStyle {
     fontWeight: FontWeight.w700,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
-  static TextStyle black = TextStyle(color: AppColor.black);
+  static TextStyle black = TextStyle(
+    color: AppColor.black,
+  );
+  static TextStyle plusgrey = TextStyle(
+    color: AppColor.lightgrey1,
+    fontFamily: CommonFontStyle.plusJakartaSans,
+  );
+  static TextStyle plusbold16 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold, // Bold style for heading
+    fontFamily: CommonFontStyle.plusJakartaSans,
+  );
+  static TextStyle blackbold = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+  );
 }

@@ -3,6 +3,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -25,14 +26,7 @@ class PresviewerScreen extends StatelessWidget {
             backgroundColor: AppColor.white,
             appBar: AppBar(
               backgroundColor: AppColor.white,
-              title: Text(
-                AppString.prescriptionviewer,
-                style: TextStyle(
-                  color: AppColor.primaryColor,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: CommonFontStyle.plusJakartaSans,
-                ),
-              ),
+              title: Text(AppString.prescriptionviewer, style: AppStyle.primaryplusw700),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
@@ -98,10 +92,7 @@ class PresviewerScreen extends StatelessWidget {
                               : const SizedBox(),
                           prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                           hintText: AppString.searchpatient,
-                          hintStyle: TextStyle(
-                            color: AppColor.lightgrey1,
-                            fontFamily: CommonFontStyle.plusJakartaSans,
-                          ),
+                          hintStyle: AppStyle.plusgrey,
                           filled: true,
                           fillColor: AppColor.white,
                           border: const OutlineInputBorder(
@@ -149,16 +140,8 @@ class PresviewerScreen extends StatelessWidget {
                                   controller.sortBy();
                                 },
                                 child: Image.asset(
-                                  'assets/image/Vector.png',
-                                ))
-
-                            // IconButton(
-                            //   icon: Icon(Icons.sort, color: AppColor.black),
-                            //   onPressed: () {
-                            //     controller.sortBy();
-                            //   },
-                            // ),
-                            ),
+                                  AppImage.filter,
+                                ))),
                       ),
                     ),
                     const SizedBox(width: 8), // Space between items
@@ -250,14 +233,8 @@ class PresviewerScreen extends StatelessWidget {
                                                     flex: 6,
                                                     child: Padding(
                                                       padding: const EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                        controller.filterpresviewerList[index].patientName.toString(),
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight: FontWeight.w500,
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                                        ),
-                                                      ),
+                                                      child: Text(controller.filterpresviewerList[index].patientName.toString(),
+                                                          style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                     ),
                                                   ),
                                                   Expanded(
@@ -309,21 +286,11 @@ class PresviewerScreen extends StatelessWidget {
                                                         TextSpan(
                                                           children: [
                                                             TextSpan(
-                                                              text: 'Print St: ', // Heading
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.bold, // Bold style for heading
-                                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                              ),
-                                                            ),
+                                                                text: AppString.printst, // Heading
+                                                                style: AppStyle.plusbold16),
                                                             TextSpan(
-                                                              text: controller.filterpresviewerList[index].printStatus.toString(), // Data
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w500, // Normal weight for data
-                                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                              ),
-                                                            ),
+                                                                text: controller.filterpresviewerList[index].printStatus.toString(), // Data
+                                                                style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                           ],
                                                         ),
                                                       ),
@@ -335,21 +302,11 @@ class PresviewerScreen extends StatelessWidget {
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: 'Priority: ', // Heading
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.bold, // Bold style for heading
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
+                                                                  text: AppString.priority, // Heading
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                               TextSpan(
-                                                                text: controller.filterpresviewerList[index].priority.toString(), // Data
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w500, // Normal weight for data
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
+                                                                  text: controller.filterpresviewerList[index].priority.toString(), // Data
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             ],
                                                           ),
                                                         ),
@@ -368,21 +325,11 @@ class PresviewerScreen extends StatelessWidget {
                                                         TextSpan(
                                                           children: [
                                                             TextSpan(
-                                                              text: 'Last User: ', // Heading
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.bold, // Bold style for heading
-                                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                              ),
-                                                            ),
+                                                                text: AppString.lastuser, // Heading
+                                                                style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             TextSpan(
-                                                              text: controller.filterpresviewerList[index].lastUser.toString(), // Data
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w500, // Normal weight for data
-                                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                              ),
-                                                            ),
+                                                                text: controller.filterpresviewerList[index].lastUser.toString(), // Data
+                                                                style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                           ],
                                                         ),
                                                       ),
@@ -394,21 +341,11 @@ class PresviewerScreen extends StatelessWidget {
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: 'RX Status: ', // Heading
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.bold, // Bold style for heading
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
+                                                                  text: AppString.rxStatus, // Heading
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                               TextSpan(
-                                                                text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.w500, // Normal weight for data
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
+                                                                  text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             ],
                                                           ),
                                                         ),
@@ -427,21 +364,23 @@ class PresviewerScreen extends StatelessWidget {
                                                         TextSpan(
                                                           children: [
                                                             TextSpan(
-                                                              text: 'IPD No: ', // Heading
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.bold, // Bold style for heading
-                                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                              ),
-                                                            ),
+                                                                text: AppString.ipdNo, // Heading
+                                                                style: AppStyle.w50018.copyWith(fontSize: 16)
+                                                                // TextStyle(
+                                                                //   fontSize: 16,
+                                                                //   fontWeight: FontWeight.bold, // Bold style for heading
+                                                                //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                // ),
+                                                                ),
                                                             TextSpan(
-                                                              text: controller.filterpresviewerList[index].ipd.toString(), // Data
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontWeight: FontWeight.w500, // Normal weight for data
-                                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                              ),
-                                                            ),
+                                                                text: controller.filterpresviewerList[index].ipd.toString(), // Data
+                                                                style: AppStyle.w50018.copyWith(fontSize: 16)
+                                                                // TextStyle(
+                                                                //   fontSize: 16,
+                                                                //   fontWeight: FontWeight.w500, // Normal weight for data
+                                                                //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                // ),
+                                                                ),
                                                           ],
                                                         ),
                                                       ),
@@ -453,21 +392,23 @@ class PresviewerScreen extends StatelessWidget {
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: 'Token No: ', // Heading
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontWeight: FontWeight.bold, // Bold style for heading
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
+                                                                  text: AppString.tokenNo, // Heading
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)
+                                                                  // TextStyle(
+                                                                  //   fontSize: 16,
+                                                                  //   fontWeight: FontWeight.bold, // Bold style for heading
+                                                                  //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                  // ),
+                                                                  ),
                                                               TextSpan(
-                                                                text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
-                                                                style: TextStyle(
-                                                                  fontSize: 30,
-                                                                  fontWeight: FontWeight.bold, // Normal weight for data
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
+                                                                  text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 30)
+                                                                  //  TextStyle(
+                                                                  //   fontSize: 30,
+                                                                  //   fontWeight: FontWeight.bold, // Normal weight for data
+                                                                  //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                  // ),
+                                                                  ),
                                                             ],
                                                           ),
                                                         ),

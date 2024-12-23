@@ -109,4 +109,27 @@ class AppString {
   static String pharmacy = "Pharmacy";
   static String prescriptionviewer = "Prescription Viewer";
   static String searchpatient = "Search Patient";
+  static String printst = "Print St: ";
+  static String priority = "Priority: ";
+  static String lastuser = "Last User: ";
+  static String rxStatus = "RX Status: ";
+  static String filterby = "Filter by";
+  static String selectWardsName = "Select Wards Name";
+  static String floor = "Floor";
+  static String selectbed = "Select Bed";
+  static String plzselectoptiontosort = "Please select options to short";
+  static String apply = "Apply";
+  static String resetall = "Reset All";
+  static String sortby = "Sort by";
+  static String patientnameAtoZ = "Patient Name [A-Z]";
+  static String patientnameZtoA = "Patient Name [Z-A]";
+  static String staydaysLtH = "Stay Days [Low - High]";
+  static String staydaysHtL = "Stay Days [High - Low]";
+  static String reset = "Reset";
+  static String ipdNo = "IPD No: ";
+  static String tokenNo = "Token No: ";
+
+  //Super Login
+  static String superlogin = "Super Login only for Admin";
+  static String pleasesuperlogin = "Please log in to continue";
 }

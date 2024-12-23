@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,7 +52,8 @@ class PresdetailsScreen extends StatelessWidget {
                           children: [
                             Text(
                               controller.presviewerList[controller.SelectedIndex].patientName.toString(),
-                              style: TextStyle(
+                              style: 
+                              TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -64,13 +66,12 @@ class PresdetailsScreen extends StatelessWidget {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].ipd.toString(),
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      ),
+                                      Text(controller.presviewerList[controller.SelectedIndex].ipd.toString(), style: AppStyle.plus16
+                                          // TextStyle(
+                                          //   fontSize: 16,
+                                          //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                          // ),
+                                          ),
                                       SizedBox(height: 5), // Space between IPD and MOP
                                       Text(
                                         controller.presviewerList[controller.SelectedIndex].mop.toString(),
@@ -122,81 +123,6 @@ class PresdetailsScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     Text(
-                            //       controller.presviewerList[controller.SelectedIndex].ipd.toString(),
-                            //       style: TextStyle(
-                            //         fontSize: 16,
-                            //         fontFamily: CommonFontStyle.plusJakartaSans,
-                            //       ),
-                            //     ),
-                            //     Expanded(
-                            //       child: Align(
-                            //         alignment: Alignment.center,
-                            //         child: Text(
-                            //           controller.presviewerList[controller.SelectedIndex].bed.toString(),
-                            //           style: TextStyle(
-                            //             fontSize: 16,
-                            //             fontFamily: CommonFontStyle.plusJakartaSans,
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
-                            // Padding(
-                            //   padding: const EdgeInsets.symmetric(vertical: 5),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //     children: [
-                            //       Text(
-                            //         controller.presviewerList[controller.SelectedIndex].mop.toString(),
-                            //         style: TextStyle(
-                            //           fontSize: 16,
-                            //           fontFamily: CommonFontStyle.plusJakartaSans,
-                            //         ),
-                            //       ),
-                            //       Expanded(
-                            //         child: Align(
-                            //           alignment: Alignment.center,
-                            //           child: Text.rich(
-                            //             TextSpan(
-                            //               children: [
-                            //                 TextSpan(
-                            //                   text: 'Intercom: ', // Heading
-                            //                   style: TextStyle(
-                            //                     fontSize: 16,
-                            //                     fontWeight: FontWeight.bold, // Bold style for heading
-                            //                     fontFamily: CommonFontStyle.plusJakartaSans,
-                            //                   ),
-                            //                 ),
-                            //                 TextSpan(
-                            //                   text: controller.presviewerList[controller.SelectedIndex].intercom.toString(), // Data
-                            //                   style: TextStyle(
-                            //                     fontSize: 16,
-                            //                     // fontWeight: FontWeight.w500, // Normal weight for data
-                            //                     fontFamily: CommonFontStyle.plusJakartaSans,
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //           ),
-                            //           // Text(
-                            //           //   controller.presviewerList[controller.SelectedIndex].intercom.toString(),
-                            //           //   style: TextStyle(
-                            //           //     fontSize: 16,
-                            //           //     // fontWeight: FontWeight.w500,
-                            //           //     fontFamily: CommonFontStyle.plusJakartaSans,
-                            //           //   ),
-                            //           // ),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 5),
                               child: Row(

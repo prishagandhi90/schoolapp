@@ -302,7 +302,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                             width: 30,
                           ),
                           Text(
-                            'Filter by',
+                            AppString.filterby,
                             style: TextStyle(
                               fontSize: 25,
                               color: AppColor.black,
@@ -324,7 +324,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 height: 25,
                               ),
                               Text(
-                                'Select Wards Name',
+                                AppString.selectWardsName,
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: AppColor.black,
@@ -339,7 +339,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 height: 15,
                               ),
                               Text(
-                                'Floor',
+                                AppString.floor,
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: AppColor.black,
@@ -354,7 +354,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 height: 15,
                               ),
                               Text(
-                                'Select Bed',
+                                AppString.selectbed,
                                 style: TextStyle(
                                   fontSize: 20,
                                   color: AppColor.black,
@@ -395,11 +395,11 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                       Navigator.pop(context);
                                       fetchpresViewer(isLoader: false);
                                     } else {
-                                      Get.rawSnackbar(message: "Please select options to short");
+                                      Get.rawSnackbar(message: AppString.plzselectoptiontosort);
                                     }
                                   },
                                   child: Text(
-                                    'Apply',
+                                    AppString.apply,
                                     style: TextStyle(color: AppColor.white, fontSize: 15),
                                   )),
                             )),
@@ -426,7 +426,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                       controller.update();
                                     },
                                     child: Text(
-                                      'Reset All',
+                                      AppString.resetall,
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: AppColor.white,
@@ -490,7 +490,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                             width: 25,
                           ),
                           Text(
-                            'Sort by',
+                            AppString.sortby,
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
@@ -523,7 +523,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Patient Name [A-Z]',
+                                      AppString.patientnameAtoZ,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -554,7 +554,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Patient Name [Z-A]',
+                                      AppString.patientnameZtoA,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -585,7 +585,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Stay Days [Low - High]',
+                                      AppString.staydaysLtH,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -616,7 +616,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Stay Days [High-Low]',
+                                      AppString.staydaysHtL,
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
@@ -652,7 +652,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         controller.update();
                                       },
                                       child: Text(
-                                        'Reset',
+                                        AppString.reset,
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: AppColor.white,

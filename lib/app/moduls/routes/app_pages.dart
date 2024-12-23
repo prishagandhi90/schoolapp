@@ -146,5 +146,6 @@ class AppPages {
       page: () => const ForgotpassScreen(mobileNumber: '',),
       binding: ForgotpasswordBinding(),
     ),
+    
   ];
 }

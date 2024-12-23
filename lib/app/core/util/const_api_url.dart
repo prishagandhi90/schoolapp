@@ -8,6 +8,10 @@ class ConstApiUrl {
   static const loginWithOTP_Pass = "$empUrl/authentication";
   static const validMobileNo = "$empLoginUrl/ValidateMobileNo";
   static const generatenewpass = "$empLoginUrl/GenerateNewPassword";
+  static const empLoginusernameAPI = "$empLoginUrl/GetLoginUserNames";
+
+
+
   static const empAttendanceDtlAPI = "$empUrl/GetEmpAttendDtl_EmpInfo";
   static const empAttendanceSummaryAPI = "$empUrl/GetEmpAttendSumm_EmpInfo";
   static const empGetDashboardListAPI = "$empUrl/GetDashboardList";

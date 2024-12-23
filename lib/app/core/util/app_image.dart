@@ -16,7 +16,7 @@ class AppImage {
   static String checkmark = "assets/image/check-mark.png";
   static String cross = "assets/image/cross.png";
   static String hourglass = "assets/image/hourglass.png";
-
+  static String filter = "assets/image/Vector.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }
