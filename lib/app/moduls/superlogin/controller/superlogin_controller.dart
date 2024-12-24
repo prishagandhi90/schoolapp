@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
+import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
@@ -11,15 +11,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SuperloginController extends GetxController {
   final TextEditingController numbercontroller = TextEditingController();
+  Dropdown_G? selectedUserName;
   final TextEditingController userName_nm_controller = TextEditingController();
   final TextEditingController userName_value_controller = TextEditingController();
   final TextEditingController searchFieldController = TextEditingController();
-  final superloginFormKey = GlobalKey<FormState>();
   var userTable = <DropdownTable>[].obs;
   List<DropdownTable> filteredItems = [];
   bool isLoading = false;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
+  final FocusNode searchFocusNode = FocusNode();
+  final superloginFormKey = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -28,9 +30,9 @@ class SuperloginController extends GetxController {
     fetchUserName();
   }
 
-  UserNameChangeMethod(Map<String, String>? value) async {
-    userName_value_controller.text = value!['value'] ?? '';
-    userName_nm_controller.text = value['text'] ?? '';
+  UserNameChangeMethod(Dropdown_G? value) async {
+    userName_value_controller.text = value!.value ?? '';
+    userName_nm_controller.text = value.name ?? '';
     update();
   }
 

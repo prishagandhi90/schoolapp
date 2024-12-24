@@ -55,4 +55,6 @@ abstract class _Paths {
 
   static const FORGOTPASSWORD = '/forgotpassword';
   static const RESET_PASSWORD = '/reset-password';
+  
+  static const SuperLogin = '/SuperLogin';
 }

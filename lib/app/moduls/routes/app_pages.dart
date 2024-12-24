@@ -32,6 +32,8 @@ import 'package:emp_app/app/moduls/payroll/bindings/payroll_binding.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/app/moduls/resetpassword/binding/reset_password_binding.dart';
 import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
+import 'package:emp_app/app/moduls/superlogin/binding/superlogin_binding.dart';
+import 'package:emp_app/app/moduls/superlogin/screen/superlogin_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/bindings/verifyotp_binding.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
 import 'package:get/get.dart';
@@ -143,9 +145,15 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FORGOTPASSWORD,
-      page: () => const ForgotpassScreen(mobileNumber: '',),
+      page: () => const ForgotpassScreen(
+        mobileNumber: '',
+      ),
       binding: ForgotpasswordBinding(),
     ),
-    
+    GetPage(
+      name: _Paths.SuperLogin,
+      page: () => const SuperloginScreen(),
+      binding: SuperLoginBinding(),
+    ),
   ];
 }

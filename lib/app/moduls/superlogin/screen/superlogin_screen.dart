@@ -1,6 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/custom_dropdown_search.dart';
+import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -34,7 +36,7 @@ class SuperloginScreen extends GetView<LoginController> {
                   horizontal: Sizes.px15,
                 ),
                 child: Form(
-                  // key: controller.superloginFormKey,
+                  key: controller.superloginFormKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -190,18 +192,19 @@ class SuperloginScreen extends GetView<LoginController> {
                           //     },
                           //   ),
                           // ),
-                          CustomDropdown(
+                          CustomDropdownSearch(
                             text: 'Enter Name',
-                            controller: controller.userName_nm_controller,
+                            selectedValue: controller.selectedUserName,
+                            // controller: controller.userName_nm_controller,
                             onChanged: (value) async {
                               await controller.UserNameChangeMethod(value);
                             },
                             items: controller.filteredItems
-                                .map((DropdownTable item) => DropdownMenuItem<Map<String, String>>(
-                                      value: {
-                                        'value': item.id ?? '',
-                                        'text': item.name ?? '',
-                                      },
+                                .map((DropdownTable item) => DropdownMenuItem<Dropdown_G>(
+                                      value: Dropdown_G(
+                                        value: item.id ?? '',
+                                        name: item.name ?? '',
+                                      ),
                                       child: Text(
                                         item.name ?? '',
                                         style: AppStyle.black.copyWith(fontSize: 14),
@@ -218,44 +221,9 @@ class SuperloginScreen extends GetView<LoginController> {
                                 color: AppColor.white,
                               ),
                             ),
-                            dropdownSearchData: DropdownSearchData(
-                              searchController: controller.userName_nm_controller,
-                              searchInnerWidgetHeight: 50,
-                              searchInnerWidget: Container(
-                                height: 50,
-                                padding: const EdgeInsets.only(
-                                  top: 8,
-                                  bottom: 4,
-                                  right: 8,
-                                  left: 8,
-                                ),
-                                child: TextFormField(
-                                  expands: true,
-                                  maxLines: null,
-                                  controller: controller.searchFieldController,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 8,
-                                    ),
-                                    hintText: 'Search for an item...',
-                                    hintStyle: const TextStyle(fontSize: 12),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  onChanged: (searchValue) {
-                                    // Call the search logic or update UI dynamically
-                                    controller.updateSearchResults(searchValue);
-                                  },
-                                ),
-                              ),
-                              searchMatchFn: (item, searchValue) {
-                                // return item.value.toString().contains(searchValue);
-                                return item.value.toString().toLowerCase().contains(searchValue.toLowerCase());
-                              },
-                            ),
+                            searchcontroller: controller.searchFieldController,
+                            searchFocusNode: controller.searchFocusNode,
+                            SearchYN: true,
                           ),
                           // ),
                           SizedBox(height: Sizes.px40),
