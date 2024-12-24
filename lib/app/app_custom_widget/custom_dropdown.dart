@@ -61,22 +61,6 @@ class CustomDropdown extends StatelessWidget {
             height: 40,
           ),
           dropdownSearchData: dropdownSearchData,
-          // dropdownStyleData: DropdownStyleData(
-          //   // maxHeight: screenHeight * 0.5, // Set dropdown max height to 50% of screen
-          //   maxHeight: screenHeight - 100.0,
-          //   // padding: const EdgeInsets.symmetric(horizontal: 14),
-          //   padding: items.length * 40.0 > screenHeight - 70.0 // Each item's height approx. 40
-          //       ? const EdgeInsets.only(bottom: 70.0) // Add padding if items exceed height
-          //       : null,
-          //   decoration: BoxDecoration(
-          //     border: Border.all(color: Colors.black),
-          //     borderRadius: BorderRadius.circular(0),
-          //     color: Colors.white,
-          //   ),
-          //   scrollbarTheme: ScrollbarThemeData(
-          //     thumbVisibility: WidgetStateProperty.all(true),
-          //   ),
-          // ),
           dropdownStyleData: DropdownStyleData(
             useSafeArea: false, // यह dropdown को safe area से बाहर जाने की अनुमति देगा
             useRootNavigator: true,
