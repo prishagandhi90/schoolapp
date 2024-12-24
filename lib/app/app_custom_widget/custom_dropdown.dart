@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomDropdown extends StatelessWidget {
-  final String text; // Label for the dropdown
-  final TextEditingController controller; // To manage the selected value
-  final Function(Map<String, String>?) onChanged; // Custom onChanged callback for Map<String, String>
-  final List<DropdownMenuItem<Map<String, String>>> items; // List of items with Map<String, String>
-  final double width; // To set width dynamically
-  final InputDecoration? decoration; // Custom decoration if needed
-  final Function(bool)? onMenuStateChange; // Menu state change callback
+  final String text;
+  final TextEditingController controller;
+  final Function(Map<String, String>?) onChanged;
+  final List<DropdownMenuItem<Map<String, String>>> items;
+  final double width;
+  final InputDecoration? decoration;
+  final Function(bool)? onMenuStateChange;
   final ButtonStyleData? buttonStyleData;
   final DropdownSearchData<Map<String, String>>? dropdownSearchData;
 
@@ -46,25 +46,22 @@ class CustomDropdown extends StatelessWidget {
               .firstWhereOrNull(
                 (item) => item.value?['text'] == controller.text,
               )
-              ?.value, // Get selected value from the controller
+              ?.value,
           onChanged: (value) {
-            // FocusManager.instance.primaryFocus?.unfocus();
             if (value != null) {
-              controller.text = value['text'] ?? ''; // Update the controller with selected value
-              onChanged(value); // Call the custom onChanged method
-              print("Selected value: ${value['text']}"); // Debugging line to check selected value
+              controller.text = value['text'] ?? '';
+              onChanged(value);
             }
           },
-
           buttonStyleData: buttonStyleData,
           menuItemStyleData: const MenuItemStyleData(
             height: 40,
           ),
           dropdownSearchData: dropdownSearchData,
           dropdownStyleData: DropdownStyleData(
-            useSafeArea: false, // यह dropdown को safe area से बाहर जाने की अनुमति देगा
+            useSafeArea: false,
             useRootNavigator: true,
-            maxHeight: screenHeight * 0.4, // स्क्रीन की ऊंचाई का 40% तक सीमित करें
+            maxHeight: screenHeight * 0.4,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
               borderRadius: BorderRadius.circular(0),
@@ -76,12 +73,11 @@ class CustomDropdown extends StatelessWidget {
               thumbVisibility: WidgetStateProperty.all(true),
               thumbColor: WidgetStateProperty.all(AppColor.black.withOpacity(0.5)),
             ),
-            offset: const Offset(0, -4), // ड्रॉपडाउन को थोड़ा ऊपर शिफ्ट करें
+            offset: const Offset(0, -4),
           ),
           onMenuStateChange: (isOpen) {
             if (isOpen) {
               print("Dropdown is open");
-              // FocusManager.instance.primaryFocus?.unfocus();
             } else {
               print("Dropdown is closed");
             }
