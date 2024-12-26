@@ -92,6 +92,9 @@ class PharmacyScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
+                              if (controller.isPresViewerNavigating.value) return;
+                              controller.isPresViewerNavigating.value = true;
+
                               Navigator.pop(context);
                               // controller.payrolListOnClk(index, context);
                               final bottomBarController = Get.put(BottomBarController());
@@ -110,6 +113,7 @@ class PharmacyScreen extends StatelessWidget {
                                 var dashboardController = Get.put(DashboardController());
                                 await dashboardController.getDashboardDataUsingToken();
                               });
+                              controller.isPresViewerNavigating.value = false;
                             },
                             child: SizedBox(
                               height: 40,

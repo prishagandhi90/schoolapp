@@ -48,6 +48,9 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   List<String> tempFloorsList = [];
   List<String> tempBedList = [];
   bool showShortButton = true;
+  var isPresViewerNavigating = false.obs;
+  var isPresMedicineNavigating = false.obs;
+
   @override
   void onInit() {
     super.onInit();

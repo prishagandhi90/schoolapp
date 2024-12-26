@@ -195,9 +195,11 @@ class PresviewerScreen extends StatelessWidget {
                                       padding: const EdgeInsets.all(8.0),
                                       child: GestureDetector(
                                         onTap: () async {
+                                          if (controller.isPresMedicineNavigating.value) return;
+                                          controller.isPresMedicineNavigating.value = true;
+
                                           controller.SelectedIndex = index;
-                                          await controller.fetchpresDetailList(
-                                              controller.filterpresviewerList[index].mstId.toString());
+                                          await controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
 
                                           final bottomBarController = Get.put(BottomBarController());
                                           bottomBarController.currentIndex.value = -1;
@@ -217,6 +219,7 @@ class PresviewerScreen extends StatelessWidget {
                                             var dashboardController = Get.put(DashboardController());
                                             await dashboardController.getDashboardDataUsingToken();
                                           });
+                                          controller.isPresMedicineNavigating.value = false;
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -234,8 +237,7 @@ class PresviewerScreen extends StatelessWidget {
                                                     flex: 6,
                                                     child: Padding(
                                                       padding: const EdgeInsets.all(8.0),
-                                                      child: Text(
-                                                          controller.filterpresviewerList[index].patientName.toString(),
+                                                      child: Text(controller.filterpresviewerList[index].patientName.toString(),
                                                           style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                     ),
                                                   ),
@@ -243,8 +245,7 @@ class PresviewerScreen extends StatelessWidget {
                                                     flex: 1,
                                                     child: Container(
                                                       height: 35, // Small container size
-                                                      margin: const EdgeInsets.only(
-                                                          bottom: 5), // Moves container a bit left and down
+                                                      margin: const EdgeInsets.only(bottom: 5), // Moves container a bit left and down
                                                       decoration: BoxDecoration(
                                                         color: Colors.grey[200],
                                                         borderRadius: BorderRadius.circular(8),
@@ -258,16 +259,14 @@ class PresviewerScreen extends StatelessWidget {
                                                             bottomBarController.currentIndex.value = -1;
                                                             hideBottomBar.value = false;
 
-                                                            await controller.fetchpresDetailList(controller
-                                                                .filterpresviewerList[index].mstId
-                                                                .toString());
+                                                            await controller.fetchpresDetailList(
+                                                                controller.filterpresviewerList[index].mstId.toString());
 
                                                             PersistentNavBarNavigator.pushNewScreen(
                                                               context,
                                                               screen: PresdetailsScreen(),
                                                               withNavBar: true,
-                                                              pageTransitionAnimation:
-                                                                  PageTransitionAnimation.cupertino,
+                                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                                             ).then((value) async {
                                                               // final bottomBarController = Get.find<BottomBarController>();
                                                               bottomBarController.persistentController.value.index = 0;
@@ -300,8 +299,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                 text: AppString.printst, // Heading
                                                                 style: AppStyle.plusbold16),
                                                             TextSpan(
-                                                                text: controller.filterpresviewerList[index].printStatus
-                                                                    .toString(), // Data
+                                                                text: controller.filterpresviewerList[index].printStatus.toString(), // Data
                                                                 style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                           ],
                                                         ),
@@ -317,8 +315,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                   text: AppString.priority, // Heading
                                                                   style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                               TextSpan(
-                                                                  text: controller.filterpresviewerList[index].priority
-                                                                      .toString(), // Data
+                                                                  text: controller.filterpresviewerList[index].priority.toString(), // Data
                                                                   style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             ],
                                                           ),
@@ -341,8 +338,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                 text: AppString.lastuser, // Heading
                                                                 style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             TextSpan(
-                                                                text: controller.filterpresviewerList[index].lastUser
-                                                                    .toString(), // Data
+                                                                text: controller.filterpresviewerList[index].lastUser.toString(), // Data
                                                                 style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                           ],
                                                         ),
@@ -358,8 +354,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                   text: AppString.rxStatus, // Heading
                                                                   style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                               TextSpan(
-                                                                  text: controller.filterpresviewerList[index].rxStatus
-                                                                      .toString(), // Data
+                                                                  text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
                                                                   style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             ],
                                                           ),
@@ -388,8 +383,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                 // ),
                                                                 ),
                                                             TextSpan(
-                                                                text: controller.filterpresviewerList[index].ipd
-                                                                    .toString(), // Data
+                                                                text: controller.filterpresviewerList[index].ipd.toString(), // Data
                                                                 style: AppStyle.w50018.copyWith(fontSize: 16)
                                                                 // TextStyle(
                                                                 //   fontSize: 16,
@@ -417,8 +411,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                   // ),
                                                                   ),
                                                               TextSpan(
-                                                                  text: controller.filterpresviewerList[index].tokenNo
-                                                                      .toString(), // Data
+                                                                  text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
                                                                   style: AppStyle.w50018.copyWith(fontSize: 30)
                                                                   //  TextStyle(
                                                                   //   fontSize: 30,
