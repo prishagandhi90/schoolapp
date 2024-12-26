@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/resetpassword/controller/resetpass_controller.dart';
@@ -31,7 +32,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                       children: [
                         Center(
                           child: Image.asset(
-                            'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                            AppImage.venuspro,
                             // scale: 2,
                             // width: Sizes.crossLength * 0.260,
                             width: MediaQuery.of(context).size.width * 0.8,
@@ -41,7 +42,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'Reset Password',
+                            AppString.resetPassword,
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 22,
@@ -177,8 +178,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColor.white,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide(color: AppColor.primaryColor)),
+                                  borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                             ),
                             child: Text(
                               AppString.cancel,

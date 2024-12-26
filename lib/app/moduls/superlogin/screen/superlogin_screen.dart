@@ -1,5 +1,6 @@
-import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown_search.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/moduls/superlogin/model/common_dropdown_model.dart';
+import 'package:emp_app/app/moduls/superlogin/screen/custom_dropdown_search.dart';
 import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
@@ -18,7 +19,6 @@ class SuperloginScreen extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     Sizes.init(context);
-
     Get.put(SuperloginController());
     return GetBuilder<SuperloginController>(
       builder: (controller) {
@@ -40,7 +40,7 @@ class SuperloginScreen extends GetView<LoginController> {
                       children: [
                         Center(
                           child: Image.asset(
-                            'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                            AppImage.venuslogo,
                             width: Sizes.w * 0.8, // Dynamic width
                           ),
                         ),
@@ -104,8 +104,7 @@ class SuperloginScreen extends GetView<LoginController> {
                         ),
                         SizedBox(height: Sizes.px20),
                         CustomDropDownSearch(
-                          text: 'USER NAME',
-                          hinttext: 'Select User name',
+                          hinttext: AppString.selectUsername,
                           selectedValue: controller.selectedUserName,
                           items: controller.filteredItems
                               .map((DropdownTable item) => DropdownMenuItem<Dropdown_G>(

@@ -5,7 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:get/get.dart';
 
 class CustomDropDownSearch extends StatelessWidget {
-  final String text;
+  final String? text;
   final String hinttext;
   final Dropdown_G? selectedValue;
   final Function? onChange;
@@ -16,7 +16,7 @@ class CustomDropDownSearch extends StatelessWidget {
 
   const CustomDropDownSearch({
     super.key,
-    required this.text,
+    this.text,
     required this.hinttext,
     this.selectedValue,
     this.onChange,

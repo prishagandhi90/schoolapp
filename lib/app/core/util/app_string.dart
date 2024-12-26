@@ -4,10 +4,11 @@ class AppString {
   static String pleaselogin = "Please log in to continue";
   static String login = "LOG IN";
   static String loginAs = "Enter into Login";
+  static String entermobileno = "Enter Mobile Number";
   static String submit = "Submit";
   static String resetPassword = "Reset Password";
   static String enterConfirmPassword = "Enter Confirm Password";
-  static String entermobileno = "Enter Mobile Number";
+  static String selectUsername = "Select User name";
   static String plzentermobileno = "Please enter a mobile number";
   static String entervalidmobileno = "Please enter a valid 10-digit mobile number";
   static String failedtorequestotp = "Failed to request OTP";

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
+import 'package:emp_app/app/moduls/superlogin/model/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -37,12 +37,6 @@ class SuperloginController extends GetxController {
     selectedUserName = value;
     update();
   }
-
-  // UserNameChangeMethod(Dropdown_G? value) async {
-  //   userName_value_controller.text = value!.value ?? '';
-  //   userName_nm_controller.text = value.name ?? '';
-  //   update();
-  // }
 
   void dismissKeyboard() {
     // Close the keyboard whenever you click outside

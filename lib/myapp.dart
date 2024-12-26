@@ -1,12 +1,8 @@
-// import 'package:device_preview/device_preview.dart';
-import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
