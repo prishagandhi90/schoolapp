@@ -1,6 +1,5 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -203,6 +202,7 @@ class PresviewerScreen extends StatelessWidget {
                                           final bottomBarController = Get.put(BottomBarController());
                                           bottomBarController.currentIndex.value = -1;
                                           hideBottomBar.value = false;
+
                                           PersistentNavBarNavigator.pushNewScreen(
                                             context,
                                             screen: PresdetailsScreen(),
@@ -254,7 +254,6 @@ class PresviewerScreen extends StatelessWidget {
                                                         onPressed: () async {
                                                           try {
                                                             controller.SelectedIndex = index;
-
                                                             final bottomBarController = Get.put(BottomBarController());
                                                             bottomBarController.currentIndex.value = -1;
                                                             hideBottomBar.value = false;

@@ -46,113 +46,118 @@ class PresdetailsScreen extends StatelessWidget {
                   bottom: 0,
                 ),
                 child: controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
-                    ? Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              controller.presviewerList[controller.SelectedIndex].patientName.toString(),
-                              style: 
-                              TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ? Column(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(controller.presviewerList[controller.SelectedIndex].ipd.toString(), style: AppStyle.plus16
-                                          // TextStyle(
-                                          //   fontSize: 16,
-                                          //   fontFamily: CommonFontStyle.plusJakartaSans,
-                                          // ),
-                                          ),
-                                      SizedBox(height: 5), // Space between IPD and MOP
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].mop.toString(),
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      ),
-                                    ],
+                                Text(
+                                  controller.presviewerList[controller.SelectedIndex].patientName.toString(),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].bed.toString(),
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(controller.presviewerList[controller.SelectedIndex].ipd.toString(),
+                                              style: AppStyle.plus16
+                                              // TextStyle(
+                                              //   fontSize: 16,
+                                              //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                              // ),
+                                              ),
+                                          SizedBox(height: 5), // Space between IPD and MOP
+                                          Text(
+                                            controller.presviewerList[controller.SelectedIndex].mop.toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 5), // Space between Bed and Intercom
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: 'Intercom: ', // Bold label
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            controller.presviewerList[controller.SelectedIndex].bed.toString(),
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
                                             ),
+                                          ),
+                                          SizedBox(height: 5), // Space between Bed and Intercom
+                                          Text.rich(
                                             TextSpan(
-                                              text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                              children: [
+                                                TextSpan(
+                                                  text: 'Intercom: ', // Bold label
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: controller.presviewerList[controller.SelectedIndex].intercom
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.start,
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            controller.presviewerList[controller.SelectedIndex].dte.toString(),
+                                            style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                          ),
+                                          SizedBox(height: 6),
+                                          Text(
+                                            controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                                            style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                        'assets/image/qr-code.png', // Replace with your image path
+                                        height: 50,
+                                        width: 50,
+                                        fit: BoxFit.contain,
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].dte.toString(),
-                                        style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
-                                      ),
-                                      SizedBox(height: 6),
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                                        style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
-                                      ),
-                                    ],
-                                  ),
-                                  Image.asset(
-                                    'assets/image/qr-code.png', // Replace with your image path
-                                    height: 50,
-                                    width: 50,
-                                    fit: BoxFit.contain,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       )
                     : const Padding(
                         padding: EdgeInsets.all(5),
@@ -244,7 +249,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                           TextSpan(
-                                                            text: controller.presdetailList[index].genericName.toString(),
+                                                            text:
+                                                                controller.presdetailList[index].genericName.toString(),
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight: FontWeight.w500,
