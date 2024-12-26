@@ -7,6 +7,7 @@ abstract class Routes {
   Routes._();
   // static const SPLASH = _Paths.SPLASH;
   static const LOGIN = _Paths.LOGIN;
+  static const SUPERLOGIN = _Paths.SuperLogin;
   static const NoInternet = _Paths.NoInterNet;
   static const VERIFYOTP = _Paths.VERIFYOTP;
   static const DASHBOARD = _Paths.DASHBOARD;
@@ -55,6 +56,6 @@ abstract class _Paths {
 
   static const FORGOTPASSWORD = '/forgotpassword';
   static const RESET_PASSWORD = '/reset-password';
-  
+
   static const SuperLogin = '/SuperLogin';
 }
