@@ -3,6 +3,7 @@ class AppString {
   static String hithere = "Hi there!";
   static String pleaselogin = "Please log in to continue";
   static String login = "LOG IN";
+  static String loginAs = "Enter into Login";
   static String submit = "Submit";
   static String resetPassword = "Reset Password";
   static String enterConfirmPassword = "Enter Confirm Password";
@@ -104,6 +105,7 @@ class AppString {
   static String keyToken = "KEY_TOKENNO";
   static String keyLoginId = "KEY_LOGINID";
   static String keyEmpId = "KEY_EMPID";
+  static String keySuperAdmin = "KEY_SUPERADMIN";
 
   //pharmacy
   static String pharmacy = "Pharmacy";

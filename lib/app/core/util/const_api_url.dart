@@ -9,7 +9,7 @@ class ConstApiUrl {
   static const validMobileNo = "$empLoginUrl/ValidateMobileNo";
   static const generatenewpass = "$empLoginUrl/GenerateNewPassword";
   static const empLoginusernameAPI = "$empLoginUrl/GetLoginUserNames";
-
+  static const empSuperLoginCred = "$empLoginUrl/GetLoginAsUserCreds";
 
 
   static const empAttendanceDtlAPI = "$empUrl/GetEmpAttendDtl_EmpInfo";

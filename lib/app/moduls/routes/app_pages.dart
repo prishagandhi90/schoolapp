@@ -152,7 +152,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SuperLogin,
-      page: () => const SuperloginScreen(),
+      page: () => const SuperloginScreen(mobileNo: '',),
       binding: SuperLoginBinding(),
     ),
   ];

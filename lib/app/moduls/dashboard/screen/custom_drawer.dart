@@ -234,35 +234,40 @@ class CustomDrawer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: SizedBox(
-                        width: 100,
-                        height: 40,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: WidgetStatePropertyAll(
-                                AppColor.white,
+                    Visibility(
+                      visible: dashboardController.isSuperAdmin == "Y",
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                  AppColor.white,
+                                ),
+                                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                                  side: BorderSide(color: AppColor.black),
+                                  borderRadius: BorderRadius.circular(20),
+                                ))),
+                            onPressed: () {
+                              Get.to(SuperloginScreen(
+                                mobileNo: dashboardController.mobileNumber,
+                              ));
+                            },
+                            child: Text(
+                              'Super Login',
+                              style: TextStyle(
+                                color: AppColor.black,
+                                overflow: TextOverflow.clip,
+                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                fontWeight: FontWeight.w500,
                               ),
-                              shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                                side: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(20),
-                              ))),
-                          onPressed: () {
-                            Get.to(SuperloginScreen());
-                          },
-                          child: Text(
-                            'Super Login',
-                            style: TextStyle(
-                              color: AppColor.black,
-                              overflow: TextOverflow.clip,
-                              fontFamily: CommonFontStyle.plusJakartaSans,
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
                 // SizedBox(

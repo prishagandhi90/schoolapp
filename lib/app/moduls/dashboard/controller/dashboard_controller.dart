@@ -18,7 +18,14 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "",
+      isSuperAdmin = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -195,16 +202,18 @@ class DashboardController extends GetxController {
         if (responseDashboardData.statusCode == 200) {
           if (responseDashboardData.data != null) {
             dashboardTable = responseDashboardData.data!;
-            var dashboardController = Get.put(DashboardController());
-            dashboardController.employeeName = dashboardTable.employeeName.toString();
-            dashboardController.mobileNumber = dashboardTable.mobileNumber.toString();
-            dashboardController.emailAddress = dashboardTable.emailAddress.toString();
-            dashboardController.empCode = dashboardTable.empCode.toString();
-            dashboardController.empType = dashboardTable.empType.toString();
-            dashboardController.department = dashboardTable.department.toString();
-            dashboardController.designation = dashboardTable.designation.toString();
+            // var dashboardController = Get.put(DashboardController());
+            employeeName = dashboardTable.employeeName.toString();
+            mobileNumber = dashboardTable.mobileNumber.toString();
+            emailAddress = dashboardTable.emailAddress.toString();
+            empCode = dashboardTable.empCode.toString();
+            empType = dashboardTable.empType.toString();
+            department = dashboardTable.department.toString();
+            designation = dashboardTable.designation.toString();
+            isSuperAdmin = dashboardTable.isSuperAdmin.toString();
 
-            dashboardController.update();
+            // dashboardController.update();
+            update();
           } else {
             Get.rawSnackbar(message: "No data found!");
           }

@@ -22,8 +22,16 @@ void main() async {
   try {
     await InitFirebaseSettings();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isSuperAdmin = prefs.getString(AppString.keySuperAdmin) != null &&
+            prefs.getString(AppString.keySuperAdmin) != '' &&
+            prefs.getString(AppString.keySuperAdmin) == 'True'
+        ? true
+        : false;
+    if (isSuperAdmin) {
+      await prefs.setString(AppString.keySuperAdmin, '');
+    }
     bool isLoggedIn =
-        prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' ? true : false;
+        prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
 
     // Set up Firebase messaging
     await setupFirebaseMessaging();

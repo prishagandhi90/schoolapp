@@ -15,9 +15,7 @@ class LoginScreen extends GetView<LoginController> {
   Widget build(BuildContext context) {
     // Initialize Sizes
     Sizes.init(context);
-
     Get.put(LoginController());
-
     return GetBuilder<LoginController>(builder: (loginController) {
       return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -118,7 +116,7 @@ class LoginScreen extends GetView<LoginController> {
                                 obscureText: loginController.hidePassword,
                                 inputFormatters: <TextInputFormatter>[
                                   // FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(10),
+                                  LengthLimitingTextInputFormatter(23),
                                 ],
                                 decoration: InputDecoration(
                                   hintText: 'Enter Password',
