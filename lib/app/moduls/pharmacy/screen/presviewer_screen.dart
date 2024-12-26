@@ -254,13 +254,15 @@ class PresviewerScreen extends StatelessWidget {
                                                         onPressed: () async {
                                                           try {
                                                             controller.SelectedIndex = index;
-                                                            await controller.fetchpresDetailList(controller
-                                                                .filterpresviewerList[index].mstId
-                                                                .toString());
 
                                                             final bottomBarController = Get.put(BottomBarController());
                                                             bottomBarController.currentIndex.value = -1;
                                                             hideBottomBar.value = false;
+
+                                                            await controller.fetchpresDetailList(controller
+                                                                .filterpresviewerList[index].mstId
+                                                                .toString());
+
                                                             PersistentNavBarNavigator.pushNewScreen(
                                                               context,
                                                               screen: PresdetailsScreen(),
