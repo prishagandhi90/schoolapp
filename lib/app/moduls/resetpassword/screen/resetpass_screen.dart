@@ -2,6 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/resetpassword/controller/resetpass_controller.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             )
                           ],
                           decoration: InputDecoration(
-                            hintText: 'Enter Password',
+                            hintText: AppString.enterPassword,
                             hintStyle: TextStyle(
                               fontFamily: CommonFontStyle.plusJakartaSans,
                             ),
@@ -154,12 +155,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             ),
                             child: Text(
                               AppString.resetPassword,
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: CommonFontStyle.plusJakartaSans,
-                              ),
+                              style: AppStyle.plusblack20w700,
                             ),
                           ),
                         ),
@@ -182,12 +178,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             ),
                             child: Text(
                               AppString.cancel,
-                              style: TextStyle(
-                                color: AppColor.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: CommonFontStyle.plusJakartaSans,
-                              ),
+                              style: AppStyle.plusblack20w700,
                             ),
                           ),
                         ),

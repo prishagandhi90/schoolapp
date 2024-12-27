@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
@@ -13,7 +14,6 @@ class LoginScreen extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize Sizes
     Sizes.init(context);
     Get.put(LoginController());
     return GetBuilder<LoginController>(builder: (loginController) {
@@ -37,7 +37,7 @@ class LoginScreen extends GetView<LoginController> {
                       children: [
                         Center(
                           child: Image.asset(
-                            'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                            AppImage.venuslogo,
                             width: Sizes.w * 0.8, // Dynamic width
                           ),
                         ),
@@ -106,7 +106,7 @@ class LoginScreen extends GetView<LoginController> {
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Enter password';
+                                    return AppString.enterPassword;
                                   }
                                   if (!RegExp(r'^\d{10}$').hasMatch(value)) {
                                     return AppString.entervalidmobileno;
@@ -119,7 +119,7 @@ class LoginScreen extends GetView<LoginController> {
                                   LengthLimitingTextInputFormatter(23),
                                 ],
                                 decoration: InputDecoration(
-                                  hintText: 'Enter Password',
+                                  hintText: AppString.enterPassword,
                                   hintStyle: TextStyle(
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                   ),
@@ -229,7 +229,7 @@ class LoginScreen extends GetView<LoginController> {
                                         ),
                                       ),
                                       child: Text(
-                                        'Forgot Password?',
+                                        AppString.forgotPassword,
                                         style: TextStyle(
                                           color: AppColor.primaryColor,
                                           fontSize: Sizes.px14, // Dynamic font size

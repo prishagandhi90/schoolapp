@@ -277,12 +277,12 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
         isScrollControlled: true,
         isDismissible: true,
         useSafeArea: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColor.trasparent,
         builder: (context) => Container(
               height: MediaQuery.of(context).size.height * 0.90,
               width: Get.width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: AppColor.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25.0),
                   topRight: Radius.circular(25.0),
@@ -465,12 +465,12 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
         isScrollControlled: true,
         isDismissible: true,
         useSafeArea: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColor.trasparent,
         builder: (context) => Container(
               height: MediaQuery.of(context).size.height * 0.42,
               width: Get.width,
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: AppColor.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25.0),
                   topRight: Radius.circular(25.0),

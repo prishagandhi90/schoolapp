@@ -255,7 +255,7 @@ class PharmacyScreen extends StatelessWidget {
                                   horizontal: 20, // 4% of screen width
                                 ),
                                 child: Text(
-                                  'Prescription Viewer',
+                                  AppString.prescriptionviewer,
                                   style: AppStyle.plus17w600.copyWith(
                                     fontSize: 19, // 4.5% of screen width
                                   ),
@@ -275,7 +275,7 @@ class PharmacyScreen extends StatelessWidget {
                                       top: -40, // 4% of screen height
                                       right: 30,
                                       child: Image.asset(
-                                        'assets/image/medicine.png',
+                                        AppImage.medicine,
                                         height: 100, // 10% of screen height
                                         width: 100, // 20% of screen width
                                         fit: BoxFit.contain,

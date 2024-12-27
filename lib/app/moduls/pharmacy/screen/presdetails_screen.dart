@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class PresdetailsScreen extends StatelessWidget {
           if (controller.blurState.every((blur) => blur)) {
             // Show alert when all items are blurred
             Get.defaultDialog(
-              title: "COMPLETED!!!",
+              title: AppString.completed,
               middleText: "All items have been collected! \nJust go back and continue with other patients!",
               onConfirm: () => Get.back(), // Close the dialog
             );
@@ -55,7 +57,7 @@ class PresdetailsScreen extends StatelessWidget {
                                 Text(
                                   controller.presviewerList[controller.SelectedIndex].patientName.toString(),
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: AppColor.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -67,8 +69,7 @@ class PresdetailsScreen extends StatelessWidget {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(controller.presviewerList[controller.SelectedIndex].ipd.toString(),
-                                              style: AppStyle.plus16
+                                          Text(controller.presviewerList[controller.SelectedIndex].ipd.toString(), style: AppStyle.plus16
                                               // TextStyle(
                                               //   fontSize: 16,
                                               //   fontFamily: CommonFontStyle.plusJakartaSans,
@@ -102,7 +103,7 @@ class PresdetailsScreen extends StatelessWidget {
                                             TextSpan(
                                               children: [
                                                 TextSpan(
-                                                  text: 'Intercom: ', // Bold label
+                                                  text: AppString.intercom, // Bold label
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -110,8 +111,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: controller.presviewerList[controller.SelectedIndex].intercom
-                                                      .toString(),
+                                                  text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
@@ -146,7 +146,7 @@ class PresdetailsScreen extends StatelessWidget {
                                         ],
                                       ),
                                       Image.asset(
-                                        'assets/image/qr-code.png', // Replace with your image path
+                                        AppImage.qrcode, // Replace with your image path
                                         height: 50,
                                         width: 50,
                                         fit: BoxFit.contain,
@@ -159,9 +159,9 @@ class PresdetailsScreen extends StatelessWidget {
                           ),
                         ],
                       )
-                    : const Padding(
+                    : Padding(
                         padding: EdgeInsets.all(5),
-                        child: Center(child: Text('No  data available')),
+                        child: Center(child: Text(AppString.nodataavailable)),
                       ),
               ),
             ),
@@ -218,7 +218,7 @@ class PresdetailsScreen extends StatelessWidget {
                                             flex: 1,
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.white,
+                                                color: AppColor.white,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(70),
                                                   bottomLeft: Radius.circular(70),
@@ -241,7 +241,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                       TextSpan(
                                                         children: [
                                                           TextSpan(
-                                                            text: 'Generic Drug: ',
+                                                            text: AppString.genericdrug,
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight: FontWeight.bold,
@@ -249,8 +249,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                           TextSpan(
-                                                            text:
-                                                                controller.presdetailList[index].genericName.toString(),
+                                                            text: controller.presdetailList[index].genericName.toString(),
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight: FontWeight.w500,
@@ -287,7 +286,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                       TextSpan(
                                                         children: [
                                                           TextSpan(
-                                                            text: 'Quantity: ',
+                                                            text: AppString.quantity,
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight: FontWeight.bold,
@@ -312,7 +311,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                       TextSpan(
                                                         children: [
                                                           TextSpan(
-                                                            text: 'Pkg: ',
+                                                            text: AppString.pkg,
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight: FontWeight.bold,
@@ -372,7 +371,7 @@ class PresdetailsScreen extends StatelessWidget {
                     ),
                   );
                 })
-              : const Center(child: Text('No data available')),
+              : Center(child: Text(AppString.nodataavailable)),
         );
       },
     );

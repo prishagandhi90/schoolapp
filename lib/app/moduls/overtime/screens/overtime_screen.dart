@@ -45,9 +45,8 @@ class OtScreen extends GetView<OvertimeController> {
                             Expanded(
                               child: CustomDatePicker(
                                 dateController: controller.fromDateController,
-                                hintText: 'From',
-                                onDateSelected: () async =>
-                                    await controller.selectDate(context, controller.fromDateController),
+                                hintText: AppString.from,
+                                onDateSelected: () async => await controller.selectDate(context, controller.fromDateController),
                               ),
                             ),
                             SizedBox(
@@ -72,9 +71,8 @@ class OtScreen extends GetView<OvertimeController> {
                             Expanded(
                               child: CustomDatePicker(
                                 dateController: controller.toDateController,
-                                hintText: 'To',
-                                onDateSelected: () async =>
-                                    await controller.selectDate(context, controller.toDateController),
+                                hintText: AppString.to,
+                                onDateSelected: () async => await controller.selectDate(context, controller.toDateController),
                               ),
                             ),
                             SizedBox(
@@ -97,7 +95,7 @@ class OtScreen extends GetView<OvertimeController> {
                         CustomTextFormField(
                           readOnly: true,
                           controller: controller.otMinutesController,
-                          hint: "Min",
+                          hint: AppString.min,
                           hintStyle: TextStyle(
                             fontSize: 14,
                             // fontWeight: FontWeight.bold,
@@ -107,7 +105,7 @@ class OtScreen extends GetView<OvertimeController> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: CustomTextFormField(
-                            hint: 'Notes...',
+                            hint: AppString.note,
                             hintStyle: TextStyle(
                               fontSize: 14,
                               // fontWeight: FontWeight.bold,
@@ -139,7 +137,7 @@ class OtScreen extends GetView<OvertimeController> {
                           ),
                         ),
                         CustomDropdown(
-                          text: 'Late Reason',
+                          text: AppString.lateReason,
                           controller: controller.delayreasonName_OT_Controller,
                           buttonStyleData: ButtonStyleData(
                             height: 50,

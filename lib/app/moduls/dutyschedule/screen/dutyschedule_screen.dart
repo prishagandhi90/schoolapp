@@ -28,7 +28,7 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
-              'Duty Schedule',
+              AppString.dutyschedule,
               style: TextStyle(
                 color: AppColor.primaryColor,
                 fontWeight: FontWeight.w700,
@@ -120,8 +120,7 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                         ),
                         child: Center(
                           child: Text(
-                            controller.dutySchSftData.isNotEmpty &&
-                                    controller.dutySchSftData[0].dateColumnsValue != null
+                            controller.dutySchSftData.isNotEmpty && controller.dutySchSftData[0].dateColumnsValue != null
                                 ? controller.dutySchSftData[0].subDepartment!
                                 : "",
                             textAlign: TextAlign.center,

@@ -7,7 +7,9 @@ class AppString {
   static String entermobileno = "Enter Mobile Number";
   static String submit = "Submit";
   static String resetPassword = "Reset Password";
+  static String enterPassword = "Enter Password";
   static String enterConfirmPassword = "Enter Confirm Password";
+  static String forgotPassword = "Forgot Password?";
   static String selectUsername = "Select User name";
   static String plzentermobileno = "Please enter a mobile number";
   static String entervalidmobileno = "Please enter a valid 10-digit mobile number";
@@ -99,7 +101,10 @@ class AppString {
   static String hrnotes = "HR Notes";
   static String hrRejectReason = "HR Reject Reason";
   static String hours = "Hours";
-
+  static String empentryDT = "Emp Entry D/T : ";
+  static String deptIncDT = "Dept Inc D/T : ";
+  static String depthodDT = "Dept HOD D/T : ";
+  static String depthrDT = "Dept HR D/T : ";
   //Duty Schedule
   static String dutyschedule = "Duty Schedule";
 
@@ -131,6 +136,12 @@ class AppString {
   static String reset = "Reset";
   static String ipdNo = "IPD No: ";
   static String tokenNo = "Token No: ";
+  static String completed = "COMPLETED!!!";
+  static String intercom = "Intercom: ";
+  static String genericdrug = "Generic Drug: ";
+  static String branddrug = "Brand Drug: ";
+  static String quantity = "Quantity: ";
+  static String pkg = "Pkg: ";
 
   //Super Login
   static String superlogin = "Super Login only for Admin";

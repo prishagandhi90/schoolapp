@@ -55,13 +55,11 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                       itemCount: controller.otentryList.length,
                                       itemBuilder: (context, index) {
                                         final row = controller.otentryList[index];
-                                        final isSelected =
-                                            controller.selectedRowIndex == index; // Check if row is selected
+                                        final isSelected = controller.selectedRowIndex == index; // Check if row is selected
 
                                         return GestureDetector(
                                           onTap: () {
-                                            controller.inchargeAction.value =
-                                                controller.otentryList[index].inchargeAction ?? '';
+                                            controller.inchargeAction.value = controller.otentryList[index].inchargeAction ?? '';
                                             controller.hodAction.value = controller.otentryList[index].hodAction ?? '';
                                             controller.hrAction.value = controller.otentryList[index].hrAction ?? '';
                                             controller.setSelectedRow(index);
@@ -329,9 +327,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -372,9 +368,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -415,9 +409,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -458,9 +450,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -501,9 +491,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -544,9 +532,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -587,9 +573,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -630,9 +614,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -673,9 +655,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -695,7 +675,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                         alignment: Alignment.centerLeft,
                                         child: RichText(
                                           text: TextSpan(
-                                            text: 'Emp Entry D/T : ',
+                                            text: AppString.empentryDT,
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w700, // 20
@@ -721,7 +701,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                                       child: RichText(
                                         text: TextSpan(
-                                          text: 'Dept Inc D/T : ',
+                                          text: AppString.deptIncDT,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w700, // 20
@@ -746,7 +726,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                                       child: RichText(
                                         text: TextSpan(
-                                          text: 'Dept HOD D/T : ',
+                                          text: AppString.depthodDT,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w700, // 20
@@ -771,7 +751,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                                       child: RichText(
                                         text: TextSpan(
-                                          text: 'Dept HR D/T : ',
+                                          text: AppString.depthrDT,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w700, // 20
