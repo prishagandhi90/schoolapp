@@ -33,7 +33,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                       children: [
                         Center(
                           child: Image.asset(
-                            AppImage.venuspro,
+                            AppImage.venuslogo,
                             // scale: 2,
                             // width: Sizes.crossLength * 0.260,
                             width: MediaQuery.of(context).size.width * 0.8,
@@ -56,14 +56,13 @@ class ResetpassScreen extends GetView<ResetpassController> {
                           controller: controller.passwordController,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
-                            final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).{8,}$');
-                            if (value!.trim().isEmpty) {
-                              return "Please enter password.";
-                            } else if (!passwordRegex.hasMatch(value)) {
-                              return 'Password must be a minimum of 8 characters in length and include at least one letter and one number.';
-                            } else {
-                              return null;
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a password";
                             }
+                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
+                              return "Password must be at least 8 characters, include a letter, number, and special character";
+                            }
+                            return null;
                           },
                           obscureText: controller.hidePassword,
                           inputFormatters: <TextInputFormatter>[
@@ -100,14 +99,15 @@ class ResetpassScreen extends GetView<ResetpassController> {
                           keyboardType: TextInputType.emailAddress,
                           // textInputAction: TextInputAction.done,
                           validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return "Please enter confirm password";
-                            } else if (value.toString() != controller.passwordController.text.trim()) {
-                              return "Password didn't match.";
-                            } else {
-                              return null;
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a password";
                             }
+                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
+                              return "Password must be at least 8 characters, include a letter, number, and special character";
+                            }
+                            return null;
                           },
+
                           obscureText: controller.hideConfirmPassword,
                           inputFormatters: <TextInputFormatter>[
                             // FilteringTextInputFormatter.digitsOnly,

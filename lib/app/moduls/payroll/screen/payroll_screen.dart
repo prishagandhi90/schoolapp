@@ -188,8 +188,7 @@ class PayrollScreen extends GetView<PayrollController> {
                   padding: const EdgeInsets.all(15),
                   child: SingleChildScrollView(
                     controller: isScrollable ? controller.payrollScrollController : null,
-                    physics:
-                        isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
+                    physics: isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: availableHeight,
@@ -262,9 +261,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                           border: Border.all(color: AppColor.primaryColor),
                                                           borderRadius: BorderRadius.circular(20)),
                                                       child: controller.empSummDashboardTable.isNotEmpty &&
-                                                              controller.empSummDashboardTable[0].inPunchTime
-                                                                  .toString()
-                                                                  .isNotEmpty
+                                                              controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                               style: TextStyle(
@@ -293,9 +290,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                           border: Border.all(color: AppColor.primaryColor),
                                                           borderRadius: BorderRadius.circular(20)),
                                                       child: controller.empSummDashboardTable.isNotEmpty &&
-                                                              controller.empSummDashboardTable[0].outPunchTime
-                                                                  .toString()
-                                                                  .isNotEmpty
+                                                              controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                               style: AppStyle.plus10,
@@ -644,7 +639,56 @@ class PayrollScreen extends GetView<PayrollController> {
                                         ],
                                       ),
                                     ),
-                                    Expanded(child: SizedBox()),
+                                    const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
+                                    Expanded(
+                                        child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            final bottomBarController = Get.put(BottomBarController());
+                                            bottomBarController.currentIndex.value = -1;
+
+                                            // Get.delete<MispunchController>();
+                                            final mispunchController = Get.put(MispunchController());
+                                            mispunchController.resetData();
+                                            mispunchController.update();
+                                            // Get.put(MispunchScreen());
+                                            PersistentNavBarNavigator.pushNewScreen(
+                                              context,
+                                              screen: const MispunchScreen(),
+                                              withNavBar: true,
+                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            ).then((value) async {
+                                              // final bottomBarController = Get.find<BottomBarController>();
+                                              bottomBarController.persistentController.value.index = 0;
+                                              bottomBarController.currentIndex.value = 0;
+                                              hideBottomBar.value = false;
+                                              var dashboardController = Get.put(DashboardController());
+                                              await dashboardController.getDashboardDataUsingToken();
+                                            });
+                                          }, //Get.to(MispunchScreen()),
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                            width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                            margin: const EdgeInsets.only(top: 15),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: AppColor.primaryColor,
+                                                ),
+                                                borderRadius: BorderRadius.circular(10)),
+                                            child: Image.asset(
+                                              AppImage.mispunch,
+                                              // height: 35, //50
+                                              // width: 35, //50
+                                              color: AppColor.primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Text(AppString.mispunchinfo, style: AppStyle.plus12),
+                                      ],
+                                    )),
                                     Expanded(child: SizedBox()),
                                     Expanded(child: SizedBox()),
                                   ],
