@@ -59,8 +59,12 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             if (value == null || value.isEmpty) {
                               return "Please enter a password";
                             }
-                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
-                              return "Password must be at least 8 characters, include a letter, number, and special character";
+                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+                                .hasMatch(value)) {
+                              return "Password must be at least 8 characters, \ninclude a letter, number, and special character";
+                            }
+                            if (controller.passwordController.text != value) {
+                              return "Passwords do not match"; // This is the validation for password mismatch
                             }
                             return null;
                           },
@@ -102,16 +106,19 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             if (value == null || value.isEmpty) {
                               return "Please enter a password";
                             }
-                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
-                              return "Password must be at least 8 characters, include a letter, number, and special character";
+                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+                                .hasMatch(value)) {
+                              return "Password must be at least 8 characters, \ninclude a letter, number, and special character";
+                            }
+                            if (controller.passwordController.text != value) {
+                              return "Passwords do not match"; // This is the validation for password mismatch
                             }
                             return null;
                           },
-
                           obscureText: controller.hideConfirmPassword,
                           inputFormatters: <TextInputFormatter>[
                             // FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(10),
+                            LengthLimitingTextInputFormatter(23),
                           ],
                           decoration: InputDecoration(
                             hintText: AppString.enterConfirmPassword,
@@ -174,7 +181,8 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColor.white,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(color: AppColor.primaryColor)),
                             ),
                             child: Text(
                               AppString.cancel,

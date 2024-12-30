@@ -144,6 +144,6 @@ class AppString {
   static String pkg = "Pkg: ";
 
   //Super Login
-  static String superlogin = "Super Login only for Admin";
+  static String superlogin = "Only Admins can log In";
   static String pleasesuperlogin = "Please log in to continue";
 }

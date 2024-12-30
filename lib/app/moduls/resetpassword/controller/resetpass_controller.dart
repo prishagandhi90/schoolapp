@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,10 +22,24 @@ class ResetpassController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (getData != null) {
-      mobileNo = getData['mobileNo'];
-      otp = getData['otp'];
-    }
+    // if (getData != null) {
+    //   mobileNo = getData['mobileNo'];
+    //   otp = getData['otp'];
+    // }
+    // if (Get.arguments != null) {
+    //   getData = Get.arguments;
+    //   mobileNo = getData['mobileNo'] ?? ''; // Safely check if mobileNo exists
+    //   otp = getData['otp'] ?? ''; // Safely check if otp exists
+    // } else {
+    //   print("No arguments passed to ResetpassScreen");
+    // }
+  }
+
+  // Custom method to update arguments
+  updateArguments(String mobile, String otpValue) async {
+    mobileNo = mobile;
+    otp = otpValue;
+    update(); // To update UI if needed
   }
 
   resetPassWordApi() async {
@@ -37,7 +51,11 @@ class ResetpassController extends GetxController {
     ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
     if (responseDashboardData.statusCode == 200) {
       if (responseDashboardData.isSuccess.toString().toLowerCase() == "true") {
-        Get.offAll(const LoginScreen());
+        // Get.offAll(const LoginScreen());
+        // Get.offAllNamed(Routes.LOGIN);
+        Future.delayed(const Duration(milliseconds: 700), () {
+          Get.offAllNamed(Routes.LOGIN);
+        });
         Get.rawSnackbar(message: responseDashboardData.message);
       } else {
         Get.rawSnackbar(message: responseDashboardData.message);

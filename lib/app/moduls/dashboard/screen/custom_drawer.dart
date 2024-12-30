@@ -118,7 +118,9 @@ class CustomDrawer extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               )
                             else
-                              Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                              Text('-- ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                             SizedBox(
                               height: Sizes.crossLength * 0.010,
                             ),
@@ -145,7 +147,9 @@ class CustomDrawer extends StatelessWidget {
                         ],
                       ),
                       borderRadius: BorderRadius.circular(40),
-                      boxShadow: const [BoxShadow(color: Colors.white70, blurRadius: 0.0, offset: Offset(0, 4), spreadRadius: 2)]),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.white70, blurRadius: 0.0, offset: Offset(0, 4), spreadRadius: 2)
+                      ]),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -153,17 +157,20 @@ class CustomDrawer extends StatelessWidget {
                         Text(dashboardController.department.toString().capitalizeFirst ?? '',
                             style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                       else
-                        Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                        Text('-- ',
+                            style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                       if (dashboardController.empCode.isNotEmpty)
                         Text(dashboardController.empCode.toString(),
                             style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                       else
-                        Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                        Text('-- ',
+                            style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                       if (dashboardController.empType.isNotEmpty)
                         Text(dashboardController.empType.toString().capitalizeFirst ?? '',
                             style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans))
                       else
-                        Text('-- ', style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
+                        Text('-- ',
+                            style: TextStyle(fontWeight: FontWeight.w600, fontFamily: CommonFontStyle.plusJakartaSans)),
                     ],
                   ),
                 ),
@@ -256,7 +263,7 @@ class CustomDrawer extends StatelessWidget {
                               ));
                             },
                             child: Text(
-                              'Super Login',
+                              'Admin Login',
                               style: TextStyle(
                                 color: AppColor.black,
                                 overflow: TextOverflow.clip,

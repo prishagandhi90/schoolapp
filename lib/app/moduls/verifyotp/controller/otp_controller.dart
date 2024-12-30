@@ -11,7 +11,10 @@ import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dar
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
+import 'package:emp_app/app/moduls/resetpassword/binding/reset_password_binding.dart';
+import 'package:emp_app/app/moduls/resetpassword/controller/resetpass_controller.dart';
 import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:emp_app/main.dart';
@@ -256,10 +259,21 @@ class OtpController extends GetxController {
         timer?.cancel();
         secondsRemaining = 150.obs;
         enableResendOtp.value = true;
-        Get.to(() => ResetpassScreen(),
-            // const ResetPasswordView(),
-            duration: const Duration(milliseconds: 700),
-            arguments: {"otp": otpNo, 'mobileNo': numberController.text});
+
+        var resetpassController = Get.put(ResetpassController());
+        await resetpassController.updateArguments(numberController.text, otpNo);
+        // Get.to(
+        //   () => ResetpassScreen(),
+        //   // const ResetPasswordView(),
+        //   duration: const Duration(milliseconds: 700),
+        //   arguments: {"otp": otpNo, 'mobileNo': numberController.text},
+        //   binding: ResetPasswordBinding(),
+        // );
+        Get.toNamed(
+          Routes.RESET_PASSWORD,
+          arguments: {"otp": otpNo, 'mobileNo': numberController.text},
+          // duration: const Duration(milliseconds: 700),
+        );
       }
     } catch (e) {
       print(e);

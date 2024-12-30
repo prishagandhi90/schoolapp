@@ -158,7 +158,7 @@ class SuperloginScreen extends GetView<LoginController> {
                         SizedBox(height: Sizes.px40),
                         SizedBox(
                           height: Sizes.w * 0.13,
-                          width: Sizes.w * 0.55,
+                          width: Sizes.w * 0.60,
                           child: ElevatedButton(
                             onPressed: () async {
                               await controller.fetchSperLoginCred();

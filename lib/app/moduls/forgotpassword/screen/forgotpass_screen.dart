@@ -90,77 +90,67 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                             ),
                           ),
                           const SizedBox(height: 55),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.width * 0.13,
-                            width: MediaQuery.of(context).size.width * 0.40,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                // controller.isLoadingLogin ? null : controller.requestOTP(context);
-                                FocusScope.of(context).unfocus();
-                                // FocusManager.instance.primaryFocus?.unfocus();
-                                if (controller.passFormKey.currentState!.validate()) {
-                                  controller.requestOTP(context);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.lightgreen,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              child: controller.isLoadingLogin
-                                  ? const CircularProgressIndicator()
-                                  : Text(
-                                      AppString.continue1,
-                                      style: TextStyle(
-                                        color: AppColor.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                      ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: MediaQuery.of(context).size.width * 0.13,
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    // controller.isLoadingLogin ? null : controller.requestOTP(context);
+                                    FocusScope.of(context).unfocus();
+                                    // FocusManager.instance.primaryFocus?.unfocus();
+                                    if (controller.passFormKey.currentState!.validate()) {
+                                      controller.requestOTP(context);
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.lightgreen,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.width * 0.13,
-                            width: MediaQuery.of(context).size.width * 0.40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Purane controllers ko delete karo
-                                // if (Get.isRegistered<ForgotpassController>()) {
-                                //   Get.delete<ForgotpassController>();
-                                // }
-                                // if (Get.isRegistered<LoginController>()) {
-                                //   Get.delete<LoginController>();
-                                // }
-
-                                // Get.put(ForgotpassController());
-                                // Nayi LoginScreen load karo
-                                // Future.delayed(Duration(milliseconds: 700), () {
-                                //   Get.put(LoginController()); // Controller inject karo
-                                //   Get.offAll(() => const LoginScreen()); // Safely navigate
-                                // });
-                                // Get.toNamed(Routes.LOGIN);
-                                Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
-                                // Get.back();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
-                              ),
-                              child: Text(
-                                AppString.cancel,
-                                style: TextStyle(
-                                  color: AppColor.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                  ),
+                                  child: controller.isLoadingLogin
+                                      ? const CircularProgressIndicator()
+                                      : Text(
+                                          AppString.continue1,
+                                          style: TextStyle(
+                                            color: AppColor.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                        ),
                                 ),
                               ),
-                            ),
-                          ),
+                              const SizedBox(width: 10),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.width * 0.13,
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(color: AppColor.primaryColor)),
+                                  ),
+                                  child: Text(
+                                    AppString.cancel,
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                       // MediaQuery.of(context).viewInsets.bottom > 0
