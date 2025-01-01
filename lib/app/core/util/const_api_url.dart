@@ -1,7 +1,10 @@
 class ConstApiUrl {
-  String initailUrl = 'http://117.217.126.127:44166/api';
-  static const empUrl = "http://117.217.126.127:44166/api/Employee";
-  static const empLoginUrl = 'http://117.217.126.127:44166/api/EmpLogin';
+  static const portNo = "55555"; //"44166";
+  static const baseURL = 'http://117.217.126.127:$portNo';
+  static const baseSecondURL = 'http://103.251.17.214:$portNo';
+  String initailUrl = 'http://117.217.126.127:$portNo/api';
+  static const empUrl = "http://117.217.126.127:$portNo/api/Employee";
+  static const empLoginUrl = 'http://117.217.126.127:$portNo/api/EmpLogin';
 
   //  ----------------    Prod  urls ---------------
   static const baseApiUrl = empLoginUrl;
@@ -10,7 +13,6 @@ class ConstApiUrl {
   static const generatenewpass = "$empLoginUrl/GenerateNewPassword";
   static const empLoginusernameAPI = "$empLoginUrl/GetLoginUserNames";
   static const empSuperLoginCred = "$empLoginUrl/GetLoginAsUserCreds";
-
 
   static const empAttendanceDtlAPI = "$empUrl/GetEmpAttendDtl_EmpInfo";
   static const empAttendanceSummaryAPI = "$empUrl/GetEmpAttendSumm_EmpInfo";

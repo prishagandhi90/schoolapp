@@ -10,6 +10,7 @@ import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dar
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/screen/dutyschedule_screen.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
+import 'package:emp_app/app/moduls/lvotApproval/screen/lvotapproval_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
@@ -656,7 +657,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                             // Get.put(MispunchScreen());
                                             PersistentNavBarNavigator.pushNewScreen(
                                               context,
-                                              screen: const MispunchScreen(),
+                                              screen: const LvotapprovalScreen(),
                                               withNavBar: true,
                                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                             ).then((value) async {
@@ -686,7 +687,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                           ),
                                         ),
                                         const SizedBox(height: 5),
-                                        Text(AppString.mispunchinfo, style: AppStyle.plus12),
+                                        Text(AppString.lvotapproval, style: AppStyle.plus12),
                                       ],
                                     )),
                                     Expanded(child: SizedBox()),

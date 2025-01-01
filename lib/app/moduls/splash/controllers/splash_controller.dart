@@ -17,7 +17,8 @@ class SplashController extends GetxController {
   }
 
   Future<void> fetchData() async {
-    String url1 = "http://117.217.126.127:44166/weatherforecast";
+    String url1 = "${ConstApiUrl.baseURL}/weatherforecast";
+    // "http://117.217.126.127:44166/weatherforecast";
     apiCall = false;
     var dio = diopackage.Dio();
     try {
@@ -31,7 +32,8 @@ class SplashController extends GetxController {
           )
           .timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
-        ConstApiUrl().initailUrl = 'http://117.217.126.127:44166/api';
+        ConstApiUrl().initailUrl = "${ConstApiUrl.baseURL}/api";
+        // 'http://117.217.126.127:44166/api';
         update();
         gotToNextPage();
       } else {
@@ -47,7 +49,8 @@ class SplashController extends GetxController {
 
   Future<void> fetchDataFromSecondUrl() async {
     apiCall = true;
-    String url2 = "http://103.251.17.214:44166/weatherforecast";
+    String url2 = "${ConstApiUrl.baseSecondURL}/weatherforecast";
+    // "http://103.251.17.214:44166/weatherforecast";
     var dio = diopackage.Dio();
 
     try {
@@ -61,7 +64,8 @@ class SplashController extends GetxController {
           .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
-        ConstApiUrl().initailUrl = 'http://103.251.17.214:44166/api';
+        ConstApiUrl().initailUrl = "${ConstApiUrl.baseSecondURL}/api";
+        // 'http://103.251.17.214:44166/api';
         gotToNextPage();
       } else {
         Get.offAll(const NoInternetView());

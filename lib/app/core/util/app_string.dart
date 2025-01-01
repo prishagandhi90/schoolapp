@@ -146,4 +146,7 @@ class AppString {
   //Super Login
   static String superlogin = "Only Admins can log In";
   static String pleasesuperlogin = "Please log in to continue";
+
+  //LV/OT Approval
+  static String lvotapproval = "LV/OT \nApproval";
 }
