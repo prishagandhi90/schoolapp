@@ -96,20 +96,23 @@ class PharmacyScreen extends StatelessWidget {
                               controller.isPresViewerNavigating.value = true;
 
                               Navigator.pop(context);
+                              // var bottomBarController = Get.put(BottomBarController());
+                              // bottomBarController.isPharmacyHome.value = true;
+                              hideBottomBar.value = true;
+
                               // controller.payrolListOnClk(index, context);
-                              final bottomBarController = Get.put(BottomBarController());
-                              bottomBarController.currentIndex.value = -1;
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
                                 screen: PresviewerScreen(),
-                                withNavBar: true,
+                                withNavBar: false,
                                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
                               ).then((value) async {
-                                // final bottomBarController = Get.find<BottomBarController>();
+                                final bottomBarController = Get.put(BottomBarController());
+                                bottomBarController.currentIndex.value = -1;
                                 bottomBarController.persistentController.value.index = 0;
                                 bottomBarController.currentIndex.value = 0;
                                 bottomBarController.isPharmacyHome.value = true;
-                                hideBottomBar.value = false;
+                                hideBottomBar.value = true;
                                 var dashboardController = Get.put(DashboardController());
                                 await dashboardController.getDashboardDataUsingToken();
                               });
@@ -135,19 +138,20 @@ class PharmacyScreen extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.pop(context);
                                       // controller.payrolListOnClk(index, context);
-                                      final bottomBarController = Get.put(BottomBarController());
-                                      bottomBarController.currentIndex.value = -1;
+                                      hideBottomBar.value = true;
                                       PersistentNavBarNavigator.pushNewScreen(
                                         context,
                                         screen: PresviewerScreen(),
                                         withNavBar: true,
                                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                       ).then((value) async {
-                                        // final bottomBarController = Get.find<BottomBarController>();
-                                        bottomBarController.persistentController.value.index = 0;
-                                        bottomBarController.currentIndex.value = 0;
-                                        bottomBarController.isPharmacyHome.value = true;
-                                        hideBottomBar.value = false;
+                                        // final bottomBarController = Get.put(BottomBarController());
+                                        // bottomBarController.currentIndex.value = -1;
+
+                                        //   bottomBarController.persistentController.value.index = 0;
+                                        //   bottomBarController.currentIndex.value = 0;
+                                        //   bottomBarController.isPharmacyHome.value = true;
+                                        //   hideBottomBar.value = false;
                                         var dashboardController = Get.put(DashboardController());
                                         await dashboardController.getDashboardDataUsingToken();
                                       });
@@ -211,21 +215,20 @@ class PharmacyScreen extends StatelessWidget {
                 child: GestureDetector(
                     // onTap: () => Get.to(PresviewerScreen()),
                     onTap: () {
-                      final bottomBarController = Get.put(BottomBarController());
-                      bottomBarController.currentIndex.value = -1;
-
                       // // Get.delete<MispunchController>();
                       // final presviewerScreen = Get.put(PresviewerScreen());
                       // presviewerScreen.resetData();
                       // presviewerScreen.update();
                       // // Get.put(MispunchScreen());
+                      hideBottomBar.value = true;
                       PersistentNavBarNavigator.pushNewScreen(
                         context,
                         screen: PresviewerScreen(),
                         withNavBar: true,
                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                       ).then((value) async {
-                        // final bottomBarController = Get.find<BottomBarController>();
+                        final bottomBarController = Get.put(BottomBarController());
+                        bottomBarController.currentIndex.value = -1;
                         bottomBarController.persistentController.value.index = 0;
                         bottomBarController.currentIndex.value = 0;
                         bottomBarController.isPharmacyHome.value = true;

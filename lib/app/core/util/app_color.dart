@@ -17,6 +17,9 @@ class AppColor {
   static Color lightwhite = Color.fromARGB(255, 230, 229, 229);
   static Color white = Colors.white;
 
+  //yellow
+  static Color lightyellow = Color.fromARGB(255, 240, 225, 183);
+
   //blue & teal
   static Color teal = Color.fromRGBO(0, 121, 113, 1);
   static Color primaryColor = const Color.fromARGB(255, 94, 157, 168);

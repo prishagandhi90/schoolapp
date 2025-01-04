@@ -14,8 +14,8 @@ class PresdetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(PharmacyController());
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
-    double availableHeight = MediaQuery.of(context).size.height - statusBarHeight - 280.0;
+    // final double statusBarHeight = MediaQuery.of(context).padding.top;
+    // double availableHeight = MediaQuery.of(context).size.height - statusBarHeight - 280.0;
     return GetBuilder<PharmacyController>(
       builder: (controller) {
         void checkAllBlurred() {
@@ -31,7 +31,7 @@ class PresdetailsScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(200), // Ensure sufficient height
+            preferredSize: const Size.fromHeight(170), // Ensure sufficient height
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
@@ -42,7 +42,7 @@ class PresdetailsScreen extends StatelessWidget {
               ),
               flexibleSpace: Padding(
                 padding: EdgeInsets.only(
-                  top: statusBarHeight + 10, // Account for the status bar height
+                  top: 40, // Account for the status bar height
                   left: 20,
                   right: 20,
                   bottom: 0,
@@ -79,9 +79,7 @@ class PresdetailsScreen extends StatelessWidget {
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].mop.toString(),
                                             style: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
+                                                fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w700),
                                           ),
                                         ],
                                       ),
@@ -93,10 +91,7 @@ class PresdetailsScreen extends StatelessWidget {
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].bed.toString(),
                                             textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
+                                            style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
                                           ),
                                           SizedBox(height: 5), // Space between Bed and Intercom
                                           Text.rich(
@@ -168,27 +163,13 @@ class PresdetailsScreen extends StatelessWidget {
           ),
           body: controller.presdetailList.isNotEmpty
               ? LayoutBuilder(builder: (context, constraints) {
-                  double ConstraintsHeight = constraints.maxHeight; // Ensure scrolling
-                  int listItemsCount = controller.presdetailList.length; // Ensure scrolling
-                  print("Screen Height: ${MediaQuery.of(context).size.height}");
-                  print("ConstraintsHeight: ${ConstraintsHeight.toString()}");
-                  // print("RealListHeight: ${controller.presdetailList.length * 100.0}");
-                  // print("statusBarHeight: ${MediaQuery.of(context).padding.top}");
-                  // print("List Height: ${listHeight}");
-                  print("Available Height: ${availableHeight}");
-                  print("ListItemsCount height: ${listItemsCount.toString()}");
-                  bool isScrollable = (ConstraintsHeight) > availableHeight;
-                  print("isScrollable height: ${isScrollable.toString()}");
+                  // double ConstraintsHeight = constraints.maxHeight; // Ensure scrolling
+                  // int listItemsCount = controller.presdetailList.length; // Ensure scrolling
+                  // bool isScrollable = (ConstraintsHeight) > availableHeight;
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10), // Adjust as needed
-                    // child: SingleChildScrollView(
-                    // controller: isScrollable ? controller.pharmacyScrollController : null,
-                    // physics:
-                    //     isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
-                    // controller: controller.pharmacyScrollController,
-                    // physics: const AlwaysScrollableScrollPhysics(),
                     child: SizedBox(
-                      height: ConstraintsHeight - 80.0,
+                      // height: ConstraintsHeight - 90.0,
                       child: ListView.builder(
                         shrinkWrap: true,
                         controller: controller.pharmacyScrollController,
@@ -346,7 +327,7 @@ class PresdetailsScreen extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(70),
                                       child: BackdropFilter(
-                                        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                        filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
                                         child: Container(
                                           color: Colors.black.withOpacity(0.2),
                                         ),

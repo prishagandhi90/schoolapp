@@ -25,7 +25,8 @@ class DashboardController extends GetxController {
       empType = "",
       department = "",
       designation = "",
-      isSuperAdmin = "";
+      isSuperAdmin = "",
+      isPharmacyUser = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -211,6 +212,7 @@ class DashboardController extends GetxController {
             department = dashboardTable.department.toString();
             designation = dashboardTable.designation.toString();
             isSuperAdmin = dashboardTable.isSuperAdmin.toString();
+            isPharmacyUser = dashboardTable.isPharmacyUser.toString();
 
             // dashboardController.update();
             update();

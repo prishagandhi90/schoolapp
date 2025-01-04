@@ -40,6 +40,7 @@ class DashboardTable {
   String? designation;
   String? empType;
   String? isSuperAdmin;
+  String? isPharmacyUser;
 
   DashboardTable(
       {this.isValidToken,
@@ -55,7 +56,8 @@ class DashboardTable {
       this.department,
       this.designation,
       this.empType,
-      this.isSuperAdmin});
+      this.isSuperAdmin,
+      this.isPharmacyUser});
 
   DashboardTable.fromJson(Map<String, dynamic> json) {
     isValidToken = json['is_valid_token'];
@@ -72,6 +74,7 @@ class DashboardTable {
     designation = json['designation'];
     empType = json['emp_Type'];
     isSuperAdmin = json['isSuperAdmin'];
+    isPharmacyUser = json['isPharmacyUser'];
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +93,7 @@ class DashboardTable {
     data['designation'] = this.designation;
     data['emp_Type'] = this.empType;
     data['isSuperAdmin'] = this.isSuperAdmin;
+    data['isPharmacyUser'] = this.isPharmacyUser;
     return data;
   }
 }

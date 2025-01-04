@@ -1,5 +1,5 @@
 class ConstApiUrl {
-  static const portNo = "55555"; //"44166";
+  static const portNo = "44166"; //"44166";
   static const baseURL = 'http://117.217.126.127:$portNo';
   static const baseSecondURL = 'http://103.251.17.214:$portNo';
   String initailUrl = 'http://117.217.126.127:$portNo/api';
@@ -31,6 +31,7 @@ class ConstApiUrl {
   static const empSaveLeaveEntryList = "$empUrl/EmpApp_SaveLeaveEntryList";
   static const empdutyscheduledrpdwnList = "$empUrl/GetShiftWeekList";
   static const empDutyScheduleShiftReport = "$empUrl/GetEmpShiftReport";
+  static const empLeaveOTapprovalList = "$empUrl/EmpApp_Get_LV_OT_Roles";
 
   //pharmacy
   static const empPresViewerListAPI = "$empUrl/GetDrPrescriptionViewer";
