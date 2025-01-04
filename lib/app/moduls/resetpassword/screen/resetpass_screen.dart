@@ -59,8 +59,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             if (value == null || value.isEmpty) {
                               return "Please enter a password";
                             }
-                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
-                                .hasMatch(value)) {
+                            if (!RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
                               return "Password must be at least 8 characters, \ninclude a letter, number, and special character";
                             }
                             if (controller.passwordController.text != value) {
@@ -106,8 +105,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             if (value == null || value.isEmpty) {
                               return "Please enter a password";
                             }
-                            if (!RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
-                                .hasMatch(value)) {
+                            if (!RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
                               return "Password must be at least 8 characters, \ninclude a letter, number, and special character";
                             }
                             if (controller.passwordController.text != value) {
