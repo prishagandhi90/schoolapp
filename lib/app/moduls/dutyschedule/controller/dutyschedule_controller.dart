@@ -121,9 +121,12 @@ class DutyscheduleController extends GetxController {
         DateTime fromDate = DateFormat('dd-MMM').parse(dates[0]);
         DateTime toDate = DateFormat('dd-MMM').parse(dates[1]);
 
+        int fromYear = fromDate.month == 12 && today.month == 1 ? today.year - 1 : today.year;
+        int toYear = toDate.month == 12 && today.month == 1 ? today.year - 1 : today.year;
+
         // Adjust the year to match current year (as only day & month are provided)
-        fromDate = DateTime(today.year, fromDate.month, fromDate.day);
-        toDate = DateTime(today.year, toDate.month, toDate.day);
+        fromDate = DateTime(fromYear, fromDate.month, fromDate.day);
+        toDate = DateTime(toYear, toDate.month, toDate.day);
 
         // Check if today falls between the 'from' and 'to' dates (inclusive)
         if (today.isAfter(fromDate.subtract(Duration(days: 1))) && today.isBefore(toDate.add(Duration(days: 1)))) {
@@ -159,7 +162,8 @@ class DutyscheduleController extends GetxController {
         var jsonbodyObj = {"loginId": loginId, "empId": empId, "DtRange": DutyDropdownNameController.text};
 
         var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-        ResponseGetDutyScheduleShift responseGetDutyScheduleShift = ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
+        ResponseGetDutyScheduleShift responseGetDutyScheduleShift =
+            ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
 
         if (responseGetDutyScheduleShift.statusCode == 200) {
           dutySchSftData = responseGetDutyScheduleShift.data!;
