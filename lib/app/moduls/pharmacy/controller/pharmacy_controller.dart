@@ -14,9 +14,9 @@ import 'package:emp_app/app/moduls/pharmacy/model/presviewer_model.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/bed_checkbox.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/ward_checkbox.dart';
-import 'package:emp_app/main.dart';
+// import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +24,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
-  final bottomBarController = Get.put(BottomBarController());
+  // final bottomBarController = Get.put(BottomBarController());
   final TextEditingController searchController = TextEditingController();
   List<PresviewerList> presviewerList = [];
   List<PresdetailList> presdetailList = [];
@@ -58,33 +58,33 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     GetPharmaFilterData();
     update();
 
-    pharmacyScrollController.addListener(() {
-      if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
-        if (hideBottomBar.value) {
-          hideBottomBar.value = false;
-          bottomBarController.update();
-        }
-      } else if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-        if (!hideBottomBar.value) {
-          hideBottomBar.value = true;
-          bottomBarController.update();
-        }
-      }
-    });
+    // pharmacyScrollController.addListener(() {
+    //   if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
+    //     if (hideBottomBar.value) {
+    //       hideBottomBar.value = false;
+    //       bottomBarController.update();
+    //     }
+    //   } else if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    //     if (!hideBottomBar.value) {
+    //       hideBottomBar.value = true;
+    //       bottomBarController.update();
+    //     }
+    //   }
+    // });
 
-    pharmacyviewScrollController.addListener(() {
-      if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.forward) {
-        if (hideBottomBar.value) {
-          hideBottomBar.value = false;
-          bottomBarController.update();
-        }
-      } else if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-        if (!hideBottomBar.value) {
-          hideBottomBar.value = true;
-          bottomBarController.update();
-        }
-      }
-    });
+    // pharmacyviewScrollController.addListener(() {
+    //   if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.forward) {
+    //     if (hideBottomBar.value) {
+    //       hideBottomBar.value = false;
+    //       bottomBarController.update();
+    //     }
+    //   } else if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    //     if (!hideBottomBar.value) {
+    //       hideBottomBar.value = true;
+    //       bottomBarController.update();
+    //     }
+    //   }
+    // });
   }
 
   void toggleBlur(int index) {
@@ -205,11 +205,26 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     return [];
   }
 
+  // void filterSearchResults(String query) {
+  //   if (query.isEmpty) {
+  //     filterpresviewerList = presviewerList; // Show all data if search is empty
+  //   } else {
+  //     filterpresviewerList = presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
+  //   }
+  //   update();
+  // }
+
   void filterSearchResults(String query) {
     if (query.isEmpty) {
       filterpresviewerList = presviewerList; // Show all data if search is empty
     } else {
-      filterpresviewerList = presviewerList.where((item) => (item.patientName ?? "").toLowerCase().contains(query.toLowerCase())).toList();
+      filterpresviewerList = presviewerList.where((item) {
+        final patientName = (item.patientName ?? "").toLowerCase();
+        final ipdNo = (item.ipd ?? "").toUpperCase();
+
+        // Check if query matches either patientName or ipdNo
+        return patientName.contains(query.toLowerCase()) || ipdNo.contains(query.toUpperCase());
+      }).toList();
     }
     update();
   }

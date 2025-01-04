@@ -25,7 +25,8 @@ class DashboardController extends GetxController {
       empType = "",
       department = "",
       designation = "",
-      isSuperAdmin = "";
+      isSuperAdmin = "",
+      isPharmacyUser = "";
   late DashboardTable dashboardTable;
 
   @override
@@ -95,22 +96,22 @@ class DashboardController extends GetxController {
         );
         break;
       case 6:
-        // var bottomBarController = Get.put(BottomBarController());
-        // bottomBarController.isPharmacyHome.value = true;
-        // hideBottomBar.value = false;
-        // // bottomBarController.onItemTapped(0, true, context);
-        // bottomBarController.resetAndInitialize_new(0);
-        // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-        //   Get.put(BottomBarController());
-        // }));
+        var bottomBarController = Get.put(BottomBarController());
+        bottomBarController.isPharmacyHome.value = true;
+        hideBottomBar.value = false;
+        // bottomBarController.onItemTapped(0, true, context);
+        bottomBarController.resetAndInitialize_new(0);
+        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+          Get.put(BottomBarController());
+        }));
 
-        Get.snackbar(
-          AppString.comingsoon,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        // Get.snackbar(
+        //   AppString.comingsoon,
+        //   '',
+        //   colorText: AppColor.white,
+        //   backgroundColor: AppColor.black,
+        //   duration: const Duration(seconds: 1),
+        // );
         break;
       case 7:
         var bottomBarController = Get.put(BottomBarController());
@@ -211,6 +212,7 @@ class DashboardController extends GetxController {
             department = dashboardTable.department.toString();
             designation = dashboardTable.designation.toString();
             isSuperAdmin = dashboardTable.isSuperAdmin.toString();
+            isPharmacyUser = dashboardTable.isPharmacyUser.toString();
 
             // dashboardController.update();
             update();

@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,6 +48,16 @@ class _CustomGridviewState extends State<CustomGridview> {
     });
 
     final DashboardController dashboardController = Get.put(DashboardController());
+    if (dashboardController.isPharmacyUser.toUpperCase() != "Y") {
+      Get.snackbar(
+        AppString.noRights,
+        '',
+        colorText: AppColor.white,
+        backgroundColor: AppColor.black,
+        duration: const Duration(seconds: 2),
+      );
+      return;
+    }
     dashboardController.gridOnClk(index, context);
   }
 

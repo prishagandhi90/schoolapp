@@ -12,123 +12,130 @@ class LvList extends StatelessWidget {
     return GetBuilder<LvotapprovalController>(
       builder: (controller) {
         return Scaffold(
-            body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12.0),
-                        decoration: BoxDecoration(
-                          color: AppColor.lightblue, // Background color
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            // Left number
-                            Text(
-                              "3",
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const VerticalDivider(
-                              thickness: 1,
-                              color: Colors.black54,
-                              width: 20,
-                            ),
-                            // Divider and Name
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
+          body: controller.leavelist.isEmpty
+              ? Center(
+                  child: Text(
+                    "No data available.",
+                    style: TextStyle(fontSize: 18, color: AppColor.grey),
+                  ),
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: controller.leavelist.length,
+                        itemBuilder: (context, index) {
+                          final leaveItem = controller.leavelist[index]; // Access item safely
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12.0),
+                                decoration: BoxDecoration(
+                                  color: AppColor.lightblue, // Background color
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
+                                  children: [
+                                    // Left number
                                     Text(
-                                      "Devakruna Pallepamula",
-                                      style: TextStyle(
-                                        fontSize: 20,
+                                      leaveItem.leaveDays.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    SizedBox(height: 10),
-                                    Row(
-                                      children: [
-                                        // From Date
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "From",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      child: Container(
+                                        width: 2, // Divider width
+                                        height: 80, // Divider height
+                                        color: AppColor.grey, // Divider color
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children:  [
+                                          Text(
+                                            leaveItem.employeeCodeName.toString(),
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            SizedBox(height: 4),
-                                            Text(
-                                              "20-Dec-24",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black54,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(height: 10),
+                                          Row(
+                                            children: [
+                                              // From Date
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "From",
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4),
+                                                  Text(
+                                                    leaveItem.fromDate.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(width: 16),
-                                        // To Date
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "To",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
+                                              SizedBox(width: 16),
+                                              // To Date
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "To",
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4),
+                                                  Text(
+                                                    leaveItem.toDate.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black54,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            SizedBox(height: 4),
-                                            Text(
-                                              "22-Dec-24",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black54,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    // Icon
+                                    IconButton(
+                                      icon: Icon(Icons.more_vert),
+                                      onPressed: () {
+                                        controller.lvotlistbottomsheet(context, index);
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
                             ),
-                            // Icon
-                            IconButton(
-                              icon: Icon(Icons.more_vert),
-                              onPressed: () {
-                                controller.lvotlistbottomsheet(context, index);
-                              },
-                            ),
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
-        ));
+                    )
+                  ],
+                ),
+        );
       },
     );
   }

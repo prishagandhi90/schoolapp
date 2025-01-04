@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
@@ -24,7 +26,6 @@ class PresviewerScreen extends StatelessWidget {
         return Scaffold(
             backgroundColor: AppColor.white,
             appBar: AppBar(
-              backgroundColor: AppColor.white,
               title: Text(AppString.prescriptionviewer, style: AppStyle.primaryplusw700),
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
@@ -66,62 +67,71 @@ class PresviewerScreen extends StatelessWidget {
                     // Search Bar (60%)
                     Expanded(
                       flex: 7,
-                      child: TextFormField(
-                        cursorColor: AppColor.black,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(10),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                              color: AppColor.black,
+                      child: WillPopScope(
+                        onWillPop: () async {
+                          // Unfocus the TextFormField and dismiss the keyboard
+                          FocusScope.of(context).unfocus();
+                          return true; // Allow navigation to go back
+                        },
+                        child: TextFormField(
+                          cursorColor: AppColor.black,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color: AppColor.black,
+                              ),
+                            ),
+                            suffixIcon: controller.searchController.text.trim().isNotEmpty
+                                ? GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                      controller.searchController.clear();
+                                      controller.fetchpresViewer(isLoader: false);
+                                    },
+                                    child: const Icon(Icons.cancel_outlined))
+                                : const SizedBox(),
+                            prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                            hintText: AppString.searchpatient,
+                            hintStyle: AppStyle.plusgrey,
+                            filled: true,
+                            fillColor: AppColor.white,
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
                             ),
                           ),
-                          suffixIcon: controller.searchController.text.trim().isNotEmpty
-                              ? GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    controller.searchController.clear();
-                                    controller.fetchpresViewer(isLoader: false);
-                                  },
-                                  child: const Icon(Icons.cancel_outlined))
-                              : const SizedBox(),
-                          prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                          hintText: AppString.searchpatient,
-                          hintStyle: AppStyle.plusgrey,
-                          filled: true,
-                          fillColor: AppColor.white,
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                          ),
+                          onTap: () {
+                            controller.showShortButton = false;
+                            controller.update();
+                          },
+                          onChanged: (value) {
+                            controller.filterSearchResults(value);
+                            controller.searchController.clear();
+                          },
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                            // Future.delayed(const Duration(milliseconds: 300));
+                            controller.showShortButton = true;
+                            controller.update();
+                          },
+                          onFieldSubmitted: (v) {
+                            if (controller.searchController.text.trim().isNotEmpty) {
+                              controller.fetchpresViewer(
+                                searchPrefix: controller.searchController.text.trim(),
+                                isLoader: false,
+                              );
+                              controller.searchController.clear();
+                            }
+                            Future.delayed(const Duration(milliseconds: 800));
+                            controller.showShortButton = true;
+                            controller.update();
+                          },
                         ),
-                        onTap: () {
-                          controller.showShortButton = false;
-                          controller.update();
-                        },
-                        onChanged: (value) {
-                          controller.filterSearchResults(value);
-                        },
-                        onTapOutside: (event) {
-                          FocusScope.of(context).unfocus();
-                          // Future.delayed(const Duration(milliseconds: 300));
-                          controller.showShortButton = true;
-                          controller.update();
-                        },
-                        onFieldSubmitted: (v) {
-                          if (controller.searchController.text.trim().isNotEmpty) {
-                            controller.fetchpresViewer(
-                              searchPrefix: controller.searchController.text.trim(),
-                              isLoader: false,
-                            );
-                          }
-                          Future.delayed(const Duration(milliseconds: 800));
-                          controller.showShortButton = true;
-                          controller.update();
-                        },
                       ),
                     ),
                     const SizedBox(width: 8), // Space between items
@@ -178,261 +188,272 @@ class PresviewerScreen extends StatelessWidget {
                   : Expanded(
                       child: LayoutBuilder(
                         builder: (context, constraints) {
-                          double ConstraintsHeight = constraints.maxHeight; // Ensure scrolling
+                          // double ConstraintsHeight = constraints.maxHeight; // Ensure scrolling
                           return Scrollbar(
                             thickness: 5, //According to your choice
                             thumbVisibility: false, //
                             radius: Radius.circular(10),
-                            child: SizedBox(
-                              height: ConstraintsHeight - 80.0,
-                              child: ListView.builder(
-                                  itemCount: controller.filterpresviewerList.length,
-                                  controller: controller.pharmacyviewScrollController,
-                                  shrinkWrap: true,
-                                  physics: AlwaysScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          if (controller.isPresMedicineNavigating.value) return;
-                                          controller.isPresMedicineNavigating.value = true;
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                await await controller.fetchpresViewer();
+                              },
+                              child: SizedBox(
+                                // height: ConstraintsHeight - 80.0,
+                                child: ListView.builder(
+                                    itemCount: controller.filterpresviewerList.length,
+                                    controller: controller.pharmacyviewScrollController,
+                                    shrinkWrap: true,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            if (controller.isPresMedicineNavigating.value) return;
+                                            controller.isPresMedicineNavigating.value = true;
 
-                                          controller.SelectedIndex = index;
-                                          await controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
+                                            controller.SelectedIndex = index;
+                                            await controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
 
-                                          final bottomBarController = Get.put(BottomBarController());
-                                          bottomBarController.currentIndex.value = -1;
-                                          hideBottomBar.value = false;
+                                            // final bottomBarController = Get.put(BottomBarController());
+                                            // bottomBarController.currentIndex.value = -1;
+                                            // hideBottomBar.value = false;
 
-                                          PersistentNavBarNavigator.pushNewScreen(
-                                            context,
-                                            screen: PresdetailsScreen(),
-                                            withNavBar: true,
-                                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                          ).then((value) async {
-                                            // final bottomBarController = Get.find<BottomBarController>();
-                                            bottomBarController.persistentController.value.index = 0;
-                                            bottomBarController.currentIndex.value = 0;
-                                            bottomBarController.isPharmacyHome.value = true;
-                                            hideBottomBar.value = false;
-                                            var dashboardController = Get.put(DashboardController());
-                                            await dashboardController.getDashboardDataUsingToken();
-                                          });
-                                          controller.isPresMedicineNavigating.value = false;
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                          decoration: BoxDecoration(
-                                            color: AppColor.lightblue,
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 6,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Text(controller.filterpresviewerList[index].patientName.toString(),
-                                                          style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                            PersistentNavBarNavigator.pushNewScreen(
+                                              context,
+                                              screen: PresdetailsScreen(),
+                                              withNavBar: false,
+                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                            ).then((value) async {
+                                              final bottomBarController = Get.put(BottomBarController());
+                                              // bottomBarController.currentIndex.value = -1;
+                                              // hideBottomBar.value = true;
+                                              bottomBarController.persistentController.value.index = 0;
+                                              bottomBarController.currentIndex.value = 0;
+                                              bottomBarController.isPharmacyHome.value = true;
+                                              hideBottomBar.value = true;
+                                              // var dashboardController = Get.put(DashboardController());
+                                              // await dashboardController.getDashboardDataUsingToken();
+                                            });
+                                            controller.isPresMedicineNavigating.value = false;
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  controller.filterpresviewerList[index].printStatus.toString().toLowerCase() == "printed"
+                                                      ? AppColor.lightyellow
+                                                      : AppColor.lightblue,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 6,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(4.0),
+                                                            child: Text(
+                                                              "${index + 1}", // Dynamic number
+                                                              style: AppStyle.w50018.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                                                            child: Text(
+                                                              controller.filterpresviewerList[index].patientName.toString(),
+                                                              style: AppStyle.w50018.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        height: 35, // Small container size
+                                                        margin: const EdgeInsets.only(bottom: 5), // Moves container a bit left and down
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.grey[200],
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        child: IconButton(
+                                                          icon: Icon(Icons.shopping_cart, size: 18),
+                                                          onPressed: () async {
+                                                            try {
+                                                              controller.SelectedIndex = index;
+                                                              // final bottomBarController = Get.put(BottomBarController());
+                                                              // bottomBarController.currentIndex.value = -1;
+                                                              // hideBottomBar.value = false;
+
+                                                              await controller.fetchpresDetailList(
+                                                                controller.filterpresviewerList[index].mstId.toString(),
+                                                              );
+
+                                                              PersistentNavBarNavigator.pushNewScreen(
+                                                                context,
+                                                                screen: PresdetailsScreen(),
+                                                                withNavBar: false,
+                                                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                              ).then((value) async {
+                                                                final bottomBarController = Get.put(BottomBarController());
+                                                                // bottomBarController.currentIndex.value = -1;
+                                                                // hideBottomBar.value = true;
+                                                                bottomBarController.persistentController.value.index = 0;
+                                                                bottomBarController.currentIndex.value = 0;
+                                                                bottomBarController.isPharmacyHome.value = true;
+                                                                hideBottomBar.value = true;
+                                                                var dashboardController = Get.put(DashboardController());
+                                                                await dashboardController.getDashboardDataUsingToken();
+                                                              });
+                                                            } catch (e) {
+                                                              print("Error in navigation: $e");
+                                                              Get.snackbar("Error", "$e");
+                                                            }
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text.rich(
+                                                          TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: AppString.rxview, // Heading
+                                                                  style: AppStyle.plusbold16),
+                                                              TextSpan(
+                                                                  text:
+                                                                      controller.filterpresviewerList[index].printStatus.toString(), // Data
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Align(
+                                                          alignment: Alignment.topLeft,
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                    text: AppString.priority, // Heading
+                                                                    style: AppStyle.plusbold16),
+                                                                TextSpan(
+                                                                    text:
+                                                                        controller.filterpresviewerList[index].priority.toString(), // Data
+                                                                    style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      height: 35, // Small container size
-                                                      margin: const EdgeInsets.only(bottom: 5), // Moves container a bit left and down
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey[200],
-                                                        borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(5.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text.rich(
+                                                          TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: AppString.lastuser, // Heading
+                                                                  style: AppStyle.plusbold16),
+                                                              TextSpan(
+                                                                  text: controller.filterpresviewerList[index].lastUser.toString(), // Data
+                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                            ],
+                                                          ),
+                                                        ),
                                                       ),
-                                                      child: IconButton(
-                                                        icon: Icon(Icons.shopping_cart, size: 18),
-                                                        onPressed: () async {
-                                                          try {
-                                                            controller.SelectedIndex = index;
-                                                            final bottomBarController = Get.put(BottomBarController());
-                                                            bottomBarController.currentIndex.value = -1;
-                                                            hideBottomBar.value = false;
-
-                                                            await controller.fetchpresDetailList(
-                                                                controller.filterpresviewerList[index].mstId.toString());
-
-                                                            PersistentNavBarNavigator.pushNewScreen(
-                                                              context,
-                                                              screen: PresdetailsScreen(),
-                                                              withNavBar: true,
-                                                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                                            ).then((value) async {
-                                                              // final bottomBarController = Get.find<BottomBarController>();
-                                                              bottomBarController.persistentController.value.index = 0;
-                                                              bottomBarController.currentIndex.value = 0;
-                                                              bottomBarController.isPharmacyHome.value = true;
-                                                              hideBottomBar.value = false;
-                                                              var dashboardController = Get.put(DashboardController());
-                                                              await dashboardController.getDashboardDataUsingToken();
-                                                            });
-                                                          } catch (e) {
-                                                            print("Error in navigation: $e");
-                                                            Get.snackbar("Error", "$e");
-                                                          }
-                                                        },
+                                                      Expanded(
+                                                        child: Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                    text: AppString.rxStatus, // Heading
+                                                                    style: AppStyle.plusbold16),
+                                                                TextSpan(
+                                                                    text:
+                                                                        controller.filterpresviewerList[index].rxStatus.toString(), // Data
+                                                                    style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                                text: AppString.printst, // Heading
-                                                                style: AppStyle.plusbold16),
-                                                            TextSpan(
-                                                                text: controller.filterpresviewerList[index].printStatus.toString(), // Data
-                                                                style: AppStyle.w50018.copyWith(fontSize: 16)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Align(
-                                                        alignment: Alignment.topLeft,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Expanded(
                                                         child: Text.rich(
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                  text: AppString.priority, // Heading
-                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                                  text: AppString.ipdNo, // Heading
+                                                                  style: AppStyle.plusbold16),
                                                               TextSpan(
-                                                                  text: controller.filterpresviewerList[index].priority.toString(), // Data
+                                                                  text: controller.filterpresviewerList[index].ipd.toString(), // Data
                                                                   style: AppStyle.w50018.copyWith(fontSize: 16)),
                                                             ],
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
+                                                      Expanded(
+                                                        child: Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: Text.rich(
                                                             TextSpan(
-                                                                text: AppString.lastuser, // Heading
-                                                                style: AppStyle.w50018.copyWith(fontSize: 16)),
-                                                            TextSpan(
-                                                                text: controller.filterpresviewerList[index].lastUser.toString(), // Data
-                                                                style: AppStyle.w50018.copyWith(fontSize: 16)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Align(
-                                                        alignment: Alignment.centerRight,
-                                                        child: Text.rich(
-                                                          TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                  text: AppString.rxStatus, // Heading
-                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
-                                                              TextSpan(
-                                                                  text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
-                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)),
-                                                            ],
+                                                              children: [
+                                                                TextSpan(
+                                                                    text: AppString.tokenNo, // Heading
+                                                                    style: AppStyle.plusbold16),
+                                                                TextSpan(
+                                                                    text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
+                                                                    style: AppStyle.w50018.copyWith(fontSize: 25)
+                                                                    //  TextStyle(
+                                                                    //   fontSize: 30,
+                                                                    //   fontWeight: FontWeight.bold, // Normal weight for data
+                                                                    //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                    // ),
+                                                                    ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text.rich(
-                                                        TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                                text: AppString.ipdNo, // Heading
-                                                                style: AppStyle.w50018.copyWith(fontSize: 16)
-                                                                // TextStyle(
-                                                                //   fontSize: 16,
-                                                                //   fontWeight: FontWeight.bold, // Bold style for heading
-                                                                //   fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                // ),
-                                                                ),
-                                                            TextSpan(
-                                                                text: controller.filterpresviewerList[index].ipd.toString(), // Data
-                                                                style: AppStyle.w50018.copyWith(fontSize: 16)
-                                                                // TextStyle(
-                                                                //   fontSize: 16,
-                                                                //   fontWeight: FontWeight.w500, // Normal weight for data
-                                                                //   fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                // ),
-                                                                ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Align(
-                                                        alignment: Alignment.centerRight,
-                                                        child: Text.rich(
-                                                          TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                  text: AppString.tokenNo, // Heading
-                                                                  style: AppStyle.w50018.copyWith(fontSize: 16)
-                                                                  // TextStyle(
-                                                                  //   fontSize: 16,
-                                                                  //   fontWeight: FontWeight.bold, // Bold style for heading
-                                                                  //   fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                  // ),
-                                                                  ),
-                                                              TextSpan(
-                                                                  text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
-                                                                  style: AppStyle.w50018.copyWith(fontSize: 30)
-                                                                  //  TextStyle(
-                                                                  //   fontSize: 30,
-                                                                  //   fontWeight: FontWeight.bold, // Normal weight for data
-                                                                  //   fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                  // ),
-                                                                  ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  }),
+                                      );
+                                    }),
+                              ),
                             ),
                           );
                         },

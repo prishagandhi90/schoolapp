@@ -41,6 +41,7 @@ class AppString {
   static String otentmin = "OT ENT MIN";
   static String otmin = "OT MIN";
   static String comingsoon = "Coming Soon";
+  static String noRights = "You are not an authorized user for this module";
   static String venushospital = "Venus Hospital";
   static String mispunch = "Mispunch";
   static String type = "TYPE";
@@ -117,7 +118,7 @@ class AppString {
   static String pharmacy = "Pharmacy";
   static String prescriptionviewer = "Prescription Viewer";
   static String searchpatient = "Search Patient";
-  static String printst = "Print St: ";
+  static String rxview = "Rx View: ";
   static String priority = "Priority: ";
   static String lastuser = "Last User: ";
   static String rxStatus = "RX Status: ";
