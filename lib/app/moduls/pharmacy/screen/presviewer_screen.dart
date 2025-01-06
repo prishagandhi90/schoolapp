@@ -343,7 +343,7 @@ class PresviewerScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 10),
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
@@ -399,7 +399,7 @@ class PresviewerScreen extends StatelessWidget {
                                                       ),
                                                       Expanded(
                                                         child: Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 9),
+                                                          padding: const EdgeInsets.symmetric(horizontal: 5),
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
