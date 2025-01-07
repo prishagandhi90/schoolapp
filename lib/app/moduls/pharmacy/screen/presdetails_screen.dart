@@ -31,7 +31,7 @@ class PresdetailsScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(170), // Ensure sufficient height
+            preferredSize: const Size.fromHeight(190), // Ensure sufficient height
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
@@ -69,12 +69,10 @@ class PresdetailsScreen extends StatelessWidget {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(controller.presviewerList[controller.SelectedIndex].ipd.toString(), style: AppStyle.plus16
-                                              // TextStyle(
-                                              //   fontSize: 16,
-                                              //   fontFamily: CommonFontStyle.plusJakartaSans,
-                                              // ),
-                                              ),
+                                          Text(
+                                            controller.presviewerList[controller.SelectedIndex].ipd.toString(),
+                                            style: AppStyle.plus16,
+                                          ),
                                           SizedBox(height: 5), // Space between IPD and MOP
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].mop.toString(),
@@ -125,7 +123,9 @@ class PresdetailsScreen extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(vertical: 5),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
+                                      // Column for Date and Doctor
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -140,15 +140,76 @@ class PresdetailsScreen extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                        AppImage.qrcode, // Replace with your image path
-                                        height: 50,
-                                        width: 50,
-                                        fit: BoxFit.contain,
+                                      // Token No and QR Code Image
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text.rich(
+                                            TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: AppString.tokenNo, // Bold label
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            textAlign: TextAlign.start,
+                                          ),
+                                          SizedBox(width: 5), // Spacing between token no and image
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10),
+                                            child: Image.asset(
+                                              AppImage.qrcode, // Replace with your image path
+                                              height: 50,
+                                              width: 50,
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
+                                // Padding(
+                                //   padding: const EdgeInsets.symmetric(vertical: 5),
+                                //   child: Row(
+                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //     children: [
+                                //       Column(
+                                //         crossAxisAlignment: CrossAxisAlignment.start,
+                                //         children: [
+                                //           Text(
+                                //             controller.presviewerList[controller.SelectedIndex].dte.toString(),
+                                //             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                //           ),
+                                //           SizedBox(height: 6),
+                                //           Text(
+                                //             controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                                //             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                //           ),
+                                //         ],
+                                //       ),
+                                //       Image.asset(
+                                //         AppImage.qrcode, // Replace with your image path
+                                //         height: 50,
+                                //         width: 50,
+                                //         fit: BoxFit.contain,
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
@@ -206,11 +267,19 @@ class PresdetailsScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               child: Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+                                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                   children: [
+                                                    Text(
+                                                      "${index + 1}.", // Serial number starts from 1
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 16,
+                                                        color: AppColor.black,
+                                                      ),
+                                                    ),
                                                     Text(
                                                       controller.presdetailList[index].formBrand.toString(),
                                                       style: TextStyle(

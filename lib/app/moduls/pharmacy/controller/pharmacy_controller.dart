@@ -6,7 +6,6 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/pharmafilter_model.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/presdetail_model.dart';
@@ -14,9 +13,7 @@ import 'package:emp_app/app/moduls/pharmacy/model/presviewer_model.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/bed_checkbox.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/pharmacy/widgets/ward_checkbox.dart';
-// import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,6 +54,20 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     fetchpresViewer();
     GetPharmaFilterData();
     update();
+
+    bool isScrollArrowVisible = false;
+
+    void showScrollArrows() {
+      isScrollArrowVisible = true;
+      update();
+    }
+
+    void hideScrollArrows() {
+      Future.delayed(const Duration(seconds: 1), () {
+        isScrollArrowVisible = false;
+        update();
+      });
+    }
 
     // pharmacyScrollController.addListener(() {
     //   if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
@@ -122,12 +133,17 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
         }
         isLoading = false;
       } else if (rsponsedrpresviewer.statusCode == 401) {
+        filterpresviewerList.clear();
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponsedrpresviewer.statusCode == 400) {
+        filterpresviewerList.clear();
+        presviewerList.clear();
         isLoading = false;
       } else {
+        filterpresviewerList.clear();
+        presviewerList.clear();
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
@@ -406,12 +422,12 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       backgroundColor: AppColor.primaryColor),
-                                  onPressed: () {
+                                  onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
                                     if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
-                                      fetchpresViewer(isLoader: false);
+                                      await fetchpresViewer(isLoader: false);
                                     } else {
                                       Get.rawSnackbar(message: AppString.plzselectoptiontosort);
                                     }
@@ -433,13 +449,13 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                         backgroundColor: AppColor.primaryColor),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       callFilterAPi = true;
                                       FocusScope.of(context).unfocus();
                                       selectedWardList = [];
                                       selectedFloorList = [];
                                       selectedBedList = [];
-                                      fetchpresViewer();
+                                      await fetchpresViewer();
                                       Navigator.pop(context);
                                       controller.update();
                                     },
