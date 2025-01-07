@@ -14,8 +14,15 @@ class PresdetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(PharmacyController());
-    // final double statusBarHeight = MediaQuery.of(context).padding.top;
-    // double availableHeight = MediaQuery.of(context).size.height - statusBarHeight - 280.0;
+
+    double fullScreenHeight = MediaQuery.of(context).size.height;
+    double statusBarHeight = MediaQuery.of(context).padding.top;
+    print('Full Screen Height: $fullScreenHeight');
+    print('Status Bar Height: $statusBarHeight');
+
+    double fullScreenWidth = MediaQuery.of(context).size.width;
+    print('Full Screen Width: $fullScreenWidth');
+
     return GetBuilder<PharmacyController>(
       builder: (controller) {
         void checkAllBlurred() {
@@ -31,20 +38,20 @@ class PresdetailsScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(190), // Ensure sufficient height
+            preferredSize: Size.fromHeight((fullScreenHeight * (17.83 / 100)).toDouble()), // Ensure sufficient height
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(30),
-                ),
-              ),
+              // shape: RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.vertical(
+              //     bottom: Radius.circular(30),
+              //   ),
+              // ),
               flexibleSpace: Padding(
                 padding: EdgeInsets.only(
-                  top: 40, // Account for the status bar height
-                  left: 20,
-                  right: 20,
+                  top: statusBarHeight + 2.0, // Account for the status bar height
+                  left: fullScreenWidth * (4.73 / 100),
+                  right: fullScreenWidth * (4.73 / 100),
                   bottom: 0,
                 ),
                 child: controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
@@ -73,11 +80,13 @@ class PresdetailsScreen extends StatelessWidget {
                                             controller.presviewerList[controller.SelectedIndex].ipd.toString(),
                                             style: AppStyle.plus16,
                                           ),
-                                          SizedBox(height: 5), // Space between IPD and MOP
+                                          SizedBox(height: fullScreenWidth * (1.1 / 100)), // Space between IPD and MOP
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].mop.toString(),
                                             style: TextStyle(
-                                                fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w700),
+                                                fontSize: 16,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                fontWeight: FontWeight.w700),
                                           ),
                                         ],
                                       ),
@@ -91,7 +100,8 @@ class PresdetailsScreen extends StatelessWidget {
                                             textAlign: TextAlign.start,
                                             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
                                           ),
-                                          SizedBox(height: 5), // Space between Bed and Intercom
+                                          SizedBox(
+                                              height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
                                           Text.rich(
                                             TextSpan(
                                               children: [
@@ -104,7 +114,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
+                                                  text: controller.presviewerList[controller.SelectedIndex].intercom
+                                                      .toString(),
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
@@ -119,104 +130,82 @@ class PresdetailsScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    // crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      // Column for Date and Doctor
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            controller.presviewerList[controller.SelectedIndex].dte.toString(),
-                                            style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // Column for Date and Doctor
+                                    Expanded(
+                                      child: Text(
+                                        controller.presviewerList[controller.SelectedIndex].dte.toString(),
+                                        style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                      ),
+                                    ),
+                                    // Token No and QR Code Image
+                                    Expanded(
+                                      child: Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: AppString.tokenNo, // Bold label
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: controller.presviewerList[controller.SelectedIndex].tokenNo
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Stack(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Column for Date and Doctor
+                                        Expanded(
+                                          child: Text(
+                                            // 'lfkjdslkfjsdlkjflkjsdlkfjlksdjflksdlkjflksdjlkfjsdlkjflkjsdlk',
                                             controller.presviewerList[controller.SelectedIndex].doctor.toString(),
                                             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
                                           ),
-                                        ],
-                                      ),
-                                      // Token No and QR Code Image
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: AppString.tokenNo, // Bold label
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                          SizedBox(width: 5), // Spacing between token no and image
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 10),
-                                            child: Image.asset(
-                                              AppImage.qrcode, // Replace with your image path
-                                              height: 50,
-                                              width: 50,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        SizedBox(width: fullScreenWidth * (1.1 / 100)),
+                                      ],
+                                    ),
+                                    // Positioned(
+                                    //   // top: 0, // Move QR code upwards
+                                    //   right: 10, // Adjust alignment if needed
+                                    //   child: Image.asset(
+                                    //     AppImage.qrcode, // Replace with your image path
+                                    //     height: 50,
+                                    //     width: 50,
+                                    //     fit: BoxFit.contain,
+                                    //   ),
+                                    // ),
+                                  ],
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.symmetric(vertical: 5),
-                                //   child: Row(
-                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //     children: [
-                                //       Column(
-                                //         crossAxisAlignment: CrossAxisAlignment.start,
-                                //         children: [
-                                //           Text(
-                                //             controller.presviewerList[controller.SelectedIndex].dte.toString(),
-                                //             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
-                                //           ),
-                                //           SizedBox(height: 6),
-                                //           Text(
-                                //             controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                                //             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //       Image.asset(
-                                //         AppImage.qrcode, // Replace with your image path
-                                //         height: 50,
-                                //         width: 50,
-                                //         fit: BoxFit.contain,
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
                               ],
                             ),
                           ),
                         ],
                       )
                     : Padding(
-                        padding: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(fullScreenWidth * (1.1 / 100)),
                         child: Center(child: Text(AppString.nodataavailable)),
                       ),
               ),
@@ -299,7 +288,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                           TextSpan(
-                                                            text: controller.presdetailList[index].genericName.toString(),
+                                                            text:
+                                                                controller.presdetailList[index].genericName.toString(),
                                                             style: TextStyle(
                                                               fontSize: 14,
                                                               fontWeight: FontWeight.w500,
