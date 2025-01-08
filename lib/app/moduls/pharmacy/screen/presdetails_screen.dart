@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
@@ -38,7 +37,9 @@ class PresdetailsScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight((fullScreenHeight * (17.83 / 100)).toDouble()), // Ensure sufficient height
+            preferredSize: controller.presviewerList[controller.SelectedIndex].patientName.toString().length <= 30
+                ? Size.fromHeight((fullScreenHeight * (16.83 / 100)).toDouble())
+                : Size.fromHeight((fullScreenHeight * (19.83 / 100)).toDouble()), // Ensure sufficient height
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
@@ -84,9 +85,7 @@ class PresdetailsScreen extends StatelessWidget {
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].mop.toString(),
                                             style: TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                                fontWeight: FontWeight.w700),
+                                                fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w700),
                                           ),
                                         ],
                                       ),
@@ -100,8 +99,7 @@ class PresdetailsScreen extends StatelessWidget {
                                             textAlign: TextAlign.start,
                                             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
                                           ),
-                                          SizedBox(
-                                              height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
+                                          SizedBox(height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
                                           Text.rich(
                                             TextSpan(
                                               children: [
@@ -114,8 +112,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: controller.presviewerList[controller.SelectedIndex].intercom
-                                                      .toString(),
+                                                  text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
@@ -155,8 +152,7 @@ class PresdetailsScreen extends StatelessWidget {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: controller.presviewerList[controller.SelectedIndex].tokenNo
-                                                  .toString(),
+                                              text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -290,8 +286,7 @@ class PresdetailsScreen extends StatelessWidget {
                                                                 ),
                                                               ),
                                                               TextSpan(
-                                                                text: controller.presdetailList[index].genericName
-                                                                    .toString(),
+                                                                text: controller.presdetailList[index].genericName.toString(),
                                                                 style: TextStyle(
                                                                   fontSize: 14,
                                                                   fontWeight: FontWeight.w500,
