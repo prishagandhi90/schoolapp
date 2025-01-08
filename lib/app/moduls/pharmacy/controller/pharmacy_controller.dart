@@ -47,6 +47,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   bool showShortButton = true;
   var isPresViewerNavigating = false.obs;
   var isPresMedicineNavigating = false.obs;
+  RxBool showPharmaDetailArrow = false.obs;
 
   @override
   void onInit() {
@@ -55,19 +56,20 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     GetPharmaFilterData();
     update();
 
-    bool isScrollArrowVisible = false;
-
-    void showScrollArrows() {
-      isScrollArrowVisible = true;
-      update();
-    }
-
-    void hideScrollArrows() {
-      Future.delayed(const Duration(seconds: 1), () {
-        isScrollArrowVisible = false;
-        update();
-      });
-    }
+    pharmacyScrollController.addListener(() {
+      // If the scroll position is greater than 50.0
+      if (pharmacyScrollController.offset > 200.0) {
+        if (!showPharmaDetailArrow.value) {
+          showPharmaDetailArrow.value = true;
+          update(); // Update the controller's arrow visibility
+        }
+      } else {
+        if (showPharmaDetailArrow.value) {
+          showPharmaDetailArrow.value = false; // Update the controller's arrow visibility
+          update();
+        }
+      }
+    });
 
     // pharmacyScrollController.addListener(() {
     //   if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
@@ -425,7 +427,9 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty ||
+                                        selectedFloorList.isNotEmpty ||
+                                        selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       await fetchpresViewer(isLoader: false);
                                     } else {
