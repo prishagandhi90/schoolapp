@@ -20,6 +20,12 @@ import 'package:emp_app/app/moduls/leave/screen/leave_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_view_screen.dart';
 import 'package:emp_app/app/moduls/login/bindings/login_binding.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/lvotApproval/binding/lv_screen_Binding.dart';
+import 'package:emp_app/app/moduls/lvotApproval/binding/lvot_appr_screen_Binding.dart';
+import 'package:emp_app/app/moduls/lvotApproval/binding/otList_screen_Binding.dart';
+import 'package:emp_app/app/moduls/lvotApproval/screen/lvlist_screen.dart';
+import 'package:emp_app/app/moduls/lvotApproval/screen/lvotapproval_screen.dart';
+import 'package:emp_app/app/moduls/lvotApproval/screen/otlist_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/bindings/mispunch_binding.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_form_binding.dart';
@@ -152,8 +158,25 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SuperLogin,
-      page: () => const SuperloginScreen(mobileNo: '',),
+      page: () => const SuperloginScreen(
+        mobileNo: '',
+      ),
       binding: SuperLoginBinding(),
     ),
+    GetPage(
+      name: _Paths.LVOTApprovalScreen,
+      page: () => const LvotapprovalScreen(),
+      binding: lvot_appr_screen_Binding(),
+    ),
+    GetPage(
+      name: _Paths.LVListScreen,
+      page: () => const LvList(),
+      binding: lv_screen_Binding(),
+    ),
+    GetPage(
+      name: _Paths.OTListScreen,
+      page: () => const OtlistScreen(),
+      binding: otList_screen_Binding(),
+    )
   ];
 }

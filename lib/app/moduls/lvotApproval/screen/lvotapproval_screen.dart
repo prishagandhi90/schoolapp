@@ -17,96 +17,123 @@ class LvotapprovalScreen extends StatelessWidget {
         length: 2,
         initialIndex: 0,
         child: Scaffold(
-            appBar: AppBar(
-              title: Text('LV/OT Approval'),
-              centerTitle: true,
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          appBar: AppBar(
+            title: const Text('LV/OT Approval'),
+            centerTitle: true,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        // await controller.selectRole('InCharge');
+                        await controller.fetchLeaveOTList("InCharge", 'LV');
+                      },
+                      child: buildContainer(
+                        text: 'InCharge',
+                        isSelected: controller.selectedRole == 'InCharge',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        // await controller.selectRole('HOD');
+                        await controller.fetchLeaveOTList('HOD', 'LV');
+                      },
+                      child: buildContainer(
+                        text: 'HOD',
+                        isSelected: controller.selectedRole == 'HOD',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        // await controller.selectRole('HR');
+                        await controller.fetchLeaveOTList('HR', 'LV');
+                      },
+                      child: buildContainer(
+                        text: 'HR',
+                        isSelected: controller.selectedRole == 'HR',
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      buildContainer('In-Charge'),
-                      buildContainer('HOD'),
-                      buildContainer('HR'),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.lightblue,
+                          ),
+                          child: TabBar(
+                            controller: controller.tabController_Lv,
+                            labelColor: AppColor.white,
+                            unselectedLabelColor: AppColor.black,
+                            dividerColor: AppColor.trasparent,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            onTap: (value) async {
+                              // await controller.fetchLeaveOTList(controller.selectedRole, value == 0 ? 'LV' : 'OT');
+                              await controller.updateFilteredList(controller.selectedRole, value == 0 ? 'LV' : 'OT');
+                            },
+                            labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
+                            indicator: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: AppColor.lightblue,
+                              color: AppColor.primaryColor,
                             ),
-                            child: TabBar(
-                              labelColor: AppColor.white,
-                              unselectedLabelColor: AppColor.black,
-                              dividerColor: AppColor.trasparent,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              onTap: (value) async {
-                                // if (controller.leaveHeaderList.isEmpty) {
-                                //   await controller.fetchHeaderList("LV");
-                                // }
-                                // hideBottomBar.value = false;
-                                // await controller.changeTab(value);
-                              },
-                              // controller: controller.tabController_Leave,
-                              labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
-                              indicator: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
-                              tabs: const [Tab(text: 'LT'), Tab(text: 'OT')],
-                              physics: NeverScrollableScrollPhysics(),
-                            ),
+                            tabs: const [Tab(text: 'LV'), Tab(text: 'OT')],
+                            physics: const NeverScrollableScrollPhysics(),
                           ),
                         ),
-                        Icon(Icons.search),
-                      ],
-                    ),
+                      ),
+                      const Icon(Icons.search),
+                    ],
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      // controller: controller.tabController_Leave,
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        LvList(),
-                        OtlistScreen(),
-                      ],
-                    ),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      LvList(),
+                      OtlistScreen(),
+                    ],
                   ),
-                ],
-              ),
-            )),
+                ),
+              ],
+            ),
+          ),
+        ),
       );
     });
   }
-}
 
-Widget buildContainer(String text) {
-  return Container(
-    height: 50,
-    width: 120,
-    decoration: BoxDecoration(
-      color: AppColor.lightwhite,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Center(
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-        textAlign: TextAlign.center,
+  Widget buildContainer({required String text, required bool isSelected}) {
+    return Container(
+      height: 50,
+      width: 120,
+      decoration: BoxDecoration(
+        color: isSelected ? AppColor.primaryColor : AppColor.lightwhite, // Change color based on selection
+        borderRadius: BorderRadius.circular(8),
       ),
-    ),
-  );
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? AppColor.white : Colors.black, // Change text color
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 }

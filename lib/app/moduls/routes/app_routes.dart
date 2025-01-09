@@ -29,6 +29,10 @@ abstract class Routes {
 
   static const FORGOTPASSWORD = _Paths.FORGOTPASSWORD;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+
+  static const LVOTApprovalScreen = _Paths.LVOTApprovalScreen;
+  static const LVListScreen = _Paths.LVListScreen;
+  static const OTListScreen = _Paths.OTListScreen;
 }
 
 abstract class _Paths {
@@ -58,4 +62,8 @@ abstract class _Paths {
   static const RESET_PASSWORD = '/reset-password';
 
   static const SuperLogin = '/SuperLogin';
+
+  static const LVOTApprovalScreen = '/LVOTApprovalScreen';
+  static const LVListScreen = '/LVListScreen';
+  static const OTListScreen = '/OTListScreen';
 }

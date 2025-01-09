@@ -37,6 +37,8 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   List<EmpSummDashboardTable> empSummDashboardTable = [];
   final ScrollController payrollScrollController = ScrollController();
   var isDutyScheduleNavigating = false.obs;
+  var isLVOTApprovalNavigating = false.obs;
+  var isLoaderPayroll = false.obs;
 
   @override
   void onInit() {
@@ -86,8 +88,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
 
       final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse =
-          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {

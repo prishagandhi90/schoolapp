@@ -10,11 +10,13 @@ class ResponseLeaveOTList {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <LeaveotlistModel>[];
       json['data'].forEach((v) {
         data!.add(new LeaveotlistModel.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 
@@ -56,6 +58,7 @@ class LeaveotlistModel {
   String? empTel;
   String? punchTime;
   String? shiftTime;
+  String? defaultRole;
 
   LeaveotlistModel(
       {this.leaveId,
@@ -82,7 +85,8 @@ class LeaveotlistModel {
       this.otHours,
       this.empTel,
       this.punchTime,
-      this.shiftTime});
+      this.shiftTime,
+      this.defaultRole});
 
   LeaveotlistModel.fromJson(Map<String, dynamic> json) {
     leaveId = json['leaveId'];
@@ -110,6 +114,7 @@ class LeaveotlistModel {
     empTel = json['empTel'];
     punchTime = json['punchTime'];
     shiftTime = json['shiftTime'];
+    defaultRole = json['defaultRole'];
   }
 
   Map<String, dynamic> toJson() {
@@ -139,6 +144,7 @@ class LeaveotlistModel {
     data['empTel'] = this.empTel;
     data['punchTime'] = this.punchTime;
     data['shiftTime'] = this.shiftTime;
+    data['defaultRole'] = this.defaultRole;
     return data;
   }
 }

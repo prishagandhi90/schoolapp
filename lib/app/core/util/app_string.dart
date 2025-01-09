@@ -150,4 +150,6 @@ class AppString {
 
   //LV/OT Approval
   static String lvotapproval = "LV/OT \nApproval";
+  static String reliever = "Reliever";
+  static String leavetype = "Leave Type";
 }
