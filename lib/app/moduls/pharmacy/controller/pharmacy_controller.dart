@@ -310,7 +310,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
         isScrollControlled: true,
         isDismissible: true,
         useSafeArea: true,
-        backgroundColor: AppColor.trasparent,
+        backgroundColor: AppColor.transparent,
         builder: (context) => Container(
               height: MediaQuery.of(context).size.height * 0.90,
               width: Get.width,
@@ -500,7 +500,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
         isScrollControlled: true,
         isDismissible: true,
         useSafeArea: true,
-        backgroundColor: AppColor.trasparent,
+        backgroundColor: AppColor.transparent,
         builder: (context) => Container(
               height: MediaQuery.of(context).size.height * 0.42,
               width: Get.width,

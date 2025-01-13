@@ -55,7 +55,7 @@ class OtlistScreen extends StatelessWidget {
                                                 children: [
                                                   // Left number
                                                   Text(
-                                                    leaveItem.leaveDays.toString(),
+                                                    leaveItem.otHours.toString(),
                                                     style: const TextStyle(
                                                       fontSize: 20,
                                                       fontWeight: FontWeight.bold,
@@ -137,7 +137,7 @@ class OtlistScreen extends StatelessWidget {
                                                   IconButton(
                                                     icon: Icon(Icons.more_vert),
                                                     onPressed: () {
-                                                      controller.lvlistbottomsheet(context, index);
+                                                      controller.otlistbottomsheet(context, index);
                                                     },
                                                   ),
                                                 ],

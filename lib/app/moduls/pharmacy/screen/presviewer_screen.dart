@@ -23,18 +23,6 @@ class PresviewerScreen extends StatelessWidget {
     Get.put(PharmacyController());
     return GetBuilder<PharmacyController>(
       builder: (controller) {
-        // ScrollController scrollController = controller.pharmacyviewScrollController;
-
-        // // Visibility booleans for arrows
-        // RxBool showUpArrow = false.obs;
-        // RxBool showDownArrow = true.obs;
-
-        // // Attach listener to scroll controller
-        // scrollController.addListener(() {
-        //   // Determine when to show or hide arrows
-        //   showUpArrow.value = scrollController.offset > 0;
-        //   showDownArrow.value = scrollController.offset < scrollController.position.maxScrollExtent;
-        // });
         return Scaffold(
           backgroundColor: AppColor.white,
           appBar: AppBar(

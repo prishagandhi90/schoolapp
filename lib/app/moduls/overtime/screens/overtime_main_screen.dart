@@ -334,7 +334,7 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                     child: TabBar(
                       labelColor: AppColor.white,
                       unselectedLabelColor: AppColor.black,
-                      dividerColor: AppColor.trasparent,
+                      dividerColor: AppColor.transparent,
                       indicatorSize: TabBarIndicatorSize.tab,
                       onTap: (value) async {
                         if (controller.otHeaderList.isEmpty) {

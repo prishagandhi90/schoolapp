@@ -49,7 +49,7 @@ class BottomBarView extends GetView<BottomBarController> {
                 backgroundColor: AppColor.white,
                 navBarHeight: hideBottomBar.value ? 0 : 70.0,
                 decoration: NavBarDecoration(
-                  colorBehindNavBar: AppColor.trasparent,
+                  colorBehindNavBar: AppColor.transparent,
                   boxShadow: [
                     BoxShadow(
                       color: AppColor.originalgrey.withOpacity(0.1),

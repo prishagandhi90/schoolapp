@@ -669,12 +669,14 @@ class PayrollScreen extends GetView<PayrollController> {
                                               await dashboardController.getDashboardDataUsingToken();
                                             });
                                             final lvotapprovalController = Get.put(LvotapprovalController());
-                                            lvotapprovalController.isLoader.value = true;
-                                            lvotapprovalController.update();
+                                            // lvotapprovalController.isLoader.value = true;
+                                            // lvotapprovalController.update();
                                             await lvotapprovalController.fetchLeaveOTList("", "LV");
-                                            lvotapprovalController.selectedRole = lvotapprovalController.leavelist[0].defaultRole!;
-                                            lvotapprovalController.isLoader.value = false;
-                                            lvotapprovalController.update();
+                                            if (lvotapprovalController.leavelist.isNotEmpty) {
+                                              lvotapprovalController.selectedRole = lvotapprovalController.leavelist[0].defaultRole!;
+                                            }
+                                            // lvotapprovalController.isLoader.value = false;
+                                            // lvotapprovalController.update();
                                             controller.isLVOTApprovalNavigating.value = false;
                                           }, //Get.to(MispunchScreen()),
                                           child: Container(

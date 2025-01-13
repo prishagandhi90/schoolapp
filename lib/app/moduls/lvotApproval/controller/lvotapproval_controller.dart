@@ -1,6 +1,6 @@
-import 'dart:convert';
-import 'dart:ffi';
+// ignore_for_file: deprecated_member_use
 
+import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LvotapprovalController extends GetxController with SingleGetTickerProviderMixin {
   final TextEditingController searchController = TextEditingController();
   String tokenNo = '', loginId = '', empId = '';
-  bool isLoading = false;
+  // bool isLoading = false;
   final ApiController apiController = Get.put(ApiController());
   List<LeaveotlistModel> leavelist = [];
   List<LeaveotlistModel> filteredList = [];
@@ -32,6 +32,18 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     tabController_Lv.addListener(_handleTabSelection);
   }
 
+  bool isSearchActive = false;
+
+  void activateSearch(bool isActive) {
+    isSearchActive = isActive;
+    update();
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    update();
+  }
+
   void _handleTabSelection() async {
     if (tabController_Lv.indexIsChanging) {
       initialIndex.value = tabController_Lv.index;
@@ -43,6 +55,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   }
 
   changeTab(int index) async {
+    // selectedLeaveType = index == 0 ? "LV" : "OT";
     tabController_Lv.animateTo(index);
     currentTabIndex.value = index;
     if (index == 1 && leavelist.isEmpty) {
@@ -51,24 +64,262 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  String selectedRole = ''; // Default selected role
+  void approveLeave(int index) {
+    // Approve leave logic
+    print("Leave approved for: ${filteredList[index].employeeCodeName}");
+    Get.snackbar("Leave Approved", "Leave approved for ${filteredList[index].employeeCodeName}");
+  }
 
-  // selectRole(String role) async {
-  //   selectedRole = role;
-  //   update(); // Notify GetBuilder to rebuild
+  void rejectLeave(int index) {
+    // Reject leave logic
+    print("Leave rejected for: ${filteredList[index].employeeCodeName}");
+    Get.snackbar("Leave Rejected", "Leave rejected for ${filteredList[index].employeeCodeName}");
+  }
+
+  void showApproveDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.all(10.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          title: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Are you sure you want to approve this record?",
+                  style: TextStyle(color: AppColor.black, fontWeight: FontWeight.w600, fontSize: 20)),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      approveLeave(index); // Approve action
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightgreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Approve", style: TextStyle(color: AppColor.black)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Cancel action
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightred,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Close", style: TextStyle(color: AppColor.black)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showRejectDialog(BuildContext context, int index) {
+    String selectedReason = ""; // Dropdown selection value
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.all(16.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          title: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Are you sure you want to reject this record?",
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+
+              // Dropdown for rejection reasons
+              DropdownButtonFormField<String>(
+                value: selectedReason.isEmpty ? null : selectedReason,
+                items: [
+                  "Reason 1",
+                  "Reason 2",
+                  "Reason 3",
+                ].map((reason) {
+                  return DropdownMenuItem(
+                    value: reason,
+                    child: Text(reason),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  selectedReason = value!;
+                },
+                decoration: const InputDecoration(
+                  labelText: "Select Reason",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Row with Reject and Close buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     // if (selectedReason.isEmpty) {
+                  //     //   Get.snackbar(
+                  //     //     "Error",
+                  //     //     "Please select a reason before rejecting",
+                  //     //     backgroundColor: Colors.red,
+                  //     //     colorText: Colors.white,
+                  //     //   );
+                  //     // } else {
+                  //     //   rejectLeave(index, selectedReason); // Perform rejection
+                  //     //   Navigator.pop(context);
+                  //     // }
+                  //   },
+                  //   child: const Text("Reject"),
+                  // ),
+                  ElevatedButton(
+                    onPressed: () {
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightgreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Reject", style: TextStyle(color: AppColor.black)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Cancel action
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightred,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Close", style: TextStyle(color: AppColor.black)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //  void showApproveDialog(BuildContext context, int index) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         // title: const Text("Confirm Approval"),
+  //         content: Text(
+  //           "Are you sure you want to approve this record?",
+  //           style: TextStyle(color: AppColor.black,fontWeight: FontWeight.w600,fontSize: 20),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               // Cancel action
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text("Cancel"),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               // Approve action
+  //               approveLeave(index);
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text("Approve"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
   // }
 
+  String selectedRole = '', selectedLeaveType = ''; // Default selected role
+
   Future<List<LeaveotlistModel>> updateFilteredList(String role, String leaveType) async {
+    isLoader.value = true;
+    update();
+    await changeTab(leaveType == "LV" ? 0 : 1);
+    selectedLeaveType = leaveType;
     filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
+    isLoader.value = false;
+    update();
     return [];
+  }
+
+  void filterSearchResults(String query, String leaveType) {
+    if (query.isEmpty) {
+      filteredList = leavelist; // Show all data if search is empty
+    } else {
+      filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
+      filteredList = filteredList.where((item) {
+        final patientName = (item.employeeCodeName ?? "").toLowerCase();
+        final employeecode = (item.employeeCodeValue ?? "").toLowerCase();
+
+        return patientName.contains(query.toLowerCase()) || employeecode.contains(query.toLowerCase());
+      }).toList();
+    }
+    update();
   }
 
   Future<List<LeaveotlistModel>> fetchLeaveOTList(String role, String leaveType) async {
     try {
+      isLoader.value = true;
       selectedRole = role;
-      changeTab(0);
-      update();
-      isLoading = true;
+      selectedLeaveType = leaveType;
+      // update();
+      await changeTab(0);
       String url = ConstApiUrl.empLeaveOTapprovalList;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -90,12 +341,14 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           if (role.isEmpty) {
             role = selectedRole;
           }
+          isLoader.value = false;
           filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
+          update();
+          return filteredList;
         } else {
           leavelist = [];
           filteredList = [];
         }
-        isLoading = false;
       } else if (responseLeaveOTList.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -103,7 +356,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       } else if (responseLeaveOTList.statusCode == 400) {
         leavelist = [];
         filteredList = [];
-        isLoading = false;
       } else {
         leavelist = [];
         filteredList = [];
@@ -111,10 +363,10 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       }
       update();
     } catch (e) {
-      isLoading = false;
+      isLoader.value = false;
       update();
     }
-    isLoading = false;
+    isLoader.value = false;
     return [];
   }
 
@@ -321,23 +573,57 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                     child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.center,
-                        child: Text(AppString.reliever, style: AppStyle.w50018)),
+                        alignment: Alignment.centerLeft,
+                        child: Text(AppString.reason, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
                   ),
                   Container(
-                      // height: 100,
-                      width: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.center,
-                      child:
-                          // controller.attendenceDetailTable.length > 0
-                          //     ?
-                          Text(
-                        'abc', //controller.attendenceDetailTable[index].oTENTMIN.toString(),
-                        style: AppStyle.fontfamilyplus,
-                      )
-                      // : Text('--:-- ', style: AppStyle.plus16w600),
-                      )
+                    // height: 100,
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    width: MediaQuery.of(context).size.height * 0.5,
+                    alignment: Alignment.centerLeft,
+                    child: leavelist.length > 0
+                        ? Text(
+                            leavelist[index].reason.toString(),
+                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+                          )
+                        : Text('--:-- ', style: AppStyle.plus16w600),
+                  )
+                ],
+              ),
+            ),
+            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.15,
+              decoration: BoxDecoration(
+                color: AppColor.lightblue,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                    child: Container(
+                        // height: 100,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        width: MediaQuery.of(context).size.height * 0.5,
+                        alignment: Alignment.centerLeft,
+                        child: Text(AppString.shiftTime, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+                  ),
+                  Container(
+                    // height: 100,
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    width: MediaQuery.of(context).size.height * 0.5,
+                    alignment: Alignment.centerLeft,
+                    child: leavelist.length > 0
+                        ? Text(
+                            leavelist[index].shiftTime.toString(),
+                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+                          )
+                        : Text('--:-- ', style: AppStyle.plus16w600),
+                  )
                 ],
               ),
             ),
@@ -356,24 +642,23 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                     // height: 45,
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                     child: Container(
-                        // height: 100,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.center,
-                        child: Text(AppString.otentmin, style: AppStyle.w50018)),
+                        alignment: Alignment.centerLeft,
+                        child: Text(AppString.punchTime, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
                   ),
                   Container(
-                      // height: 100,
-                      width: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.center,
-                      child:
-                          // controller.attendenceDetailTable.length > 0
-                          //     ?
-                          Text(
-                        'abc', //controller.attendenceDetailTable[index].oTENTMIN.toString(),
-                        style: AppStyle.fontfamilyplus,
-                      )
-                      // : Text('--:-- ', style: AppStyle.plus16w600),
-                      )
+                    // height: 100,
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    width: MediaQuery.of(context).size.height * 0.5,
+                    alignment: Alignment.centerLeft,
+                    child: leavelist.length > 0
+                        ? Text(
+                            leavelist[index].punchTime.toString(),
+                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+                          )
+                        : Text('--:-- ', style: AppStyle.plus16w600),
+                  )
                 ],
               ),
             ),
@@ -388,28 +673,25 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
-                    // width: double.infinity,
-                    // height: 45,
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                     child: Container(
-                        // height: 100,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
                         width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.center,
-                        child: Text(AppString.otentmin, style: AppStyle.w50018)),
+                        alignment: Alignment.centerLeft,
+                        child: Text(AppString.employeenote, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
                   ),
                   Container(
-                      // height: 100,
-                      width: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.center,
-                      child:
-                          // controller.attendenceDetailTable.length > 0
-                          //     ?
-                          Text(
-                        'abc', //controller.attendenceDetailTable[index].oTENTMIN.toString(),
-                        style: AppStyle.fontfamilyplus,
-                      )
-                      // : Text('--:-- ', style: AppStyle.plus16w600),
-                      )
+                    // height: 100,
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    width: MediaQuery.of(context).size.height * 0.5,
+                    alignment: Alignment.centerLeft,
+                    child: leavelist.length > 0
+                        ? Text(
+                            leavelist[index].punchTime.toString(),
+                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+                          )
+                        : Text('--:-- ', style: AppStyle.plus16w600),
+                  )
                 ],
               ),
             )
