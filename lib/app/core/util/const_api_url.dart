@@ -31,11 +31,15 @@ class ConstApiUrl {
   static const empSaveLeaveEntryList = "$empUrl/EmpApp_SaveLeaveEntryList";
   static const empdutyscheduledrpdwnList = "$empUrl/GetShiftWeekList";
   static const empDutyScheduleShiftReport = "$empUrl/GetEmpShiftReport";
-  static const empLeaveOTapprovalList = "$empUrl/EmpApp_Get_LV_OT_Roles";
 
   //pharmacy
   static const empPresViewerListAPI = "$empUrl/GetDrPrescriptionViewer";
   static const empPresDetailListAPI = "$empUrl/GetDrPrescriptionMedicines";
   static const empPharmaFilterDataApi = "$empUrl/GetPharmaDashboardFilters";
   static const empPatientsortDataApi = "$empUrl/SortDr_PrecriptionViewer";
+
+  //  ----------------LV/OT Approval ---------------
+  static const empLeaveOTapprovalList = "$empUrl/EmpApp_Get_LV_OT_Roles";
+  static const empLeaveAppRejListData = "$empUrl/EmpApp_Appr_Rej_LV_OT_Entry";
+  static const empGetLeaveRejectReason = "$empUrl/GetLeaveRejectReason";
 }

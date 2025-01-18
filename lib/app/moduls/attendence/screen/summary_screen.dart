@@ -115,7 +115,7 @@ class SummaryScreen extends GetView<AttendenceController> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      CustomContainerview(text: 'OT HRS', text1: controller.attendenceSummaryTable[0].cOTHRS.toString()),
+                                      CustomContainerview(text: 'OT HRS', text1: controller.attendenceSummaryTable[0].ttLOTHRS.toString()),
                                       CustomContainerview(text: 'DUTY HRS', text1: controller.attendenceSummaryTable[0].dutYHRS.toString()),
                                       CustomContainerview(text: 'DUTY ST', text1: controller.attendenceSummaryTable[0].dutYST.toString()),
                                     ],

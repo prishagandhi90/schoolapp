@@ -10,7 +10,7 @@ import 'package:emp_app/app/moduls/leave/model/leavedelayreason_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
 import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/moduls/leave/screen/custom_textformfield.dart';
+import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

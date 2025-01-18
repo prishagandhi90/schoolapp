@@ -30,43 +30,38 @@ class LvotapprovalScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: () async {
-                        // await controller.changeTab(controller.selectedLeaveType == 'LV' ? 0 : 1);
-                        // await controller.fetchLeaveOTList("InCharge", controller.selectedLeaveType);
-                        // await controller.changeTab(0);
-                        await controller.fetchLeaveOTList("InCharge", 'LV');
-                      },
                       child: buildContainer(
                         text: 'InCharge',
                         isSelected: controller.selectedRole == 'InCharge',
+                        isEnabled: controller.getRoleStatus('InCharge'), // Check API status
+                        onTap: () async {
+                          await controller.fetchLeaveOTList("InCharge", 'LV');
+                        },
                       ),
                     ),
                     GestureDetector(
-                      onTap: () async {
-                        // await controller.changeTab(controller.selectedLeaveType == 'LV' ? 0 : 1);
-                        // await controller.fetchLeaveOTList('HOD', controller.selectedLeaveType);
-                        // await controller.changeTab(0);
-                        await controller.fetchLeaveOTList('HOD', 'LV');
-                      },
                       child: buildContainer(
                         text: 'HOD',
                         isSelected: controller.selectedRole == 'HOD',
+                        isEnabled: controller.getRoleStatus('HOD'), // Check API status
+                        onTap: () async {
+                          await controller.fetchLeaveOTList('HOD', 'LV');
+                        },
                       ),
                     ),
                     GestureDetector(
-                      onTap: () async {
-                        // await controller.changeTab(controller.selectedLeaveType == 'LV' ? 0 : 1);
-                        // await controller.fetchLeaveOTList('HR', controller.selectedLeaveType);
-                        // await controller.changeTab(0);
-                        await controller.fetchLeaveOTList('HR', 'LV');
-                      },
                       child: buildContainer(
                         text: 'HR',
                         isSelected: controller.selectedRole == 'HR',
+                        isEnabled: controller.getRoleStatus('HR'), // Check API status
+                        onTap: () async {
+                          await controller.fetchLeaveOTList('HR', 'LV');
+                        },
                       ),
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 10),
                 // Dynamic TabBar & Search Bar
                 Padding(
@@ -171,27 +166,58 @@ class LvotapprovalScreen extends StatelessWidget {
     });
   }
 
-  Widget buildContainer({required String text, required bool isSelected}) {
-    return Container(
-      height: 50,
-      width: 120,
-      decoration: BoxDecoration(
-        color: isSelected ? AppColor.lightblue : AppColor.lightwhite,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+  Widget buildContainer({
+    required String text,
+    required bool isSelected,
+    required bool isEnabled,
+    required VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: isEnabled ? onTap : null, // Disable onTap if not enabled
+      child: Container(
+        height: 50,
+        width: 120,
+        decoration: BoxDecoration(
+          color: isSelected ? (isEnabled ? AppColor.lightblue : AppColor.lightblue) : AppColor.lightwhite,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: isEnabled ? Colors.black : Colors.grey,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
     );
   }
+
+  //   Widget buildContainer({required String text, required bool isSelected}) {
+  //   return Container(
+  //     height: 50,
+  //     width: 120,
+  //     decoration: BoxDecoration(
+  //       color: isSelected ? AppColor.lightblue : AppColor.lightwhite,
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     child: Center(
+  //       child: Text(
+  //         text,
+  //         style: TextStyle(
+  //           color: Colors.black,
+  //           fontWeight: FontWeight.bold,
+  //           fontSize: 16,
+  //         ),
+  //         textAlign: TextAlign.center,
+  //       ),
+  //     ),
+  //   );
+  // }
+
 }
 
 

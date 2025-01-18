@@ -59,6 +59,9 @@ class LeaveotlistModel {
   String? punchTime;
   String? shiftTime;
   String? defaultRole;
+  String? inchargeYN;
+  String? hodyn;
+  String? hryn;
 
   LeaveotlistModel(
       {this.leaveId,
@@ -86,7 +89,10 @@ class LeaveotlistModel {
       this.empTel,
       this.punchTime,
       this.shiftTime,
-      this.defaultRole});
+      this.defaultRole,
+      this.inchargeYN,
+      this.hodyn,
+      this.hryn});
 
   LeaveotlistModel.fromJson(Map<String, dynamic> json) {
     leaveId = json['leaveId'];
@@ -115,6 +121,9 @@ class LeaveotlistModel {
     punchTime = json['punchTime'];
     shiftTime = json['shiftTime'];
     defaultRole = json['defaultRole'];
+    inchargeYN = json['inchargeYN'];
+    hodyn = json['hodyn'];
+    hryn = json['hryn'];
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +154,9 @@ class LeaveotlistModel {
     data['punchTime'] = this.punchTime;
     data['shiftTime'] = this.shiftTime;
     data['defaultRole'] = this.defaultRole;
+    data['inchargeYN']=this.inchargeYN;
+    data['hodyn']=this.hodyn;
+    data['hryn']=this.hryn;
     return data;
   }
 }
