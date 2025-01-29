@@ -155,4 +155,6 @@ class AppString {
   static String shiftTime = "Shift Time";
   static String punchTime = "Punch Time";
   static String employeenote = "Employee Note";
+  static String inchargestatus = "In-Charge Status";
+
 }

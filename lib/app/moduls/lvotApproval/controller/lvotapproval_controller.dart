@@ -8,28 +8,43 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/leaveapprejlist_model.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/leaveotlist_model.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/otreason_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LvotapprovalController extends GetxController with SingleGetTickerProviderMixin {
   final TextEditingController searchController = TextEditingController();
-  final TextEditingController reasonController = TextEditingController();
+  final TextEditingController reasonnameController = TextEditingController();
+  final TextEditingController reasonvalueController = TextEditingController();
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = false;
   final ApiController apiController = Get.put(ApiController());
   List<LeaveotlistModel> leavelist = [];
+  final ScrollController lvappScrollController = ScrollController();
   List<LeaveotlistModel> filteredList = [];
+  List<ResponseLeaveOTList> responseLeaveOTList = [];
+  List<LeaveotlistModel> selectedItems = [];
   List<SaveAppRejLeaveList> saveAppRejLeaveList = [];
   List<ReasonList> reasonList = [];
   var isLoader = false.obs;
   late TabController tabController_Lv;
   var initialIndex = 0.obs;
   RxInt currentTabIndex = 0.obs;
+  RxBool InchargeYN_c = false.obs;
+  RxBool HODYN_c = false.obs;
+  RxBool HRYN_c = false.obs;
+  bool isSearchActive = false;
+  var isSelectionMode = false.obs;
+  var isAllSelected = false.obs;
+  RxBool hideBottomBar = false.obs;
+  final bottomBarController = Get.put(BottomBarController());
+  String selectedRole = '', selectedLeaveType = ''; // Default selected role
 
   @override
   void onInit() {
@@ -38,9 +53,56 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     tabController_Lv = TabController(length: 2, vsync: this);
     tabController_Lv.addListener(_handleTabSelection);
     fetchOTReason();
+
+    lvappScrollController.addListener(() {
+      if (lvappScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        print("Scrolling up");
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (lvappScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        print("Scrolling down");
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
 
-  bool isSearchActive = false;
+  void enterSelectionMode(int index) {
+    isSelectionMode.value = true;
+    selectedItems.add(filteredList[index]);
+    update();
+  }
+
+  void exitSelectionMode() {
+    isSelectionMode.value = false;
+    isAllSelected.value = false;
+    selectedItems.clear();
+    update();
+  }
+
+  void toggleSelection(int index, bool value) {
+    if (value) {
+      selectedItems.add(filteredList[index]);
+    } else {
+      selectedItems.remove(filteredList[index]);
+    }
+    isAllSelected.value = selectedItems.length == filteredList.length;
+    update();
+  }
+
+  void toggleSelectAll(bool value) {
+    if (value) {
+      selectedItems = List.from(filteredList);
+    } else {
+      selectedItems.clear();
+    }
+    isAllSelected.value = value;
+    update();
+  }
 
   void activateSearch(bool isActive) {
     isSearchActive = isActive;
@@ -104,8 +166,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   //   );
   // }
 
-  String selectedRole = '', selectedLeaveType = ''; // Default selected role
-
   Future<List<LeaveotlistModel>> updateFilteredList(String role, String leaveType) async {
     isLoader.value = true;
     update();
@@ -138,95 +198,45 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     return roleStatus[role] == 'Y';
   }
 
-  Future<void> fetchLeaveOTList(String role, String leaveType) async {
-    try {
-      isLoader.value = true;
-      selectedRole = role;
-      selectedLeaveType = leaveType;
-
-      String url = ConstApiUrl.empLeaveOTapprovalList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = pref.getString(AppString.keyToken) ?? "";
-
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "empId": empId,
-        "role": role,
-        "flag": leaveType,
-      };
-
-      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseLeaveOTList responseLeaveOTList = ResponseLeaveOTList.fromJson(jsonDecode(response));
-
-      if (responseLeaveOTList.statusCode == 200) {
-        leavelist.clear();
-        leavelist.assignAll(responseLeaveOTList.data ?? []);
-
-        // Update role statuses for each LeaveotlistModel item
-        responseLeaveOTList.data?.forEach((item) {
-          // Use the role-related fields
-          roleStatus[item.defaultRole ?? ''] = item.defaultRole ?? 'N';
-          roleStatus[item.inchargeYN ?? ''] = item.inchargeYN ?? 'N';
-          roleStatus[item.hodyn ?? ''] = item.hodyn ?? 'N';
-          roleStatus[item.hryn ?? ''] = item.hryn ?? 'N';
-        });
-
-        if (leavelist.isNotEmpty) {
-          filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
-        } else {
-          leavelist = [];
-          filteredList = [];
-        }
-      } else if (responseLeaveOTList.statusCode == 401) {
-        pref.clear();
-        Get.offAll(const LoginScreen());
-        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else {
-        leavelist = [];
-        filteredList = [];
-        Get.rawSnackbar(message: "Something went wrong");
-      }
-      update();
-    } catch (e) {
-      isLoader.value = false;
-      update();
-    }
-    isLoader.value = false;
+  rejectreasonChangeMethod(Map<String, String>? value) async {
+    reasonvalueController.text = value!['text'] ?? '';
+    reasonnameController.text = value['text'] ?? '';
+    update();
   }
 
-  // Future<List<LeaveotlistModel>> fetchLeaveOTList(String role, String leaveType) async {
+  // Future<void> fetchLeaveOTList(String role, String leaveType) async {
   //   try {
   //     isLoader.value = true;
   //     selectedRole = role;
   //     selectedLeaveType = leaveType;
-  //     // update();
-  //     // await changeTab(0);
+  //     update();
+
   //     String url = ConstApiUrl.empLeaveOTapprovalList;
   //     SharedPreferences pref = await SharedPreferences.getInstance();
-  //     loginId = await pref.getString(AppString.keyLoginId) ?? "";
-  //     tokenNo = await pref.getString(AppString.keyToken) ?? "";
-  //     var jsonbodyObj;
+  //     loginId = pref.getString(AppString.keyLoginId) ?? "";
+  //     empId = await pref.getString(AppString.keyEmpId) ?? "";
+  //     tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-  //     if (role.isEmpty) {
-  //       jsonbodyObj = {"loginId": loginId, "empId": empId};
-  //     } else {
-  //       jsonbodyObj = {"loginId": loginId, "empId": empId, "role": role, "flag": leaveType};
-  //     }
+  //     var jsonbodyObj = {"loginId": loginId, "empId": empId, "role": role, "flag": leaveType};
+
   //     var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
   //     ResponseLeaveOTList responseLeaveOTList = ResponseLeaveOTList.fromJson(jsonDecode(response));
 
   //     if (responseLeaveOTList.statusCode == 200) {
   //       leavelist.clear();
   //       leavelist.assignAll(responseLeaveOTList.data ?? []);
-  //       if (leavelist.isNotEmpty && leaveType.isNotEmpty) {
-  //         if (role.isEmpty) {
-  //           role = selectedRole;
-  //         }
-  //         isLoader.value = false;
+
+  //       // Update role statuses for each LeaveotlistModel item
+  //       responseLeaveOTList.data?.forEach((item) {
+  //         // Use the role-related fields
+  //         roleStatus[item.defaultRole ?? ''] = item.defaultRole ?? 'N';
+  //         roleStatus[item.inchargeYN ?? ''] = item.inchargeYN ?? 'N';
+  //         roleStatus[item.hodyn ?? ''] = item.hodyn ?? 'N';
+  //         roleStatus[item.hryn ?? ''] = item.hryn ?? 'N';
+  //       });
+
+  //       if (leavelist.isNotEmpty) {
   //         filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
-  //         update();
-  //         return filteredList;
   //       } else {
   //         leavelist = [];
   //         filteredList = [];
@@ -235,9 +245,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   //       pref.clear();
   //       Get.offAll(const LoginScreen());
   //       Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //     } else if (responseLeaveOTList.statusCode == 400) {
-  //       leavelist = [];
-  //       filteredList = [];
   //     } else {
   //       leavelist = [];
   //       filteredList = [];
@@ -249,8 +256,71 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   //     update();
   //   }
   //   isLoader.value = false;
-  //   return [];
   // }
+
+  Future<List<LeaveotlistModel>> fetchLeaveOTList(String role, String leaveType) async {
+    try {
+      isLoader.value = true;
+      selectedRole = role;
+      selectedLeaveType = leaveType;
+      update();
+      // await changeTab(0);
+      String url = ConstApiUrl.empLeaveOTapprovalList;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      var jsonbodyObj;
+
+      if (role.isEmpty) {
+        jsonbodyObj = {"loginId": loginId, "empId": empId};
+      } else {
+        jsonbodyObj = {"loginId": loginId, "empId": empId, "role": role, "flag": leaveType};
+      }
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveOTList responseLeaveOTList = ResponseLeaveOTList.fromJson(jsonDecode(response));
+      update_roles(responseLeaveOTList);
+      if (responseLeaveOTList.statusCode == 200) {
+        leavelist.clear();
+        leavelist.assignAll(responseLeaveOTList.data ?? []);
+        if (leavelist.isNotEmpty && leaveType.isNotEmpty) {
+          if (role.isEmpty) {
+            role = selectedRole;
+          }
+          isLoader.value = false;
+          filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
+          update();
+          return filteredList;
+        } else {
+          leavelist = [];
+          filteredList = [];
+        }
+      } else if (responseLeaveOTList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseLeaveOTList.statusCode == 400) {
+        leavelist = [];
+        filteredList = [];
+      } else {
+        leavelist = [];
+        filteredList = [];
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoader.value = false;
+      update();
+    }
+    isLoader.value = false;
+    return [];
+  }
+
+  void update_roles(ResponseLeaveOTList responseLeaveOTList) {
+    selectedRole = selectedRole == '' ? (responseLeaveOTList.defaultRole ?? '') : selectedRole;
+    InchargeYN_c.value = responseLeaveOTList.inchargeYN == 'Y';
+    HODYN_c.value = responseLeaveOTList.hodyn == 'Y';
+    HRYN_c.value = responseLeaveOTList.hryn == 'Y';
+  }
 
   Future<List<SaveAppRejLeaveList>> fetchLeave_app_rej_List(String action, int index) async {
     try {
@@ -408,264 +478,408 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   }
 
   void showRejectDialog(BuildContext context, int index) {
-    String selectedReason; // Dropdown selection value
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          titlePadding: EdgeInsets.zero,
-          contentPadding: const EdgeInsets.all(16.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          title: Stack(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () async {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.close),
-                  color: Colors.black,
+        context: context,
+        builder: (context) {
+          return GetBuilder<LvotapprovalController>(
+            // Wrap with GetBuilder
+            builder: (controller) {
+              return AlertDialog(
+                titlePadding: EdgeInsets.zero,
+                contentPadding: const EdgeInsets.all(16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
                 ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Are you sure you want to reject this record?",
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
+                title: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.close),
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Are you sure you want to reject this record?",
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
 
-              // Dropdown for rejection reasons
-              CustomDropdown(
-                text: AppString.reason,
-                controller: reasonController,
-                buttonStyleData: ButtonStyleData(
-                  height: 50,
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColor.black),
-                    borderRadius: BorderRadius.circular(0),
-                    color: AppColor.white,
-                  ),
-                ),
-                onChanged: (value) async {
-                  selectedReason = value.toString();
-                  update();
-                },
-                width: double.infinity,
-                items: reasonList
-                    .map((ReasonList item) => DropdownMenuItem<Map<String, String>>(
-                          value: {
-                            'value': item.name ?? '', // Use the value as the item value
-                            'text': item.name ?? '', // Display the name in the dropdown
+                    // Dropdown for rejection reasons
+                    CustomDropdown(
+                      text: AppString.reason,
+                      controller: reasonnameController,
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColor.black),
+                          borderRadius: BorderRadius.circular(0),
+                          color: AppColor.white,
+                        ),
+                      ),
+                      onChanged: (value) async {
+                        await rejectreasonChangeMethod(value);
+                        // update();
+                      },
+                      width: double.infinity,
+                      items: reasonList
+                          .map((ReasonList item) => DropdownMenuItem<Map<String, String>>(
+                                value: {
+                                  'value': item.name ?? '', // Use the value as the item value
+                                  'text': item.name ?? '', // Display the name in the dropdown
+                                },
+                                child: Text(
+                                  item.name ?? '', // Display the name in the dropdown
+                                  style: AppStyle.black.copyWith(fontSize: 14),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await fetchLeave_app_rej_List("Rejected", index);
+                            Navigator.pop(context);
                           },
-                          child: Text(
-                            item.name ?? '', // Display the name in the dropdown
-                            style: AppStyle.black.copyWith(fontSize: 14),
-                            overflow: TextOverflow.ellipsis,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.lightgreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        ))
-                    .toList(),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      await fetchLeave_app_rej_List("Rejected", index);
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.lightgreen,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                          child: Text("Reject", style: TextStyle(color: AppColor.black)),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); // Cancel action
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.lightred,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text("Close", style: TextStyle(color: AppColor.black)),
+                        ),
+                      ],
                     ),
-                    child: Text("Reject", style: TextStyle(color: AppColor.black)),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Cancel action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.lightred,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  ],
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  Future<void> lvlistbottomsheet(BuildContext context, int index) async {
+    showModalBottomSheet(
+      backgroundColor: AppColor.white,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      context: Get.context!,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        side: BorderSide(color: AppColor.black),
+      ),
+      builder: (context) {
+        final isIncharge = InchargeYN_c.value;
+        final isHOD = HODYN_c.value;
+        final isHR = HRYN_c.value;
+
+        List<Widget> content = [];
+
+        if (isIncharge) {
+          content.addAll([
+            parameterWidget(
+              title: AppString.reliever,
+              value: leavelist[index].relieverEmpName?.toString() ?? '--:--',
+            ),
+            parameterWidget(
+              title: AppString.reason,
+              value: leavelist[index].reason?.toString() ?? '--:--',
+            ),
+            parameterWidget(
+              title: AppString.leavetype,
+              value: leavelist[index].leaveShortName?.toString() ?? '--:--',
+            ),
+          ]);
+        }
+
+        if (isHOD) {
+          content.addAll([
+            parameterWidget(
+              title: AppString.inchargestatus,
+              value: leavelist[index].inchargeAction?.toString() ?? '--:--',
+            ),
+          ]);
+        }
+
+        if (isHR) {
+          content.addAll([
+            // parameterWidget(
+            //   title: AppString.reason,
+            //   value: leavelist[index].reason?.toString() ?? '--:--',
+            // ),
+            // parameterWidget(
+            //   title: AppString.inchargestatus,
+            //   value: leavelist[index].inchargeAction?.toString() ?? '--:--',
+            // ),
+            parameterWidget(
+              title: AppString.shiftTime,
+              value: leavelist[index].shiftTime?.toString() ?? '--:--',
+            ),
+            parameterWidget(
+              title: AppString.punchTime,
+              value: leavelist[index].punchTime?.toString() ?? '--:--',
+            ),
+            parameterWidget(
+              title: AppString.employeenote, value: '--:--', //leavelist[index].employeeNote?.toString() ?? '--:--',
+            ),
+          ]);
+        }
+
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const SizedBox(width: 30),
+                    const Spacer(),
+                    Container(
+                      width: 90,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                      child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
                     ),
-                    child: Text("Close", style: TextStyle(color: AppColor.black)),
-                  ),
-                ],
-              ),
-            ],
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(Icons.close),
+                    ),
+                    const SizedBox(width: 30),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                ...content,
+              ],
+            ),
           ),
         );
       },
     );
   }
 
-  Future<void> lvlistbottomsheet(BuildContext context, int index) async {
-    showModalBottomSheet(
-        backgroundColor: AppColor.white,
-        isScrollControlled: true,
-        isDismissible: true,
-        enableDrag: true,
-        context: Get.context!,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: BorderSide(color: AppColor.black),
+  Widget parameterWidget({required String title, required String value}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+          color: AppColor.lightblue,
+          borderRadius: BorderRadius.circular(20),
         ),
-        builder: (context) {
-          return Column(mainAxisSize: MainAxisSize.min, children: [
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const SizedBox(width: 30),
-                const Spacer(),
-                Container(
-                  width: 90,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                  child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(Icons.close),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                decoration: BoxDecoration(
-                  color: AppColor.lightblue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      // width: double.infinity,
-                      // height: 45,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                      child: Container(
-                          // height: 100,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          width: MediaQuery.of(context).size.height * 0.5,
-                          alignment: Alignment.centerLeft,
-                          child: Text(AppString.reliever, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
-                    ),
-                    Container(
-                      // height: 100,
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                      width: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.centerLeft,
-                      child: leavelist.length > 0
-                          ? Text(
-                              leavelist[index].relieverEmpName.toString(),
-                              style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                            )
-                          : Text('--:-- ', style: AppStyle.plus16w600),
-                    )
-                  ],
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: AppColor.primaryColor,
+              ),
+              child: Row(
+                children: [
+                  Text(title, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600)),
+                ],
               ),
             ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                decoration: BoxDecoration(
-                  color: AppColor.lightblue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      // width: double.infinity,
-                      // height: 45,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                      child: Container(
-                          // height: 100,
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          width: MediaQuery.of(context).size.height * 0.5,
-                          alignment: Alignment.centerLeft,
-                          child: Text(AppString.reason, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
-                    ),
-                    Container(
-                      // height: 100,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      width: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.centerLeft,
-                      child: leavelist.length > 0
-                          ? Text(
-                              leavelist[index].reason.toString(),
-                              style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                            )
-                          : Text('--:-- ', style: AppStyle.plus16w600),
-                    )
-                  ],
-                ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                value,
+                style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                decoration: BoxDecoration(
-                  color: AppColor.lightblue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      // width: double.infinity,
-                      // height: 45,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                      child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          width: MediaQuery.of(context).size.height * 0.5,
-                          alignment: Alignment.centerLeft,
-                          child: Text(AppString.leavetype, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
-                    ),
-                    Container(
-                      // height: 100,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      width: MediaQuery.of(context).size.height * 0.5,
-                      alignment: Alignment.centerLeft,
-                      child: leavelist.length > 0
-                          ? Text(
-                              leavelist[index].leaveShortName.toString(),
-                              style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                            )
-                          : Text('--:-- ', style: AppStyle.plus16w600),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ]);
-        });
+          ],
+        ),
+      ),
+    );
   }
+
+  // Future<void> lvlistbottomsheet(BuildContext context, int index) async {
+  //   showModalBottomSheet(
+  //       backgroundColor: AppColor.white,
+  //       isScrollControlled: true,
+  //       isDismissible: true,
+  //       enableDrag: true,
+  //       context: Get.context!,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(20.0),
+  //         side: BorderSide(color: AppColor.black),
+  //       ),
+  //       builder: (context) {
+  //         return Column(mainAxisSize: MainAxisSize.min, children: [
+  //           const SizedBox(height: 10),
+  //           Row(
+  //             children: [
+  //               const SizedBox(width: 30),
+  //               const Spacer(),
+  //               Container(
+  //                 width: 90,
+  //                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+  //                 child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+  //               ),
+  //               const Spacer(),
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.pop(context);
+  //                 },
+  //                 child: const Icon(Icons.close),
+  //               ),
+  //               const SizedBox(
+  //                 width: 30,
+  //               ),
+  //             ],
+  //           ),
+  //           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 13),
+  //             child: Container(
+  //               height: MediaQuery.of(context).size.height * 0.15,
+  //               decoration: BoxDecoration(
+  //                 color: AppColor.lightblue,
+  //                 borderRadius: BorderRadius.circular(20),
+  //               ),
+  //               child: Column(
+  //                 children: [
+  //                   Container(
+  //                     padding: const EdgeInsets.all(10),
+  //                     // width: double.infinity,
+  //                     // height: 45,
+  //                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                     child: Container(
+  //                         // height: 100,
+  //                         padding: EdgeInsets.symmetric(horizontal: 10),
+  //                         width: MediaQuery.of(context).size.height * 0.5,
+  //                         alignment: Alignment.centerLeft,
+  //                         child: Text(AppString.reliever, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+  //                   ),
+  //                   Container(
+  //                     // height: 100,
+  //                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+  //                     width: MediaQuery.of(context).size.height * 0.5,
+  //                     alignment: Alignment.centerLeft,
+  //                     child: leavelist.length > 0
+  //                         ? Text(
+  //                             leavelist[index].relieverEmpName.toString(),
+  //                             style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+  //                           )
+  //                         : Text('--:-- ', style: AppStyle.plus16w600),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 13),
+  //             child: Container(
+  //               height: MediaQuery.of(context).size.height * 0.15,
+  //               decoration: BoxDecoration(
+  //                 color: AppColor.lightblue,
+  //                 borderRadius: BorderRadius.circular(20),
+  //               ),
+  //               child: Column(
+  //                 children: [
+  //                   Container(
+  //                     padding: const EdgeInsets.all(10),
+  //                     // width: double.infinity,
+  //                     // height: 45,
+  //                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                     child: Container(
+  //                         // height: 100,
+  //                         padding: EdgeInsets.symmetric(horizontal: 10),
+  //                         width: MediaQuery.of(context).size.height * 0.5,
+  //                         alignment: Alignment.centerLeft,
+  //                         child: Text(AppString.reason, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+  //                   ),
+  //                   Container(
+  //                     // height: 100,
+  //                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  //                     width: MediaQuery.of(context).size.height * 0.5,
+  //                     alignment: Alignment.centerLeft,
+  //                     child: leavelist.length > 0
+  //                         ? Text(
+  //                             leavelist[index].reason.toString(),
+  //                             style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+  //                           )
+  //                         : Text('--:-- ', style: AppStyle.plus16w600),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           ),
+  //           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+  //           Padding(
+  //             padding: const EdgeInsets.symmetric(horizontal: 13),
+  //             child: Container(
+  //               height: MediaQuery.of(context).size.height * 0.15,
+  //               decoration: BoxDecoration(
+  //                 color: AppColor.lightblue,
+  //                 borderRadius: BorderRadius.circular(20),
+  //               ),
+  //               child: Column(
+  //                 children: [
+  //                   Container(
+  //                     padding: const EdgeInsets.all(10),
+  //                     // width: double.infinity,
+  //                     // height: 45,
+  //                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+  //                     child: Container(
+  //                         padding: EdgeInsets.symmetric(horizontal: 10),
+  //                         width: MediaQuery.of(context).size.height * 0.5,
+  //                         alignment: Alignment.centerLeft,
+  //                         child: Text(AppString.leavetype, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+  //                   ),
+  //                   Container(
+  //                     // height: 100,
+  //                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  //                     width: MediaQuery.of(context).size.height * 0.5,
+  //                     alignment: Alignment.centerLeft,
+  //                     child: leavelist.length > 0
+  //                         ? Text(
+  //                             leavelist[index].leaveShortName.toString(),
+  //                             style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+  //                           )
+  //                         : Text('--:-- ', style: AppStyle.plus16w600),
+  //                   )
+  //                 ],
+  //               ),
+  //             ),
+  //           )
+  //         ]);
+  //       });
+  // }
 
   Future<void> otlistbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
@@ -674,6 +888,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         isDismissible: true,
         enableDrag: true,
         context: Get.context!,
+        // context: context,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
           side: BorderSide(color: AppColor.black),

@@ -10,11 +10,13 @@ class RsponseLVRejReason {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <ReasonList>[];
       json['data'].forEach((v) {
         data!.add(new ReasonList.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 
@@ -31,16 +33,19 @@ class RsponseLVRejReason {
 }
 
 class ReasonList {
+  String? value;
   String? name;
 
-  ReasonList({this.name});
+  ReasonList({this.value, this.name});
 
   ReasonList.fromJson(Map<String, dynamic> json) {
+    value = json['value'];
     name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['value'] = this.value;
     data['name'] = this.name;
     return data;
   }

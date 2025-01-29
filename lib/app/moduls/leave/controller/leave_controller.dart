@@ -66,7 +66,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   TextEditingController relieverValueController = TextEditingController();
   TextEditingController delayreasonNameController = TextEditingController();
   TextEditingController delayreasonIdController = TextEditingController();
-
   RxBool isNotesFieldFocused = false.obs;
 
   @override

@@ -2,14 +2,31 @@ class ResponseLeaveOTList {
   int? statusCode;
   String? isSuccess;
   String? message;
+  String? defaultRole;
+  String? inchargeYN;
+  String? hodyn;
+  String? hryn;
   List<LeaveotlistModel>? data;
 
-  ResponseLeaveOTList({this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseLeaveOTList({
+    this.statusCode,
+    this.isSuccess,
+    this.message,
+    this.defaultRole,
+    this.inchargeYN,
+    this.hodyn,
+    this.hryn,
+    this.data,
+  });
 
   ResponseLeaveOTList.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
+    defaultRole = json['defaultRole'];
+    inchargeYN = json['inchargeYN'];
+    hodyn = json['hodyn'];
+    hryn = json['hryn'];
     if (json['data'] != null && json['data'] is List) {
       data = <LeaveotlistModel>[];
       json['data'].forEach((v) {
@@ -25,6 +42,10 @@ class ResponseLeaveOTList {
     data['statusCode'] = this.statusCode;
     data['isSuccess'] = this.isSuccess;
     data['message'] = this.message;
+    data['defaultRole'] = this.defaultRole;
+    data['inchargeYN'] = this.inchargeYN;
+    data['hodyn'] = this.hodyn;
+    data['hryn'] = this.hryn;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -58,41 +79,34 @@ class LeaveotlistModel {
   String? empTel;
   String? punchTime;
   String? shiftTime;
-  String? defaultRole;
-  String? inchargeYN;
-  String? hodyn;
-  String? hryn;
 
-  LeaveotlistModel(
-      {this.leaveId,
-      this.typeValue,
-      this.typeName,
-      this.leaveShortName,
-      this.leaveFullName,
-      this.employeeCodeValue,
-      this.employeeCodeName,
-      this.fromDate,
-      this.toDate,
-      this.overTimeMinutes,
-      this.leaveDays,
-      this.reason,
-      this.inchargeAction,
-      this.hodAction,
-      this.deptInc,
-      this.deptHOD,
-      this.hoDNote,
-      this.hrNote,
-      this.enterDate,
-      this.relieverEmpName,
-      this.lateReasonName,
-      this.otHours,
-      this.empTel,
-      this.punchTime,
-      this.shiftTime,
-      this.defaultRole,
-      this.inchargeYN,
-      this.hodyn,
-      this.hryn});
+  LeaveotlistModel({
+    this.leaveId,
+    this.typeValue,
+    this.typeName,
+    this.leaveShortName,
+    this.leaveFullName,
+    this.employeeCodeValue,
+    this.employeeCodeName,
+    this.fromDate,
+    this.toDate,
+    this.overTimeMinutes,
+    this.leaveDays,
+    this.reason,
+    this.inchargeAction,
+    this.hodAction,
+    this.deptInc,
+    this.deptHOD,
+    this.hoDNote,
+    this.hrNote,
+    this.enterDate,
+    this.relieverEmpName,
+    this.lateReasonName,
+    this.otHours,
+    this.empTel,
+    this.punchTime,
+    this.shiftTime,
+  });
 
   LeaveotlistModel.fromJson(Map<String, dynamic> json) {
     leaveId = json['leaveId'];
@@ -120,10 +134,6 @@ class LeaveotlistModel {
     empTel = json['empTel'];
     punchTime = json['punchTime'];
     shiftTime = json['shiftTime'];
-    defaultRole = json['defaultRole'];
-    inchargeYN = json['inchargeYN'];
-    hodyn = json['hodyn'];
-    hryn = json['hryn'];
   }
 
   Map<String, dynamic> toJson() {
@@ -153,10 +163,6 @@ class LeaveotlistModel {
     data['empTel'] = this.empTel;
     data['punchTime'] = this.punchTime;
     data['shiftTime'] = this.shiftTime;
-    data['defaultRole'] = this.defaultRole;
-    data['inchargeYN']=this.inchargeYN;
-    data['hodyn']=this.hodyn;
-    data['hryn']=this.hryn;
     return data;
   }
 }
