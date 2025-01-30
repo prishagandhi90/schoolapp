@@ -5,7 +5,7 @@ class AppImage {
   static String venuslogo = "assets/Venus_Hospital_New_Logo-removebg-preview.png";
 
   static String home = "assets/image/home.png";
-  static String attendence = "assets/image/attendence.png";
+  static String attendance = "assets/image/attendence.png";
   static String dashboard = "assets/image/dashboard.png";
   static String leave = "assets/image/leave.png";
   static String overtime = "assets/image/overtime.png";

@@ -21,7 +21,7 @@ class AppString {
   static String requestnewotp = "Request new OTP in ";
   static String resend = "Resend";
   static String home = "Home";
-  static String attendence = "Attendance";
+  static String attendance = "Attendance";
   static String dashboard = "Dashboard";
   static String leave = "Leave";
   static String overtime = "Over Time";

@@ -58,6 +58,19 @@ class _CustomGridviewState extends State<CustomGridview> {
       );
       return;
     }
+
+    // if (index == 7) {
+      
+    //   Get.snackbar(
+    //     AppString.noRights,
+    //     '',
+    //     colorText: AppColor.white,
+    //     backgroundColor: AppColor.black,
+    //     duration: const Duration(seconds: 2),
+    //   );
+    //   return;
+    // }
+
     dashboardController.gridOnClk(index, context);
   }
 

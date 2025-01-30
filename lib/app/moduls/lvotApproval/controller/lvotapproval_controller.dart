@@ -77,7 +77,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  void exitSelectionMode() {
+  exitSelectionMode() async {
     isSelectionMode.value = false;
     isAllSelected.value = false;
     selectedItems.clear();
@@ -375,6 +375,53 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     return [];
   }
 
+  Future<List<SaveAppRejLeaveList>> SelectAll_Leave_app_rej_List() async {
+    try {
+      // String UpdFlag = "";
+      // if (selectedRole.toString().toLowerCase() == "incharge") {
+      //   UpdFlag = "INC"; // Incharge
+      // } else if (selectedRole.toString().toLowerCase() == "hr") {
+      //   UpdFlag = "HR"; // HR
+      // } else if (selectedRole.toString().toLowerCase() == "hod") {
+      //   UpdFlag = "HOD"; // Admin
+      // }
+      isLoader.value = true;
+      update();
+
+      String url = ConstApiUrl.empAppRejLeaveOTEntryList;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      var jsonbodyObj = {"loginId": loginId, "list_Resp_LV_OT_Roles": selectedItems};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseLeaveOTList responseLeaveAppRejList = ResponseLeaveOTList.fromJson(jsonDecode(response));
+
+      if (responseLeaveAppRejList.statusCode == 200) {
+        if (responseLeaveAppRejList.message == "Y") {
+          // leavelist.removeAt(index);
+          // filteredList = leavelist.where((item) => item.typeValue == selectedLeaveType).toList();
+          await fetchLeaveOTList(selectedRole, selectedLeaveType);
+          await exitSelectionMode();
+          Get.rawSnackbar(message: "Leave approved successfully!");
+        } else {
+          Get.rawSnackbar(message: "Action failed");
+        }
+      } else if (responseLeaveAppRejList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+    } catch (e) {
+      Get.rawSnackbar(message: "An error occurred");
+    }
+    isLoader.value = false;
+    return [];
+  }
+
   Future<List<ReasonList>> fetchOTReason() async {
     try {
       isLoading = true;
@@ -597,14 +644,15 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         side: BorderSide(color: AppColor.black),
       ),
       builder: (context) {
-        final isIncharge = InchargeYN_c.value;
-        final isHOD = HODYN_c.value;
-        final isHR = HRYN_c.value;
+        return GetBuilder<LvotapprovalController>(
+            // Wrap with GetBuilder
+            builder: (controller) {
+          final isIncharge = selectedRole == "InCharge" ? true : false;
+          final isHOD = selectedRole == "HOD" ? true : false;
+          final isHR = selectedRole == "HR" ? true : false;
 
-        List<Widget> content = [];
-
-        if (isIncharge) {
-          content.addAll([
+          List<Widget> content = [];
+          List<Widget> InchargeParameters = [
             parameterWidget(
               title: AppString.reliever,
               value: leavelist[index].relieverEmpName?.toString() ?? '--:--',
@@ -617,74 +665,57 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
               title: AppString.leavetype,
               value: leavelist[index].leaveShortName?.toString() ?? '--:--',
             ),
-          ]);
-        }
+          ];
 
-        if (isHOD) {
-          content.addAll([
+          List<Widget> HODParameters = [
             parameterWidget(
               title: AppString.inchargestatus,
               value: leavelist[index].inchargeAction?.toString() ?? '--:--',
             ),
-          ]);
-        }
+          ];
 
-        if (isHR) {
-          content.addAll([
-            // parameterWidget(
-            //   title: AppString.reason,
-            //   value: leavelist[index].reason?.toString() ?? '--:--',
-            // ),
-            // parameterWidget(
-            //   title: AppString.inchargestatus,
-            //   value: leavelist[index].inchargeAction?.toString() ?? '--:--',
-            // ),
-            parameterWidget(
-              title: AppString.shiftTime,
-              value: leavelist[index].shiftTime?.toString() ?? '--:--',
-            ),
-            parameterWidget(
-              title: AppString.punchTime,
-              value: leavelist[index].punchTime?.toString() ?? '--:--',
-            ),
-            parameterWidget(
-              title: AppString.employeenote, value: '--:--', //leavelist[index].employeeNote?.toString() ?? '--:--',
-            ),
-          ]);
-        }
+          if (isIncharge) {
+            content.addAll(InchargeParameters);
+          }
 
-        return SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    const SizedBox(width: 30),
-                    const Spacer(),
-                    Container(
-                      width: 90,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                      child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(Icons.close),
-                    ),
-                    const SizedBox(width: 30),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-                ...content,
-              ],
+          if (isHOD || isHR) {
+            content.addAll(InchargeParameters);
+            content.addAll(HODParameters);
+          }
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const SizedBox(width: 30),
+                      const Spacer(),
+                      Container(
+                        width: 90,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                        child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(Icons.close),
+                      ),
+                      const SizedBox(width: 30),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                  ...content,
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }
@@ -894,165 +925,128 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           side: BorderSide(color: AppColor.black),
         ),
         builder: (context) {
-          return Column(mainAxisSize: MainAxisSize.min, children: [
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const SizedBox(width: 30),
-                const Spacer(),
-                Container(
-                  width: 90,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                  child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+          return GetBuilder<LvotapprovalController>(
+            builder: (controller) {
+              final isIncharge = selectedRole == "InCharge" ? true : false;
+              final isHOD = selectedRole == "HOD" ? true : false;
+              final isHR = selectedRole == "HR" ? true : false;
+
+              List<Widget> content = [];
+              List<Widget> InchargeParameters = [
+                parameterWidget(
+                  title: AppString.reason,
+                  value: leavelist[index].reason?.toString() ?? '--:--',
                 ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(Icons.close),
+                parameterWidget(
+                  title: AppString.shiftTime,
+                  value: leavelist[index].shiftTime?.toString() ?? '--:--',
                 ),
-                const SizedBox(
-                  width: 30,
+                parameterWidget(
+                  title: AppString.punchTime,
+                  value: leavelist[index].punchTime?.toString() ?? '--:--',
                 ),
-              ],
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.15,
-              decoration: BoxDecoration(
-                color: AppColor.lightblue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                    child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.centerLeft,
-                        child: Text(AppString.reason, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+                parameterWidget(
+                  title: AppString.employeenote,
+                  value: leavelist[index].note?.toString() ?? '--:--',
+                ),
+              ];
+
+              if (isIncharge) {
+                content.addAll(InchargeParameters);
+              }
+
+              if (isHOD || isHR) {
+                content.addAll([
+                  parameterWidget(
+                    title: AppString.reason,
+                    value: leavelist[index].reason?.toString() ?? '--:--',
                   ),
-                  Container(
-                    // height: 100,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    width: MediaQuery.of(context).size.height * 0.5,
-                    alignment: Alignment.centerLeft,
-                    child: leavelist.length > 0
-                        ? Text(
-                            leavelist[index].reason.toString(),
-                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                          )
-                        : Text('--:-- ', style: AppStyle.plus16w600),
-                  )
-                ],
-              ),
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.15,
-              decoration: BoxDecoration(
-                color: AppColor.lightblue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                    child: Container(
-                        // height: 100,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.centerLeft,
-                        child: Text(AppString.shiftTime, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+                  parameterWidget(
+                    title: AppString.inchargestatus,
+                    value: leavelist[index].inchargeAction?.toString() ?? '--:--',
                   ),
-                  Container(
-                    // height: 100,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    width: MediaQuery.of(context).size.height * 0.5,
-                    alignment: Alignment.centerLeft,
-                    child: leavelist.length > 0
-                        ? Text(
-                            leavelist[index].shiftTime.toString(),
-                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                          )
-                        : Text('--:-- ', style: AppStyle.plus16w600),
-                  )
-                ],
-              ),
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.15,
-              decoration: BoxDecoration(
-                color: AppColor.lightblue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    // width: double.infinity,
-                    // height: 45,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                    child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.centerLeft,
-                        child: Text(AppString.punchTime, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+                  parameterWidget(
+                    title: AppString.shiftTime,
+                    value: leavelist[index].shiftTime?.toString() ?? '--:--',
                   ),
-                  Container(
-                    // height: 100,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    width: MediaQuery.of(context).size.height * 0.5,
-                    alignment: Alignment.centerLeft,
-                    child: leavelist.length > 0
-                        ? Text(
-                            leavelist[index].punchTime.toString(),
-                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                          )
-                        : Text('--:-- ', style: AppStyle.plus16w600),
-                  )
-                ],
-              ),
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.15,
-              decoration: BoxDecoration(
-                color: AppColor.lightblue,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-                    child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: MediaQuery.of(context).size.height * 0.5,
-                        alignment: Alignment.centerLeft,
-                        child: Text(AppString.employeenote, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
+                  parameterWidget(
+                    title: AppString.punchTime,
+                    value: leavelist[index].punchTime?.toString() ?? '--:--',
                   ),
-                  Container(
-                    // height: 100,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    width: MediaQuery.of(context).size.height * 0.5,
-                    alignment: Alignment.centerLeft,
-                    child: leavelist.length > 0
-                        ? Text(
-                            leavelist[index].punchTime.toString(),
-                            style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-                          )
-                        : Text('--:-- ', style: AppStyle.plus16w600),
-                  )
-                ],
-              ),
-            )
-          ]);
+                  parameterWidget(
+                    title: AppString.employeenote,
+                    value: leavelist[index].note?.toString() ?? '--:--',
+                  ),
+                ]);
+              }
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const SizedBox(width: 30),
+                          const Spacer(),
+                          Container(
+                            width: 90,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                            child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(Icons.close),
+                          ),
+                          const SizedBox(width: 30),
+                        ],
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                      ...content,
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
         });
+  }
+
+  
+
+  resetForm() async {
+    Get.back();
+    // await changeTab(0);
+    tabController_Lv.animateTo(0);
+    await exitSelectionMode();
+    // await fetchLeaveOTList("", "LV");
+    // fromDateController.clear();
+    // toDateController.clear();
+    // leaveNameController.clear();
+    // leaveValueController.clear();
+    // daysController.clear();
+    // reasonController.clear();
+    // noteController.clear();
+    // relieverNameController.clear();
+    // relieverValueController.clear();
+    // delayreasonNameController.clear();
+    // delayreasonIdController.clear();
+    // leftleavedays.value = '';
+    // leftLeaveDaysController.text = '';
+    // overtimeController.fromDateController.clear();
+    // overtimeController.toDateController.clear();
+    // overtimeController.fromTimeController.clear();
+    // overtimeController.toTimeController.clear();
+    // overtimeController.noteController.clear();
+    // overtimeController.otMinutesController.clear();
+    // overtimeController.delayreasonName_OT_Controller.clear();
+    // overtimeController.delayreasonId_OT_Controller.clear();
+    // tabController_Leave.animateTo(0);
+    // overtimeController.tabController_OT.animateTo(0);
+    update();
   }
 }

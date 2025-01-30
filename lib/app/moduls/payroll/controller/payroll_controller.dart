@@ -39,6 +39,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   var isDutyScheduleNavigating = false.obs;
   var isLVOTApprovalNavigating = false.obs;
   var isLoaderPayroll = false.obs;
+  var isLVOTAppr_Rights = false.obs;
 
   @override
   void onInit() {
@@ -238,5 +239,46 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
 
     filteredList = tempList;
     update();
+  }
+
+  Future<dynamic> getScreenRightsData(String moduleName) async {
+    try {
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+      String url = ConstApiUrl.empAppScreenRights;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "Module": moduleName};
+
+      final ApiController apiController = Get.find<ApiController>();
+      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+
+      if (empSummDashboardDataResponse.statusCode == 200) {
+        if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
+          isLoading.value = false;
+          empSummDashboardTable = empSummDashboardDataResponse.data!;
+          update();
+          return empSummDashboardTable;
+        } else {
+          empSummDashboardTable = [];
+        }
+        update();
+      } else if (empSummDashboardDataResponse.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (empSummDashboardDataResponse.statusCode == 400) {
+        empSummDashboardTable = [];
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
   }
 }

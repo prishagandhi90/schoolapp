@@ -66,6 +66,7 @@ class LeaveotlistModel {
   double? overTimeMinutes;
   String? leaveDays;
   String? reason;
+  String? note;
   String? inchargeAction;
   String? hodAction;
   String? deptInc;
@@ -93,6 +94,7 @@ class LeaveotlistModel {
     this.overTimeMinutes,
     this.leaveDays,
     this.reason,
+    this.note,
     this.inchargeAction,
     this.hodAction,
     this.deptInc,
@@ -121,6 +123,7 @@ class LeaveotlistModel {
     overTimeMinutes = json['overTimeMinutes'];
     leaveDays = json['leaveDays'];
     reason = json['reason'];
+    note = json['note'];
     inchargeAction = json['inchargeAction'];
     hodAction = json['hodAction'];
     deptInc = json['deptInc'];
@@ -150,6 +153,7 @@ class LeaveotlistModel {
     data['overTimeMinutes'] = this.overTimeMinutes;
     data['leaveDays'] = this.leaveDays;
     data['reason'] = this.reason;
+    data['note'] = this.note;
     data['inchargeAction'] = this.inchargeAction;
     data['hodAction'] = this.hodAction;
     data['deptInc'] = this.deptInc;

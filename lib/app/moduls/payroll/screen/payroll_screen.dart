@@ -403,13 +403,16 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: Image.asset(
-                                                AppImage.attendence,
+                                                AppImage.attendance,
                                                 color: AppColor.primaryColor,
                                               ),
                                             ),
                                           ),
                                           const SizedBox(height: 5),
-                                          Text(AppString.attendence, style: AppStyle.plus12),
+                                          Text(
+                                            AppString.attendance,
+                                            style: AppStyle.plus12,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -668,6 +671,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   await dashboardController.getDashboardDataUsingToken();
                                                 });
                                                 final lvotapprovalController = Get.put(LvotapprovalController());
+                                                await lvotapprovalController.resetForm();
                                                 await lvotapprovalController.fetchLeaveOTList("", "LV");
                                                 if (lvotapprovalController.leavelist.isNotEmpty) {
                                                   // lvotapprovalController.selectedRole = lvotapprovalController.leavelist.defaultRole!;

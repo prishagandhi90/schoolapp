@@ -28,7 +28,7 @@ class AttendanceScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: AppColor.white,
               title: Text(
-                AppString.attendence,
+                AppString.attendance,
                 style: TextStyle(
                   color: AppColor.primaryColor,
                   fontWeight: FontWeight.w700,

@@ -18,239 +18,237 @@ class OtlistScreen extends GetView<LvotapprovalController> {
           body: Column(
             children: [
               Expanded(
-                child: controller.isLoader.value
-                    ? const Center(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 100),
-                          child: ProgressWithIcon(),
-                        ),
-                      )
-                    : controller.filteredList.isNotEmpty
-                        ? Column(
-                            children: [
-                              Expanded(
-                                child: Scrollbar(
-                                  thickness: 4, //According to your choice
-                                  thumbVisibility: false, //
-                                  radius: Radius.circular(10),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 45),
-                                    child: ListView.builder(
-                                      itemCount: controller.filteredList.length,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        final leaveItem = controller.filteredList[index];
-                                        final isSelected = controller.selectedItems.contains(leaveItem);
+                child: controller.filteredList.isNotEmpty
+                    ? Column(
+                        children: [
+                          Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                await controller.fetchLeaveOTList(controller.selectedRole, controller.selectedLeaveType);
+                              },
+                              child: Scrollbar(
+                                thickness: 4, //According to your choice
+                                thumbVisibility: false, //
+                                radius: Radius.circular(10),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 45),
+                                  child: ListView.builder(
+                                    itemCount: controller.filteredList.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      final leaveItem = controller.filteredList[index];
+                                      final isSelected = controller.selectedItems.contains(leaveItem);
 
-                                        // Divider color logic
-                                        final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
-                                        final showRedDivider = leaveItem.inchargeAction == "Rejected";
+                                      // Divider color logic
+                                      final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
+                                      final showRedDivider = leaveItem.inchargeAction == "Rejected";
 
-                                        return GestureDetector(
-                                          onLongPress: () {
-                                            controller.enterSelectionMode(index);
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Slidable(
-                                              key: ValueKey(leaveItem.employeeCodeName),
-                                              endActionPane: ActionPane(
-                                                motion: const DrawerMotion(),
-                                                children: [
-                                                  SlidableAction(
-                                                    onPressed: (_) {
-                                                      controller.showApproveDialog(context, index);
-                                                    },
-                                                    backgroundColor: AppColor.lightwhite,
-                                                    foregroundColor: Colors.black,
-                                                    icon: Icons.check,
-                                                    // label: 'Approve',
-                                                  ),
-                                                  SlidableAction(
-                                                    onPressed: (_) {
-                                                      controller.showRejectDialog(context, index);
-                                                      // controller.update();
-                                                    },
-                                                    backgroundColor: AppColor.lightred,
-                                                    foregroundColor: Colors.black,
-                                                    icon: Icons.close,
-                                                    // label: 'Reject',
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Container(
-                                                width: double.infinity,
-                                                padding: const EdgeInsets.all(12.0),
-                                                decoration: BoxDecoration(
-                                                  color: AppColor.lightblue, // Background color
-                                                  borderRadius: BorderRadius.circular(10),
+                                      return GestureDetector(
+                                        onLongPress: () {
+                                          controller.enterSelectionMode(index);
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Slidable(
+                                            key: ValueKey(leaveItem.employeeCodeName),
+                                            endActionPane: ActionPane(
+                                              motion: const DrawerMotion(),
+                                              children: [
+                                                SlidableAction(
+                                                  onPressed: (_) {
+                                                    controller.showApproveDialog(context, index);
+                                                  },
+                                                  backgroundColor: AppColor.lightwhite,
+                                                  foregroundColor: Colors.black,
+                                                  icon: Icons.check,
+                                                  // label: 'Approve',
                                                 ),
-                                                child: IntrinsicHeight(
-                                                  child: Row(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      // Add left divider with dynamic color
-                                                      if (showPurpleDivider)
-                                                        Container(
-                                                          width: 5,
-                                                          height: double.infinity,
-                                                          color: Colors.purple,
-                                                        ),
-                                                      const SizedBox(width: 3),
-                                                      if (showRedDivider)
-                                                        Container(
-                                                          width: 5,
-                                                          height: double.infinity,
-                                                          color: Colors.red,
-                                                        ),
-                                                      const SizedBox(width: 8), // Space after divider
-                                                      // Checkbox logic
-                                                      if (controller.isSelectionMode.value)
-                                                        Checkbox(
-                                                          value: isSelected,
-                                                          onChanged: (value) {
-                                                            controller.toggleSelection(index, value!);
-                                                          },
-                                                        ),
+                                                SlidableAction(
+                                                  onPressed: (_) {
+                                                    controller.showRejectDialog(context, index);
+                                                    // controller.update();
+                                                  },
+                                                  backgroundColor: AppColor.lightred,
+                                                  foregroundColor: Colors.black,
+                                                  icon: Icons.close,
+                                                  // label: 'Reject',
+                                                ),
+                                              ],
+                                            ),
+                                            child: Container(
+                                              width: double.infinity,
+                                              padding: const EdgeInsets.all(12.0),
+                                              decoration: BoxDecoration(
+                                                color: AppColor.lightblue, // Background color
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: IntrinsicHeight(
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    // Add left divider with dynamic color
+                                                    if (showPurpleDivider)
                                                       Container(
-                                                        width: 50, // Fixed width for consistent alignment
-                                                        alignment: Alignment.topLeft,
-                                                        child: Text(
-                                                          leaveItem.otHours.toString(),
-                                                          style: const TextStyle(
-                                                            fontSize: 20,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
-                                                        ),
+                                                        width: 5,
+                                                        height: double.infinity,
+                                                        color: Colors.purple,
                                                       ),
-                                                      // Vertical Divider
+                                                    const SizedBox(width: 3),
+                                                    if (showRedDivider)
                                                       Container(
-                                                        width: 2, // Thickness of the divider
-                                                        color: AppColor.grey,
+                                                        width: 5,
+                                                        height: double.infinity,
+                                                        color: Colors.red,
                                                       ),
-                                                      // Text(
-                                                      //   leaveItem.otHours.toString(),
-                                                      //   style: const TextStyle(
-                                                      //     fontSize: 20,
-                                                      //     fontWeight: FontWeight.bold,
-                                                      //   ),
-                                                      // ),
-                                                      // Padding(
-                                                      //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                      //   child: VerticalDivider(
-                                                      //     thickness: 2,
-                                                      //     color: AppColor.grey, // Divider color
-                                                      //   ),
-                                                      // ),
-                                                      // // Divider and Name
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            children: [
-                                                              Text(
-                                                                leaveItem.employeeCodeName.toString(),
-                                                                style: TextStyle(
-                                                                  fontSize: 17,
-                                                                  fontWeight: FontWeight.bold,
-                                                                ),
-                                                                softWrap: true,
-                                                                maxLines: 2,
-                                                                overflow: TextOverflow.ellipsis,
-                                                              ),
-                                                              SizedBox(height: 10),
-                                                              Row(
-                                                                children: [
-                                                                  // From Date
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(
-                                                                        "From",
-                                                                        style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 14,
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(height: 4),
-                                                                      Text(
-                                                                        leaveItem.fromDate.toString(),
-                                                                        style: TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.black54,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(width: 16),
-                                                                  // To Date
-                                                                  Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(
-                                                                        "To",
-                                                                        style: TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 14,
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(height: 4),
-                                                                      Text(
-                                                                        leaveItem.toDate.toString(),
-                                                                        style: TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.black54,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () async {
-                                                          await controller.otlistbottomsheet(context, index);
+                                                    const SizedBox(width: 8), // Space after divider
+                                                    // Checkbox logic
+                                                    if (controller.isSelectionMode.value)
+                                                      Checkbox(
+                                                        value: isSelected,
+                                                        onChanged: (value) {
+                                                          controller.toggleSelection(index, value!);
                                                         },
-                                                        child: Image.asset(
-                                                          'assets/image/bottomsheet.png',
-                                                          width: 50,
-                                                          height: 50,
-                                                          alignment: Alignment.topRight,
+                                                      ),
+                                                    Container(
+                                                      width: 50, // Fixed width for consistent alignment
+                                                      alignment: Alignment.topLeft,
+                                                      child: Text(
+                                                        leaveItem.otHours.toString(),
+                                                        style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight: FontWeight.bold,
                                                         ),
                                                       ),
-                                                      // IconButton(
-                                                      //   icon: Icon(Icons.more_vert),
-                                                      //   onPressed: () {
-                                                      //     controller.otlistbottomsheet(context, index);
-                                                      //   },
-                                                      // ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    // Vertical Divider
+                                                    Container(
+                                                      width: 2, // Thickness of the divider
+                                                      color: AppColor.grey,
+                                                    ),
+                                                    // Text(
+                                                    //   leaveItem.otHours.toString(),
+                                                    //   style: const TextStyle(
+                                                    //     fontSize: 20,
+                                                    //     fontWeight: FontWeight.bold,
+                                                    //   ),
+                                                    // ),
+                                                    // Padding(
+                                                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                    //   child: VerticalDivider(
+                                                    //     thickness: 2,
+                                                    //     color: AppColor.grey, // Divider color
+                                                    //   ),
+                                                    // ),
+                                                    // // Divider and Name
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              leaveItem.employeeCodeName.toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 17,
+                                                                fontWeight: FontWeight.bold,
+                                                              ),
+                                                              softWrap: true,
+                                                              maxLines: 2,
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+                                                            SizedBox(height: 10),
+                                                            Row(
+                                                              children: [
+                                                                // From Date
+                                                                Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "From",
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.bold,
+                                                                        fontSize: 14,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(height: 4),
+                                                                    Text(
+                                                                      leaveItem.fromDate.toString(),
+                                                                      style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        color: Colors.black54,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(width: 16),
+                                                                // To Date
+                                                                Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "To",
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.bold,
+                                                                        fontSize: 14,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(height: 4),
+                                                                    Text(
+                                                                      leaveItem.toDate.toString(),
+                                                                      style: TextStyle(
+                                                                        fontSize: 14,
+                                                                        color: Colors.black54,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        await controller.otlistbottomsheet(context, index);
+                                                      },
+                                                      child: Image.asset(
+                                                        'assets/image/bottomsheet.png',
+                                                        width: 50,
+                                                        height: 50,
+                                                        alignment: Alignment.topRight,
+                                                      ),
+                                                    ),
+                                                    // IconButton(
+                                                    //   icon: Icon(Icons.more_vert),
+                                                    //   onPressed: () {
+                                                    //     controller.otlistbottomsheet(context, index);
+                                                    //   },
+                                                    // ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
-                              )
-                            ],
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Center(
-                              child: Text(
-                                "No data available",
-                                style: AppStyle.fontfamilyplus,
                               ),
                             ),
+                          )
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Center(
+                          child: Text(
+                            "No data available",
+                            style: AppStyle.fontfamilyplus,
                           ),
+                        ),
+                      ),
               ),
             ],
           ),

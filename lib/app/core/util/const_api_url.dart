@@ -20,6 +20,7 @@ class ConstApiUrl {
   static const empSendEMPMobileOtpAPI = "$empLoginUrl/SendEMPMobileOTP";
   static const empMispunchDetailAPI = "$empUrl/GetMisPunchDtl_EmpInfo";
   static const empDashboardSummaryAPI = "$empUrl/GetEmpSummary_Dashboard";
+  static const empAppScreenRights = "$empUrl/GetEmpAppScreenRights";
   static const empLeaveDaysAPI = "$empUrl/GetLeaveDays";
   static const empLeftLeavesAPI = "$empUrl/GetAvlLvCount";
   static const empLeaveNamesAPI = "$empUrl/GetLeaveNames";
@@ -42,4 +43,5 @@ class ConstApiUrl {
   static const empLeaveOTapprovalList = "$empUrl/EmpApp_Get_LV_OT_Roles";
   static const empLeaveAppRejListData = "$empUrl/EmpApp_Appr_Rej_LV_OT_Entry";
   static const empGetLeaveRejectReason = "$empUrl/GetLeaveRejectReason";
+  static const empAppRejLeaveOTEntryList = "$empUrl/EmpApp_Appr_Rej_LV_OT_Entry_List";
 }

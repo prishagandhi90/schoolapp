@@ -141,10 +141,10 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.attendence,
+              Image.asset(AppImage.attendance,
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.attendence,
+              Text(AppString.attendance,
                   style: TextStyle(
                       color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
             ],
@@ -154,9 +154,9 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.attendence, color: AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.attendance, color: AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.attendence, style: TextStyle(color: AppColor.black, fontSize: 12)),
+              Text(AppString.attendance, style: TextStyle(color: AppColor.black, fontSize: 12)),
             ],
           ),
         ),
