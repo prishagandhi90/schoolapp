@@ -4,18 +4,19 @@ class ResponseLeaveAppRejList {
   String? message;
   List<SaveAppRejLeaveList>? data;
 
-  ResponseLeaveAppRejList(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseLeaveAppRejList({this.statusCode, this.isSuccess, this.message, this.data});
 
   ResponseLeaveAppRejList.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <SaveAppRejLeaveList>[];
       json['data'].forEach((v) {
         data!.add(new SaveAppRejLeaveList.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

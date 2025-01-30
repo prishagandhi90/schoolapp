@@ -1,4 +1,3 @@
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
@@ -44,8 +43,11 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                       final showRedDivider = leaveItem.inchargeAction == "Rejected";
 
                                       return GestureDetector(
-                                        onLongPress: () {
-                                          controller.enterSelectionMode(index);
+                                        onLongPress: () async {
+                                          if (controller.selectedRole == "HOD")
+                                            await controller.enterSelectionMode(index);
+                                          else
+                                            await controller.exitSelectionMode();
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -79,7 +81,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                               width: double.infinity,
                                               padding: const EdgeInsets.all(12.0),
                                               decoration: BoxDecoration(
-                                                color: AppColor.lightblue, // Background color
+                                                color: isSelected ? AppColor.lightred.withOpacity(0.3) : AppColor.lightblue,
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: IntrinsicHeight(
@@ -105,8 +107,8 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                     if (controller.isSelectionMode.value)
                                                       Checkbox(
                                                         value: isSelected,
-                                                        onChanged: (value) {
-                                                          controller.toggleSelection(index, value!);
+                                                        onChanged: (value) async {
+                                                          await controller.toggleSelection(index, value!);
                                                         },
                                                       ),
                                                     Container(

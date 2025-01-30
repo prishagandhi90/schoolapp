@@ -19,6 +19,7 @@ class AppImage {
   static String filter = "assets/image/Vector.png";
   static String medicine = "assets/image/medicine.png";
   static String qrcode = "assets/image/qr-code.png";
+  static String lvotapproval = "assets/image/lvotapp.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }

@@ -10,11 +10,13 @@ class RsponseLeaveReason {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <LeaveReasonTable>[];
       json['data'].forEach((v) {
         data!.add(new LeaveReasonTable.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

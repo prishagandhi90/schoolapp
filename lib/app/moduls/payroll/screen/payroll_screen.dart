@@ -381,6 +381,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                         children: [
                                           GestureDetector(
                                             onTap: () async {
+                                              if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                                if (controller.empModuleScreenRightsTable[0].rightsYN == "N") {
+                                                  Get.snackbar(
+                                                    "You don't have access to this screen",
+                                                    '',
+                                                    colorText: AppColor.white,
+                                                    backgroundColor: AppColor.black,
+                                                    duration: const Duration(seconds: 1),
+                                                  );
+                                                  return;
+                                                }
+                                              }
+
                                               final bottomBarController = Get.put(BottomBarController());
                                               final attendanceController = Get.put(AttendenceController());
                                               await attendanceController.resetData();
@@ -402,15 +415,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     color: AppColor.primaryColor,
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
-                                              child: Image.asset(
-                                                AppImage.attendance,
-                                                color: AppColor.primaryColor,
-                                              ),
+                                              child: controller.screens.isNotEmpty
+                                                  ? Image.asset(
+                                                      controller.getImage(controller.screens[0].screenName.toString()),
+                                                      color: AppColor.primaryColor,
+                                                    )
+                                                  : SizedBox(),
                                             ),
                                           ),
                                           const SizedBox(height: 5),
                                           Text(
-                                            AppString.attendance,
+                                            controller.screens.isNotEmpty
+                                                ? controller.getScreenName(controller.screens[0].screenName.toString())
+                                                : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -423,6 +440,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
+                                            if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                              if (controller.empModuleScreenRightsTable[1].rightsYN == "N") {
+                                                Get.snackbar(
+                                                  "You don't have access to this screen",
+                                                  '',
+                                                  colorText: AppColor.white,
+                                                  backgroundColor: AppColor.black,
+                                                  duration: const Duration(seconds: 1),
+                                                );
+                                                return;
+                                              }
+                                            }
+
                                             final bottomBarController = Get.put(BottomBarController());
                                             bottomBarController.currentIndex.value = -1;
 
@@ -454,16 +484,22 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   color: AppColor.primaryColor,
                                                 ),
                                                 borderRadius: BorderRadius.circular(10)),
-                                            child: Image.asset(
-                                              AppImage.mispunch,
-                                              // height: 35, //50
-                                              // width: 35, //50
-                                              color: AppColor.primaryColor,
-                                            ),
+                                            child: controller.screens.isNotEmpty
+                                                ? Image.asset(
+                                                    controller.getImage(controller.screens[1].screenName.toString()),
+                                                    color: AppColor.primaryColor,
+                                                  )
+                                                : SizedBox(),
                                           ),
                                         ),
                                         const SizedBox(height: 5),
-                                        Text(AppString.mispunchinfo, style: AppStyle.plus12),
+                                        // Text(AppString.mispunchinfo, style: AppStyle.plus12),
+                                        Text(
+                                          controller.screens.isNotEmpty
+                                              ? controller.getScreenName(controller.screens[1].screenName.toString())
+                                              : "", // Empty string instead of SizedBox()
+                                          style: AppStyle.plus12,
+                                        ),
                                       ],
                                     )),
                                     const Padding(padding: EdgeInsets.symmetric(horizontal: 7)),
@@ -473,6 +509,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                         children: [
                                           GestureDetector(
                                             onTap: () async {
+                                              if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                                if (controller.empModuleScreenRightsTable[2].rightsYN == "N") {
+                                                  Get.snackbar(
+                                                    "You don't have access to this screen",
+                                                    '',
+                                                    colorText: AppColor.white,
+                                                    backgroundColor: AppColor.black,
+                                                    duration: const Duration(seconds: 1),
+                                                  );
+                                                  return;
+                                                }
+                                              }
+
                                               final bottomBarController = Get.put(BottomBarController());
                                               // final attendanceController = Get.put(AttendenceController());
                                               // await attendanceController.resetData();
@@ -521,14 +570,22 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     color: AppColor.primaryColor,
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
-                                              child: Image.asset(
-                                                AppImage.leave,
-                                                color: AppColor.primaryColor,
-                                              ),
+                                              child: controller.screens.isNotEmpty
+                                                  ? Image.asset(
+                                                      controller.getImage(controller.screens[2].screenName.toString()),
+                                                      color: AppColor.primaryColor,
+                                                    )
+                                                  : SizedBox(),
                                             ),
                                           ),
                                           const SizedBox(height: 5),
-                                          Text(AppString.leaveentry, style: AppStyle.plus12),
+                                          // Text(AppString.leaveentry, style: AppStyle.plus12),
+                                          Text(
+                                            controller.screens.isNotEmpty
+                                                ? controller.getScreenName(controller.screens[2].screenName.toString())
+                                                : "", // Empty string instead of SizedBox()
+                                            style: AppStyle.plus12,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -539,6 +596,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                         children: [
                                           GestureDetector(
                                             onTap: () async {
+                                              if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                                if (controller.empModuleScreenRightsTable[3].rightsYN == "N") {
+                                                  Get.snackbar(
+                                                    "You don't have access to this screen",
+                                                    '',
+                                                    colorText: AppColor.white,
+                                                    backgroundColor: AppColor.black,
+                                                    duration: const Duration(seconds: 1),
+                                                  );
+                                                  return;
+                                                }
+                                              }
+
                                               final bottomBarController = Get.put(BottomBarController());
                                               final leaveController = Get.put(LeaveController());
                                               await leaveController.resetForm();
@@ -576,14 +646,22 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     color: AppColor.primaryColor,
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
-                                              child: Image.asset(
-                                                AppImage.overtime,
-                                                color: AppColor.primaryColor,
-                                              ),
+                                              child: controller.screens.isNotEmpty
+                                                  ? Image.asset(
+                                                      controller.getImage(controller.screens[3].screenName.toString()),
+                                                      color: AppColor.primaryColor,
+                                                    )
+                                                  : SizedBox(),
                                             ),
                                           ),
                                           const SizedBox(height: 5),
-                                          Text(AppString.overtime, style: AppStyle.plus12),
+                                          // Text(AppString.overtime, style: AppStyle.plus12),
+                                          Text(
+                                            controller.screens.isNotEmpty
+                                                ? controller.getScreenName(controller.screens[3].screenName.toString())
+                                                : "", // Empty string instead of SizedBox()
+                                            style: AppStyle.plus12,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -603,6 +681,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                               onTap: () async {
                                                 if (controller.isDutyScheduleNavigating.value) return;
                                                 controller.isDutyScheduleNavigating.value = true;
+
+                                                if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                                  if (controller.empModuleScreenRightsTable[4].rightsYN == "N") {
+                                                    Get.snackbar(
+                                                      "You don't have access to this screen",
+                                                      '',
+                                                      colorText: AppColor.white,
+                                                      backgroundColor: AppColor.black,
+                                                      duration: const Duration(seconds: 1),
+                                                    );
+                                                    return;
+                                                  }
+                                                }
 
                                                 final bottomBarController = Get.put(BottomBarController());
                                                 bottomBarController.currentIndex.value = -1;
@@ -634,14 +725,22 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
-                                                child: Image.asset(
-                                                  AppImage.dutySchedule,
-                                                  color: AppColor.primaryColor,
-                                                ),
+                                                child: controller.screens.isNotEmpty
+                                                    ? Image.asset(
+                                                        controller.getImage(controller.screens[4].screenName.toString()),
+                                                        color: AppColor.primaryColor,
+                                                      )
+                                                    : SizedBox(),
                                               ),
                                             ),
                                             const SizedBox(height: 5),
-                                            Text(AppString.dutyschedule, style: AppStyle.plus12),
+                                            // Text(AppString.dutyschedule, style: AppStyle.plus12),
+                                            Text(
+                                              controller.screens.isNotEmpty
+                                                  ? controller.getScreenName(controller.screens[4].screenName.toString())
+                                                  : "", // Empty string instead of SizedBox()
+                                              style: AppStyle.plus12,
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -654,6 +753,19 @@ class PayrollScreen extends GetView<PayrollController> {
                                               onTap: () async {
                                                 if (controller.isLVOTApprovalNavigating.value) return;
                                                 controller.isLVOTApprovalNavigating.value = true;
+
+                                                if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                                  if (controller.empModuleScreenRightsTable[5].rightsYN == "N") {
+                                                    Get.snackbar(
+                                                      "You don't have access to this screen",
+                                                      '',
+                                                      colorText: AppColor.white,
+                                                      backgroundColor: AppColor.black,
+                                                      duration: const Duration(seconds: 1),
+                                                    );
+                                                    return;
+                                                  }
+                                                }
 
                                                 final bottomBarController = Get.put(BottomBarController());
                                                 bottomBarController.currentIndex.value = -1;
@@ -673,17 +785,6 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 final lvotapprovalController = Get.put(LvotapprovalController());
                                                 await lvotapprovalController.resetForm();
                                                 await lvotapprovalController.fetchLeaveOTList("", "LV");
-                                                if (lvotapprovalController.leavelist.isNotEmpty) {
-                                                  // lvotapprovalController.selectedRole = lvotapprovalController.leavelist.defaultRole!;
-                                                  // lvotapprovalController.InchargeYN_c.value =
-                                                  //     lvotapprovalController.leavelist[0].inchargeYN! == "Y" ? true : false;
-                                                  // lvotapprovalController.HODYN_c.value =
-                                                  //     lvotapprovalController.leavelist[0].hodyn! == "Y" ? true : false;
-                                                  // lvotapprovalController.HRYN_c.value =
-                                                  //     lvotapprovalController.leavelist[0].hryn! == "Y" ? true : false;
-
-                                                  // lvotapprovalController.changeTab(0);
-                                                }
                                                 controller.isLVOTApprovalNavigating.value = false;
                                               },
                                               child: Container(
@@ -696,14 +797,22 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
-                                                child: Image.asset(
-                                                  AppImage.mispunch,
-                                                  color: AppColor.primaryColor,
-                                                ),
+                                                child: controller.screens.isNotEmpty
+                                                    ? Image.asset(
+                                                        controller.getImage(controller.screens[5].screenName.toString()),
+                                                        color: AppColor.primaryColor,
+                                                      )
+                                                    : SizedBox(),
                                               ),
                                             ),
                                             const SizedBox(height: 5),
-                                            Text(AppString.lvotapproval, style: AppStyle.plus12),
+                                            // Text(AppString.lvotapproval, style: AppStyle.plus12),
+                                            Text(
+                                              controller.screens.isNotEmpty
+                                                  ? controller.getScreenName(controller.screens[5].screenName.toString())
+                                                  : "", // Empty string instead of SizedBox()
+                                              style: AppStyle.plus12,
+                                            ),
                                           ],
                                         ),
                                       ),

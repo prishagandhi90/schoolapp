@@ -47,7 +47,7 @@ class LvotapprovalScreen extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: ElevatedButton(
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     await controller.exitSelectionMode();
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: AppColor.lightblue),
@@ -73,6 +73,8 @@ class LvotapprovalScreen extends StatelessWidget {
                                     // isEnabled: controller.getRoleStatus('InCharge'), // Check API status
                                     isEnabled: controller.InchargeYN_c.value,
                                     onTap: () async {
+                                      await controller.clearSearch();
+                                      await controller.activateSearch(false);
                                       controller.InchargeYN_c.value
                                           ? await controller.fetchLeaveOTList("InCharge", controller.selectedLeaveType)
                                           : null;
@@ -91,6 +93,8 @@ class LvotapprovalScreen extends StatelessWidget {
                                     // isEnabled: controller.getRoleStatus('HOD'), // Check API status
                                     isEnabled: controller.HODYN_c.value,
                                     onTap: () async {
+                                      await controller.clearSearch();
+                                      await controller.activateSearch(false);
                                       controller.HODYN_c.value
                                           ? await controller.fetchLeaveOTList('HOD', controller.selectedLeaveType)
                                           : null;
@@ -109,6 +113,8 @@ class LvotapprovalScreen extends StatelessWidget {
                                     // isEnabled: controller.getRoleStatus('HR'), // Check API status
                                     isEnabled: controller.HRYN_c.value,
                                     onTap: () async {
+                                      await controller.clearSearch();
+                                      await controller.activateSearch(false);
                                       controller.HRYN_c.value
                                           ? await controller.fetchLeaveOTList('HR', controller.selectedLeaveType)
                                           : null;
@@ -134,8 +140,9 @@ class LvotapprovalScreen extends StatelessWidget {
                                         children: [
                                           Checkbox(
                                             value: controller.isAllSelected.value,
-                                            onChanged: (value) {
-                                              controller.toggleSelectAll(value!);
+                                            onChanged: (value) async {
+                                              await controller.clearSearch();
+                                              await controller.toggleSelectAll(value!);
                                             },
                                           ),
                                           const Text(
@@ -198,8 +205,8 @@ class LvotapprovalScreen extends StatelessWidget {
                                     if (!controller.isSearchActive)
                                       IconButton(
                                         icon: const Icon(Icons.search),
-                                        onPressed: () {
-                                          controller.activateSearch(true);
+                                        onPressed: () async {
+                                          await controller.activateSearch(true);
                                         },
                                       ),
                                     if (controller.isSearchActive)
@@ -227,9 +234,9 @@ class LvotapprovalScreen extends StatelessWidget {
                                               ),
                                               IconButton(
                                                 icon: const Icon(Icons.cancel),
-                                                onPressed: () {
-                                                  controller.clearSearch();
-                                                  controller.activateSearch(false);
+                                                onPressed: () async {
+                                                  await controller.clearSearch();
+                                                  await controller.activateSearch(false);
                                                 },
                                               ),
                                             ],

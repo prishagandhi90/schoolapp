@@ -10,11 +10,13 @@ class ResponseLeaveDelayReason {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <LeaveDelayReason>[];
       json['data'].forEach((v) {
         data!.add(new LeaveDelayReason.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

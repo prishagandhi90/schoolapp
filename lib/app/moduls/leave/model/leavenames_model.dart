@@ -10,11 +10,13 @@ class ResponseLeaveNames {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <LeaveNamesTable>[];
       json['data'].forEach((v) {
         data!.add(new LeaveNamesTable.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

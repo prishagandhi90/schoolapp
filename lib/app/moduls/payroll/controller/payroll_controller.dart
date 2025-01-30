@@ -1,17 +1,21 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/screen/dutyschedule_screen.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
+import 'package:emp_app/app/moduls/lvotApproval/screen/lvotapproval_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/payroll/model/empsummdash_model.dart';
@@ -31,19 +35,22 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   var isLoading = false.obs;
   late List<Payroll> payrolltable = [];
   TextEditingController textEditingController = TextEditingController();
-  String tokenNo = '', loginId = '';
+  String tokenNo = '', loginId = '', empId = '';
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   List<EmpSummDashboardTable> empSummDashboardTable = [];
+  List<ModuleScreenRights> empModuleScreenRightsTable = [];
   final ScrollController payrollScrollController = ScrollController();
   var isDutyScheduleNavigating = false.obs;
   var isLVOTApprovalNavigating = false.obs;
   var isLoaderPayroll = false.obs;
   var isLVOTAppr_Rights = false.obs;
+  List<ModuleScreenRights> screens = [];
 
   @override
   void onInit() {
     super.onInit();
+    loadScreens();
     getProfileData();
     // hideBottomBar.value = false;
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,6 +82,54 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     // focusNode.dispose();
     // textEditingController.dispose();
     super.onClose();
+  }
+
+  void loadScreens() async {
+    List<ModuleScreenRights> fetchedScreens = await fetchModuleScreens();
+    screens = fetchedScreens;
+    update();
+  }
+
+  Future<dynamic> fetchModuleScreens() async {
+    try {
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+      String url = ConstApiUrl.empAppScreenRights;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "EmpId": empId, "ModuleName": "Payroll"};
+
+      final ApiController apiController = Get.find<ApiController>();
+      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
+
+      if (responseModuleData.statusCode == 200) {
+        if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
+          isLoading.value = false;
+          empModuleScreenRightsTable = responseModuleData.data!;
+          update();
+          return empModuleScreenRightsTable;
+        } else {
+          empModuleScreenRightsTable = [];
+        }
+        update();
+      } else if (responseModuleData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseModuleData.statusCode == 400) {
+        empModuleScreenRightsTable = [];
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
   }
 
   Future<dynamic> getProfileData() async {
@@ -222,6 +277,31 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         });
         isDutyScheduleNavigating.value = false;
         break;
+      case 5:
+        if (isLVOTApprovalNavigating.value) return;
+        isLVOTApprovalNavigating.value = true;
+
+        final bottomBarController = Get.put(BottomBarController());
+        bottomBarController.currentIndex.value = -1;
+
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: const LvotapprovalScreen(),
+          withNavBar: true,
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        ).then((value) async {
+          bottomBarController.persistentController.value.index = 0;
+          bottomBarController.currentIndex.value = 0;
+          hideBottomBar.value = false;
+          var dashboardController = Get.put(DashboardController());
+          await dashboardController.getDashboardDataUsingToken();
+        });
+        final lvotapprovalController = Get.put(LvotapprovalController());
+        await lvotapprovalController.resetForm();
+        await lvotapprovalController.fetchLeaveOTList("", "LV");
+        if (lvotapprovalController.leavelist.isNotEmpty) {}
+        isLVOTApprovalNavigating.value = false;
+        break;
       default:
     }
   }
@@ -241,44 +321,41 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     update();
   }
 
-  Future<dynamic> getScreenRightsData(String moduleName) async {
-    try {
-      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
-      String url = ConstApiUrl.empAppScreenRights;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
-      var jsonbodyObj = {"loginId": loginId, "Module": moduleName};
-
-      final ApiController apiController = Get.find<ApiController>();
-      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
-
-      if (empSummDashboardDataResponse.statusCode == 200) {
-        if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
-          isLoading.value = false;
-          empSummDashboardTable = empSummDashboardDataResponse.data!;
-          update();
-          return empSummDashboardTable;
-        } else {
-          empSummDashboardTable = [];
-        }
-        update();
-      } else if (empSummDashboardDataResponse.statusCode == 401) {
-        pref.clear();
-        Get.offAll(const LoginScreen());
-        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else if (empSummDashboardDataResponse.statusCode == 400) {
-        empSummDashboardTable = [];
-      } else {
-        Get.rawSnackbar(message: "Something went wrong");
-      }
-      update();
-    } catch (e) {
-      isLoading.value = false;
-      update();
+  String getImage(String screenName) {
+    switch (screenName) {
+      case "Attendance":
+        return AppImage.attendance;
+      case "Mispunch":
+        return AppImage.mispunch;
+      case "Leave":
+        return AppImage.leave;
+      case "Overtime":
+        return AppImage.overtime;
+      case "Duty Schedule":
+        return AppImage.dutySchedule;
+      case "LV OT Approval":
+        return AppImage.lvotapproval;
+      default:
+        return AppImage.attendance;
     }
-    return [];
+  }
+
+  String getScreenName(String screenName) {
+    switch (screenName) {
+      case "Attendance":
+        return AppString.attendance;
+      case "Mispunch":
+        return AppString.mispunch;
+      case "Leave":
+        return AppString.leave;
+      case "Overtime":
+        return AppString.overtime;
+      case "Duty Schedule":
+        return AppString.dutyschedule;
+      case "LV OT Approval":
+        return AppString.lvotapproval;
+      default:
+        return AppString.attendance;
+    }
   }
 }

@@ -41,8 +41,11 @@ class LvList extends StatelessWidget {
                                 final showRedDivider = leaveItem.inchargeAction == "Rejected";
 
                                 return GestureDetector(
-                                  onLongPress: () {
-                                    controller.enterSelectionMode(index);
+                                  onLongPress: () async{
+                                    if(controller.selectedRole == "HOD")
+                                      await controller.enterSelectionMode(index);
+                                    else
+                                      await controller.exitSelectionMode();
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -99,8 +102,8 @@ class LvList extends StatelessWidget {
                                               if (controller.isSelectionMode.value)
                                                 Checkbox(
                                                   value: isSelected,
-                                                  onChanged: (value) {
-                                                    controller.toggleSelection(index, value!);
+                                                  onChanged: (value) async{
+                                                    await controller.toggleSelection(index, value!);
                                                   },
                                                 ),
                                               // Main Leave Information

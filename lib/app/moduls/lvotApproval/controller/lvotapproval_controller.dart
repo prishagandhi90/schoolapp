@@ -45,6 +45,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   RxBool hideBottomBar = false.obs;
   final bottomBarController = Get.put(BottomBarController());
   String selectedRole = '', selectedLeaveType = ''; // Default selected role
+  Map<String, String> roleStatus = {}; // Stores role statuses: "Y" or "N"
 
   @override
   void onInit() {
@@ -71,7 +72,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     });
   }
 
-  void enterSelectionMode(int index) {
+  enterSelectionMode(int index) async {
     isSelectionMode.value = true;
     selectedItems.add(filteredList[index]);
     update();
@@ -84,7 +85,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  void toggleSelection(int index, bool value) {
+  toggleSelection(int index, bool value) async {
     if (value) {
       selectedItems.add(filteredList[index]);
     } else {
@@ -94,7 +95,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  void toggleSelectAll(bool value) {
+  toggleSelectAll(bool value) async {
     if (value) {
       selectedItems = List.from(filteredList);
     } else {
@@ -104,14 +105,15 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  void activateSearch(bool isActive) {
+  activateSearch(bool isActive) async {
     isSearchActive = isActive;
     update();
   }
 
-  void clearSearch() {
-    searchController.clear();
-    update();
+  clearSearch() async {
+    searchController.clear(); // Search bar clear karo
+    filteredList = List.from(leavelist); // Original list wapas set karo
+    update(); // UI update karo
   }
 
   void _handleTabSelection() async {
@@ -179,7 +181,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
 
   void filterSearchResults(String query, String leaveType) {
     if (query.isEmpty) {
-      filteredList = leavelist; // Show all data if search is empty
+      clearSearch(); // Directly clearSearch() call kar do
     } else {
       filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
       filteredList = filteredList.where((item) {
@@ -192,7 +194,20 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  Map<String, String> roleStatus = {}; // Stores role statuses: "Y" or "N"
+  // void filterSearchResults(String query, String leaveType) {
+  //   if (query.isEmpty) {
+  //     filteredList = leavelist; // Show all data if search is empty
+  //   } else {
+  //     filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
+  //     filteredList = filteredList.where((item) {
+  //       final patientName = (item.employeeCodeName ?? "").toLowerCase();
+  //       final employeecode = (item.employeeCodeValue ?? "").toLowerCase();
+
+  //       return patientName.contains(query.toLowerCase()) || employeecode.contains(query.toLowerCase());
+  //     }).toList();
+  //   }
+  //   update();
+  // }
 
   bool getRoleStatus(String role) {
     return roleStatus[role] == 'Y';
@@ -1015,8 +1030,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           );
         });
   }
-
-  
 
   resetForm() async {
     Get.back();
