@@ -393,7 +393,6 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   return;
                                                 }
                                               }
-
                                               final bottomBarController = Get.put(BottomBarController());
                                               final attendanceController = Get.put(AttendenceController());
                                               await attendanceController.resetData();

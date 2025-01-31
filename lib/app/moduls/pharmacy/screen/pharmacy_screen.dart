@@ -224,15 +224,15 @@ class PharmacyScreen extends StatelessWidget {
                       PersistentNavBarNavigator.pushNewScreen(
                         context,
                         screen: PresviewerScreen(),
-                        withNavBar: true,
+                        withNavBar: false,
                         pageTransitionAnimation: PageTransitionAnimation.cupertino,
                       ).then((value) async {
                         final bottomBarController = Get.put(BottomBarController());
-                        bottomBarController.currentIndex.value = -1;
+                        // bottomBarController.currentIndex.value = -1;
                         bottomBarController.persistentController.value.index = 0;
                         bottomBarController.currentIndex.value = 0;
                         bottomBarController.isPharmacyHome.value = true;
-                        hideBottomBar.value = false;
+                        hideBottomBar.value = true;
                         var dashboardController = Get.put(DashboardController());
                         await dashboardController.getDashboardDataUsingToken();
                       });

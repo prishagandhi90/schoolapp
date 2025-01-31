@@ -37,9 +37,9 @@ class PresdetailsScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: controller.presviewerList[controller.SelectedIndex].patientName.toString().length <= 30
-                ? Size.fromHeight((fullScreenHeight * (16.83 / 100)).toDouble())
-                : Size.fromHeight((fullScreenHeight * (19.83 / 100)).toDouble()), // Ensure sufficient height
+            preferredSize: controller.presviewerList[controller.SelectedIndex].patientName.toString().length <= 28
+                ? Size.fromHeight((fullScreenHeight * (16.0 / 100)).toDouble())
+                : Size.fromHeight((fullScreenHeight * (19.0 / 100)).toDouble()), // Ensure sufficient height
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
@@ -62,12 +62,16 @@ class PresdetailsScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  controller.presviewerList[controller.SelectedIndex].patientName.toString(),
-                                  style: TextStyle(
-                                    color: AppColor.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                Flexible(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].patientName.toString(),
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 2, // Allow wrapping in 2 lines
+                                    overflow: TextOverflow.visible,
                                   ),
                                 ),
                                 Row(
@@ -215,7 +219,7 @@ class PresdetailsScreen extends StatelessWidget {
                       // int listItemsCount = controller.presdetailList.length; // Ensure scrolling
                       // bool isScrollable = (ConstraintsHeight) > availableHeight;
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10), // Adjust as needed
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 9), // Adjust as needed
                         child: SizedBox(
                           // height: ConstraintsHeight - 90.0,
                           child: ListView.builder(
@@ -259,36 +263,42 @@ class PresdetailsScreen extends StatelessWidget {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                       children: [
-                                                        Text(
-                                                          "${index + 1}.", // Serial number starts from 1
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.bold,
-                                                            fontSize: 16,
-                                                            color: AppColor.black,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          controller.presdetailList[index].formBrand.toString(),
-                                                          style: TextStyle(
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 15,
-                                                          ),
+                                                        Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Text(
+                                                              "${index + 1}.", // Serial number starts from 1
+                                                              style: TextStyle(
+                                                                fontWeight: FontWeight.bold,
+                                                                fontSize: 16,
+                                                                color: AppColor.black,
+                                                              ),
+                                                              overflow: TextOverflow.ellipsis,
+                                                              maxLines: 2,
+                                                            ),
+                                                            SizedBox(width: 8),
+                                                            Expanded(
+                                                              child: Text(
+                                                                controller.presdetailList[index].formBrand.toString(),
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.w600,
+                                                                  fontSize: 15,
+                                                                ),
+                                                                overflow: TextOverflow.ellipsis,
+                                                                maxLines: 2,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                         Text.rich(
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: AppString.genericdrug,
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
-                                                              ),
-                                                              TextSpan(
                                                                 text: controller.presdetailList[index].genericName.toString(),
                                                                 style: TextStyle(
                                                                   fontSize: 14,
+                                                                  fontStyle: FontStyle.italic,
                                                                   fontWeight: FontWeight.w500,
                                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                                 ),
@@ -303,73 +313,70 @@ class PresdetailsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: AppColor.lightblue,
-                                                    borderRadius: BorderRadius.only(
-                                                      topRight: Radius.circular(70),
-                                                      bottomRight: Radius.circular(70),
-                                                    ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.lightblue,
+                                                  borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(70),
+                                                    bottomRight: Radius.circular(70),
                                                   ),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                      children: [
-                                                        Text.rich(
-                                                          TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: AppString.quantity,
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: [
+                                                      Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: AppString.quantity,
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.bold,
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
                                                               ),
-                                                              TextSpan(
-                                                                text: controller.presdetailList[index].qty.toString(),
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
+                                                            ),
+                                                            TextSpan(
+                                                              text: controller.presdetailList[index].qty.toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.w500,
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
                                                               ),
-                                                            ],
-                                                          ),
-                                                          softWrap: true,
-                                                          overflow: TextOverflow.visible,
+                                                            ),
+                                                          ],
                                                         ),
-                                                        const SizedBox(height: 5),
-                                                        Text.rich(
-                                                          TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: AppString.pkg,
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
+                                                        softWrap: true,
+                                                        overflow: TextOverflow.visible,
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: AppString.pkg,
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.bold,
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
                                                               ),
-                                                              TextSpan(
-                                                                text: controller.presdetailList[index].pkg.toString(),
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                ),
+                                                            ),
+                                                            TextSpan(
+                                                              text: controller.presdetailList[index].pkg.toString(),
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.w500,
+                                                                fontFamily: CommonFontStyle.plusJakartaSans,
                                                               ),
-                                                            ],
-                                                          ),
-                                                          softWrap: true,
-                                                          overflow: TextOverflow.visible,
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
+                                                        softWrap: true,
+                                                        overflow: TextOverflow.visible,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               )

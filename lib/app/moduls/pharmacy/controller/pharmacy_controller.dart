@@ -427,9 +427,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty ||
-                                        selectedFloorList.isNotEmpty ||
-                                        selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       await fetchpresViewer(isLoader: false);
                                     } else {
