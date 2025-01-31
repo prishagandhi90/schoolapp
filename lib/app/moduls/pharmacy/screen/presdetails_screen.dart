@@ -38,7 +38,23 @@ class PresdetailsScreen extends StatelessWidget {
           }
         }
 
-        double appBarHeight = (controller.presviewerList[controller.SelectedIndex].patientName.toString().length <= 26)
+        String patientName = controller.presviewerList[controller.SelectedIndex].patientName.toString();
+        TextStyle textStyle = TextStyle(
+          color: AppColor.black,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        );
+
+        Size textSize = calculateTextSize(patientName, textStyle, fullScreenWidth * 0.9); // 90% width max
+        double textHeight = textSize.height;
+        double textWidth = textSize.width;
+
+        bool isWrapped = textWidth > (fullScreenWidth * 0.77);
+        print("textWidth: $textWidth");
+        print("patientName: $patientName");
+        print("isWrapped: $isWrapped");
+
+        double appBarHeight = isWrapped == false
             ? (fullScreenHeight * (16.0 / 100)).toDouble()
             : (fullScreenHeight * (19.0 / 100)).toDouble();
         print('appbar height: $appBarHeight');
@@ -95,7 +111,9 @@ class PresdetailsScreen extends StatelessWidget {
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].mop.toString(),
                                             style: TextStyle(
-                                                fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w700),
+                                                fontSize: 16,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                                fontWeight: FontWeight.w700),
                                           ),
                                         ],
                                       ),
@@ -109,7 +127,8 @@ class PresdetailsScreen extends StatelessWidget {
                                             textAlign: TextAlign.start,
                                             style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
                                           ),
-                                          SizedBox(height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
+                                          SizedBox(
+                                              height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
                                           Text.rich(
                                             TextSpan(
                                               children: [
@@ -122,7 +141,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
+                                                  text: controller.presviewerList[controller.SelectedIndex].intercom
+                                                      .toString(),
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
@@ -162,7 +182,8 @@ class PresdetailsScreen extends StatelessWidget {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
+                                              text: controller.presviewerList[controller.SelectedIndex].tokenNo
+                                                  .toString(),
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -302,7 +323,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                           TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: controller.presdetailList[index].genericName.toString(),
+                                                                text: controller.presdetailList[index].genericName
+                                                                    .toString(),
                                                                 style: TextStyle(
                                                                   fontSize: 14,
                                                                   fontStyle: FontStyle.italic,
@@ -511,4 +533,14 @@ class PresdetailsScreen extends StatelessWidget {
       },
     );
   }
+}
+
+Size calculateTextSize(String text, TextStyle style, double maxWidth) {
+  final TextPainter textPainter = TextPainter(
+    text: TextSpan(text: text, style: style),
+    maxLines: 1, // Tumhare case me max 2 lines allowed hai
+    textDirection: TextDirection.ltr,
+  )..layout(maxWidth: maxWidth);
+
+  return textPainter.size;
 }
