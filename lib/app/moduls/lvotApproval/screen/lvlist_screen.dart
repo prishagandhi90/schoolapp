@@ -38,11 +38,11 @@ class LvList extends StatelessWidget {
 
                                 // Divider color logic
                                 final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
-                                final showRedDivider = leaveItem.inchargeAction == "Rejected";
+                                final showRedDivider = leaveItem.inchargeAction?.toLowerCase() == "rejected";
 
                                 return GestureDetector(
-                                  onLongPress: () async{
-                                    if(controller.selectedRole == "HOD")
+                                  onLongPress: () async {
+                                    if (controller.selectedRole == "HOD")
                                       await controller.enterSelectionMode(index);
                                     else
                                       await controller.exitSelectionMode();
@@ -102,7 +102,7 @@ class LvList extends StatelessWidget {
                                               if (controller.isSelectionMode.value)
                                                 Checkbox(
                                                   value: isSelected,
-                                                  onChanged: (value) async{
+                                                  onChanged: (value) async {
                                                     await controller.toggleSelection(index, value!);
                                                   },
                                                 ),

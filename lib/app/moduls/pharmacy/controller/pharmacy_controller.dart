@@ -26,7 +26,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   List<PresviewerList> presviewerList = [];
   List<PresdetailList> presdetailList = [];
   List<PresviewerList> filterpresviewerList = [];
-  final ScrollController pharmacyScrollController = ScrollController();
+  ScrollController pharmacyScrollController = ScrollController();
   final ScrollController pharmacyviewScrollController = ScrollController();
   FocusNode focusNode = FocusNode();
   TextEditingController textEditingController = TextEditingController();
@@ -48,28 +48,41 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   var isPresViewerNavigating = false.obs;
   var isPresMedicineNavigating = false.obs;
   RxBool showPharmaDetailArrow = false.obs;
-
+  var showScrollDownArrow = false.obs; // RxBool
+  var showScrollUpArrow = false.obs;
   @override
   void onInit() {
     super.onInit();
     fetchpresViewer();
     GetPharmaFilterData();
     update();
+    pharmacyScrollController = ScrollController();
 
     pharmacyScrollController.addListener(() {
-      // If the scroll position is greater than 50.0
-      if (pharmacyScrollController.offset > 200.0) {
-        if (!showPharmaDetailArrow.value) {
-          showPharmaDetailArrow.value = true;
-          update(); // Update the controller's arrow visibility
-        }
-      } else {
-        if (showPharmaDetailArrow.value) {
-          showPharmaDetailArrow.value = false; // Update the controller's arrow visibility
-          update();
-        }
-      }
+      double maxScroll = pharmacyScrollController.position.maxScrollExtent;
+      double currentScroll = pharmacyScrollController.position.pixels;
+
+      // Jab list scrollable ho, neeche ka arrow show ho
+      showScrollDownArrow.value = maxScroll > 0 && currentScroll < maxScroll;
+
+      // Jab scroll ho to upar ka arrow show ho
+      showScrollUpArrow.value = currentScroll > 0;
     });
+
+    // pharmacyScrollController.addListener(() {
+    //   // If the scroll position is greater than 50.0
+    //   if (pharmacyScrollController.offset > 200.0) {
+    //     if (!showPharmaDetailArrow.value) {
+    //       showPharmaDetailArrow.value = true;
+    //       update(); // Update the controller's arrow visibility
+    //     }
+    //   } else {
+    //     if (showPharmaDetailArrow.value) {
+    //       showPharmaDetailArrow.value = false; // Update the controller's arrow visibility
+    //       update();
+    //     }
+    //   }
+    // });
 
     // pharmacyScrollController.addListener(() {
     //   if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {

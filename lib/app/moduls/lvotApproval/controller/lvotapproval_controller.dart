@@ -111,8 +111,9 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   }
 
   clearSearch() async {
-    searchController.clear(); // Search bar clear karo
-    filteredList = List.from(leavelist); // Original list wapas set karo
+    searchController.clear();
+    filteredList = leavelist.where((item) => item.typeValue == selectedLeaveType).toList(); // Search bar clear karo
+    filteredList = List.from(filteredList); // Original list wapas set karo
     update(); // UI update karo
   }
 
