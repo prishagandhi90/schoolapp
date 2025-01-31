@@ -236,7 +236,8 @@ class PresviewerScreen extends StatelessWidget {
                                                 // final bottomBarController = Get.put(BottomBarController());
                                                 // bottomBarController.currentIndex.value = -1;
                                                 // hideBottomBar.value = false;
-
+                                                controller.showScrollDownArrow.value = false;
+                                                controller.showScrollUpArrow.value = false;
                                                 PersistentNavBarNavigator.pushNewScreen(
                                                   context,
                                                   screen: PresdetailsScreen(),
@@ -313,7 +314,8 @@ class PresviewerScreen extends StatelessWidget {
                                                                       await controller.fetchpresDetailList(
                                                                         controller.filterpresviewerList[index].mstId.toString(),
                                                                       );
-
+                                                                      controller.showScrollDownArrow.value = false;
+                                                                      controller.showScrollUpArrow.value = false;
                                                                       PersistentNavBarNavigator.pushNewScreen(
                                                                         context,
                                                                         screen: PresdetailsScreen(),
