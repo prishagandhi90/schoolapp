@@ -90,7 +90,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     update();
   }
 
-  Future<dynamic> fetchModuleScreens() async {
+  Future<List<ModuleScreenRights>> fetchModuleScreens() async {
     try {
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
       String url = ConstApiUrl.empAppScreenRights;
@@ -100,31 +100,32 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
       var jsonbodyObj = {"loginId": loginId, "EmpId": empId, "ModuleName": "Payroll"};
+      if (loginId != "") {
+        final ApiController apiController = Get.find<ApiController>();
+        var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+        ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
 
-      final ApiController apiController = Get.find<ApiController>();
-      var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
-
-      if (responseModuleData.statusCode == 200) {
-        if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
-          isLoading.value = false;
-          empModuleScreenRightsTable = responseModuleData.data!;
+        if (responseModuleData.statusCode == 200) {
+          if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
+            isLoading.value = false;
+            empModuleScreenRightsTable = responseModuleData.data!;
+            update();
+            return empModuleScreenRightsTable;
+          } else {
+            return [];
+          }
           update();
-          return empModuleScreenRightsTable;
-        } else {
+        } else if (responseModuleData.statusCode == 401) {
+          pref.clear();
+          Get.offAll(const LoginScreen());
+          Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+        } else if (responseModuleData.statusCode == 400) {
           empModuleScreenRightsTable = [];
+        } else {
+          Get.rawSnackbar(message: "Something went wrong");
         }
         update();
-      } else if (responseModuleData.statusCode == 401) {
-        pref.clear();
-        Get.offAll(const LoginScreen());
-        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else if (responseModuleData.statusCode == 400) {
-        empModuleScreenRightsTable = [];
-      } else {
-        Get.rawSnackbar(message: "Something went wrong");
       }
-      update();
     } catch (e) {
       isLoading.value = false;
       update();
