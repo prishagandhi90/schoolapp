@@ -181,6 +181,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   Future<List<PresdetailList>> fetchpresDetailList(String Mst_Id) async {
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empPresDetailListAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";

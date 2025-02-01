@@ -230,8 +230,7 @@ class PresviewerScreen extends StatelessWidget {
                                                 controller.isPresMedicineNavigating.value = true;
 
                                                 controller.SelectedIndex = index;
-                                                await controller
-                                                    .fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
+                                                controller.fetchpresDetailList(controller.filterpresviewerList[index].mstId.toString());
 
                                                 // final bottomBarController = Get.put(BottomBarController());
                                                 // bottomBarController.currentIndex.value = -1;
@@ -253,6 +252,7 @@ class PresviewerScreen extends StatelessWidget {
                                                   bottomBarController.currentIndex.value = 0;
                                                   bottomBarController.isPharmacyHome.value = true;
                                                   hideBottomBar.value = true;
+                                                  controller.isPresMedicineNavigating.value = false;
 
                                                   // var dashboardController = Get.put(DashboardController());
                                                   // await dashboardController.getDashboardDataUsingToken();
@@ -309,13 +309,16 @@ class PresviewerScreen extends StatelessWidget {
                                                                   icon: Icon(Icons.shopping_cart, size: 18),
                                                                   onPressed: () async {
                                                                     try {
+                                                                      if (controller.isPresMedicineNavigating.value) return;
+                                                                      controller.isPresMedicineNavigating.value = true;
                                                                       controller.SelectedIndex = index;
 
-                                                                      await controller.fetchpresDetailList(
+                                                                      controller.fetchpresDetailList(
                                                                         controller.filterpresviewerList[index].mstId.toString(),
                                                                       );
                                                                       controller.showScrollDownArrow.value = false;
                                                                       controller.showScrollUpArrow.value = false;
+                                                                      controller.isPresMedicineNavigating.value = false;
                                                                       PersistentNavBarNavigator.pushNewScreen(
                                                                         context,
                                                                         screen: PresdetailsScreen(),
@@ -329,7 +332,9 @@ class PresviewerScreen extends StatelessWidget {
                                                                         hideBottomBar.value = true;
                                                                         var dashboardController = Get.put(DashboardController());
                                                                         await dashboardController.getDashboardDataUsingToken();
+                                                                        controller.isPresMedicineNavigating.value = false;
                                                                       });
+                                                                      controller.isPresMedicineNavigating.value = false;
                                                                     } catch (e) {
                                                                       print("Error in navigation: $e");
                                                                       Get.snackbar("Error", "$e");
