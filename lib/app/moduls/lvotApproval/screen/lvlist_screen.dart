@@ -57,6 +57,7 @@ class LvList extends StatelessWidget {
                                           SlidableAction(
                                             onPressed: (_) {
                                               controller.showApproveDialog(context, index);
+                                              
                                             },
                                             backgroundColor: AppColor.lightwhite,
                                             foregroundColor: Colors.black,

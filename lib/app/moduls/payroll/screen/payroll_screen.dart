@@ -755,6 +755,7 @@ class PayrollScreen extends GetView<PayrollController> {
 
                                                 if (controller.empModuleScreenRightsTable.isNotEmpty) {
                                                   if (controller.empModuleScreenRightsTable[5].rightsYN == "N") {
+                                                    controller.isLVOTApprovalNavigating.value = false;
                                                     Get.snackbar(
                                                       "You don't have access to this screen",
                                                       '',

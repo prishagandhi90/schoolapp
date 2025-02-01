@@ -349,6 +349,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         UpdFlag = "HOD"; // Admin
       }
       isLoader.value = true;
+      update();
       String url = ConstApiUrl.empLeaveAppRejListData;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
@@ -370,7 +371,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
 
       if (responseLeaveAppRejList.statusCode == 200) {
         if (responseLeaveAppRejList.data![0].savedYN == "Y") {
-          leavelist.removeAt(index);
+          filteredList.removeAt(index);
           filteredList = leavelist.where((item) => item.typeValue == selectedLeaveType).toList();
           await fetchLeaveOTList(selectedRole, selectedLeaveType);
           Get.rawSnackbar(message: action == "Approved" ? "Leave approved successfully!" : "Leave rejected successfully!");
