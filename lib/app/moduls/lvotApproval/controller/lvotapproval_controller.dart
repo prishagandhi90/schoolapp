@@ -46,6 +46,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   final bottomBarController = Get.put(BottomBarController());
   String selectedRole = '', selectedLeaveType = ''; // Default selected role
   Map<String, String> roleStatus = {}; // Stores role statuses: "Y" or "N"
+  bool byPassApprove = false;
 
   @override
   void onInit() {
@@ -374,8 +375,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           filteredList.removeAt(index);
           filteredList = leavelist.where((item) => item.typeValue == selectedLeaveType).toList();
           await fetchLeaveOTList(selectedRole, selectedLeaveType);
-          Get.rawSnackbar(
-              message: action == "Approved" ? "Leave approved successfully!" : "Leave rejected successfully!");
+          Get.rawSnackbar(message: action == "Approved" ? "Leave approved successfully!" : "Leave rejected successfully!");
         } else {
           Get.rawSnackbar(message: "Action failed: ${responseLeaveAppRejList.data![0].savedYN}");
         }
@@ -473,6 +473,73 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     }
     isLoading = false;
     return reasonList.toList();
+  }
+
+  void showByPassApproveDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.all(10.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          title: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("You are going to approve rejected leave or overtime. Are you sure you want to accept this record?",
+                  style: TextStyle(color: AppColor.black, fontWeight: FontWeight.w600, fontSize: 20)),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      await SelectAll_Leave_app_rej_List();
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightgreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Yes", style: TextStyle(color: AppColor.black)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Cancel action
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightred,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("No", style: TextStyle(color: AppColor.black)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void showApproveDialog(BuildContext context, int index) {
@@ -594,7 +661,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                       ),
                       onChanged: (value) async {
                         await rejectreasonChangeMethod(value);
-                        // update();
+                        update();
                       },
                       width: double.infinity,
                       items: reasonList

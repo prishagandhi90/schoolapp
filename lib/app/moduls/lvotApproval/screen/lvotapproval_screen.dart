@@ -153,6 +153,14 @@ class LvotapprovalScreen extends StatelessWidget {
                                       ),
                                       ElevatedButton(
                                         onPressed: () async {
+                                          bool hasRejectedLeave = controller.selectedItems.any((item) =>
+                                              item.typeValue == controller.selectedLeaveType &&
+                                              item.inchargeAction?.toLowerCase() == 'rejected');
+
+                                          if (hasRejectedLeave) {
+                                            controller.showByPassApproveDialog(context);
+                                            return;
+                                          }
                                           await controller.SelectAll_Leave_app_rej_List();
                                           // controller.exitSelectionMode(); // Exit selection mode
                                         },
