@@ -319,23 +319,26 @@ class PresdetailsScreen extends StatelessWidget {
                                                             ),
                                                           ],
                                                         ),
-                                                        Text.rich(
-                                                          TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: controller.presdetailList[index].genericName
-                                                                    .toString(),
-                                                                style: TextStyle(
-                                                                  fontSize: 14,
-                                                                  fontStyle: FontStyle.italic,
-                                                                  fontWeight: FontWeight.w500,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(left: 20),
+                                                          child: Text.rich(
+                                                            TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                  text: controller.presdetailList[index].genericName
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    fontStyle: FontStyle.italic,
+                                                                    fontWeight: FontWeight.w500,
+                                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
+                                                            softWrap: true, // Allow text to wrap
+                                                            overflow: TextOverflow.visible, // Prevent text clipping
                                                           ),
-                                                          softWrap: true, // Allow text to wrap
-                                                          overflow: TextOverflow.visible, // Prevent text clipping
                                                         ),
                                                       ],
                                                     ),
