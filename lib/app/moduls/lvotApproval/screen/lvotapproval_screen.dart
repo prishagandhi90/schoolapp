@@ -44,18 +44,44 @@ class LvotapprovalScreen extends StatelessWidget {
                       controller.isSelectionMode.value
                           ? Padding(
                               padding: const EdgeInsets.only(right: 10),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    await controller.exitSelectionMode();
-                                  },
-                                  style: ElevatedButton.styleFrom(backgroundColor: AppColor.lightblue),
-                                  child: Text(
-                                    "Cancel",
-                                    style: TextStyle(color: AppColor.black),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 25),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                               "${controller.selectedItems.length}",
+                                              style: TextStyle(color: AppColor.black,fontWeight: FontWeight.bold,fontSize: 18),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              "selected",
+                                              style: TextStyle(color: AppColor.black,fontWeight: FontWeight.bold,fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              await controller.exitSelectionMode();
+                                            },
+                                            style: ElevatedButton.styleFrom(backgroundColor: AppColor.lightblue),
+                                            child: Text(
+                                              "Cancel",
+                                              style: TextStyle(color: AppColor.black),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             )
                           : Row(
@@ -123,7 +149,6 @@ class LvotapprovalScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                       const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
@@ -142,11 +167,14 @@ class LvotapprovalScreen extends StatelessWidget {
                                             value: controller.isAllSelected.value,
                                             onChanged: (value) async {
                                               await controller.clearSearch();
-                                              await controller.toggleSelectAll(value!);
+                                              controller.isAllSelected.value = value!;
+
+                                              await controller.toggleSelectAll(value);
                                             },
                                           ),
-                                          const Text(
-                                            "Select All",
+                                          Text(
+                                            controller.isAllSelected.value ? "Unselect All" : "Select All",
+                                            // "Select All",
                                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                           ),
                                         ],
