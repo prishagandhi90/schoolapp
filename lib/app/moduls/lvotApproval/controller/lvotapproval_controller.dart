@@ -359,7 +359,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         "loginId": loginId,
         "empId": empId,
         "flag": UpdFlag,
-        "leaveDetailId": leavelist[index].leaveId.toString(),
+        "leaveDetailId": filteredList[index].leaveId.toString(),
         "action": action, // "Approved" or "Rejected"
         "reason": "",
         "userName": "",
@@ -374,7 +374,8 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           filteredList.removeAt(index);
           filteredList = leavelist.where((item) => item.typeValue == selectedLeaveType).toList();
           await fetchLeaveOTList(selectedRole, selectedLeaveType);
-          Get.rawSnackbar(message: action == "Approved" ? "Leave approved successfully!" : "Leave rejected successfully!");
+          Get.rawSnackbar(
+              message: action == "Approved" ? "Leave approved successfully!" : "Leave rejected successfully!");
         } else {
           Get.rawSnackbar(message: "Action failed: ${responseLeaveAppRejList.data![0].savedYN}");
         }
@@ -672,22 +673,22 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           List<Widget> InchargeParameters = [
             parameterWidget(
               title: AppString.reliever,
-              value: leavelist[index].relieverEmpName?.toString() ?? '--:--',
+              value: filteredList[index].relieverEmpName?.toString() ?? '--:--',
             ),
             parameterWidget(
               title: AppString.reason,
-              value: leavelist[index].reason?.toString() ?? '--:--',
+              value: filteredList[index].reason?.toString() ?? '--:--',
             ),
             parameterWidget(
               title: AppString.leavetype,
-              value: leavelist[index].leaveShortName?.toString() ?? '--:--',
+              value: filteredList[index].leaveShortName?.toString() ?? '--:--',
             ),
           ];
 
           List<Widget> HODParameters = [
             parameterWidget(
               title: AppString.inchargestatus,
-              value: leavelist[index].inchargeAction?.toString() ?? '--:--',
+              value: filteredList[index].inchargeAction?.toString() ?? '--:--',
             ),
           ];
 
@@ -952,19 +953,19 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
               List<Widget> InchargeParameters = [
                 parameterWidget(
                   title: AppString.reason,
-                  value: leavelist[index].reason?.toString() ?? '--:--',
+                  value: filteredList[index].reason?.toString() ?? '--:--',
                 ),
                 parameterWidget(
                   title: AppString.shiftTime,
-                  value: leavelist[index].shiftTime?.toString() ?? '--:--',
+                  value: filteredList[index].shiftTime?.toString() ?? '--:--',
                 ),
                 parameterWidget(
                   title: AppString.punchTime,
-                  value: leavelist[index].punchTime?.toString() ?? '--:--',
+                  value: filteredList[index].punchTime?.toString() ?? '--:--',
                 ),
                 parameterWidget(
                   title: AppString.employeenote,
-                  value: leavelist[index].note?.toString() ?? '--:--',
+                  value: filteredList[index].note?.toString() ?? '--:--',
                 ),
               ];
 
@@ -976,23 +977,23 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                 content.addAll([
                   parameterWidget(
                     title: AppString.reason,
-                    value: leavelist[index].reason?.toString() ?? '--:--',
+                    value: filteredList[index].reason?.toString() ?? '--:--',
                   ),
                   parameterWidget(
                     title: AppString.inchargestatus,
-                    value: leavelist[index].inchargeAction?.toString() ?? '--:--',
+                    value: filteredList[index].inchargeAction?.toString() ?? '--:--',
                   ),
                   parameterWidget(
                     title: AppString.shiftTime,
-                    value: leavelist[index].shiftTime?.toString() ?? '--:--',
+                    value: filteredList[index].shiftTime?.toString() ?? '--:--',
                   ),
                   parameterWidget(
                     title: AppString.punchTime,
-                    value: leavelist[index].punchTime?.toString() ?? '--:--',
+                    value: filteredList[index].punchTime?.toString() ?? '--:--',
                   ),
                   parameterWidget(
                     title: AppString.employeenote,
-                    value: leavelist[index].note?.toString() ?? '--:--',
+                    value: filteredList[index].note?.toString() ?? '--:--',
                   ),
                 ]);
               }
