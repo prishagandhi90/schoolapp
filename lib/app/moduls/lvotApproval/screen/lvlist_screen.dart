@@ -57,14 +57,17 @@ class LvList extends StatelessWidget {
                                           SlidableAction(
                                             onPressed: (_) {
                                               controller.showApproveDialog(context, index);
-                                              
                                             },
                                             backgroundColor: AppColor.lightwhite,
                                             foregroundColor: Colors.black,
                                             icon: Icons.check,
                                           ),
                                           SlidableAction(
-                                            onPressed: (_) {
+                                            onPressed: (_) async {
+                                              controller.reasonnameController.clear();
+                                              controller.reasonvalueController.clear();
+                                              // controller.fetchOTReason();
+
                                               controller.showRejectDialog(context, index);
                                             },
                                             backgroundColor: AppColor.lightred,
@@ -77,7 +80,7 @@ class LvList extends StatelessWidget {
                                         width: double.infinity,
                                         padding: const EdgeInsets.all(12.0),
                                         decoration: BoxDecoration(
-                                          color: isSelected ? AppColor.lightred.withOpacity(0.3) : AppColor.lightblue,
+                                          color: isSelected ? AppColor.darkgery.withOpacity(0.3) : AppColor.lightblue,
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: IntrinsicHeight(

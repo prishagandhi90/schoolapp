@@ -67,6 +67,9 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                 ),
                                                 SlidableAction(
                                                   onPressed: (_) {
+                                                    controller.reasonnameController.clear();
+                                                    controller.reasonvalueController.clear();
+                                                    // controller.fetchOTReason();
                                                     controller.showRejectDialog(context, index);
                                                     // controller.update();
                                                   },
@@ -81,7 +84,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                               width: double.infinity,
                                               padding: const EdgeInsets.all(12.0),
                                               decoration: BoxDecoration(
-                                                color: isSelected ? AppColor.lightred.withOpacity(0.3) : AppColor.lightblue,
+                                                color: isSelected ? AppColor.darkgery.withOpacity(0.3) : AppColor.lightblue,
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: IntrinsicHeight(

@@ -696,7 +696,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                           child: Text("Reject", style: TextStyle(color: AppColor.black)),
                         ),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             Navigator.pop(context); // Cancel action
                           },
                           style: ElevatedButton.styleFrom(
