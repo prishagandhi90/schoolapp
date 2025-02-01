@@ -190,6 +190,7 @@ class DashboardController extends GetxController {
   Future<void> getDashboardDataUsingToken() async {
     try {
       isLoading.value = true;
+      update();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
         String token = prefs.getString(AppString.keyToken) ?? '';

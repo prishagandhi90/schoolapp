@@ -48,6 +48,7 @@ class _CustomGridviewState extends State<CustomGridview> {
     });
 
     final DashboardController dashboardController = Get.put(DashboardController());
+    // dashboardController.update();
     if (index == 6 && dashboardController.isPharmacyUser.toUpperCase() != "Y") {
       Get.snackbar(
         AppString.noRights,
@@ -60,7 +61,7 @@ class _CustomGridviewState extends State<CustomGridview> {
     }
 
     // if (index == 7) {
-      
+
     //   Get.snackbar(
     //     AppString.noRights,
     //     '',
