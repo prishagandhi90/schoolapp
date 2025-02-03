@@ -67,7 +67,6 @@ class LvList extends StatelessWidget {
                                               controller.reasonnameController.clear();
                                               controller.reasonvalueController.clear();
                                               // controller.fetchOTReason();
-
                                               controller.showRejectDialog(context, index);
                                             },
                                             backgroundColor: AppColor.lightred,

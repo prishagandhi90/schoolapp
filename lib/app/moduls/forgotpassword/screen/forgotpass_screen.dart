@@ -2,6 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/forgotpassword/controller/forgotpass_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                           AppString.continue1,
                                           style: TextStyle(
                                             color: AppColor.black,
-                                            fontSize: 20,
+                                            fontSize: MediaQuery.of(context).size.width * 0.05,
                                             fontWeight: FontWeight.w700,
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                           ),
@@ -135,8 +136,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColor.white,
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        side: BorderSide(color: AppColor.primaryColor)),
+                                        borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                                   ),
                                   child: Text(
                                     AppString.cancel,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/core/common/common_firebase.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -48,32 +49,59 @@ void main() async {
     // );
 
     runApp(
-      Builder(
-        builder: (context) {
-          Get.put(NoInternetController());
-          Sizes.init(context);
-          return GetMaterialApp(
-            initialBinding: NoInternetBinding(),
-            debugShowCheckedModeBanner: false,
-            // useInheritedMediaQuery: true,
-            // locale: DevicePreview.locale(context),
-            // builder: DevicePreview.appBuilder,
-            builder: EasyLoading.init(),
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-              useMaterial3: true,
-            ),
-            // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
-            initialRoute: AppPages.getInitialRoute(isLoggedIn),
-            getPages: AppPages.routes,
-            navigatorObservers: [
-              NavigatorObserver(),
-            ],
-          );
-        },
+      DevicePreview(
+        enabled: !kReleaseMode, // Enable only in debug mode
+        builder: (context) => Builder(
+          builder: (context) {
+            Get.put(NoInternetController());
+            Sizes.init(context);
+            return GetMaterialApp(
+              initialBinding: NoInternetBinding(),
+              debugShowCheckedModeBanner: false,
+              useInheritedMediaQuery: true,
+              locale: DevicePreview.locale(context),
+              builder: DevicePreview.appBuilder,
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+                useMaterial3: true,
+              ),
+              initialRoute: AppPages.getInitialRoute(isLoggedIn),
+              getPages: AppPages.routes,
+              navigatorObservers: [
+                NavigatorObserver(),
+              ],
+            );
+          },
+        ),
       ),
     );
+    //   Builder(
+    //     builder: (context) {
+    //       Get.put(NoInternetController());
+    //       Sizes.init(context);
+    //       return GetMaterialApp(
+    //         initialBinding: NoInternetBinding(),
+    //         debugShowCheckedModeBanner: false,
+    //         // useInheritedMediaQuery: true,
+    //         // locale: DevicePreview.locale(context),
+    //         // builder: DevicePreview.appBuilder,
+    //         builder: EasyLoading.init(),
+    //         title: 'Flutter Demo',
+    //         theme: ThemeData(
+    //           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+    //           useMaterial3: true,
+    //         ),
+    //         // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
+    //         initialRoute: AppPages.getInitialRoute(isLoggedIn),
+    //         getPages: AppPages.routes,
+    //         navigatorObservers: [
+    //           NavigatorObserver(),
+    //         ],
+    //       );
+    //     },
+    //   ),
+    // );
 
     // runApp(
     //   DevicePreview(
