@@ -146,8 +146,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedrpresviewer rsponsedrpresviewer = Rsponsedrpresviewer.fromJson(jsonDecode(response));
 
+      presviewerList.clear();
       if (rsponsedrpresviewer.statusCode == 200) {
-        presviewerList.clear();
         presviewerList.assignAll(rsponsedrpresviewer.data ?? []);
         if (rsponsedrpresviewer.data != null && rsponsedrpresviewer.data!.isNotEmpty) {
           filterpresviewerList = rsponsedrpresviewer.data!;
@@ -192,8 +192,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedrpresdetail rsponsedrpresdetail = Rsponsedrpresdetail.fromJson(jsonDecode(response));
 
+      presdetailList.clear();
       if (rsponsedrpresdetail.statusCode == 200) {
-        presdetailList.clear();
         presdetailList.assignAll(rsponsedrpresdetail.data ?? []);
         blurState = List.generate(presdetailList.length, (index) => false);
         isLoading = false;
