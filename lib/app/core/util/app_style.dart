@@ -76,7 +76,7 @@ class AppStyle {
   );
   static TextStyle plusbold16 = TextStyle(
     // fontSize: 16,
-    fontSize: getDynamicHeight(size: 0.018),
+    fontSize: getDynamicHeight(size: 0.017),
     fontWeight: FontWeight.bold, // Bold style for heading
     fontFamily: CommonFontStyle.plusJakartaSans,
   );

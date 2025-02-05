@@ -62,7 +62,7 @@ class PresviewerScreen extends StatelessWidget {
                   },
                   icon: Image.asset(
                     AppImage.notification,
-                    width: 20,
+                    width: getDynamicHeight(size: 0.022),
                   ))
             ],
             centerTitle: true,
@@ -70,7 +70,7 @@ class PresviewerScreen extends StatelessWidget {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
                 child: Row(
                   children: [
                     // Search Bar (60%)
@@ -86,13 +86,13 @@ class PresviewerScreen extends StatelessWidget {
                           cursorColor: AppColor.black,
                           controller: controller.searchController,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10),
+                            contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                               borderSide: BorderSide(
                                 color: AppColor.black,
                               ),
@@ -111,8 +111,8 @@ class PresviewerScreen extends StatelessWidget {
                             hintStyle: AppStyle.plusgrey,
                             filled: true,
                             fillColor: AppColor.white,
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
                             ),
                           ),
                           onTap: () {
@@ -144,14 +144,14 @@ class PresviewerScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8), // Space between items
+                    SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
                     Expanded(
                       flex: 1.5.toInt(),
                       child: Container(
-                        height: 50, // Adjust height as needed
+                        height: getDynamicHeight(size: 0.052), // Adjust height as needed
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                         ),
                         child: Center(
                             child: GestureDetector(
@@ -163,18 +163,18 @@ class PresviewerScreen extends StatelessWidget {
                                 ))),
                       ),
                     ),
-                    const SizedBox(width: 8), // Space between items
+                    SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
                     Expanded(
                       flex: 1.5.toInt(),
                       child: Container(
                         // height: 50, // Adjust height as needed
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                         ),
                         child: Center(
                           child: IconButton(
-                            icon: Icon(Icons.filter_alt, color: AppColor.black, size: 25),
+                            icon: Icon(Icons.filter_alt, color: AppColor.black, size: getDynamicHeight(size: 0.027)),
                             onPressed: () async {
                               controller.callFilterAPi = false;
                               controller.tempWardList = List.unmodifiable(controller.selectedWardList);
@@ -191,8 +191,8 @@ class PresviewerScreen extends StatelessWidget {
                 ),
               ),
               controller.isLoading
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 100),
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.102)),
                       child: Center(child: ProgressWithIcon()),
                     )
                   : Expanded(
@@ -200,9 +200,9 @@ class PresviewerScreen extends StatelessWidget {
                         builder: (context, constraints) {
                           // double ConstraintsHeight = constraints.maxHeight; // Ensure scrolling
                           return Scrollbar(
-                            thickness: 5, //According to your choice
+                            thickness: getDynamicHeight(size: 0.007), //According to your choice
                             thumbVisibility: false, //
-                            radius: Radius.circular(10),
+                            radius: Radius.circular(getDynamicHeight(size: 0.012)),
                             child: RefreshIndicator(
                               onRefresh: () async {
                                 await controller.fetchpresViewer();
@@ -228,7 +228,7 @@ class PresviewerScreen extends StatelessWidget {
                                         physics: AlwaysScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {
                                           return Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
                                             child: GestureDetector(
                                               onTap: () async {
                                                 if (controller.isPresMedicineNavigating.value) return;
@@ -265,7 +265,8 @@ class PresviewerScreen extends StatelessWidget {
                                                 controller.isPresMedicineNavigating.value = false;
                                               },
                                               child: Container(
-                                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: getDynamicHeight(size: 0.012), horizontal: getDynamicHeight(size: 0.012)),
                                                 decoration: BoxDecoration(
                                                   color: controller.filterpresviewerList[index].printStatus.toString().toLowerCase() ==
                                                           "printed"
@@ -280,8 +281,9 @@ class PresviewerScreen extends StatelessWidget {
                                                       children: [
                                                         // Left side: Index
                                                         Padding(
-                                                          padding: const EdgeInsets.symmetric(
-                                                              horizontal: 5), // Space between index and right side
+                                                          padding: EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  getDynamicHeight(size: 0.007)), // Space between index and right side
                                                           child: Text(
                                                             "${index + 1}", // Dynamic index
                                                             style: AppStyle.w50018.copyWith(
@@ -303,19 +305,29 @@ class PresviewerScreen extends StatelessWidget {
                                                                 controller.filterpresviewerList[index].org
                                                                     .toString(), // Add your custom text
                                                                 style: TextStyle(
-                                                                    fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+                                                                  // fontSize: 16,
+                                                                  fontSize: getDynamicHeight(size: 0.018),
+                                                                  fontWeight: FontWeight.w500,
+                                                                  color: Colors.black,
+                                                                ),
                                                               ),
                                                               const SizedBox(width: 20), // Minimal space between text and container
                                                               // Container
                                                               Container(
-                                                                height: 35, // Small container size
-                                                                margin: const EdgeInsets.only(bottom: 5), // Adjust positioning if needed
+                                                                // height: 35, // Small container size
+                                                                height: getDynamicHeight(size: 0.037),
+                                                                margin: EdgeInsets.only(
+                                                                    bottom: getDynamicHeight(size: 0.007)), // Adjust positioning if needed
                                                                 decoration: BoxDecoration(
                                                                   color: Colors.grey[200],
                                                                   borderRadius: BorderRadius.circular(8),
                                                                 ),
                                                                 child: IconButton(
-                                                                  icon: Icon(Icons.shopping_cart, size: 18),
+                                                                  icon: Icon(
+                                                                    Icons.shopping_cart,
+                                                                    // size: 18,
+                                                                    size: getDynamicHeight(size: 0.020),
+                                                                  ),
                                                                   onPressed: () async {
                                                                     try {
                                                                       if (controller.isPresMedicineNavigating.value) return;
@@ -357,7 +369,7 @@ class PresviewerScreen extends StatelessWidget {
                                                       ],
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.006)),
                                                       child: Text(
                                                         controller.filterpresviewerList[index].patientName.toString(),
                                                         style: AppStyle.w50018.copyWith(
@@ -381,7 +393,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                     children: [
                                                                       TextSpan(
                                                                           text: AppString.rxview, // Heading
-                                                                          style: AppStyle.plusbold16),
+                                                                          style: AppStyle.plusbold16.copyWith(
+                                                                            // fontSize: 16,
+                                                                            fontSize: getDynamicHeight(size: 0.018),
+                                                                          )),
                                                                       TextSpan(
                                                                           text: controller.filterpresviewerList[index].printStatus
                                                                               .toString(), // Data
@@ -392,13 +407,17 @@ class PresviewerScreen extends StatelessWidget {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                SizedBox(height: 5), // Space between IPD and MOP
+                                                                SizedBox(
+                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
                                                                 Text.rich(
                                                                   TextSpan(
                                                                     children: [
                                                                       TextSpan(
                                                                           text: AppString.lastuser, // Heading
-                                                                          style: AppStyle.plusbold16),
+                                                                          style: AppStyle.plusbold16.copyWith(
+                                                                            // fontSize: 16,
+                                                                            fontSize: getDynamicHeight(size: 0.018),
+                                                                          )),
                                                                       TextSpan(
                                                                           text: controller.filterpresviewerList[index].lastUser
                                                                               .toString(), // Data
@@ -409,13 +428,17 @@ class PresviewerScreen extends StatelessWidget {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                SizedBox(height: 5), // Space between IPD and MOP
+                                                                SizedBox(
+                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
                                                                 Text.rich(
                                                                   TextSpan(
                                                                     children: [
                                                                       TextSpan(
                                                                           text: AppString.ipdNo, // Heading
-                                                                          style: AppStyle.plusbold16),
+                                                                          style: AppStyle.plusbold16.copyWith(
+                                                                            // fontSize: 16,
+                                                                            fontSize: getDynamicHeight(size: 0.018),
+                                                                          )),
                                                                       TextSpan(
                                                                           text:
                                                                               controller.filterpresviewerList[index].ipd.toString(), // Data
@@ -431,7 +454,9 @@ class PresviewerScreen extends StatelessWidget {
                                                           ),
                                                           Expanded(
                                                             child: Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 9),
+                                                              padding: EdgeInsets.symmetric(
+                                                                horizontal: getDynamicHeight(size: 0.011),
+                                                              ),
                                                               child: Column(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: [
@@ -440,7 +465,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                       children: [
                                                                         TextSpan(
                                                                             text: AppString.priority, // Heading
-                                                                            style: AppStyle.plusbold16),
+                                                                            style: AppStyle.plusbold16.copyWith(
+                                                                              // fontSize: 16,
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            )),
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].priority
                                                                                 .toString(), // Data
@@ -451,30 +479,40 @@ class PresviewerScreen extends StatelessWidget {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(height: 5), // Space between Bed and Intercom
+                                                                  SizedBox(
+                                                                      height:
+                                                                          getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
                                                                   Text.rich(
                                                                     TextSpan(
                                                                       children: [
                                                                         TextSpan(
                                                                             text: AppString.rxStatus, // Heading
-                                                                            style: AppStyle.plusbold16),
+                                                                            style: AppStyle.plusbold16.copyWith(
+                                                                              // fontSize: 16,
+                                                                              fontSize: getDynamicHeight(size: 0.017),
+                                                                            )),
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].rxStatus
                                                                                 .toString(), // Data
                                                                             style: AppStyle.w50018.copyWith(
                                                                               // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                              fontSize: getDynamicHeight(size: 0.017),
                                                                             )),
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(height: 5), // Space between Bed and Intercom
+                                                                  SizedBox(
+                                                                      height:
+                                                                          getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
                                                                   Text.rich(
                                                                     TextSpan(
                                                                       children: [
                                                                         TextSpan(
                                                                             text: AppString.tokenNo, // Heading
-                                                                            style: AppStyle.plusbold16),
+                                                                            style: AppStyle.plusbold16.copyWith(
+                                                                              // fontSize: 16,
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            )),
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].tokenNo
                                                                                 .toString(), // Data

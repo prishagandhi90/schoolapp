@@ -40,20 +40,20 @@ class BottomBarView extends GetView<BottomBarController> {
                 return true;
               },
               child: PersistentTabView(
-                padding: const EdgeInsets.only(bottom: 4, top: 0),
+                padding: EdgeInsets.only(bottom: getDynamicHeight(size: 0.006), top: 0),
                 context,
                 confineToSafeArea: Platform.isAndroid ? true : false,
                 controller: controller.persistentController.value,
                 handleAndroidBackButtonPress: true,
                 hideNavigationBarWhenKeyboardAppears: true,
                 backgroundColor: AppColor.white,
-                navBarHeight: hideBottomBar.value ? 0 : 70.0,
+                navBarHeight: hideBottomBar.value ? 0 : getDynamicHeight(size: 0.072),
                 decoration: NavBarDecoration(
                   colorBehindNavBar: AppColor.transparent,
                   boxShadow: [
                     BoxShadow(
                       color: AppColor.originalgrey.withOpacity(0.1),
-                      spreadRadius: 3.0,
+                      spreadRadius: getDynamicHeight(size: 0.005),
                     ),
                   ],
                 ),
@@ -69,7 +69,8 @@ class BottomBarView extends GetView<BottomBarController> {
                 navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
                 stateManagement: true,
                 resizeToAvoidBottomInset: true,
-                bottomScreenMargin: Sizes.crossLength * 0.020,
+                // bottomScreenMargin: Sizes.crossLength * 0.020,
+                bottomScreenMargin: getDynamicHeight(size: 0.020),
                 onItemSelected: (index) async {
                   await controller.onItemTapped(index, false, context);
                 },
