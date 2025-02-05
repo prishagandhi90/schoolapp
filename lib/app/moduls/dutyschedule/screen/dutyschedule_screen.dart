@@ -6,6 +6,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/dropdown_model.dart';
 import 'package:flutter/material.dart';
@@ -87,9 +88,13 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
                                     child: Text(
                                       item.name ?? '',
                                       style: item.name != controller.CurrentWeekItem
-                                          ? AppStyle.black.copyWith(fontSize: 13)
+                                          ? AppStyle.black.copyWith(
+                                              // fontSize: 13,
+                                              fontSize: getDynamicHeight(size: 0.015),
+                                            )
                                           : TextStyle(
-                                              fontSize: 13,
+                                              // fontSize: 13,
+                                              fontSize: getDynamicHeight(size: 0.015),
                                               color: item.name == controller.CurrentWeekItem
                                                   ? AppColor.primaryColor
                                                   : Colors.black, // Custom color

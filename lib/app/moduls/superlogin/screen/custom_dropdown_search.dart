@@ -1,5 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,8 @@ class CustomDropDownSearch extends StatelessWidget {
           hint: Text(
             hinttext,
             style: TextStyle(
-              fontSize: 14,
+              // fontSize: 14,
+              fontSize: getDynamicHeight(size: 0.016),
               color: Theme.of(context).hintColor,
             ),
           ),
@@ -77,7 +79,10 @@ class CustomDropDownSearch extends StatelessWidget {
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                         hintText: 'Search....',
-                        hintStyle: const TextStyle(fontSize: 12),
+                        hintStyle: TextStyle(
+                          // fontSize: 12,
+                          fontSize: getDynamicHeight(size: 0.014),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

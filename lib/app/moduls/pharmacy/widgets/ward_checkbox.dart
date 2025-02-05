@@ -1,4 +1,5 @@
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,8 @@ WardsCheckBoxes({required PharmacyController controller}) {
                     Text(
                       controller.wards[i].wardName ?? '',
                       style: TextStyle(
-                        fontSize: 14,
+                        // fontSize: 14,
+                        fontSize: getDynamicHeight(size: 0.016),
                         color: AppColor.black,
                         fontWeight: FontWeight.w600,
                       ),

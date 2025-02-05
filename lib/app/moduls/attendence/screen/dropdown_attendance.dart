@@ -4,6 +4,7 @@ import 'package:emp_app/app/app_custom_widget/common_methods.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -45,7 +46,8 @@ class CustomDropDownState extends State<DropDownAttendance> {
           hint: Text(
             AppString.select,
             style: TextStyle(
-              fontSize: 14,
+              // fontSize: 14,
+              fontSize: getDynamicHeight(size: 0.016),
               fontWeight: FontWeight.bold,
               color: AppColor.black,
             ),
@@ -56,14 +58,14 @@ class CustomDropDownState extends State<DropDownAttendance> {
                     child: Text(
                       item,
                       style: TextStyle(
-                        fontSize: 13, //16
+                        // fontSize: 13, //16
+                        fontSize: getDynamicHeight(size: 0.015),
                         fontFamily: CommonFontStyle.plusJakartaSans,
                       ),
                     ),
                   ))
               .toList(),
-          value: widget
-              .selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
+          value: widget.selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
           onChanged: (String? value) {
             setState(() {
               widget.selValue = value;

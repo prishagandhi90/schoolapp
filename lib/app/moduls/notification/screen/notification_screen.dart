@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/moduls/notification/screen/circular_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/filter_screen.dart';
@@ -84,7 +85,8 @@ class NotificationScreen extends StatelessWidget {
                       'Notification $index',
                       style: TextStyle(
                         color: AppColor.black,
-                        fontSize: 18,
+                        // fontSize: 18,
+                        fontSize: getDynamicHeight(size: 0.020),
                         fontWeight: FontWeight.bold,
                         fontFamily: CommonFontStyle.plusJakartaSans,
                       ),
@@ -92,7 +94,8 @@ class NotificationScreen extends StatelessWidget {
                     subtitle: Text('Notification $index',
                         style: TextStyle(
                           color: AppColor.black,
-                          fontSize: 16,
+                          // fontSize: 16,
+                          fontSize: getDynamicHeight(size: 0.018),
                           fontWeight: FontWeight.w400,
                           fontFamily: CommonFontStyle.plusJakartaSans,
                         )),
@@ -102,7 +105,8 @@ class NotificationScreen extends StatelessWidget {
                         Text('12/12/2021',
                             style: TextStyle(
                               color: AppColor.black,
-                              fontSize: 14,
+                              // fontSize: 14,
+                              fontSize: getDynamicHeight(size: 0.018),
                               fontWeight: FontWeight.w400,
                               fontFamily: CommonFontStyle.plusJakartaSans,
                             )),

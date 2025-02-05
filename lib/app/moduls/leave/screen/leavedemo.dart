@@ -49,7 +49,10 @@ class Leavedemo extends GetView<LeaveController> {
         body: Center(
           child: Text(
             AppString.comingsoon,
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+              // fontSize: 20,
+              fontSize: getDynamicHeight(size: 0.022),
+            ),
           ),
         ),
       );

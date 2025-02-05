@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
 import 'package:emp_app/app/moduls/lvotApproval/screen/lvlist_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/screen/otlist_screen.dart';
@@ -55,13 +56,23 @@ class LvotapprovalScreen extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                               "${controller.selectedItems.length}",
-                                              style: TextStyle(color: AppColor.black,fontWeight: FontWeight.bold,fontSize: 18),
+                                              "${controller.selectedItems.length}",
+                                              style: TextStyle(
+                                                color: AppColor.black,
+                                                fontWeight: FontWeight.bold,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
+                                              ),
                                             ),
                                             SizedBox(width: 5),
                                             Text(
                                               "selected",
-                                              style: TextStyle(color: AppColor.black,fontWeight: FontWeight.bold,fontSize: 18),
+                                              style: TextStyle(
+                                                color: AppColor.black,
+                                                fontWeight: FontWeight.bold,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -407,7 +418,8 @@ class LvotapprovalScreen extends StatelessWidget {
             style: TextStyle(
               color: isEnabled ? Colors.black : Colors.grey,
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              // fontSize: 16,
+              fontSize: getDynamicHeight(size: 0.018),
             ),
             textAlign: TextAlign.center,
           ),

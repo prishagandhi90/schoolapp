@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -212,7 +213,11 @@ class PresviewerScreen extends StatelessWidget {
                                     ? Center(
                                         child: Text(
                                           "No data found",
-                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                                          style: TextStyle(
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       )
                                     : ListView.builder(
@@ -279,7 +284,11 @@ class PresviewerScreen extends StatelessWidget {
                                                               horizontal: 5), // Space between index and right side
                                                           child: Text(
                                                             "${index + 1}", // Dynamic index
-                                                            style: AppStyle.w50018.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+                                                            style: AppStyle.w50018.copyWith(
+                                                              // fontSize: 17,
+                                                              fontSize: getDynamicHeight(size: 0.019),
+                                                              fontWeight: FontWeight.w600,
+                                                            ),
                                                           ),
                                                         ),
                                                         // Right side: Text and Container
@@ -351,7 +360,11 @@ class PresviewerScreen extends StatelessWidget {
                                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                                       child: Text(
                                                         controller.filterpresviewerList[index].patientName.toString(),
-                                                        style: AppStyle.w50018.copyWith(fontSize: 17, fontWeight: FontWeight.w600),
+                                                        style: AppStyle.w50018.copyWith(
+                                                          // fontSize: 17,
+                                                          fontSize: getDynamicHeight(size: 0.019),
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
                                                       ),
                                                     ),
                                                     Padding(
@@ -372,7 +385,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                       TextSpan(
                                                                           text: controller.filterpresviewerList[index].printStatus
                                                                               .toString(), // Data
-                                                                          style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                                          style: AppStyle.w50018.copyWith(
+                                                                            // fontSize: 16,
+                                                                            fontSize: getDynamicHeight(size: 0.018),
+                                                                          )),
                                                                     ],
                                                                   ),
                                                                 ),
@@ -386,7 +402,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                       TextSpan(
                                                                           text: controller.filterpresviewerList[index].lastUser
                                                                               .toString(), // Data
-                                                                          style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                                          style: AppStyle.w50018.copyWith(
+                                                                            // fontSize: 16,
+                                                                            fontSize: getDynamicHeight(size: 0.018),
+                                                                          )),
                                                                     ],
                                                                   ),
                                                                 ),
@@ -400,7 +419,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                       TextSpan(
                                                                           text:
                                                                               controller.filterpresviewerList[index].ipd.toString(), // Data
-                                                                          style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                                          style: AppStyle.w50018.copyWith(
+                                                                            // fontSize: 16,
+                                                                            fontSize: getDynamicHeight(size: 0.018),
+                                                                          )),
                                                                     ],
                                                                   ),
                                                                 ),
@@ -422,7 +444,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].priority
                                                                                 .toString(), // Data
-                                                                            style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                                            style: AppStyle.w50018.copyWith(
+                                                                              // fontSize: 16,
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            )),
                                                                       ],
                                                                     ),
                                                                   ),
@@ -436,7 +461,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].rxStatus
                                                                                 .toString(), // Data
-                                                                            style: AppStyle.w50018.copyWith(fontSize: 16)),
+                                                                            style: AppStyle.w50018.copyWith(
+                                                                              // fontSize: 16,
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            )),
                                                                       ],
                                                                     ),
                                                                   ),
@@ -450,7 +478,10 @@ class PresviewerScreen extends StatelessWidget {
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].tokenNo
                                                                                 .toString(), // Data
-                                                                            style: AppStyle.w50018.copyWith(fontSize: 20)),
+                                                                            style: AppStyle.w50018.copyWith(
+                                                                              // fontSize: 20,
+                                                                              fontSize: getDynamicHeight(size: 0.022),
+                                                                            )),
                                                                       ],
                                                                     ),
                                                                   ),

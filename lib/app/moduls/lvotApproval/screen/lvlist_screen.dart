@@ -1,5 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -115,8 +116,9 @@ class LvList extends StatelessWidget {
                                                 alignment: Alignment.topLeft,
                                                 child: Text(
                                                   leaveItem.leaveDays.toString(),
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
+                                                  style: TextStyle(
+                                                    // fontSize: 20,
+                                                    fontSize: getDynamicHeight(size: 0.022),
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
@@ -133,8 +135,11 @@ class LvList extends StatelessWidget {
                                                     children: [
                                                       Text(
                                                         leaveItem.employeeCodeName.toString(),
-                                                        style: const TextStyle(
-                                                          fontSize: 17,
+                                                        style: TextStyle(
+                                                          // fontSize: 17,
+                                                          fontSize: getDynamicHeight(
+                                                            size: 0.019,
+                                                          ),
                                                           fontWeight: FontWeight.bold,
                                                         ),
                                                         softWrap: true,
@@ -147,18 +152,20 @@ class LvList extends StatelessWidget {
                                                           Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
-                                                              const Text(
+                                                              Text(
                                                                 "From",
                                                                 style: TextStyle(
                                                                   fontWeight: FontWeight.bold,
-                                                                  fontSize: 14,
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                 ),
                                                               ),
                                                               const SizedBox(height: 4),
                                                               Text(
                                                                 leaveItem.fromDate.toString(),
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
+                                                                style: TextStyle(
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                   color: Colors.black54,
                                                                 ),
                                                               ),
@@ -168,18 +175,20 @@ class LvList extends StatelessWidget {
                                                           Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
-                                                              const Text(
+                                                              Text(
                                                                 "To",
                                                                 style: TextStyle(
                                                                   fontWeight: FontWeight.bold,
-                                                                  fontSize: 14,
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                 ),
                                                               ),
                                                               const SizedBox(height: 4),
                                                               Text(
                                                                 leaveItem.toDate.toString(),
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
+                                                                style: TextStyle(
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                   color: Colors.black54,
                                                                 ),
                                                               ),
@@ -221,12 +230,15 @@ class LvList extends StatelessWidget {
                     // Displaying selected items at the end
                   ],
                 )
-              : const Padding(
+              : Padding(
                   padding: EdgeInsets.all(15),
                   child: Center(
                     child: Text(
                       "No data available",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                        // fontSize: 16,
+                        fontSize: getDynamicHeight(size: 0.018),
+                      ),
                     ),
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -120,7 +121,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                   title: Text(
                                     controller.filteredList[index]['label'],
                                     style: TextStyle(
-                                      fontSize: 16.0,
+                                      // fontSize: 16.0,
+                                      fontSize: getDynamicHeight(size: 0.018),
                                       fontFamily: CommonFontStyle.plusJakartaSans,
                                     ),
                                   ),
@@ -267,7 +269,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                               style: TextStyle(
-                                                                fontSize: 10, //12
+                                                                // fontSize: 10, //12
+                                                                fontSize: getDynamicHeight(size: 0.012),
                                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                               ),
                                                             )

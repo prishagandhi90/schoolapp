@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/overtime/controller/overtime_controller.dart';
 import 'package:flutter/material.dart';
@@ -677,7 +678,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                           text: TextSpan(
                                             text: AppString.empentryDT,
                                             style: TextStyle(
-                                              fontSize: 18,
+                                              // fontSize: 18,
+                                              fontSize: getDynamicHeight(size: 0.020),
                                               fontWeight: FontWeight.w700, // 20
                                               fontFamily: CommonFontStyle.plusJakartaSans,
                                               color: Colors.white60, // Main text color
@@ -686,7 +688,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                               TextSpan(
                                                 text: controller.otentryList[index].enterDate,
                                                 style: TextStyle(
-                                                  fontSize: 18,
+                                                  // fontSize: 18,
+                                                  fontSize: getDynamicHeight(size: 0.020),
                                                   fontWeight: FontWeight.w500, // Slightly lighter
                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                   color: Colors.white38, // Lighter color for right side text
@@ -703,7 +706,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                         text: TextSpan(
                                           text: AppString.deptIncDT,
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
                                             fontWeight: FontWeight.w700, // 20
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                             color: Colors.white60, // Main text color
@@ -712,7 +716,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             TextSpan(
                                               text: controller.otentryList[index].inchargeDate,
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                 color: Colors.white38, // Lighter color for right side text
@@ -728,7 +733,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                         text: TextSpan(
                                           text: AppString.depthodDT,
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
                                             fontWeight: FontWeight.w700, // 20
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                             color: Colors.white60, // Main text color
@@ -737,7 +743,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             TextSpan(
                                               text: controller.otentryList[index].hodDate,
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                 color: Colors.white38, // Lighter color for right side text
@@ -753,7 +760,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                         text: TextSpan(
                                           text: AppString.depthrDT,
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
                                             fontWeight: FontWeight.w700, // 20
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                             color: Colors.white60, // Main text color
@@ -762,7 +770,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             TextSpan(
                                               text: controller.otentryList[index].hrDate,
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                 color: Colors.white38, // Lighter color for right side text

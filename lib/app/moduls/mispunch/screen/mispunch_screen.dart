@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/monthpicker_mispunch.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
@@ -91,7 +92,8 @@ class MispunchScreen extends GetView<MispunchController> {
                                                 child: Text(
                                                   controller.mispunchTable[index].dt.toString(),
                                                   style: TextStyle(
-                                                    fontSize: 20,
+                                                    // fontSize: 20,
+                                                    fontSize: getDynamicHeight(size: 0.022),
                                                     fontWeight: FontWeight.w500, //20
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                                   ),

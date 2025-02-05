@@ -1,4 +1,5 @@
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,7 +67,8 @@ class MonthPicker extends StatelessWidget {
                       style: TextStyle(
                         color: controller.MonthSel_selIndex == index ? AppColor.white : AppColor.black,
                         fontWeight: controller.MonthSel_selIndex == index ? FontWeight.bold : FontWeight.normal,
-                        fontSize: controller.MonthSel_selIndex == index ? 18 : 15,
+                        // fontSize: controller.MonthSel_selIndex == index ? 18 : 15,
+                        fontSize: controller.MonthSel_selIndex == index ? getDynamicHeight(size: 0.020): getDynamicHeight(size: 0.017),
                       ),
                     ),
                   ),

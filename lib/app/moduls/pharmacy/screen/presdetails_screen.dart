@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,8 @@ class PresdetailsScreen extends StatelessWidget {
         String patientName = controller.presviewerList[controller.SelectedIndex].patientName.toString();
         TextStyle textStyle = TextStyle(
           color: AppColor.black,
-          fontSize: 20,
+          // fontSize: 20,
+          fontSize: getDynamicHeight(size: 0.022),
           fontWeight: FontWeight.bold,
         );
 
@@ -89,7 +91,8 @@ class PresdetailsScreen extends StatelessWidget {
                                     controller.presviewerList[controller.SelectedIndex].patientName.toString(),
                                     style: TextStyle(
                                       color: AppColor.black,
-                                      fontSize: 20,
+                                      // fontSize: 20,
+                                      fontSize: getDynamicHeight(size: 0.022),
                                       fontWeight: FontWeight.bold,
                                     ),
                                     maxLines: 2, // Allow wrapping in 2 lines
@@ -111,7 +114,11 @@ class PresdetailsScreen extends StatelessWidget {
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].mop.toString(),
                                             style: TextStyle(
-                                                fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans, fontWeight: FontWeight.w700),
+                                              // fontSize: 16,
+                                              fontSize: getDynamicHeight(size: 0.018),
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -123,7 +130,11 @@ class PresdetailsScreen extends StatelessWidget {
                                           Text(
                                             controller.presviewerList[controller.SelectedIndex].bed.toString(),
                                             textAlign: TextAlign.start,
-                                            style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                            style: TextStyle(
+                                              // fontSize: 16,
+                                              fontSize: getDynamicHeight(size: 0.018),
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
                                           ),
                                           SizedBox(height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
                                           Text.rich(
@@ -132,7 +143,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                 TextSpan(
                                                   text: AppString.intercom, // Bold label
                                                   style: TextStyle(
-                                                    fontSize: 16,
+                                                    // fontSize: 16,
+                                                    fontSize: getDynamicHeight(size: 0.018),
                                                     fontWeight: FontWeight.bold,
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                                   ),
@@ -140,7 +152,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                 TextSpan(
                                                   text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
                                                   style: TextStyle(
-                                                    fontSize: 16,
+                                                    // fontSize: 16,
+                                                    fontSize: getDynamicHeight(size: 0.018),
                                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                                   ),
                                                 ),
@@ -161,7 +174,11 @@ class PresdetailsScreen extends StatelessWidget {
                                     Expanded(
                                       child: Text(
                                         controller.presviewerList[controller.SelectedIndex].dte.toString(),
-                                        style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                        style: TextStyle(
+                                          // fontSize: 16,
+                                          fontSize: getDynamicHeight(size: 0.018),
+                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                        ),
                                       ),
                                     ),
                                     // Token No and QR Code Image
@@ -172,7 +189,8 @@ class PresdetailsScreen extends StatelessWidget {
                                             TextSpan(
                                               text: AppString.tokenNo, // Bold label
                                               style: TextStyle(
-                                                fontSize: 16,
+                                                // fontSize: 16,
+                                                fontSize: getDynamicHeight(size: 0.018),
                                                 fontWeight: FontWeight.bold,
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                               ),
@@ -180,7 +198,8 @@ class PresdetailsScreen extends StatelessWidget {
                                             TextSpan(
                                               text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.bold,
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                               ),
@@ -203,7 +222,11 @@ class PresdetailsScreen extends StatelessWidget {
                                           child: Text(
                                             // 'lfkjdslkfjsdlkjflkjsdlkfjlksdjflksdlkjflksdjlkfjsdlkjflkjsdlk',
                                             controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                                            style: TextStyle(fontSize: 16, fontFamily: CommonFontStyle.plusJakartaSans),
+                                            style: TextStyle(
+                                              // fontSize: 16,
+                                              fontSize: getDynamicHeight(size: 0.018),
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
                                           ),
                                         ),
                                         SizedBox(width: fullScreenWidth * (1.1 / 100)),
@@ -297,7 +320,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                                 "${index + 1}.", // Serial number starts from 1
                                                                 style: TextStyle(
                                                                   fontWeight: FontWeight.bold,
-                                                                  fontSize: 16,
+                                                                  // fontSize: 16,
+                                                                  fontSize: getDynamicHeight(size: 0.018),
                                                                   color: AppColor.black,
                                                                 ),
                                                                 overflow: TextOverflow.ellipsis,
@@ -309,7 +333,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                                   controller.presdetailList[index].formBrand.toString(),
                                                                   style: TextStyle(
                                                                     fontWeight: FontWeight.w600,
-                                                                    fontSize: 15,
+                                                                    // fontSize: 15,
+                                                                    fontSize: getDynamicHeight(size: 0.017),
                                                                   ),
                                                                   overflow: TextOverflow.ellipsis,
                                                                   maxLines: 2,
@@ -325,7 +350,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                                   TextSpan(
                                                                     text: controller.presdetailList[index].genericName.toString(),
                                                                     style: TextStyle(
-                                                                      fontSize: 14,
+                                                                      // fontSize: 14,
+                                                                      fontSize: getDynamicHeight(size: 0.016),
                                                                       fontStyle: FontStyle.italic,
                                                                       fontWeight: FontWeight.w500,
                                                                       fontFamily: CommonFontStyle.plusJakartaSans,
@@ -362,7 +388,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                               TextSpan(
                                                                 text: AppString.quantity,
                                                                 style: TextStyle(
-                                                                  fontSize: 14,
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                   fontWeight: FontWeight.bold,
                                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                                 ),
@@ -370,7 +397,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                               TextSpan(
                                                                 text: controller.presdetailList[index].qty.toString(),
                                                                 style: TextStyle(
-                                                                  fontSize: 14,
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                   fontWeight: FontWeight.w500,
                                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                                 ),
@@ -387,7 +415,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                               TextSpan(
                                                                 text: AppString.pkg,
                                                                 style: TextStyle(
-                                                                  fontSize: 14,
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                   fontWeight: FontWeight.bold,
                                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                                 ),
@@ -395,7 +424,8 @@ class PresdetailsScreen extends StatelessWidget {
                                                               TextSpan(
                                                                 text: controller.presdetailList[index].pkg.toString(),
                                                                 style: TextStyle(
-                                                                  fontSize: 14,
+                                                                  // fontSize: 14,
+                                                                  fontSize: getDynamicHeight(size: 0.016),
                                                                   fontWeight: FontWeight.w500,
                                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                                 ),

@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,17 +56,14 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       itemCount: controller.leaveentryList.length,
                                       itemBuilder: (context, index) {
                                         final row = controller.leaveentryList[index];
-                                        final isSelected =
-                                            controller.selectedRowIndex == index; // Check if row is selected
+                                        final isSelected = controller.selectedRowIndex == index; // Check if row is selected
 
                                         return GestureDetector(
                                           onTap: () {
                                             // Trigger API Call here
                                             // controller.callApiForRow(row);
-                                            controller.inchargeAction.value =
-                                                controller.leaveentryList[index].inchargeAction ?? '';
-                                            controller.hodAction.value =
-                                                controller.leaveentryList[index].hodAction ?? '';
+                                            controller.inchargeAction.value = controller.leaveentryList[index].inchargeAction ?? '';
+                                            controller.hodAction.value = controller.leaveentryList[index].hodAction ?? '';
                                             controller.hrAction.value = controller.leaveentryList[index].hrAction ?? '';
                                             controller.setSelectedRow(index);
                                             controller.update();
@@ -404,9 +402,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -447,9 +443,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -490,9 +484,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -533,9 +525,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -576,9 +566,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -619,9 +607,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -662,9 +648,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -706,9 +690,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           )
                                         : Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('--:--', style: AppStyle.plus16w600)),
+                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
                                           ),
                                   ],
                                 ),
@@ -730,7 +712,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           text: TextSpan(
                                             text: 'Emp Entry D/T : ',
                                             style: TextStyle(
-                                              fontSize: 18,
+                                              // fontSize: 18,
+                                              fontSize: getDynamicHeight(size: 0.020),
                                               fontWeight: FontWeight.w700, // 20
                                               fontFamily: CommonFontStyle.plusJakartaSans,
                                               color: Colors.white60, // Main text color
@@ -739,7 +722,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                               TextSpan(
                                                 text: controller.leaveentryList[index].enterDate,
                                                 style: TextStyle(
-                                                  fontSize: 18,
+                                                  // fontSize: 18,
+                                                  fontSize: getDynamicHeight(size: 0.020),
                                                   fontWeight: FontWeight.w500, // Slightly lighter
                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                   color: Colors.white38, // Lighter color for right side text
@@ -756,7 +740,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         text: TextSpan(
                                           text: 'Dept InC D/T : ',
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
                                             fontWeight: FontWeight.w700, // 20
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                             color: Colors.white60, // Main text color
@@ -765,7 +750,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                             TextSpan(
                                               text: controller.leaveentryList[index].inchargeDate,
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                 color: Colors.white38, // Lighter color for right side text
@@ -781,7 +767,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         text: TextSpan(
                                           text: 'Dept HOD D/T : ',
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
                                             fontWeight: FontWeight.w700, // 20
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                             color: Colors.white60, // Main text color
@@ -790,7 +777,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                             TextSpan(
                                               text: controller.leaveentryList[index].hodDate,
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                 color: Colors.white38, // Lighter color for right side text
@@ -806,7 +794,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         text: TextSpan(
                                           text: 'Dept HR D/T : ',
                                           style: TextStyle(
-                                            fontSize: 18,
+                                            // fontSize: 18,
+                                            fontSize: getDynamicHeight(size: 0.020),
                                             fontWeight: FontWeight.w700, // 20
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                             color: Colors.white60, // Main text color
@@ -815,7 +804,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                             TextSpan(
                                               text: controller.leaveentryList[index].hrDate,
                                               style: TextStyle(
-                                                fontSize: 18,
+                                                // fontSize: 18,
+                                                fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                                 color: Colors.white38, // Lighter color for right side text

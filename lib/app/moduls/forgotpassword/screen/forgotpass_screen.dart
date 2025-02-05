@@ -52,7 +52,8 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                               AppString.generateotp,
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
-                                fontSize: 22,
+                                // fontSize: 22,
+                                fontSize: getDynamicHeight(size: 0.024),
                                 fontFamily: CommonFontStyle.plusJakartaSans,
                               ),
                             ),
@@ -142,7 +143,8 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                     AppString.cancel,
                                     style: TextStyle(
                                       color: AppColor.black,
-                                      fontSize: 20,
+                                      // fontSize: 20,
+                                      fontSize: getDynamicHeight(size: 0.022),
                                       fontWeight: FontWeight.w700,
                                       fontFamily: CommonFontStyle.plusJakartaSans,
                                     ),

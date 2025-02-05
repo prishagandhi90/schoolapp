@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
@@ -40,7 +41,8 @@ class CircularScreen extends StatelessWidget {
                           'HR',
                           style: TextStyle(
                             color: AppColor.black,
-                            fontSize: 18,
+                            // fontSize: 18,
+                            fontSize: getDynamicHeight(size: 0.020),
                             fontWeight: FontWeight.bold,
                             fontFamily: CommonFontStyle.plusJakartaSans,
                           ),
@@ -49,7 +51,8 @@ class CircularScreen extends StatelessWidget {
                           '12/12/2021',
                           style: TextStyle(
                             color: AppColor.black,
-                            fontSize: 14,
+                            // fontSize: 14,
+                            fontSize: getDynamicHeight(size: 0.016),
                             fontWeight: FontWeight.w400,
                             fontFamily: CommonFontStyle.plusJakartaSans,
                           ),
@@ -61,7 +64,8 @@ class CircularScreen extends StatelessWidget {
                       'data',
                       style: TextStyle(
                         color: AppColor.black,
-                        fontSize: 14,
+                        // fontSize: 14,
+                        fontSize: getDynamicHeight(size: 0.016),
                         fontWeight: FontWeight.w400,
                         fontFamily: CommonFontStyle.plusJakartaSans,
                       ),
@@ -76,7 +80,7 @@ class CircularScreen extends StatelessWidget {
 
           /// ✅ Ye part bottom pe fixed rahega
           Padding(
-            padding: const EdgeInsets.only(bottom: 25,left: 15),
+            padding: const EdgeInsets.only(bottom: 25, left: 15),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Container(
@@ -101,7 +105,8 @@ class CircularScreen extends StatelessWidget {
                     'FFG.pdf',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
+                      // fontSize: 16,
+                      fontSize: getDynamicHeight(size: 0.018),
                       fontWeight: FontWeight.w500,
                       fontFamily: CommonFontStyle.plusJakartaSans,
                     ),

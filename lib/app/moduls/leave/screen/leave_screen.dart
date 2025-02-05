@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/leave/model/dropdownlist_custom.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -97,7 +98,10 @@ class LeaveScreen extends GetView<LeaveController> {
                                         },
                                         child: Text(
                                           item.name ?? '',
-                                          style: AppStyle.black.copyWith(fontSize: 14),
+                                          style: AppStyle.black.copyWith(
+                                            // fontSize: 14,
+                                            fontSize: getDynamicHeight(size: 0.016),
+                                          ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ))
@@ -116,7 +120,11 @@ class LeaveScreen extends GetView<LeaveController> {
                                 style: TextStyle(color: AppColor.white),
                                 decoration: InputDecoration(
                                     hintText: controller.leftleavedays.value != '' ? 'Left ' : 'Left',
-                                    hintStyle: TextStyle(color: AppColor.white, fontSize: 15),
+                                    hintStyle: TextStyle(
+                                      color: AppColor.white,
+                                      // fontSize: 15,
+                                      fontSize: getDynamicHeight(size: 0.017),
+                                    ),
                                     contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: AppColor.darkGreen),
@@ -157,7 +165,10 @@ class LeaveScreen extends GetView<LeaveController> {
                                         },
                                         child: Text(
                                           item.name ?? '',
-                                          style: AppStyle.black.copyWith(fontSize: 14),
+                                          style: AppStyle.black.copyWith(
+                                            // fontSize: 14,
+                                            fontSize: getDynamicHeight(size: 0.016),
+                                          ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ))
@@ -207,7 +218,10 @@ class LeaveScreen extends GetView<LeaveController> {
                                   },
                                   child: Text(
                                     item.name ?? '', // Display the name in the dropdown
-                                    style: AppStyle.black.copyWith(fontSize: 14),
+                                    style: AppStyle.black.copyWith(
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ))
@@ -218,7 +232,10 @@ class LeaveScreen extends GetView<LeaveController> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: CustomTextFormField(
                         hint: AppString.note,
-                        hintStyle: AppStyle.black.copyWith(fontSize: 14),
+                        hintStyle: AppStyle.black.copyWith(
+                          // fontSize: 14,
+                          fontSize: getDynamicHeight(size: 0.016),
+                        ),
                         minLines: 3,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -270,7 +287,10 @@ class LeaveScreen extends GetView<LeaveController> {
                                   },
                                   child: Text(
                                     item.name ?? '', // Display the name in the dropdown
-                                    style: AppStyle.black.copyWith(fontSize: 14),
+                                    style: AppStyle.black.copyWith(
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ))
@@ -304,7 +324,10 @@ class LeaveScreen extends GetView<LeaveController> {
                                   },
                                   child: Text(
                                     item.name ?? '', // Display the name in the dropdown
-                                    style: AppStyle.black.copyWith(fontSize: 14),
+                                    style: AppStyle.black.copyWith(
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ))
@@ -332,7 +355,10 @@ class LeaveScreen extends GetView<LeaveController> {
                             ? const CircularProgressIndicator()
                             : Text(
                                 AppString.save,
-                                style: AppStyle.black.copyWith(fontSize: 20),
+                                style: AppStyle.black.copyWith(
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
+                                ),
                               ),
                       ),
                     ),

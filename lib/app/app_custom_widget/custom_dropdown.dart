@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -37,7 +38,8 @@ class CustomDropdown extends StatelessWidget {
           hint: Text(
             text,
             style: TextStyle(
-              fontSize: 14,
+              // fontSize: 14,
+              fontSize: getDynamicHeight(size: 0.016),
               color: AppColor.black,
             ),
           ),

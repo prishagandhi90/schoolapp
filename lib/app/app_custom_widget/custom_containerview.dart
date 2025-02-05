@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
 class CustomContainerview extends StatelessWidget {
@@ -15,7 +16,8 @@ class CustomContainerview extends StatelessWidget {
           text,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 12, //15
+            // fontSize: 12, //15
+            fontSize: getDynamicHeight(size: 0.014),
             fontWeight: FontWeight.w600,
             fontFamily: CommonFontStyle.plusJakartaSans,
           ),

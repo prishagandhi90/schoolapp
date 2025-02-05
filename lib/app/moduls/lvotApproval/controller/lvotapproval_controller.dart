@@ -8,6 +8,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/leaveapprejlist_model.dart';
@@ -503,7 +504,12 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
             mainAxisSize: MainAxisSize.min,
             children: [
               Text("You are going to approve rejected leave or overtime. Are you sure you want to accept this record?",
-                  style: TextStyle(color: AppColor.black, fontWeight: FontWeight.w600, fontSize: 20)),
+                  style: TextStyle(
+                    color: AppColor.black,
+                    fontWeight: FontWeight.w600,
+                    // fontSize: 20,
+                    fontSize: getDynamicHeight(size: 0.022),
+                  )),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -570,7 +576,12 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
             mainAxisSize: MainAxisSize.min,
             children: [
               Text("Are you sure you want to approve this record?",
-                  style: TextStyle(color: AppColor.black, fontWeight: FontWeight.w600, fontSize: 20)),
+                  style: TextStyle(
+                    color: AppColor.black,
+                    fontWeight: FontWeight.w600,
+                    // fontSize: 20,
+                    fontSize: getDynamicHeight(size: 0.022),
+                  )),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -672,7 +683,10 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                                 },
                                 child: Text(
                                   item.name ?? '', // Display the name in the dropdown
-                                  style: AppStyle.black.copyWith(fontSize: 14),
+                                  style: AppStyle.black.copyWith(
+                                    // fontSize: 14,
+                                    fontSize: getDynamicHeight(size: 0.016),
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ))

@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -109,12 +110,16 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home,
-                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.home, color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.home,
-                  style: TextStyle(
-                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+              Text(
+                AppString.home,
+                style: TextStyle(
+                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  // fontSize: 12,
+                  fontSize: getDynamicHeight(size: 0.014),
+                ),
+              ),
             ],
           ),
         ),
@@ -124,7 +129,14 @@ class BottomBarController extends GetxController {
             children: [
               Image.asset(AppImage.home, color: AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.home, style: TextStyle(color: AppColor.black, fontSize: 12)),
+              Text(
+                AppString.home,
+                style: TextStyle(
+                  color: AppColor.black,
+                  // fontSize: 12,
+                  fontSize: getDynamicHeight(size: 0.014),
+                ),
+              ),
             ],
           ),
         ),
@@ -144,9 +156,14 @@ class BottomBarController extends GetxController {
               Image.asset(AppImage.attendance,
                   color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.attendance,
-                  style: TextStyle(
-                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+              Text(
+                AppString.attendance,
+                style: TextStyle(
+                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                  // fontSize: 12,
+                  fontSize: getDynamicHeight(size: 0.014),
+                ),
+              ),
             ],
           ),
         ),
@@ -156,7 +173,16 @@ class BottomBarController extends GetxController {
             children: [
               Image.asset(AppImage.attendance, color: AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.attendance, style: TextStyle(color: AppColor.black, fontSize: 12)),
+              Text(
+                AppString.attendance,
+                style: TextStyle(
+                  color: AppColor.black,
+                  // fontSize: 12,
+                  fontSize: getDynamicHeight(
+                    size: 0.014,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -173,7 +199,10 @@ class BottomBarController extends GetxController {
               SizedBox(height: 4),
               Text(AppString.dashboard,
                   style: TextStyle(
-                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                    color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                    // fontSize: 12,
+                    fontSize: getDynamicHeight(size: 0.014),
+                  )),
             ],
           ),
         ),
@@ -183,7 +212,12 @@ class BottomBarController extends GetxController {
             children: [
               Image.asset(AppImage.dashboard, color: AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.dashboard, style: TextStyle(color: AppColor.black, fontSize: 12)),
+              Text(AppString.dashboard,
+                  style: TextStyle(
+                    color: AppColor.black,
+                    // fontSize: 12,
+                    fontSize: getDynamicHeight(size: 0.014),
+                  )),
             ],
           ),
         ),
@@ -195,12 +229,14 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.leave,
-                  color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
+              Image.asset(AppImage.leave, color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
               Text(AppString.leave,
                   style: TextStyle(
-                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                    color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                    // fontSize: 12,
+                    fontSize: getDynamicHeight(size: 0.014),
+                  )),
             ],
           ),
         ),
@@ -210,7 +246,12 @@ class BottomBarController extends GetxController {
             children: [
               Image.asset(AppImage.leave, color: AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.leave, style: TextStyle(color: AppColor.black, fontSize: 12)),
+              Text(AppString.leave,
+                  style: TextStyle(
+                    color: AppColor.black,
+                    // fontSize: 12,
+                    fontSize: getDynamicHeight(size: 0.014),
+                  )),
             ],
           ),
         ),
@@ -227,7 +268,10 @@ class BottomBarController extends GetxController {
               SizedBox(height: 4),
               Text(AppString.overtime,
                   style: TextStyle(
-                      color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black, fontSize: 12)),
+                    color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
+                    // fontSize: 12,
+                    fontSize: getDynamicHeight(size: 0.014),
+                  )),
             ],
           ),
         ),
@@ -237,7 +281,12 @@ class BottomBarController extends GetxController {
             children: [
               Image.asset(AppImage.overtime, color: AppColor.black, height: 32, width: 32),
               SizedBox(height: 4),
-              Text(AppString.overtime, style: TextStyle(color: AppColor.black, fontSize: 12)),
+              Text(AppString.overtime,
+                  style: TextStyle(
+                    color: AppColor.black,
+                    // fontSize: 12,
+                    fontSize: getDynamicHeight(size: 0.014),
+                  )),
             ],
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
@@ -85,7 +86,12 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget textWidgetInfo() {
     return RichText(
       text: TextSpan(
-        style: TextStyle(fontSize: 15.0, color: AppColor.black, fontFamily: CommonFontStyle.plusJakartaSans),
+        style: TextStyle(
+          // fontSize: 15.0,
+          fontSize: getDynamicHeight(size: 0.017),
+          color: AppColor.black,
+          fontFamily: CommonFontStyle.plusJakartaSans,
+        ),
         children: [
           TextSpan(text: AppString.requestnewotp),
           otpController.secondsRemaining.value > 0
@@ -119,8 +125,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   showSnackBar() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '',
-          colorText: AppColor.white, backgroundColor: AppColor.black);
+      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
     });
   }
 
@@ -130,7 +135,8 @@ class _OtpScreenState extends State<OtpScreen> {
       width: 56,
       height: 56,
       textStyle: TextStyle(
-        fontSize: 22,
+        // fontSize: 22,
+        fontSize: getDynamicHeight(size: 0.024),
         color: AppColor.primaryColor,
       ),
       decoration: BoxDecoration(
@@ -167,7 +173,8 @@ class _OtpScreenState extends State<OtpScreen> {
                         AppString.verifyyiurnumber,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: 22,
+                          // fontSize: 22,
+                          fontSize: getDynamicHeight(size: 0.024),
                           fontFamily: CommonFontStyle.plusJakartaSans,
                         ),
                       ),
@@ -175,7 +182,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       Text(
                         "Please enter the 6 digit code we sent to \n+91 $maskedNumber",
                         style: TextStyle(
-                          fontSize: 15,
+                          // fontSize: 15,
+                          fontSize: getDynamicHeight(size: 0.017),
                           fontFamily: CommonFontStyle.plusJakartaSans,
                         ),
                       ),
@@ -208,8 +216,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           onPressed: otpController.isLoadingLogin
                               ? null
                               : () async {
-                                  if (otpController.otpController.text.isEmpty ||
-                                      otpController.otpController.text.length < 6) {
+                                  if (otpController.otpController.text.isEmpty || otpController.otpController.text.length < 6) {
                                     Get.snackbar(
                                       AppString.error,
                                       AppString.plzentervalidotp,
@@ -220,8 +227,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   } else {
                                     otpController.fromLogin = widget.fromLogin;
                                     otpController.update();
-                                    await otpController.otpOnClk(
-                                        context, loginController.responseOTPNo, otpController.deviceTok);
+                                    await otpController.otpOnClk(context, loginController.responseOTPNo, otpController.deviceTok);
                                   }
                                 },
                           style: ElevatedButton.styleFrom(
@@ -235,7 +241,8 @@ class _OtpScreenState extends State<OtpScreen> {
                               : Text(
                                   AppString.verify,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    // fontSize: 20,
+                                    fontSize: getDynamicHeight(size: 0.022),
                                     color: AppColor.black,
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                     fontWeight: FontWeight.w700,

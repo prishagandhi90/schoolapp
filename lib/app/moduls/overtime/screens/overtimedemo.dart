@@ -51,10 +51,13 @@ class OvertimeScreen extends GetView<OvertimeController> {
           bottomBarController.update();
         },
         drawer: CustomDrawer(),
-        body: const Center(
+        body: Center(
           child: Text(
             'Coming Soon...',
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(
+              // fontSize: 20,
+              fontSize: getDynamicHeight(size: 0.022),
+            ),
           ),
         ),
       );

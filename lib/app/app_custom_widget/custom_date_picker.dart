@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -30,7 +31,8 @@ class CustomDatePicker extends StatelessWidget {
         ),
         hintText: hintText,
         hintStyle: TextStyle(
-          fontSize: 14,
+          // fontSize: 14,
+          fontSize: getDynamicHeight(size: 0.016),
           // fontWeight: FontWeight.bold,
           color: Colors.black,
         ),

@@ -1,5 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,7 +47,11 @@ class _FilterScreenState extends State<FilterScreen> {
                 // ✅ **Filter by Days / Date Range (TOP)**
                 Text(
                   "Filter by days / date range",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    // fontSize: 16,
+                    fontSize: getDynamicHeight(size: 0.018),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 10),
 
@@ -80,7 +85,11 @@ class _FilterScreenState extends State<FilterScreen> {
                             },
                             activeColor: Colors.black,
                           ),
-                          Text(option, style: TextStyle(fontSize: 16)),
+                          Text(option,
+                              style: TextStyle(
+                                // fontSize: 16,
+                                fontSize: getDynamicHeight(size: 0.018),
+                              )),
                         ],
                       ),
                     );
@@ -94,7 +103,11 @@ class _FilterScreenState extends State<FilterScreen> {
                 // ✅ **Filter by Tags (BOTTOM)**
                 Text(
                   "Filter by tags",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    // fontSize: 16,
+                    fontSize: getDynamicHeight(size: 0.018),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 10),
 
@@ -107,7 +120,11 @@ class _FilterScreenState extends State<FilterScreen> {
                         children: [
                           Icon(Icons.check_circle, color: Colors.black, size: 20),
                           SizedBox(width: 10),
-                          Text(tag, style: TextStyle(fontSize: 14)),
+                          Text(tag,
+                              style: TextStyle(
+                                // fontSize: 14,
+                                fontSize: getDynamicHeight(size: 0.016),
+                              )),
                         ],
                       ),
                     );
@@ -136,7 +153,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Select Date Range", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text("Select Date Range",
+                      style: TextStyle(
+                        // fontSize: 18,
+                        fontSize: getDynamicHeight(size: 0.020),
+                        fontWeight: FontWeight.bold,
+                      )),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Row(

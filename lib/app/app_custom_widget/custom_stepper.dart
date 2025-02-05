@@ -1,5 +1,6 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,11 @@ class _CustomStepperState extends State<CustomStepper> {
             padding: EdgeInsets.symmetric(vertical: 100),
             child: Text(
               "No Data Found",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                // fontSize: 18,
+                fontSize: getDynamicHeight(size: 0.020),
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -91,7 +96,8 @@ class _CustomStepperState extends State<CustomStepper> {
                     stepData.content['date'] ?? '',
                     style: TextStyle(
                       color: isActive ? AppColor.primaryColor : Colors.grey, // Highlight active step
-                      fontSize: 15,
+                      // fontSize: 15,
+                      fontSize: getDynamicHeight(size: 0.017),
                     ),
                     textAlign: TextAlign.center,
                   ),

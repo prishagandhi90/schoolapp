@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -75,7 +76,8 @@ class FlexibleMonthPicker extends StatelessWidget {
                   style: TextStyle(
                     color: selectedMonthIndex == index ? AppColor.white : AppColor.black,
                     fontWeight: selectedMonthIndex == index ? FontWeight.bold : FontWeight.normal,
-                    fontSize: selectedMonthIndex == index ? 18 : 15,
+                    // fontSize: selectedMonthIndex == index ? 18 : 15,
+                    fontSize: selectedMonthIndex == index ? getDynamicHeight(size: 0.020) : getDynamicHeight(size: 0.017),
                   ),
                 ),
               ),

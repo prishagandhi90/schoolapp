@@ -6,6 +6,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/pharmafilter_model.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/presdetail_model.dart';
@@ -362,7 +363,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                           Text(
                             AppString.filterby,
                             style: TextStyle(
-                              fontSize: 25,
+                              // fontSize: 25,
+                              fontSize: getDynamicHeight(size: 0.027),
                               color: AppColor.black,
                               fontWeight: FontWeight.w700,
                             ),
@@ -384,7 +386,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                               Text(
                                 AppString.selectWardsName,
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
                                   color: AppColor.black,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -399,7 +402,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                               Text(
                                 AppString.floor,
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
                                   color: AppColor.black,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -414,7 +418,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                               Text(
                                 AppString.selectbed,
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
                                   color: AppColor.black,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -458,7 +463,11 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                   },
                                   child: Text(
                                     AppString.apply,
-                                    style: TextStyle(color: AppColor.white, fontSize: 15),
+                                    style: TextStyle(
+                                      color: AppColor.white,
+                                      // fontSize: 15,
+                                      fontSize: getDynamicHeight(size: 0.017),
+                                    ),
                                   )),
                             )),
                             SizedBox(
@@ -486,7 +495,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     child: Text(
                                       AppString.resetall,
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        // fontSize: 16,
+                                        fontSize: getDynamicHeight(size: 0.018),
                                         color: AppColor.white,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -550,7 +560,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                           Text(
                             AppString.sortby,
                             style: TextStyle(
-                              fontSize: 20,
+                              // fontSize: 20,
+                              fontSize: getDynamicHeight(size: 0.022),
                               fontWeight: FontWeight.w700,
                               color: AppColor.black,
                             ),
@@ -583,7 +594,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     Text(
                                       AppString.patientnameAtoZ,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
                                         fontWeight: FontWeight.w500,
                                         color: sortBySelected == 0 ? AppColor.primaryColor : AppColor.black,
                                       ),
@@ -614,7 +626,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     Text(
                                       AppString.patientnameZtoA,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
                                         fontWeight: FontWeight.w500,
                                         color: sortBySelected == 1 ? AppColor.primaryColor : AppColor.black,
                                       ),
@@ -645,7 +658,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     Text(
                                       AppString.staydaysLtH,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
                                         fontWeight: FontWeight.w500,
                                         color: sortBySelected == 2 ? AppColor.primaryColor : AppColor.black,
                                       ),
@@ -676,7 +690,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                     Text(
                                       AppString.staydaysHtL,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
                                         fontWeight: FontWeight.w500,
                                         color: sortBySelected == 3 ? AppColor.primaryColor : AppColor.black,
                                       ),
@@ -712,7 +727,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                       child: Text(
                                         AppString.reset,
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          // fontSize: 16,
+                                          fontSize: getDynamicHeight(size: 0.018),
                                           color: AppColor.white,
                                           fontWeight: FontWeight.w500,
                                         ),

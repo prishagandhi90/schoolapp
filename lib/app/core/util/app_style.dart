@@ -1,20 +1,24 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
 class AppStyle {
   static TextStyle plus16w600 = TextStyle(
-    fontSize: 16, //25
+    // fontSize: 16, //25
+    fontSize: getDynamicHeight(size: 0.018),
     fontWeight: FontWeight.w600,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle plus17w600 = TextStyle(
-    fontSize: 17, //25
+    // fontSize: 17, //25
+    fontSize: getDynamicHeight(size: 0.019),
     fontWeight: FontWeight.w600,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle w50018 = TextStyle(
-    fontSize: 18,
+    // fontSize: 18,
+    fontSize: getDynamicHeight(size: 0.020),
     fontWeight: FontWeight.w500,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
@@ -22,25 +26,30 @@ class AppStyle {
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle blackplus16 = TextStyle(
-    fontSize: 16, //18
+    // fontSize: 16, //18
+    fontSize: getDynamicHeight(size: 0.018),
     color: AppColor.black1,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle plus16 = TextStyle(
-    fontSize: 16, //18
+    // fontSize: 16, //18
+    fontSize: getDynamicHeight(size: 0.018),
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle plus10 = TextStyle(
-    fontSize: 10, //18
+    // fontSize: 10, //18
+    fontSize: getDynamicHeight(size: 0.012),
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle plus14w500 = TextStyle(
-    fontSize: 14, //18
+    // fontSize: 14, //18
+    fontSize: getDynamicHeight(size: 0.016),
     fontWeight: FontWeight.w500,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle plus12 = TextStyle(
-    fontSize: 12.0,
+    // fontSize: 12.0,
+    fontSize: getDynamicHeight(size: 0.014),
     overflow: TextOverflow.ellipsis,
     fontFamily: CommonFontStyle.plusJakartaSans,
     fontWeight: FontWeight.w500,
@@ -66,7 +75,8 @@ class AppStyle {
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle plusbold16 = TextStyle(
-    fontSize: 16,
+    // fontSize: 16,
+    fontSize: getDynamicHeight(size: 0.018),
     fontWeight: FontWeight.bold, // Bold style for heading
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
@@ -76,7 +86,8 @@ class AppStyle {
   );
   static TextStyle plusblack20w700 = TextStyle(
     color: AppColor.black,
-    fontSize: 20,
+    // fontSize: 20,
+    fontSize: getDynamicHeight(size: 0.022),
     fontWeight: FontWeight.w700,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
