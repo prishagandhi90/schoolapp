@@ -38,7 +38,7 @@ class CustomDropDownState extends State<DropDownAttendance> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(getDynamicHeight(size: 0.012)), //10),
+      padding: EdgeInsets.all(10),
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           key: UniqueKey(),
@@ -65,7 +65,8 @@ class CustomDropDownState extends State<DropDownAttendance> {
                     ),
                   ))
               .toList(),
-          value: widget.selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
+          value: widget
+              .selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
           onChanged: (String? value) {
             setState(() {
               widget.selValue = value;
