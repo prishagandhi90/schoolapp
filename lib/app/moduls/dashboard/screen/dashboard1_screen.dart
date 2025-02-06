@@ -1,4 +1,5 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/app_custom_widget/custom_gridview.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -47,7 +48,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
                   },
                   icon: Image.asset(
                     AppImage.drawer,
-                    width: 20,
+                    width: getDynamicHeight(size: 0.022),
                     color: AppColor.black,
                   ),
                 );
@@ -57,24 +58,24 @@ class Dashboard1Screen extends GetView<DashboardController> {
             actions: [
               IconButton(
                   onPressed: () {
-                    Get.to(NotificationScreen());
-                    // Get.snackbar(
-                    //   AppString.comingsoon,
-                    //   '',
-                    //   colorText: AppColor.white,
-                    //   backgroundColor: AppColor.black,
-                    //   duration: const Duration(seconds: 1),
-                    // );
+                    // Get.to(NotificationScreen());
+                    Get.snackbar(
+                      AppString.comingsoon,
+                      '',
+                      colorText: AppColor.white,
+                      backgroundColor: AppColor.black,
+                      duration: const Duration(seconds: 1),
+                    );
                   },
                   icon: Image.asset(
                     AppImage.notification,
-                    width: 20,
+                    width: getDynamicHeight(size: 0.022),
                   ))
             ],
           ),
           body: controller.isLoading.value
-              ? const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 100),
+              ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.102)), //100),
                   child: Center(child: ProgressWithIcon()),
                 )
               : const CustomGridview(),

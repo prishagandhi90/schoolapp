@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/dropdown_attendance.dart';
 import 'package:emp_app/app/moduls/attendence/screen/details_screen.dart';
@@ -63,10 +64,10 @@ class AttendanceScreen extends StatelessWidget {
             body: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.017)), //15),
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: EdgeInsets.all(getDynamicHeight(size: 0.005)), //4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: AppColor.lightblue,
@@ -80,7 +81,7 @@ class AttendanceScreen extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       labelColor: AppColor.white,
                       unselectedLabelColor: AppColor.black,
-                      dividerColor: Colors.transparent,
+                      dividerColor: AppColor.transparent,
                       // dragStartBehavior: DragStartBehavior.start,
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),

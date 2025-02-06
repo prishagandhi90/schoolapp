@@ -37,7 +37,11 @@ class CustomDrawer extends StatelessWidget {
               children: [
                 SizedBox(height: topPadding + 15),
                 Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 10, bottom: 5),
+                  padding: EdgeInsets.only(
+                    left: getDynamicHeight(size: 0.017), //15,
+                    top: getDynamicHeight(size: 0.012), // 10,
+                    bottom: getDynamicHeight(size: 0.007), //5,
+                  ),
                   child: Row(
                     children: [
                       Container(
@@ -46,7 +50,12 @@ class CustomDrawer extends StatelessWidget {
                             borderRadius: const BorderRadius.all(Radius.circular(10))),
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 30),
+                            padding: EdgeInsets.only(
+                              left: getDynamicHeight(size: 0.017), //15,
+                              right: getDynamicHeight(size: 0.017), //15,
+                              top: getDynamicHeight(size: 0.032), //30,
+                              bottom: getDynamicHeight(size: 0.032), //30,
+                            ),
                             child: Image.asset(
                               AppImage.venuspro,
                               scale: 2,
@@ -54,8 +63,8 @@ class CustomDrawer extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 15,
+                      SizedBox(
+                        width: getDynamicHeight(size: 0.017), //15,
                       ),
                       Expanded(
                         child: Column(
@@ -130,7 +139,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                 Container(
-                  height: 70,
+                  height: getDynamicHeight(size: 0.072), //70,
                   width: double.maxFinite,
                   decoration: BoxDecoration(
                       border: Border.all(
@@ -179,13 +188,13 @@ class CustomDrawer extends StatelessWidget {
                         dashboardController.gridOnClk(index, context);
                       },
                       child: SizedBox(
-                        height: 40,
+                        height: getDynamicHeight(size: 0.042), //40,
                         child: ListTile(
                           leading: Image.asset(
                             AppConst.listItems[index]['image'],
                             color: AppColor.primaryColor,
-                            height: 25,
-                            width: 25,
+                            height: getDynamicHeight(size: 0.027), //25,
+                            width: getDynamicHeight(size: 0.027), //25,
                           ),
                           title: Text(
                             AppConst.listItems[index]['label'],
@@ -218,8 +227,8 @@ class CustomDrawer extends StatelessWidget {
                     Expanded(
                       child: Center(
                         child: SizedBox(
-                          width: 120,
-                          height: 40,
+                          width: getDynamicHeight(size: 0.122), //120,
+                          height: getDynamicHeight(size: 0.042), //40,
                           child: ElevatedButton(
                             style: const ButtonStyle(
                               backgroundColor: WidgetStatePropertyAll(
@@ -242,8 +251,8 @@ class CustomDrawer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 10),
                         child: SizedBox(
-                          width: 100,
-                          height: 40,
+                          width: getDynamicHeight(size: 0.102), //120,
+                          height: getDynamicHeight(size: 0.042), //40,
                           child: ElevatedButton(
                             style: ButtonStyle(
                                 backgroundColor: WidgetStatePropertyAll(
@@ -251,7 +260,7 @@ class CustomDrawer extends StatelessWidget {
                                 ),
                                 shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                                   side: BorderSide(color: AppColor.black),
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(30),
                                 ))),
                             onPressed: () {
                               Get.to(SuperloginScreen(
@@ -273,19 +282,6 @@ class CustomDrawer extends StatelessWidget {
                     )
                   ],
                 ),
-                // SizedBox(
-                //     width: 120,
-                //     height: 40,
-                //     child: ElevatedButton(
-                //         style: const ButtonStyle(
-                //             backgroundColor: WidgetStatePropertyAll(Color.fromARGB(204, 244, 67, 54))),
-                //         onPressed: () {
-                //           otpController.showLogoutDialog(context);
-                //         },
-                //         child: Text(
-                //           AppString.logout,
-                //           style: TextStyle(color: AppColor.white),
-                //         ))),
                 const SizedBox(
                   height: 20,
                 ),

@@ -3,6 +3,7 @@ import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -79,8 +80,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                   children: [
                                                     buildCell(
                                                       Container(
-                                                        height: 40,
-                                                        width: 30, // Width ko kam kiya gaya hai
+                                                        height: getDynamicHeight(size: 0.042), //40,
+                                                        width: getDynamicHeight(size: 0.032), //30, // Width ko kam kiya gaya hai
                                                         decoration: BoxDecoration(
                                                           color: AppColor.lightgrey,
                                                           borderRadius: BorderRadius.circular(10),
@@ -97,10 +98,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       Text(
                                                         controller.attendenceDetailTable[index].iN.toString(),
                                                         style: AppStyle.fontfamilyplus.copyWith(
-                                                          color:
-                                                              controller.attendenceDetailTable[index].redYNINTM == 'Y'
-                                                                  ? AppColor.red
-                                                                  : AppColor.black, // redYNINTM se color set kiya
+                                                          color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
+                                                              ? AppColor.red
+                                                              : AppColor.black, // redYNINTM se color set kiya
                                                         ),
                                                       ),
                                                     ),
@@ -108,10 +108,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                       Text(
                                                         controller.attendenceDetailTable[index].out.toString(),
                                                         style: AppStyle.fontfamilyplus.copyWith(
-                                                          color:
-                                                              controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
-                                                                  ? AppColor.red
-                                                                  : AppColor.black, // redYNOUTTM se color set kiya
+                                                          color: controller.attendenceDetailTable[index].redYNOUTTM == 'Y'
+                                                              ? AppColor.red
+                                                              : AppColor.black, // redYNOUTTM se color set kiya
                                                         ),
                                                       ),
                                                     ),
@@ -120,8 +119,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         controller.attendenceDetailTable[index].lCEGMIN.toString(),
                                                         textAlign: TextAlign.center,
                                                         style: AppStyle.fontfamilyplus.copyWith(
-                                                          color: controller.attendenceDetailTable[index].redYNLCEGMIN ==
-                                                                  'Y'
+                                                          color: controller.attendenceDetailTable[index].redYNLCEGMIN == 'Y'
                                                               ? AppColor.red
                                                               : AppColor.black, // redYNLCEGMIN se color set kiya
                                                         ),
@@ -147,7 +145,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                 ),
                               )
                             : Padding(
-                                padding: const EdgeInsets.all(15),
+                                padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15),
                                 child: Center(
                                   child: Text(
                                     AppString.noattendencedata,
@@ -168,7 +166,7 @@ class DetailsScreen extends GetView<AttendenceController> {
   Widget buildHeaderCell(String text, double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(getDynamicHeight(size: 0.010)), //8),
       child: Text(
         text,
         textAlign: TextAlign.center,
@@ -182,7 +180,7 @@ class DetailsScreen extends GetView<AttendenceController> {
 
   Widget buildCell(Widget child) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(getDynamicHeight(size: 0.010)), //8),
       child: child,
     );
   }
@@ -195,7 +193,8 @@ class DetailsScreen extends GetView<AttendenceController> {
         enableDrag: true,
         context: Get.context!,
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.95,
+          maxWidth: getDynamicHeight(size: 0.9),
+          //  MediaQuery.of(context).size.width * 0.95,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -208,13 +207,13 @@ class DetailsScreen extends GetView<AttendenceController> {
                   ? SingleChildScrollView(
                       child: Column(
                         children: [
-                          const SizedBox(height: 10),
+                          SizedBox(height: getDynamicHeight(size: 0.010)), //10),
                           Row(
                             children: [
-                              const SizedBox(width: 30),
+                              SizedBox(width: getDynamicHeight(size: 0.032)), //30),
                               const Spacer(),
                               Container(
-                                width: 90,
+                                width: getDynamicHeight(size: 0.092),//90,
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
                                 child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
                               ),
@@ -225,8 +224,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                 },
                                 child: const Icon(Icons.close),
                               ),
-                              const SizedBox(
-                                width: 30,
+                               SizedBox(
+                                width: getDynamicHeight(size: 0.032),//30,
                               ),
                             ],
                           ),
@@ -244,8 +243,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
                                   height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),
                                     child: Align(
@@ -284,8 +282,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     children: [
                                       Flexible(
@@ -374,8 +371,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -447,8 +443,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   padding: const EdgeInsets.all(10),
                                   // width: double.infinity,
                                   // height: 45,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Row(
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [

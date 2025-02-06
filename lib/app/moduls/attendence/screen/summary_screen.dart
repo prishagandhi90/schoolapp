@@ -2,6 +2,7 @@ import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,8 +27,8 @@ class SummaryScreen extends GetView<AttendenceController> {
               // },
             ),
             controller.isLoader.value
-                ? const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 100),
+                ? Padding(
+                    padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.102)), //100),
                     child: Center(child: ProgressWithIcon()),
                   )
                 : controller.attendenceSummaryTable.isNotEmpty

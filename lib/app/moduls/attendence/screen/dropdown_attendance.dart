@@ -38,7 +38,7 @@ class CustomDropDownState extends State<DropDownAttendance> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(getDynamicHeight(size: 0.012)), //10),
       child: DropdownButtonHideUnderline(
         child: DropdownButton2<String>(
           key: UniqueKey(),
@@ -74,17 +74,20 @@ class CustomDropDownState extends State<DropDownAttendance> {
             widget.onPressed(value!);
           },
           buttonStyleData: ButtonStyleData(
-            height: 50,
-            width: 120,
-            padding: const EdgeInsets.only(left: 14, right: 14),
+            height: getDynamicHeight(size: 0.052), //50,
+            width: getDynamicHeight(size: 0.122), //120,
+            padding: EdgeInsets.only(
+              left: getDynamicHeight(size: 0.016), //14,
+              right: getDynamicHeight(size: 0.016), //14,
+            ),
             decoration: BoxDecoration(
               border: Border.all(color: AppColor.black),
               color: AppColor.white,
               borderRadius: BorderRadius.circular(6.0),
             ),
           ),
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
+          menuItemStyleData: MenuItemStyleData(
+            height: getDynamicHeight(size: 0.042), //40,
           ),
         ),
       ),

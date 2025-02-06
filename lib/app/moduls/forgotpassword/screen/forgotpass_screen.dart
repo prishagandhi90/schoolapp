@@ -58,7 +58,9 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 40),
+                          SizedBox(
+                            height: getDynamicHeight(size: 0.042),
+                          ),
                           TextFormField(
                             controller: controller.numberController..text = mobileNumber,
                             keyboardType: TextInputType.number,
@@ -71,6 +73,10 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                               }
                               return null;
                             },
+                            style: TextStyle(
+                              fontFamily: CommonFontStyle.plusJakartaSans,
+                              fontSize: getDynamicHeight(size: 0.016),
+                            ),
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(10),
@@ -79,25 +85,39 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                               hintText: AppString.entermobileno,
                               hintStyle: TextStyle(
                                 fontFamily: CommonFontStyle.plusJakartaSans,
+                                fontSize: getDynamicHeight(size: 0.014),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.primaryColor),
+                                borderSide: BorderSide(
+                                  color: AppColor.primaryColor,
+                                  width: getDynamicHeight(size: 0.002),
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.primaryColor),
+                                borderSide: BorderSide(
+                                  color: AppColor.primaryColor,
+                                  width: getDynamicHeight(size: 0.002),
+                                ),
                               ),
                               border: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.primaryColor),
+                                borderSide: BorderSide(
+                                  color: AppColor.primaryColor,
+                                  width: getDynamicHeight(size: 0.002),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: getDynamicHeight(size: 0.01), // Fixed dynamic height
+                                horizontal: getDynamicHeight(size: 0.01), // Maintain spacing
                               ),
                             ),
                           ),
-                          const SizedBox(height: 55),
+                          SizedBox(height: getDynamicHeight(size: 0.057)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(
                                 height: MediaQuery.of(context).size.width * 0.13,
-                                width: MediaQuery.of(context).size.width * 0.35,
+                                width: MediaQuery.of(context).size.width * 0.38,
                                 child: ElevatedButton(
                                   onPressed: () async {
                                     // controller.isLoadingLogin ? null : controller.requestOTP(context);
@@ -119,7 +139,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                           AppString.continue1,
                                           style: TextStyle(
                                             color: AppColor.black,
-                                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                                            fontSize: getDynamicHeight(size: 0.022),
                                             fontWeight: FontWeight.w700,
                                             fontFamily: CommonFontStyle.plusJakartaSans,
                                           ),

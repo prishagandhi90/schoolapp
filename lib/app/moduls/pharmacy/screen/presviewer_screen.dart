@@ -29,7 +29,12 @@ class PresviewerScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: AppColor.white,
             automaticallyImplyLeading: false,
-            title: Text(AppString.prescriptionviewer, style: AppStyle.primaryplusw700),
+            title: Text(
+              AppString.prescriptionviewer,
+              style: AppStyle.primaryplusw700,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 color: Colors.white, // Set your default color here

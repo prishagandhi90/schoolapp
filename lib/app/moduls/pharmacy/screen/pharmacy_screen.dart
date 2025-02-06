@@ -265,6 +265,7 @@ class PharmacyScreen extends StatelessWidget {
                                     // fontSize: 19, // 4.5% of screen width
                                     fontSize: getDynamicHeight(size: 0.021),
                                   ),
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),

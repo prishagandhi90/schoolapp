@@ -119,12 +119,11 @@ class _CustomGridviewState extends State<CustomGridview> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset(
-              gridview[index]['image'],
-              color: AppColor.primaryColor,
-              height: 35, //50
-              width: 35, //50
-            ),
+            Image.asset(gridview[index]['image'],
+                color: AppColor.primaryColor,
+                height: getDynamicHeight(size: 0.037), //35,
+                width: getDynamicHeight(size: 0.037) //35,
+                ),
             Text(
               gridview[index]['label'],
               style: TextStyle(
@@ -135,8 +134,8 @@ class _CustomGridviewState extends State<CustomGridview> {
                 fontFamily: CommonFontStyle.plusJakartaSans,
               ),
             ),
-            const SizedBox(
-              height: 10, //5
+            SizedBox(
+              height: getDynamicHeight(size: 0.012), //10,
             )
           ],
         ),

@@ -49,9 +49,9 @@ class PayrollScreen extends GetView<PayrollController> {
                 backgroundColor: AppColor.white,
                 child: ListView(
                   children: [
-                    const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                    Padding(padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.022))), //20)),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
                       child: TextFormField(
                         focusNode: controller.focusNode,
                         cursorColor: AppColor.grey,
@@ -59,10 +59,10 @@ class PayrollScreen extends GetView<PayrollController> {
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                            borderRadius: BorderRadius.circular(25),
+                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.027)), //25),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
+                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.027)), //25.0),
                             borderSide: BorderSide(
                               color: AppColor.lightgrey1,
                             ),
@@ -100,7 +100,7 @@ class PayrollScreen extends GetView<PayrollController> {
                     GetBuilder<PayrollController>(
                       builder: (controller) {
                         return ListView.builder(
-                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.032)), //30),
                           shrinkWrap: true,
                           itemCount: controller.filteredList.length,
                           itemBuilder: (context, index) {
@@ -110,12 +110,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                 controller.payrolListOnClk(index, context);
                               },
                               child: SizedBox(
-                                height: 40,
+                                height: getDynamicHeight(size: 0.042), //40,
                                 child: ListTile(
                                   leading: Image.asset(
                                     controller.filteredList[index]['image'],
-                                    height: 25,
-                                    width: 25,
+                                    height: getDynamicHeight(size: 0.027), //25,
+                                    width: getDynamicHeight(size: 0.027), //25,
                                     color: AppColor.primaryColor,
                                   ),
                                   title: Text(
@@ -159,7 +159,7 @@ class PayrollScreen extends GetView<PayrollController> {
                     },
                     icon: Image.asset(
                       AppImage.drawer,
-                      width: 20,
+                      width: getDynamicHeight(size: 0.022), //20,
                       color: AppColor.black,
                     ),
                   );
@@ -178,7 +178,7 @@ class PayrollScreen extends GetView<PayrollController> {
                     },
                     icon: Image.asset(
                       AppImage.notification,
-                      width: 20,
+                      width: getDynamicHeight(size: 0.022), //20,
                     ))
               ],
               centerTitle: true,
@@ -189,7 +189,7 @@ class PayrollScreen extends GetView<PayrollController> {
                 bool isScrollable = constraints.maxHeight > availableHeight;
 
                 return Padding(
-                  padding: const EdgeInsets.all(15),
+                  padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15),
                   child: SingleChildScrollView(
                     controller: isScrollable ? controller.payrollScrollController : null,
                     physics: isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
@@ -198,14 +198,14 @@ class PayrollScreen extends GetView<PayrollController> {
                         minHeight: availableHeight,
                       ),
                       child: controller.isLoading.value
-                          ? const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100),
+                          ? Padding(
+                              padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.102)), //100),
                               child: Center(child: ProgressWithIcon()),
                             )
                           : Column(
                               children: [
                                 Container(
-                                    padding: const EdgeInsets.all(20),
+                                    padding: EdgeInsets.all(getDynamicHeight(size: 0.022)), //20),
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
@@ -222,17 +222,17 @@ class PayrollScreen extends GetView<PayrollController> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
                                           child: Text(AppString.todaysoverview, style: AppStyle.blackplus16),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
                                           child: Text(controller.formattedDate, style: AppStyle.plus17w600),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.all(10),
+                                          padding: EdgeInsets.all(getDynamicHeight(size: 0.012)), //10),
                                           child: Container(
-                                            padding: const EdgeInsets.all(20),
+                                            padding: EdgeInsets.all(getDynamicHeight(size: 0.022)), //20),
                                             decoration: BoxDecoration(
                                               boxShadow: [
                                                 BoxShadow(
@@ -242,7 +242,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     offset: Offset(3.0, 3.0))
                                               ],
                                               color: AppColor.white,
-                                              borderRadius: BorderRadius.circular(20),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.022)), //20),
                                               border: Border.all(color: AppColor.primaryColor),
                                             ),
                                             child: Row(
@@ -672,12 +672,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                 Container(
                                   color: AppColor.transparent,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    // mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             GestureDetector(
                                               onTap: () async {
@@ -718,9 +719,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 controller.isDutyScheduleNavigating.value = false;
                                               },
                                               child: Container(
-                                                height: MediaQuery.of(context).size.width * 0.14, // Dynamic height
+                                                height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
                                                 width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
-                                                margin: const EdgeInsets.only(top: 15),
+                                                margin: const EdgeInsets.only(top: 15, ),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
                                                     color: AppColor.primaryColor,
@@ -746,7 +747,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                           ],
                                         ),
                                       ),
-                                      const SizedBox(width: 10), // Space between containers
+                                      // const SizedBox(width: 5), // Space between containers
                                       Expanded(
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
@@ -791,7 +792,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 controller.isLVOTApprovalNavigating.value = false;
                                               },
                                               child: Container(
-                                                height: MediaQuery.of(context).size.width * 0.14, // Dynamic height
+                                                height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
                                                 width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
                                                 margin: const EdgeInsets.only(top: 15),
                                                 decoration: BoxDecoration(
