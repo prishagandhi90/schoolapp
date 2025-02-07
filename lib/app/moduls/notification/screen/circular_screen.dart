@@ -1,3 +1,5 @@
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -12,25 +14,16 @@ class CircularScreen extends StatelessWidget {
       backgroundColor: AppColor.white,
       appBar: AppBar(
         backgroundColor: AppColor.white,
-        title: Text(
-          'Circular Screen',
-          style: TextStyle(
-            color: AppColor.primaryColor,
-            fontWeight: FontWeight.w700,
-            fontFamily: CommonFontStyle.plusJakartaSans,
-          ),
-        ),
+        title: Text(AppString.circularScreen, style: AppStyle.primaryplusw700),
         centerTitle: true,
       ),
       body: Column(
         children: [
           Divider(color: AppColor.originalgrey, thickness: 1),
-
-          /// ✅ Ye part scrollable hoga
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:  EdgeInsets.all(getDynamicHeight(size: 0.010)),//8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -38,7 +31,7 @@ class CircularScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'HR',
+                          AppString.hr,
                           style: TextStyle(
                             color: AppColor.black,
                             // fontSize: 18,
@@ -59,7 +52,7 @@ class CircularScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: getDynamicHeight(size: 0.012)),//10),
                     Text(
                       'data',
                       style: TextStyle(

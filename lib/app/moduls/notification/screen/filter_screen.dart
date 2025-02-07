@@ -1,5 +1,8 @@
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
 import 'package:flutter/material.dart';
@@ -30,175 +33,321 @@ class _FilterScreenState extends State<FilterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(NotificationController());
     return GetBuilder<NotificationController>(
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColor.white,
           appBar: AppBar(
-            title: Text("Filters"),
-            backgroundColor: Colors.white,
-            elevation: 0,
+            title: Text(AppString.filters, style: AppStyle.primaryplusw700),
+            backgroundColor: AppColor.white,
+            centerTitle: true,
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Text(
+                    AppString.cancel,
+                    style: AppStyle.primaryplusw700.copyWith(
+                      fontSize: getDynamicHeight(size: 0.018),
+                    ),
+                    // TextStyle(
+                    //   color: AppColor.black,
+                    //   fontSize: 16,
+                    //   fontWeight: FontWeight.w700,
+                    //   fontFamily: CommonFontStyle.plusJakartaSans,
+                    // ),
+                  ))
+            ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ✅ **Filter by Days / Date Range (TOP)**
-                Text(
-                  "Filter by days / date range",
-                  style: TextStyle(
-                    // fontSize: 16,
-                    fontSize: getDynamicHeight(size: 0.018),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                // ✅ **Radio Button List**
-                Column(
-                  children: filterOptions.map((option) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedFilter = option;
-                        });
-
-                        // ✅ If "Date range" is selected, open BottomSheet
-                        if (option == "Date range") {
-                          _showDateRangeBottomSheet(context);
-                        }
-                      },
-                      child: Row(
-                        children: [
-                          Radio<String>(
-                            value: option,
-                            groupValue: selectedFilter,
-                            onChanged: (value) {
+          body: Column(
+            children: [
+              Divider(
+                color: AppColor.black,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(getDynamicHeight(size: 0.018)), //16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppString.filterbydays,
+                        style: TextStyle(
+                          fontSize: getDynamicHeight(size: 0.018),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.011)), //10),
+                      Column(
+                        children: filterOptions.map((option) {
+                          return GestureDetector(
+                            onTap: () {
                               setState(() {
-                                selectedFilter = value!;
+                                selectedFilter = option;
                               });
-
-                              if (value == "Date range") {
+                              if (option == "Date range") {
                                 _showDateRangeBottomSheet(context);
                               }
                             },
-                            activeColor: Colors.black,
-                          ),
-                          Text(option,
-                              style: TextStyle(
-                                // fontSize: 16,
-                                fontSize: getDynamicHeight(size: 0.018),
-                              )),
-                        ],
+                            child: Row(
+                              children: [
+                                Radio<String>(
+                                  value: option,
+                                  groupValue: selectedFilter,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedFilter = value!;
+                                    });
+
+                                    if (value == "Date range") {
+                                      _showDateRangeBottomSheet(context);
+                                    }
+                                  },
+                                  activeColor: AppColor.black,
+                                ),
+                                Text(option,
+                                    style: TextStyle(
+                                      fontSize: getDynamicHeight(size: 0.018),
+                                    )),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    );
-                  }).toList(),
-                ),
-
-                // ✅ **Divider**
-                SizedBox(height: 10),
-                Divider(color: Colors.black, thickness: 1),
-
-                // ✅ **Filter by Tags (BOTTOM)**
-                Text(
-                  "Filter by tags",
-                  style: TextStyle(
-                    // fontSize: 16,
-                    fontSize: getDynamicHeight(size: 0.018),
-                    fontWeight: FontWeight.bold,
+                      SizedBox(height: getDynamicHeight(size: 0.010)), //10),
+                      Divider(color: AppColor.black, thickness: 1),
+                      Text(
+                        AppString.filterbytags,
+                        style: TextStyle(
+                          fontSize: getDynamicHeight(size: 0.018),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.012)), //10),
+                      Column(
+                        children: tagFilters.map((tag) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.check_circle, color: AppColor.black, size: 20),
+                                SizedBox(width: getDynamicHeight(size: 0.012)), //10),
+                                Text(tag,
+                                    style: TextStyle(
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    )),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+                    ],
                   ),
                 ),
-                SizedBox(height: 10),
-
-                // ✅ **Column-Wise Tag List**
-                Column(
-                  children: tagFilters.map((tag) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Colors.black, size: 20),
-                          SizedBox(width: 10),
-                          Text(tag,
-                              style: TextStyle(
-                                // fontSize: 14,
-                                fontSize: getDynamicHeight(size: 0.016),
-                              )),
-                        ],
+              ),
+              Container(
+                color: AppColor.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.38,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          AppString.apply,
+                          style: TextStyle(
+                            color: AppColor.white,
+                            fontSize: getDynamicHeight(size: 0.022),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                        ),
+                        child: Text(
+                          AppString.reset,
+                          style: TextStyle(
+                            color: AppColor.white,
+                            fontSize: getDynamicHeight(size: 0.022),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
     );
   }
+}
 
-  void _showDateRangeBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (context) {
-        return GetBuilder<NotificationController>(
-          builder: (controller) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Select Date Range",
-                      style: TextStyle(
-                        // fontSize: 18,
-                        fontSize: getDynamicHeight(size: 0.020),
-                        fontWeight: FontWeight.bold,
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CustomDatePicker(
-                            dateController: controller.fromDateController,
-                            hintText: AppString.from,
-                            onDateSelected: () async => await controller.selectFromDate(context),
+void _showDateRangeBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (context) {
+      return GetBuilder<NotificationController>(
+        builder: (controller) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: getDynamicHeight(size: 0.032)), //30),
+                    const Spacer(),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Select Date",
+                        style: TextStyle(
+                          color: AppColor.primaryColor,
+                          fontSize: getDynamicHeight(size: 0.020),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomDatePicker(
+                          dateController: controller.fromDateController,
+                          hintText: AppString.from,
+                          onDateSelected: () async => await controller.selectFromDate(context),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 12.0,
+                      ),
+                      Expanded(
+                        child: CustomDatePicker(
+                          dateController: controller.toDateController,
+                          hintText: AppString.to,
+                          onDateSelected: () async => await controller.selectToDate(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                // Center(
+                //   child: ElevatedButton(
+                //     onPressed: () => Navigator.pop(context),
+                //     child: Text("Apply"),
+                //     style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                //   ),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.38,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // // controller.isLoadingLogin ? null : controller.requestOTP(context);
+                          // FocusScope.of(context).unfocus();
+                          // // FocusManager.instance.primaryFocus?.unfocus();
+                          // if (controller.passFormKey.currentState!.validate()) {
+                          //   controller.requestOTP(context);
+                          // }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        SizedBox(
-                          width: 12.0,
-                        ),
-                        Expanded(
-                          child: CustomDatePicker(
-                            dateController: controller.toDateController,
-                            hintText: AppString.to,
-                            onDateSelected: () async => await controller.selectToDate(context),
+                        child:
+                            // controller.isLoadingLogin
+                            //     ? const CircularProgressIndicator()
+                            //     :
+                            Text(
+                          AppString.confirm,
+                          style: TextStyle(
+                            color: AppColor.white,
+                            fontSize: getDynamicHeight(size: 0.022),
+                            fontWeight: FontWeight.w700,
+                            fontFamily: CommonFontStyle.plusJakartaSans,
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text("Apply"),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+                    const SizedBox(width: 10),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.primaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                        ),
+                        child: Text(
+                          AppString.cancel,
+                          style: TextStyle(
+                            color: AppColor.white,
+                            // fontSize: 20,
+                            fontSize: getDynamicHeight(size: 0.022),
+                            fontWeight: FontWeight.w700,
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
 }
 
 

@@ -721,7 +721,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                               child: Container(
                                                 height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
                                                 width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
-                                                margin: const EdgeInsets.only(top: 15, ),
+                                                margin: const EdgeInsets.only(
+                                                  top: 15,
+                                                ),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
                                                     color: AppColor.primaryColor,
@@ -742,7 +744,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                               controller.screens.isNotEmpty
                                                   ? controller.getScreenName(controller.screens[4].screenName.toString())
                                                   : "", // Empty string instead of SizedBox()
-                                              style: AppStyle.plus12,
+                                              style: AppStyle.plus12, overflow: TextOverflow.ellipsis, maxLines: 2,
+                                              textAlign: TextAlign.center,
                                             ),
                                           ],
                                         ),
@@ -815,7 +818,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                               controller.screens.isNotEmpty
                                                   ? controller.getScreenName(controller.screens[5].screenName.toString())
                                                   : "", // Empty string instead of SizedBox()
-                                              style: AppStyle.plus12,
+                                              style: AppStyle.plus12,textAlign: TextAlign.center,
                                             ),
                                           ],
                                         ),

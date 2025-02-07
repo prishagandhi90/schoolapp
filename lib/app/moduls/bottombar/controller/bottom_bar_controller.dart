@@ -113,8 +113,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.home,
                 color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
@@ -162,8 +162,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.attendance,
                 color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
@@ -212,8 +212,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.dashboard,
                 color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(AppString.dashboard,
@@ -232,8 +232,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.dashboard,
                 color: AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(AppString.dashboard,
@@ -256,8 +256,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.leave,
                 color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(AppString.leave,
@@ -276,8 +276,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.leave,
                 color: AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(AppString.leave,
@@ -300,8 +300,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.overtime,
                 color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(AppString.overtime,
@@ -320,8 +320,8 @@ class BottomBarController extends GetxController {
               Image.asset(
                 AppImage.overtime,
                 color: AppColor.black,
-                height: getDynamicHeight(size: 0.034),
-                width: getDynamicHeight(size: 0.034),
+                height: getDynamicHeight(size: 0.032),
+                width: getDynamicHeight(size: 0.032),
               ),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(AppString.overtime,

@@ -77,6 +77,10 @@ class LoginScreen extends GetView<LoginController> {
                             }
                             return null;
                           },
+                          style: TextStyle(
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                            fontSize: getDynamicHeight(size: 0.016),
+                          ),
                           inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.digitsOnly,
                             LengthLimitingTextInputFormatter(10),
@@ -88,13 +92,26 @@ class LoginScreen extends GetView<LoginController> {
                               fontSize: getDynamicHeight(size: 0.014),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.primaryColor),
+                              borderSide: BorderSide(
+                                color: AppColor.primaryColor,
+                                width: getDynamicHeight(size: 0.002),
+                              ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.primaryColor),
+                              borderSide: BorderSide(
+                                color: AppColor.primaryColor,
+                                width: getDynamicHeight(size: 0.002),
+                              ),
                             ),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.primaryColor),
+                              borderSide: BorderSide(
+                                color: AppColor.primaryColor,
+                                width: getDynamicHeight(size: 0.002),
+                              ),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: getDynamicHeight(size: 0.015), // Fixed dynamic height
+                              horizontal: getDynamicHeight(size: 0.015), // Maintain spacing
                             ),
                           ),
                         ),
@@ -114,6 +131,10 @@ class LoginScreen extends GetView<LoginController> {
                                   }
                                   return null;
                                 },
+                                style: TextStyle(
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                  fontSize: getDynamicHeight(size: 0.016),
+                                ),
                                 obscureText: loginController.hidePassword,
                                 inputFormatters: <TextInputFormatter>[
                                   LengthLimitingTextInputFormatter(23),
@@ -125,13 +146,26 @@ class LoginScreen extends GetView<LoginController> {
                                     fontSize: getDynamicHeight(size: 0.014),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: AppColor.primaryColor),
+                                    borderSide: BorderSide(
+                                      color: AppColor.primaryColor,
+                                      width: getDynamicHeight(size: 0.002),
+                                    ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: AppColor.primaryColor),
+                                    borderSide: BorderSide(
+                                      color: AppColor.primaryColor,
+                                      width: getDynamicHeight(size: 0.002),
+                                    ),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide(color: AppColor.primaryColor),
+                                    borderSide: BorderSide(
+                                      color: AppColor.primaryColor,
+                                      width: getDynamicHeight(size: 0.002),
+                                    ),
+                                  ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: getDynamicHeight(size: 0.015), // Fixed dynamic height
+                                    horizontal: getDynamicHeight(size: 0.015), // Maintain spacing
                                   ),
                                   suffixIcon: GestureDetector(
                                     onTap: () {

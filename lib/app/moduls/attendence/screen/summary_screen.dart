@@ -60,9 +60,9 @@ class SummaryScreen extends GetView<AttendenceController> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(15),
+                            padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.017)), //15),
                               decoration: BoxDecoration(
                                 color: AppColor.lightblue,
                                 border: Border.all(color: AppColor.primaryColor),
@@ -82,9 +82,9 @@ class SummaryScreen extends GetView<AttendenceController> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(15),
+                            padding: EdgeInsets.all(getDynamicHeight(size: 0.015)), //15),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.017)), //15),
                               decoration: BoxDecoration(
                                 color: AppColor.lightblue,
                                 border: Border.all(color: AppColor.primaryColor),

@@ -78,14 +78,19 @@ class _CustomGridviewState extends State<CustomGridview> {
 
   @override
   Widget build(BuildContext context) {
+    Sizes.init(context); // Initialize screen sizes
+
+    // Tablet aur mobile ke liye different aspect ratio
+    double aspectRatio = (Sizes.w < 100) ? (Sizes.w / 3) / (Sizes.h * 0.18) : 1.2;
+
     return GridView.builder(
-      padding: const EdgeInsets.all(15),
+      padding: EdgeInsets.all(getDynamicHeight(size: 0.017)),
       itemCount: gridview.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 18,
-        mainAxisSpacing: 18,
-        childAspectRatio: 1.30,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, // Har screen pe 3 hi columns rahenge
+        crossAxisSpacing: getDynamicHeight(size: 0.012), // Dynamic spacing
+        mainAxisSpacing: getDynamicHeight(size: 0.012), // Dynamic spacing
+        childAspectRatio: aspectRatio, // Tablet aur Mobile ke liye adjust
       ),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
@@ -98,18 +103,19 @@ class _CustomGridviewState extends State<CustomGridview> {
 
   Container card(int index) {
     bool isSelected = selectedIndex == index;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColor.white,
-        border: Border.all(color: AppColor.primaryColor),
-        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: AppColor.primaryColor, width: getDynamicHeight(size: 0.002)),
+        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
         boxShadow: isSelected
             ? [
                 BoxShadow(
                   color: AppColor.grey,
-                  spreadRadius: 2,
-                  offset: Offset(0, 4),
-                  blurRadius: 0.0,
+                  spreadRadius: getDynamicHeight(size: 0.004),
+                  offset: Offset(0, getDynamicHeight(size: 0.006)),
+                  blurRadius: getDynamicHeight(size: 0.01),
                 ),
               ]
             : [],
@@ -119,24 +125,22 @@ class _CustomGridviewState extends State<CustomGridview> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset(gridview[index]['image'],
-                color: AppColor.primaryColor,
-                height: getDynamicHeight(size: 0.037), //35,
-                width: getDynamicHeight(size: 0.037) //35,
-                ),
+            Image.asset(
+              gridview[index]['image'],
+              color: AppColor.primaryColor,
+              height: Sizes.w * 0.09, // Image size dynamic
+              width: Sizes.w * 0.09, // Image size dynamic
+            ),
             Text(
               gridview[index]['label'],
               style: TextStyle(
-                // fontSize: 15.0,
-                fontSize: getDynamicHeight(size: 0.017),
+                fontSize: Sizes.w * 0.035, // Dynamic font size
                 fontWeight: FontWeight.w600,
                 overflow: TextOverflow.ellipsis,
                 fontFamily: CommonFontStyle.plusJakartaSans,
               ),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(
-              height: getDynamicHeight(size: 0.012), //10,
-            )
           ],
         ),
       ),

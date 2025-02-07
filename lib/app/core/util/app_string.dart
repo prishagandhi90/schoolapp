@@ -156,5 +156,10 @@ class AppString {
   static String punchTime = "Punch Time";
   static String employeenote = "Employee Note";
   static String inchargestatus = "In-Charge Status";
-
+  static String confirm = "Confirm";
+  static String filters = "Filters";
+  static String filterbydays = "Filter by days / date range";
+  static String filterbytags = "Filter by tags";
+  static String notificationScreen = "Notification Screen";
+  static String circularScreen = "Circular Screen";
 }
