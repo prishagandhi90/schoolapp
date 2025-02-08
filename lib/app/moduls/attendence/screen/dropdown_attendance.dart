@@ -65,7 +65,8 @@ class CustomDropDownState extends State<DropDownAttendance> {
                     ),
                   ))
               .toList(),
-          value: widget.selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
+          value: widget
+              .selValue, //selectedValue, //widget.selValue == null || widget.selValue!.isNotEmpty ? widget.selValue : null,
           onChanged: (String? value) {
             setState(() {
               widget.selValue = value;
