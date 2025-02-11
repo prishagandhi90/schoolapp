@@ -10,6 +10,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/model/mispunchtable_model.dart';
 import 'package:emp_app/app/moduls/attendence/model/attpresenttable_model.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,6 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
   var initialIndex = 0.obs;
   late TabController tabController;
   RxInt currentTabIndex = 0.obs;
-  RxBool hideBottomBar = false.obs;
 
   @override
   void onInit() {
@@ -94,10 +94,10 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
 
   @override
   void onClose() {
-    // attendanceScrollController.dispose(); //
-    // monthScrollControllerSummary.dispose();
-    // monthScrollControllerDetail.dispose();
-    // tabController.dispose();
+    attendanceScrollController.dispose(); //
+    monthScrollControllerSummary.dispose();
+    monthScrollControllerDetail.dispose();
+    tabController.dispose();
     // monthScrollControllerDetail.dispose();
 
     super.onClose();
