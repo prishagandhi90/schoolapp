@@ -42,6 +42,7 @@ class NotificationScreen extends StatelessWidget {
                             decoration: InputDecoration(
                               hintText: "Search...",
                               border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(bottom: 8),
                             ),
                             style: AppStyle.primaryplusw700,
                           ),
