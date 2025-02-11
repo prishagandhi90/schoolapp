@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -282,6 +283,20 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         if (isLVOTApprovalNavigating.value) return;
         isLVOTApprovalNavigating.value = true;
 
+        if (empModuleScreenRightsTable.isNotEmpty) {
+          if (empModuleScreenRightsTable[5].rightsYN == "N") {
+            isLVOTApprovalNavigating.value = false;
+            Get.snackbar(
+              "You don't have access to this screen",
+              '',
+              colorText: AppColor.white,
+              backgroundColor: AppColor.black,
+              duration: const Duration(seconds: 1),
+            );
+            return;
+          }
+        }
+
         final bottomBarController = Get.put(BottomBarController());
         bottomBarController.currentIndex.value = -1;
 
@@ -300,7 +315,6 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         final lvotapprovalController = Get.put(LvotapprovalController());
         await lvotapprovalController.resetForm();
         await lvotapprovalController.fetchLeaveOTList("", "LV");
-        if (lvotapprovalController.leavelist.isNotEmpty) {}
         isLVOTApprovalNavigating.value = false;
         break;
       default:

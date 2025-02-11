@@ -66,6 +66,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                           },
                                           child: SingleChildScrollView(
                                             controller: controller.attendanceScrollController,
+                                            physics: const AlwaysScrollableScrollPhysics(),
                                             child: Table(
                                               columnWidths: {
                                                 0: FixedColumnWidth(constraints.maxWidth * 0.15),
