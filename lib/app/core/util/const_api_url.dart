@@ -1,6 +1,6 @@
 class ConstApiUrl {
-  static const portNo = "44166"; //LIVE
-  // static const portNo = "55555"; //"Backup";
+  // static const portNo = "44166"; //LIVE
+  static const portNo = "55555"; //"Backup";
   static const baseURL = 'http://117.217.126.127:$portNo';
   static const baseSecondURL = 'http://103.251.17.214:$portNo';
   String initailUrl = 'http://117.217.126.127:$portNo/api';
