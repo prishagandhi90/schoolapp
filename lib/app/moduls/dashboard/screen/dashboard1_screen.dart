@@ -58,14 +58,14 @@ class Dashboard1Screen extends GetView<DashboardController> {
             actions: [
               IconButton(
                   onPressed: () {
-                    Get.to(NotificationScreen());
-                    // Get.snackbar(
-                    //   AppString.comingsoon,
-                    //   '',
-                    //   colorText: AppColor.white,
-                    //   backgroundColor: AppColor.black,
-                    //   duration: const Duration(seconds: 1),
-                    // );
+                    // Get.to(NotificationScreen());
+                    Get.snackbar(
+                      AppString.comingsoon,
+                      '',
+                      colorText: AppColor.white,
+                      backgroundColor: AppColor.black,
+                      duration: const Duration(seconds: 1),
+                    );
                   },
                   icon: Image.asset(
                     AppImage.notification,

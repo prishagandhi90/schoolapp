@@ -323,18 +323,18 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   }
 
   String getImage(String screenName) {
-    switch (screenName) {
-      case "Attendance":
+    switch (screenName.toUpperCase()) {
+      case "ATTENDANCE":
         return AppImage.attendance;
-      case "Mispunch":
+      case "MISPUNCH":
         return AppImage.mispunch;
-      case "Leave":
+      case "LEAVE":
         return AppImage.leave;
-      case "Overtime":
+      case "OVERTIME":
         return AppImage.overtime;
-      case "Duty Schedule":
+      case "DUTY SCHEDULE":
         return AppImage.dutySchedule;
-      case "LV OT Approval":
+      case "LV OT APPROVAL":
         return AppImage.lvotapproval;
       default:
         return AppImage.attendance;
@@ -342,18 +342,18 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   }
 
   String getScreenName(String screenName) {
-    switch (screenName) {
-      case "Attendance":
+    switch (screenName.toUpperCase()) {
+      case "ATTENDANCE":
         return AppString.attendance;
-      case "Mispunch":
+      case "MISPUNCH":
         return AppString.mispunch;
-      case "Leave":
+      case "LEAVE":
         return AppString.leave;
-      case "Overtime":
+      case "OVERTIME":
         return AppString.overtime;
-      case "Duty Schedule":
+      case "DUTY SCHEDULE":
         return AppString.dutyschedule;
-      case "LV OT Approval":
+      case "LV OT APPROVAL":
         return AppString.lvotapproval;
       default:
         return AppString.attendance;

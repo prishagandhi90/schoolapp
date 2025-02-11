@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 class NotificationController extends GetxController {
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  bool isSearching = false;
 
   Future<void> selectFromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(

@@ -185,7 +185,6 @@ class LvotapprovalScreen extends StatelessWidget {
                                           ),
                                           Text(
                                             controller.isAllSelected.value ? "Unselect All" : "Select All",
-                                            // "Select All",
                                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                           ),
                                         ],

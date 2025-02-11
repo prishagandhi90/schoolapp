@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
+import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/circular_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/filter_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,102 +16,151 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: AppColor.white,
-      drawer: CustomDrawer(),
-      appBar: AppBar(
-        backgroundColor: AppColor.white,
-        title: Text(AppString.notificationScreen, style: AppStyle.primaryplusw700),
-        centerTitle: true,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: Image.asset(
-                AppImage.drawer,
-                width: getDynamicHeight(size: 0.022),//20,
-                color: AppColor.black,
-              ),
-            );
-          },
-        ),
-        actions: [
-          Row(
-            children: [
-              IconButton(
+    Get.put(NotificationController());
+    return GetBuilder<NotificationController>(
+      builder: (controller) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          backgroundColor: AppColor.white,
+          drawer: CustomDrawer(),
+          appBar: AppBar(
+            backgroundColor: AppColor.white,
+            title: controller.isSearching
+                ? Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: controller.searchController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: "Search...",
+                              border: InputBorder.none,
+                            ),
+                            style: AppStyle.primaryplusw700,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            controller.isSearching = false;
+                            controller.searchController.clear();
+                            controller.update();
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Icon(Icons.cancel),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Text(
+                    AppString.notificationScreen,
+                    style: AppStyle.primaryplusw700,
+                  ),
+            centerTitle: true,
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
                   onPressed: () {
-                    Get.to(NotificationScreen());
+                    Scaffold.of(context).openDrawer();
                   },
                   icon: Image.asset(
-                    AppImage.notification,
-                    width: getDynamicHeight(size: 0.022)//20,
-                  )),
-              IconButton(
-                  onPressed: () {
-                    Get.to(FilterScreen());
-                  },
-                  icon: Icon(Icons.filter_list)),
-            ],
-          )
-        ],
-      ),
-      body: Column(
-        children: [
-          Divider(
-            color: AppColor.black,
-          ),
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Get.to(CircularScreen());
+                    AppImage.drawer,
+                    width: getDynamicHeight(size: 0.022),
+                    color: AppColor.black,
+                  ),
+                );
               },
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      'Notification $index',
-                      style: TextStyle(
-                        color: AppColor.black,
-                        // fontSize: 18,
-                        fontSize: getDynamicHeight(size: 0.020),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: CommonFontStyle.plusJakartaSans,
-                      ),
+            ),
+            actions: [
+              Row(
+                children: [
+                  if (!controller.isSearching) // Search icon tabhi dikhe jab search enable na ho
+
+                    IconButton(
+                      onPressed: () {
+                        controller.isSearching = true;
+                        controller.update();
+                      },
+                      icon: Icon(Icons.search),
                     ),
-                    subtitle: Text('Notification $index',
-                        style: TextStyle(
-                          color: AppColor.black,
-                          // fontSize: 16,
-                          fontSize: getDynamicHeight(size: 0.018),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: CommonFontStyle.plusJakartaSans,
-                        )),
-                    trailing: Column(
-                      children: [
-                        SizedBox(height: 5),
-                        Text('12/12/2021',
+                  IconButton(
+                    onPressed: () {
+                      Get.to(FilterScreen());
+                    },
+                    icon: Image.asset(
+                      AppImage.filter1,
+                      width: getDynamicHeight(size: 0.022),
+                      color: AppColor.black,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              Divider(
+                color: AppColor.black,
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(CircularScreen());
+                  },
+                  child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          'Notification $index',
+                          style: TextStyle(
+                            color: AppColor.black,
+                            // fontSize: 18,
+                            fontSize: getDynamicHeight(size: 0.020),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                          ),
+                        ),
+                        subtitle: Text('Notification $index',
                             style: TextStyle(
                               color: AppColor.black,
-                              // fontSize: 14,
-                              fontSize: getDynamicHeight(size: 0.016),
+                              // fontSize: 16,
+                              fontSize: getDynamicHeight(size: 0.018),
                               fontWeight: FontWeight.w400,
                               fontFamily: CommonFontStyle.plusJakartaSans,
                             )),
-                        SizedBox(height: getDynamicHeight(size: 0.005)),//5),
-                        Icon(Icons.attach_file),
-                      ],
-                    ),
-                  );
-                },
+                        trailing: Column(
+                          children: [
+                            SizedBox(height: 5),
+                            Text('12/12/2021',
+                                style: TextStyle(
+                                  color: AppColor.black,
+                                  // fontSize: 14,
+                                  fontSize: getDynamicHeight(size: 0.016),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                )),
+                            SizedBox(height: getDynamicHeight(size: 0.005)), //5),
+                            Icon(Icons.attach_file),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
