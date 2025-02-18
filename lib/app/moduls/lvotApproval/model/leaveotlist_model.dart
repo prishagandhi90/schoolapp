@@ -71,6 +71,7 @@ class LeaveotlistModel {
   String? hodAction;
   String? deptInc;
   String? deptHOD;
+  String? inchargeNote;
   String? hoDNote;
   String? hrNote;
   String? enterDate;
@@ -99,6 +100,7 @@ class LeaveotlistModel {
     this.hodAction,
     this.deptInc,
     this.deptHOD,
+    this.inchargeNote,
     this.hoDNote,
     this.hrNote,
     this.enterDate,
@@ -128,6 +130,7 @@ class LeaveotlistModel {
     hodAction = json['hodAction'];
     deptInc = json['deptInc'];
     deptHOD = json['deptHOD'];
+    inchargeNote = json['inchargeNote'];
     hoDNote = json['hoDNote'];
     hrNote = json['hrNote'];
     enterDate = json['enterDate'];
@@ -158,6 +161,7 @@ class LeaveotlistModel {
     data['hodAction'] = this.hodAction;
     data['deptInc'] = this.deptInc;
     data['deptHOD'] = this.deptHOD;
+    data['inchargeNote'] = this.inchargeNote;
     data['hoDNote'] = this.hoDNote;
     data['hrNote'] = this.hrNote;
     data['enterDate'] = this.enterDate;

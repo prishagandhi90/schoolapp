@@ -751,76 +751,85 @@ class PayrollScreen extends GetView<PayrollController> {
                                         ),
                                       ),
                                       // const SizedBox(width: 5), // Space between containers
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                if (controller.isLVOTApprovalNavigating.value) return;
-                                                controller.isLVOTApprovalNavigating.value = true;
+                                      Visibility(
+                                        visible: controller.empModuleScreenRightsTable.isNotEmpty &&
+                                            controller.empModuleScreenRightsTable[5].rightsYN == "Y",
+                                        child: Expanded(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  if (controller.isLVOTApprovalNavigating.value) return;
+                                                  controller.isLVOTApprovalNavigating.value = true;
 
-                                                if (controller.empModuleScreenRightsTable.isNotEmpty) {
-                                                  if (controller.empModuleScreenRightsTable[5].rightsYN == "N") {
-                                                    controller.isLVOTApprovalNavigating.value = false;
-                                                    Get.snackbar(
-                                                      "You don't have access to this screen",
-                                                      '',
-                                                      colorText: AppColor.white,
-                                                      backgroundColor: AppColor.black,
-                                                      duration: const Duration(seconds: 1),
-                                                    );
-                                                    return;
+                                                  if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                                    if (controller.empModuleScreenRightsTable[5].rightsYN == "N") {
+                                                      controller.isLVOTApprovalNavigating.value = false;
+                                                      Get.snackbar(
+                                                        "You don't have access to this screen",
+                                                        '',
+                                                        colorText: AppColor.white,
+                                                        backgroundColor: AppColor.black,
+                                                        duration: const Duration(seconds: 1),
+                                                      );
+                                                      return;
+                                                    }
                                                   }
-                                                }
 
-                                                final bottomBarController = Get.put(BottomBarController());
-                                                bottomBarController.currentIndex.value = -1;
+                                                  final bottomBarController = Get.put(BottomBarController());
+                                                  bottomBarController.currentIndex.value = -1;
 
-                                                PersistentNavBarNavigator.pushNewScreen(
-                                                  context,
-                                                  screen: const LvotapprovalScreen(),
-                                                  withNavBar: true,
-                                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                                ).then((value) async {
-                                                  bottomBarController.persistentController.value.index = 0;
-                                                  bottomBarController.currentIndex.value = 0;
-                                                  hideBottomBar.value = false;
-                                                  var dashboardController = Get.put(DashboardController());
-                                                  await dashboardController.getDashboardDataUsingToken();
-                                                });
-                                                final lvotapprovalController = Get.put(LvotapprovalController());
-                                                await lvotapprovalController.resetForm();
-                                                await lvotapprovalController.fetchLeaveOTList("", "LV");
-                                                controller.isLVOTApprovalNavigating.value = false;
-                                              },
-                                              child: Container(
-                                                height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
-                                                width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
-                                                margin: const EdgeInsets.only(top: 15),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: AppColor.primaryColor,
+                                                  PersistentNavBarNavigator.pushNewScreen(
+                                                    context,
+                                                    screen: const LvotapprovalScreen(),
+                                                    withNavBar: true,
+                                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                  ).then((value) async {
+                                                    final lvotapprovalController = Get.put(LvotapprovalController());
+                                                    if (lvotapprovalController.isSelectionMode.value == true) {
+                                                      await lvotapprovalController.exitSelectionMode();
+                                                      return false;
+                                                    }
+                                                    bottomBarController.persistentController.value.index = 0;
+                                                    bottomBarController.currentIndex.value = 0;
+                                                    hideBottomBar.value = false;
+                                                    var dashboardController = Get.put(DashboardController());
+                                                    await dashboardController.getDashboardDataUsingToken();
+                                                  });
+                                                  final lvotapprovalController = Get.put(LvotapprovalController());
+                                                  await lvotapprovalController.resetForm();
+                                                  await lvotapprovalController.fetchLeaveOTList("", "LV");
+                                                  controller.isLVOTApprovalNavigating.value = false;
+                                                },
+                                                child: Container(
+                                                  height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
+                                                  width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
+                                                  margin: const EdgeInsets.only(top: 15),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: AppColor.primaryColor,
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(10),
                                                   ),
-                                                  borderRadius: BorderRadius.circular(10),
+                                                  child: controller.screens.isNotEmpty
+                                                      ? Image.asset(
+                                                          controller.getImage(controller.screens[5].screenName.toString()),
+                                                          color: AppColor.primaryColor,
+                                                        )
+                                                      : SizedBox(),
                                                 ),
-                                                child: controller.screens.isNotEmpty
-                                                    ? Image.asset(
-                                                        controller.getImage(controller.screens[5].screenName.toString()),
-                                                        color: AppColor.primaryColor,
-                                                      )
-                                                    : SizedBox(),
                                               ),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            // Text(AppString.lvotapproval, style: AppStyle.plus12),
-                                            Text(
-                                              controller.screens.isNotEmpty
-                                                  ? controller.getScreenName(controller.screens[5].screenName.toString())
-                                                  : "", // Empty string instead of SizedBox()
-                                              style: AppStyle.plus12,textAlign: TextAlign.center,
-                                            ),
-                                          ],
+                                              const SizedBox(height: 5),
+                                              // Text(AppString.lvotapproval, style: AppStyle.plus12),
+                                              Text(
+                                                controller.screens.isNotEmpty
+                                                    ? controller.getScreenName(controller.screens[5].screenName.toString())
+                                                    : "", // Empty string instead of SizedBox()
+                                                style: AppStyle.plus12, textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       Expanded(child: SizedBox()), // Empty space

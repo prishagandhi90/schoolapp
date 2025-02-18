@@ -85,6 +85,7 @@ class AppString {
   static String nodataavailable = "No data available";
   static String name = "Name";
   static String reason = "Reason";
+  static String hdleaveperiod = "HD Leave Period";
   static String note = "Notes...";
   static String notesisrequired = "Notes is required";
   static String relieverName = "Reliever Name";

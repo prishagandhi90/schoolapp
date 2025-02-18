@@ -205,7 +205,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
   }
 
   Widget getStatusImage(String status) {
-    switch (status) {
+    switch (status.toUpperCase()) {
       case 'APPROVED':
         return Image.asset(AppImage.checkmark);
       case 'REJECTED':

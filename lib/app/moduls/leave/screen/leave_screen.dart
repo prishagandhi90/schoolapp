@@ -180,6 +180,76 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
+                      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                      child: CustomDropdown(
+                        text: AppString.hdleaveperiod,
+                        controller: controller.hdleaveperiodController,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value!['value'] != '--select--') {
+                            controller.hdleaveperiodController.text = value['text']!;
+                          } else {
+                            // "--select--" choose hone par, previous value rakho
+                            controller.hdleaveperiodController.text = controller.hdleaveperiodController.text;
+                          }
+                          controller.update();
+                        },
+                        width: double.infinity,
+                        items: [
+                          {'value': '', 'text': '--select--'}, // Empty value so that it doesn't save
+                          {'value': 'First_Half', 'text': 'First_Half'},
+                          {'value': 'Second_Half', 'text': 'Second_Half'},
+                        ].map((Map<String, String> item) {
+                          return DropdownMenuItem<Map<String, String>>(
+                            value: item,
+                            child: Text(
+                              item['text'] ?? '',
+                              style: AppStyle.black,
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                    //   child: CustomDropdown(
+                    //     text: AppString.hdleaveperiod,
+                    //     controller: controller.hdleaveperiodController,
+                    //     buttonStyleData: ButtonStyleData(
+                    //       height: 50,
+                    //       decoration: BoxDecoration(
+                    //         border: Border.all(color: AppColor.black),
+                    //         borderRadius: BorderRadius.circular(0),
+                    //         color: AppColor.white,
+                    //       ),
+                    //     ),
+                    //     onChanged: (value) {
+                    //       controller.update();
+                    //     },
+                    //     width: double.infinity,
+                    //     items: [
+                    //       {'value': '--select--', 'text': '--select--'},
+                    //       {'value': 'First_Half', 'text': 'First_Half'},
+                    //       {'value': 'Second_Half', 'text': 'Second_Half'},
+                    //     ].map((Map<String, String> item) {
+                    //       return DropdownMenuItem<Map<String, String>>(
+                    //         value: item,
+                    //         child: Text(
+                    //           item['text'] ?? '',
+                    //           style: AppStyle.black,
+                    //         ),
+                    //       );
+                    //     }).toList(),
+                    //   ),
+                    // ),
+                    Padding(
                       padding: const EdgeInsets.all(16),
                       child: CustomDropdown(
                         text: AppString.reason,
@@ -196,19 +266,6 @@ class LeaveScreen extends GetView<LeaveController> {
                         onChanged: (value) async {
                           controller.update();
                         },
-                        // onMenuStateChange: (isOpen) async {
-                        //   // Bottom navigation bar ko hide/show karna
-                        //   if (isOpen) {
-                        //     // Delay to ensure dropdown opens properly before hiding navbar
-                        //     Future.delayed(Duration(milliseconds: 100), () {
-                        //       controller.hideBottomNavBar();
-                        //     });
-                        //   } else {
-                        //     Future.delayed(Duration(milliseconds: 100), () {
-                        //       controller.showBottomNavBar();
-                        //     });
-                        //   }
-                        // },
                         width: double.infinity,
                         items: controller.leavereason
                             .map((LeaveReasonTable item) => DropdownMenuItem<Map<String, String>>(
@@ -249,8 +306,6 @@ class LeaveScreen extends GetView<LeaveController> {
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
                         onFieldSubmitted: (value) {
-                          // Move focus to the next field
-                          // FocusScope.of(context).requestFocus(passwordFocusNode);
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
                         validator: (value) {

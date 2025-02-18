@@ -10,12 +10,15 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/leaveapprejlist_model.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/leaveotlist_model.dart';
 import 'package:emp_app/app/moduls/lvotApproval/model/otreason_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +26,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   final TextEditingController searchController = TextEditingController();
   final TextEditingController reasonnameController = TextEditingController();
   final TextEditingController reasonvalueController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = false;
   final ApiController apiController = Get.put(ApiController());
@@ -48,6 +52,8 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   String selectedRole = '', selectedLeaveType = ''; // Default selected role
   Map<String, String> roleStatus = {}; // Stores role statuses: "Y" or "N"
   bool byPassApprove = false;
+  final FocusNode notesFocusNode = FocusNode();
+  bool showShortButton = true;
 
   @override
   void onInit() {
@@ -74,6 +80,21 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     });
   }
 
+  void closeSlidableIfOpen(BuildContext context) async {
+    final slidable = Slidable.of(context);
+    if (slidable != null && slidable.actionPaneType.value != ActionPaneType.none) {
+      slidable.close();
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+  }
+
+   @override
+  void dispose() {
+    // Custom back button action for Android hardware button
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    super.dispose();
+  }
+  
   enterSelectionMode(int index) async {
     isSelectionMode.value = true;
     selectedItems.add(filteredList[index]);
@@ -138,38 +159,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     }
     update();
   }
-
-  //  void showApproveDialog(BuildContext context, int index) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         // title: const Text("Confirm Approval"),
-  //         content: Text(
-  //           "Are you sure you want to approve this record?",
-  //           style: TextStyle(color: AppColor.black,fontWeight: FontWeight.w600,fontSize: 20),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               // Cancel action
-  //               Navigator.pop(context);
-  //             },
-  //             child: const Text("Cancel"),
-  //           ),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               // Approve action
-  //               approveLeave(index);
-  //               Navigator.pop(context);
-  //             },
-  //             child: const Text("Approve"),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   Future<List<LeaveotlistModel>> updateFilteredList(String role, String leaveType) async {
     isLoader.value = true;
@@ -365,7 +354,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         "action": action, // "Approved" or "Rejected"
         "reason": "",
         "userName": "",
-        "note": ""
+        "note": noteController.text
       };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
@@ -376,7 +365,10 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
           filteredList.removeAt(index);
           filteredList = leavelist.where((item) => item.typeValue == selectedLeaveType).toList();
           await fetchLeaveOTList(selectedRole, selectedLeaveType);
-          Get.rawSnackbar(message: action == "Approved" ? "Leave approved successfully!" : "Leave rejected successfully!");
+          Get.rawSnackbar(
+              message: action.toLowerCase() == "approved"
+                  ? "Leave approved successfully!"
+                  : (action.toLowerCase() == "rejected" ? "Leave rejected successfully!" : "Note saved successfully!"));
         } else {
           Get.rawSnackbar(message: "Action failed: ${responseLeaveAppRejList.data![0].savedYN}");
         }
@@ -391,6 +383,8 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       Get.rawSnackbar(message: "An error occurred");
     }
     isLoader.value = false;
+    noteController.text = "";
+    update();
     return [];
   }
 
@@ -538,6 +532,78 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                       ),
                     ),
                     child: Text("No", style: TextStyle(color: AppColor.black)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void showApproveAllDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          contentPadding: const EdgeInsets.all(10.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          title: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.close),
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Are you sure you want to approve this record?",
+                  style: TextStyle(
+                    color: AppColor.black,
+                    fontWeight: FontWeight.w600,
+                    // fontSize: 20,
+                    fontSize: getDynamicHeight(size: 0.022),
+                  )),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      await SelectAll_Leave_app_rej_List();
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightgreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Approve", style: TextStyle(color: AppColor.black)),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Cancel action
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.lightred,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text("Close", style: TextStyle(color: AppColor.black)),
                   ),
                 ],
               ),
@@ -731,6 +797,213 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         });
   }
 
+  void showNoteDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return GetBuilder<LvotapprovalController>(
+          builder: (controller) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              titlePadding: EdgeInsets.zero,
+              contentPadding: const EdgeInsets.all(16.0),
+              title: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close),
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min, // ✅ Wrap content according to size
+                children: [
+                  CustomTextFormField(
+                    hint: AppString.note,
+                    hintStyle: AppStyle.black.copyWith(
+                      fontSize: getDynamicHeight(size: 0.016),
+                    ),
+                    minLines: 3,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    controller: controller.noteController,
+                    focusNode: controller.notesFocusNode,
+                    scrollPhysics: const BouncingScrollPhysics(),
+                    onTapOutside: (event) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    onFieldSubmitted: (value) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppString.notesisrequired;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16), //
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // 🔹 Cancel Button
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.10,
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            AppString.cancel,
+                            style: AppStyle.black.copyWith(
+                              fontSize: getDynamicHeight(size: 0.018),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.10,
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            await fetchLeave_app_rej_List("CALL_EMP", index);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.lightgreen,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            AppString.save,
+                            style: AppStyle.black.copyWith(
+                              fontSize: getDynamicHeight(size: 0.018),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // void showNoteDialog(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return GetBuilder<LvotapprovalController>(
+  //           // Wrap with GetBuilder
+  //           builder: (controller) {
+  //             return AlertDialog(
+  //                 // titlePadding: EdgeInsets.zero,
+  //                 // contentPadding: const EdgeInsets.all(16.0),
+  //                 shape: RoundedRectangleBorder(
+  //                   borderRadius: BorderRadius.circular(12.0),
+  //                 ),
+  //                 title: Stack(
+  //                   children: [
+  //                     Align(
+  //                       alignment: Alignment.topRight,
+  //                       child: IconButton(
+  //                         onPressed: () async {
+  //                           Navigator.pop(context);
+  //                         },
+  //                         icon: const Icon(Icons.close),
+  //                         color: Colors.black,
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 content: Column(
+  //                   children: [
+  //                     CustomTextFormField(
+  //                       hint: AppString.note,
+  //                       hintStyle: AppStyle.black.copyWith(
+  //                         // fontSize: 14,
+  //                         fontSize: getDynamicHeight(size: 0.016),
+  //                       ),
+  //                       minLines: 3,
+  //                       maxLines: null,
+  //                       keyboardType: TextInputType.multiline,
+  //                       controller: controller.noteController,
+  //                       focusNode: controller.notesFocusNode,
+  //                       scrollPhysics: BouncingScrollPhysics(),
+  //                       onChanged: (value) {},
+  //                       onTapOutside: (event) {
+  //                         FocusManager.instance.primaryFocus?.unfocus();
+  //                       },
+  //                       onFieldSubmitted: (value) {
+  //                         // Move focus to the next field
+  //                         // FocusScope.of(context).requestFocus(passwordFocusNode);
+  //                         FocusManager.instance.primaryFocus?.unfocus();
+  //                       },
+  //                       validator: (value) {
+  //                         if (value == null || value.isEmpty) {
+  //                           return AppString.notesisrequired;
+  //                         }
+  //                         return null;
+  //                       },
+  //                     ),
+  //                     SizedBox(
+  //                       height: MediaQuery.of(context).size.width * 0.13,
+  //                       width: MediaQuery.of(context).size.width * 0.40,
+  //                       child: ElevatedButton(
+  //                         onPressed: () {},
+  //                         // controller.isSaveBtnLoading
+  //                         //     ? null
+  //                         //     : () async {
+  //                         //         await controller.saveLeaveEntryList("LV");
+  //                         //         controller.update();
+  //                         //       },
+  //                         style: ElevatedButton.styleFrom(
+  //                           backgroundColor: AppColor.lightgreen,
+  //                           shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(10),
+  //                           ),
+  //                         ),
+  //                         child:
+  //                             // controller.isSaveBtnLoading
+  //                             //     ? const CircularProgressIndicator()
+  //                             //     :
+  //                             Text(
+  //                           AppString.save,
+  //                           style: AppStyle.black.copyWith(
+  //                             // fontSize: 20,
+  //                             fontSize: getDynamicHeight(size: 0.022),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ));
+  //           },
+  //         );
+  //       });
+  // }
+
   Future<void> lvlistbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
       backgroundColor: AppColor.white,
@@ -742,289 +1015,198 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
         borderRadius: BorderRadius.circular(20.0),
         side: BorderSide(color: AppColor.black),
       ),
-      builder: (context) {
-        return GetBuilder<LvotapprovalController>(
-            // Wrap with GetBuilder
-            builder: (controller) {
-          final isIncharge = selectedRole == "InCharge" ? true : false;
-          final isHOD = selectedRole == "HOD" ? true : false;
-          final isHR = selectedRole == "HR" ? true : false;
+      builder: (context) => Container(
+          height: MediaQuery.of(context).size.height * 0.90,
+          width: Get.width,
+          child: GetBuilder<LvotapprovalController>(
+              // Wrap with GetBuilder
+              builder: (controller) {
+            final isIncharge = selectedRole == "InCharge" ? true : false;
+            final isHOD = selectedRole == "HOD" ? true : false;
+            final isHR = selectedRole == "HR" ? true : false;
 
-          List<Widget> content = [];
-          List<Widget> InchargeParameters = [
-            parameterWidget(
-              title: AppString.reliever,
-              value: filteredList[index].relieverEmpName?.toString() ?? '--:--',
-            ),
-            parameterWidget(
-              title: AppString.reason,
-              value: filteredList[index].reason?.toString() ?? '--:--',
-            ),
-            parameterWidget(
-              title: AppString.leavetype,
-              value: filteredList[index].leaveShortName?.toString() ?? '--:--',
-            ),
-          ];
-
-          List<Widget> HODParameters = [
-            parameterWidget(
-              title: AppString.inchargestatus,
-              value: filteredList[index].inchargeAction?.toString() ?? '--:--',
-            ),
-          ];
-
-          if (isIncharge) {
-            content.addAll(InchargeParameters);
-          }
-
-          if (isHOD || isHR) {
-            content.addAll(InchargeParameters);
-            content.addAll(HODParameters);
-          }
-
-          return SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const SizedBox(width: 30),
-                      const Spacer(),
-                      Container(
-                        width: 90,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                        child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Icon(Icons.close),
-                      ),
-                      const SizedBox(width: 30),
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-                  ...content,
-                ],
+            List<Widget> content = [];
+            List<Widget> InchargeParameters = [
+              parameterWidget(
+                title: AppString.reliever,
+                value: filteredList[index].relieverEmpName?.toString() ?? '--:--',
               ),
-            ),
-          );
-        });
-      },
+              parameterWidget(
+                title: AppString.reason,
+                value: filteredList[index].reason?.toString() ?? '--:--',
+              ),
+              // parameterWidget(
+              //   title: AppString.leavetype,
+              //   value: filteredList[index].leaveShortName?.toString() ?? '--:--',
+              // ),
+              parameterWidget(
+                title: AppString.inChargeNotes,
+                value: filteredList[index].inchargeNote?.toString() ?? '--:--',
+              ),
+              parameterWidget(
+                title: AppString.hodNotes,
+                value: filteredList[index].hoDNote?.toString() ?? '--:--',
+              ),
+              parameterWidget(
+                title: AppString.hrnotes,
+                value: filteredList[index].hrNote?.toString() ?? '--:--',
+              ),
+            ];
+
+            List<Widget> HODParameters = [
+              parameterWidget(
+                title: AppString.inchargestatus,
+                value: filteredList[index].inchargeAction?.toString() ?? '--:--',
+              ),
+            ];
+
+            if (isIncharge) {
+              content.addAll(InchargeParameters);
+            }
+
+            if (isHOD || isHR) {
+              content.addAll(InchargeParameters);
+              content.addAll(HODParameters);
+            }
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        const Spacer(),
+                        Container(
+                          width: 90,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                          child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.close),
+                        ),
+                        const SizedBox(width: 30),
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                    ...content,
+                  ],
+                ),
+              ),
+            );
+          })),
     );
   }
 
   Widget parameterWidget({required String title, required String value}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-      child: Container(
-        height: 100,
-        decoration: BoxDecoration(
-          color: AppColor.lightblue,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColor.primaryColor,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+          child: IntrinsicHeight(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.30,
               ),
-              child: Row(
+              decoration: BoxDecoration(
+                color: AppColor.lightblue,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
                 children: [
-                  Text(title, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600)),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppColor.primaryColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(title, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      value,
+                      style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                value,
-                style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  // Future<void> lvlistbottomsheet(BuildContext context, int index) async {
-  //   showModalBottomSheet(
-  //       backgroundColor: AppColor.white,
-  //       isScrollControlled: true,
-  //       isDismissible: true,
-  //       enableDrag: true,
-  //       context: Get.context!,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(20.0),
-  //         side: BorderSide(color: AppColor.black),
+  // Widget parameterWidget({required String title, required String value,}) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
+  //     child: IntrinsicHeight(
+  //       child: Container(
+  //         constraints: BoxConstraints(
+  //           maxHeight: MediaQuery.of(context).size.height * 0.30,
+  //         ),
+  //         decoration: BoxDecoration(
+  //           color: AppColor.lightblue,
+  //           borderRadius: BorderRadius.circular(20),
+  //         ),
+  //         child: Column(
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.all(10),
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(20),
+  //                 color: AppColor.primaryColor,
+  //               ),
+  //               child: Row(
+  //                 children: [
+  //                   Text(title, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600)),
+  //                 ],
+  //               ),
+  //             ),
+  //             Container(
+  //               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+  //               alignment: Alignment.centerLeft,
+  //               child: Text(
+  //                 value,
+  //                 style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
   //       ),
-  //       builder: (context) {
-  //         return Column(mainAxisSize: MainAxisSize.min, children: [
-  //           const SizedBox(height: 10),
-  //           Row(
-  //             children: [
-  //               const SizedBox(width: 30),
-  //               const Spacer(),
-  //               Container(
-  //                 width: 90,
-  //                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-  //                 child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
-  //               ),
-  //               const Spacer(),
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: const Icon(Icons.close),
-  //               ),
-  //               const SizedBox(
-  //                 width: 30,
-  //               ),
-  //             ],
-  //           ),
-  //           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-  //           Padding(
-  //             padding: const EdgeInsets.symmetric(horizontal: 13),
-  //             child: Container(
-  //               height: MediaQuery.of(context).size.height * 0.15,
-  //               decoration: BoxDecoration(
-  //                 color: AppColor.lightblue,
-  //                 borderRadius: BorderRadius.circular(20),
-  //               ),
-  //               child: Column(
-  //                 children: [
-  //                   Container(
-  //                     padding: const EdgeInsets.all(10),
-  //                     // width: double.infinity,
-  //                     // height: 45,
-  //                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-  //                     child: Container(
-  //                         // height: 100,
-  //                         padding: EdgeInsets.symmetric(horizontal: 10),
-  //                         width: MediaQuery.of(context).size.height * 0.5,
-  //                         alignment: Alignment.centerLeft,
-  //                         child: Text(AppString.reliever, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
-  //                   ),
-  //                   Container(
-  //                     // height: 100,
-  //                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-  //                     width: MediaQuery.of(context).size.height * 0.5,
-  //                     alignment: Alignment.centerLeft,
-  //                     child: leavelist.length > 0
-  //                         ? Text(
-  //                             leavelist[index].relieverEmpName.toString(),
-  //                             style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-  //                           )
-  //                         : Text('--:-- ', style: AppStyle.plus16w600),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-  //           Padding(
-  //             padding: const EdgeInsets.symmetric(horizontal: 13),
-  //             child: Container(
-  //               height: MediaQuery.of(context).size.height * 0.15,
-  //               decoration: BoxDecoration(
-  //                 color: AppColor.lightblue,
-  //                 borderRadius: BorderRadius.circular(20),
-  //               ),
-  //               child: Column(
-  //                 children: [
-  //                   Container(
-  //                     padding: const EdgeInsets.all(10),
-  //                     // width: double.infinity,
-  //                     // height: 45,
-  //                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-  //                     child: Container(
-  //                         // height: 100,
-  //                         padding: EdgeInsets.symmetric(horizontal: 10),
-  //                         width: MediaQuery.of(context).size.height * 0.5,
-  //                         alignment: Alignment.centerLeft,
-  //                         child: Text(AppString.reason, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
-  //                   ),
-  //                   Container(
-  //                     // height: 100,
-  //                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-  //                     width: MediaQuery.of(context).size.height * 0.5,
-  //                     alignment: Alignment.centerLeft,
-  //                     child: leavelist.length > 0
-  //                         ? Text(
-  //                             leavelist[index].reason.toString(),
-  //                             style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-  //                           )
-  //                         : Text('--:-- ', style: AppStyle.plus16w600),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-  //           Padding(
-  //             padding: const EdgeInsets.symmetric(horizontal: 13),
-  //             child: Container(
-  //               height: MediaQuery.of(context).size.height * 0.15,
-  //               decoration: BoxDecoration(
-  //                 color: AppColor.lightblue,
-  //                 borderRadius: BorderRadius.circular(20),
-  //               ),
-  //               child: Column(
-  //                 children: [
-  //                   Container(
-  //                     padding: const EdgeInsets.all(10),
-  //                     // width: double.infinity,
-  //                     // height: 45,
-  //                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
-  //                     child: Container(
-  //                         padding: EdgeInsets.symmetric(horizontal: 10),
-  //                         width: MediaQuery.of(context).size.height * 0.5,
-  //                         alignment: Alignment.centerLeft,
-  //                         child: Text(AppString.leavetype, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600))),
-  //                   ),
-  //                   Container(
-  //                     // height: 100,
-  //                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-  //                     width: MediaQuery.of(context).size.height * 0.5,
-  //                     alignment: Alignment.centerLeft,
-  //                     child: leavelist.length > 0
-  //                         ? Text(
-  //                             leavelist[index].leaveShortName.toString(),
-  //                             style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-  //                           )
-  //                         : Text('--:-- ', style: AppStyle.plus16w600),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //           )
-  //         ]);
-  //       });
+  //     ),
+  //   );
   // }
 
   Future<void> otlistbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
-        backgroundColor: AppColor.white,
-        isScrollControlled: true,
-        isDismissible: true,
-        enableDrag: true,
-        context: Get.context!,
-        // context: context,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-          side: BorderSide(color: AppColor.black),
-        ),
-        builder: (context) {
-          return GetBuilder<LvotapprovalController>(
+      backgroundColor: AppColor.white,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      context: Get.context!,
+      // context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+        side: BorderSide(color: AppColor.black),
+      ),
+      builder: (context) => Container(
+          height: MediaQuery.of(context).size.height * 0.90,
+          width: Get.width,
+          child: GetBuilder<LvotapprovalController>(
             builder: (controller) {
               final isIncharge = selectedRole == "InCharge" ? true : false;
               final isHOD = selectedRole == "HOD" ? true : false;
@@ -1047,6 +1229,18 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                 parameterWidget(
                   title: AppString.employeenote,
                   value: filteredList[index].note?.toString() ?? '--:--',
+                ),
+                parameterWidget(
+                  title: AppString.inChargeNotes,
+                  value: filteredList[index].inchargeNote?.toString() ?? '--:--',
+                ),
+                parameterWidget(
+                  title: AppString.hodNotes,
+                  value: filteredList[index].hoDNote?.toString() ?? '--:--',
+                ),
+                parameterWidget(
+                  title: AppString.hrnotes,
+                  value: filteredList[index].hrNote?.toString() ?? '--:--',
                 ),
               ];
 
@@ -1075,6 +1269,18 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                   parameterWidget(
                     title: AppString.employeenote,
                     value: filteredList[index].note?.toString() ?? '--:--',
+                  ),
+                  parameterWidget(
+                    title: AppString.inChargeNotes,
+                    value: filteredList[index].inchargeNote?.toString() ?? '--:--',
+                  ),
+                  parameterWidget(
+                    title: AppString.hodNotes,
+                    value: filteredList[index].hoDNote?.toString() ?? '--:--',
+                  ),
+                  parameterWidget(
+                    title: AppString.hrnotes,
+                    value: filteredList[index].hrNote?.toString() ?? '--:--',
                   ),
                 ]);
               }
@@ -1111,8 +1317,8 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                 ),
               );
             },
-          );
-        });
+          )),
+    );
   }
 
   resetForm() async {
@@ -1120,20 +1326,23 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     // await changeTab(0);
     tabController_Lv.animateTo(0);
     await exitSelectionMode();
-    // await fetchLeaveOTList("", "LV");
-    // fromDateController.clear();
-    // toDateController.clear();
-    // leaveNameController.clear();
-    // leaveValueController.clear();
-    // daysController.clear();
-    // reasonController.clear();
-    // noteController.clear();
-    // relieverNameController.clear();
-    // relieverValueController.clear();
-    // delayreasonNameController.clear();
-    // delayreasonIdController.clear();
-    // leftleavedays.value = '';
-    // leftLeaveDaysController.text = '';
+    await clearSearch();
+    leavelist.clear();
+    filteredList.clear();
+    selectedRole = "";
+    selectedLeaveType = "";
+    searchController.clear();
+    reasonnameController.clear();
+    reasonvalueController.clear();
+    noteController.clear();
+    reasonList.clear();
+    initialIndex = 0.obs;
+    currentTabIndex = 0.obs;
+    InchargeYN_c = false.obs;
+    HODYN_c = false.obs;
+    HRYN_c = false.obs;
+    isSearchActive = false;
+    roleStatus.clear();
     // overtimeController.fromDateController.clear();
     // overtimeController.toDateController.clear();
     // overtimeController.fromTimeController.clear();
