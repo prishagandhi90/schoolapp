@@ -47,6 +47,8 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   var isLoaderPayroll = false.obs;
   var isLVOTAppr_Rights = false.obs;
   List<ModuleScreenRights> screens = [];
+  List<Map<String, dynamic>> originalList = List.from(AppConst.payrollgrid);
+  List<Map<String, dynamic>> filteredList = [];
 
   @override
   void onInit() {
@@ -57,7 +59,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     hideBottomBar.value = false;
     // });
-    filteredList = originalList;
+
     // focusNode.addListener(() {
     //   hasFocus = focusNode.hasFocus;
     //   update();
@@ -88,6 +90,12 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   void loadScreens() async {
     List<ModuleScreenRights> fetchedScreens = await fetchModuleScreens();
     screens = fetchedScreens;
+    if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
+      filteredList = originalList;
+    } else {
+      originalList.removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
+      filteredList = originalList;
+    }
     update();
   }
 
@@ -296,10 +304,8 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
             return;
           }
         }
-
         final bottomBarController = Get.put(BottomBarController());
         bottomBarController.currentIndex.value = -1;
-
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: const LvotapprovalScreen(),
@@ -320,9 +326,6 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
       default:
     }
   }
-
-  List<Map<String, dynamic>> originalList = AppConst.payrollgrid;
-  List<Map<String, dynamic>> filteredList = [];
 
   void filterSearchResults(String query) {
     List<Map<String, dynamic>> tempList = [];

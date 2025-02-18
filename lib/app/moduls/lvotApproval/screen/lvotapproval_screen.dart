@@ -1,11 +1,13 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
 import 'package:emp_app/app/moduls/lvotApproval/screen/lvlist_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/screen/otlist_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 class LvotapprovalScreen extends StatelessWidget {
@@ -28,6 +30,19 @@ class LvotapprovalScreen extends StatelessWidget {
                 fontWeight: FontWeight.w700,
                 fontFamily: CommonFontStyle.plusJakartaSans,
               ),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                if (controller.isSelectionMode.value) {
+                  await controller.exitSelectionMode(); // Selection mode se exit karega
+                } else {
+                  controller.searchController.clear(); // Search text clear karna
+                  controller.activateSearch(false); // Search mode deactivate karna
+                  controller.update(); // UI ko refresh karna
+                  Navigator.pop(context); // Normal back navigation
+                }
+              },
             ),
             centerTitle: true,
           ),
@@ -199,7 +214,8 @@ class LvotapprovalScreen extends StatelessWidget {
                                             controller.showByPassApproveDialog(context);
                                             return;
                                           }
-                                          await controller.SelectAll_Leave_app_rej_List();
+                                          controller.showApproveAllDialog(context);
+
                                           // controller.exitSelectionMode(); // Exit selection mode
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -252,31 +268,80 @@ class LvotapprovalScreen extends StatelessWidget {
                                       IconButton(
                                         icon: const Icon(Icons.search),
                                         onPressed: () async {
+                                          final slidable = Slidable.of(context);
+                                          if (slidable != null && slidable.actionPaneType.value != ActionPaneType.none) {
+                                            slidable.close(); // Close Slidable if it's open
+                                            await Future.delayed(Duration(milliseconds: 300)); // Smooth transition
+                                          }
                                           await controller.activateSearch(true);
                                         },
                                       ),
                                     if (controller.isSearchActive)
                                       Expanded(
                                         child: Container(
-                                          height: 50,
+                                          height: 60,
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
-                                            color: Colors.grey[200],
+                                            // color: Colors.grey[200],
                                           ),
                                           child: Row(
                                             children: [
                                               Expanded(
-                                                child: TextField(
-                                                  controller: controller.searchController,
-                                                  decoration: const InputDecoration(
-                                                    hintText: "Search...",
-                                                    border: InputBorder.none,
-                                                    contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                                                  ),
-                                                  onChanged: (value) {
-                                                    controller.filterSearchResults(value, controller.selectedLeaveType);
-                                                  },
-                                                ),
+                                                child: TextFormField(
+                                                    controller: controller.searchController,
+                                                    decoration: InputDecoration(
+                                                      hintText: "Search...",
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
+                                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                                      ),
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                                        borderSide: BorderSide(
+                                                          color: AppColor.black,
+                                                        ),
+                                                      ),
+                                                      // suffixIcon: controller.searchController.text.trim().isNotEmpty
+                                                      //     ? GestureDetector(
+                                                      //         onTap: () {
+                                                      //           FocusScope.of(context).unfocus();
+                                                      //           controller.searchController.clear();
+                                                      //           controller.fetchLeaveOTList(
+                                                      //               controller.selectedRole, controller.selectedLeaveType);
+                                                      //         },
+                                                      //         child: const Icon(Icons.cancel_outlined))
+                                                      //     : const SizedBox(),
+                                                      prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                                                      hintStyle: AppStyle.plusgrey,
+                                                      filled: true,
+                                                      fillColor: AppColor.white,
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      controller.showShortButton = false;
+                                                      controller.update();
+                                                    },
+                                                    onChanged: (value) {
+                                                      controller.filterSearchResults(value, controller.selectedLeaveType);
+                                                    },
+                                                    onTapOutside: (event) {
+                                                      FocusScope.of(context).unfocus();
+                                                      // Future.delayed(const Duration(milliseconds: 300));
+                                                      controller.showShortButton = true;
+                                                      controller.update();
+                                                    },
+                                                    onFieldSubmitted: (v) {
+                                                      if (controller.searchController.text.trim().isNotEmpty) {
+                                                        controller.fetchLeaveOTList(controller.selectedRole, controller.selectedLeaveType);
+                                                        controller.searchController.clear();
+                                                      }
+                                                      Future.delayed(const Duration(milliseconds: 800));
+                                                      controller.showShortButton = true;
+                                                      controller.update();
+                                                    }),
                                               ),
                                               IconButton(
                                                 icon: const Icon(Icons.cancel),

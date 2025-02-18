@@ -170,7 +170,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LVListScreen,
-      page: () => const LvList(),
+      page: () =>  LvList(),
       binding: lv_screen_Binding(),
     ),
     GetPage(

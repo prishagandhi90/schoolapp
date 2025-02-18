@@ -62,6 +62,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   TextEditingController toDateController = TextEditingController();
   TextEditingController daysController = TextEditingController();
   TextEditingController reasonController = TextEditingController();
+  TextEditingController hdleaveperiodController = TextEditingController();
   TextEditingController relieverNameController = TextEditingController();
   TextEditingController relieverValueController = TextEditingController();
   TextEditingController delayreasonNameController = TextEditingController();
@@ -752,6 +753,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
         "usr_Nm": '',
         "reliever_Empcode": flag == "LV" ? relieverValueController.text : '',
         "delayLVNote": flag == "LV" ? delayreasonIdController.text : overtimeController.delayreasonId_OT_Controller.text,
+        "leaveDivision": flag == "LV" ? hdleaveperiodController.text : "OT"
       };
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       print(response);
@@ -800,6 +802,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     relieverValueController.clear();
     delayreasonNameController.clear();
     delayreasonIdController.clear();
+    hdleaveperiodController.clear();
     leftleavedays.value = '';
     leftLeaveDaysController.text = '';
     overtimeController.fromDateController.clear();
