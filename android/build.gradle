@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2' // Ensure this version is compatible with your Flutter version
+        classpath 'com.android.tools.build:gradle:8.1.0' // Ensure this version is compatible with your Flutter version
         classpath 'com.google.gms:google-services:4.3.14'
     }
 }
