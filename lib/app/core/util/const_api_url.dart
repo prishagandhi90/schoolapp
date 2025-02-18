@@ -1,11 +1,17 @@
+import 'package:flutter/foundation.dart';
+
 class ConstApiUrl {
+  static const isMobile = kIsWeb ? false : true;
   // static const portNo = "44166"; //LIVE
   static const portNo = "55555"; //"Backup";
-  static const baseURL = 'http://117.217.126.127:$portNo';
+  // static const baseURL = 'http://117.217.126.127:$portNo';
+  static const baseURL = isMobile ? 'http://117.217.126.127:$portNo' : 'http://192.168.1.35:$portNo';
   static const baseSecondURL = 'http://103.251.17.214:$portNo';
-  String initailUrl = 'http://117.217.126.127:$portNo/api';
-  static const empUrl = "http://117.217.126.127:$portNo/api/Employee";
-  static const empLoginUrl = 'http://117.217.126.127:$portNo/api/EmpLogin';
+  String initailUrl = isMobile ? 'http://117.217.126.127:$portNo/api' : 'http://192.168.1.35:$portNo/api';
+  static const empUrl =
+      isMobile ? 'http://117.217.126.127:$portNo/api/Employee' : 'http://192.168.1.35:$portNo/api/Employee';
+  static const empLoginUrl =
+      isMobile ? 'http://117.217.126.127:$portNo/api/EmpLogin' : 'http://192.168.1.35:$portNo/api/EmpLogin';
 
   //  ----------------    Prod  urls ---------------
   static const baseApiUrl = empLoginUrl;

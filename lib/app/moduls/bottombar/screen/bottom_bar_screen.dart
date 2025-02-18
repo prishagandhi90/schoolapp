@@ -5,9 +5,11 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class BottomBarView extends GetView<BottomBarController> {
   BottomBarView({super.key});
@@ -42,7 +44,7 @@ class BottomBarView extends GetView<BottomBarController> {
               child: PersistentTabView(
                 padding: EdgeInsets.only(bottom: getDynamicHeight(size: 0.006), top: 0),
                 context,
-                confineToSafeArea: Platform.isAndroid ? true : false,
+                confineToSafeArea: kIsWeb ? false : true,
                 controller: controller.persistentController.value,
                 handleAndroidBackButtonPress: true,
                 hideNavigationBarWhenKeyboardAppears: true,
