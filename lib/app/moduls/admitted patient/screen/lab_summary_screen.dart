@@ -47,9 +47,9 @@ class LabSummaryScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white, // Header Background Color
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black, width: 1), // Border
+                border: Border.all(color: Colors.black, width: 1),
               ),
               margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               padding: EdgeInsets.all(8),
@@ -61,7 +61,6 @@ class LabSummaryScreen extends StatelessWidget {
                 ],
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -84,15 +83,6 @@ class LabSummaryScreen extends StatelessWidget {
                               color: AppColor.black,
                             ),
                           ),
-                          suffixIcon: controller.searchController.text.trim().isNotEmpty
-                              ? GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    // controller.searchController.clear();
-                                    // controller.fetchpresViewer(isLoader: false);
-                                  },
-                                  child: const Icon(Icons.cancel_outlined))
-                              : const SizedBox(),
                           prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                           hintText: AppString.searchpatient,
                           hintStyle: AppStyle.plusgrey,
@@ -102,91 +92,60 @@ class LabSummaryScreen extends StatelessWidget {
                             borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
                           ),
                         ),
-                        onTap: () {
-                          // controller.showShortButton = false;
-                          // controller.update();
-                        },
-                        onChanged: (value) {
-                          // controller.filterSearchResults(value);
-                          // controller.searchController.clear();
-                        },
-                        onTapOutside: (event) {
-                          FocusScope.of(context).unfocus();
-                          // Future.delayed(const Duration(milliseconds: 300));
-                          // controller.showShortButton = true;
-                          // controller.update();
-                        },
-                        onFieldSubmitted: (v) {
-                          // if (controller.searchController.text.trim().isNotEmpty) {
-                          //   controller.fetchpresViewer(
-                          //     searchPrefix: controller.searchController.text.trim(),
-                          //     isLoader: false,
-                          //   );
-                          //   controller.searchController.clear();
-                          // }
-                          // Future.delayed(const Duration(milliseconds: 800));
-                          // controller.showShortButton = true;
-                          // controller.update();
-                        },
                       ),
                     )
                   ],
                 ),
               ),
             ),
-            // Header Row
-            Row(
-              children: [
-                _buildFixedHeaderCell("ID"),
-                _buildFixedHeaderCell("Name", overflow: true),
-
-                // Scrollable Headers (Sync Scroll)
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _horizontalScrollController, // ✅ Sync Scroll
-                    child: Row(
-                      children: ["Age", "Salary", "Department", "City"].map((title) => _buildHeaderCell(title)).toList(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            // Data Section (Fixed Columns + Scrollable Columns)
             Expanded(
               child: SingleChildScrollView(
-                controller: _verticalScrollController, // ✅ Vertical Sync Scroll
+                controller: _verticalScrollController,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Fixed Columns (ID & Name)
                     Column(
-                      children: data.map((item) {
-                        return Row(
-                          children: [
-                            _buildFixedCell("${item['ID']}"),
-                            _buildFixedCell(item['Name'], overflow: true),
-                          ],
-                        );
-                      }).toList(),
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildFixedHeaderCell("ID"),
+                        ...data.map((item) => _buildFixedCell("${item['ID']}")),
+                      ],
                     ),
-
-                    // Scrollable Data Columns (Age, Salary, Dept, City)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildFixedHeaderCell("Name", overflow: true),
+                        ...data.map((item) => _buildFixedCell(item['Name'], overflow: true)),
+                      ],
+                    ),
                     Expanded(
                       child: SingleChildScrollView(
+                        controller: _horizontalScrollController,
                         scrollDirection: Axis.horizontal,
-                        controller: _horizontalScrollController, // ✅ Same ScrollController
                         child: Column(
-                          children: data.map((item) {
-                            return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
                               children: [
-                                _buildDataCell("${item['Age']}"),
-                                _buildDataCell("${item['Salary']}"),
-                                _buildDataCell(item['Department']),
-                                _buildDataCell(item['City']),
+                                _buildHeaderCell("Age"),
+                                _buildHeaderCell("Salary"),
+                                _buildHeaderCell("Department"),
+                                _buildHeaderCell("City"),
                               ],
-                            );
-                          }).toList(),
+                            ),
+                            Column(
+                              children: data.map((item) {
+                                return Row(
+                                  children: [
+                                    _buildDataCell("${item['Age']}", width: 100),
+                                    _buildDataCell("${item['Salary']}", width: 100),
+                                    _buildDataCell(item['Department'], width: 120),
+                                    _buildDataCell(item['City'], width: 100),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -200,7 +159,6 @@ class LabSummaryScreen extends StatelessWidget {
     });
   }
 
-  /// Fixed Column Header Cells (ID, Name)
   Widget _buildFixedHeaderCell(String text, {bool overflow = false}) {
     return Container(
       width: 80,
@@ -217,10 +175,9 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  /// Scrollable Header Cells (Age, Salary, Dept, City)
   Widget _buildHeaderCell(String text) {
     return Container(
-      width: 80,
+      width: 100,
       height: rowHeight,
       padding: EdgeInsets.all(8.0),
       alignment: Alignment.centerLeft,
@@ -232,7 +189,6 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  /// Fixed Column Data Cells (ID, Name)
   Widget _buildFixedCell(String text, {bool overflow = false}) {
     return Container(
       width: 80,
@@ -251,10 +207,9 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  /// Scrollable Data Cells (Age, Salary, Dept, City)
-  Widget _buildDataCell(String text) {
+  Widget _buildDataCell(String text, {double width = 80}) {
     return Container(
-      width: 80,
+      width: width,
       height: rowHeight,
       padding: EdgeInsets.all(8.0),
       alignment: Alignment.centerLeft,
