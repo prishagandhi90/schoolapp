@@ -7,7 +7,6 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +29,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
           },
           drawer: CustomDrawer(),
           appBar: AppBar(
-            backgroundColor: AppColor.white,
+            backgroundColor: AppColor.white,            
             title: Text(
               AppString.venushospital,
               style: TextStyle(

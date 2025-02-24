@@ -60,13 +60,21 @@ class DashboardController extends GetxController {
         );
         break;
       case 2:
-        Get.snackbar(
-          AppString.comingsoon,
-          '',
-          colorText: AppColor.white,
-          backgroundColor: AppColor.black,
-          duration: const Duration(seconds: 1),
-        );
+        var bottomBarController = Get.put(BottomBarController());
+        bottomBarController.isAdmittedPatient.value = true;
+        hideBottomBar.value = false;
+        // bottomBarController.onItemTapped(0, true, context);
+        bottomBarController.resetAndInitialize_new(0);
+        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+          Get.put(BottomBarController());
+        }));
+        // Get.snackbar(
+        //   AppString.comingsoon,
+        //   '',
+        //   colorText: AppColor.white,
+        //   backgroundColor: AppColor.black,
+        //   duration: const Duration(seconds: 1),
+        // );
         break;
       case 3:
         Get.snackbar(
@@ -104,7 +112,6 @@ class DashboardController extends GetxController {
         Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
           Get.put(BottomBarController());
         }));
-
         // Get.snackbar(
         //   AppString.comingsoon,
         //   '',
@@ -116,15 +123,9 @@ class DashboardController extends GetxController {
       case 7:
         var bottomBarController = Get.put(BottomBarController());
         hideBottomBar.value = false;
-        // Get.until((route) {
-        //   print(route.settings); // This will print the route settings to debug
-        //   return route.settings == Routes.Payroll;
-        // });
-
-        // bottomBarController.onItemTapped(0, false, context);
+        bottomBarController.isAdmittedPatient.value = false;
         bottomBarController.isPharmacyHome.value = false;
         bottomBarController.resetAndInitialize_new(0);
-
         Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
           Get.put(BottomBarController());
         }));

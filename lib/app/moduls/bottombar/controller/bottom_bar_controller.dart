@@ -2,6 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/ipd_dashboard_screen.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -19,6 +20,7 @@ class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
   RxBool isPharmacyHome = false.obs;
+  var isAdmittedPatient = false.obs;
 
   @override
   void onInit() {
@@ -32,7 +34,16 @@ class BottomBarController extends GetxController {
     return [
       // PharmacyScreen(),
       // PayrollScreen(),
-      Obx(() => isPharmacyHome.value ? PharmacyScreen() : PayrollScreen()), // Use condition here
+      Obx(() {
+        if (isPharmacyHome.value) {
+          return PharmacyScreen();
+        } else if (isAdmittedPatient.value) {
+          return IpdDashboardScreen();
+        } else {
+          return PayrollScreen();
+        }
+      }),
+      // Obx(() => isPharmacyHome.value ? PharmacyScreen() : PayrollScreen()), // Use condition here
       // attendanceScreen,
       AttendanceScreen(),
       const Dashboard1Screen(),
