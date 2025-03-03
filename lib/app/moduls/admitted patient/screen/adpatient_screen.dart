@@ -12,6 +12,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_report_screen.d
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class AdpatientScreen extends StatelessWidget {
   const AdpatientScreen({Key? key}) : super(key: key);
@@ -177,7 +178,7 @@ class AdpatientScreen extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     itemCount: controller.patients.length,
                     itemBuilder: (context, index) {
-                      return _buildPatientCard(index);
+                      return _buildPatientCard(index, context);
                     },
                   ),
                 ),
@@ -187,7 +188,7 @@ class AdpatientScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPatientCard(int index) {
+  Widget _buildPatientCard(int index, BuildContext context) {
     return GetBuilder<AdpatientController>(
         builder: (controller) => controller.patientdata.isNotEmpty
             ? Card(
@@ -234,7 +235,8 @@ class AdpatientScreen extends StatelessWidget {
                             children: [
                               Text(
                                 controller.patientdata[index].patientName.toString(),
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
+                                style:
+                                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
                               ),
                               DropdownButtonHideUnderline(
                                 child: DropdownButton2<String>(
@@ -249,7 +251,18 @@ class AdpatientScreen extends StatelessWidget {
                                     if (value == "Lab Summary") {
                                       Get.to(LabSummaryScreen());
                                     } else if (value == "Lab Report") {
-                                      Get.to(LabReportScreen());
+                                      // Get.to(LabReportScreen());
+                                      // PersistentNavBarNavigator.pushNewScreen(
+                                      //   context,
+                                      //   screen: LabReportsViewCopy(
+                                      //     bedNumber: patientdata.bedNo ?? '',
+                                      //     patientName: patientdata.patientName ?? "",
+                                      //   ),
+                                      //   withNavBar: true,
+                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      // ).then((value) {
+                                      //   hideBottomBar.value = false;
+                                      // });
                                     }
                                   },
                                   dropdownStyleData: DropdownStyleData(

@@ -93,7 +93,8 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
       filteredList = originalList;
     } else {
-      originalList.removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
+      originalList
+          .removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
       filteredList = originalList;
     }
     update();
@@ -154,7 +155,8 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
 
       final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse =
+          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
@@ -351,7 +353,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         return AppImage.overtime;
       case "DUTY SCHEDULE":
         return AppImage.dutySchedule;
-      case "LV OT APPROVAL":
+      case "LV/OT APPROVAL":
         return AppImage.lvotapproval;
       default:
         return AppImage.attendance;

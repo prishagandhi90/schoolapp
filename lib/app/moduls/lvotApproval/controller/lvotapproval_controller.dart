@@ -88,13 +88,13 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     }
   }
 
-   @override
+  @override
   void dispose() {
     // Custom back button action for Android hardware button
     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
     super.dispose();
   }
-  
+
   enterSelectionMode(int index) async {
     isSelectionMode.value = true;
     selectedItems.add(filteredList[index]);
@@ -857,19 +857,19 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
                       // 🔹 Cancel Button
                       SizedBox(
                         height: MediaQuery.of(context).size.width * 0.10,
-                        width: MediaQuery.of(context).size.width * 0.25,
+                        width: MediaQuery.of(context).size.width * 0.27,
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey,
+                            backgroundColor: AppColor.lightred,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: Text(
-                            AppString.cancel,
+                            "Close",
                             style: AppStyle.black.copyWith(
                               fontSize: getDynamicHeight(size: 0.018),
                             ),

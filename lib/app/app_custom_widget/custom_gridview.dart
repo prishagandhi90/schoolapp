@@ -50,7 +50,10 @@ class _CustomGridviewState extends State<CustomGridview> {
 
     final DashboardController dashboardController = Get.put(DashboardController());
     // dashboardController.update();
-    if (index == 6 && dashboardController.isPharmacyUser.toUpperCase() != "Y") {
+    bool hasModuleAccess = dashboardController.empModuleScreenRightsTable.isNotEmpty &&
+        dashboardController.empModuleScreenRightsTable
+            .any((element) => element.moduleSeq == (index + 1) && element.rightsYN == 'Y');
+    if (hasModuleAccess == false) {
       Get.snackbar(
         AppString.noRights,
         '',
@@ -60,6 +63,16 @@ class _CustomGridviewState extends State<CustomGridview> {
       );
       return;
     }
+    // if (index == 6 && dashboardController.isPharmacyUser.toUpperCase() != "Y") {
+    //   Get.snackbar(
+    //     AppString.noRights,
+    //     '',
+    //     colorText: AppColor.white,
+    //     backgroundColor: AppColor.black,
+    //     duration: const Duration(seconds: 2),
+    //   );
+    //   return;
+    // }
 
     // if (index == 7) {
 

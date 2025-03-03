@@ -37,6 +37,7 @@ class LvList extends StatelessWidget {
                                 child: Builder(builder: (context) {
                                   return ListView.builder(
                                     controller: controller.lvappScrollController,
+                                    physics: AlwaysScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: controller.filteredList.length,
                                     itemBuilder: (context, index) {
@@ -44,7 +45,8 @@ class LvList extends StatelessWidget {
                                       final isSelected = controller.selectedItems.contains(leaveItem);
 
                                       // Divider color logic
-                                      final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
+                                      final showPurpleDivider =
+                                          leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
                                       final showRedDivider = leaveItem.inchargeAction?.toLowerCase() == "rejected";
 
                                       return GestureDetector(
@@ -102,9 +104,11 @@ class LvList extends StatelessWidget {
                                                       controller.noteController.text =
                                                           controller.filteredList[index].inchargeNote.toString();
                                                     } else if (controller.selectedRole == "HOD") {
-                                                      controller.noteController.text = controller.filteredList[index].hoDNote.toString();
+                                                      controller.noteController.text =
+                                                          controller.filteredList[index].hoDNote.toString();
                                                     } else if (controller.selectedRole == "HR") {
-                                                      controller.noteController.text = controller.filteredList[index].hrNote.toString();
+                                                      controller.noteController.text =
+                                                          controller.filteredList[index].hrNote.toString();
                                                     }
                                                     controller.showNoteDialog(context, index);
                                                   },
@@ -121,7 +125,9 @@ class LvList extends StatelessWidget {
                                               width: double.infinity,
                                               padding: const EdgeInsets.all(12.0),
                                               decoration: BoxDecoration(
-                                                color: isSelected ? AppColor.darkgery.withOpacity(0.3) : AppColor.lightblue,
+                                                color: isSelected
+                                                    ? AppColor.darkgery.withOpacity(0.3)
+                                                    : AppColor.lightblue,
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: IntrinsicHeight(
@@ -153,7 +159,8 @@ class LvList extends StatelessWidget {
                                                       ),
                                                     // Main Leave Information
                                                     Column(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Top & Bottom alignment maintain
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .spaceBetween, // Top & Bottom alignment maintain
                                                       children: [
                                                         // ✅ Top-Left Aligned Leave Days
                                                         Container(

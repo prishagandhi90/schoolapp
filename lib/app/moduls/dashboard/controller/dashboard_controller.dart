@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
+import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController {
-  String tokenNo = '', loginId = '';
+  String tokenNo = '', loginId = '', empId = '';
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
@@ -27,16 +28,73 @@ class DashboardController extends GetxController {
       designation = "",
       isSuperAdmin = "",
       isPharmacyUser = "";
+
+  // String HIMS_MODULE_YN = "",
+  //     OPD_Module_YN = "",
+  //     IPD_Module_YN = "",
+  //     Store_Module_YN = "",
+  //     Radiology_Module_YN = "",
+  //     Pathology_Module_YN = "",
+  //     Pharmacy_Module_YN = "",
+  //     Payroll_Module_YN = "",
+  //     OT_Module_YN = "",
+  //     NABH_MODULE_YN = "";
+
   late DashboardTable dashboardTable;
+  List<ModuleScreenRights> empModuleScreenRightsTable = [];
 
   @override
   void onInit() {
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getDashboardDataUsingToken();
+      fetchModuleRights();
       hideBottomBar.value = false;
       update();
     });
+  }
+
+  Future<List<ModuleScreenRights>> fetchModuleRights() async {
+    try {
+      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+      String url = ConstApiUrl.empAppModuleRights;
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "EmpId": empId, "ModuleName": "Payroll"};
+      if (loginId != "") {
+        final ApiController apiController = Get.find<ApiController>();
+        var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+        ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
+
+        if (responseModuleData.statusCode == 200) {
+          if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
+            isLoading.value = false;
+            empModuleScreenRightsTable = responseModuleData.data!;
+            update();
+            return empModuleScreenRightsTable;
+          } else {
+            return [];
+          }
+          update();
+        } else if (responseModuleData.statusCode == 401) {
+          pref.clear();
+          Get.offAll(const LoginScreen());
+          Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+        } else if (responseModuleData.statusCode == 400) {
+          empModuleScreenRightsTable = [];
+        } else {
+          Get.rawSnackbar(message: "Something went wrong");
+        }
+        update();
+      }
+    } catch (e) {
+      isLoading.value = false;
+      update();
+    }
+    return [];
   }
 
   Future<void> gridOnClk(int index, BuildContext context) async {

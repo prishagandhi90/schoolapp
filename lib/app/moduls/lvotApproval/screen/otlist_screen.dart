@@ -24,7 +24,8 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                           Expanded(
                             child: RefreshIndicator(
                               onRefresh: () async {
-                                await controller.fetchLeaveOTList(controller.selectedRole, controller.selectedLeaveType);
+                                await controller.fetchLeaveOTList(
+                                    controller.selectedRole, controller.selectedLeaveType);
                               },
                               child: Scrollbar(
                                 thickness: 4, //According to your choice
@@ -35,13 +36,15 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                   child: SlidableAutoCloseBehavior(
                                     child: ListView.builder(
                                       itemCount: controller.filteredList.length,
+                                      physics: AlwaysScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         final leaveItem = controller.filteredList[index];
                                         final isSelected = controller.selectedItems.contains(leaveItem);
 
                                         // Divider color logic
-                                        final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
+                                        final showPurpleDivider =
+                                            leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
                                         final showRedDivider = leaveItem.inchargeAction == "Rejected";
 
                                         return GestureDetector(
@@ -102,9 +105,11 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                         controller.noteController.text =
                                                             controller.filteredList[index].inchargeNote.toString();
                                                       } else if (controller.selectedRole == "HOD") {
-                                                        controller.noteController.text = controller.filteredList[index].hoDNote.toString();
+                                                        controller.noteController.text =
+                                                            controller.filteredList[index].hoDNote.toString();
                                                       } else if (controller.selectedRole == "HR") {
-                                                        controller.noteController.text = controller.filteredList[index].hrNote.toString();
+                                                        controller.noteController.text =
+                                                            controller.filteredList[index].hrNote.toString();
                                                       }
                                                       controller.showNoteDialog(context, index);
                                                     },
@@ -121,7 +126,9 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                 width: double.infinity,
                                                 padding: const EdgeInsets.all(12.0),
                                                 decoration: BoxDecoration(
-                                                  color: isSelected ? AppColor.darkgery.withOpacity(0.3) : AppColor.lightblue,
+                                                  color: isSelected
+                                                      ? AppColor.darkgery.withOpacity(0.3)
+                                                      : AppColor.lightblue,
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
                                                 child: IntrinsicHeight(
