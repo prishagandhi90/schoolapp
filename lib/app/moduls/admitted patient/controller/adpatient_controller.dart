@@ -20,7 +20,8 @@ class AdpatientController extends GetxController {
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
-  List<PatientdataModel> patientdata = [];
+  // List<PatientdataModel> patientdata = [];
+  List<PatientdataModel> patientsData = [];
   List<filterpatientModel> filterdata = [];
   List<String> selectedorgsList = [];
   List<String> selectedFloorsList = [];
@@ -40,42 +41,82 @@ class AdpatientController extends GetxController {
     getPatientDashboardFilters();
   }
 
-  final List<Map<String, dynamic>> patientData = [
-    {"title": "Admitted Patients", "count": 10},
-  ];
+  // final List<Map<String, dynamic>> patientData = [
+  //   {"title": "Admitted Patients", "count": 10},
+  // ];
 
-  final List<Map<String, dynamic>> patients = [
-    {
-      "room": "MICU-02",
-      "id": "A/9537/24",
-      "floor": "Micu- Floor 1",
-      "name": "Ibraham Vali Piriya",
-      "payment": "Cash",
-      "doctor": "Dr. Abhishek Ajit Bhagat",
-      "doa": "14/01/2025",
-      "days": 2
-    },
-    {
-      "room": "ICU-05",
-      "id": "B/4567/23",
-      "floor": "ICU - Floor 2",
-      "name": "Ramesh Kumar",
-      "payment": "Insurance",
-      "doctor": "Dr. Sameer Verma",
-      "doa": "10/01/2025",
-      "days": 5
-    },
-    {
-      "room": "General-12",
-      "id": "C/1234/22",
-      "floor": "General Ward",
-      "name": "Sita Devi",
-      "payment": "Cash",
-      "doctor": "Dr. Priya Sharma",
-      "doa": "12/01/2025",
-      "days": 3
-    }
-  ];
+  // final List<PatientdataModel> patients = [
+  //   PatientdataModel(
+  //       isValidToken: "Y",
+  //       patientCategory: "Admitted",
+  //       uhid: "U/45832/17",
+  //       ipdNo: "A/10799/24",
+  //       patientName: "CHETANKUMAR MANSUKHLAL CHITRODA",
+  //       bedNo: "E/AC -1-C",
+  //       ward: "ECONOMY AC",
+  //       floor: "2",
+  //       doa: "02/03/2025",
+  //       admType: "Cash",
+  //       totalDays: "4",
+  //       referredDr: "",
+  //       mobileNo: "8866759082"),
+  //   PatientdataModel(
+  //       isValidToken: "Y",
+  //       patientCategory: "Admitted",
+  //       uhid: "U/115404/17",
+  //       ipdNo: "A/10752/24",
+  //       patientName: "CHUNIBHAI LAXMANBHAI CHOTHANI",
+  //       bedNo: "E/AC -1-D",
+  //       ward: "ECONOMY AC",
+  //       floor: "2",
+  //       doa: "01/03/2025",
+  //       admType: "PMJAY",
+  //       totalDays: "5",
+  //       referredDr: "",
+  //       mobileNo: "7567765472"),
+  //   PatientdataModel(
+  //       isValidToken: "Y",
+  //       patientCategory: "Admitted",
+  //       uhid: "U/115447/17",
+  //       ipdNo: "A/10791/24",
+  //       patientName: "VASANTBHAI JADAVBHAI GAJERA",
+  //       bedNo: "ICCU-9",
+  //       ward: "ICCU",
+  //       floor: "3",
+  //       doa: "02/03/2025",
+  //       admType: "PMJAY",
+  //       totalDays: "4",
+  //       referredDr: "",
+  //       mobileNo: "9879180316"),
+  //   PatientdataModel(
+  //       isValidToken: "Y",
+  //       patientCategory: "Admitted",
+  //       uhid: "U/115271/17",
+  //       ipdNo: "A/10672/24",
+  //       patientName: "SUSHILABEN MANHARBHAI VAGHANI",
+  //       bedNo: "CT SICU-4",
+  //       ward: "CT SICU",
+  //       floor: "3",
+  //       doa: "26/02/2025",
+  //       admType: "Cashless",
+  //       totalDays: "8",
+  //       referredDr: "",
+  //       mobileNo: "9998199387"),
+  //   PatientdataModel(
+  //       isValidToken: "Y",
+  //       patientCategory: "Admitted",
+  //       uhid: "U/115429/17",
+  //       ipdNo: "A/10789/24",
+  //       patientName: "ARVINDBHAI KALUBHAI KHERALA",
+  //       bedNo: "MICU-20",
+  //       ward: "MICU",
+  //       floor: "4",
+  //       doa: "02/03/2025",
+  //       admType: "PMJAY",
+  //       totalDays: "4",
+  //       referredDr: "",
+  //       mobileNo: "8140690545")
+  // ];
 
   List<List<String>> data = [
     ["Hemoglobin", "13–18", "12", "12.8", "13.5", "12", "11.5"],
@@ -111,7 +152,7 @@ class AdpatientController extends GetxController {
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
 
       if (rsponsedpatientdata.statusCode == 200) {
-        patientdata.assignAll(rsponsedpatientdata.data ?? []);
+        patientsData.assignAll(rsponsedpatientdata.data ?? []);
         isLoading = false;
       } else if (rsponsedpatientdata.statusCode == 401) {
         pref.clear();
@@ -288,7 +329,9 @@ class AdpatientController extends GetxController {
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedorgsList.isNotEmpty || selectedFloorsList.isNotEmpty || selectedwardsList.isNotEmpty) {
+                                    if (selectedorgsList.isNotEmpty ||
+                                        selectedFloorsList.isNotEmpty ||
+                                        selectedwardsList.isNotEmpty) {
                                       Navigator.pop(context);
                                       await fetchpresDetailList();
                                     } else {

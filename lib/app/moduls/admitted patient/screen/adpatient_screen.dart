@@ -8,14 +8,17 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_report_screen.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_controller.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/model/patientdata_model.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view_copy.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class AdpatientScreen extends StatelessWidget {
-  const AdpatientScreen({Key? key}) : super(key: key);
+  const AdpatientScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +179,7 @@ class AdpatientScreen extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     padding: EdgeInsets.all(10),
-                    itemCount: controller.patients.length,
+                    itemCount: controller.patientsData.length,
                     itemBuilder: (context, index) {
                       return _buildPatientCard(index, context);
                     },
@@ -190,7 +193,7 @@ class AdpatientScreen extends StatelessWidget {
 
   Widget _buildPatientCard(int index, BuildContext context) {
     return GetBuilder<AdpatientController>(
-        builder: (controller) => controller.patientdata.isNotEmpty
+        builder: (controller) => controller.patientsData.isNotEmpty
             ? Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -209,15 +212,15 @@ class AdpatientScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            controller.patientdata[index].bedNo.toString(),
+                            controller.patientsData[index].bedNo.toString(),
                             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            controller.patientdata[index].ipdNo.toString(),
+                            controller.patientsData[index].ipdNo.toString(),
                             style: TextStyle(color: Colors.white),
                           ),
                           Text(
-                            controller.patientdata[index].floor.toString(),
+                            controller.patientsData[index].floor.toString(),
                             style: TextStyle(color: Colors.white),
                           ),
                         ],
@@ -234,7 +237,7 @@ class AdpatientScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                controller.patientdata[index].patientName.toString(),
+                                controller.patientsData[index].patientName.toString(),
                                 style:
                                     TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
                               ),
@@ -252,17 +255,32 @@ class AdpatientScreen extends StatelessWidget {
                                       Get.to(LabSummaryScreen());
                                     } else if (value == "Lab Report") {
                                       // Get.to(LabReportScreen());
-                                      // PersistentNavBarNavigator.pushNewScreen(
-                                      //   context,
-                                      //   screen: LabReportsViewCopy(
-                                      //     bedNumber: patientdata.bedNo ?? '',
-                                      //     patientName: patientdata.patientName ?? "",
-                                      //   ),
-                                      //   withNavBar: true,
-                                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      // ).then((value) {
-                                      //   hideBottomBar.value = false;
-                                      // });
+                                      var labreportsController = Get.put(LabReportsController());
+                                      labreportsController.showSwipe = true;
+                                      hideBottomBar.value = true;
+                                      labreportsController.labReportsList = [];
+                                      labreportsController.allReportsList = [];
+                                      labreportsController.allDatesList = [];
+                                      labreportsController.update();
+                                      labreportsController.showSwipe = true;
+                                      hideBottomBar.value = true;
+                                      labreportsController.getLabReporst(
+                                          ipdNo: controller.patientsData[index].ipdNo ?? '',
+                                          uhidNo: controller.patientsData[index].uhid ?? '');
+                                      labreportsController.commonList = [];
+                                      labreportsController.dataContain = [];
+                                      labreportsController.scrollLister();
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: LabReportsViewCopy(
+                                          bedNumber: controller.patientsData[index].bedNo ?? '',
+                                          patientName: controller.patientsData[index].patientName ?? "",
+                                        ),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) {
+                                        hideBottomBar.value = false;
+                                      });
                                     }
                                   },
                                   dropdownStyleData: DropdownStyleData(
@@ -283,7 +301,7 @@ class AdpatientScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    controller.patientdata[index].admType.toString(),
+                                    controller.patientsData[index].admType.toString(),
                                     style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(height: 5),
@@ -292,7 +310,7 @@ class AdpatientScreen extends StatelessWidget {
                                     style: TextStyle(fontWeight: FontWeight.bold),
                                     children: [
                                       TextSpan(
-                                        text: controller.patientdata[index].doa.toString(),
+                                        text: controller.patientsData[index].doa.toString(),
                                         style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ],
@@ -306,7 +324,7 @@ class AdpatientScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    controller.patientdata[index].referredDr.toString(),
+                                    controller.patientsData[index].referredDr.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontWeight: FontWeight.bold),
                                   ),
@@ -316,7 +334,7 @@ class AdpatientScreen extends StatelessWidget {
                                     style: TextStyle(fontWeight: FontWeight.bold),
                                     children: [
                                       TextSpan(
-                                        text: controller.patientdata[index].totalDays.toString(),
+                                        text: controller.patientsData[index].totalDays.toString(),
                                         style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ],

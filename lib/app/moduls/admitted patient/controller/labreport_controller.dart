@@ -1,8 +1,13 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart' as dio_package;
+import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/model/lab_report_model.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -14,8 +19,8 @@ class LabReportsController extends GetxController {
   final count = 0.obs;
   bool apiCall = false;
   List commonList = [];
-  // List<ReportsAllData> labReportsList = [];
-  // List<ReportListData> allReportsList = [];
+  List<ReportsAllData> labReportsList = [];
+  List<ReportListData> allReportsList = [];
   List dataContain = [];
   List allDatesList = [];
   void increment() => count.value++;
@@ -109,35 +114,35 @@ class LabReportsController extends GetxController {
     }
   }
 
-  // getLabReporst({required String ipdNo, required String uhidNo, bool isLoader = true}) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String token = prefs.getString('token') ?? '';
-  //   String loginId = prefs.getString('loginId') ?? '';
-  //   Map data = {"loginId": loginId, "ipdNo": ipdNo, "uhid": uhidNo};
-  //   apiCall = true;
-  //   String apiUrl = getLabReports;
-  //   dio_package.Response finalData =
-  //       await APIServices.postMethodWithHeaderDioMapData(body: data, apiUrl: apiUrl, token: token, isShowLoader: isLoader);
-  //   if (finalData.statusCode == 200) {
-  //     var responseData = jsonDecode(finalData.data);
+  getLabReporst({required String ipdNo, required String uhidNo, bool isLoader = true}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString(AppString.keyToken) ?? '';
+    String loginId = prefs.getString(AppString.keyLoginId) ?? '';
+    Map data = {"loginId": loginId, "ipdNo": ipdNo, "uhid": uhidNo};
+    apiCall = true;
+    String apiUrl = ConstApiUrl.getLabReports;
+    dio_package.Response finalData = await ApiController.postMethodWithHeaderDioMapData(
+        body: data, apiUrl: apiUrl, token: token, isShowLoader: isLoader);
+    if (finalData.statusCode == 200) {
+      var responseData = jsonDecode(finalData.data);
 
-  //     commonList = responseData['data']['Data'];
-  //     scrollController1.addListener(_syncScroll);
-  //     scrollController2.addListener(_syncScroll2);
-  //     apiCall = false;
-  //     update();
-  //   } else if (finalData.statusCode == 401) {
-  //     prefs.clear();
-  //     Get.offAll(const LoginView());
-  //     Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //   } else if (finalData.statusCode == 400) {
-  //     apiCall = false;
-  //   } else {
-  //     apiCall = false;
-  //     Get.rawSnackbar(message: "Something went wrong");
-  //   }
-  //   update();
-  // }
+      commonList = responseData['data']['Data'];
+      scrollController1.addListener(_syncScroll);
+      scrollController2.addListener(_syncScroll2);
+      apiCall = false;
+      update();
+    } else if (finalData.statusCode == 401) {
+      prefs.clear();
+      Get.offAll(const LoginScreen());
+      Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+    } else if (finalData.statusCode == 400) {
+      apiCall = false;
+    } else {
+      apiCall = false;
+      Get.rawSnackbar(message: "Something went wrong");
+    }
+    update();
+  }
 
   getKey1(List data) {
     List alldates = [];

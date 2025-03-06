@@ -35,4 +35,9 @@ class AppColor {
   static Color lightgrey1 = Color.fromARGB(255, 192, 191, 191);
   static Color grey = Color.fromARGB(255, 163, 163, 163);
   static Color darkgery = Color.fromRGBO(150, 150, 150, 1);
+
+  static const buttonColor = Color(0xff35B6BD);
+  static const blackColor = Color(0xff000000);
+  static const black6B6B6B = Color(0xff6B6B6B);
+  static const headingTexColor = Color(0xff007971);
 }

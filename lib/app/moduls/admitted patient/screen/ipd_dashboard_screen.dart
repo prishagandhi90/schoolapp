@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/model/patientdata_model.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,12 +31,9 @@ class IpdDashboardScreen extends StatelessWidget {
           ),
           body: ListView.builder(
             padding: EdgeInsets.all(10),
-            itemCount: controller.patientData.length,
+            itemCount: 1,
             itemBuilder: (context, index) {
-              return _buildPatientCard(
-                controller.patientData[index]["title"],
-                controller.patientData[index]["count"],
-              );
+              return _buildPatientCard("Admitted Patients", controller.patientsData.length);
             },
           ),
         );
