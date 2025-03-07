@@ -47,7 +47,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   var isLVOTApprovalNavigating = false.obs;
   var isLoaderPayroll = false.obs;
   var isLVOTAppr_Rights = false.obs;
-  List<ModuleScreenRights> screens = [];
+  // List<ModuleScreenRights> screens = [];
   List<Map<String, dynamic>> originalList = List.from(AppConst.payrollgrid);
   List<Map<String, dynamic>> filteredList = [];
 
@@ -91,7 +91,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   void loadScreens() async {
     // List<ModuleScreenRights> fetchedScreens = await CommonMethods.fetchModuleScreens("Payroll");
     // screens = fetchedScreens;
-    screens = await CommonMethods.fetchModuleScreens("Payroll");
+    empModuleScreenRightsTable = await CommonMethods.fetchModuleScreens("Payroll");
     filteredList = originalList;
     // if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
     //   filteredList = originalList;

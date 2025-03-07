@@ -410,9 +410,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     color: AppColor.primaryColor,
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
-                                              child: controller.screens.isNotEmpty
+                                              child: controller.empModuleScreenRightsTable.isNotEmpty
                                                   ? Image.asset(
-                                                      controller.getImage(controller.screens[0].screenName.toString()),
+                                                      controller.getImage(controller.empModuleScreenRightsTable[0].screenName.toString()),
                                                       color: AppColor.primaryColor,
                                                     )
                                                   : SizedBox(),
@@ -420,7 +420,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                           ),
                                           const SizedBox(height: 5),
                                           Text(
-                                            controller.screens.isNotEmpty ? controller.screens[0].screenName.toString() : "", // Empty string instead of SizedBox()
+                                            controller.empModuleScreenRightsTable.isNotEmpty
+                                                ? controller.empModuleScreenRightsTable[0].screenName.toString()
+                                                : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -477,9 +479,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   color: AppColor.primaryColor,
                                                 ),
                                                 borderRadius: BorderRadius.circular(10)),
-                                            child: controller.screens.isNotEmpty
+                                            child: controller.empModuleScreenRightsTable.isNotEmpty
                                                 ? Image.asset(
-                                                    controller.getImage(controller.screens[1].screenName.toString()),
+                                                    controller.getImage(controller.empModuleScreenRightsTable[1].screenName.toString()),
                                                     color: AppColor.primaryColor,
                                                   )
                                                 : SizedBox(),
@@ -488,7 +490,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                         const SizedBox(height: 5),
                                         // Text(AppString.mispunchinfo, style: AppStyle.plus12),
                                         Text(
-                                          controller.screens.isNotEmpty ? controller.screens[1].screenName.toString() : "", // Empty string instead of SizedBox()
+                                          controller.empModuleScreenRightsTable.isNotEmpty
+                                              ? controller.empModuleScreenRightsTable[1].screenName.toString()
+                                              : "", // Empty string instead of SizedBox()
                                           style: AppStyle.plus12,
                                         ),
                                       ],
@@ -561,9 +565,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     color: AppColor.primaryColor,
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
-                                              child: controller.screens.isNotEmpty
+                                              child: controller.empModuleScreenRightsTable.isNotEmpty
                                                   ? Image.asset(
-                                                      controller.getImage(controller.screens[2].screenName.toString()),
+                                                      controller.getImage(controller.empModuleScreenRightsTable[2].screenName.toString()),
                                                       color: AppColor.primaryColor,
                                                     )
                                                   : SizedBox(),
@@ -572,7 +576,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                           const SizedBox(height: 5),
                                           // Text(AppString.leaveentry, style: AppStyle.plus12),
                                           Text(
-                                            controller.screens.isNotEmpty ? controller.screens[2].screenName.toString() : "", // Empty string instead of SizedBox()
+                                            controller.empModuleScreenRightsTable.isNotEmpty
+                                                ? controller.empModuleScreenRightsTable[2].screenName.toString()
+                                                : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -635,9 +641,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     color: AppColor.primaryColor,
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
-                                              child: controller.screens.isNotEmpty
+                                              child: controller.empModuleScreenRightsTable.isNotEmpty
                                                   ? Image.asset(
-                                                      controller.getImage(controller.screens[3].screenName.toString()),
+                                                      controller.getImage(controller.empModuleScreenRightsTable[3].screenName.toString()),
                                                       color: AppColor.primaryColor,
                                                     )
                                                   : SizedBox(),
@@ -646,7 +652,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                           const SizedBox(height: 5),
                                           // Text(AppString.overtime, style: AppStyle.plus12),
                                           Text(
-                                            controller.screens.isNotEmpty ? controller.screens[3].screenName.toString() : "", // Empty string instead of SizedBox()
+                                            controller.empModuleScreenRightsTable.isNotEmpty
+                                                ? controller.empModuleScreenRightsTable[3].screenName.toString()
+                                                : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -715,9 +723,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
-                                                child: controller.screens.isNotEmpty
+                                                child: controller.empModuleScreenRightsTable.isNotEmpty
                                                     ? Image.asset(
-                                                        controller.getImage(controller.screens[4].screenName.toString()),
+                                                        controller.getImage(controller.empModuleScreenRightsTable[4].screenName.toString()),
                                                         color: AppColor.primaryColor,
                                                       )
                                                     : SizedBox(),
@@ -726,7 +734,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                             const SizedBox(height: 5),
                                             // Text(AppString.dutyschedule, style: AppStyle.plus12),
                                             Text(
-                                              controller.screens.isNotEmpty ? controller.screens[4].screenName.toString() : "", // Empty string instead of SizedBox()
+                                              controller.empModuleScreenRightsTable.isNotEmpty
+                                                  ? controller.empModuleScreenRightsTable[4].screenName.toString()
+                                                  : "", // Empty string instead of SizedBox()
                                               style: AppStyle.plus12, overflow: TextOverflow.ellipsis, maxLines: 2,
                                               textAlign: TextAlign.center,
                                             ),
@@ -793,9 +803,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
-                                                child: controller.screens.isNotEmpty
+                                                child: controller.empModuleScreenRightsTable.isNotEmpty
                                                     ? Image.asset(
-                                                        controller.getImage(controller.screens[5].screenName.toString()),
+                                                        controller.getImage(controller.empModuleScreenRightsTable[5].screenName.toString()),
                                                         color: AppColor.primaryColor,
                                                       )
                                                     : SizedBox(),
@@ -803,7 +813,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                             ),
                                             const SizedBox(height: 5),
                                             Text(
-                                              controller.screens.isNotEmpty ? controller.screens[5].screenName.toString() : "",
+                                              controller.empModuleScreenRightsTable.isNotEmpty ? controller.empModuleScreenRightsTable[5].screenName.toString() : "",
                                               style: AppStyle.plus12,
                                               textAlign: TextAlign.center,
                                             ),
