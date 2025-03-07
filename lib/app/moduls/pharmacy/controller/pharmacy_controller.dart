@@ -1,12 +1,14 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
+import 'package:emp_app/app/core/common/common_methods.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/pharmafilter_model.dart';
 import 'package:emp_app/app/moduls/pharmacy/model/presdetail_model.dart';
@@ -51,9 +53,13 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   // RxBool showPharmaDetailArrow = false.obs;
   RxBool showScrollDownArrow = false.obs; // RxBool
   RxBool showScrollUpArrow = false.obs;
+  List<ModuleScreenRights> screens = [];
+  List<ModuleScreenRights> empModuleScreenRightsTable = [];
+
   @override
   void onInit() {
     super.onInit();
+    loadScreens();
     fetchpresViewer();
     GetPharmaFilterData();
     update();
@@ -120,6 +126,21 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     //     }
     //   }
     // });
+  }
+
+  void loadScreens() async {
+    // List<ModuleScreenRights> fetchedScreens = await CommonMethods.fetchModuleScreens("Payroll");
+    // screens = fetchedScreens;
+    empModuleScreenRightsTable = await CommonMethods.fetchModuleScreens("Pharmacy");
+    filteredList = originalList;
+    // if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
+    //   filteredList = originalList;
+    // } else {
+    //   originalList
+    //       .removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
+    //   filteredList = originalList;
+    // }
+    update();
   }
 
   void toggleBlur(int index) {
@@ -454,7 +475,9 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty ||
+                                        selectedFloorList.isNotEmpty ||
+                                        selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       await fetchpresViewer(isLoader: false);
                                     } else {

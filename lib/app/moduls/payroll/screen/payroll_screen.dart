@@ -192,8 +192,7 @@ class PayrollScreen extends GetView<PayrollController> {
                   padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15),
                   child: SingleChildScrollView(
                     controller: isScrollable ? controller.payrollScrollController : null,
-                    physics:
-                        isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
+                    physics: isScrollable ? const AlwaysScrollableScrollPhysics() : const NeverScrollableScrollPhysics(),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                         minHeight: availableHeight,
@@ -223,13 +222,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding:
-                                              EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
+                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
                                           child: Text(AppString.todaysoverview, style: AppStyle.blackplus16),
                                         ),
                                         Padding(
-                                          padding:
-                                              EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
+                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)), //10),
                                           child: Text(controller.formattedDate, style: AppStyle.plus17w600),
                                         ),
                                         Padding(
@@ -264,13 +261,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     Container(
                                                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColor.lightblue2,
-                                                          border: Border.all(color: AppColor.primaryColor),
-                                                          borderRadius: BorderRadius.circular(20)),
-                                                      child: controller.empSummDashboardTable.isNotEmpty &&
-                                                              controller.empSummDashboardTable[0].inPunchTime
-                                                                  .toString()
-                                                                  .isNotEmpty
+                                                          color: AppColor.lightblue2, border: Border.all(color: AppColor.primaryColor), borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty && controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                               style: TextStyle(
@@ -296,13 +288,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     Container(
                                                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColor.lightblue2,
-                                                          border: Border.all(color: AppColor.primaryColor),
-                                                          borderRadius: BorderRadius.circular(20)),
-                                                      child: controller.empSummDashboardTable.isNotEmpty &&
-                                                              controller.empSummDashboardTable[0].outPunchTime
-                                                                  .toString()
-                                                                  .isNotEmpty
+                                                          color: AppColor.lightblue2, border: Border.all(color: AppColor.primaryColor), borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty && controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                               style: AppStyle.plus10,
@@ -338,8 +325,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   children: [
                                                     Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                                     if (controller.empSummDashboardTable.isNotEmpty)
-                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
-                                                          style: AppStyle.plus16w600)
+                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
                                                     else
                                                       Text('-- ', style: AppStyle.plus16w600),
                                                   ],
@@ -434,9 +420,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                           ),
                                           const SizedBox(height: 5),
                                           Text(
-                                            controller.screens.isNotEmpty
-                                                ? controller.screens[0].screenName.toString()
-                                                : "", // Empty string instead of SizedBox()
+                                            controller.screens.isNotEmpty ? controller.screens[0].screenName.toString() : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -504,9 +488,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                         const SizedBox(height: 5),
                                         // Text(AppString.mispunchinfo, style: AppStyle.plus12),
                                         Text(
-                                          controller.screens.isNotEmpty
-                                              ? controller.screens[1].screenName.toString()
-                                              : "", // Empty string instead of SizedBox()
+                                          controller.screens.isNotEmpty ? controller.screens[1].screenName.toString() : "", // Empty string instead of SizedBox()
                                           style: AppStyle.plus12,
                                         ),
                                       ],
@@ -590,9 +572,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                           const SizedBox(height: 5),
                                           // Text(AppString.leaveentry, style: AppStyle.plus12),
                                           Text(
-                                            controller.screens.isNotEmpty
-                                                ? controller.screens[2].screenName.toString()
-                                                : "", // Empty string instead of SizedBox()
+                                            controller.screens.isNotEmpty ? controller.screens[2].screenName.toString() : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -666,9 +646,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                           const SizedBox(height: 5),
                                           // Text(AppString.overtime, style: AppStyle.plus12),
                                           Text(
-                                            controller.screens.isNotEmpty
-                                                ? controller.screens[3].screenName.toString()
-                                                : "", // Empty string instead of SizedBox()
+                                            controller.screens.isNotEmpty ? controller.screens[3].screenName.toString() : "", // Empty string instead of SizedBox()
                                             style: AppStyle.plus12,
                                           ),
                                         ],
@@ -739,8 +717,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 ),
                                                 child: controller.screens.isNotEmpty
                                                     ? Image.asset(
-                                                        controller
-                                                            .getImage(controller.screens[4].screenName.toString()),
+                                                        controller.getImage(controller.screens[4].screenName.toString()),
                                                         color: AppColor.primaryColor,
                                                       )
                                                     : SizedBox(),
@@ -749,9 +726,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                             const SizedBox(height: 5),
                                             // Text(AppString.dutyschedule, style: AppStyle.plus12),
                                             Text(
-                                              controller.screens.isNotEmpty
-                                                  ? controller.screens[4].screenName.toString()
-                                                  : "", // Empty string instead of SizedBox()
+                                              controller.screens.isNotEmpty ? controller.screens[4].screenName.toString() : "", // Empty string instead of SizedBox()
                                               style: AppStyle.plus12, overflow: TextOverflow.ellipsis, maxLines: 2,
                                               textAlign: TextAlign.center,
                                             ),
@@ -820,8 +795,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 ),
                                                 child: controller.screens.isNotEmpty
                                                     ? Image.asset(
-                                                        controller
-                                                            .getImage(controller.screens[5].screenName.toString()),
+                                                        controller.getImage(controller.screens[5].screenName.toString()),
                                                         color: AppColor.primaryColor,
                                                       )
                                                     : SizedBox(),
@@ -829,9 +803,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                             ),
                                             const SizedBox(height: 5),
                                             Text(
-                                              controller.screens.isNotEmpty
-                                                  ? controller.screens[5].screenName.toString()
-                                                  : "",
+                                              controller.screens.isNotEmpty ? controller.screens[5].screenName.toString() : "",
                                               style: AppStyle.plus12,
                                               textAlign: TextAlign.center,
                                             ),

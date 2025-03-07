@@ -96,6 +96,20 @@ class PharmacyScreen extends StatelessWidget {
                               if (controller.isPresViewerNavigating.value) return;
                               controller.isPresViewerNavigating.value = true;
 
+                              if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                                if (controller.empModuleScreenRightsTable[0].rightsYN == "N") {
+                                  controller.isPresViewerNavigating.value = false;
+                                  Get.snackbar(
+                                    "You don't have access to this screen",
+                                    '',
+                                    colorText: AppColor.white,
+                                    backgroundColor: AppColor.black,
+                                    duration: const Duration(seconds: 1),
+                                  );
+                                  return;
+                                }
+                              }
+
                               Navigator.pop(context);
                               // var bottomBarController = Get.put(BottomBarController());
                               // bottomBarController.isPharmacyHome.value = true;
@@ -222,6 +236,22 @@ class PharmacyScreen extends StatelessWidget {
                       // presviewerScreen.resetData();
                       // presviewerScreen.update();
                       // // Get.put(MispunchScreen());
+                      if (controller.isPresViewerNavigating.value) return;
+                      controller.isPresViewerNavigating.value = true;
+
+                      if (controller.empModuleScreenRightsTable.isNotEmpty) {
+                        if (controller.empModuleScreenRightsTable[0].rightsYN == "N") {
+                          controller.isPresViewerNavigating.value = false;
+                          Get.snackbar(
+                            "You don't have access to this screen",
+                            '',
+                            colorText: AppColor.white,
+                            backgroundColor: AppColor.black,
+                            duration: const Duration(seconds: 1),
+                          );
+                          return;
+                        }
+                      }
                       hideBottomBar.value = true;
                       PersistentNavBarNavigator.pushNewScreen(
                         context,
@@ -238,6 +268,7 @@ class PharmacyScreen extends StatelessWidget {
                         var dashboardController = Get.put(DashboardController());
                         await dashboardController.getDashboardDataUsingToken();
                       });
+                      controller.isPresViewerNavigating.value = false;
                     },
                     child: Container(
                         height: 100,

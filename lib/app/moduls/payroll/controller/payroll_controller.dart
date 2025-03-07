@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
+import 'package:emp_app/app/core/common/common_methods.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
@@ -88,60 +89,62 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   }
 
   void loadScreens() async {
-    List<ModuleScreenRights> fetchedScreens = await fetchModuleScreens();
-    screens = fetchedScreens;
-    if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
-      filteredList = originalList;
-    } else {
-      originalList
-          .removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
-      filteredList = originalList;
-    }
+    // List<ModuleScreenRights> fetchedScreens = await CommonMethods.fetchModuleScreens("Payroll");
+    // screens = fetchedScreens;
+    screens = await CommonMethods.fetchModuleScreens("Payroll");
+    filteredList = originalList;
+    // if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
+    //   filteredList = originalList;
+    // } else {
+    //   originalList
+    //       .removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
+    //   filteredList = originalList;
+    // }
     update();
   }
 
-  Future<List<ModuleScreenRights>> fetchModuleScreens() async {
-    try {
-      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
-      String url = ConstApiUrl.empAppScreenRights;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      empId = await pref.getString(AppString.keyEmpId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+  // Future<List<ModuleScreenRights>> fetchModuleScreens() async {
+  //   try {
+  //     // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+  //     String url = ConstApiUrl.empAppScreenRights;
+  //     SharedPreferences pref = await SharedPreferences.getInstance();
+  //     loginId = await pref.getString(AppString.keyLoginId) ?? "";
+  //     empId = await pref.getString(AppString.keyEmpId) ?? "";
+  //     tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "EmpId": empId, "ModuleName": "Payroll"};
-      if (loginId != "") {
-        final ApiController apiController = Get.find<ApiController>();
-        var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-        ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
+  //     var jsonbodyObj = {"loginId": loginId, "EmpId": empId, "ModuleName": "Payroll"};
+  //     if (loginId != "") {
+  //       final ApiController apiController = Get.find<ApiController>();
+  //       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+  //       ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
 
-        if (responseModuleData.statusCode == 200) {
-          if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
-            isLoading.value = false;
-            empModuleScreenRightsTable = responseModuleData.data!;
-            update();
-            return empModuleScreenRightsTable;
-          } else {
-            return [];
-          }
-          update();
-        } else if (responseModuleData.statusCode == 401) {
-          pref.clear();
-          Get.offAll(const LoginScreen());
-          Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-        } else if (responseModuleData.statusCode == 400) {
-          empModuleScreenRightsTable = [];
-        } else {
-          Get.rawSnackbar(message: "Something went wrong");
-        }
-        update();
-      }
-    } catch (e) {
-      isLoading.value = false;
-      update();
-    }
-    return [];
-  }
+  //       if (responseModuleData.statusCode == 200) {
+  //         if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
+  //           isLoading.value = false;
+  //           empModuleScreenRightsTable = responseModuleData.data!;
+  //           update();
+  //           return empModuleScreenRightsTable;
+  //         } else {
+  //           return [];
+  //         }
+  //         update();
+  //       } else if (responseModuleData.statusCode == 401) {
+  //         pref.clear();
+  //         Get.offAll(const LoginScreen());
+  //         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+  //       } else if (responseModuleData.statusCode == 400) {
+  //         empModuleScreenRightsTable = [];
+  //       } else {
+  //         Get.rawSnackbar(message: "Something went wrong");
+  //       }
+  //       update();
+  //     }
+  //   } catch (e) {
+  //     isLoading.value = false;
+  //     update();
+  //   }
+  //   return [];
+  // }
 
   Future<dynamic> getProfileData() async {
     try {
@@ -155,8 +158,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
 
       final ApiController apiController = Get.find<ApiController>();
       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseEmpSummDashboardData empSummDashboardDataResponse =
-          ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+      ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
 
       if (empSummDashboardDataResponse.statusCode == 200) {
         if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {

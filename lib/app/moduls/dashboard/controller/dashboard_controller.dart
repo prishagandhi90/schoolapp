@@ -98,6 +98,22 @@ class DashboardController extends GetxController {
   }
 
   Future<void> gridOnClk(int index, BuildContext context) async {
+    final DashboardController dashboardController = Get.put(DashboardController());
+    bool hasModuleAccess = dashboardController.empModuleScreenRightsTable.isNotEmpty &&
+        dashboardController.empModuleScreenRightsTable
+            .any((element) => element.moduleSeq == (index + 1) && element.rightsYN == 'Y');
+    // if (hasModuleAccess == false && index != 2) {
+    if (hasModuleAccess == false) {
+      Get.snackbar(
+        AppString.noRights,
+        '',
+        colorText: AppColor.white,
+        backgroundColor: AppColor.black,
+        duration: const Duration(seconds: 2),
+      );
+      return;
+    }
+
     switch (index) {
       case 0:
         Get.snackbar(
