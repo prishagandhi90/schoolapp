@@ -8,10 +8,8 @@ class ConstApiUrl {
   static const baseURL = isMobile ? 'http://117.217.126.127:$portNo' : 'http://192.168.1.35:$portNo';
   static const baseSecondURL = 'http://103.251.17.214:$portNo';
   String initailUrl = isMobile ? 'http://117.217.126.127:$portNo/api' : 'http://192.168.1.35:$portNo/api';
-  static const empUrl =
-      isMobile ? 'http://117.217.126.127:$portNo/api/Employee' : 'http://192.168.1.35:$portNo/api/Employee';
-  static const empLoginUrl =
-      isMobile ? 'http://117.217.126.127:$portNo/api/EmpLogin' : 'http://192.168.1.35:$portNo/api/EmpLogin';
+  static const empUrl = isMobile ? 'http://117.217.126.127:$portNo/api/Employee' : 'http://192.168.1.35:$portNo/api/Employee';
+  static const empLoginUrl = isMobile ? 'http://117.217.126.127:$portNo/api/EmpLogin' : 'http://192.168.1.35:$portNo/api/EmpLogin';
 
   //  ----------------    Prod  urls ---------------
   static const baseApiUrl = empLoginUrl;
