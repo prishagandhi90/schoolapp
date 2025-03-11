@@ -51,10 +51,9 @@ class _CustomGridviewState extends State<CustomGridview> {
     final DashboardController dashboardController = Get.put(DashboardController());
     // dashboardController.update();
     bool hasModuleAccess = dashboardController.empModuleScreenRightsTable.isNotEmpty &&
-        dashboardController.empModuleScreenRightsTable
-            .any((element) => element.moduleSeq == (index + 1) && element.rightsYN == 'Y');
-    // if (hasModuleAccess == false && index != 2) {
-    if (hasModuleAccess == false) {
+        dashboardController.empModuleScreenRightsTable.any((element) => element.moduleSeq == (index + 1) && element.rightsYN == 'Y');
+    if (hasModuleAccess == false && index != 2) {
+      // if (hasModuleAccess == false) {
       Get.snackbar(
         AppString.noRights,
         '',

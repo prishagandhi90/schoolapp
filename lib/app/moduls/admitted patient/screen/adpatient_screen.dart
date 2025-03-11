@@ -238,8 +238,7 @@ class AdpatientScreen extends StatelessWidget {
                             children: [
                               Text(
                                 controller.patientsData[index].patientName.toString(),
-                                style:
-                                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
                               ),
                               DropdownButtonHideUnderline(
                                 child: DropdownButton2<String>(
@@ -252,7 +251,8 @@ class AdpatientScreen extends StatelessWidget {
                                   }).toList(),
                                   onChanged: (String? value) {
                                     if (value == "Lab Summary") {
-                                      Get.to(LabSummaryScreen());
+                                      // Get.to(LabSummaryScreen());
+                                      Get.to(() => LabSummaryScreen());
                                     } else if (value == "Lab Report") {
                                       // Get.to(LabReportScreen());
                                       var labreportsController = Get.put(LabReportsController());
@@ -264,9 +264,7 @@ class AdpatientScreen extends StatelessWidget {
                                       labreportsController.update();
                                       labreportsController.showSwipe = true;
                                       hideBottomBar.value = true;
-                                      labreportsController.getLabReporst(
-                                          ipdNo: controller.patientsData[index].ipdNo ?? '',
-                                          uhidNo: controller.patientsData[index].uhid ?? '');
+                                      labreportsController.getLabReporst(ipdNo: controller.patientsData[index].ipdNo ?? '', uhidNo: controller.patientsData[index].uhid ?? '');
                                       labreportsController.commonList = [];
                                       labreportsController.dataContain = [];
                                       labreportsController.scrollLister();

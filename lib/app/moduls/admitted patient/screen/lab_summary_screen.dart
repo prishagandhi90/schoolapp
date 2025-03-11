@@ -1,5 +1,4 @@
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -12,47 +11,32 @@ class LabSummaryScreen extends StatelessWidget {
 
   final List<Map<String, dynamic>> data = List.generate(
     20,
-    (index) => {
-      'ID': index + 1,
-      'Name': 'Person $index',
-      'Age': 20 + index,
-      'Salary': (index + 1) * 1000,
-      'Department': 'Dept ${index % 5}',
-      'City': 'City ${index % 3}'
-    },
+    (index) => {'ID': index + 1, 'Name': 'Person $index', 'Age': 20 + index, 'Salary': (index + 1) * 1000, 'Department': 'Dept ${index % 5}', 'City': 'City ${index % 3}'},
   );
 
-  final ScrollController _verticalScrollController = ScrollController();
-  final ScrollController _horizontalScrollController = ScrollController();
   final double rowHeight = 50.0;
 
   @override
   Widget build(BuildContext context) {
     Get.put(AdpatientController());
+
+    // Sync scrolling setup
     return GetBuilder<AdpatientController>(builder: (controller) {
       return Scaffold(
-        backgroundColor: AppColor.white,
         appBar: AppBar(
-          title: Text(
-            'Lab Summary',
-            style: TextStyle(
-              color: AppColor.primaryColor,
-              fontWeight: FontWeight.w700,
-              fontFamily: CommonFontStyle.plusJakartaSans,
-            ),
-          ),
+          title: Text('Lab Summary'),
           centerTitle: true,
         ),
         body: Column(
           children: [
             Container(
+              margin: EdgeInsets.all(8),
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black, width: 1),
+                border: Border.all(color: Colors.black),
               ),
-              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              padding: EdgeInsets.all(8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -99,58 +83,73 @@ class LabSummaryScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                controller: _verticalScrollController,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildFixedHeaderCell("ID"),
-                        ...data.map((item) => _buildFixedCell("${item['ID']}")),
-                      ],
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildFixedHeaderCell("Name", overflow: true),
-                        ...data.map((item) => _buildFixedCell(item['Name'], overflow: true)),
-                      ],
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        controller: _horizontalScrollController,
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                _buildHeaderCell("Age"),
-                                _buildHeaderCell("Salary"),
-                                _buildHeaderCell("Department"),
-                                _buildHeaderCell("City"),
-                              ],
-                            ),
-                            Column(
-                              children: data.map((item) {
-                                return Row(
-                                  children: [
-                                    _buildDataCell("${item['Age']}", width: 100),
-                                    _buildDataCell("${item['Salary']}", width: 100),
-                                    _buildDataCell(item['Department'], width: 120),
-                                    _buildDataCell(item['City'], width: 100),
-                                  ],
-                                );
-                              }).toList(),
-                            ),
-                          ],
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Left side (ID & Name) - Independent vertical scroll
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          _buildFixedHeaderCell("ID"),
+                          _buildFixedHeaderCell("Name", overflow: true),
+                        ],
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          controller: controller.verticalScrollControllerLeft,
+                          child: Column(
+                            children: data.map((item) {
+                              return Row(
+                                children: [
+                                  _buildFixedCell("${item['ID']}"),
+                                  _buildFixedCell(item['Name'], overflow: true),
+                                ],
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+
+                  // Right side (Data Table) - Horizontal & Vertical Scroll
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: controller.horizontalScrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              _buildHeaderCell("Age", width: getDynamicHeight(size: 0.090)),
+                              _buildHeaderCell("Salary", width: getDynamicHeight(size: 0.102)),
+                              _buildHeaderCell("Department", width: getDynamicHeight(size: 0.122)),
+                              _buildHeaderCell("City", width: getDynamicHeight(size: 0.102)),
+                            ],
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              controller: controller.verticalScrollControllerRight, // Sync with left scroll
+                              child: Column(
+                                children: data.map((item) {
+                                  return Row(
+                                    children: [
+                                      _buildDataCell("${item['Age']}", width: getDynamicHeight(size: 0.090)),
+                                      _buildDataCell("${item['Salary']}", width: getDynamicHeight(size: 0.102)),
+                                      _buildDataCell(item['Department'], width: getDynamicHeight(size: 0.122)),
+                                      _buildDataCell(item['City'], width: getDynamicHeight(size: 0.102)),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -163,7 +162,11 @@ class LabSummaryScreen extends StatelessWidget {
     return Container(
       width: 80,
       height: rowHeight,
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        top: 8.0,
+        bottom: 8.0,
+      ),
       alignment: Alignment.centerLeft,
       color: Colors.grey[400],
       child: Text(
@@ -175,11 +178,15 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderCell(String text) {
+  Widget _buildHeaderCell(String text, {double width = 100}) {
     return Container(
-      width: 100,
+      width: width,
       height: rowHeight,
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        top: 8.0,
+        bottom: 8.0,
+      ),
       alignment: Alignment.centerLeft,
       color: Colors.blueGrey,
       child: Text(
@@ -193,7 +200,11 @@ class LabSummaryScreen extends StatelessWidget {
     return Container(
       width: 80,
       height: rowHeight,
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        top: 8.0,
+        bottom: 8.0,
+      ),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.black12)),
@@ -211,7 +222,11 @@ class LabSummaryScreen extends StatelessWidget {
     return Container(
       width: width,
       height: rowHeight,
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        top: 8.0,
+        bottom: 8.0,
+      ),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.black12)),

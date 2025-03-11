@@ -33,11 +33,15 @@ class AdpatientController extends GetxController {
   List<String> tempOrgsList = [];
   List<String> tempFloorsList = [];
   List<String> tempWardList = [];
+  final ScrollController verticalScrollControllerLeft = ScrollController();
+  final ScrollController verticalScrollControllerRight = ScrollController();
+  final ScrollController horizontalScrollController = ScrollController();
 
   @override
   void onInit() {
     super.onInit();
-    fetchpresDetailList();
+    _syncScrollControllers();
+    fetchDeptwisePatientList();
     getPatientDashboardFilters();
   }
 
@@ -131,7 +135,30 @@ class AdpatientController extends GetxController {
 
   List<String> headers = ["Test Name", "Ref.", "12 Feb", "11 Feb", "9 Feb", "8 Feb", "7 Feb"];
 
-  Future<List<PatientdataModel>> fetchpresDetailList() async {
+  void _syncScrollControllers() {
+    verticalScrollControllerLeft.addListener(() {
+      if (verticalScrollControllerRight.hasClients && verticalScrollControllerRight.offset != verticalScrollControllerLeft.offset) {
+        verticalScrollControllerRight.jumpTo(verticalScrollControllerLeft.offset);
+      }
+    });
+
+    verticalScrollControllerRight.addListener(() {
+      if (verticalScrollControllerLeft.hasClients && verticalScrollControllerLeft.offset != verticalScrollControllerRight.offset) {
+        verticalScrollControllerLeft.jumpTo(verticalScrollControllerRight.offset);
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    verticalScrollControllerLeft.dispose();
+    verticalScrollControllerRight.dispose();
+    horizontalScrollController.dispose();
+    searchController.dispose();
+    super.onClose();
+  }
+
+  Future<List<PatientdataModel>> fetchDeptwisePatientList() async {
     try {
       isLoading = true;
       update();
@@ -140,13 +167,7 @@ class AdpatientController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": "",
-        "orgs": selectedorgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedwardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": "", "orgs": selectedorgsList, "floors": selectedFloorsList, "wards": selectedwardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -329,11 +350,9 @@ class AdpatientController extends GetxController {
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedorgsList.isNotEmpty ||
-                                        selectedFloorsList.isNotEmpty ||
-                                        selectedwardsList.isNotEmpty) {
+                                    if (selectedorgsList.isNotEmpty || selectedFloorsList.isNotEmpty || selectedwardsList.isNotEmpty) {
                                       Navigator.pop(context);
-                                      await fetchpresDetailList();
+                                      await fetchDeptwisePatientList();
                                     } else {
                                       Get.rawSnackbar(message: AppString.plzselectoptiontosort);
                                     }
@@ -365,7 +384,7 @@ class AdpatientController extends GetxController {
                                       selectedorgsList = [];
                                       selectedFloorsList = [];
                                       selectedwardsList = [];
-                                      await fetchpresDetailList();
+                                      await fetchDeptwisePatientList();
                                       Navigator.pop(context);
                                       controller.update();
                                     },
@@ -392,7 +411,7 @@ class AdpatientController extends GetxController {
               }),
             )).whenComplete(() {
       if (!callFilterAPi) {
-        fetchpresDetailList();
+        fetchDeptwisePatientList();
         selectedorgsList = List.from(tempOrgsList);
         selectedFloorsList = List.from(tempFloorsList);
         selectedwardsList = List.from(tempWardList);
