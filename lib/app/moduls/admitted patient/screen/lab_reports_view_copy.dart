@@ -96,8 +96,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                             excludeHeaderSemantics: false,
                             surfaceTintColor: Colors.white,
                             shadowColor: Colors.grey,
-                            leading:
-                                IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+                            leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
                           ),
                           Expanded(
                             child: Padding(
@@ -181,14 +180,11 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                 Expanded(
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      if (controller.dataContain
-                                                          .contains(controller.commonList[index]['report_name'])) {
-                                                        controller.dataContain
-                                                            .remove(controller.commonList[index]['report_name']);
+                                                      if (controller.dataContain.contains(controller.commonList[index]['report_name'])) {
+                                                        controller.dataContain.remove(controller.commonList[index]['report_name']);
                                                       } else {
                                                         controller.dataContain = [];
-                                                        controller.dataContain
-                                                            .add(controller.commonList[index]['report_name']);
+                                                        controller.dataContain.add(controller.commonList[index]['report_name']);
                                                       }
                                                       controller.update();
                                                       if (controller.dataContain.isNotEmpty) {
@@ -219,9 +215,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                 children: [
                                                                   Expanded(
                                                                     child: AppText(
-                                                                      text: controller.commonList[index]
-                                                                              ['report_name'] ??
-                                                                          "",
+                                                                      text: controller.commonList[index]['report_name'] ?? "",
                                                                       fontSize: Sizes.px14,
                                                                       fontColor: AppColor.buttonColor,
                                                                       fontWeight: FontWeight.w600,
@@ -230,8 +224,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                     ),
                                                                   ),
                                                                   Icon(
-                                                                    controller.dataContain.contains(
-                                                                            controller.commonList[index]['report_name'])
+                                                                    controller.dataContain.contains(controller.commonList[index]['report_name'])
                                                                         ? Icons.keyboard_arrow_up
                                                                         : Icons.keyboard_arrow_down,
                                                                     size: 40,
@@ -239,14 +232,12 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            controller.dataContain.contains(
-                                                                    controller.commonList[index]['report_name'])
+                                                            controller.dataContain.contains(controller.commonList[index]['report_name'])
                                                                 ? const SizedBox(
                                                                     height: 10,
                                                                   )
                                                                 : const SizedBox(),
-                                                            controller.dataContain.contains(
-                                                                    controller.commonList[index]['report_name'])
+                                                            controller.dataContain.contains(controller.commonList[index]['report_name'])
                                                                 ? Container(
                                                                     decoration: BoxDecoration(
                                                                       color: AppColor.white,
@@ -286,8 +277,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                               child: StartingHeading(
                                                                                 allReportsData: indexWiseData,
                                                                                 dateLsiting: dateLists1,
-                                                                                height: getHeight(
-                                                                                    indexWiseData, dateLists1),
+                                                                                height: getHeight(indexWiseData, dateLists1),
                                                                               )),
                                                                           Padding(
                                                                             padding: const EdgeInsets.only(bottom: 10),
@@ -302,8 +292,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                               child: ReferenceWidget(
                                                                                   allReportsData: indexWiseData,
                                                                                   dateLsiting: dateLists1,
-                                                                                  height: getHeight(
-                                                                                      indexWiseData, dateLists1))),
+                                                                                  height: getHeight(indexWiseData, dateLists1))),
                                                                           Padding(
                                                                             padding: const EdgeInsets.only(bottom: 10),
                                                                             child: VerticalDivider(
@@ -315,8 +304,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                           Expanded(
                                                                             flex: 7,
                                                                             child: SizedBox(
-                                                                              height:
-                                                                                  getHeight(indexWiseData, dateLists1),
+                                                                              height: getHeight(indexWiseData, dateLists1),
                                                                               child: ListView.builder(
                                                                                 padding: EdgeInsets.zero,
                                                                                 scrollDirection: Axis.horizontal,
@@ -325,31 +313,23 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                                 itemBuilder: (context, index) {
                                                                                   return IntrinsicHeight(
                                                                                     child: Row(
-                                                                                      mainAxisAlignment:
-                                                                                          MainAxisAlignment.center,
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
                                                                                       children: [
                                                                                         Column(
                                                                                           children: [
                                                                                             Container(
-                                                                                              decoration:
-                                                                                                  const BoxDecoration(
-                                                                                                color: AppColor
-                                                                                                    .buttonColor,
+                                                                                              decoration: const BoxDecoration(
+                                                                                                color: AppColor.buttonColor,
                                                                                               ),
                                                                                               height: 90,
-                                                                                              width: getDynamicHeight(
-                                                                                                  size: 0.120),
+                                                                                              width: getDynamicHeight(size: 0.120),
                                                                                               child: Center(
                                                                                                 child: AppText(
-                                                                                                  text:
-                                                                                                      "${dateLists1[index]}",
+                                                                                                  text: "${dateLists1[index]}",
                                                                                                   fontSize: Sizes.px13,
-                                                                                                  fontColor:
-                                                                                                      AppColor.white,
-                                                                                                  fontWeight:
-                                                                                                      FontWeight.w700,
-                                                                                                  textAlign:
-                                                                                                      TextAlign.center,
+                                                                                                  fontColor: AppColor.white,
+                                                                                                  fontWeight: FontWeight.w700,
+                                                                                                  textAlign: TextAlign.center,
                                                                                                 ),
                                                                                               ),
                                                                                             ),
@@ -358,34 +338,25 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                                             ),
                                                                                             IntrinsicHeight(
                                                                                               child: SizedBox(
-                                                                                                height: getHeight(
-                                                                                                    indexWiseData,
-                                                                                                    dateLists1),
-                                                                                                width: getDynamicHeight(
-                                                                                                    size: 0.120),
+                                                                                                height: getHeight(indexWiseData, dateLists1),
+                                                                                                width: getDynamicHeight(size: 0.120),
                                                                                                 child: ListView.builder(
-                                                                                                  padding:
-                                                                                                      EdgeInsets.zero,
+                                                                                                  padding: EdgeInsets.zero,
                                                                                                   shrinkWrap: true,
-                                                                                                  itemCount:
-                                                                                                      indexWiseData
-                                                                                                          .length,
-                                                                                                  physics:
-                                                                                                      const NeverScrollableScrollPhysics(),
+                                                                                                  itemCount: indexWiseData.length,
+                                                                                                  physics: const NeverScrollableScrollPhysics(),
                                                                                                   // controller: controller.scrollController3[index],
-                                                                                                  itemBuilder:
-                                                                                                      (item, i) {
+                                                                                                  itemBuilder: (item, i) {
                                                                                                     return IntrinsicHeight(
                                                                                                       child: Column(
                                                                                                         children: [
                                                                                                           SizedBox(
                                                                                                             height: getHeightOfWidget(
-                                                                                                                indexWiseData[i]['NormalRange'] != null && indexWiseData[i]['NormalRange'] != ''
-                                                                                                                    ? indexWiseData[i][
-                                                                                                                        'NormalRange']
+                                                                                                                indexWiseData[i]['NormalRange'] != null &&
+                                                                                                                        indexWiseData[i]['NormalRange'] != ''
+                                                                                                                    ? indexWiseData[i]['NormalRange']
                                                                                                                     : '-',
-                                                                                                                indexWiseData[i]['Unit'] != null &&
-                                                                                                                        indexWiseData[i]['Unit'] != ''
+                                                                                                                indexWiseData[i]['Unit'] != null && indexWiseData[i]['Unit'] != ''
                                                                                                                     ? indexWiseData[i]['Unit']
                                                                                                                     : '-',
                                                                                                                 indexWiseData,
@@ -393,26 +364,23 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                                                                 i),
                                                                                                             child: Center(
                                                                                                                 child: Column(
-                                                                                                              mainAxisAlignment:
-                                                                                                                  MainAxisAlignment
-                                                                                                                      .center,
+                                                                                                              mainAxisAlignment: MainAxisAlignment.center,
                                                                                                               children: [
                                                                                                                 AppText(
-                                                                                                                  text: indexWiseData[i][dateLists1[index]] != null && indexWiseData[i][dateLists1[index]] != ''
+                                                                                                                  text: indexWiseData[i][dateLists1[index]] != null &&
+                                                                                                                          indexWiseData[i][dateLists1[index]] != ''
                                                                                                                       ? splitName(indexWiseData[i][dateLists1[index]])
                                                                                                                       : '-',
                                                                                                                   // text: i == 0 ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged" : "",
-                                                                                                                  fontSize:
-                                                                                                                      Sizes.px13,
-                                                                                                                  fontColor: indexWiseData[i][dateLists1[index]] != null && indexWiseData[i][dateLists1[index]] != ''
+                                                                                                                  fontSize: Sizes.px13,
+                                                                                                                  fontColor: indexWiseData[i][dateLists1[index]] != null &&
+                                                                                                                          indexWiseData[i][dateLists1[index]] != ''
                                                                                                                       ? textColor(indexWiseData[i][dateLists1[index]])
                                                                                                                           ? AppColor.red
                                                                                                                           : AppColor.black
                                                                                                                       : AppColor.black,
-                                                                                                                  fontWeight:
-                                                                                                                      FontWeight.w500,
-                                                                                                                  textAlign:
-                                                                                                                      TextAlign.center,
+                                                                                                                  fontWeight: FontWeight.w500,
+                                                                                                                  textAlign: TextAlign.center,
                                                                                                                   // maxLine: 10,
                                                                                                                   // overflow: TextOverflow.ellipsis,
                                                                                                                 ),
@@ -429,15 +397,9 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                                                                 ),
                                                                                                           ),
                                                                                                           Divider(
-                                                                                                            thickness:
-                                                                                                                1,
-                                                                                                            height: getDynamicHeight(
-                                                                                                                size:
-                                                                                                                    0.002),
-                                                                                                            color: AppColor
-                                                                                                                .black
-                                                                                                                .withOpacity(
-                                                                                                                    0.3),
+                                                                                                            thickness: 1,
+                                                                                                            height: getDynamicHeight(size: 0.002),
+                                                                                                            color: AppColor.black.withOpacity(0.3),
                                                                                                           ),
                                                                                                         ],
                                                                                                       ),
@@ -449,13 +411,10 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                                           ],
                                                                                         ),
                                                                                         Padding(
-                                                                                          padding:
-                                                                                              const EdgeInsets.only(
-                                                                                                  bottom: 10),
+                                                                                          padding: const EdgeInsets.only(bottom: 10),
                                                                                           child: VerticalDivider(
                                                                                             thickness: 1,
-                                                                                            color: AppColor.black
-                                                                                                .withOpacity(0.3),
+                                                                                            color: AppColor.black.withOpacity(0.3),
                                                                                             width: 1,
                                                                                           ),
                                                                                         ),

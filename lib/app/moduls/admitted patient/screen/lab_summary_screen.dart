@@ -102,8 +102,8 @@ class LabSummaryScreen extends StatelessWidget {
                             children: data.map((item) {
                               return Row(
                                 children: [
-                                  _buildFixedCell("${item['ID']}"),
-                                  _buildFixedCell(item['Name'], overflow: true),
+                                  _buildFixedCell("${item['Test']}"),
+                                  _buildFixedCell(item['NormalRange'], overflow: true),
                                 ],
                               );
                             }).toList(),
