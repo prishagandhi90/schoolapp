@@ -11,7 +11,14 @@ class LabSummaryScreen extends StatelessWidget {
 
   final List<Map<String, dynamic>> data = List.generate(
     20,
-    (index) => {'ID': index + 1, 'Name': 'Person $index', 'Age': 20 + index, 'Salary': (index + 1) * 1000, 'Department': 'Dept ${index % 5}', 'City': 'City ${index % 3}'},
+    (index) => {
+      'ID': index + 1,
+      'Name': 'Person $index',
+      'Age': 20 + index,
+      'Salary': (index + 1) * 1000,
+      'Department': 'Dept ${index % 5}',
+      'City': 'City ${index % 3}'
+    },
   );
 
   final double rowHeight = 50.0;
@@ -24,35 +31,44 @@ class LabSummaryScreen extends StatelessWidget {
     return GetBuilder<AdpatientController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
+          // backgroundColor: AppColor.white,
           title: Text('Lab Summary'),
           centerTitle: true,
         ),
-        body: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.all(8),
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Patient Name", style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("Status", style: TextStyle(fontWeight: FontWeight.bold)),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: rowHeight,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
+        body: CustomScrollView(slivers: [
+          SliverAppBar(
+            // backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            expandedHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.height * 0.105 // Portrait Mode Height
+                : MediaQuery.of(context).size.height * 0.24, // Dynamic Height
+            pinned: false,
+            floating: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 12, right: 12, bottom: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Patient Name",
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          Text(
+                            "Status",
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      TextFormField(
                         cursorColor: AppColor.black,
                         controller: controller.searchController,
                         decoration: InputDecoration(
@@ -63,9 +79,7 @@ class LabSummaryScreen extends StatelessWidget {
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                            borderSide: BorderSide(
-                              color: AppColor.black,
-                            ),
+                            borderSide: BorderSide(color: AppColor.black),
                           ),
                           prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                           hintText: AppString.searchpatient,
@@ -77,12 +91,17 @@ class LabSummaryScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-            Expanded(
+          ),
+          SliverFillRemaining(
+            hasScrollBody: true,
+            // ✅ Correct way
+            child: SizedBox(
+              height: double.infinity,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -91,22 +110,25 @@ class LabSummaryScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          _buildFixedHeaderCell("ID"),
-                          _buildFixedHeaderCell("Name", overflow: true),
+                          _buildFixedHeaderCell("Report"),
+                          _buildFixedHeaderCell("Test"),
+                          _buildFixedHeaderCell("Normal Range", overflow: true),
                         ],
                       ),
-                      Expanded(
+                      Flexible(
                         child: SingleChildScrollView(
                           controller: controller.verticalScrollControllerLeft,
                           child: Column(
-                            children: data.map((item) {
+                            children: List.generate(controller.labdata.length, (index) {
+                              var item = controller.labdata[index]; // API se aaya ek row
                               return Row(
                                 children: [
-                                  _buildFixedCell("${item['Test']}"),
-                                  _buildFixedCell(item['NormalRange'], overflow: true),
+                                  _buildFixedCell("${item.formattest.toString()}"),
+                                  _buildFixedCell("${item.testName.toString()}"),
+                                  _buildFixedCell("${item.normalRange.toString()}", overflow: true),
                                 ],
                               );
-                            }).toList(),
+                            }),
                           ),
                         ),
                       ),
@@ -121,27 +143,24 @@ class LabSummaryScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Row(
-                            children: [
-                              _buildHeaderCell("Age", width: getDynamicHeight(size: 0.090)),
-                              _buildHeaderCell("Salary", width: getDynamicHeight(size: 0.102)),
-                              _buildHeaderCell("Department", width: getDynamicHeight(size: 0.122)),
-                              _buildHeaderCell("City", width: getDynamicHeight(size: 0.102)),
-                            ],
+                            children: controller.labdata.isNotEmpty
+                                ? controller.labdata[0].dateValues!.keys.map((date) {
+                                    return _buildHeaderCell(date, width: getDynamicHeight(size: 0.090));
+                                  }).toList()
+                                : [],
                           ),
-                          Expanded(
+                          Flexible(
                             child: SingleChildScrollView(
                               controller: controller.verticalScrollControllerRight, // Sync with left scroll
                               child: Column(
-                                children: data.map((item) {
+                                children: List.generate(controller.labdata.length, (index) {
+                                  var item = controller.labdata[index]; // API se aaya ek row
                                   return Row(
-                                    children: [
-                                      _buildDataCell("${item['Age']}", width: getDynamicHeight(size: 0.090)),
-                                      _buildDataCell("${item['Salary']}", width: getDynamicHeight(size: 0.102)),
-                                      _buildDataCell(item['Department'], width: getDynamicHeight(size: 0.122)),
-                                      _buildDataCell(item['City'], width: getDynamicHeight(size: 0.102)),
-                                    ],
+                                    children: item.dateValues!.entries.map((entry) {
+                                      return _buildDataCell("${entry.value}", width: getDynamicHeight(size: 0.090));
+                                    }).toList(),
                                   );
-                                }).toList(),
+                                }),
                               ),
                             ),
                           ),
@@ -152,8 +171,8 @@ class LabSummaryScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ]),
       );
     });
   }

@@ -249,9 +249,11 @@ class AdpatientScreen extends StatelessWidget {
                                       child: Text(item, style: TextStyle(fontSize: 14)),
                                     );
                                   }).toList(),
-                                  onChanged: (String? value) {
+                                  onChanged: (String? value) async {
                                     if (value == "Lab Summary") {
                                       // Get.to(LabSummaryScreen());
+                                      var adpatientController = Get.put(AdpatientController());
+                                      await adpatientController.fetchsummarylabdata();
                                       Get.to(() => LabSummaryScreen());
                                     } else if (value == "Lab Report") {
                                       // Get.to(LabReportScreen());
@@ -264,7 +266,9 @@ class AdpatientScreen extends StatelessWidget {
                                       labreportsController.update();
                                       labreportsController.showSwipe = true;
                                       hideBottomBar.value = true;
-                                      labreportsController.getLabReporst(ipdNo: controller.patientsData[index].ipdNo ?? '', uhidNo: controller.patientsData[index].uhid ?? '');
+                                      labreportsController.getLabReporst(
+                                          ipdNo: controller.patientsData[index].ipdNo ?? '',
+                                          uhidNo: controller.patientsData[index].uhid ?? '');
                                       labreportsController.commonList = [];
                                       labreportsController.dataContain = [];
                                       labreportsController.scrollLister();

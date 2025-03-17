@@ -54,5 +54,6 @@ class ConstApiUrl {
   //  ----------------Admitted patient ---------------
   static const empfilterpatientdataList = "$empUrl/GetFilteredPatientData";
   static const patientDashboardFilters = "$empUrl/GetPatientDashboardFilters";
-  static const String getLabReports = "$empUrl/GetPatientLabReports";
+  static const getLabReports = "$empUrl/GetPatientLabReports";
+  static const empPatientSummaryLabData="$empUrl/GetPatientSummaryLabData";
 }

@@ -341,7 +341,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                   onPressed: () async {
                                                                     try {
                                                                       if (controller.isPresMedicineNavigating.value) return;
-
+                                                                       controller.isPresMedicineNavigating.value = true;
                                                                       if (controller.empModuleScreenRightsTable.isNotEmpty) {
                                                                         if (controller.empModuleScreenRightsTable[0].rightsYN == "N") {
                                                                           controller.isPresViewerNavigating.value = false;
