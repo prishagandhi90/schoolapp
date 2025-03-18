@@ -52,117 +52,6 @@ class AdpatientController extends GetxController {
     // fetchsummarylabdata();
   }
 
-  // final List<Map<String, dynamic>> patientData = [
-  //   {"title": "Admitted Patients", "count": 10},
-  // ];
-
-  // final List<PatientdataModel> patients = [
-  //   PatientdataModel(
-  //       isValidToken: "Y",
-  //       patientCategory: "Admitted",
-  //       uhid: "U/45832/17",
-  //       ipdNo: "A/10799/24",
-  //       patientName: "CHETANKUMAR MANSUKHLAL CHITRODA",
-  //       bedNo: "E/AC -1-C",
-  //       ward: "ECONOMY AC",
-  //       floor: "2",
-  //       doa: "02/03/2025",
-  //       admType: "Cash",
-  //       totalDays: "4",
-  //       referredDr: "",
-  //       mobileNo: "8866759082"),
-  //   PatientdataModel(
-  //       isValidToken: "Y",
-  //       patientCategory: "Admitted",
-  //       uhid: "U/115404/17",
-  //       ipdNo: "A/10752/24",
-  //       patientName: "CHUNIBHAI LAXMANBHAI CHOTHANI",
-  //       bedNo: "E/AC -1-D",
-  //       ward: "ECONOMY AC",
-  //       floor: "2",
-  //       doa: "01/03/2025",
-  //       admType: "PMJAY",
-  //       totalDays: "5",
-  //       referredDr: "",
-  //       mobileNo: "7567765472"),
-  //   PatientdataModel(
-  //       isValidToken: "Y",
-  //       patientCategory: "Admitted",
-  //       uhid: "U/115447/17",
-  //       ipdNo: "A/10791/24",
-  //       patientName: "VASANTBHAI JADAVBHAI GAJERA",
-  //       bedNo: "ICCU-9",
-  //       ward: "ICCU",
-  //       floor: "3",
-  //       doa: "02/03/2025",
-  //       admType: "PMJAY",
-  //       totalDays: "4",
-  //       referredDr: "",
-  //       mobileNo: "9879180316"),
-  //   PatientdataModel(
-  //       isValidToken: "Y",
-  //       patientCategory: "Admitted",
-  //       uhid: "U/115271/17",
-  //       ipdNo: "A/10672/24",
-  //       patientName: "SUSHILABEN MANHARBHAI VAGHANI",
-  //       bedNo: "CT SICU-4",
-  //       ward: "CT SICU",
-  //       floor: "3",
-  //       doa: "26/02/2025",
-  //       admType: "Cashless",
-  //       totalDays: "8",
-  //       referredDr: "",
-  //       mobileNo: "9998199387"),
-  //   PatientdataModel(
-  //       isValidToken: "Y",
-  //       patientCategory: "Admitted",
-  //       uhid: "U/115429/17",
-  //       ipdNo: "A/10789/24",
-  //       patientName: "ARVINDBHAI KALUBHAI KHERALA",
-  //       bedNo: "MICU-20",
-  //       ward: "MICU",
-  //       floor: "4",
-  //       doa: "02/03/2025",
-  //       admType: "PMJAY",
-  //       totalDays: "4",
-  //       referredDr: "",
-  //       mobileNo: "8140690545")
-  // ];
-
-  List<List<String>> data = [
-    ["Hemoglobin", "13–18", "12", "12.8", "13.5", "12", "11.5"],
-    ["RBC count", "4.5–6", "4.3", "4.6", "4.7", "4.3", "4.1"],
-    ["P.C.V", "40–57", "40.5", "42", "50", "40.5", "41"],
-    ["Hemoglobin", "13–18", "40.5", "42", "50", "40.5", "41"],
-    ["RBC count", "4.5–6", "40.5", "42", "50", "40.5", "41"],
-    ["P.C.V", "40–57", "40.5", "42", "50", "40.5", "41"],
-  ];
-
-  // Generate last 7 days dynamically
-  // List<String> last7Days() {
-  //   DateTime today = DateTime.now();
-  //   return List.generate(7, (index) {
-  //     return DateFormat('dd-MM-yyyy').format(today.subtract(Duration(days: index)));
-  //   }); // Reverse to show oldest first
-  // }
-
-  // void generateLast7Days() {
-  //   List<String> dates = last7Days(); // Get list of last 7 days
-
-  //   // Store each date in respective variable
-  //   date1 = dates[0];
-  //   date2 = dates[1];
-  //   date3 = dates[2];
-  //   date4 = dates[3];
-  //   date5 = dates[4];
-  //   date6 = dates[5];
-  //   date7 = dates[6];
-  // }
-
-  final List<String> menuItems = ["View", "Edit", "Delete"];
-
-  List<String> headers = ["Test Name", "Ref.", "12 Feb", "11 Feb", "9 Feb", "8 Feb", "7 Feb"];
-
   void _syncScrollControllers() {
     verticalScrollControllerLeft.addListener(() {
       if (verticalScrollControllerRight.hasClients && verticalScrollControllerRight.offset != verticalScrollControllerLeft.offset) {
@@ -195,13 +84,7 @@ class AdpatientController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": "",
-        "orgs": selectedorgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedwardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": "", "orgs": selectedorgsList, "floors": selectedFloorsList, "wards": selectedwardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
