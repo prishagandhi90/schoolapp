@@ -3,7 +3,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:flutter/material.dart';
 
-organizationCheckBoxes({required AdpatientController controller}) {
+organizationCheckBoxes({required AdPatientController controller}) {
   return GridView.builder(
       itemCount: controller.orgsList.length,
       shrinkWrap: true,
@@ -15,23 +15,21 @@ organizationCheckBoxes({required AdpatientController controller}) {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  if (controller.selectedorgsList.contains(controller.orgsList[i].organization)) {
-                    controller.selectedorgsList.remove(controller.orgsList[i].organization);
+                  if (controller.selectedOrgsList.contains(controller.orgsList[i].organization)) {
+                    controller.selectedOrgsList.remove(controller.orgsList[i].organization);
                   } else {
-                    controller.selectedorgsList.add(controller.orgsList[i].organization!);
+                    controller.selectedOrgsList.add(controller.orgsList[i].organization!);
                   }
                   controller.update();
                 },
                 child: Row(
                   children: [
-                    controller.selectedorgsList.contains(controller.orgsList[i].organization)
+                    controller.selectedOrgsList.contains(controller.orgsList[i].organization)
                         ? Container(
                             height: getDynamicHeight(size: 0.020),
                             width: getDynamicHeight(size: 0.020),
                             decoration: BoxDecoration(
-                                color: AppColor.originalgrey,
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                color: AppColor.originalgrey, border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
                             child: Center(
                               child: Icon(Icons.check, color: AppColor.white, size: getDynamicHeight(size: 0.016)),
                             ),
@@ -39,9 +37,7 @@ organizationCheckBoxes({required AdpatientController controller}) {
                         : Container(
                             height: getDynamicHeight(size: 0.020),
                             width: getDynamicHeight(size: 0.020),
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
+                            decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
                           ),
                     SizedBox(
                       width: Sizes.crossLength * 0.010,

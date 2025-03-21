@@ -59,11 +59,11 @@ class BottomBarController extends GetxController {
   //   update(); // Refresh UI
   // }
 
-  onItemTapped(int index, bool showPharmacy, BuildContext context,bool showAdPatient) async {
+  onItemTapped(int index, bool showPharmacy, BuildContext context, bool showAdPatient) async {
     currentIndex.value = index;
     hideBottomBar.value = false;
     isPharmacyHome.value = showPharmacy;
-    isAdmittedPatient.value = showAdPatient;
+    // isAdmittedPatient.value = showAdPatient;
 
     if (index == 1) {
       final attendanceController = Get.put(AttendenceController());
@@ -144,8 +144,7 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home,
-                  color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
+              Image.asset(AppImage.home, color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
                 AppString.home,

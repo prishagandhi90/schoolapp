@@ -3,7 +3,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:flutter/material.dart';
 
-WardsCheckBox({required AdpatientController controller}) {
+WardsCheckBox({required AdPatientController controller}) {
   return GridView.builder(
       itemCount: controller.wardList.length,
       shrinkWrap: true,
@@ -15,23 +15,21 @@ WardsCheckBox({required AdpatientController controller}) {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  if (controller.selectedwardsList.contains(controller.wardList[i].wardName)) {
-                    controller.selectedwardsList.remove(controller.wardList[i].wardName);
+                  if (controller.selectedWardsList.contains(controller.wardList[i].wardName)) {
+                    controller.selectedWardsList.remove(controller.wardList[i].wardName);
                   } else {
-                    controller.selectedwardsList.add(controller.wardList[i].wardName!);
+                    controller.selectedWardsList.add(controller.wardList[i].wardName!);
                   }
                   controller.update();
                 },
                 child: Row(
                   children: [
-                    controller.selectedwardsList.contains(controller.wardList[i].wardName)
+                    controller.selectedWardsList.contains(controller.wardList[i].wardName)
                         ? Container(
                             height: 20,
                             width: 20,
                             decoration: BoxDecoration(
-                                color: AppColor.originalgrey,
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                color: AppColor.originalgrey, border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
                             child: Center(
                               child: Icon(Icons.check, color: AppColor.white, size: 16),
                             ),
@@ -39,9 +37,7 @@ WardsCheckBox({required AdpatientController controller}) {
                         : Container(
                             height: 20,
                             width: 20,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
+                            decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
                           ),
                     SizedBox(
                       width: 10,

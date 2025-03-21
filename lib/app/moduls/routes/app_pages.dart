@@ -1,3 +1,6 @@
+import 'package:emp_app/app/moduls/admitted%20patient/bindings/admittedPatientBinding.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/ipd_dashboard_screen.dart';
 import 'package:emp_app/app/moduls/attendence/bindings/attendance_detail_binding.dart';
 import 'package:emp_app/app/moduls/attendence/bindings/attendance_summary_binding.dart';
 import 'package:emp_app/app/moduls/attendence/bindings/attendance_screen_binding.dart';
@@ -170,13 +173,23 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LVListScreen,
-      page: () =>  LvList(),
+      page: () => LvList(),
       binding: lv_screen_Binding(),
     ),
     GetPage(
       name: _Paths.OTListScreen,
       page: () => const OtlistScreen(),
       binding: otList_screen_Binding(),
+    ),
+    GetPage(
+      name: _Paths.IPDDASHBOARDSCREEN,
+      page: () => const IpdDashboardScreen(),
+      binding: AdmittedPatientBinding(),
+    ),
+    GetPage(
+      name: _Paths.IPDADMITTEDPATIENTS,
+      page: () => const AdpatientScreen(),
+      binding: AdmittedPatientBinding(),
     )
   ];
 }

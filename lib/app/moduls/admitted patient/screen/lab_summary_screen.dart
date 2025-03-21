@@ -13,10 +13,10 @@ class LabSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AdpatientController());
+    Get.put(AdPatientController());
 
     // Sync scrolling setup
-    return GetBuilder<AdpatientController>(builder: (controller) {
+    return GetBuilder<AdPatientController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
           // backgroundColor: AppColor.white,
@@ -178,13 +178,11 @@ class LabSummaryScreen extends StatelessWidget {
   }
 
   // Method to calculate max height for a given row (left and right sync)
-  double _getMaxRowHeight(int index, AdpatientController controller) {
+  double _getMaxRowHeight(int index, AdPatientController controller) {
     var item = controller.labdata[index];
 
     // Calculate left side height
-    double leftHeight = _calculateCellHeight(item.formattest ?? '') +
-        _calculateCellHeight(item.testName ?? '') +
-        _calculateCellHeight(item.normalRange ?? '');
+    double leftHeight = _calculateCellHeight(item.formattest ?? '') + _calculateCellHeight(item.testName ?? '') + _calculateCellHeight(item.normalRange ?? '');
 
     // Calculate right side height (maximum height of the date columns)
     double rightHeight = item.dateValues!.entries.map((entry) {

@@ -33,6 +33,9 @@ abstract class Routes {
   static const LVOTApprovalScreen = _Paths.LVOTApprovalScreen;
   static const LVListScreen = _Paths.LVListScreen;
   static const OTListScreen = _Paths.OTListScreen;
+
+  static const IPDDashboardScreen = _Paths.IPDDASHBOARDSCREEN;
+  static const IPDAdmittedPatients = _Paths.IPDADMITTEDPATIENTS;
 }
 
 abstract class _Paths {
@@ -66,4 +69,7 @@ abstract class _Paths {
   static const LVOTApprovalScreen = '/LVOTApprovalScreen';
   static const LVListScreen = '/LVListScreen';
   static const OTListScreen = '/OTListScreen';
+
+  static const IPDDASHBOARDSCREEN = '/ipd-dashboard-screen';
+  static const IPDADMITTEDPATIENTS = '/ipd-admitted-patients';
 }

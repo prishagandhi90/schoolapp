@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/adpatientfilter_model.dart';
 
-class AdpatientController extends GetxController {
+class AdPatientController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
@@ -25,9 +25,9 @@ class AdpatientController extends GetxController {
   List<PatientdataModel> filterpatientsData = [];
   List<LabData> labdata = [];
   List<FilterPatientList> filterdata = [];
-  List<String> selectedorgsList = [];
+  List<String> selectedOrgsList = [];
   List<String> selectedFloorsList = [];
-  List<String> selectedwardsList = [];
+  List<String> selectedWardsList = [];
   bool callFilterAPi = false;
   List<Orgs> orgsList = [];
   List<Floors> floorsList = [];
@@ -49,7 +49,7 @@ class AdpatientController extends GetxController {
     super.onInit();
     // generateLast7Days();
     _syncScrollControllers();
-    fetchDeptwisePatientList();
+    // fetchDeptwisePatientList();
     getPatientDashboardFilters();
     update();
     // fetchsummarylabdata();
@@ -87,13 +87,7 @@ class AdpatientController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": searchPrefix ?? "",
-        "orgs": selectedorgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedwardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -116,6 +110,7 @@ class AdpatientController extends GetxController {
         patientsData.clear();
         isLoading = false;
       } else {
+        isLoading = false;
         filterpatientsData.clear();
         patientsData.clear();
         Get.rawSnackbar(message: "Something went wrong");
@@ -273,7 +268,7 @@ class AdpatientController extends GetxController {
                   topRight: Radius.circular(25.0),
                 ),
               ),
-              child: GetBuilder<AdpatientController>(builder: (controller) {
+              child: GetBuilder<AdPatientController>(builder: (controller) {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -383,8 +378,13 @@ class AdpatientController extends GetxController {
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedorgsList.isNotEmpty || selectedFloorsList.isNotEmpty || selectedwardsList.isNotEmpty) {
+                                    if (selectedOrgsList.isNotEmpty || selectedFloorsList.isNotEmpty || selectedWardsList.isNotEmpty) {
                                       Navigator.pop(context);
+                                      controller.isSearchActive = false;
+                                      controller.searchController.clear();
+
+                                      sortBySelected = -1;
+
                                       await fetchDeptwisePatientList();
                                     } else {
                                       Get.rawSnackbar(message: AppString.plzselectoptiontosort);
@@ -414,9 +414,14 @@ class AdpatientController extends GetxController {
                                     onPressed: () async {
                                       callFilterAPi = true;
                                       FocusScope.of(context).unfocus();
-                                      selectedorgsList = [];
+                                      selectedOrgsList = [];
                                       selectedFloorsList = [];
-                                      selectedwardsList = [];
+                                      selectedWardsList = [];
+
+                                      controller.isSearchActive = false;
+                                      controller.searchController.clear();
+                                      sortBySelected = -1;
+
                                       await fetchDeptwisePatientList();
                                       Navigator.pop(context);
                                       controller.update();
@@ -445,9 +450,9 @@ class AdpatientController extends GetxController {
             )).whenComplete(() {
       if (!callFilterAPi) {
         fetchDeptwisePatientList();
-        selectedorgsList = List.from(tempOrgsList);
+        selectedOrgsList = List.from(tempOrgsList);
         selectedFloorsList = List.from(tempFloorsList);
-        selectedwardsList = List.from(tempWardList);
+        selectedWardsList = List.from(tempWardList);
         update();
       }
     });
@@ -470,7 +475,7 @@ class AdpatientController extends GetxController {
                   topRight: Radius.circular(25.0),
                 ),
               ),
-              child: GetBuilder<AdpatientController>(builder: (controller) {
+              child: GetBuilder<AdPatientController>(builder: (controller) {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -512,10 +517,13 @@ class AdpatientController extends GetxController {
                               ),
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
-                                onTap: () {
+                                onTap: () async {
+                                  controller.isSearchActive = false;
+                                  controller.searchController.clear();
+
                                   sortBySelected = 0;
                                   controller.update();
-                                  getSortData(isLoader: true);
+                                  await getSortData(isLoader: true);
                                   Get.back();
                                 },
                                 child: Row(
@@ -544,10 +552,13 @@ class AdpatientController extends GetxController {
                               ),
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
-                                onTap: () {
+                                onTap: () async {
+                                  controller.isSearchActive = false;
+                                  controller.searchController.clear();
+
                                   sortBySelected = 1;
                                   controller.update();
-                                  getSortData(isLoader: true);
+                                  await getSortData(isLoader: true);
                                   Get.back();
                                 },
                                 child: Row(
@@ -576,10 +587,13 @@ class AdpatientController extends GetxController {
                               ),
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
-                                onTap: () {
+                                onTap: () async {
+                                  controller.isSearchActive = false;
+                                  controller.searchController.clear();
+
                                   sortBySelected = 2;
                                   controller.update();
-                                  getSortData(isLoader: true);
+                                  await getSortData(isLoader: true);
                                   Get.back();
                                 },
                                 child: Row(
@@ -608,10 +622,13 @@ class AdpatientController extends GetxController {
                               ),
                               GestureDetector(
                                 behavior: HitTestBehavior.opaque,
-                                onTap: () {
+                                onTap: () async {
+                                  controller.isSearchActive = false;
+                                  controller.searchController.clear();
+
                                   sortBySelected = 3;
                                   controller.update();
-                                  getSortData(isLoader: true);
+                                  await getSortData(isLoader: true);
                                   Get.back();
                                 },
                                 child: Row(
@@ -644,10 +661,10 @@ class AdpatientController extends GetxController {
                                             borderRadius: BorderRadius.circular(10),
                                           ),
                                           backgroundColor: AppColor.primaryColor),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         FocusScope.of(context).unfocus();
                                         sortBySelected = null;
-                                        fetchDeptwisePatientList();
+                                        await fetchDeptwisePatientList();
                                         Navigator.pop(context);
                                         controller.update();
                                       },
@@ -673,7 +690,10 @@ class AdpatientController extends GetxController {
             ));
   }
 
-  resetForm() {
+  resetForm() async {
+    selectedOrgsList.clear();
+    selectedWardsList.clear();
+    selectedFloorsList.clear();
     searchController.clear();
     isSearchActive = false;
     filterpatientsData.clear();
