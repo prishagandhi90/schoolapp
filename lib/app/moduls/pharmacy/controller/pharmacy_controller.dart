@@ -24,7 +24,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
   final ApiController apiController = Get.put(ApiController());
-  // final bottomBarController = Get.put(BottomBarController());
   final TextEditingController searchController = TextEditingController();
   List<PresviewerList> presviewerList = [];
   List<PresdetailList> presdetailList = [];

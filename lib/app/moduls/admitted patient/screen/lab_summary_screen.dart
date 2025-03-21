@@ -9,12 +9,7 @@ import 'package:get/get.dart';
 class LabSummaryScreen extends StatelessWidget {
   LabSummaryScreen({Key? key}) : super(key: key);
 
-  final List<Map<String, dynamic>> data = List.generate(
-    20,
-    (index) => {'ID': index + 1, 'Name': 'Person $index', 'Age': 20 + index, 'Salary': (index + 1) * 1000, 'Department': 'Dept ${index % 5}', 'City': 'City ${index % 3}'},
-  );
-
-  // final double rowHeight = 50.0;
+  final double rowHeight = 50.0;
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +98,8 @@ class LabSummaryScreen extends StatelessWidget {
                       Row(
                         children: [
                           _buildFixedHeaderCell("Report"),
-                          _buildFixedHeaderCell("Test"),
-                          _buildFixedHeaderCell("Range", overflow: true),
+                          // _buildFixedHeaderCell("Test"),
+                          // _buildFixedHeaderCell("Range", overflow: true),
                         ],
                       ),
                       Flexible(
@@ -121,8 +116,8 @@ class LabSummaryScreen extends StatelessWidget {
                               return Row(
                                 children: [
                                   _buildFixedCell("${item.formattest.toString()}", height: maxHeight),
-                                  _buildFixedCell("${item.testName.toString()}", height: maxHeight),
-                                  _buildFixedCell("${item.normalRange.toString()}", overflow: true, height: maxHeight),
+                                  // _buildFixedCell("${item.testName.toString()}", height: maxHeight),
+                                  // _buildFixedCell("${item.normalRange.toString()}", height: maxHeight),
                                 ],
                               );
                             }),
@@ -158,7 +153,11 @@ class LabSummaryScreen extends StatelessWidget {
 
                                   return Row(
                                     children: item.dateValues!.entries.map((entry) {
-                                      return _buildDataCell("${entry.value}", width: getDynamicHeight(size: 0.090), height: maxHeight);
+                                      return _buildDataCell(
+                                        "${entry.value}",
+                                        width: getDynamicHeight(size: 0.090),
+                                        height: maxHeight,
+                                      );
                                     }).toList(),
                                   );
                                 }),
@@ -183,7 +182,9 @@ class LabSummaryScreen extends StatelessWidget {
     var item = controller.labdata[index];
 
     // Calculate left side height
-    double leftHeight = _calculateCellHeight(item.formattest ?? '') + _calculateCellHeight(item.testName ?? '') + _calculateCellHeight(item.normalRange ?? '');
+    double leftHeight = _calculateCellHeight(item.formattest ?? '') +
+        _calculateCellHeight(item.testName ?? '') +
+        _calculateCellHeight(item.normalRange ?? '');
 
     // Calculate right side height (maximum height of the date columns)
     double rightHeight = item.dateValues!.entries.map((entry) {
@@ -197,7 +198,7 @@ class LabSummaryScreen extends StatelessWidget {
 // Helper function to calculate the height of each cell's content
   double _calculateCellHeight(String content) {
     // Logic to estimate the height based on content length (you can adjust this)
-    double baseHeight = 40.0; // base height for a cell
+    double baseHeight = 30.0; // base height for a cell
     // double extraHeight = content.length > 20 ? content.length * 0.5 : 0; // Adjust based on content length
     double extraHeight = _calculateTextHeight(content);
     return baseHeight + extraHeight;
@@ -218,17 +219,19 @@ class LabSummaryScreen extends StatelessWidget {
     return painter.height;
   }
 
-  Widget _buildFixedHeaderCell(String text, {bool overflow = false}) {
+  Widget _buildFixedHeaderCell(String text, {bool overflow = false, bool isLast = false}) {
     return Container(
       width: 80,
-      height: 50.0,
-      padding: EdgeInsets.only(
-        left: 8.0,
-        top: 8.0,
-        bottom: 8.0,
-      ),
+      height: rowHeight,
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       alignment: Alignment.centerLeft,
-      color: Colors.grey[400],
+      decoration: BoxDecoration(
+        color: Colors.grey[400],
+        border: Border(
+          bottom: BorderSide(color: Colors.black26, width: 1), // 👈 Bottom Divider
+          right: isLast ? BorderSide.none : BorderSide(color: Colors.black26, width: 1), // 👈 Right Divider
+        ),
+      ),
       child: Text(
         text,
         maxLines: 1,
@@ -238,95 +241,105 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderCell(String text, {double width = 100}) {
+  Widget _buildHeaderCell(String text, {double width = 100, bool isLast = false}) {
     return Container(
       width: width,
-      height: 50.0,
-      padding: EdgeInsets.only(
-        left: 8.0,
-        top: 8.0,
-        bottom: 8.0,
-      ),
+      height: rowHeight,
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       alignment: Alignment.centerLeft,
-      color: Colors.blueGrey,
-      child: Text(
-        text,
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey,
+        border: Border(
+          bottom: BorderSide(color: Colors.black26, width: 1), // 👈 Bottom Divider
+          right: isLast ? BorderSide.none : BorderSide(color: Colors.black26, width: 1), // 👈 Right Divider
+        ),
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          text,
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
       ),
     );
   }
 
-  Widget _buildFixedCell(String text, {bool overflow = false, double height = 80}) {
+  Widget _buildFixedCell(String text, {bool isLast = false, required double height}) {
     return Container(
       width: 80,
-      height: height,
-      padding: EdgeInsets.only(
-        left: 8.0,
-        top: 8.0,
-        bottom: 8.0,
-      ),
+      constraints: BoxConstraints(minHeight: height), // ✅ Dynamic Height
+      padding: EdgeInsets.all(8.0),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.black12)),
+        border: Border(
+          bottom: BorderSide(color: Colors.black12),
+          right: isLast ? BorderSide.none : BorderSide(color: Colors.black26, width: 1),
+        ),
         color: Colors.grey[200],
       ),
       child: Text(
         text,
-        maxLines: 1,
-        overflow: overflow ? TextOverflow.ellipsis : TextOverflow.visible,
+        softWrap: true,
+        maxLines: null,
       ),
     );
   }
 
-  // Widget _buildDataCell(String text, {double width = 80}) {
-  //   return Container(
-  //     width: width,
-  //     height: rowHeight,
-  //     padding: EdgeInsets.only(
-  //       left: 8.0,
-  //       top: 8.0,
-  //       bottom: 8.0,
-  //     ),
-  //     alignment: Alignment.centerLeft,
-  //     decoration: BoxDecoration(
-  //       border: Border(bottom: BorderSide(color: Colors.black12)),
-  //       color: Colors.white,
-  //     ),
-  //     child: Text(text),
-  //   );
-  // }
-
-  Widget _buildDataCell(String value, {double width = 100, double height = 50}) {
-    List<String> lines = value.split("\n"); // Split into multiple lines
-
+  Widget _buildDataCell(String value, {double width = 100, required double height}) {
+    List<String> lines = value.split("\n"); // ✅ Multi-line handling
     return Container(
       width: width,
-      height: height,
+      constraints: BoxConstraints(minHeight: height), // ✅ Dynamic Height
       padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey), // Table border
-      ),
+      decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: lines.map((line) {
-          List<String> parts = line.split("|"); // Split by '|'
-          String text = parts.first; // The actual value (e.g., "Blood 1")
-          bool isHighlighted = parts.length > 1 && parts.last.trim() == "True"; // Check if 'True'
+          List<String> parts = line.split("|");
+          String text = parts.first;
+          bool isHighlighted = parts.length > 1 && parts.last.trim() == "True";
 
           return Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             decoration: BoxDecoration(
-              color: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent, // Background color logic
+              color: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
               text,
-              style: TextStyle(color: Colors.black), // Text color
+              softWrap: true,
+              maxLines: null,
             ),
           );
         }).toList(),
       ),
     );
   }
+
+  /// ✅ **Calculate max height for each row dynamically**
+  List<double> calculateRowHeights(List<List<String>> data, double columnWidth) {
+    return data.map((row) {
+      return row.map((cell) => calculateTextHeight(cell, columnWidth)).reduce((a, b) => a > b ? a : b);
+    }).toList();
+  }
+
+  /// ✅ **Calculate text height dynamically**
+  double calculateTextHeight(String text, double width) {
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: TextStyle(fontSize: 14)),
+      textDirection: TextDirection.ltr,
+      maxLines: null,
+    )..layout(maxWidth: width);
+    return textPainter.height + 16; // Extra padding
+  }
+
+  // Widget buildRow(String fixedText, String dataText) {
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.stretch, // ✅ Dono ko equal height karega
+  //     children: [
+  //       _buildFixedCell(fixedText),
+  //       Expanded(child: _buildDataCell(dataText)),
+  //     ],
+  //   );
+  // }
 }

@@ -125,6 +125,7 @@ class AppString {
   static String rxStatus = "RX Status: ";
   static String filterby = "Filter by";
   static String selectWardsName = "Select Wards Name";
+  static String selectOrgsName = "Organization";
   static String floor = "Floor";
   static String selectbed = "Select Bed";
   static String plzselectoptiontosort = "Please select options to short";

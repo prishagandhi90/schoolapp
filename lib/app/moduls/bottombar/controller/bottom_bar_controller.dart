@@ -20,7 +20,7 @@ class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
   RxBool isPharmacyHome = false.obs;
-  var isAdmittedPatient = false.obs;
+  RxBool isAdmittedPatient = false.obs;
 
   @override
   void onInit() {
@@ -59,10 +59,11 @@ class BottomBarController extends GetxController {
   //   update(); // Refresh UI
   // }
 
-  onItemTapped(int index, bool showPharmacy, BuildContext context) async {
+  onItemTapped(int index, bool showPharmacy, BuildContext context,bool showAdPatient) async {
     currentIndex.value = index;
     hideBottomBar.value = false;
     isPharmacyHome.value = showPharmacy;
+    isAdmittedPatient.value = showAdPatient;
 
     if (index == 1) {
       final attendanceController = Get.put(AttendenceController());

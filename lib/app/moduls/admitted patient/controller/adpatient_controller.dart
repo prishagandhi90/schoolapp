@@ -8,13 +8,10 @@ import 'package:emp_app/app/moduls/admitted%20patient/model/patientdata_model.da
 import 'package:emp_app/app/moduls/admitted%20patient/model/patientsummary_labdata_model.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/organization_checkbox.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/widgets/ward_checkbox.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../model/adpatientfilter_model.dart';
 
 class AdpatientController extends GetxController {
@@ -25,8 +22,9 @@ class AdpatientController extends GetxController {
   final ApiController apiController = Get.put(ApiController());
   // List<PatientdataModel> patientdata = [];
   List<PatientdataModel> patientsData = [];
+  List<PatientdataModel> filterpatientsData = [];
   List<LabData> labdata = [];
-  List<filterpatientModel> filterdata = [];
+  List<FilterPatientList> filterdata = [];
   List<String> selectedorgsList = [];
   List<String> selectedFloorsList = [];
   List<String> selectedwardsList = [];
@@ -37,6 +35,10 @@ class AdpatientController extends GetxController {
   List<String> tempOrgsList = [];
   List<String> tempFloorsList = [];
   List<String> tempWardList = [];
+  bool isSearchActive = false;
+  var isAdpatientData = false.obs;
+  var isSelectionMode = false.obs;
+  int? sortBySelected;
   final ScrollController verticalScrollControllerLeft = ScrollController();
   final ScrollController verticalScrollControllerRight = ScrollController();
   final ScrollController horizontalScrollController = ScrollController();
@@ -49,6 +51,7 @@ class AdpatientController extends GetxController {
     _syncScrollControllers();
     fetchDeptwisePatientList();
     getPatientDashboardFilters();
+    update();
     // fetchsummarylabdata();
   }
 
@@ -71,11 +74,11 @@ class AdpatientController extends GetxController {
     verticalScrollControllerLeft.dispose();
     verticalScrollControllerRight.dispose();
     horizontalScrollController.dispose();
-    searchController.dispose();
+    // searchController.dispose();
     super.onClose();
   }
 
-  Future<List<PatientdataModel>> fetchDeptwisePatientList() async {
+  Future<List<PatientdataModel>> fetchDeptwisePatientList({String? searchPrefix, bool isLoader = true}) async {
     try {
       isLoading = true;
       update();
@@ -84,21 +87,37 @@ class AdpatientController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": "", "orgs": selectedorgsList, "floors": selectedFloorsList, "wards": selectedwardsList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? "",
+        "orgs": selectedorgsList,
+        "floors": selectedFloorsList,
+        "wards": selectedwardsList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
-
+      patientsData.clear();
       if (rsponsedpatientdata.statusCode == 200) {
         patientsData.assignAll(rsponsedpatientdata.data ?? []);
+        if (rsponsedpatientdata.data != null && rsponsedpatientdata.data!.isNotEmpty) {
+          filterpatientsData = rsponsedpatientdata.data!;
+        } else {
+          filterpatientsData = [];
+        }
         isLoading = false;
       } else if (rsponsedpatientdata.statusCode == 401) {
+        filterpatientsData.clear();
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponsedpatientdata.statusCode == 400) {
+        filterpatientsData.clear();
+        patientsData.clear();
         isLoading = false;
       } else {
+        filterpatientsData.clear();
+        patientsData.clear();
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
@@ -106,11 +125,10 @@ class AdpatientController extends GetxController {
       isLoading = false;
       update();
     }
-    isLoading = false;
-    return [];
+    return patientsData.toList();
   }
 
-  getPatientDashboardFilters({bool isLoader = true}) async {
+  Future<List<PatientdataModel>> getPatientDashboardFilters({bool isLoader = true}) async {
     try {
       isLoading = true;
       String url = ConstApiUrl.patientDashboardFilters;
@@ -176,6 +194,68 @@ class AdpatientController extends GetxController {
     return [];
   }
 
+  void filterSearchResults(String query) {
+    if (query.isEmpty) {
+      filterpatientsData = patientsData; // Show all data if search is empty
+    } else {
+      filterpatientsData = patientsData.where((item) {
+        final patientName = (item.patientName ?? "").toLowerCase();
+        final ipdNo = (item.ipdNo ?? "").toUpperCase();
+
+        // Check if query matches either patientName or ipdNo
+        return patientName.contains(query.toLowerCase()) || ipdNo.contains(query.toUpperCase());
+      }).toList();
+    }
+    update();
+  }
+
+  activateSearch(bool isActive) async {
+    isSearchActive = isActive;
+    update();
+  }
+
+  getSortData({bool isLoader = true}) async {
+    try {
+      isLoading = isLoader;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      loginId = await prefs.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await prefs.getString(AppString.keyToken) ?? "";
+      Map data = {
+        "loginId": loginId,
+        "sortType": sortBySelected == 0
+            ? "Patient Name[A to Z]"
+            : sortBySelected == 1
+                ? "Patient Name[Z to A]"
+                : sortBySelected == 2
+                    ? "Stay Days [Low - High]"
+                    : "Stay Days [High - Low]"
+      };
+      String url = ConstApiUrl.empSortDeptPatientList;
+      var response = await apiController.parseJsonBody(url, tokenNo, data);
+      Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
+      if (rsponsedpatientdata.statusCode == 200) {
+        if (rsponsedpatientdata.data != null && rsponsedpatientdata.data!.isNotEmpty) {
+          filterpatientsData = rsponsedpatientdata.data!;
+        } else {
+          filterpatientsData = [];
+        }
+        isLoading = false;
+      } else if (rsponsedpatientdata.statusCode == 401) {
+        prefs.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (rsponsedpatientdata.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+    }
+  }
+
   Future<void> AdpatientFiltterBottomSheet() async {
     showModalBottomSheet(
         context: Get.context!,
@@ -233,7 +313,7 @@ class AdpatientController extends GetxController {
                                 height: 25,
                               ),
                               Text(
-                                AppString.selectWardsName,
+                                AppString.selectOrgsName,
                                 style: TextStyle(
                                   // fontSize: 20,
                                   fontSize: getDynamicHeight(size: 0.022),
@@ -264,22 +344,22 @@ class AdpatientController extends GetxController {
                               SizedBox(
                                 height: 15,
                               ),
-                              Text(
-                                AppString.selectbed,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              WardsCheckBox(controller: controller),
-                              const SizedBox(
-                                height: 10,
-                              ),
+                              // Text(
+                              //   AppString.selectbed,
+                              //   style: TextStyle(
+                              //     // fontSize: 20,
+                              //     fontSize: getDynamicHeight(size: 0.022),
+                              //     color: AppColor.black,
+                              //     fontWeight: FontWeight.w700,
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 10,
+                              // ),
+                              // WardsCheckBox(controller: controller),
+                              // const SizedBox(
+                              //   height: 10,
+                              // ),
                             ],
                           ),
                         ),
@@ -371,5 +451,233 @@ class AdpatientController extends GetxController {
         update();
       }
     });
+  }
+
+  Future<void> sortBy() async {
+    showModalBottomSheet(
+        context: Get.context!,
+        isScrollControlled: true,
+        isDismissible: true,
+        useSafeArea: true,
+        backgroundColor: AppColor.transparent,
+        builder: (context) => Container(
+              height: MediaQuery.of(context).size.height * 0.42,
+              width: Get.width,
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25.0),
+                  topRight: Radius.circular(25.0),
+                ),
+              ),
+              child: GetBuilder<AdpatientController>(builder: (controller) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          Text(
+                            AppString.sortby,
+                            style: TextStyle(
+                              // fontSize: 20,
+                              fontSize: getDynamicHeight(size: 0.022),
+                              fontWeight: FontWeight.w700,
+                              color: AppColor.black,
+                            ),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.cancel))
+                        ],
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 25,
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  sortBySelected = 0;
+                                  controller.update();
+                                  getSortData(isLoader: true);
+                                  Get.back();
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppString.patientnameAtoZ,
+                                      style: TextStyle(
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                        fontWeight: FontWeight.w500,
+                                        color: sortBySelected == 0 ? AppColor.primaryColor : AppColor.black,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Divider(
+                                color: AppColor.originalgrey,
+                                thickness: 1,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  sortBySelected = 1;
+                                  controller.update();
+                                  getSortData(isLoader: true);
+                                  Get.back();
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppString.patientnameZtoA,
+                                      style: TextStyle(
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                        fontWeight: FontWeight.w500,
+                                        color: sortBySelected == 1 ? AppColor.primaryColor : AppColor.black,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Divider(
+                                color: AppColor.originalgrey,
+                                thickness: 1,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  sortBySelected = 2;
+                                  controller.update();
+                                  getSortData(isLoader: true);
+                                  Get.back();
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppString.staydaysLtH,
+                                      style: TextStyle(
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                        fontWeight: FontWeight.w500,
+                                        color: sortBySelected == 2 ? AppColor.primaryColor : AppColor.black,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Divider(
+                                color: AppColor.originalgrey,
+                                thickness: 1,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  sortBySelected = 3;
+                                  controller.update();
+                                  getSortData(isLoader: true);
+                                  Get.back();
+                                },
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      AppString.staydaysHtL,
+                                      style: TextStyle(
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                        fontWeight: FontWeight.w500,
+                                        color: sortBySelected == 3 ? AppColor.primaryColor : AppColor.black,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Divider(
+                                color: AppColor.originalgrey,
+                                thickness: 1,
+                              ),
+                              Center(
+                                child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          backgroundColor: AppColor.primaryColor),
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        sortBySelected = null;
+                                        fetchDeptwisePatientList();
+                                        Navigator.pop(context);
+                                        controller.update();
+                                      },
+                                      child: Text(
+                                        AppString.reset,
+                                        style: TextStyle(
+                                          // fontSize: 16,
+                                          fontSize: getDynamicHeight(size: 0.018),
+                                          color: AppColor.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ));
+  }
+
+  resetForm() {
+    searchController.clear();
+    isSearchActive = false;
+    filterpatientsData.clear();
+    patientsData.clear();
+    update();
   }
 }

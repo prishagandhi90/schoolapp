@@ -2,15 +2,16 @@ class AdpatientFilterModel {
   int? statusCode;
   String? isSuccess;
   String? message;
-  filterpatientModel? data;
+  FilterPatientList? data;
 
-  AdpatientFilterModel({this.statusCode, this.isSuccess, this.message, this.data});
+  AdpatientFilterModel(
+      {this.statusCode, this.isSuccess, this.message, this.data});
 
   AdpatientFilterModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    data = json['data'] != null ? new filterpatientModel.fromJson(json['data']) : null;
+    data = json['data'] != null ? new FilterPatientList.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -25,14 +26,14 @@ class AdpatientFilterModel {
   }
 }
 
-class filterpatientModel {
+class FilterPatientList {
   List<Orgs>? orgs;
   List<Floors>? floors;
   List<Wards>? wards;
 
-  filterpatientModel({this.orgs, this.floors, this.wards});
+  FilterPatientList({this.orgs, this.floors, this.wards});
 
-  filterpatientModel.fromJson(Map<String, dynamic> json) {
+  FilterPatientList.fromJson(Map<String, dynamic> json) {
     if (json['orgs'] != null) {
       orgs = <Orgs>[];
       json['orgs'].forEach((v) {

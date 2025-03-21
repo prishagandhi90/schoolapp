@@ -1,11 +1,13 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/model/patientdata_model.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class IpdDashboardScreen extends StatelessWidget {
   const IpdDashboardScreen({Key? key}) : super(key: key);
@@ -33,7 +35,7 @@ class IpdDashboardScreen extends StatelessWidget {
             padding: EdgeInsets.all(10),
             itemCount: 1,
             itemBuilder: (context, index) {
-              return _buildPatientCard("Admitted Patients", controller.patientsData.length);
+              return _buildPatientCard("Admitted Patients", controller.patientsData.length,context);
             },
           ),
         );
@@ -41,11 +43,27 @@ class IpdDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPatientCard(String title, int count) {
+  Widget _buildPatientCard(String title, int count,BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(AdpatientScreen());
-        // Get.to(LabSummaryScreen());
+        // var adPatientController = Get.put(AdpatientController());
+        // adPatientController.fetchDeptwisePatientList();
+        // Get.to(AdpatientScreen());
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: AdpatientScreen(),
+          withNavBar: false,
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        ).then((value) async {
+          final bottomBarController = Get.put(BottomBarController());
+          bottomBarController.currentIndex.value = -1;
+          bottomBarController.persistentController.value.index = 0;
+          bottomBarController.currentIndex.value = 0;
+          bottomBarController.isAdmittedPatient.value = true;
+          hideBottomBar.value = false;
+          var dashboardController = Get.put(DashboardController());
+          await dashboardController.getDashboardDataUsingToken();
+        });
       },
       child: Card(
         color: AppColor.white,
