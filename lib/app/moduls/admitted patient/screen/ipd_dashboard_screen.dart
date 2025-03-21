@@ -78,6 +78,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           final controller = Get.put(AdPatientController());
+          controller.sortBySelected = -1;
           await controller.resetForm();
           await _fetchData();
           final bottomBarController = Get.find<BottomBarController>();
