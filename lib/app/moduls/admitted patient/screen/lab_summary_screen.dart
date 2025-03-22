@@ -98,7 +98,7 @@ class LabSummaryScreen extends StatelessWidget {
                       Row(
                         children: [
                           _buildFixedHeaderCell("Report"),
-                          // _buildFixedHeaderCell("Test"),
+                          _buildFixedHeaderCell("Test"),
                           // _buildFixedHeaderCell("Range", overflow: true),
                         ],
                       ),
@@ -116,7 +116,7 @@ class LabSummaryScreen extends StatelessWidget {
                               return Row(
                                 children: [
                                   _buildFixedCell("${item.formattest.toString()}", height: maxHeight),
-                                  // _buildFixedCell("${item.testName.toString()}", height: maxHeight),
+                                  _buildFixedCell("${item.testName.toString()}", height: maxHeight),
                                   // _buildFixedCell("${item.normalRange.toString()}", height: maxHeight),
                                 ],
                               );
