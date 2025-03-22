@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -9,55 +10,78 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class IpdDashboardScreen extends StatelessWidget {
+class IpdDashboardScreen extends StatefulWidget {
   const IpdDashboardScreen({Key? key}) : super(key: key);
 
   @override
+  State<IpdDashboardScreen> createState() => _IpdDashboardScreenState();
+}
+
+class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
+  final adPatientController = Get.put(AdPatientController());
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    await adPatientController.fetchDeptwisePatientList();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Get.put(AdpatientController());
-    return GetBuilder<AdpatientController>(
-      builder: (controller) {
-        return Scaffold(
-          backgroundColor: AppColor.white,
-          appBar: AppBar(
-            title: Text(
-              'IPD',
-              style: TextStyle(
-                color: AppColor.primaryColor,
-                fontWeight: FontWeight.w700,
-                fontFamily: CommonFontStyle.plusJakartaSans,
-              ),
-            ),
-            backgroundColor: AppColor.white,
-            centerTitle: true,
+    return Scaffold(
+      backgroundColor: AppColor.white,
+      appBar: AppBar(
+        title: Text(
+          'IPD',
+          style: TextStyle(
+            color: AppColor.primaryColor,
+            fontWeight: FontWeight.w700,
+            fontFamily: CommonFontStyle.plusJakartaSans,
           ),
-          body: ListView.builder(
+        ),
+        backgroundColor: AppColor.white,
+        centerTitle: true,
+      ),
+      body: GetBuilder<AdPatientController>(
+        builder: (controller) {
+          if (controller.isLoading) {
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: getDynamicHeight(size: 0.102),
+              ),
+              child: Center(child: CircularProgressIndicator()),
+            ); // 🔹 Jab tak data load ho raha hai
+          }
+          return ListView.builder(
             padding: EdgeInsets.all(10),
             itemCount: 1,
             itemBuilder: (context, index) {
-              return _buildPatientCard("Admitted Patients", controller.patientsData.length,context);
+              return _buildPatientCard("Admitted Patients", controller.patientsData.length, context, index);
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildPatientCard(String title, int count,BuildContext context) {
+  Widget _buildPatientCard(String title, int count, BuildContext context, int index) {
     return GestureDetector(
       onTap: () {
-        // var adPatientController = Get.put(AdpatientController());
-        // adPatientController.fetchDeptwisePatientList();
-        // Get.to(AdpatientScreen());
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: AdpatientScreen(),
           withNavBar: false,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
-          final bottomBarController = Get.put(BottomBarController());
-          bottomBarController.currentIndex.value = -1;
-          bottomBarController.persistentController.value.index = 0;
+          final controller = Get.put(AdPatientController());
+          controller.sortBySelected = -1;
+          await controller.resetForm();
+          await _fetchData();
+          final bottomBarController = Get.find<BottomBarController>();
           bottomBarController.currentIndex.value = 0;
           bottomBarController.isAdmittedPatient.value = true;
           hideBottomBar.value = false;

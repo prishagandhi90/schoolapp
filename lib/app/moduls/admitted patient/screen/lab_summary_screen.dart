@@ -13,9 +13,9 @@ class LabSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AdpatientController());
+    Get.put(AdPatientController());
 
-    return GetBuilder<AdpatientController>(builder: (controller) {
+    return GetBuilder<AdPatientController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Lab Summary'),
@@ -111,6 +111,7 @@ class LabSummaryScreen extends StatelessWidget {
                                   _buildFixedCell("${item.formattest.toString()}", height: maxHeight),
                                   _buildFixedCell("${item.testName.toString()}", height: maxHeight),
                                   _buildFixedCell("${item.normalRange.toString()}", height: maxHeight),
+
                                 ],
                               );
                             }),
@@ -166,11 +167,12 @@ class LabSummaryScreen extends StatelessWidget {
     });
   }
 
-  double _getMaxRowHeight(int index, AdpatientController controller) {
+  double _getMaxRowHeight(int index, AdPatientController controller) {
     var item = controller.labdata[index];
     double leftHeight = _calculateCellHeight(item.formattest ?? '') +
         _calculateCellHeight(item.testName ?? '') +
         _calculateCellHeight(item.normalRange ?? '');
+
     double rightHeight = item.dateValues!.entries.map((entry) {
       return _calculateCellHeight(entry.value ?? '');
     }).reduce((a, b) => a > b ? a : b); // Choose the max height from the right side columns

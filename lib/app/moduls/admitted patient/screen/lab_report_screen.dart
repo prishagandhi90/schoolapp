@@ -10,7 +10,7 @@ class LabReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AdpatientController>(
+    return GetBuilder<AdPatientController>(
       builder: (controller) {
         return Scaffold(
             appBar: AppBar(
