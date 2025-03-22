@@ -12,6 +12,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_contr
 import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view_copy.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_test.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -290,8 +291,11 @@ class AdpatientScreen extends StatelessWidget {
                                   if (value == "Lab Summary") {
                                     // Get.to(LabSummaryScreen());
                                     var adPatientController = Get.put(AdPatientController());
+                                    adPatientController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                                    adPatientController.uhid = controller.filterpatientsData[index].uhid ?? '';
+                                    adPatientController.update();
                                     await adPatientController.fetchsummarylabdata();
-                                    Get.to(() => LabSummaryScreen());
+                                    Get.to(() => LabSummaryScreen_test());
                                   } else if (value == "Lab Report") {
                                     // Get.to(LabReportScreen());
                                     var labreportsController = Get.put(LabReportsController());

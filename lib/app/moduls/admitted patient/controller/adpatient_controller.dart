@@ -181,7 +181,8 @@ class AdPatientController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "ipdNo": "A/3761/24", "uhid": "U/74859/17"};
+      // var jsonbodyObj = {"loginId": loginId, "ipdNo": "A/3761/24", "uhid": "U/74859/17"};
+      var jsonbodyObj = {"loginId": loginId, "ipdNo": ipdNo, "uhid": uhid};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       RsponsePatientlabsummarydata rsponsePatientlabsummarydata = RsponsePatientlabsummarydata.fromJson(jsonDecode(response));

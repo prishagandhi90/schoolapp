@@ -94,9 +94,9 @@ class LabSummaryScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          _buildFixedHeaderCell("Report"),
-                          _buildFixedHeaderCell("Test"),
-                          _buildFixedHeaderCell("Range", overflow: true),
+                          _buildFixedHeaderCell("Report", width: getDynamicHeight(size: 0.090)),
+                          _buildFixedHeaderCell("Test", width: getDynamicHeight(size: 0.080)),
+                          _buildFixedHeaderCell("Range", width: getDynamicHeight(size: 0.085), overflow: true),
                         ],
                       ),
                       Flexible(
@@ -108,10 +108,10 @@ class LabSummaryScreen extends StatelessWidget {
                               double maxHeight = _getMaxRowHeight(index, controller);
                               return Row(
                                 children: [
-                                  _buildFixedCell("${item.formattest.toString()}", height: maxHeight),
-                                  _buildFixedCell("${item.testName.toString()}", height: maxHeight),
-                                  _buildFixedCell("${item.normalRange.toString()}", height: maxHeight),
-
+                                  _buildFixedCell("${item.formattest.toString()}", height: maxHeight, width: getDynamicHeight(size: 0.090)),
+                                  _buildFixedCell("${item.testName.toString()}", height: maxHeight, width: getDynamicHeight(size: 0.080)),
+                                  _buildFixedCell("${item.normalRange.toString()}",
+                                      height: maxHeight, width: getDynamicHeight(size: 0.085)),
                                 ],
                               );
                             }),
@@ -129,7 +129,7 @@ class LabSummaryScreen extends StatelessWidget {
                           Row(
                             children: controller.labdata.isNotEmpty
                                 ? controller.labdata[0].dateValues!.keys.map((date) {
-                                    return _buildHeaderCell(date, width: getDynamicHeight(size: 0.090));
+                                    return _buildHeaderCell(date, width: getDynamicHeight(size: 0.110));
                                   }).toList()
                                 : [],
                           ),
@@ -145,7 +145,7 @@ class LabSummaryScreen extends StatelessWidget {
                                     children: item.dateValues!.entries.map((entry) {
                                       return _buildDataCell(
                                         "${entry.value}",
-                                        width: getDynamicHeight(size: 0.090),
+                                        width: getDynamicHeight(size: 0.110),
                                         height: maxHeight,
                                       );
                                     }).toList(),
@@ -182,7 +182,16 @@ class LabSummaryScreen extends StatelessWidget {
   double _calculateCellHeight(String content) {
     double baseHeight = 30.0; // base height for a cell
     double extraHeight = _calculateTextHeight(content);
-    return baseHeight + extraHeight;
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(text: content, style: TextStyle(fontSize: 14)),
+      textDirection: TextDirection.ltr,
+      maxLines: null,
+    )..layout(maxWidth: getDynamicHeight(size: 0.110));
+
+    int lineCount = textPainter.computeLineMetrics().length; // ✅ Line Count Check
+    bool isOverflow = lineCount > 5;
+    // return baseHeight + extraHeight;
+    return isOverflow ? baseHeight + extraHeight : extraHeight + 18.0;
   }
 
   double _calculateTextHeight(String content) {
@@ -196,9 +205,9 @@ class LabSummaryScreen extends StatelessWidget {
     return painter.height;
   }
 
-  Widget _buildFixedHeaderCell(String text, {bool overflow = false, bool isLast = false}) {
+  Widget _buildFixedHeaderCell(String text, {double width = 100, bool overflow = false, bool isLast = false}) {
     return Container(
-      width: 80,
+      width: width,
       height: rowHeight,
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       alignment: Alignment.centerLeft,
@@ -241,26 +250,14 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  /// **Calculate max height for each row dynamically**
-  List<double> calculateRowHeights(List<List<String>> data, double columnWidth) {
-    return data.map((row) {
-      return row.map((cell) => calculateTextHeight(cell, columnWidth)).reduce((a, b) => a > b ? a : b);
-    }).toList();
-  }
-
-  /// **Calculate text height dynamically**
-  double calculateTextHeight(String text, double width) {
-    TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: TextStyle(fontSize: 14)),
-      textDirection: TextDirection.ltr,
-      maxLines: null, // ✅ Allow unlimited lines
-    )..layout(maxWidth: width);
-    return textPainter.height + 16; // Extra padding
-  }
-
-  Widget _buildFixedCell(String text, {bool isLast = false, required double height,double width = 100,}) {
+  Widget _buildFixedCell(
+    String text, {
+    bool isLast = false,
+    required double height,
+    double width = 100,
+  }) {
     return Container(
-      width: 80,
+      width: width,
       height: height, // ✅ Fixed Height
       padding: EdgeInsets.all(8.0),
       alignment: Alignment.centerLeft,
@@ -287,6 +284,7 @@ class LabSummaryScreen extends StatelessWidget {
 
   Widget _buildSlidableText(String text, double maxWidth, double maxHeight) {
     ScrollController scrollController = ScrollController();
+    List<String> lines = text.split("\n");
 
     return Container(
       width: maxWidth,
@@ -302,6 +300,37 @@ class LabSummaryScreen extends StatelessWidget {
           int lineCount = textPainter.computeLineMetrics().length; // ✅ Line Count Check
           bool isOverflow = lineCount > 5; // ✅ 5 Lines Se Zyada Ho Toh Scroll Karega
 
+          Widget textWidget = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: lines.map((line) {
+              List<String> parts = line.split("|");
+              String textPart = parts.first;
+              List<String> labStatusParts = parts.length > 1 ? parts.last.trim().split("~") : [];
+              bool isFontColorRed = false;
+              bool isHighlighted = false;
+              if (labStatusParts.length > 1) {
+                isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
+              }
+
+              isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == "True";
+
+              return Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(textPart,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: isFontColorRed ? Colors.red : Colors.black,
+                      fontWeight: isFontColorRed ? FontWeight.bold : FontWeight.normal,
+                    ),
+                    softWrap: true),
+              );
+            }).toList(),
+          );
+
           return isOverflow
               ? SizedBox(
                   height: maxHeight,
@@ -313,12 +342,12 @@ class LabSummaryScreen extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(minHeight: maxHeight),
-                        child: Text(text, style: TextStyle(fontSize: 12),softWrap: true),
+                        child: textWidget,
                       ),
                     ),
                   ),
                 )
-              : Text(text, style: TextStyle(fontSize: 12), softWrap: true);
+              : textWidget;
         },
       ),
     );
