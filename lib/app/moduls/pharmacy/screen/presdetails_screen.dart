@@ -273,7 +273,7 @@ class PresdetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 9), // Adjust as needed
                             child: ListView.builder(
                               shrinkWrap: true,
-                              controller: controller.pharmacyScrollController,
+                              controller: controller.pharmacyScrollController,    
                               physics: const AlwaysScrollableScrollPhysics(), // Disable internal scrolling
                               itemCount: controller.presdetailList.length,
                               itemBuilder: (context, index) {

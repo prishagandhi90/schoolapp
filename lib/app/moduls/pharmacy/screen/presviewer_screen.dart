@@ -505,13 +505,13 @@ class PresviewerScreen extends StatelessWidget {
                                                                             text: AppString.rxStatus, // Heading
                                                                             style: AppStyle.plusbold16.copyWith(
                                                                               // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.017),
+                                                                              fontSize: getDynamicHeight(size: 0.016),
                                                                             )),
                                                                         TextSpan(
                                                                             text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
                                                                             style: AppStyle.w50018.copyWith(
                                                                               // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.017),
+                                                                              fontSize: getDynamicHeight(size: 0.016),
                                                                             )),
                                                                       ],
                                                                     ),
