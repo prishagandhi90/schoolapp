@@ -8,8 +8,11 @@ import 'package:emp_app/app/moduls/admitted%20patient/model/patientdata_model.da
 import 'package:emp_app/app/moduls/admitted%20patient/model/patientsummary_labdata_model.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/organization_checkbox.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/adpatientfilter_model.dart';
@@ -42,6 +45,8 @@ class AdPatientController extends GetxController {
   final ScrollController verticalScrollControllerLeft = ScrollController();
   final ScrollController verticalScrollControllerRight = ScrollController();
   final ScrollController horizontalScrollController = ScrollController();
+  final ScrollController adPatientScrollController = ScrollController();
+  final bottomBarController = Get.put(BottomBarController());
   late final String date1, date2, date3, date4, date5, date6, date7;
 
   @override
@@ -53,6 +58,20 @@ class AdPatientController extends GetxController {
     getPatientDashboardFilters();
     update();
     // fetchsummarylabdata();
+
+    adPatientScrollController.addListener(() {
+      if (adPatientScrollController.position.userScrollDirection == ScrollDirection.forward) {
+        if (hideBottomBar.value) {
+          hideBottomBar.value = false;
+          bottomBarController.update();
+        }
+      } else if (adPatientScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+        if (!hideBottomBar.value) {
+          hideBottomBar.value = true;
+          bottomBarController.update();
+        }
+      }
+    });
   }
 
   void _syncScrollControllers() {

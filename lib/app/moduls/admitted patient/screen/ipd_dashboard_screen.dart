@@ -74,7 +74,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: AdpatientScreen(),
-          withNavBar: false,
+          withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           final controller = Get.put(AdPatientController());

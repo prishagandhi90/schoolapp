@@ -87,136 +87,141 @@ class AdpatientScreen extends StatelessWidget {
                       }
                       await controller.fetchDeptwisePatientList();
                     },
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
-                          child: Row(
-                            children: [
-                              // Search Bar (60%)
-                              Expanded(
-                                flex: 7,
-                                child: WillPopScope(
-                                  onWillPop: () async {
-                                    // Unfocus the TextFormField and dismiss the keyboard
-                                    FocusScope.of(context).unfocus();
-                                    return true; // Allow navigation to go back
-                                  },
-                                  child: TextFormField(
-                                    cursorColor: AppColor.black,
-                                    controller: controller.searchController,
-                                    decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                                        borderSide: BorderSide(
-                                          color: AppColor.black,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.82,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
+                            child: Row(
+                              children: [
+                                // Search Bar (60%)
+                                Expanded(
+                                  flex: 7,
+                                  child: WillPopScope(
+                                    onWillPop: () async {
+                                      // Unfocus the TextFormField and dismiss the keyboard
+                                      FocusScope.of(context).unfocus();
+                                      return true; // Allow navigation to go back
+                                    },
+                                    child: TextFormField(
+                                      cursorColor: AppColor.black,
+                                      controller: controller.searchController,
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
+                                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                          borderSide: BorderSide(
+                                            color: AppColor.black,
+                                          ),
+                                        ),
+                                        suffixIcon: controller.searchController.text.trim().isNotEmpty
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  FocusScope.of(context).unfocus();
+                                                  controller.searchController.clear();
+                                                  controller.fetchDeptwisePatientList(isLoader: false);
+                                                },
+                                                child: const Icon(Icons.cancel_outlined))
+                                            : const SizedBox(),
+                                        prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                        hintText: AppString.search,
+                                        hintStyle: AppStyle.plusgrey,
+                                        filled: true,
+                                        fillColor: AppColor.white,
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
                                         ),
                                       ),
-                                      suffixIcon: controller.searchController.text.trim().isNotEmpty
-                                          ? GestureDetector(
-                                              onTap: () {
-                                                FocusScope.of(context).unfocus();
-                                                controller.searchController.clear();
-                                                controller.fetchDeptwisePatientList(isLoader: false);
-                                              },
-                                              child: const Icon(Icons.cancel_outlined))
-                                          : const SizedBox(),
-                                      prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                                      hintText: AppString.search,
-                                      hintStyle: AppStyle.plusgrey,
-                                      filled: true,
-                                      fillColor: AppColor.white,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      controller.update();
-                                    },
-                                    onChanged: (value) {
-                                      controller.filterSearchResults(value);
-                                      // controller.searchController.clear();
-                                    },
-                                    onTapOutside: (event) {
-                                      FocusScope.of(context).unfocus();
-                                      Future.delayed(const Duration(milliseconds: 300));
-                                      controller.update();
-                                    },
-                                    onFieldSubmitted: (v) {
-                                      if (controller.searchController.text.trim().isNotEmpty) {
-                                        controller.fetchDeptwisePatientList(
-                                          searchPrefix: controller.searchController.text.trim(),
-                                          isLoader: false,
-                                        );
-                                        controller.searchController.clear();
-                                      }
-                                      Future.delayed(const Duration(milliseconds: 800));
-                                      controller.update();
-                                    },
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
-                              Expanded(
-                                flex: 1.5.toInt(),
-                                child: Container(
-                                  height: getDynamicHeight(size: 0.052), // Adjust height as needed
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                                  ),
-                                  child: Center(
-                                      child: GestureDetector(
-                                          onTap: () {
-                                            controller.sortBy();
-                                          },
-                                          child: Image.asset(
-                                            AppImage.filter,
-                                          ))),
-                                ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
-                              Expanded(
-                                flex: 1.5.toInt(),
-                                child: Container(
-                                  // height: 50, // Adjust height as needed
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                                  ),
-                                  child: Center(
-                                    child: IconButton(
-                                      icon: Icon(Icons.filter_alt, color: AppColor.black, size: getDynamicHeight(size: 0.027)),
-                                      onPressed: () async {
-                                        controller.callFilterAPi = false;
-                                        controller.tempOrgsList = List.unmodifiable(controller.selectedOrgsList);
-                                        controller.tempFloorsList = List.unmodifiable((controller.selectedFloorsList));
-                                        controller.tempWardList = List.unmodifiable(controller.selectedWardsList);
-
-                                        controller.AdpatientFiltterBottomSheet();
+                                      onTap: () {
+                                        controller.update();
+                                      },
+                                      onChanged: (value) {
+                                        controller.filterSearchResults(value);
+                                        // controller.searchController.clear();
+                                      },
+                                      onTapOutside: (event) {
+                                        FocusScope.of(context).unfocus();
+                                        Future.delayed(const Duration(milliseconds: 300));
+                                        controller.update();
+                                      },
+                                      onFieldSubmitted: (v) {
+                                        if (controller.searchController.text.trim().isNotEmpty) {
+                                          controller.fetchDeptwisePatientList(
+                                            searchPrefix: controller.searchController.text.trim(),
+                                            isLoader: false,
+                                          );
+                                          controller.searchController.clear();
+                                        }
+                                        Future.delayed(const Duration(milliseconds: 800));
+                                        controller.update();
                                       },
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
+                                Expanded(
+                                  flex: 1.5.toInt(),
+                                  child: Container(
+                                    height: getDynamicHeight(size: 0.052), // Adjust height as needed
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                    ),
+                                    child: Center(
+                                        child: GestureDetector(
+                                            onTap: () {
+                                              controller.sortBy();
+                                            },
+                                            child: Image.asset(
+                                              AppImage.filter,
+                                            ))),
+                                  ),
+                                ),
+                                SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
+                                Expanded(
+                                  flex: 1.5.toInt(),
+                                  child: Container(
+                                    // height: 50, // Adjust height as needed
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                    ),
+                                    child: Center(
+                                      child: IconButton(
+                                        icon: Icon(Icons.filter_alt, color: AppColor.black, size: getDynamicHeight(size: 0.027)),
+                                        onPressed: () async {
+                                          controller.callFilterAPi = false;
+                                          controller.tempOrgsList = List.unmodifiable(controller.selectedOrgsList);
+                                          controller.tempFloorsList = List.unmodifiable((controller.selectedFloorsList));
+                                          controller.tempWardList = List.unmodifiable(controller.selectedWardsList);
+
+                                          controller.AdpatientFiltterBottomSheet();
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            padding: EdgeInsets.all(10),
-                            itemCount: controller.filterpatientsData.length,
-                            itemBuilder: (context, index) {
-                              return _buildPatientCard(index, context);
-                            },
+                          Expanded(
+                            child: ListView.builder(
+                              controller: controller.adPatientScrollController,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding: EdgeInsets.all(10),
+                              itemCount: controller.filterpatientsData.length,
+                              itemBuilder: (context, index) {
+                                return _buildPatientCard(index, context);
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ));
       },
@@ -299,7 +304,8 @@ class AdpatientScreen extends StatelessWidget {
                                     labreportsController.showSwipe = true;
                                     hideBottomBar.value = true;
                                     labreportsController.getLabReporst(
-                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '', uhidNo: controller.filterpatientsData[index].uhid ?? '');
+                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                        uhidNo: controller.filterpatientsData[index].uhid ?? '');
                                     labreportsController.commonList = [];
                                     labreportsController.dataContain = [];
                                     labreportsController.scrollLister();
@@ -312,7 +318,7 @@ class AdpatientScreen extends StatelessWidget {
                                       withNavBar: true,
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ).then((value) {
-                                      hideBottomBar.value = false;
+                                      hideBottomBar.value = true;
                                     });
                                   }
                                 },
