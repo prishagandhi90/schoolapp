@@ -88,7 +88,7 @@ class AdpatientScreen extends StatelessWidget {
                       await controller.fetchDeptwisePatientList();
                     },
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.82,
+                      // height: MediaQuery.of(context).size.height * 0.82,
                       child: Column(
                         children: [
                           Padding(
