@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -42,6 +43,10 @@ class AdPatientController extends GetxController {
   var isAdpatientData = false.obs;
   var isSelectionMode = false.obs;
   int? sortBySelected;
+  FocusNode focusNode = FocusNode();
+  TextEditingController textEditingController = TextEditingController();
+  bool hasFocus = false;
+  var isPresViewerNavigating = false.obs;
   final ScrollController verticalScrollControllerLeft = ScrollController();
   final ScrollController verticalScrollControllerRight = ScrollController();
   final ScrollController horizontalScrollController = ScrollController();
@@ -72,6 +77,7 @@ class AdPatientController extends GetxController {
         }
       }
     });
+    filteredList = List.from(originalList);
   }
 
   void _syncScrollControllers() {
@@ -106,7 +112,13 @@ class AdPatientController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? "",
+        "orgs": selectedOrgsList,
+        "floors": selectedFloorsList,
+        "wards": selectedWardsList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -221,6 +233,21 @@ class AdPatientController extends GetxController {
         return patientName.contains(query.toLowerCase()) || ipdNo.contains(query.toUpperCase());
       }).toList();
     }
+    update();
+  }
+
+  List<Map<String, dynamic>> originalList = AppConst.adpatientgrid;
+  List<Map<String, dynamic>> filteredList = [];
+
+  void filterSearchAdPatientResults(String query) {
+    List<Map<String, dynamic>> tempList = [];
+    if (query.isNotEmpty) {
+      tempList = originalList.where((item) => item['label'].toLowerCase().contains(query.toLowerCase())).toList();
+    } else {
+      tempList = originalList;
+    }
+
+    filteredList = tempList;
     update();
   }
 

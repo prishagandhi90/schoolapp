@@ -54,4 +54,8 @@ class AppConst {
   static const List<Map<String, dynamic>> pharmacygrid = [
     {'image': 'assets/image/prescription.png', 'label': 'Prescription Viewer'},
   ];
+
+  static const List<Map<String, dynamic>> adpatientgrid = [
+    {'image': 'assets/image/AdPatient.png', 'label': 'Admitted Patients'},
+  ];
 }
