@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
@@ -32,39 +33,177 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: AppBar(
-        title: Text(
-          'IPD',
-          style: TextStyle(
-            color: AppColor.primaryColor,
-            fontWeight: FontWeight.w700,
-            fontFamily: CommonFontStyle.plusJakartaSans,
+    return GetBuilder<AdPatientController>(
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: AppColor.white,
+          drawer: Drawer(
+            backgroundColor: AppColor.white,
+            child: ListView(
+              children: [
+                const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextFormField(
+                    focusNode: controller.focusNode,
+                    cursorColor: AppColor.grey,
+                    controller: controller.textEditingController,
+                    decoration: InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: BorderSide(
+                          color: AppColor.lightgrey1,
+                        ),
+                      ),
+                      prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                      suffixIcon: controller.hasFocus
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.cancel_outlined,
+                                color: Color.fromARGB(255, 192, 191, 191),
+                              ),
+                              onPressed: () {
+                                controller.textEditingController.clear();
+                                controller.filterSearchAdPatientResults('');
+                              },
+                            )
+                          : null,
+                      hintText: AppString.search,
+                      hintStyle: TextStyle(
+                        color: AppColor.lightgrey1,
+                        fontFamily: CommonFontStyle.plusJakartaSans,
+                      ),
+                      filled: true,
+                      focusColor: AppColor.originalgrey,
+                      fillColor: AppColor.white,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      controller.filterSearchAdPatientResults(value);
+                    },
+                  ),
+                ),
+                GetBuilder<AdPatientController>(
+                  builder: (controller) {
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      shrinkWrap: true,
+                      itemCount: controller.filteredList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (controller.isPresViewerNavigating.value) return;
+                            controller.isPresViewerNavigating.value = true;
+
+                            Navigator.pop(context);
+                            // hideBottomBar.value = true;
+
+                            // controller.payrolListOnClk(index, context);
+                            PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: AdpatientScreen(),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            ).then((value) async {
+                              final bottomBarController = Get.put(BottomBarController());
+                              bottomBarController.currentIndex.value = -1;
+                              bottomBarController.persistentController.value.index = 0;
+                              bottomBarController.currentIndex.value = 0;
+                              bottomBarController.isAdmittedPatient.value = true;
+                              hideBottomBar.value = true;
+                              var dashboardController = Get.put(DashboardController());
+                              await dashboardController.getDashboardDataUsingToken();
+                            });
+                            controller.isPresViewerNavigating.value = false;
+                          },
+                          child: SizedBox(
+                            height: 40,
+                            child: ListTile(
+                              leading: Image.asset(
+                                controller.filteredList[index]['image'],
+                                height: 25,
+                                width: 25,
+                                color: AppColor.primaryColor,
+                              ),
+                              title: Text(
+                                controller.filteredList[index]['label'],
+                                style: TextStyle(
+                                  // fontSize: 16.0,
+                                  fontSize: getDynamicHeight(size: 0.018),
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    // controller.payrolListOnClk(index, context);
+                                    hideBottomBar.value = true;
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: AdpatientScreen(),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ).then((value) async {
+                                      final bottomBarController = Get.put(BottomBarController());
+                                      bottomBarController.currentIndex.value = -1;
+                                      bottomBarController.persistentController.value.index = 0;
+                                      bottomBarController.currentIndex.value = 0;
+                                      bottomBarController.isAdmittedPatient.value = true;
+                                      hideBottomBar.value = true;
+                                      var dashboardController = Get.put(DashboardController());
+                                      await dashboardController.getDashboardDataUsingToken();
+                                    });
+                                  },
+                                  icon: const Icon(Icons.arrow_forward_ios)),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
           ),
-        ),
-        backgroundColor: AppColor.white,
-        centerTitle: true,
-      ),
-      body: GetBuilder<AdPatientController>(
-        builder: (controller) {
-          if (controller.isLoading) {
-            return Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: getDynamicHeight(size: 0.102),
+          appBar: AppBar(
+            title: Text(
+              'IPD',
+              style: TextStyle(
+                color: AppColor.primaryColor,
+                fontWeight: FontWeight.w700,
+                fontFamily: CommonFontStyle.plusJakartaSans,
               ),
-              child: Center(child: CircularProgressIndicator()),
-            ); // 🔹 Jab tak data load ho raha hai
-          }
-          return ListView.builder(
-            padding: EdgeInsets.all(10),
-            itemCount: 1,
-            itemBuilder: (context, index) {
-              return _buildPatientCard("Admitted Patients", controller.patientsData.length, context, index);
+            ),
+            backgroundColor: AppColor.white,
+            centerTitle: true,
+          ),
+          body: GetBuilder<AdPatientController>(
+            builder: (controller) {
+              if (controller.isLoading) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: getDynamicHeight(size: 0.102),
+                  ),
+                  child: Center(child: CircularProgressIndicator()),
+                ); // 🔹 Jab tak data load ho raha hai
+              }
+              return ListView.builder(
+                padding: EdgeInsets.all(10),
+                itemCount: 1,
+                itemBuilder: (context, index) {
+                  return _buildPatientCard("Admitted Patients", controller.patientsData.length, context, index);
+                },
+              );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

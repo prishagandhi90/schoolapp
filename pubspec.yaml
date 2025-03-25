@@ -33,8 +33,6 @@ dependencies:
   anim_search_bar: ^2.0.3
   flutter_slidable: ^3.1.2
   universal_platform: ^1.0.0+1
-  marquee: ^2.3.0
-
   
 dev_dependencies:
   flutter_test:

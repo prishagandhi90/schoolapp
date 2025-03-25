@@ -11,7 +11,6 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view_copy.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_test.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
@@ -89,7 +88,7 @@ class AdpatientScreen extends StatelessWidget {
                       await controller.fetchDeptwisePatientList();
                     },
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.82,
+                      // height: MediaQuery.of(context).size.height * 0.82,
                       child: Column(
                         children: [
                           Padding(
@@ -264,8 +263,6 @@ class AdpatientScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // Patient Details
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8, top: 8),
                     child: Column(
@@ -274,64 +271,77 @@ class AdpatientScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              controller.filterpatientsData[index].patientName.toString(),
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.primaryColor),
+                            Expanded(
+                              child: Text(
+                                controller.filterpatientsData[index].patientName.toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.primaryColor,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
                             ),
-                            DropdownButtonHideUnderline(
-                              child: DropdownButton2<String>(
-                                customButton: Icon(Icons.menu, color: Colors.black),
-                                items: ["Lab Summary", "Lab Report"].map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item, style: TextStyle(fontSize: 14)),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) async {
-                                  if (value == "Lab Summary") {
-                                    // Get.to(LabSummaryScreen());
-                                    var adPatientController = Get.put(AdPatientController());
-                                    adPatientController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                                    adPatientController.uhid = controller.filterpatientsData[index].uhid ?? '';
-                                    adPatientController.update();
-                                    await adPatientController.fetchsummarylabdata();
-                                    Get.to(() => LabSummaryScreen());
-                                  } else if (value == "Lab Report") {
-                                    // Get.to(LabReportScreen());
-                                    var labreportsController = Get.put(LabReportsController());
-                                    labreportsController.showSwipe = true;
-                                    hideBottomBar.value = true;
-                                    labreportsController.labReportsList = [];
-                                    labreportsController.allReportsList = [];
-                                    labreportsController.allDatesList = [];
-                                    labreportsController.update();
-                                    labreportsController.showSwipe = true;
-                                    hideBottomBar.value = true;
-                                    labreportsController.getLabReporst(
-                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '', uhidNo: controller.filterpatientsData[index].uhid ?? '');
-                                    labreportsController.commonList = [];
-                                    labreportsController.dataContain = [];
-                                    labreportsController.scrollLister();
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: LabReportsViewCopy(
-                                        bedNumber: controller.filterpatientsData[index].bedNo ?? '',
-                                        patientName: controller.filterpatientsData[index].patientName ?? "",
-                                      ),
-                                      withNavBar: true,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ).then((value) {
+                            SizedBox(width: 10),
+                            SizedBox(
+                              width: 40,
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton2<String>(
+                                  customButton: Icon(Icons.menu, color: Colors.black),
+                                  items: ["Lab Summary", "Lab Report"].map((String item) {
+                                    return DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(item, style: TextStyle(fontSize: 14)),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) async {
+                                    if (value == "Lab Summary") {
+                                      // Get.to(LabSummaryScreen());
+                                      var adPatientController = Get.put(AdPatientController());
+                                      adPatientController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                                      adPatientController.uhid = controller.filterpatientsData[index].uhid ?? '';
+                                      adPatientController.update();
+                                      await adPatientController.fetchsummarylabdata();
+                                      Get.to(() => LabSummaryScreen_test());
+                                    } else if (value == "Lab Report") {
+                                      // Get.to(LabReportScreen());
+                                      var labreportsController = Get.put(LabReportsController());
+                                      labreportsController.showSwipe = true;
                                       hideBottomBar.value = true;
-                                    });
-                                  }
-                                },
-                                dropdownStyleData: DropdownStyleData(
-                                  width: 150, padding: EdgeInsets.only(right: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: Colors.white,
+                                      labreportsController.labReportsList = [];
+                                      labreportsController.allReportsList = [];
+                                      labreportsController.allDatesList = [];
+                                      labreportsController.update();
+                                      labreportsController.showSwipe = true;
+                                      hideBottomBar.value = true;
+                                      labreportsController.getLabReporst(
+                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '', uhidNo: controller.filterpatientsData[index].uhid ?? '');
+                                      labreportsController.commonList = [];
+                                      labreportsController.dataContain = [];
+                                      labreportsController.scrollLister();
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: LabReportsViewCopy(
+                                          bedNumber: controller.filterpatientsData[index].bedNo ?? '',
+                                          patientName: controller.filterpatientsData[index].patientName ?? "",
+                                        ),
+                                        withNavBar: true,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) {
+                                        hideBottomBar.value = true;
+                                      });
+                                    }
+                                  },
+                                  dropdownStyleData: DropdownStyleData(
+                                    width: 150, padding: EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                    ),
+                                    // offset: Offset(10, 5), // ✅ Dropdown menu exact menu end se start hoga
                                   ),
-                                  // offset: Offset(10, 5), // ✅ Dropdown menu exact menu end se start hoga
                                 ),
                               ),
                             ),

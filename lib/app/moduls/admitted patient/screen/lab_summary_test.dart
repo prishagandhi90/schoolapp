@@ -1,156 +1,69 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LabSummaryScreen_test extends StatelessWidget {
   LabSummaryScreen_test({Key? key}) : super(key: key);
 
   final double rowHeight = 50.0;
+  double maxHeight = 80.0;
 
   @override
+  @override
   Widget build(BuildContext context) {
-    Get.put(AdPatientController());
-
-    return GetBuilder<AdPatientController>(builder: (controller) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Lab Summary'),
-          centerTitle: true,
-        ),
-        body: CustomScrollView(slivers: [
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          // ✅ Fixed Header (SliverAppBar)
           SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 0.105 // Portrait Mode Height
-                : MediaQuery.of(context).size.height * 0.24, // Dynamic Height
-            pinned: false,
+            title: Text("Lab Summary"),
             floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 12, right: 12, bottom: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Patient Name",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          Text(
-                            "Status",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        cursorColor: AppColor.black,
-                        controller: controller.searchController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                            borderSide: BorderSide(color: AppColor.black),
-                          ),
-                          prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                          hintText: AppString.searchpatient,
-                          hintStyle: AppStyle.plusgrey,
-                          filled: true,
-                          fillColor: AppColor.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            pinned: true,
+            expandedHeight: 100,
           ),
+
+          // ✅ Table Content (Fixed First 3 Columns + Scrollable Other Columns)
           SliverFillRemaining(
             hasScrollBody: true,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: IntrinsicHeight(
-                child: DataTable(
-                  columnSpacing: 20,
-                  columns: [
-                    DataColumn(label: Text("Report")),
-                    DataColumn(label: Text("Test")),
-                    DataColumn(label: Text("Range")),
-                    ...controller.labdata.first.dateValues!.keys.toList().map((date) => DataColumn(label: Text(date))).toList(),
-                  ],
-                  rows: controller.labdata.map((row) {
-                    return DataRow(cells: [
-                      DataCell(_buildDataCell(row.formattest.toString())),
-                      DataCell(_buildDataCell(row.testName.toString())),
-                      DataCell(_buildDataCell(row.normalRange.toString())),
-                      ...controller.labdata.first.dateValues!.keys.map((date) {
-                        return DataCell(_buildDataCell(row.dateValues?[date] ?? "-"));
-                      }).toList(),
-                    ]);
-                  }).toList(),
+            child: Row(
+              children: [
+                // ✅ Fixed Columns (Report, Test, Range)
+                Container(
+                  width: 300, // Fixing the width of first 3 columns
+                  color: Colors.white,
+                  child: DataTable(
+                    columnSpacing: 20,
+                    columns: [
+                      DataColumn(label: Text("Report")),
+                      DataColumn(label: Text("Test")),
+                      DataColumn(label: Text("Range")),
+                    ],
+                    rows: List.generate(10, (index) {
+                      return DataRow(cells: [
+                        DataCell(Text("Report $index")),
+                        DataCell(Text("Test $index")),
+                        DataCell(Text("Range $index")),
+                      ]);
+                    }),
+                  ),
                 ),
-              ),
+
+                // ✅ Scrollable Columns (Remaining Data)
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columnSpacing: 20,
+                      columns: List.generate(5, (i) => DataColumn(label: Text("Date ${i + 1}"))),
+                      rows: List.generate(10, (index) {
+                        return DataRow(cells: List.generate(5, (i) => DataCell(Text("Data $index-$i"))));
+                      }),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ]),
-      );
-    });
-  }
-
-  Widget _buildDataCell(String value, {double width = 100}) {
-    List<String> lines = value.split("\n"); // ✅ Multi-line handling
-
-    return SizedBox(
-      width: width, // ✅ Fixed Width
-      child: IntrinsicHeight(
-        // ✅ Auto adjust height
-        child: Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: lines.map((line) {
-              List<String> parts = line.split("|");
-              String text = parts.first;
-              bool isHighlighted = parts.length > 1 && parts.last.trim() == "True";
-
-              return Flexible(
-                child: Container(
-                  // width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    text,
-                    // softWrap: true,
-                    // overflow: TextOverflow.visible, // ✅ Text wrap allow
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+        ],
       ),
     );
   }
-
-  //
 }
