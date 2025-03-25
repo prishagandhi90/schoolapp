@@ -277,6 +277,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                                                               child: StartingHeading(
                                                                                 allReportsData: indexWiseData,
                                                                                 dateLsiting: dateLists1,
+                                                                                // height: 30.0,
                                                                                 height: getHeight(indexWiseData, dateLists1),
                                                                               )),
                                                                           Padding(
