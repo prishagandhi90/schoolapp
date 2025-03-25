@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -112,19 +114,24 @@ class LabSummaryScreen extends StatelessWidget {
                               String normalRange = controller.labdata[index].normalRange.toString();
                               String unit = controller.labdata[index].unit.toString();
                               double maxHeight = getHeightOfWidget(normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
+                              double rowHeights = 0.00;
+                              rowHeights = getLabRowHeights(
+                                labData: controller.labdata[index],
+                                rowIndex: index,
+                              );
 
                               return Row(
                                 children: [
-                                  _buildFixedCell("${item.formattest.toString()}", height: maxHeight, width: getDynamicHeight(size: 0.090)),
+                                  _buildFixedCell("${item.formattest.toString()}", height: rowHeights, width: getDynamicHeight(size: 0.090)),
                                   _buildFixedCell(
                                     "${item.testName.toString()}",
-                                    height: maxHeight,
+                                    height: rowHeights,
                                     width: getDynamicHeight(size: 0.080),
                                     // heightContainer: maxHeight_Container,
                                   ),
                                   _buildFixedCell(
                                     "${item.normalRange.toString()}",
-                                    height: maxHeight,
+                                    height: rowHeights,
                                     width: getDynamicHeight(size: 0.085),
                                     // heightContainer: maxHeight_Container,
                                   ),
@@ -161,13 +168,18 @@ class LabSummaryScreen extends StatelessWidget {
                                   String normalRange = controller.labdata[index].normalRange.toString();
                                   String unit = controller.labdata[index].unit.toString();
                                   double maxHeight = getHeightOfWidget(normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
+                                  double rowHeights = 0.00;
+                                  rowHeights = getLabRowHeights(
+                                    labData: controller.labdata[index],
+                                    rowIndex: index,
+                                  );
 
                                   return Row(
                                     children: item.dateValues!.entries.map((entry) {
                                       return _buildDataCell(
                                         "${entry.value}",
                                         width: getDynamicHeight(size: 0.130),
-                                        height: maxHeight,
+                                        height: rowHeights,
                                         // containerHeight: maxHeight_Container,
                                       );
                                     }).toList(),
@@ -188,6 +200,126 @@ class LabSummaryScreen extends StatelessWidget {
       );
     });
   }
+
+  double getLabRowHeights({
+    required LabData labData, // List of LabData objects
+    required int rowIndex, // Current row index
+  }) {
+    List<String> dateKeys = labData.dateValues?.keys.toList() ?? [];
+
+    // ✅ Extract all column texts
+    List<String> columnTexts = [
+      labData.formattest ?? "",
+      labData.testName ?? "",
+      labData.normalRange ?? "",
+      labData.unit ?? "",
+      ...dateKeys.map((date) => labData.dateValues?[date] ?? "")
+    ];
+
+    List<double> rowHeights = [];
+    double colWidth = 0;
+    double padding = getDynamicHeight(size: 0.012); // ✅ Padding added
+
+    for (int i = 0; i < columnTexts.length; i++) {
+      if (i == 0) {
+        colWidth = getDynamicHeight(size: 0.090);
+      } else if (i == 1) {
+        colWidth = getDynamicHeight(size: 0.080);
+      } else if (i == 2) {
+        colWidth = getDynamicHeight(size: 0.085);
+      } else {
+        colWidth = getDynamicHeight(size: 0.130);
+      }
+
+      // ✅ Adjust maxWidth for padding
+      double adjustedColWidth = colWidth - (2 * padding);
+
+      // ✅ Split text based on "|" to check for highlighting condition
+      List<String> parts = columnTexts[i].split("|");
+      String text = parts.first;
+      bool isHighlighted = parts.length > 1 && parts.last.trim() == "True";
+
+      TextPainter textPainter = TextPainter(
+        text: TextSpan(
+          text: text,
+          style: TextStyle(
+            fontSize: getDynamicHeight(size: 0.015),
+            backgroundColor: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
+          ),
+        ),
+        maxLines: null,
+        textDirection: TextDirection.ltr,
+      )..layout(maxWidth: adjustedColWidth); // ✅ Adjust width to account for padding
+
+      rowHeights.add(textPainter.height + (2 * padding)); // ✅ Add padding to final height
+    }
+
+    return rowHeights.isNotEmpty ? rowHeights.reduce(max) : 0;
+  }
+
+  // double getLabRowHeights({
+  //   required LabData labData, // List of LabData objects
+  //   required int rowIndex, // Current row index
+  //   // required List<double> columnWidths, // Column widths list
+  //   // required TextStyle textStyle, // Text style for font size
+  // }) {
+  //   // if (rowIndex >= labDataList.length) return 0.00; // Prevent out-of-bound error
+
+  //   // LabData labData = labDataList[rowIndex];
+  //   List<String> dateKeys = labData.dateValues?.keys.toList() ?? [];
+
+  //   // ✅ Extract all column texts
+  //   List<String> columnTexts = [
+  //     labData.formattest ?? "",
+  //     labData.testName ?? "",
+  //     labData.normalRange ?? "",
+  //     labData.unit ?? "",
+  //     ...dateKeys.map((date) => labData.dateValues?[date] ?? "")
+  //   ];
+
+  //   List<double> rowHeights = [];
+  //   double colWidth = 0;
+
+  //   for (int i = 0; i < columnTexts.length; i++) {
+  //     if (i == 0) {
+  //       colWidth = getDynamicHeight(size: 0.090);
+  //     } else if (i == 1) {
+  //       colWidth = getDynamicHeight(size: 0.080);
+  //     } else if (i == 2) {
+  //       colWidth = getDynamicHeight(size: 0.085);
+  //     } else {
+  //       colWidth = getDynamicHeight(size: 0.130);
+  //     }
+  //     TextPainter textPainter = TextPainter(
+  //       text: TextSpan(
+  //         text: columnTexts[i],
+  //         style: TextStyle(
+  //           fontSize: getDynamicHeight(size: 0.015),
+  //         ),
+  //       ),
+  //       maxLines: null, // Allow multi-line wrapping
+  //       textDirection: TextDirection.ltr,
+  //     )..layout(maxWidth: colWidth); // Set max width for wrapping
+
+  //     rowHeights.add(textPainter.height); // Store calculated height
+  //   }
+  //   return rowHeights.isNotEmpty ? rowHeights.reduce(max) : 0;
+  //   // return rowHeights;
+  // }
+
+  // double getCellHeight({
+  //   required String text,
+  //   required double width,
+  //   required TextStyle textStyle,
+  // }) {
+  //   TextPainter textPainter = TextPainter(
+  //     text: TextSpan(text: text, style: textStyle),
+  //     maxLines: null, // unlimited lines (so text wraps properly)
+  //     textDirection: TextDirection.ltr,
+  //   )..layout(maxWidth: width); // Set the max width for wrapping
+
+  //   return textPainter.height; // Returns the exact required height
+  // }
 
   getHeight(List wholeData, List alldata, List datesListing) {
     int formatTest_index = 0;
@@ -350,65 +482,6 @@ class LabSummaryScreen extends StatelessWidget {
     return getDynamicHeight(size: 0.055);
   }
 
-  // getHeightOfWidget(String text1, String text2, List alldata, List datesListing, int index) {
-  //   // print((text1.length + text2.length));
-  //   // if ((text1.length + text2.length) > 14) {
-  //   //   return getDynamicHeight(size: 0.125);
-  //   // } else {
-  //   double height_testName = 0;
-  //   double height_normalRange = 0;
-  //   double height_formatTest = 0;
-  //   double height_index2 = 0;
-  //   double height_index3 = 0;
-  //   double height_index5 = 0;
-  //   double height_index6 = 0;
-  //   for (int i = 0; i < alldata.length; i++) {
-  //     for (int j = 0; j < datesListing.length; j++) {
-  //       String? value = alldata[i].dateValues![datesListing[j]];
-  //       if (value != null) {
-  //         if (value.length > 70) {
-  //           height_index2 = getDynamicHeight(size: 0.350);
-  //         } else if (value.length > 50) {
-  //           height_index3 = getDynamicHeight(size: 0.250);
-  //         } else if (value.length > 25) {
-  //           height_index5 = getDynamicHeight(size: 0.175);
-  //         } else if (value.length > 14) {
-  //           height_index6 = getDynamicHeight(size: 0.125);
-  //         } else {
-  //           if (alldata[i].formattest.length > 25) {
-  //             height_formatTest = getDynamicHeight(size: 0.185);
-  //           } else if (alldata[i].formattest.length > 14) {
-  //             height_formatTest = getDynamicHeight(size: 0.125);
-  //           } else if (alldata[i].formattest.length > 7) {
-  //             height_formatTest = getDynamicHeight(size: 0.065);
-  //           }
-
-  //           if (alldata[i].testName.toString().length > 25) {
-  //             height_testName = getDynamicHeight(size: 0.10);
-  //           } else if (alldata[i].testName.toString().length > 14) {
-  //             height_testName = getDynamicHeight(size: 0.125);
-  //           } else if (alldata[i].testName.toString().length > 7) {
-  //             height_testName = getDynamicHeight(size: 0.085);
-  //           }
-
-  //           if ((text1.length + text2.length) > 25) {
-  //             height_normalRange = getDynamicHeight(size: 0.185);
-  //           } else if ((text1.length + text2.length) > 14) {
-  //             height_normalRange = getDynamicHeight(size: 0.125);
-  //           } else if ((text1.length + text2.length) > 7) {
-  //             height_normalRange = getDynamicHeight(size: 0.065);
-  //           }
-  //         }
-
-  //         double highestValue = [height_formatTest, height_normalRange, height_index2, height_index3, height_testName, height_index5, height_index6]
-  //             .reduce((value, element) => value > element ? value : element);
-  //         return highestValue;
-  //       }
-  //     }
-  //   }
-  //   return getDynamicHeight(size: 0.055);
-  // }
-
   Widget _buildFixedHeaderCell(String text, {double width = 100, bool overflow = false, bool isLast = false}) {
     return Container(
       width: width,
@@ -469,6 +542,7 @@ class LabSummaryScreen extends StatelessWidget {
       ),
       child: Text(
         text,
+        style: TextStyle(fontSize: getDynamicHeight(size: 0.015)),
         maxLines: null,
         overflow: overflow ? TextOverflow.ellipsis : TextOverflow.visible,
       ),
@@ -500,7 +574,7 @@ class LabSummaryScreen extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: getDynamicHeight(size: 0.015)),
               textAlign: TextAlign.left,
             ),
           );
@@ -508,45 +582,4 @@ class LabSummaryScreen extends StatelessWidget {
       ),
     );
   }
-
-  // Widget _buildSlidableText(String text, double maxWidth, double maxHeight, double maxHeightContainer) {
-  //   List<String> lines = text.split("\n");
-
-  //   return Container(
-  //       width: maxWidth,
-  //       // height: maxHeight,
-  //       decoration: BoxDecoration(color: Colors.transparent),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: lines.map((line) {
-  //           List<String> parts = line.split("|");
-  //           String textPart = parts.first;
-  //           List<String> labStatusParts = parts.length > 1 ? parts.last.trim().split("~") : [];
-  //           bool isFontColorRed = false;
-  //           bool isHighlighted = false;
-  //           if (labStatusParts.length > 1) {
-  //             isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
-  //           }
-
-  //           isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == "True";
-
-  //           return Container(
-  //             width: double.infinity,
-  //             decoration: BoxDecoration(
-  //               color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.transparent,
-  //               borderRadius: BorderRadius.circular(4),
-  //             ),
-  //             child: Text(
-  //               textPart,
-  //               style: TextStyle(
-  //                 fontSize: Sizes.px13,
-  //                 color: isFontColorRed ? Colors.red : Colors.black,
-  //                 fontWeight: isFontColorRed ? FontWeight.bold : FontWeight.normal,
-  //               ),
-  //               // softWrap: true,
-  //             ),
-  //           );
-  //         }).toList(),
-  //       ));
-  // }
 }

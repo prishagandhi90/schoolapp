@@ -11,6 +11,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view_copy.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_test.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
@@ -304,7 +305,7 @@ class AdpatientScreen extends StatelessWidget {
                                       adPatientController.uhid = controller.filterpatientsData[index].uhid ?? '';
                                       adPatientController.update();
                                       await adPatientController.fetchsummarylabdata();
-                                      Get.to(() => LabSummaryScreen_test());
+                                      Get.to(() => LabSummaryScreen());
                                     } else if (value == "Lab Report") {
                                       // Get.to(LabReportScreen());
                                       var labreportsController = Get.put(LabReportsController());
