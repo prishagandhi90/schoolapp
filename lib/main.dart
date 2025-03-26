@@ -87,8 +87,8 @@ void main() async {
             debugShowCheckedModeBanner: false,
             // useInheritedMediaQuery: true,
             locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
-            // builder: EasyLoading.init(),
+            // builder: DevicePreview.appBuilder,
+            builder: EasyLoading.init(),
             title: 'Flutter Demo',
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),

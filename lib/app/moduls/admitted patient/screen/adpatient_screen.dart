@@ -304,6 +304,7 @@ class AdpatientScreen extends StatelessWidget {
                                       adPatientController.uhid = controller.filterpatientsData[index].uhid ?? '';
                                       adPatientController.update();
                                       await adPatientController.fetchsummarylabdata();
+                                      await adPatientController.resetForm();
                                       Get.to(() => LabSummaryScreen());
                                     } else if (value == "Lab Report") {
                                       // Get.to(LabReportScreen());
@@ -317,7 +318,8 @@ class AdpatientScreen extends StatelessWidget {
                                       labreportsController.showSwipe = true;
                                       hideBottomBar.value = true;
                                       labreportsController.getLabReporst(
-                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '', uhidNo: controller.filterpatientsData[index].uhid ?? '');
+                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                          uhidNo: controller.filterpatientsData[index].uhid ?? '');
                                       labreportsController.commonList = [];
                                       labreportsController.dataContain = [];
                                       labreportsController.scrollLister();

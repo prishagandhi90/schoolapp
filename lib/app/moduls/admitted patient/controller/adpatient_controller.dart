@@ -20,6 +20,7 @@ import '../model/adpatientfilter_model.dart';
 
 class AdPatientController extends GetxController {
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController labSummarySearchController = TextEditingController();
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
   String ipdNo = '', uhid = '', patientName = '', bedNo = '';
@@ -28,6 +29,7 @@ class AdPatientController extends GetxController {
   List<PatientdataModel> patientsData = [];
   List<PatientdataModel> filterpatientsData = [];
   List<LabData> labdata = [];
+  List<LabData> filterlabdata = [];
   List<FilterPatientList> filterdata = [];
   List<String> selectedOrgsList = [];
   List<String> selectedFloorsList = [];
@@ -65,19 +67,19 @@ class AdPatientController extends GetxController {
     update();
     // fetchsummarylabdata();
 
-    adPatientScrollController.addListener(() {
-      if (adPatientScrollController.position.userScrollDirection == ScrollDirection.forward) {
-        if (hideBottomBar.value) {
-          hideBottomBar.value = false;
-          bottomBarController.update();
-        }
-      } else if (adPatientScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-        if (!hideBottomBar.value) {
-          hideBottomBar.value = true;
-          bottomBarController.update();
-        }
-      }
-    });
+    // adPatientScrollController.addListener(() {
+    //   if (adPatientScrollController.position.userScrollDirection == ScrollDirection.forward) {
+    //     if (hideBottomBar.value) {
+    //       hideBottomBar.value = false;
+    //       bottomBarController.update();
+    //     }
+    //   } else if (adPatientScrollController.position.userScrollDirection == ScrollDirection.reverse) {
+    //     if (!hideBottomBar.value) {
+    //       hideBottomBar.value = true;
+    //       bottomBarController.update();
+    //     }
+    //   }
+    // });
     filteredList = List.from(originalList);
   }
 
@@ -206,14 +208,27 @@ class AdPatientController extends GetxController {
 
         patientName = rsponsePatientlabsummarydata.data?.patientName ?? "";
         bedNo = rsponsePatientlabsummarydata.data?.bedNo ?? "";
+
+        if (rsponsePatientlabsummarydata.data != null && rsponsePatientlabsummarydata.data!.labData!.isNotEmpty) {
+          filterlabdata = rsponsePatientlabsummarydata.data!.labData ?? [];
+        } else {
+          filterlabdata = [];
+        }
+
         isLoading = false;
       } else if (rsponsePatientlabsummarydata.statusCode == 401) {
+        filterlabdata.clear();
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (rsponsePatientlabsummarydata.statusCode == 400) {
+        filterlabdata.clear();
+        labdata.clear();
         isLoading = false;
       } else {
+        filterlabdata.clear();
+        labdata.clear();
+        isLoading = false;
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
@@ -222,7 +237,7 @@ class AdPatientController extends GetxController {
       update();
     }
     isLoading = false;
-    return [];
+    return labdata.toList();
   }
 
   void filterSearchResults(String query) {
@@ -235,6 +250,21 @@ class AdPatientController extends GetxController {
 
         // Check if query matches either patientName or ipdNo
         return patientName.contains(query.toLowerCase()) || ipdNo.contains(query.toUpperCase());
+      }).toList();
+    }
+    update();
+  }
+
+  void filterLabSummarySearchResults(String query) {
+    if (query.isEmpty) {
+      filterlabdata = labdata; // Show all data if search is empty
+    } else {
+      filterlabdata = labdata.where((item) {
+        final formatTest = (item.formattest ?? "").toLowerCase();
+        final testName = (item.testName ?? "").toLowerCase();
+
+        // Check if query matches either patientName or ipdNo
+        return formatTest.contains(query.toLowerCase()) || testName.contains(query.toLowerCase());
       }).toList();
     }
     update();
@@ -769,6 +799,7 @@ class AdPatientController extends GetxController {
     isSearchActive = false;
     filterpatientsData.clear();
     patientsData.clear();
+    labSummarySearchController.clear();
     update();
   }
 }

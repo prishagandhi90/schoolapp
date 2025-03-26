@@ -21,6 +21,22 @@ class LabSummaryScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text('Lab Summary'),
+          leading: IconButton(
+              onPressed: () {
+                // final bottomBarController = Get.find<BottomBarController>();
+                // bottomBarController.isAdmittedPatient.value = true;
+                controller.labSummarySearchController.clear(); // Search text clear karna
+                // controller.activateSearch(false); // Search mode deactivate karna
+                // print("After reset: sortBySelected = ${controller.sortBySelected}");
+                controller.sortBySelected = null;
+                controller.update();
+
+                // **Fresh Data fetch karna**
+                controller.fetchDeptwisePatientList();
+
+                Navigator.pop(context); // UI ko refresh karna
+              },
+              icon: Icon(Icons.arrow_back_ios, color: AppColor.black)),
           centerTitle: true,
         ),
         body: CustomScrollView(slivers: [
@@ -56,7 +72,7 @@ class LabSummaryScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "Bed: ${controller.bedNo}",
+                            controller.bedNo,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: getDynamicHeight(size: 0.013),
@@ -69,19 +85,31 @@ class LabSummaryScreen extends StatelessWidget {
                         height: getDynamicHeight(size: 0.050),
                         child: TextFormField(
                           cursorColor: AppColor.black,
-                          controller: controller.searchController,
+                          controller: controller.labSummarySearchController,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: getDynamicHeight(size: 0.010),
-                            ),
+                            contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.lightgrey1, width: getDynamicHeight(size: 0.0005)),
+                              borderSide: BorderSide(
+                                color: AppColor.lightgrey1,
+                                width: getDynamicHeight(size: 0.00105),
+                              ),
                               borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                              borderSide: BorderSide(color: AppColor.black),
+                              borderSide: BorderSide(
+                                color: AppColor.black,
+                              ),
                             ),
+                            suffixIcon: controller.labSummarySearchController.text.trim().isNotEmpty
+                                ? GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                      controller.labSummarySearchController.clear();
+                                      controller.fetchsummarylabdata();
+                                    },
+                                    child: const Icon(Icons.cancel_outlined))
+                                : const SizedBox(),
                             prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                             hintText: AppString.search,
                             hintStyle: AppStyle.plusgrey,
@@ -91,7 +119,52 @@ class LabSummaryScreen extends StatelessWidget {
                               borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
                             ),
                           ),
+                          onTap: () {
+                            controller.update();
+                          },
+                          onChanged: (value) {
+                            controller.filterLabSummarySearchResults(value);
+                            // controller.searchController.clear();
+                          },
+                          onTapOutside: (event) {
+                            FocusScope.of(context).unfocus();
+                            Future.delayed(const Duration(milliseconds: 300));
+                            controller.update();
+                          },
+                          onFieldSubmitted: (v) {
+                            if (controller.labSummarySearchController.text.trim().isNotEmpty) {
+                              controller.fetchsummarylabdata();
+                              controller.labSummarySearchController.clear();
+                            }
+                            Future.delayed(const Duration(milliseconds: 800));
+                            controller.update();
+                          },
                         ),
+                        // TextFormField(
+                        //   cursorColor: AppColor.black,
+                        //   controller: controller.searchController,
+                        //   decoration: InputDecoration(
+                        //     contentPadding: EdgeInsets.symmetric(
+                        //       horizontal: getDynamicHeight(size: 0.010),
+                        //     ),
+                        //     focusedBorder: OutlineInputBorder(
+                        //       borderSide: BorderSide(color: AppColor.lightgrey1, width: getDynamicHeight(size: 0.0005)),
+                        //       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                        //     ),
+                        //     enabledBorder: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                        //       borderSide: BorderSide(color: AppColor.black),
+                        //     ),
+                        //     prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                        //     hintText: AppString.search,
+                        //     hintStyle: AppStyle.plusgrey,
+                        //     filled: true,
+                        //     fillColor: AppColor.white,
+                        //     border: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
+                        //     ),
+                        //   ),
+                        // ),
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.005)),
                     ],
@@ -124,12 +197,12 @@ class LabSummaryScreen extends StatelessWidget {
                         child: SingleChildScrollView(
                           controller: controller.verticalScrollControllerLeft,
                           child: Column(
-                            children: List.generate(controller.labdata.length, (index) {
-                              var item = controller.labdata[index]; // API data
+                            children: List.generate(controller.filterlabdata.length, (index) {
+                              var item = controller.filterlabdata[index]; // API data
                               // double maxHeight = _getMaxRowHeight(index, controller);
                               double rowHeights = 0.00;
                               rowHeights = getLabRowHeights(
-                                labData: controller.labdata[index],
+                                labData: controller.filterlabdata[index],
                                 rowIndex: index,
                                 context: context,
                               );
@@ -170,8 +243,8 @@ class LabSummaryScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Row(
-                            children: controller.labdata.isNotEmpty
-                                ? controller.labdata[0].dateValues!.keys.map((date) {
+                            children: controller.filterlabdata.isNotEmpty
+                                ? controller.filterlabdata[0].dateValues!.keys.map((date) {
                                     return _buildHeaderCell(date, width: getDynamicHeight(size: 0.130));
                                   }).toList()
                                 : [],
@@ -180,11 +253,11 @@ class LabSummaryScreen extends StatelessWidget {
                             child: SingleChildScrollView(
                               controller: controller.verticalScrollControllerRight,
                               child: Column(
-                                children: List.generate(controller.labdata.length, (index) {
-                                  var item = controller.labdata[index]; // API data
+                                children: List.generate(controller.filterlabdata.length, (index) {
+                                  var item = controller.filterlabdata[index]; // API data
                                   double rowHeights = 0.00;
                                   rowHeights = getLabRowHeights(
-                                    labData: controller.labdata[index],
+                                    labData: controller.filterlabdata[index],
                                     rowIndex: index,
                                     context: context,
                                   );
@@ -234,7 +307,7 @@ class LabSummaryScreen extends StatelessWidget {
 
     List<double> rowHeights = [];
     double colWidth = 0;
-    double padding = getDynamicHeight(size: 0.013); // ✅ Padding added
+    double padding = getDynamicHeight(size: 0.0178); // ✅ Padding added
 
     for (int i = 0; i < columnTexts.length; i++) {
       if (i == 0) {
@@ -249,29 +322,46 @@ class LabSummaryScreen extends StatelessWidget {
         colWidth = getDynamicHeight(size: 0.130);
       }
 
-      double adaptivePadding = getDynamicHeight(size: MediaQuery.of(context!).size.height < 100 ? 0.005 : 0.015);
-      padding = adaptivePadding;
-      // ✅ Adjust maxWidth for padding
-      double adjustedColWidth = colWidth - (2 * padding);
-
       // ✅ Split text based on "|" to check for highlighting condition
       List<String> parts = columnTexts[i].split("|");
-      String text = parts.first;
+      String textPart = parts.first;
       bool isHighlighted = parts.length > 1 && parts.last.trim() == "True";
+      List<String> labStatusParts = parts.length > 1 ? parts.last.trim().split("~") : [];
+      bool isFontColorRed = false;
+      if (labStatusParts.length > 1) {
+        isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
+      }
+
+      isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == "True";
+
+      double normalPadding = 0.012;
+      if (i > 2 && textPart.length <= 24 && MediaQuery.of(context!).size.height > 680) {
+        normalPadding = 0.012;
+      } else if (i > 2 && textPart.length > 24 && MediaQuery.of(context!).size.height > 680) {
+        normalPadding = 0.0185;
+      }
+
+      double adaptivePadding = getDynamicHeight(
+        size: MediaQuery.of(context!).size.height < 680 ? 0.029 : normalPadding,
+      );
+      padding = adaptivePadding;
+      // ✅ Adjust maxWidth for padding
+      double adjustedColWidth = colWidth - (getDynamicHeight(size: 0.0021) * padding);
 
       TextPainter textPainter = TextPainter(
         text: TextSpan(
-          text: text,
+          text: textPart,
           style: TextStyle(
             fontSize: getDynamicHeight(size: 0.013),
-            backgroundColor: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
+            backgroundColor: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.transparent,
+            color: isFontColorRed ? Colors.red : Colors.black,
           ),
         ),
         maxLines: null,
         textDirection: TextDirection.ltr,
       )..layout(maxWidth: adjustedColWidth); // ✅ Adjust width to account for padding
 
-      rowHeights.add(textPainter.height + (2 * padding)); // ✅ Add padding to final height
+      rowHeights.add(textPainter.height + (getDynamicHeight(size: 0.0022) * padding)); // ✅ Add padding to final height
     }
 
     return rowHeights.isNotEmpty ? rowHeights.reduce(max) : 0;
@@ -333,7 +423,7 @@ class LabSummaryScreen extends StatelessWidget {
       builder: (controller) {
         return GestureDetector(
           onLongPress: () {
-            if (controller.labdata[index].normalRange == null || controller.labdata[index].normalRange == "") {
+            if (controller.filterlabdata[index].normalRange == null || controller.filterlabdata[index].normalRange == "") {
               return;
             }
             controller.showSimpleDialog(context, index);
@@ -364,7 +454,7 @@ class LabSummaryScreen extends StatelessWidget {
       builder: (controller) {
         return GestureDetector(
           onLongPress: () {
-            if (controller.labdata[index].normalRange == null || controller.labdata[index].normalRange == "") {
+            if (controller.filterlabdata[index].normalRange == null || controller.filterlabdata[index].normalRange == "") {
               return;
             }
             controller.showSimpleDialog(context, index);
@@ -382,20 +472,35 @@ class LabSummaryScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: lines.map((line) {
                 List<String> parts = line.split("|");
-                String text = parts.first;
-                bool isHighlighted = parts.length > 1 && parts.last.trim() == "True";
+                String textPart = parts.first;
+                List<String> labStatusParts = parts.length > 1 ? parts.last.trim().split("~") : [];
+                bool isFontColorRed = false;
+                bool isHighlighted = false;
+                if (labStatusParts.length > 1) {
+                  isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
+                }
+
+                isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == "True";
 
                 return Container(
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(4),
+                  padding: EdgeInsets.all(
+                    getDynamicHeight(size: 0.00417),
+                  ),
                   decoration: BoxDecoration(
-                    color: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(4),
+                    color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(
+                      getDynamicHeight(size: 0.00417),
+                    ),
                   ),
                   child: Text(
-                    text,
-                    style: TextStyle(fontSize: getDynamicHeight(size: 0.013)),
+                    textPart,
+                    style: TextStyle(
+                      fontSize: getDynamicHeight(size: 0.013),
+                      color: isFontColorRed ? Colors.red : Colors.black,
+                      // fontWeight: isFontColorRed ? FontWeight.bold : FontWeight.normal,
+                    ),
                     textAlign: TextAlign.left,
                   ),
                 );

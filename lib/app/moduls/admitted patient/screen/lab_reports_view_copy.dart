@@ -132,7 +132,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                             child: AppText(
                                               text: patientName,
                                               fontSize: Sizes.px14,
-                                              fontColor: AppColor.buttonColor,
+                                              fontColor: AppColor.black,
                                               fontWeight: FontWeight.w600,
                                               maxLine: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -143,7 +143,7 @@ class LabReportsViewCopy extends GetView<LabReportsController> {
                                           ),
                                           bedNumber != ''
                                               ? AppText(
-                                                  text: 'Bed: $bedNumber',
+                                                  text: bedNumber,
                                                   fontSize: Sizes.px14,
                                                   fontColor: AppColor.black6B6B6B,
                                                   fontWeight: FontWeight.w500,

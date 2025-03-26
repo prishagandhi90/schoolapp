@@ -108,7 +108,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
                               screen: AdpatientScreen(),
-                              withNavBar: true,
+                              withNavBar: false,
                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                             ).then((value) async {
                               final bottomBarController = Get.put(BottomBarController());
@@ -147,7 +147,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                                     PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen: AdpatientScreen(),
-                                      withNavBar: true,
+                                      withNavBar: false,
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ).then((value) async {
                                       final bottomBarController = Get.put(BottomBarController());
@@ -213,7 +213,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: AdpatientScreen(),
-          withNavBar: true,
+          withNavBar: false,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {
           final controller = Get.put(AdPatientController());
