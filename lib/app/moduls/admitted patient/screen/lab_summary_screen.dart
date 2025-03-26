@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class LabSummaryScreen extends StatelessWidget {
   LabSummaryScreen({Key? key}) : super(key: key);
 
-  final double rowHeight = 50.0;
+  final double rowHeight = getDynamicHeight(size: 0.0528);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,11 @@ class LabSummaryScreen extends StatelessWidget {
               background: Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 12, right: 12, bottom: 10),
+                  padding: EdgeInsets.only(
+                    left: getDynamicHeight(size: 0.005),
+                    right: getDynamicHeight(size: 0.005),
+                    // bottom: getDynamicHeight(size: 0.003),
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,22 +51,28 @@ class LabSummaryScreen extends StatelessWidget {
                         children: [
                           Text(
                             "Patient Name",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getDynamicHeight(size: 0.013),
+                            ),
                           ),
                           Text(
                             "Status",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getDynamicHeight(size: 0.013),
+                            ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: getDynamicHeight(size: 0.005)),
                       TextFormField(
                         cursorColor: AppColor.black,
                         controller: controller.searchController,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
+                            borderSide: BorderSide(color: AppColor.lightgrey1, width: getDynamicHeight(size: 0.0005)),
                             borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                           ),
                           enabledBorder: OutlineInputBorder(
@@ -99,7 +109,10 @@ class LabSummaryScreen extends StatelessWidget {
                         children: [
                           _buildFixedHeaderCell("Report", width: getDynamicHeight(size: 0.090)),
                           _buildFixedHeaderCell("Test", width: getDynamicHeight(size: 0.080)),
-                          _buildFixedHeaderCell("Range", width: getDynamicHeight(size: 0.085), overflow: true),
+                          _buildFixedHeaderCell(
+                            "Range",
+                            width: getDynamicHeight(size: 0.085),
+                          ),
                         ],
                       ),
                       Flexible(
@@ -110,12 +123,10 @@ class LabSummaryScreen extends StatelessWidget {
                               var item = controller.labdata[index]; // API data
                               // double maxHeight = _getMaxRowHeight(index, controller);
                               List<LabData> singleItemList = [controller.labdata[index]];
-                              double maxHeight_Container =
-                                  getHeight(controller.labdata, singleItemList, controller.labdata[index].dateValues!.keys.toList());
+
                               String normalRange = controller.labdata[index].normalRange.toString();
                               String unit = controller.labdata[index].unit.toString();
-                              double maxHeight = getHeightOfWidget(
-                                  normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
+
                               double rowHeights = 0.00;
                               rowHeights = getLabRowHeights(
                                 labData: controller.labdata[index],
@@ -170,12 +181,10 @@ class LabSummaryScreen extends StatelessWidget {
                                   var item = controller.labdata[index]; // API data
                                   // double maxHeight = _getMaxRowHeight(index, controller);
                                   List<LabData> singleItemList = [controller.labdata[index]];
-                                  double maxHeight_Container =
-                                      getHeight(controller.labdata, singleItemList, controller.labdata[index].dateValues!.keys.toList());
+
                                   String normalRange = controller.labdata[index].normalRange.toString();
                                   String unit = controller.labdata[index].unit.toString();
-                                  double maxHeight = getHeightOfWidget(
-                                      normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
+
                                   double rowHeights = 0.00;
                                   rowHeights = getLabRowHeights(
                                     labData: controller.labdata[index],
@@ -265,278 +274,48 @@ class LabSummaryScreen extends StatelessWidget {
     return rowHeights.isNotEmpty ? rowHeights.reduce(max) : 0;
   }
 
-  // double getLabRowHeights({
-  //   required LabData labData, // List of LabData objects
-  //   required int rowIndex, // Current row index
-  //   // required List<double> columnWidths, // Column widths list
-  //   // required TextStyle textStyle, // Text style for font size
-  // }) {
-  //   // if (rowIndex >= labDataList.length) return 0.00; // Prevent out-of-bound error
-
-  //   // LabData labData = labDataList[rowIndex];
-  //   List<String> dateKeys = labData.dateValues?.keys.toList() ?? [];
-
-  //   // ✅ Extract all column texts
-  //   List<String> columnTexts = [
-  //     labData.formattest ?? "",
-  //     labData.testName ?? "",
-  //     labData.normalRange ?? "",
-  //     labData.unit ?? "",
-  //     ...dateKeys.map((date) => labData.dateValues?[date] ?? "")
-  //   ];
-
-  //   List<double> rowHeights = [];
-  //   double colWidth = 0;
-
-  //   for (int i = 0; i < columnTexts.length; i++) {
-  //     if (i == 0) {
-  //       colWidth = getDynamicHeight(size: 0.090);
-  //     } else if (i == 1) {
-  //       colWidth = getDynamicHeight(size: 0.080);
-  //     } else if (i == 2) {
-  //       colWidth = getDynamicHeight(size: 0.085);
-  //     } else {
-  //       colWidth = getDynamicHeight(size: 0.130);
-  //     }
-  //     TextPainter textPainter = TextPainter(
-  //       text: TextSpan(
-  //         text: columnTexts[i],
-  //         style: TextStyle(
-  //           fontSize: getDynamicHeight(size: 0.015),
-  //         ),
-  //       ),
-  //       maxLines: null, // Allow multi-line wrapping
-  //       textDirection: TextDirection.ltr,
-  //     )..layout(maxWidth: colWidth); // Set max width for wrapping
-
-  //     rowHeights.add(textPainter.height); // Store calculated height
-  //   }
-  //   return rowHeights.isNotEmpty ? rowHeights.reduce(max) : 0;
-  //   // return rowHeights;
-  // }
-
-  // double getCellHeight({
-  //   required String text,
-  //   required double width,
-  //   required TextStyle textStyle,
-  // }) {
-  //   TextPainter textPainter = TextPainter(
-  //     text: TextSpan(text: text, style: textStyle),
-  //     maxLines: null, // unlimited lines (so text wraps properly)
-  //     textDirection: TextDirection.ltr,
-  //   )..layout(maxWidth: width); // Set the max width for wrapping
-
-  //   return textPainter.height; // Returns the exact required height
-  // }
-
-  getHeight(List wholeData, List alldata, List datesListing) {
-    int formatTest_index = 0;
-    int normalRange_index = 0;
-    int index2 = 0;
-    int index3 = 0;
-    int testName_index = 0;
-    int index5 = 0;
-    int index6 = 0;
-    List indexList = [];
-
-    for (int i = 0; i < alldata.length; i++) {
-      for (int j = 0; j < datesListing.length; j++) {
-        String? value = alldata[i].dateValues![datesListing[j]];
-        if (value != null) {
-          if (value.length > 70) {
-            // print('yes..${alldata[i][datesListing[j]].toString()}');
-            if (indexList.contains(i)) {
-            } else {
-              indexList.add(i);
-              index6++;
-            }
-          } else if (value.length > 50) {
-            // print('yes..${alldata[i][datesListing[j]].toString()}');
-            if (indexList.contains(i)) {
-            } else {
-              indexList.add(i);
-              index5++;
-            }
-          } else if (value.length > 25) {
-            // print('yes..${alldata[i][datesListing[j]].toString()}');
-            if (indexList.contains(i)) {
-            } else {
-              indexList.add(i);
-              index3++;
-            }
-          } else if (value.length > 14) {
-            if (indexList.contains(i)) {
-            } else {
-              index2++;
-            }
-          }
-        }
-      }
-
-      if (alldata[i].formattest.toString().length > 14 && alldata[i].formattest.toString().length <= 28) {
-        formatTest_index++;
-      } else if (alldata[i].formattest.toString().length > 28 && alldata[i].formattest.toString().length <= 42) {
-        formatTest_index++;
-      } else if (alldata[i].formattest.toString().length > 42) {
-        formatTest_index++;
-      }
-
-      if (alldata[i].normalRange.toString().length > 14 && alldata[i].normalRange.toString().length <= 28) {
-        normalRange_index++;
-      } else if (alldata[i].normalRange.toString().length > 28 && alldata[i].normalRange.toString().length <= 42) {
-        normalRange_index++;
-      } else if (alldata[i].normalRange.toString().length > 42) {
-        normalRange_index++;
-      }
-
-      if (alldata[i].testName.toString().length > 14 && alldata[i].testName.toString().length <= 28) {
-        testName_index++;
-      } else if (alldata[i].testName.toString().length > 28 && alldata[i].testName.toString().length <= 42) {
-        testName_index++;
-      } else if (alldata[i].testName.toString().length > 42) {
-        testName_index++;
-      }
-    }
-    double height_formatTest = formatTest_index * (Sizes.crossLength * .055);
-    double height_normalRange = normalRange_index * (Sizes.crossLength * .080);
-    double height_index2 = index2 * (Sizes.crossLength * .0381);
-    double height_index3 = index3 * (Sizes.crossLength * .0531);
-    double height_testName = testName_index * (Sizes.crossLength * .051);
-    double height_index5 = index5 * (Sizes.crossLength * .0756);
-    double height_index6 = index6 * (Sizes.crossLength * .1056);
-
-    /// Sab values me se highest nikalna
-    double highestValue = [
-      height_formatTest,
-      height_normalRange,
-      height_index2,
-      height_index3,
-      height_testName,
-      height_index5,
-      height_index6
-    ].reduce((value, element) => value > element ? value : element);
-
-    // height_default ko highestValue se multiply karna
-    double height_default = (1) * (Sizes.crossLength * .063) + 10;
-    double finalHeight = highestValue + height_default;
-
-    return finalHeight;
-    // return (formatTest_index * (Sizes.crossLength * .040) +
-    //     normalRange_index * (Sizes.crossLength * .080) +
-    //     index2 * (Sizes.crossLength * .0381) +
-    //     index3 * (Sizes.crossLength * .0531) +
-    //     testName_index * (Sizes.crossLength * .051) +
-    //     index5 * (Sizes.crossLength * .0756) +
-    //     index6 * (Sizes.crossLength * .1056) +
-    //     // (((((((alldata.length - 0) - normalRange_index) - index2) - index3) - index4) - index5) - index6) * (Sizes.crossLength * .057) +
-    //     // (((((((formatTest_index - 0) - normalRange_index) - index2) - index3) - index4) - index5) - index6) * (Sizes.crossLength * .057) +
-    //     (1) * (Sizes.crossLength * .057) +
-    //     10);
-  }
-
-  getHeightOfWidget(String text1, String text2, List alldata, List datesListing, int index) {
-    // print((text1.length + text2.length));
-    // if ((text1.length + text2.length) > 14) {
-    //   return getDynamicHeight(size: 0.125);
-    // } else {
-    double height_testName = 0;
-    double height_normalRange = 0;
-    double height_formatTest = 0;
-    double height_index2 = 0;
-    double height_index3 = 0;
-    double height_index5 = 0;
-    double height_index6 = 0;
-    for (int i = 0; i < alldata.length; i++) {
-      for (int j = 0; j < datesListing.length; j++) {
-        String? value = alldata[i].dateValues![datesListing[j]];
-        if (value != null) {
-          if (value.length > 70) {
-            height_index2 = getDynamicHeight(size: 0.350);
-          } else if (value.length > 50) {
-            height_index3 = getDynamicHeight(size: 0.250);
-          } else if (value.length > 25) {
-            height_index5 = getDynamicHeight(size: 0.175);
-          } else if (value.length > 14) {
-            height_index6 = getDynamicHeight(size: 0.125);
-          } else {
-            if (alldata[i].formattest.length > 21) {
-              height_formatTest = getDynamicHeight(size: 0.150);
-            } else if (alldata[i].formattest.length > 14) {
-              height_formatTest = getDynamicHeight(size: 0.100);
-            } else if (alldata[i].formattest.length > 7) {
-              height_formatTest = getDynamicHeight(size: 0.050);
-            }
-
-            if (alldata[i].testName.toString().length > 25) {
-              height_testName = getDynamicHeight(size: 0.10);
-            } else if (alldata[i].testName.toString().length > 14) {
-              height_testName = getDynamicHeight(size: 0.125);
-            } else if (alldata[i].testName.toString().length > 7) {
-              height_testName = getDynamicHeight(size: 0.085);
-            }
-
-            if ((text1.length + text2.length) > 25) {
-              height_normalRange = getDynamicHeight(size: 0.185);
-            } else if ((text1.length + text2.length) > 14) {
-              height_normalRange = getDynamicHeight(size: 0.125);
-            } else if ((text1.length + text2.length) > 7) {
-              height_normalRange = getDynamicHeight(size: 0.065);
-            }
-          }
-
-          double highestValue = [
-            height_formatTest,
-            height_normalRange,
-            height_index2,
-            height_index3,
-            height_testName,
-            height_index5,
-            height_index6
-          ].reduce((value, element) => value > element ? value : element);
-          if (highestValue > 0.0) {
-            return highestValue;
-          } else {
-            return getDynamicHeight(size: 0.055);
-          }
-        }
-      }
-    }
-    return getDynamicHeight(size: 0.055);
-  }
-
-  Widget _buildFixedHeaderCell(String text, {double width = 100, bool overflow = false, bool isLast = false}) {
+  Widget _buildFixedHeaderCell(
+    String text, {
+    double width = 100,
+  }) {
     return Container(
       width: width,
       height: rowHeight,
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: getDynamicHeight(size: 0.007),
+        vertical: getDynamicHeight(size: 0.007),
+      ),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: Colors.grey[400],
         border: Border(
           bottom: BorderSide(color: Colors.black26, width: 1), // 👈 Bottom Divider
-          right: isLast ? BorderSide.none : BorderSide(color: Colors.black26, width: 1), // 👈 Right Divider
+          right: BorderSide(color: Colors.black26, width: 1), // 👈 Right Divider
         ),
       ),
       child: Text(
         text,
         maxLines: 1,
-        overflow: overflow ? TextOverflow.ellipsis : TextOverflow.visible,
+        overflow: TextOverflow.visible,
         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
 
-  Widget _buildHeaderCell(String text, {double width = 100, bool isLast = false}) {
+  Widget _buildHeaderCell(String text, {double width = 100}) {
     return Container(
       width: width,
       height: rowHeight,
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: getDynamicHeight(size: 0.007),
+        vertical: getDynamicHeight(size: 0.007),
+      ),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         color: Colors.blueGrey,
         border: Border(
           bottom: BorderSide(color: Colors.black26, width: 1), // 👈 Bottom Divider
-          right: isLast ? BorderSide.none : BorderSide(color: Colors.black26, width: 1), // 👈 Right Divider
+          right: BorderSide(color: Colors.black26, width: 1), // 👈 Right Divider
         ),
       ),
       child: FittedBox(
@@ -549,9 +328,9 @@ class LabSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFixedCell(String text, {bool overflow = false, double width = 80, double height = 50, double heightContainer = 50}) {
+  Widget _buildFixedCell(String text, {double width = 80, double height = 50}) {
     return Container(
-      width: 80,
+      width: width,
       height: height,
       // padding: EdgeInsets.all(8.0),
       alignment: Alignment.centerLeft,
@@ -566,7 +345,7 @@ class LabSummaryScreen extends StatelessWidget {
         text,
         style: TextStyle(fontSize: getDynamicHeight(size: 0.013)),
         maxLines: null,
-        overflow: overflow ? TextOverflow.ellipsis : TextOverflow.visible,
+        overflow: TextOverflow.visible,
       ),
     );
   }
