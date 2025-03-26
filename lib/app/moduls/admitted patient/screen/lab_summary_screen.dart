@@ -49,14 +49,14 @@ class LabSummaryScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Patient Name",
+                            controller.patientName,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: getDynamicHeight(size: 0.013),
                             ),
                           ),
                           Text(
-                            "Status",
+                            "Bed: ${controller.bedNo}",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: getDynamicHeight(size: 0.013),
@@ -182,12 +182,6 @@ class LabSummaryScreen extends StatelessWidget {
                               child: Column(
                                 children: List.generate(controller.labdata.length, (index) {
                                   var item = controller.labdata[index]; // API data
-                                  // double maxHeight = _getMaxRowHeight(index, controller);
-                                  List<LabData> singleItemList = [controller.labdata[index]];
-
-                                  String normalRange = controller.labdata[index].normalRange.toString();
-                                  String unit = controller.labdata[index].unit.toString();
-
                                   double rowHeights = 0.00;
                                   rowHeights = getLabRowHeights(
                                     labData: controller.labdata[index],

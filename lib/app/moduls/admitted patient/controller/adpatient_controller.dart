@@ -22,7 +22,7 @@ class AdPatientController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   bool isLoading = true;
   String tokenNo = '', loginId = '', empId = '';
-  String ipdNo = '', uhid = '';
+  String ipdNo = '', uhid = '', patientName = '', bedNo = '';
   final ApiController apiController = Get.put(ApiController());
   // List<PatientdataModel> patientdata = [];
   List<PatientdataModel> patientsData = [];
@@ -39,6 +39,7 @@ class AdPatientController extends GetxController {
   List<String> tempOrgsList = [];
   List<String> tempFloorsList = [];
   List<String> tempWardList = [];
+
   bool isSearchActive = false;
   var isAdpatientData = false.obs;
   var isSelectionMode = false.obs;
@@ -202,6 +203,9 @@ class AdPatientController extends GetxController {
       if (rsponsePatientlabsummarydata.statusCode == 200) {
         labdata.clear();
         labdata.assignAll(rsponsePatientlabsummarydata.data?.labData ?? []);
+
+        patientName = rsponsePatientlabsummarydata.data?.patientName ?? "";
+        bedNo = rsponsePatientlabsummarydata.data?.bedNo ?? "";
         isLoading = false;
       } else if (rsponsePatientlabsummarydata.statusCode == 401) {
         pref.clear();
@@ -741,7 +745,6 @@ class AdPatientController extends GetxController {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        
         return AlertDialog(
           title: Text("Normal Range"),
           content: Text((labdata[index].normalRange ?? "No Normal Range Available")),

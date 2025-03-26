@@ -12,7 +12,6 @@ import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_contr
 import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view_copy.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_test.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
