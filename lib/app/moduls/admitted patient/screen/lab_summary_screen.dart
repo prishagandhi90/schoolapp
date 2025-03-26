@@ -110,10 +110,12 @@ class LabSummaryScreen extends StatelessWidget {
                               var item = controller.labdata[index]; // API data
                               // double maxHeight = _getMaxRowHeight(index, controller);
                               List<LabData> singleItemList = [controller.labdata[index]];
-                              double maxHeight_Container = getHeight(controller.labdata, singleItemList, controller.labdata[index].dateValues!.keys.toList());
+                              double maxHeight_Container =
+                                  getHeight(controller.labdata, singleItemList, controller.labdata[index].dateValues!.keys.toList());
                               String normalRange = controller.labdata[index].normalRange.toString();
                               String unit = controller.labdata[index].unit.toString();
-                              double maxHeight = getHeightOfWidget(normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
+                              double maxHeight = getHeightOfWidget(
+                                  normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
                               double rowHeights = 0.00;
                               rowHeights = getLabRowHeights(
                                 labData: controller.labdata[index],
@@ -122,7 +124,11 @@ class LabSummaryScreen extends StatelessWidget {
 
                               return Row(
                                 children: [
-                                  _buildFixedCell("${item.formattest.toString()}", height: rowHeights, width: getDynamicHeight(size: 0.090)),
+                                  _buildFixedCell(
+                                    "${item.formattest.toString()}",
+                                    height: rowHeights,
+                                    width: getDynamicHeight(size: 0.090),
+                                  ),
                                   _buildFixedCell(
                                     "${item.testName.toString()}",
                                     height: rowHeights,
@@ -164,10 +170,12 @@ class LabSummaryScreen extends StatelessWidget {
                                   var item = controller.labdata[index]; // API data
                                   // double maxHeight = _getMaxRowHeight(index, controller);
                                   List<LabData> singleItemList = [controller.labdata[index]];
-                                  double maxHeight_Container = getHeight(controller.labdata, singleItemList, controller.labdata[index].dateValues!.keys.toList());
+                                  double maxHeight_Container =
+                                      getHeight(controller.labdata, singleItemList, controller.labdata[index].dateValues!.keys.toList());
                                   String normalRange = controller.labdata[index].normalRange.toString();
                                   String unit = controller.labdata[index].unit.toString();
-                                  double maxHeight = getHeightOfWidget(normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
+                                  double maxHeight = getHeightOfWidget(
+                                      normalRange, unit, singleItemList, controller.labdata[index].dateValues!.keys.toList(), index);
                                   double rowHeights = 0.00;
                                   rowHeights = getLabRowHeights(
                                     labData: controller.labdata[index],
@@ -218,7 +226,7 @@ class LabSummaryScreen extends StatelessWidget {
 
     List<double> rowHeights = [];
     double colWidth = 0;
-    double padding = getDynamicHeight(size: 0.012); // ✅ Padding added
+    double padding = getDynamicHeight(size: 0.013); // ✅ Padding added
 
     for (int i = 0; i < columnTexts.length; i++) {
       if (i == 0) {
@@ -243,7 +251,7 @@ class LabSummaryScreen extends StatelessWidget {
         text: TextSpan(
           text: text,
           style: TextStyle(
-            fontSize: getDynamicHeight(size: 0.015),
+            fontSize: getDynamicHeight(size: 0.013),
             backgroundColor: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
           ),
         ),
@@ -398,8 +406,15 @@ class LabSummaryScreen extends StatelessWidget {
     double height_index6 = index6 * (Sizes.crossLength * .1056);
 
     /// Sab values me se highest nikalna
-    double highestValue = [height_formatTest, height_normalRange, height_index2, height_index3, height_testName, height_index5, height_index6]
-        .reduce((value, element) => value > element ? value : element);
+    double highestValue = [
+      height_formatTest,
+      height_normalRange,
+      height_index2,
+      height_index3,
+      height_testName,
+      height_index5,
+      height_index6
+    ].reduce((value, element) => value > element ? value : element);
 
     // height_default ko highestValue se multiply karna
     double height_default = (1) * (Sizes.crossLength * .063) + 10;
@@ -469,8 +484,15 @@ class LabSummaryScreen extends StatelessWidget {
             }
           }
 
-          double highestValue = [height_formatTest, height_normalRange, height_index2, height_index3, height_testName, height_index5, height_index6]
-              .reduce((value, element) => value > element ? value : element);
+          double highestValue = [
+            height_formatTest,
+            height_normalRange,
+            height_index2,
+            height_index3,
+            height_testName,
+            height_index5,
+            height_index6
+          ].reduce((value, element) => value > element ? value : element);
           if (highestValue > 0.0) {
             return highestValue;
           } else {
@@ -542,7 +564,7 @@ class LabSummaryScreen extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(fontSize: getDynamicHeight(size: 0.015)),
+        style: TextStyle(fontSize: getDynamicHeight(size: 0.013)),
         maxLines: null,
         overflow: overflow ? TextOverflow.ellipsis : TextOverflow.visible,
       ),
@@ -553,6 +575,7 @@ class LabSummaryScreen extends StatelessWidget {
     List<String> lines = value.split("\n");
 
     return Container(
+      alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey), // Table border
       ),
@@ -560,6 +583,7 @@ class LabSummaryScreen extends StatelessWidget {
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: lines.map((line) {
           List<String> parts = line.split("|");
           String text = parts.first;
@@ -567,6 +591,7 @@ class LabSummaryScreen extends StatelessWidget {
 
           return Container(
             width: double.infinity,
+            alignment: Alignment.centerLeft,
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: isHighlighted ? Colors.pink.withOpacity(0.5) : Colors.transparent,
@@ -574,7 +599,7 @@ class LabSummaryScreen extends StatelessWidget {
             ),
             child: Text(
               text,
-              style: TextStyle(fontSize: getDynamicHeight(size: 0.015)),
+              style: TextStyle(fontSize: getDynamicHeight(size: 0.013)),
               textAlign: TextAlign.left,
             ),
           );
