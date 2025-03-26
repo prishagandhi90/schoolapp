@@ -737,6 +737,27 @@ class AdPatientController extends GetxController {
             ));
   }
 
+  void showSimpleDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        
+        return AlertDialog(
+          title: Text("Normal Range"),
+          content: Text((labdata[index].normalRange ?? "No Normal Range Available")),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog close karega
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   resetForm() async {
     selectedOrgsList.clear();
     selectedWardsList.clear();
