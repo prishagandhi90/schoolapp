@@ -164,4 +164,13 @@ class AppString {
   static String filterbytags = "Filter by tags";
   static String notificationScreen = "Notification Screen";
   static String circularScreen = "Circular Screen";
+
+  //Admitted Patient
+  static String admittedPatient = "Admitted Patients";
+  static String doa = "DOA: ";
+  static String totaldays = "Total Days: ";
+  static String nopatientavaiable = "No Patients Available";
+  static String labsummary = "Lab Summary";
+  static String ipd = "IPD";
+  static String labreport = "Lab Report";
 }

@@ -1,9 +1,12 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class LabReportScreen extends StatelessWidget {
   LabReportScreen({Key? key}) : super(key: key);
   List<bool> expandedList = List.generate(5, (index) => false);
@@ -15,12 +18,8 @@ class LabReportScreen extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
               title: Text(
-                'Lab Report',
-                style: TextStyle(
-                  color: AppColor.primaryColor,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: CommonFontStyle.plusJakartaSans,
-                ),
+                AppString.labreport,
+                style: AppStyle.primaryplusw700,
               ),
               centerTitle: true,
             ),

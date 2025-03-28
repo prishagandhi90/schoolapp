@@ -20,7 +20,7 @@ class LabSummaryScreen extends StatelessWidget {
     return GetBuilder<AdPatientController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Lab Summary'),
+          title: Text(AppString.labsummary, style: AppStyle.primaryplusw700,),
           leading: IconButton(
               onPressed: () {
                 // final bottomBarController = Get.find<BottomBarController>();

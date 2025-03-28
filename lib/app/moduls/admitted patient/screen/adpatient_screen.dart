@@ -29,12 +29,8 @@ class AdpatientScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: AppColor.white,
               title: Text(
-                'Admitted Patients',
-                style: TextStyle(
-                  color: AppColor.primaryColor,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: CommonFontStyle.plusJakartaSans,
-                ),
+                AppString.admittedPatient,
+                style: AppStyle.primaryplusw700,
               ),
               actions: [
                 IconButton(
@@ -59,13 +55,12 @@ class AdpatientScreen extends StatelessWidget {
                     bottomBarController.isAdmittedPatient.value = true;
                     controller.searchController.clear(); // Search text clear karna
                     controller.activateSearch(false); // Search mode deactivate karna
-                    print("After reset: sortBySelected = ${controller.sortBySelected}");
+                    // print("After reset: sortBySelected = ${controller.sortBySelected}");
                     controller.sortBySelected = null;
                     controller.update();
 
                     // **Fresh Data fetch karna**
-                    controller.fetchDeptwisePatientList();
-
+                    controller.fetchDeptwisePatientList(); // Fetch data from server
                     Navigator.pop(context); // UI ko refresh karna
                   },
                   icon: Icon(Icons.arrow_back_ios, color: AppColor.black)),
@@ -96,6 +91,7 @@ class AdpatientScreen extends StatelessWidget {
                                 // Search Bar (60%)
                                 Expanded(
                                   flex: 7,
+                                  // ignore: deprecated_member_use
                                   child: WillPopScope(
                                     onWillPop: () async {
                                       // Unfocus the TextFormField and dismiss the keyboard
@@ -175,9 +171,7 @@ class AdpatientScreen extends StatelessWidget {
                                             onTap: () {
                                               controller.sortBy();
                                             },
-                                            child: Image.asset(
-                                              AppImage.filter,
-                                            ))),
+                                            child: Image.asset(AppImage.filter))),
                                   ),
                                 ),
                                 SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
@@ -248,15 +242,15 @@ class AdpatientScreen extends StatelessWidget {
                       children: [
                         Text(
                           controller.filterpatientsData[index].bedNo.toString(),
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           controller.filterpatientsData[index].ipdNo.toString(),
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppColor.white),
                         ),
                         Text(
                           controller.filterpatientsData[index].floor.toString(),
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppColor.white),
                         ),
                       ],
                     ),
@@ -358,7 +352,7 @@ class AdpatientScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 5),
                                 Text.rich(TextSpan(
-                                  text: 'DOA: ',
+                                  text: AppString.doa,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
@@ -382,7 +376,7 @@ class AdpatientScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: 5),
                                 Text.rich(TextSpan(
-                                  text: 'Total Days: ',
+                                  text: AppString.totaldays,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
@@ -405,8 +399,8 @@ class AdpatientScreen extends StatelessWidget {
             )
           : Center(
               child: Text(
-                "No Patients Available",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                AppString.nopatientavaiable,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.red1),
               ),
             ),
     );

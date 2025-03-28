@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
@@ -64,7 +65,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           ? IconButton(
                               icon: Icon(
                                 Icons.cancel_outlined,
-                                color: Color.fromARGB(255, 192, 191, 191),
+                                color: AppColor.lightgrey1,
                               ),
                               onPressed: () {
                                 controller.textEditingController.clear();
@@ -102,9 +103,6 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                             controller.isPresViewerNavigating.value = true;
 
                             Navigator.pop(context);
-                            // hideBottomBar.value = true;
-
-                            // controller.payrolListOnClk(index, context);
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
                               screen: AdpatientScreen(),
@@ -123,11 +121,11 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                             controller.isPresViewerNavigating.value = false;
                           },
                           child: SizedBox(
-                            height: 40,
+                            height: getDynamicHeight(size: 0.040),
                             child: ListTile(
                               leading: Image.asset(
                                 controller.filteredList[index]['image'],
-                                height: 25,
+                                height: getDynamicHeight(size: 0.025),
                                 width: 25,
                                 color: AppColor.primaryColor,
                               ),
@@ -172,14 +170,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
             ),
           ),
           appBar: AppBar(
-            title: Text(
-              'IPD',
-              style: TextStyle(
-                color: AppColor.primaryColor,
-                fontWeight: FontWeight.w700,
-                fontFamily: CommonFontStyle.plusJakartaSans,
-              ),
-            ),
+            title: Text(AppString.ipd, style: AppStyle.primaryplusw700),
             backgroundColor: AppColor.white,
             centerTitle: true,
           ),
@@ -197,7 +188,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                 padding: EdgeInsets.all(10),
                 itemCount: 1,
                 itemBuilder: (context, index) {
-                  return _buildPatientCard("Admitted Patients", controller.patientsData.length, context, index);
+                  return _buildPatientCard(AppString.admittedPatient, controller.patientsData.length, context, index);
                 },
               );
             },
@@ -232,7 +223,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
         color: AppColor.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.teal, width: 1),
+          side: BorderSide(color: AppColor.teal, width: 1),
         ),
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         child: Padding(
@@ -262,7 +253,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
               Icon(
                 Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
                 size: 40,
-                color: Colors.teal,
+                color: AppColor.teal,
               ),
             ],
           ),
