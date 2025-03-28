@@ -206,7 +206,6 @@ class LabSummaryScreen extends StatelessWidget {
                                 rowIndex: index,
                                 context: context,
                               );
-
                               return Row(
                                 children: [
                                   _buildFixedCell(
