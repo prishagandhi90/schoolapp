@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -53,9 +55,7 @@ class StartingHeading extends StatelessWidget {
                                   allReportsData[i]['NormalRange'] != null && allReportsData[i]['NormalRange'] != ''
                                       ? allReportsData[i]['NormalRange']
                                       : '-',
-                                  allReportsData[i]['Unit'] != null && allReportsData[i]['Unit'] != ''
-                                      ? allReportsData[i]['Unit']
-                                      : '-',
+                                  allReportsData[i]['Unit'] != null && allReportsData[i]['Unit'] != '' ? allReportsData[i]['Unit'] : '-',
                                   allReportsData,
                                   dateLsiting,
                                   i),

@@ -20,7 +20,10 @@ class LabSummaryScreen extends StatelessWidget {
     return GetBuilder<AdPatientController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(AppString.labsummary, style: AppStyle.primaryplusw700,),
+          title: Text(
+            AppString.labsummary,
+            style: AppStyle.primaryplusw700,
+          ),
           leading: IconButton(
               onPressed: () {
                 // final bottomBarController = Get.find<BottomBarController>();
@@ -352,8 +355,8 @@ class LabSummaryScreen extends StatelessWidget {
           text: textPart,
           style: TextStyle(
             fontSize: getDynamicHeight(size: 0.013),
-            backgroundColor: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.transparent,
-            color: isFontColorRed ? Colors.red : Colors.black,
+            backgroundColor: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
+            color: isFontColorRed ? AppColor.red1 : AppColor.black,
           ),
         ),
         maxLines: null,
@@ -386,7 +389,7 @@ class LabSummaryScreen extends StatelessWidget {
         text,
         maxLines: 1,
         overflow: TextOverflow.visible,
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.white),
       ),
     );
   }
@@ -411,13 +414,19 @@ class LabSummaryScreen extends StatelessWidget {
         fit: BoxFit.scaleDown,
         child: Text(
           text,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColor.white),
         ),
       ),
     );
   }
 
-  Widget _buildFixedCell(String text, BuildContext context, int index, {double width = 80, double height = 50}) {
+  Widget _buildFixedCell(
+    String text,
+    BuildContext context,
+    int index, {
+    double width = 80,
+    double height = 50,
+  }) {
     return GetBuilder<AdPatientController>(
       builder: (controller) {
         return GestureDetector(
@@ -432,9 +441,13 @@ class LabSummaryScreen extends StatelessWidget {
             height: height,
             // padding: EdgeInsets.all(8.0),
             alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(color: index % 2 == 0 ? Colors.white : Colors.grey[200], border: Border.all(color: Colors.grey)
-                // color: Colors.grey[200],
-                ),
+            decoration: BoxDecoration(
+              color: index % 2 == 0 ? AppColor.white : Colors.grey[200],
+              border: Border.all(
+                color: Colors.grey,
+              ),
+              // color: Colors.grey[200],
+            ),
             child: Text(
               text,
               style: TextStyle(fontSize: getDynamicHeight(size: 0.013)),
@@ -461,8 +474,8 @@ class LabSummaryScreen extends StatelessWidget {
           child: Container(
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
-              color: index % 2 == 0 ? Colors.white : Colors.grey[200], // Alternating row colors
-              border: Border.all(color: Colors.grey), // Table border
+              color: index % 2 == 0 ? AppColor.white : Colors.grey[200], // Alternating row colors
+              border: Border.all(color: AppColor.originalgrey), // Table border
             ),
             height: height,
             width: width,
@@ -476,10 +489,10 @@ class LabSummaryScreen extends StatelessWidget {
                 bool isFontColorRed = false;
                 bool isHighlighted = false;
                 if (labStatusParts.length > 1) {
-                  isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
+                  isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == AppString.provisional;
                 }
 
-                isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == "True";
+                isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == AppString.true1;
 
                 return Container(
                   width: double.infinity,
@@ -488,7 +501,8 @@ class LabSummaryScreen extends StatelessWidget {
                     getDynamicHeight(size: 0.00417),
                   ),
                   decoration: BoxDecoration(
-                    color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : Colors.transparent,
+                    // ignore: deprecated_member_use
+                    color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
                     borderRadius: BorderRadius.circular(
                       getDynamicHeight(size: 0.00417),
                     ),
@@ -497,7 +511,7 @@ class LabSummaryScreen extends StatelessWidget {
                     textPart,
                     style: TextStyle(
                       fontSize: getDynamicHeight(size: 0.013),
-                      color: isFontColorRed ? Colors.red : Colors.black,
+                      color: isFontColorRed ? AppColor.red1 : AppColor.black,
                       // fontWeight: isFontColorRed ? FontWeight.bold : FontWeight.normal,
                     ),
                     textAlign: TextAlign.left,

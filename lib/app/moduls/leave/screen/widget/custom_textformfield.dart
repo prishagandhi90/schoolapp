@@ -24,6 +24,8 @@ class CustomTextFormField extends StatelessWidget {
   final bool? showSuffixIcon;
   final Color? fillColor;
   final bool? filled;
+  final InputBorder? focusedBorder;
+  final InputBorder? enabledBorder;
   final TextStyle? style;
   final ScrollPhysics? scrollPhysics;
   final TextStyle? hintStyle;
@@ -56,7 +58,7 @@ class CustomTextFormField extends StatelessWidget {
     this.minLines,
     this.scrollPhysics,
     this.hintStyle,
-    this.onTapOutside,
+    this.onTapOutside, this.focusedBorder, this.enabledBorder,
   });
 
   @override
@@ -86,6 +88,8 @@ class CustomTextFormField extends StatelessWidget {
             hintStyle: hintStyle,
             filled: filled ?? false,
             fillColor: fillColor,
+            focusedBorder: focusedBorder,
+            enabledBorder: enabledBorder,
             prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
             suffixIcon: (showSuffixIcon ?? false) && suffixIcon != null ? Icon(suffixIcon) : null,
             border: OutlineInputBorder(

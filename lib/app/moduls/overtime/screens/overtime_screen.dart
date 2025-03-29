@@ -56,6 +56,11 @@ class OtScreen extends GetView<OvertimeController> {
                             Expanded(
                               child: CustomTimepicker(
                                 hinttext: "--:--",
+                                hintStyle: TextStyle(
+                                  // fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.black,
+                                ),
                                 controllerValue: controller.fromTimeController,
                                 onTap: () async {
                                   await controller.selectTime(context, controller.fromTimeController);
@@ -82,6 +87,11 @@ class OtScreen extends GetView<OvertimeController> {
                             Expanded(
                               child: CustomTimepicker(
                                 hinttext: "--:--",
+                                hintStyle: TextStyle(
+                                  // fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColor.black,
+                                ),
                                 controllerValue: controller.toTimeController,
                                 onTap: () async {
                                   await controller.selectTime(context, controller.toTimeController);
@@ -100,9 +110,17 @@ class OtScreen extends GetView<OvertimeController> {
                           hintStyle: TextStyle(
                             // fontSize: 14,
                             fontSize: getDynamicHeight(size: 0.016),
-                            // fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             color: AppColor.black,
                           ),
+                           enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black, width: 1),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black,width: 1),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -111,7 +129,7 @@ class OtScreen extends GetView<OvertimeController> {
                             hintStyle: TextStyle(
                               // fontSize: 14,
                               fontSize: getDynamicHeight(size: 0.016),
-                              // fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
                               color: AppColor.black,
                             ),
                             minLines: 3,
@@ -120,6 +138,14 @@ class OtScreen extends GetView<OvertimeController> {
                             controller: controller.noteController,
                             focusNode: controller.notesFocusNode,
                             scrollPhysics: BouncingScrollPhysics(),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black, width: 1),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black,width: 1),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
                             onChanged: (value) {
                               print('Password changed: $value');
                             },

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/core/common/common_firebase.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';

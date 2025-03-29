@@ -100,6 +100,7 @@ class ReferenceWidget extends StatelessWidget {
                           : Divider(
                               thickness: 1,
                               height: getDynamicHeight(size: 0.002),
+                              // ignore: deprecated_member_use
                               color: AppColor.black.withOpacity(0.3),
                             ),
                       i == allReportsData.length

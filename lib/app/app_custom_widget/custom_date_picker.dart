@@ -33,7 +33,7 @@ class CustomDatePicker extends StatelessWidget {
         hintStyle: TextStyle(
           // fontSize: 14,
           fontSize: getDynamicHeight(size: 0.016),
-          // fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           color: Colors.black,
         ),
         suffixIcon: IconButton(

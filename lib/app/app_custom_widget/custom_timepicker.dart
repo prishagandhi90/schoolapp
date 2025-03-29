@@ -5,9 +5,16 @@ import 'package:get/get.dart';
 
 class CustomTimepicker extends StatelessWidget {
   final String hinttext;
+  final TextStyle? hintStyle;
   final TextEditingController controllerValue;
   final Function()? onTap;
-  const CustomTimepicker({super.key, required this.hinttext, required this.controllerValue, this.onTap});
+  const CustomTimepicker({
+    super.key,
+    required this.hinttext,
+    required this.controllerValue,
+    this.onTap,
+    this.hintStyle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +32,7 @@ class CustomTimepicker extends StatelessWidget {
               borderRadius: BorderRadius.circular(0),
             ),
             hintText: hinttext,
+            hintStyle: hintStyle,
             suffixIcon: Icon(Icons.access_time),
           ),
           onTap: onTap,

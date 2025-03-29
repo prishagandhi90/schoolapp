@@ -291,6 +291,7 @@ class LeaveScreen extends GetView<LeaveController> {
                         hint: AppString.note,
                         hintStyle: AppStyle.black.copyWith(
                           // fontSize: 14,
+                          fontWeight: FontWeight.w500,
                           fontSize: getDynamicHeight(size: 0.016),
                         ),
                         minLines: 3,
@@ -299,6 +300,14 @@ class LeaveScreen extends GetView<LeaveController> {
                         controller: controller.noteController,
                         focusNode: controller.notesFocusNode,
                         scrollPhysics: BouncingScrollPhysics(),
+                         enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black, width: 1),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black,width: 1),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
                         onChanged: (value) {
                           print('Password changed: $value');
                         },
