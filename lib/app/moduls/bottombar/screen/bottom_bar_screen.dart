@@ -3,6 +3,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,11 @@ class BottomBarView extends GetView<BottomBarController> {
             resizeToAvoidBottomInset: false,
             body: WillPopScope(
               onWillPop: () async {
+                final lvotapprovalController = Get.put(LvotapprovalController());
+                if (lvotapprovalController.isSelectionMode.value == true) {
+                  await lvotapprovalController.exitSelectionMode();
+                  return false;
+                }
                 if (controller.currentIndex.value == 0) {
                   // final bottomBarController = Get.find<BottomBarController>();
                   // bottomBarController.resetAndInitialize();
@@ -37,6 +43,9 @@ class BottomBarView extends GetView<BottomBarController> {
                 } else if (controller.currentIndex.value == 2) {
                   return false;
                 }
+                // else if (controller.currentIndex.value < 0) {
+                //   return false;
+                // }
                 return true;
               },
               child: PersistentTabView(
@@ -72,7 +81,7 @@ class BottomBarView extends GetView<BottomBarController> {
                 // bottomScreenMargin: Sizes.crossLength * 0.020,
                 bottomScreenMargin: getDynamicHeight(size: 0.020),
                 onItemSelected: (index) async {
-                  await controller.onItemTapped(index, false, context,false);
+                  await controller.onItemTapped(index, false, context, false);
                 },
                 // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
                 // popAllScreensOnTapOfSelectedTab: true,

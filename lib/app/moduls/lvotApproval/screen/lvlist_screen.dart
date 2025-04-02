@@ -15,10 +15,14 @@ class LvList extends StatelessWidget {
     // final LvotapprovalController controller = Get.put(LvotapprovalController());
     return GetBuilder<LvotapprovalController>(
       builder: (controller) {
-        return PopScope(
-          canPop: false,
-          onPopInvoked: (v) async {
-            await controller.exitSelectionMode();
+        return WillPopScope(
+          onWillPop: () async {
+            // Agar selection mode ON hai to exit kare bina bas selection hataye
+            if (controller.isSelectionMode.value) {
+              await controller.exitSelectionMode();
+              return false; // Screen se exit nahi karega
+            }
+            return true; // Normal back navigation
           },
           child: Scaffold(
             body: controller.filteredList.isNotEmpty
@@ -102,8 +106,7 @@ class LvList extends StatelessWidget {
                                                 CustomSlidableAction(
                                                   onPressed: (_) async {
                                                     if (controller.selectedRole.toLowerCase() == "incharge") {
-                                                      controller.noteController.text =
-                                                          controller.filteredList[index].inchargeNote.toString();
+                                                      controller.noteController.text = controller.filteredList[index].inchargeNote.toString();
                                                     } else if (controller.selectedRole == "HOD") {
                                                       controller.noteController.text = controller.filteredList[index].hoDNote.toString();
                                                     } else if (controller.selectedRole == "HR") {
