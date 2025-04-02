@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
@@ -122,7 +124,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                     controller.filteredList[index]['label'],
                                     style: TextStyle(
                                       // fontSize: 16.0,
-                                      fontSize: getDynamicHeight(size: 0.018),
+                                      fontSize: controller.getResponsiveFontSize(context, 16),
                                       fontFamily: CommonFontStyle.plusJakartaSans,
                                     ),
                                   ),
@@ -261,8 +263,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     Container(
                                                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColor.lightblue2, border: Border.all(color: AppColor.primaryColor), borderRadius: BorderRadius.circular(20)),
-                                                      child: controller.empSummDashboardTable.isNotEmpty && controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
+                                                          color: AppColor.lightblue2,
+                                                          border: Border.all(color: AppColor.primaryColor),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty &&
+                                                              controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                               style: TextStyle(
@@ -288,8 +293,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     Container(
                                                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColor.lightblue2, border: Border.all(color: AppColor.primaryColor), borderRadius: BorderRadius.circular(20)),
-                                                      child: controller.empSummDashboardTable.isNotEmpty && controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
+                                                          color: AppColor.lightblue2,
+                                                          border: Border.all(color: AppColor.primaryColor),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty &&
+                                                              controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                               style: AppStyle.plus10,
@@ -325,7 +333,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   children: [
                                                     Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                                     if (controller.empSummDashboardTable.isNotEmpty)
-                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                          style: AppStyle.plus16w600)
                                                     else
                                                       Text('-- ', style: AppStyle.plus16w600),
                                                   ],
@@ -465,6 +474,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                               // final bottomBarController = Get.find<BottomBarController>();
                                               bottomBarController.persistentController.value.index = 0;
                                               bottomBarController.currentIndex.value = 0;
+                                              bottomBarController.isPayrollHome.value = true;
                                               hideBottomBar.value = false;
                                               var dashboardController = Get.put(DashboardController());
                                               await dashboardController.getDashboardDataUsingToken();
@@ -706,6 +716,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   bottomBarController.persistentController.value.index = 0;
                                                   bottomBarController.currentIndex.value = 0;
                                                   hideBottomBar.value = false;
+                                                  bottomBarController.isPayrollHome.value = true;
                                                   var dashboardController = Get.put(DashboardController());
                                                   await dashboardController.getDashboardDataUsingToken();
                                                 });
@@ -783,6 +794,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   }
                                                   bottomBarController.persistentController.value.index = 0;
                                                   bottomBarController.currentIndex.value = 0;
+                                                  bottomBarController.isPayrollHome.value = true;
                                                   hideBottomBar.value = false;
                                                   var dashboardController = Get.put(DashboardController());
                                                   await dashboardController.getDashboardDataUsingToken();
@@ -813,14 +825,17 @@ class PayrollScreen extends GetView<PayrollController> {
                                             ),
                                             const SizedBox(height: 5),
                                             Text(
-                                              controller.empModuleScreenRightsTable.isNotEmpty ? controller.empModuleScreenRightsTable[5].screenName.toString() : "",
+                                              controller.empModuleScreenRightsTable.isNotEmpty
+                                                  ? controller.empModuleScreenRightsTable[5].screenName.toString()
+                                                  : "",
                                               style: AppStyle.plus12,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
                                               textAlign: TextAlign.center,
                                             ),
                                           ],
                                         ),
                                       ),
-
                                       Expanded(child: SizedBox()), // Empty space
                                       Expanded(child: SizedBox()), // Empty space
                                     ],

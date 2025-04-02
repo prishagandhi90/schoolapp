@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -448,8 +450,8 @@ class LabSummaryScreen extends StatelessWidget {
               ),
               // color: Colors.grey[200],
             ),
-            child: Text(
-              text,
+            child: Text.rich(
+              highlightText(text, controller.searchQuery.value),
               style: TextStyle(fontSize: getDynamicHeight(size: 0.013)),
               maxLines: null,
               overflow: TextOverflow.visible,
@@ -501,7 +503,6 @@ class LabSummaryScreen extends StatelessWidget {
                     getDynamicHeight(size: 0.00417),
                   ),
                   decoration: BoxDecoration(
-                    // ignore: deprecated_member_use
                     color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
                     borderRadius: BorderRadius.circular(
                       getDynamicHeight(size: 0.00417),
@@ -523,5 +524,33 @@ class LabSummaryScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  TextSpan highlightText(String text, String query) {
+    if (query.isEmpty) {
+      return TextSpan(text: text, style: TextStyle(color: Colors.black));
+    }
+
+    List<TextSpan> spans = [];
+    String lowerText = text.toLowerCase();
+    String lowerQuery = query.toLowerCase();
+
+    int startIndex = 0;
+    int index = lowerText.indexOf(lowerQuery);
+    while (index != -1) {
+      if (index > startIndex) {
+        spans.add(TextSpan(text: text.substring(startIndex, index), style: TextStyle(color: Colors.black)));
+      }
+      spans.add(TextSpan(
+          text: text.substring(index, index + query.length), style: TextStyle(color: Colors.black, backgroundColor: Colors.yellow)));
+      startIndex = index + query.length;
+      index = lowerText.indexOf(lowerQuery, startIndex);
+    }
+
+    if (startIndex < text.length) {
+      spans.add(TextSpan(text: text.substring(startIndex), style: TextStyle(color: Colors.black)));
+    }
+
+    return TextSpan(children: spans);
   }
 }

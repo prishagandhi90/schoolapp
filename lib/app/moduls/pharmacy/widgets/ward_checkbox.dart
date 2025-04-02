@@ -46,13 +46,18 @@ WardsCheckBoxes({required PharmacyController controller}) {
                     SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      controller.wards[i].wardName ?? '',
-                      style: TextStyle(
-                        // fontSize: 14,
-                        fontSize: getDynamicHeight(size: 0.016),
-                        color: AppColor.black,
-                        fontWeight: FontWeight.w600,
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          controller.wards[i].wardName ?? '',
+                          style: TextStyle(
+                            // fontSize: 14,
+                            fontSize: getDynamicHeight(size: 0.016),
+                            color: AppColor.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                     // AppText(

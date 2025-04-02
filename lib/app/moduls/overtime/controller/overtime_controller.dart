@@ -268,6 +268,11 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     }
   }
 
+   double getResponsiveFontSize(BuildContext context, double size) {
+    final width = MediaQuery.of(context).size.width;
+    return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
+  }
+
   double calculateMinutes(DateTime fromDateTime, DateTime toDateTime) {
     Duration difference = toDateTime.difference(fromDateTime);
     double totalMinutes = difference.inMinutes.toDouble();

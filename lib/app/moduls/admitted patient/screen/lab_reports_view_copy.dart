@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, deprecated_member_use
 
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/core/util/app_color.dart';

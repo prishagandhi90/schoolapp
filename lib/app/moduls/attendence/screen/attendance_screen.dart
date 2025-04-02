@@ -43,6 +43,7 @@ class AttendanceScreen extends StatelessWidget {
                     final bottomBarController = Get.find<BottomBarController>();
                     bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
                     bottomBarController.currentIndex.value = 0;
+                    bottomBarController.isPayrollHome.value = true;
                     hideBottomBar.value = false;
                     Get.back();
                   });

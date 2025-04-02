@@ -27,7 +27,7 @@ class AppConst {
   ];
 
   static const List<Map<String, dynamic>> payrolllist = [
-    {'image': 'assets/image/attendence.png', 'label': 'Attendence'},
+    {'image': 'assets/image/attendence.png', 'label': 'Attendance'},
     {'image': 'assets/image/mispunch.png', 'label': 'Mispunch Info'},
     {'image': 'assets/image/leave.png', 'label': 'Leave Entry'},
     {'image': 'assets/image/overtime.png', 'label': 'Over Time'},
@@ -41,7 +41,7 @@ class AppConst {
   ];
 
   static const List<Map<String, dynamic>> payrollgrid = [
-    {'image': 'assets/image/attendence.png', 'label': 'Attendence'},
+    {'image': 'assets/image/attendence.png', 'label': 'Attendance'},
     {'image': 'assets/image/mispunch.png', 'label': 'Mispunch Info'},
     {'image': 'assets/image/leave.png', 'label': 'Leave Entry'},
     {'image': 'assets/image/overtime.png', 'label': 'Over Time Entry'},

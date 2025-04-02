@@ -21,6 +21,7 @@ class BottomBarController extends GetxController {
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
   RxBool isPharmacyHome = false.obs;
   RxBool isAdmittedPatient = false.obs;
+  RxBool isPayrollHome = false.obs;
 
   @override
   void onInit() {
@@ -32,32 +33,23 @@ class BottomBarController extends GetxController {
 
   List<Widget> buildScreens() {
     return [
-      // PharmacyScreen(),
-      // PayrollScreen(),
       Obx(() {
         if (isPharmacyHome.value) {
           return PharmacyScreen();
         } else if (isAdmittedPatient.value) {
           return IpdDashboardScreen();
-        } else {
+        } else if (isPayrollHome.value) {
           return PayrollScreen();
+        } else {
+          return Dashboard1Screen(); // Default screen if none of the conditions are met
         }
       }),
-      // Obx(() => isPharmacyHome.value ? PharmacyScreen() : PayrollScreen()), // Use condition here
-      // attendanceScreen,
       AttendanceScreen(),
       const Dashboard1Screen(),
       LeaveMainScreen(),
-      // Leavedemo(),
-      // OvertimeScreen()
       OvertimeMainScreen(),
     ];
   }
-
-  // void toggleHomeScreen(bool showPharmacy) {
-  //   isPharmacyHome.value = showPharmacy; // Update condition dynamically
-  //   update(); // Refresh UI
-  // }
 
   onItemTapped(int index, bool showPharmacy, BuildContext context, bool showAdPatient) async {
     currentIndex.value = index;
@@ -83,6 +75,9 @@ class BottomBarController extends GetxController {
       return; // This sets PayrollScreen tab
     } else if (index == 2) {
       persistentController.value.index = index;
+      isPharmacyHome.value = false;
+      isAdmittedPatient.value = false;
+      isPayrollHome.value = false;
       return;
     }
     {
@@ -94,6 +89,9 @@ class BottomBarController extends GetxController {
 
   void resetAndInitialize() {
     currentIndex.value = 2;
+    isPharmacyHome.value = false;
+    isAdmittedPatient.value = false;
+    isPayrollHome.value = false;
     persistentController.value = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
     // update();
@@ -105,6 +103,11 @@ class BottomBarController extends GetxController {
     // persistentController.value = PersistentTabController(initialIndex: index);
     persistentController.value.index = index;
     hideBottomBar.value = false;
+    if (index == 2) {
+      isPharmacyHome.value = false;
+      isAdmittedPatient.value = false;
+      isPayrollHome.value = false;
+    }
     // update();
   }
 
@@ -144,7 +147,8 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home, color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
+              Image.asset(AppImage.home,
+                  color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
                 AppString.home,

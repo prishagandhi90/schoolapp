@@ -68,7 +68,11 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
-                                              alignment: Alignment.centerLeft, child: Text(AppString.department, style: AppStyle.w50018)),
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(AppString.department,
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: controller.getResponsiveFontSize(context, 16),
+                                                  ))),
                                         ),
                                       ),
                                       Padding(
@@ -82,7 +86,8 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                                     ? controller.leaveHeaderList[0].department.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(
-                                                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  fontSize: controller.getResponsiveFontSize(context, 20),
+                                                  // fontSize: MediaQuery.of(context).size.width * 0.04,
                                                 )),
                                           ),
                                         ),
@@ -121,7 +126,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                               alignment: Alignment.centerLeft,
                                               child: Text(AppString.departmentincharge,
                                                   style: AppStyle.plus500.copyWith(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                    fontSize: controller.getResponsiveFontSize(context, 16),
                                                   )),
                                             ),
                                           ),
@@ -137,7 +142,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                                       ? controller.leaveHeaderList[0].deptInc.toString()
                                                       : '--:--',
                                                   style: AppStyle.plus500.copyWith(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                    fontSize: controller.getResponsiveFontSize(context, 20),
                                                   )),
                                             ),
                                           ),
@@ -171,7 +176,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                               alignment: Alignment.centerLeft,
                                               child: Text(AppString.departmentHOD,
                                                   style: AppStyle.plus500.copyWith(
-                                                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                    fontSize: controller.getResponsiveFontSize(context, 16),
                                                   ))),
                                         ),
                                       ),
@@ -186,7 +191,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                                     ? controller.leaveHeaderList[0].deptHOD.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(
-                                                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  fontSize: controller.getResponsiveFontSize(context, 20),
                                                 )),
                                           ),
                                         ),
@@ -215,7 +220,10 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(AppString.subdepartment, style: AppStyle.w50018)),
+                                              child: Text(AppString.subdepartment,
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: controller.getResponsiveFontSize(context, 16),
+                                                  ))),
                                         ),
                                       ),
                                       Padding(
@@ -229,7 +237,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                                     ? controller.leaveHeaderList[0].subDept.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(
-                                                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  fontSize: controller.getResponsiveFontSize(context, 20),
                                                 )),
                                           ),
                                         ),
@@ -261,7 +269,10 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
                                               alignment: Alignment.centerLeft,
-                                              child: Text(AppString.subdepartmentincharge, style: AppStyle.w50018)),
+                                              child: Text(AppString.subdepartmentincharge,
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: controller.getResponsiveFontSize(context, 16),
+                                                  ))),
                                         ),
                                       ),
                                       Padding(
@@ -275,7 +286,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                                     ? controller.leaveHeaderList[0].subDeptInc.toString()
                                                     : '--:--',
                                                 style: AppStyle.plus500.copyWith(
-                                                  fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                  fontSize: controller.getResponsiveFontSize(context, 20),
                                                 )),
                                           ),
                                         ),
@@ -299,6 +310,7 @@ class LeaveMainScreen extends GetView<LeaveController> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       final bottomBarController = Get.find<BottomBarController>();
                       bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                      bottomBarController.isPayrollHome.value = true;
                       bottomBarController.currentIndex.value = 0;
                       hideBottomBar.value = false;
                       Get.back();

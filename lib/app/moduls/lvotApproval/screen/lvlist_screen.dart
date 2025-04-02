@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
@@ -10,13 +12,13 @@ class LvList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LvotapprovalController controller = Get.put(LvotapprovalController());
+    // final LvotapprovalController controller = Get.put(LvotapprovalController());
     return GetBuilder<LvotapprovalController>(
       builder: (controller) {
         return PopScope(
-          onPopInvokedWithResult: (bool didPop, Object? result) async {
+          canPop: false,
+          onPopInvoked: (v) async {
             await controller.exitSelectionMode();
-            // This can be async and you can check your condition
           },
           child: Scaffold(
             body: controller.filteredList.isNotEmpty
@@ -45,8 +47,7 @@ class LvList extends StatelessWidget {
                                       final isSelected = controller.selectedItems.contains(leaveItem);
 
                                       // Divider color logic
-                                      final showPurpleDivider =
-                                          leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
+                                      final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
                                       final showRedDivider = leaveItem.inchargeAction?.toLowerCase() == "rejected";
 
                                       return GestureDetector(
@@ -104,11 +105,9 @@ class LvList extends StatelessWidget {
                                                       controller.noteController.text =
                                                           controller.filteredList[index].inchargeNote.toString();
                                                     } else if (controller.selectedRole == "HOD") {
-                                                      controller.noteController.text =
-                                                          controller.filteredList[index].hoDNote.toString();
+                                                      controller.noteController.text = controller.filteredList[index].hoDNote.toString();
                                                     } else if (controller.selectedRole == "HR") {
-                                                      controller.noteController.text =
-                                                          controller.filteredList[index].hrNote.toString();
+                                                      controller.noteController.text = controller.filteredList[index].hrNote.toString();
                                                     }
                                                     controller.showNoteDialog(context, index);
                                                   },
@@ -123,11 +122,9 @@ class LvList extends StatelessWidget {
                                             ),
                                             child: Container(
                                               width: double.infinity,
-                                              padding: const EdgeInsets.all(12.0),
+                                              padding: const EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
                                               decoration: BoxDecoration(
-                                                color: isSelected
-                                                    ? AppColor.darkgery.withOpacity(0.3)
-                                                    : AppColor.lightblue,
+                                                color: isSelected ? AppColor.darkgery.withOpacity(0.3) : AppColor.lightblue,
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: IntrinsicHeight(
@@ -148,7 +145,7 @@ class LvList extends StatelessWidget {
                                                         height: double.infinity,
                                                         color: Colors.red,
                                                       ),
-                                                    const SizedBox(width: 8),
+                                                    // const SizedBox(width: 8),
                                                     // Checkbox logic
                                                     if (controller.isSelectionMode.value)
                                                       Checkbox(
@@ -159,8 +156,7 @@ class LvList extends StatelessWidget {
                                                       ),
                                                     // Main Leave Information
                                                     Column(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween, // Top & Bottom alignment maintain
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Top & Bottom alignment maintain
                                                       children: [
                                                         // ✅ Top-Left Aligned Leave Days
                                                         Container(
@@ -182,7 +178,7 @@ class LvList extends StatelessWidget {
                                                           child: Text(
                                                             leaveItem.leaveShortName.toString(),
                                                             style: TextStyle(
-                                                              fontSize: getDynamicHeight(size: 0.020),
+                                                              fontSize: getDynamicHeight(size: 0.019),
                                                               fontWeight: FontWeight.w500,
                                                             ),
                                                           ),
@@ -216,7 +212,7 @@ class LvList extends StatelessWidget {
                                                               style: TextStyle(
                                                                 // fontSize: 17,
                                                                 fontSize: getDynamicHeight(
-                                                                  size: 0.019,
+                                                                  size: 0.018,
                                                                 ),
                                                                 fontWeight: FontWeight.bold,
                                                               ),
@@ -278,7 +274,6 @@ class LvList extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
-
                                                     // Bottom Sheet Button
                                                     GestureDetector(
                                                       onTap: () async {

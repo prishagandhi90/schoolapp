@@ -36,6 +36,7 @@ class MispunchScreen extends GetView<MispunchController> {
                 onPressed: () {
                   final bottomBarController = Get.put(BottomBarController());
                   bottomBarController.persistentController.value.index = 0; // Set index to Payroll tab
+                  bottomBarController.isPayrollHome.value = true;
                   bottomBarController.currentIndex.value = 0;
                   Navigator.of(context).pop();
 

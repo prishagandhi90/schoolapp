@@ -70,7 +70,6 @@ class DashboardController extends GetxController {
           } else {
             return [];
           }
-          update();
         } else if (responseModuleData.statusCode == 401) {
           pref.clear();
           Get.offAll(const LoginScreen());
@@ -127,6 +126,8 @@ class DashboardController extends GetxController {
       case 2:
         var bottomBarController = Get.put(BottomBarController());
         bottomBarController.isAdmittedPatient.value = true;
+        bottomBarController.isPayrollHome.value = false;
+        bottomBarController.isPharmacyHome.value = false;
         hideBottomBar.value = false;
         // bottomBarController.onItemTapped(0, true, context);
         bottomBarController.resetAndInitialize_new(0);
@@ -171,6 +172,8 @@ class DashboardController extends GetxController {
       case 6:
         var bottomBarController = Get.put(BottomBarController());
         bottomBarController.isPharmacyHome.value = true;
+        bottomBarController.isPayrollHome.value = false;
+        bottomBarController.isAdmittedPatient.value = false;
         hideBottomBar.value = false;
         // bottomBarController.onItemTapped(0, true, context);
         bottomBarController.resetAndInitialize_new(0);
@@ -190,6 +193,7 @@ class DashboardController extends GetxController {
         hideBottomBar.value = false;
         bottomBarController.isAdmittedPatient.value = false;
         bottomBarController.isPharmacyHome.value = false;
+        bottomBarController.isPayrollHome.value = true;
         bottomBarController.resetAndInitialize_new(0);
         Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
           Get.put(BottomBarController());

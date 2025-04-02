@@ -224,6 +224,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     // update();
   }
 
+  double getResponsiveFontSize(BuildContext context, double size) {
+    final width = MediaQuery.of(context).size.width;
+    return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
+  }
+
   clearLeaveDays() async {
     daysController.clear();
     dropdownItems123.assignAll(

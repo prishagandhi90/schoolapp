@@ -103,48 +103,10 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     update();
   }
 
-  // Future<List<ModuleScreenRights>> fetchModuleScreens() async {
-  //   try {
-  //     // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
-  //     String url = ConstApiUrl.empAppScreenRights;
-  //     SharedPreferences pref = await SharedPreferences.getInstance();
-  //     loginId = await pref.getString(AppString.keyLoginId) ?? "";
-  //     empId = await pref.getString(AppString.keyEmpId) ?? "";
-  //     tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
-  //     var jsonbodyObj = {"loginId": loginId, "EmpId": empId, "ModuleName": "Payroll"};
-  //     if (loginId != "") {
-  //       final ApiController apiController = Get.find<ApiController>();
-  //       var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-  //       ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
-
-  //       if (responseModuleData.statusCode == 200) {
-  //         if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
-  //           isLoading.value = false;
-  //           empModuleScreenRightsTable = responseModuleData.data!;
-  //           update();
-  //           return empModuleScreenRightsTable;
-  //         } else {
-  //           return [];
-  //         }
-  //         update();
-  //       } else if (responseModuleData.statusCode == 401) {
-  //         pref.clear();
-  //         Get.offAll(const LoginScreen());
-  //         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //       } else if (responseModuleData.statusCode == 400) {
-  //         empModuleScreenRightsTable = [];
-  //       } else {
-  //         Get.rawSnackbar(message: "Something went wrong");
-  //       }
-  //       update();
-  //     }
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     update();
-  //   }
-  //   return [];
-  // }
+  double getResponsiveFontSize(BuildContext context, double size) {
+    final width = MediaQuery.of(context).size.width;
+    return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
+  }
 
   Future<dynamic> getProfileData() async {
     try {
@@ -222,6 +184,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
           // final bottomBarController = Get.find<BottomBarController>();
           bottomBarController.persistentController.value.index = 0;
           bottomBarController.currentIndex.value = 0;
+          bottomBarController.isPayrollHome.value = true;
           hideBottomBar.value = false;
           var dashboardController = Get.put(DashboardController());
           await dashboardController.getDashboardDataUsingToken();
@@ -285,6 +248,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
           // final bottomBarController = Get.find<BottomBarController>();
           bottomBarController.persistentController.value.index = 0;
           bottomBarController.currentIndex.value = 0;
+          bottomBarController.isPayrollHome.value = true;
           hideBottomBar.value = false;
           var dashboardController = Get.put(DashboardController());
           await dashboardController.getDashboardDataUsingToken();
@@ -318,6 +282,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
         ).then((value) async {
           bottomBarController.persistentController.value.index = 0;
           bottomBarController.currentIndex.value = 0;
+          bottomBarController.isPayrollHome.value = true;
           hideBottomBar.value = false;
           var dashboardController = Get.put(DashboardController());
           await dashboardController.getDashboardDataUsingToken();

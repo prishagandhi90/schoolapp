@@ -238,6 +238,15 @@ class AdPatientController extends GetxController {
     return labdata.toList();
   }
 
+   var searchQuery = "".obs; // Observable search query
+  
+  void updateSearchQuery(String query) {
+    searchQuery.value = query;
+    update(); // GetBuilder ke liye UI refresh karega
+  }
+
+
+
   void filterSearchResults(String query) {
     if (query.isEmpty) {
       filterpatientsData = patientsData; // Show all data if search is empty

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:ui';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -49,7 +51,7 @@ class PresdetailsScreen extends StatelessWidget {
         );
 
         Size textSize = calculateTextSize(patientName, textStyle, fullScreenWidth * 0.9); // 90% width max
-        double textHeight = textSize.height;
+        // double textHeight = textSize.height;
         double textWidth = textSize.width;
 
         bool isWrapped = textWidth > (fullScreenWidth * 0.8);

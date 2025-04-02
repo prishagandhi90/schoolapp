@@ -77,11 +77,11 @@ class NoInternetController extends GetxController {
         connectionType.value = ConnectivityResult.other.index;
         print("ConnectivityResult.other : ${connectionType.value}");
         break;
-      default:
-        Get.rawSnackbar(message: "Failed to get connection type");
+      // default:
+      //   Get.rawSnackbar(message: "Failed to get connection type");
         // Get.showSnackbar(const GetSnackBar(
         //     title: 'Error', message: 'Failed to get connection type'));
-        break;
+        // break;
     }
     update();
   }
