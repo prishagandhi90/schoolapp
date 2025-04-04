@@ -62,84 +62,40 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     fetchpresViewer();
     GetPharmaFilterData();
     update();
-    // pharmacyScrollController = ScrollController();
-
     // pharmacyScrollController.addListener(() {
     //   double maxScroll = pharmacyScrollController.position.maxScrollExtent;
     //   double currentScroll = pharmacyScrollController.position.pixels;
 
-    //   // Jab list scrollable ho, neeche ka arrow show ho
-    //   // showScrollDownArrow.value = maxScroll > 0 && currentScroll < maxScroll;
-
-    //   // Jab scroll ho to upar ka arrow show ho
+    //   showScrollDownArrow.value = maxScroll > 0 && currentScroll < maxScroll;
     //   showScrollUpArrow.value = currentScroll > 0;
+    //   update();
     // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (pharmacyScrollController.hasClients) {
+        pharmacyScrollController.addListener(() {
+          double maxScroll = pharmacyScrollController.position.maxScrollExtent;
+          double currentScroll = pharmacyScrollController.position.pixels;
 
-    pharmacyScrollController.addListener(() {
-      // If the scroll position is greater than 50.0
-      // if (pharmacyScrollController.offset > 50.0) {
-      //   if (!showScrollDownArrow.value) {
-      //     showScrollDownArrow.value = true;
-      //   }
-      // } else {
-      //   if (showScrollDownArrow.value) {
-      //     showScrollDownArrow.value = false; // Update the controller's arrow visibility
-      //   }
-      // }
+          // Scroll position check
+          showScrollDownArrow.value = maxScroll > 0 && currentScroll < maxScroll;
+          showScrollUpArrow.value = currentScroll > 0;
 
-      double maxScroll = pharmacyScrollController.position.maxScrollExtent;
-      double currentScroll = pharmacyScrollController.position.pixels;
-
-      // Jab list scrollable ho, neeche ka arrow show ho
-      showScrollDownArrow.value = maxScroll > 0 && currentScroll < maxScroll;
-
-      // Jab scroll ho to upar ka arrow show ho
-      showScrollUpArrow.value = currentScroll > 0;
-      update();
+          update();
+        });
+      }
     });
-
-    // pharmacyScrollController.addListener(() {
-    //   if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.forward) {
-    //     if (hideBottomBar.value) {
-    //       hideBottomBar.value = false;
-    //       bottomBarController.update();
-    //     }
-    //   } else if (pharmacyScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-    //     if (!hideBottomBar.value) {
-    //       hideBottomBar.value = true;
-    //       bottomBarController.update();
-    //     }
-    //   }
-    // });
-
-    // pharmacyviewScrollController.addListener(() {
-    //   if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.forward) {
-    //     if (hideBottomBar.value) {
-    //       hideBottomBar.value = false;
-    //       bottomBarController.update();
-    //     }
-    //   } else if (pharmacyviewScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-    //     if (!hideBottomBar.value) {
-    //       hideBottomBar.value = true;
-    //       bottomBarController.update();
-    //     }
-    //   }
-    // });
   }
 
   void loadScreens() async {
-    // List<ModuleScreenRights> fetchedScreens = await CommonMethods.fetchModuleScreens("Payroll");
-    // screens = fetchedScreens;
     empModuleScreenRightsTable = await CommonMethods.fetchModuleScreens("Pharmacy");
     filteredList = originalList;
-    // if (empModuleScreenRightsTable.isNotEmpty && empModuleScreenRightsTable[5].rightsYN == "Y") {
-    //   filteredList = originalList;
-    // } else {
-    //   originalList
-    //       .removeWhere((element) => element['label'].toString().toLowerCase() == 'lv/ot approval'.toLowerCase());
-    //   filteredList = originalList;
-    // }
     update();
+  }
+
+  @override
+  void onClose() {
+    pharmacyScrollController.dispose(); //
+    super.onClose();
   }
 
   void toggleBlur(int index) {
@@ -474,9 +430,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
                                   onPressed: () async {
                                     FocusScope.of(context).unfocus();
                                     callFilterAPi = true;
-                                    if (selectedWardList.isNotEmpty ||
-                                        selectedFloorList.isNotEmpty ||
-                                        selectedBedList.isNotEmpty) {
+                                    if (selectedWardList.isNotEmpty || selectedFloorList.isNotEmpty || selectedBedList.isNotEmpty) {
                                       Navigator.pop(context);
                                       await fetchpresViewer(isLoader: false);
                                     } else {

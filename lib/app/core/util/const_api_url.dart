@@ -57,4 +57,7 @@ class ConstApiUrl {
   static const getLabReports = "$empUrl/GetPatientLabReports";
   static const empPatientSummaryLabData="$empUrl/GetPatientSummaryLabData";
   static const empSortDeptPatientList="$empUrl/SortDeptPatientList";
+
+  //  ----------------Notification ---------------
+  static const empNotificationListAPI = "$empUrl/GetEMPNotificationsList";
 }

@@ -112,50 +112,61 @@ class NotificationScreen extends StatelessWidget {
                 color: AppColor.black,
               ),
               Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(CircularScreen());
-                  },
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          'Notification $index',
-                          style: TextStyle(
-                            color: AppColor.black,
-                            // fontSize: 18,
-                            fontSize: getDynamicHeight(size: 0.020),
-                            fontWeight: FontWeight.bold,
-                            fontFamily: CommonFontStyle.plusJakartaSans,
-                          ),
-                        ),
-                        subtitle: Text('Notification $index',
-                            style: TextStyle(
-                              color: AppColor.black,
-                              // fontSize: 16,
-                              fontSize: getDynamicHeight(size: 0.018),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: CommonFontStyle.plusJakartaSans,
-                            )),
-                        trailing: Column(
-                          children: [
-                            SizedBox(height: 5),
-                            Text('12/12/2021',
+                child: ListView.builder(
+                  itemCount: controller.notificationlist.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(CircularScreen(
+                          index: index,
+                        ));
+                      },
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              controller.notificationlist[index].sender.toString(),
+                              style: TextStyle(
+                                color: AppColor.black,
+                                // fontSize: 18,
+                                fontSize: getDynamicHeight(size: 0.020),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: CommonFontStyle.plusJakartaSans,
+                              ),
+                            ),
+                            subtitle: Text(controller.notificationlist[index].messageTitle.toString(),
                                 style: TextStyle(
                                   color: AppColor.black,
-                                  // fontSize: 14,
-                                  fontSize: getDynamicHeight(size: 0.016),
+                                  // fontSize: 16,
+                                  fontSize: getDynamicHeight(size: 0.018),
                                   fontWeight: FontWeight.w400,
                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                 )),
-                            SizedBox(height: getDynamicHeight(size: 0.005)), //5),
-                            Icon(Icons.attach_file),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                            trailing: Column(
+                              children: [
+                                SizedBox(height: 5),
+                                Text(controller.notificationlist[index].createdDate.toString(),
+                                    style: TextStyle(
+                                      color: AppColor.black,
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    )),
+                                SizedBox(height: getDynamicHeight(size: 0.005)), //5),
+                                if (controller.notificationlist[index].fileYN == "Y") Icon(Icons.attach_file),
+                              ],
+                            ),
+                          ),
+                          Divider(
+                            color: AppColor.black,
+                            height: 1,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

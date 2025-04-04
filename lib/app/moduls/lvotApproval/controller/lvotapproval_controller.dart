@@ -186,21 +186,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     update();
   }
 
-  // void filterSearchResults(String query, String leaveType) {
-  //   if (query.isEmpty) {
-  //     filteredList = leavelist; // Show all data if search is empty
-  //   } else {
-  //     filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
-  //     filteredList = filteredList.where((item) {
-  //       final patientName = (item.employeeCodeName ?? "").toLowerCase();
-  //       final employeecode = (item.employeeCodeValue ?? "").toLowerCase();
-
-  //       return patientName.contains(query.toLowerCase()) || employeecode.contains(query.toLowerCase());
-  //     }).toList();
-  //   }
-  //   update();
-  // }
-
   bool getRoleStatus(String role) {
     return roleStatus[role] == 'Y';
   }
@@ -210,60 +195,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     reasonnameController.text = value['text'] ?? '';
     update();
   }
-
-  // Future<void> fetchLeaveOTList(String role, String leaveType) async {
-  //   try {
-  //     isLoader.value = true;
-  //     selectedRole = role;
-  //     selectedLeaveType = leaveType;
-  //     update();
-
-  //     String url = ConstApiUrl.empLeaveOTapprovalList;
-  //     SharedPreferences pref = await SharedPreferences.getInstance();
-  //     loginId = pref.getString(AppString.keyLoginId) ?? "";
-  //     empId = await pref.getString(AppString.keyEmpId) ?? "";
-  //     tokenNo = pref.getString(AppString.keyToken) ?? "";
-
-  //     var jsonbodyObj = {"loginId": loginId, "empId": empId, "role": role, "flag": leaveType};
-
-  //     var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-  //     ResponseLeaveOTList responseLeaveOTList = ResponseLeaveOTList.fromJson(jsonDecode(response));
-
-  //     if (responseLeaveOTList.statusCode == 200) {
-  //       leavelist.clear();
-  //       leavelist.assignAll(responseLeaveOTList.data ?? []);
-
-  //       // Update role statuses for each LeaveotlistModel item
-  //       responseLeaveOTList.data?.forEach((item) {
-  //         // Use the role-related fields
-  //         roleStatus[item.defaultRole ?? ''] = item.defaultRole ?? 'N';
-  //         roleStatus[item.inchargeYN ?? ''] = item.inchargeYN ?? 'N';
-  //         roleStatus[item.hodyn ?? ''] = item.hodyn ?? 'N';
-  //         roleStatus[item.hryn ?? ''] = item.hryn ?? 'N';
-  //       });
-
-  //       if (leavelist.isNotEmpty) {
-  //         filteredList = leavelist.where((item) => item.typeValue == leaveType).toList();
-  //       } else {
-  //         leavelist = [];
-  //         filteredList = [];
-  //       }
-  //     } else if (responseLeaveOTList.statusCode == 401) {
-  //       pref.clear();
-  //       Get.offAll(const LoginScreen());
-  //       Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //     } else {
-  //       leavelist = [];
-  //       filteredList = [];
-  //       Get.rawSnackbar(message: "Something went wrong");
-  //     }
-  //     update();
-  //   } catch (e) {
-  //     isLoader.value = false;
-  //     update();
-  //   }
-  //   isLoader.value = false;
-  // }
 
   Future<List<LeaveotlistModel>> fetchLeaveOTList(String role, String leaveType) async {
     try {
