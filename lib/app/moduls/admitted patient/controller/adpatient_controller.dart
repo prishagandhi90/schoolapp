@@ -238,14 +238,12 @@ class AdPatientController extends GetxController {
     return labdata.toList();
   }
 
-   var searchQuery = "".obs; // Observable search query
-  
+  var searchQuery = "".obs; // Observable search query
+
   void updateSearchQuery(String query) {
     searchQuery.value = query;
     update(); // GetBuilder ke liye UI refresh karega
   }
-
-
 
   void filterSearchResults(String query) {
     if (query.isEmpty) {
@@ -340,175 +338,174 @@ class AdPatientController extends GetxController {
   }
 
   Future<void> AdpatientFiltterBottomSheet() async {
-  showModalBottomSheet(
-    context: Get.context!,
-    isScrollControlled: true,
-    isDismissible: true,
-    useSafeArea: true,
-    backgroundColor: AppColor.transparent,
-    builder: (context) => DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: 0.7,
-      minChildSize: 0.4,
-      maxChildSize: 0.9,
-      builder: (context, scrollController) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: true,
+      isDismissible: true,
+      useSafeArea: true,
+      backgroundColor: AppColor.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.7,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: AppColor.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                topRight: Radius.circular(25),
+              ),
             ),
-          ),
-          child: GetBuilder<AdPatientController>(
-            builder: (controller) {
-              return Column(
-                children: [
-                  SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(width: 30),
-                      Text(
-                        AppString.filterby,
-                        style: TextStyle(
-                          fontSize: getDynamicHeight(size: 0.027),
-                          color: AppColor.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(Icons.cancel),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: ListView(
-                      controller: scrollController,
+            child: GetBuilder<AdPatientController>(
+              builder: (controller) {
+                return Column(
+                  children: [
+                    SizedBox(height: 25),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(height: 25),
+                        const SizedBox(width: 30),
                         Text(
-                          AppString.selectOrgsName,
+                          AppString.filterby,
                           style: TextStyle(
-                            fontSize: getDynamicHeight(size: 0.022),
+                            fontSize: getDynamicHeight(size: 0.027),
                             color: AppColor.black,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        organizationCheckBoxes(controller: controller),
-                        SizedBox(height: 15),
-                        Text(
-                          AppString.floor,
-                          style: TextStyle(
-                            fontSize: getDynamicHeight(size: 0.022),
-                            color: AppColor.black,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(Icons.cancel),
                         ),
-                        SizedBox(height: 10),
-                        floorCheckBox(controller: controller),
-                        SizedBox(height: 15),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 50,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                    Expanded(
+                      child: ListView(
+                        controller: scrollController,
+                        children: [
+                          SizedBox(height: 25),
+                          Text(
+                            AppString.selectOrgsName,
+                            style: TextStyle(
+                              fontSize: getDynamicHeight(size: 0.022),
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          organizationCheckBoxes(controller: controller),
+                          SizedBox(height: 15),
+                          Text(
+                            AppString.floor,
+                            style: TextStyle(
+                              fontSize: getDynamicHeight(size: 0.022),
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          floorCheckBox(controller: controller),
+                          SizedBox(height: 15),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: AppColor.primaryColor,
                                 ),
-                                backgroundColor: AppColor.primaryColor,
+                                onPressed: () async {
+                                  FocusScope.of(context).unfocus();
+                                  callFilterAPi = true;
+                                  if (selectedOrgsList.isNotEmpty || selectedFloorsList.isNotEmpty) {
+                                    Navigator.pop(context);
+                                    controller.isSearchActive = false;
+                                    controller.searchController.clear();
+                                    sortBySelected = -1;
+                                    await fetchDeptwisePatientList();
+                                  } else {
+                                    Get.rawSnackbar(message: AppString.plzselectoptiontosort);
+                                  }
+                                },
+                                child: Text(
+                                  AppString.apply,
+                                  style: TextStyle(
+                                    color: AppColor.white,
+                                    fontSize: getDynamicHeight(size: 0.017),
+                                  ),
+                                ),
                               ),
-                              onPressed: () async {
-                                FocusScope.of(context).unfocus();
-                                callFilterAPi = true;
-                                if (selectedOrgsList.isNotEmpty || selectedFloorsList.isNotEmpty) {
-                                  Navigator.pop(context);
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: AppColor.primaryColor,
+                                ),
+                                onPressed: () async {
+                                  callFilterAPi = true;
+                                  FocusScope.of(context).unfocus();
+                                  selectedOrgsList = [];
+                                  selectedFloorsList = [];
+                                  selectedWardsList = [];
+
                                   controller.isSearchActive = false;
                                   controller.searchController.clear();
                                   sortBySelected = -1;
+
                                   await fetchDeptwisePatientList();
-                                } else {
-                                  Get.rawSnackbar(message: AppString.plzselectoptiontosort);
-                                }
-                              },
-                              child: Text(
-                                AppString.apply,
-                                style: TextStyle(
-                                  color: AppColor.white,
-                                  fontSize: getDynamicHeight(size: 0.017),
+                                  Navigator.pop(context);
+                                  controller.update();
+                                },
+                                child: Text(
+                                  AppString.resetall,
+                                  style: TextStyle(
+                                    fontSize: getDynamicHeight(size: 0.018),
+                                    color: AppColor.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 20),
-                        Expanded(
-                          child: SizedBox(
-                            height: 50,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                backgroundColor: AppColor.primaryColor,
-                              ),
-                              onPressed: () async {
-                                callFilterAPi = true;
-                                FocusScope.of(context).unfocus();
-                                selectedOrgsList = [];
-                                selectedFloorsList = [];
-                                selectedWardsList = [];
-
-                                controller.isSearchActive = false;
-                                controller.searchController.clear();
-                                sortBySelected = -1;
-
-                                await fetchDeptwisePatientList();
-                                Navigator.pop(context);
-                                controller.update();
-                              },
-                              child: Text(
-                                AppString.resetall,
-                                style: TextStyle(
-                                  fontSize: getDynamicHeight(size: 0.018),
-                                  color: AppColor.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
-      },
-    ),
-  ).whenComplete(() {
-    if (!callFilterAPi) {
-      fetchDeptwisePatientList();
-      selectedOrgsList = List.from(tempOrgsList);
-      selectedFloorsList = List.from(tempFloorsList);
-      selectedWardsList = List.from(tempWardList);
-      update();
-    }
-  });
-}
-
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ),
+    ).whenComplete(() {
+      if (!callFilterAPi) {
+        fetchDeptwisePatientList();
+        selectedOrgsList = List.from(tempOrgsList);
+        selectedFloorsList = List.from(tempFloorsList);
+        selectedWardsList = List.from(tempWardList);
+        update();
+      }
+    });
+  }
 
   Future<void> sortBy() async {
     showModalBottomSheet(

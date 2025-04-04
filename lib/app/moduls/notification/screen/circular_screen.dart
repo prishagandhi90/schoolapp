@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
@@ -20,7 +20,10 @@ class CircularScreen extends StatelessWidget {
           backgroundColor: AppColor.white,
           appBar: AppBar(
             backgroundColor: AppColor.white,
-            title: Text(AppString.circularScreen, style: AppStyle.primaryplusw700),
+            title: Text(
+              controller.notificationlist[index].notificationType.toString(),
+              style: AppStyle.primaryplusw700,
+            ),
             centerTitle: true,
           ),
           body: controller.isLoading
@@ -91,44 +94,34 @@ class CircularScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        controller.filesList.isEmpty
+                            ? Center(child: CircularProgressIndicator())
+                            : SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: controller.filesList.asMap().entries.map((entry) {
+                                    int index = entry.key + 1; // Index ko 1 se start karne ke liye
+                                    var file = entry.value;
+                                    bool isImage = file["contentType"]!.startsWith("image");
 
-                        /// ✅ Ye part bottom pe fixed rahega
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 25, left: 15),
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Container(
-                              width: 150, // Width like your image
-                              height: 100, // Height like your image
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10), // Rounded edges
-                                border: Border.all(color: Colors.black), // Black border
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 5,
-                                    spreadRadius: 1,
-                                    offset: Offset(0, -2), // Light shadow
-                                  ),
-                                ],
-                              ),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Text(
-                                  'FFG.pdf',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    // fontSize: 16,
-                                    fontSize: getDynamicHeight(size: 0.018),
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                  ),
+                                    return GestureDetector(
+                                      onTap: () => controller.openFile(file["fileName"]!, file["content"]!, file["contentType"]!),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            isImage
+                                                ? Image.memory(base64Decode(file["content"]!), width: 100, height: 100, fit: BoxFit.cover)
+                                                : Icon(Icons.insert_drive_file, size: 100, color: Colors.blue),
+                                            SizedBox(height: 5),
+                                            Text("File $index", style: TextStyle(fontSize: 12)), // ✅ Fixed name like "File 1", "File 2"
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
+                              )
                       ],
                     )
                   : Center(
@@ -145,4 +138,3 @@ class CircularScreen extends StatelessWidget {
     );
   }
 }
-

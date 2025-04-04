@@ -36,28 +36,82 @@ class NotificationScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: TextField(
+                          child: TextFormField(
+                            cursorColor: AppColor.black,
                             controller: controller.searchController,
                             autofocus: true,
                             decoration: InputDecoration(
-                              hintText: "Search...",
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(bottom: 8),
+                             contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black, width: 1.5), // ✅ Border on focus
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.02)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.2), // ✅ Default border
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.02)),
+                              ),
+                              suffixIcon: controller.searchController.text.trim().isNotEmpty
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(context).unfocus();
+                                        controller.searchController.clear();
+                                        controller.fetchNotificationList();
+                                        controller.update();
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Icon(Icons.cancel, color: Colors.black, size: 24), // ✅ Cancel button color
+                                      ),
+                                    )
+                                  : null,
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Icon(Icons.search, color: AppColor.black, size: 24), // ✅ Search icon color
+                              ),
+                              hintText: AppString.search,
+                              hintStyle: AppStyle.plusgrey.copyWith(fontSize: 14, color: AppColor.lightgrey1), // ✅ Hint text style
+                              filled: true,
+                              fillColor: AppColor.white, // ✅ Background color
                             ),
-                            style: AppStyle.primaryplusw700,
+                            onTap: () => controller.update(),
+                            onChanged: (value) => controller.filterSearchResults(value),
+                            onTapOutside: (event) {
+                              FocusScope.of(context).unfocus();
+                              Future.delayed(const Duration(milliseconds: 300));
+                              controller.update();
+                            },
+                            onFieldSubmitted: (v) {
+                              if (controller.searchController.text.trim().isNotEmpty) {
+                                controller.fetchNotificationList();
+                                controller.searchController.clear();
+                              }
+                              Future.delayed(const Duration(milliseconds: 800));
+                              controller.update();
+                            },
                           ),
+
+                          // TextField(
+                          //   controller: controller.searchController,
+                          //   autofocus: true,
+                          //   decoration: InputDecoration(
+                          //     hintText: "Search...",
+                          //     border: InputBorder.none,
+                          //     contentPadding: EdgeInsets.only(bottom: 8),
+                          //   ),
+                          //   style: AppStyle.primaryplusw700,
+                          // ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            controller.isSearching = false;
-                            controller.searchController.clear();
-                            controller.update();
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Icon(Icons.cancel),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     controller.isSearching = false;
+                        //     controller.searchController.clear();
+                        //     controller.update();
+                        //   },
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(horizontal: 8),
+                        //     child: Icon(Icons.cancel),
+                        //   ),
+                        // ),
                       ],
                     ),
                   )
@@ -113,20 +167,19 @@ class NotificationScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: controller.notificationlist.length,
+                  itemCount: controller.filternotificationlist.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: () {
-                        Get.to(CircularScreen(
-                          index: index,
-                        ));
+                      onTap: () async {
+                        await controller.fetchNotificationFile();
+                        Get.to(CircularScreen(index: index));
                       },
                       child: Column(
                         children: [
                           ListTile(
                             title: Text(
-                              controller.notificationlist[index].sender.toString(),
+                              controller.filternotificationlist[index].sender.toString(),
                               style: TextStyle(
                                 color: AppColor.black,
                                 // fontSize: 18,
@@ -135,7 +188,7 @@ class NotificationScreen extends StatelessWidget {
                                 fontFamily: CommonFontStyle.plusJakartaSans,
                               ),
                             ),
-                            subtitle: Text(controller.notificationlist[index].messageTitle.toString(),
+                            subtitle: Text(controller.filternotificationlist[index].messageTitle.toString(),
                                 style: TextStyle(
                                   color: AppColor.black,
                                   // fontSize: 16,
@@ -146,7 +199,7 @@ class NotificationScreen extends StatelessWidget {
                             trailing: Column(
                               children: [
                                 SizedBox(height: 5),
-                                Text(controller.notificationlist[index].createdDate.toString(),
+                                Text(controller.filternotificationlist[index].createdDate.toString(),
                                     style: TextStyle(
                                       color: AppColor.black,
                                       // fontSize: 14,
@@ -155,7 +208,7 @@ class NotificationScreen extends StatelessWidget {
                                       fontFamily: CommonFontStyle.plusJakartaSans,
                                     )),
                                 SizedBox(height: getDynamicHeight(size: 0.005)), //5),
-                                if (controller.notificationlist[index].fileYN == "Y") Icon(Icons.attach_file),
+                                if (controller.filternotificationlist[index].fileYN == "Y") Icon(Icons.attach_file),
                               ],
                             ),
                           ),
