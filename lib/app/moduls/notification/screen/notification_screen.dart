@@ -41,7 +41,7 @@ class NotificationScreen extends StatelessWidget {
                             controller: controller.searchController,
                             autofocus: true,
                             decoration: InputDecoration(
-                             contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
+                              contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: AppColor.black, width: 1.5), // ✅ Border on focus
                                 borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.02)),
@@ -197,6 +197,7 @@ class NotificationScreen extends StatelessWidget {
                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                 )),
                             trailing: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 SizedBox(height: 5),
                                 Text(controller.filternotificationlist[index].createdDate.toString(),
@@ -208,7 +209,12 @@ class NotificationScreen extends StatelessWidget {
                                       fontFamily: CommonFontStyle.plusJakartaSans,
                                     )),
                                 SizedBox(height: getDynamicHeight(size: 0.005)), //5),
-                                if (controller.filternotificationlist[index].fileYN == "Y") Icon(Icons.attach_file),
+                                if (controller.filternotificationlist[index].fileYN == "Y")
+                                  Image.asset(
+                                    AppImage.attach,
+                                    width: getDynamicHeight(size: 0.022),
+                                    color: AppColor.black,
+                                  ),
                               ],
                             ),
                           ),

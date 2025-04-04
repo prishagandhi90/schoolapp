@@ -22,6 +22,7 @@ class AppImage {
   static String lvotapproval = "assets/image/lvotapp.png";
   static String filter1 = "assets/image/filter.png";
   static String note = "assets/image/notes.png";
+  static String attach = "assets/image/attach.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }
