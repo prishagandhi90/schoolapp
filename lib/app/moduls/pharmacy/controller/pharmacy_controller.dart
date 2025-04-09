@@ -288,6 +288,28 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     }
   }
 
+  double calculateAppBarHeight(BuildContext context, String patientName) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: patientName,
+        style: TextStyle(
+          fontSize: getDynamicHeight(size: 0.015),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      maxLines: 2,
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: MediaQuery.of(context).size.width * 0.10);
+
+    int lines = (textPainter.size.height / textPainter.preferredLineHeight).ceil();
+
+    // Adjusted values: Add your own layout heights
+    double baseHeight = getDynamicHeight(size: 0.120); // minimum for 1 line
+    double extraLineHeight = getDynamicHeight(size: 0.018); // for second line
+
+    return lines > 1 ? baseHeight + extraLineHeight : baseHeight;
+  }
+
   List<Map<String, dynamic>> originalList = AppConst.pharmacygrid;
   List<Map<String, dynamic>> filteredList = [];
 

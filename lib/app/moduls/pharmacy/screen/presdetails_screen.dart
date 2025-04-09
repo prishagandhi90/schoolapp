@@ -5,7 +5,6 @@ import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,18 +16,7 @@ class PresdetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(PharmacyController());
-
     double fullScreenHeight = MediaQuery.of(context).size.height;
-    double statusBarHeight = MediaQuery.of(context).padding.top;
-    print('\n');
-    print('Full Screen Height: $fullScreenHeight');
-    print('Status Bar Height: $statusBarHeight');
-
-    double fullScreenWidth = MediaQuery.of(context).size.width;
-    print('Full Screen Width: $fullScreenWidth');
-
-    // double appBarHeight = AppBar().preferredSize.height;
-
     return GetBuilder<PharmacyController>(
       builder: (controller) {
         void checkAllBlurred() {
@@ -42,219 +30,139 @@ class PresdetailsScreen extends StatelessWidget {
           }
         }
 
-        String patientName = controller.presviewerList[controller.SelectedIndex].patientName.toString();
-        TextStyle textStyle = TextStyle(
-          color: AppColor.black,
-          // fontSize: 20,
-          fontSize: getDynamicHeight(size: 0.022),
-          fontWeight: FontWeight.bold,
-        );
-
-        Size textSize = calculateTextSize(patientName, textStyle, fullScreenWidth * 0.9); // 90% width max
-        // double textHeight = textSize.height;
-        double textWidth = textSize.width;
-
-        bool isWrapped = textWidth > (fullScreenWidth * 0.8);
-        print("textWidth: $textWidth");
-        print("patientName: $patientName");
-        print("isWrapped: $isWrapped");
-
-        double appBarHeight =
-            isWrapped == false ? (fullScreenHeight * (16.0 / 100)).toDouble() : (fullScreenHeight * (19.0 / 100)).toDouble();
-        print('appbar height: $appBarHeight');
-
         return Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(appBarHeight), // Ensure sufficient height
+            preferredSize: Size.fromHeight(
+              controller.calculateAppBarHeight(
+                context,
+                controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
+                    ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
+                    : '',
+              ),
+            ),
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.vertical(
-              //     bottom: Radius.circular(30),
-              //   ),
-              // ),
-              flexibleSpace: Padding(
-                padding: EdgeInsets.only(
-                  top: statusBarHeight + 2.0, // Account for the status bar height
-                  left: fullScreenWidth * (4.73 / 100),
-                  right: fullScreenWidth * (4.73 / 100),
-                  bottom: 0,
-                ),
-                child: controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
-                    ? Column(
-                        children: [
-                          Expanded(
-                            child: Column(
+              flexibleSpace: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.011), vertical: getDynamicHeight(size: 0.007)),
+                  child: controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Patient Name
+                            Text(
+                              controller.presviewerList[controller.SelectedIndex].patientName.toString(),
+                              style: TextStyle(
+                                fontSize: getDynamicHeight(size: 0.016),
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.black,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+
+                            // IPD & MOP
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    controller.presviewerList[controller.SelectedIndex].patientName.toString(),
-                                    style: TextStyle(
-                                      color: AppColor.black,
-                                      // fontSize: 20,
-                                      fontSize: getDynamicHeight(size: 0.022),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 2, // Allow wrapping in 2 lines
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            controller.presviewerList[controller.SelectedIndex].ipd.toString(),
-                                            style: AppStyle.plus16,
-                                          ),
-                                          SizedBox(height: fullScreenWidth * (1.1 / 100)), // Space between IPD and MOP
-                                          Text(
-                                            controller.presviewerList[controller.SelectedIndex].mop.toString(),
-                                            style: TextStyle(
-                                              // fontSize: 16,
-                                              fontSize: getDynamicHeight(size: 0.018),
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ],
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.presviewerList[controller.SelectedIndex].ipd.toString(),
+                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            controller.presviewerList[controller.SelectedIndex].bed.toString(),
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              // fontSize: 16,
-                                              fontSize: getDynamicHeight(size: 0.018),
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
-                                          ),
-                                          SizedBox(height: fullScreenWidth * (1.1 / 100)), // Space between Bed and Intercom
-                                          Text.rich(
-                                            TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: AppString.intercom, // Bold label
-                                                  style: TextStyle(
-                                                    // fontSize: 16,
-                                                    fontSize: getDynamicHeight(size: 0.018),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
-                                                  style: TextStyle(
-                                                    // fontSize: 16,
-                                                    fontSize: getDynamicHeight(size: 0.018),
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            textAlign: TextAlign.start,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    // Column for Date and Doctor
-                                    Expanded(
-                                      child: Text(
-                                        controller.presviewerList[controller.SelectedIndex].dte.toString(),
+                                      SizedBox(height: getDynamicHeight(size: 0.003)),
+                                      Text(
+                                        controller.presviewerList[controller.SelectedIndex].mop.toString(),
                                         style: TextStyle(
-                                          // fontSize: 16,
-                                          fontSize: getDynamicHeight(size: 0.018),
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                          fontSize: getDynamicHeight(size: 0.014),
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                    ),
-                                    // Token No and QR Code Image
-                                    Expanded(
-                                      child: Text.rich(
-                                        TextSpan(
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: getDynamicHeight(size: 0.007)),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.presviewerList[controller.SelectedIndex].bed.toString(),
+                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                      ),
+                                      SizedBox(height: getDynamicHeight(size: 0.003)),
+                                      RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(fontSize: getDynamicHeight(size: 0.014), color: AppColor.black),
                                           children: [
                                             TextSpan(
-                                              text: AppString.tokenNo, // Bold label
-                                              style: TextStyle(
-                                                // fontSize: 16,
-                                                fontSize: getDynamicHeight(size: 0.018),
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                              text: '${AppString.intercom}: ',
+                                              style: TextStyle(fontWeight: FontWeight.bold),
                                             ),
                                             TextSpan(
-                                              text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
-                                              style: TextStyle(
-                                                // fontSize: 18,
-                                                fontSize: getDynamicHeight(size: 0.020),
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                                              text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
                                             ),
                                           ],
                                         ),
-                                        textAlign: TextAlign.start,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Stack(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        // Column for Date and Doctor
-                                        Expanded(
-                                          child: Text(
-                                            // 'lfkjdslkfjsdlkjflkjsdlkfjlksdjflksdlkjflksdjlkfjsdlkjflkjsdlk',
-                                            controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                                            style: TextStyle(
-                                              // fontSize: 16,
-                                              fontSize: getDynamicHeight(size: 0.018),
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: fullScreenWidth * (1.1 / 100)),
-                                      ],
-                                    ),
-                                    // Positioned(
-                                    //   // top: 0, // Move QR code upwards
-                                    //   right: 10, // Adjust alignment if needed
-                                    //   child: Image.asset(
-                                    //     AppImage.qrcode, // Replace with your image path
-                                    //     height: 50,
-                                    //     width: 50,
-                                    //     fit: BoxFit.contain,
-                                    //   ),
-                                    // ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      )
-                    : Padding(
-                        padding: EdgeInsets.all(fullScreenWidth * (1.1 / 100)),
-                        child: Center(child: Text(AppString.nodataavailable)),
-                      ),
+
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+
+                            // Date & Token
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].dte.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(fontSize: getDynamicHeight(size: 0.014), color: AppColor.black),
+                                      children: [
+                                        TextSpan(
+                                          text: '${AppString.tokenNo}: ',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        TextSpan(
+                                          text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+
+                            // Doctor Name
+                            Text(
+                              controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                              style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        )
+                      : Center(
+                          child: Text(AppString.nodataavailable),
+                        ),
+                ),
               ),
             ),
           ),
@@ -275,7 +183,7 @@ class PresdetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 9), // Adjust as needed
                             child: ListView.builder(
                               shrinkWrap: true,
-                              controller: controller.pharmacyScrollController,    
+                              controller: controller.pharmacyScrollController,
                               physics: const AlwaysScrollableScrollPhysics(), // Disable internal scrolling
                               itemCount: controller.presdetailList.length,
                               itemBuilder: (context, index) {
