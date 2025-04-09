@@ -118,36 +118,41 @@ class _CustomGridviewState extends State<CustomGridview> {
     bool isSelected = selectedIndex == index;
 
     return Container(
-      decoration: BoxDecoration(
-        color: AppColor.white,
-        border: Border.all(color: AppColor.primaryColor, width: getDynamicHeight(size: 0.002)),
-        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-        boxShadow: isSelected
-            ? [
-                BoxShadow(
-                  color: AppColor.grey,
-                  spreadRadius: getDynamicHeight(size: 0.004),
-                  offset: Offset(0, getDynamicHeight(size: 0.006)),
-                  blurRadius: getDynamicHeight(size: 0.01),
-                ),
-              ]
-            : [],
-      ),
-      child: Center(
+  decoration: BoxDecoration(
+    color: AppColor.white,
+    border: Border.all(color: AppColor.primaryColor, width: getDynamicHeight(size: 0.002)),
+    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+    boxShadow: isSelected
+        ? [
+            BoxShadow(
+              color: AppColor.grey,
+              spreadRadius: getDynamicHeight(size: 0.004),
+              offset: Offset(0, getDynamicHeight(size: 0.006)),
+              blurRadius: getDynamicHeight(size: 0.01),
+            ),
+          ]
+        : [],
+  ),
+  child: LayoutBuilder(
+    builder: (context, constraints) {
+      double imageSize = constraints.maxWidth * 0.35; // You can adjust this
+
+      return Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Image.asset(
               gridview[index]['image'],
               color: AppColor.primaryColor,
-              height: Sizes.w * 0.09, // Image size dynamic
-              width: Sizes.w * 0.09, // Image size dynamic
+              height: imageSize,
+              width: imageSize,
+              fit: BoxFit.contain,
             ),
+            SizedBox(height: getDynamicHeight(size: 0.008)),
             Text(
               gridview[index]['label'],
               style: TextStyle(
-                fontSize: Sizes.w * 0.035, // Dynamic font size
+                fontSize: constraints.maxWidth * 0.13, // Text also responsive
                 fontWeight: FontWeight.w600,
                 overflow: TextOverflow.ellipsis,
                 fontFamily: CommonFontStyle.plusJakartaSans,
@@ -156,7 +161,10 @@ class _CustomGridviewState extends State<CustomGridview> {
             ),
           ],
         ),
-      ),
-    );
+      );
+    },
+  ),
+);
+
   }
 }

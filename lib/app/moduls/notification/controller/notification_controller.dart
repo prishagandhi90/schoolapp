@@ -14,13 +14,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:open_filex/open_filex.dart';
 
 class NotificationController extends GetxController {
-  @override
-  void onInit() {
-    fetchNotificationList();
-
-    super.onInit();
-  }
-
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
   TextEditingController searchController = TextEditingController();
@@ -32,6 +25,24 @@ class NotificationController extends GetxController {
   bool isLoading = false;
   final ApiController apiController = Get.put(ApiController());
   List<Map<String, String>> filesList = [];
+  final FocusNode searchFocusNode = FocusNode();
+  RxBool isNotesFieldFocused = false.obs;
+
+  @override
+  void onInit() {
+    fetchNotificationList();
+    searchController.clear();
+    searchFocusNode.unfocus();
+    searchFocusNode.addListener(_onsearchFocusChange);
+    super.onInit();
+  }
+
+  void _onsearchFocusChange() {
+    if (!searchFocusNode.hasFocus) {
+      isNotesFieldFocused.value = searchFocusNode.hasFocus;
+      update();
+    }
+  }
 
   Future<void> selectFromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -59,16 +70,31 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<List<NotificationlistModel>> fetchNotificationList() async {
+  Future<List<NotificationlistModel>> fetchNotificationList({int days = 0, String tag = "",String fromDate="",String toDate=""}) async {
     try {
       isLoading = true;
+      
+      update();
+      notificationlist.clear(); // 👈 Important: Clear previous list
+      filternotificationlist.clear();
       String url = ConstApiUrl.empNotificationListAPI;
       SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId};
-
+      var jsonbodyObj;
+      if (fromDate == "" && toDate == "") {
+        jsonbodyObj = {"loginId": loginId, "empId": empId, "days": days, "tag": tag};
+      } else {
+        jsonbodyObj = {
+          "loginId": loginId,
+          "empId": empId,
+          "days": days,
+          "tag": tag,
+          "FromDate": fromDate,
+          "ToDate": toDate,
+        };
+      }
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseNotificationList responseNotificationList = ResponseNotificationList.fromJson(jsonDecode(response));
       notificationlist.clear();
@@ -98,7 +124,7 @@ class NotificationController extends GetxController {
     return notificationlist.toList();
   }
 
-  Future<List<NotificationfileModel>> fetchNotificationFile() async {
+  Future<List<NotificationfileModel>> fetchNotificationFile(int index) async {
     try {
       isLoading = true;
       String url = ConstApiUrl.empNotificationFileAPI;
@@ -106,11 +132,12 @@ class NotificationController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "index": 0};
+      var jsonbodyObj = {"loginId": loginId, "notificationId": notificationlist[index].id.toString(), "index": 0};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseNotificationfile responseNotificationfile = ResponseNotificationfile.fromJson(jsonDecode(response));
-
+      notificationfile.clear();
+      filesList.clear();
       if (responseNotificationfile.statusCode == 200) {
         notificationfile.assignAll(responseNotificationfile.data ?? []);
         for (var fileData in notificationfile) {
@@ -179,5 +206,35 @@ class NotificationController extends GetxController {
       OpenFilex.open(file.path);
     });
     // OpenFilex.open(file.path);
+  }
+
+  final List<String> filterOptions = [
+    "Today",
+    "Last 7 days",
+    "Last 15 days",
+    "Last 30 days",
+    "Last 50 days",
+    "Last 70 days",
+    "Last 90 days",
+    "Date range",
+  ];
+  final Map<String, int> filterOptionDaysMap = {
+    "Today": 1,
+    "Last 7 days": 7,
+    "Last 15 days": 15,
+    "Last 30 days": 30,
+    "Last 50 days": 50,
+    "Last 70 days": 70,
+    "Last 90 days": 90,
+    "Date range": 0, // handled separately
+  };
+  RxList<String> selectedTags = <String>[].obs;
+
+  void toggleTag(String tag) {
+    if (selectedTags.contains(tag)) {
+      selectedTags.remove(tag);
+    } else {
+      selectedTags.add(tag);
+    }
   }
 }

@@ -39,7 +39,6 @@ class AdPatientController extends GetxController {
   List<String> tempOrgsList = [];
   List<String> tempFloorsList = [];
   List<String> tempWardList = [];
-
   bool isSearchActive = false;
   var isAdpatientData = false.obs;
   var isSelectionMode = false.obs;

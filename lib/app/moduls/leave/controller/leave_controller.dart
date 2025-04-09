@@ -106,6 +106,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   void _onNotesFocusChange() {
     if (!notesFocusNode.hasFocus) {
       isNotesFieldFocused.value = notesFocusNode.hasFocus;
+      
       update();
     }
   }

@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,17 +18,6 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   String selectedFilter = "Today"; // Default Selected Value
-
-  final List<String> filterOptions = [
-    "Today",
-    "Last 7 days",
-    "Last 15 days",
-    "Last 30 days",
-    "Last 50 days",
-    "Last 70 days",
-    "Last 90 days",
-    "Date range" // Ye last wala BottomSheet open karega
-  ];
 
   final List<String> tagFilters = ["Training", "Circular", "Notice"];
 
@@ -42,30 +32,34 @@ class _FilterScreenState extends State<FilterScreen> {
             title: Text(AppString.filters, style: AppStyle.primaryplusw700),
             backgroundColor: AppColor.white,
             centerTitle: true,
+            leading: IconButton(
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  controller.fetchNotificationList(); // Fetch data from server
+                  Navigator.pop(context); // UI ko refresh karna
+                },
+                icon: Icon(Icons.arrow_back_ios_new, color: AppColor.black)),
             actions: [
               TextButton(
                   onPressed: () {
-                    Get.back();
+                    FocusScope.of(context).unfocus();
+                    controller.fetchNotificationList();
+                    controller.selectedTags.clear();
+                    controller.filesList.clear();
+                    Navigator.pop(context);
+                    controller.update();
                   },
                   child: Text(
                     AppString.cancel,
                     style: AppStyle.primaryplusw700.copyWith(
                       fontSize: getDynamicHeight(size: 0.018),
                     ),
-                    // TextStyle(
-                    //   color: AppColor.black,
-                    //   fontSize: 16,
-                    //   fontWeight: FontWeight.w700,
-                    //   fontFamily: CommonFontStyle.plusJakartaSans,
-                    // ),
                   ))
             ],
           ),
           body: Column(
             children: [
-              Divider(
-                color: AppColor.black,
-              ),
+              Divider(color: AppColor.black),
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(getDynamicHeight(size: 0.018)), //16),
@@ -81,12 +75,11 @@ class _FilterScreenState extends State<FilterScreen> {
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.011)), //10),
                       Column(
-                        children: filterOptions.map((option) {
+                        children: controller.filterOptions.map((option) {
                           return GestureDetector(
                             onTap: () {
-                              setState(() {
-                                selectedFilter = option;
-                              });
+                              selectedFilter = option;
+                              controller.update();
                               if (option == "Date range") {
                                 _showDateRangeBottomSheet(context);
                               }
@@ -96,13 +89,15 @@ class _FilterScreenState extends State<FilterScreen> {
                                 Radio<String>(
                                   value: option,
                                   groupValue: selectedFilter,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedFilter = value!;
-                                    });
+                                  onChanged: (value) async {
+                                    selectedFilter = option;
+                                    controller.update();
 
-                                    if (value == "Date range") {
+                                    if (option == "Date range") {
                                       _showDateRangeBottomSheet(context);
+                                    } else {
+                                      final days = controller.filterOptionDaysMap[option] ?? 0;
+                                      await controller.fetchNotificationList(days: days); // 👈 Pass the days to API call
                                     }
                                   },
                                   activeColor: AppColor.black,
@@ -128,21 +123,59 @@ class _FilterScreenState extends State<FilterScreen> {
                       SizedBox(height: getDynamicHeight(size: 0.012)), //10),
                       Column(
                         children: tagFilters.map((tag) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Row(
-                              children: [
-                                Icon(Icons.check_circle, color: AppColor.black, size: 20),
-                                SizedBox(width: getDynamicHeight(size: 0.012)), //10),
-                                Text(tag,
-                                    style: TextStyle(
-                                      fontSize: getDynamicHeight(size: 0.016),
-                                    )),
-                              ],
+                          final isSelected = controller.selectedTags.contains(tag);
+                          return GestureDetector(
+                            onTap: () {
+                              print('Tag tapped: $tag');
+                              if (isSelected) {
+                                controller.selectedTags.remove(tag);
+                              } else {
+                                controller.selectedTags.add(tag);
+                              }
+                              controller.update();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black, width: 2),
+                                      borderRadius: BorderRadius.circular(4), // square corners
+                                      color: isSelected ? Colors.black : Colors.transparent,
+                                    ),
+                                    child: isSelected
+                                        ? Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 18,
+                                          )
+                                        : null,
+                                  ),
+                                  SizedBox(width: getDynamicHeight(size: 0.012)),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: TextEditingController(text: tag),
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.zero,
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }).toList(),
                       ),
+
                       SizedBox(height: MediaQuery.of(context).size.height * 0.12),
                     ],
                   ),
@@ -158,7 +191,19 @@ class _FilterScreenState extends State<FilterScreen> {
                       height: MediaQuery.of(context).size.width * 0.13,
                       width: MediaQuery.of(context).size.width * 0.38,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final controller = Get.find<NotificationController>();
+
+                          final days = controller.filterOptionDaysMap[selectedFilter] ?? 0;
+                          final tagString = controller.selectedTags.join(',');
+
+                          print("Selected Days: $days"); // ✅ Check in console
+                          print("Selected Tags: $tagString");
+
+                          await controller.fetchNotificationList(days: days, tag: tagString);
+
+                          Get.back();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
                           shape: RoundedRectangleBorder(
@@ -180,7 +225,14 @@ class _FilterScreenState extends State<FilterScreen> {
                       height: MediaQuery.of(context).size.width * 0.13,
                       width: MediaQuery.of(context).size.width * 0.35,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          FocusScope.of(context).unfocus();
+                          controller.fetchNotificationList();
+                          controller.selectedTags.clear();
+                          controller.filesList.clear();
+                          Navigator.pop(context);
+                          controller.update();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
                           shape: RoundedRectangleBorder(
@@ -205,312 +257,156 @@ class _FilterScreenState extends State<FilterScreen> {
       },
     );
   }
-}
 
-void _showDateRangeBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-    ),
-    builder: (context) {
-      return GetBuilder<NotificationController>(
-        builder: (controller) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: getDynamicHeight(size: 0.032)), //30),
-                    const Spacer(),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Select Date",
-                        style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: getDynamicHeight(size: 0.020),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Icon(Icons.close),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
+  void _showDateRangeBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return GetBuilder<NotificationController>(
+          builder: (controller) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Expanded(
-                        child: CustomDatePicker(
-                          dateController: controller.fromDateController,
-                          hintText: AppString.from,
-                          onDateSelected: () async => await controller.selectFromDate(context),
+                      SizedBox(width: getDynamicHeight(size: 0.032)), //30),
+                      const Spacer(),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Select Date",
+                          style: TextStyle(
+                            color: AppColor.primaryColor,
+                            fontSize: getDynamicHeight(size: 0.020),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        width: 12.0,
-                      ),
-                      Expanded(
-                        child: CustomDatePicker(
-                          dateController: controller.toDateController,
-                          hintText: AppString.to,
-                          onDateSelected: () async => await controller.selectToDate(context),
-                        ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () async {
+                          Navigator.pop(context);
+                          await controller.fetchNotificationList(
+                            days: 0, // because we're using range
+                            tag: "", // future scope: can add selected tags
+                          );
+                        },
+                        child: const Icon(Icons.close),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 20),
-                // Center(
-                //   child: ElevatedButton(
-                //     onPressed: () => Navigator.pop(context),
-                //     child: Text("Apply"),
-                //     style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-                //   ),
-                // ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.13,
-                      width: MediaQuery.of(context).size.width * 0.38,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // // controller.isLoadingLogin ? null : controller.requestOTP(context);
-                          // FocusScope.of(context).unfocus();
-                          // // FocusManager.instance.primaryFocus?.unfocus();
-                          // if (controller.passFormKey.currentState!.validate()) {
-                          //   controller.requestOTP(context);
-                          // }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CustomDatePicker(
+                            dateController: controller.fromDateController,
+                            hintText: AppString.from,
+                            onDateSelected: () async => await controller.selectFromDate(context),
                           ),
                         ),
-                        child:
-                            // controller.isLoadingLogin
-                            //     ? const CircularProgressIndicator()
-                            //     :
-                            Text(
-                          AppString.confirm,
-                          style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: getDynamicHeight(size: 0.022),
-                            fontWeight: FontWeight.w700,
-                            fontFamily: CommonFontStyle.plusJakartaSans,
+                        SizedBox(
+                          width: 12.0,
+                        ),
+                        Expanded(
+                          child: CustomDatePicker(
+                            dateController: controller.toDateController,
+                            hintText: AppString.to,
+                            onDateSelected: () async => await controller.selectToDate(context),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.13,
+                        width: MediaQuery.of(context).size.width * 0.38,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final controller = Get.find<NotificationController>();
+
+                            final days = controller.filterOptionDaysMap[selectedFilter] ?? 0;
+                            final tagString = controller.selectedTags.join(',');
+
+                            print("Selected Days: $days"); // ✅ Check in console
+                            print("Selected Tags: $tagString");
+
+                            await controller.fetchNotificationList(
+                              days: days,
+                              tag: tagString,
+                              fromDate: controller.fromDateController.text,
+                              toDate: controller.toDateController.text,
+                            );
+
+                            Get.to(NotificationScreen());
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            AppString.confirm,
+                            style: TextStyle(
+                              color: AppColor.white,
+                              fontSize: getDynamicHeight(size: 0.022),
+                              fontWeight: FontWeight.w700,
+                              fontFamily: CommonFontStyle.plusJakartaSans,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.width * 0.13,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
-                        ),
-                        child: Text(
-                          AppString.cancel,
-                          style: TextStyle(
-                            color: AppColor.white,
-                            // fontSize: 20,
-                            fontSize: getDynamicHeight(size: 0.022),
-                            fontWeight: FontWeight.w700,
-                            fontFamily: CommonFontStyle.plusJakartaSans,
+                      const SizedBox(width: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.13,
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            controller.fetchNotificationList();
+                            controller.selectedTags.clear();
+                            controller.filesList.clear();
+                            controller.fromDateController.clear();
+                            controller.toDateController.clear();
+                            Navigator.pop(context);
+                            controller.update();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.primaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                          ),
+                          child: Text(
+                            AppString.cancel,
+                            style: TextStyle(
+                              color: AppColor.white,
+                              fontSize: getDynamicHeight(size: 0.022),
+                              fontWeight: FontWeight.w700,
+                              fontFamily: CommonFontStyle.plusJakartaSans,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          );
-        },
-      );
-    },
-  );
+                    ],
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
-
-
-// import 'package:emp_app/app/core/util/app_color.dart';
-// import 'package:emp_app/app/core/util/app_font_name.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-
-// class FilterScreen extends StatelessWidget {
-//   FilterScreen({Key? key}) : super(key: key);
-
-//   String selectedFilter = "Today"; // Default Selected Value
-
-//   final List<String> filterOptions = [
-//     "Today",
-//     "Last 7 days",
-//     "Last 15 days",
-//     "Last 30 days",
-//     "Last 50 days",
-//     "Last 70 days",
-//     "Last 90 days",
-//     "Date range"
-//   ];
-
-//   final List<String> tagFilters = ["Training", "Circular", "Notice"];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Filter Screen',
-//           style: TextStyle(
-//             color: AppColor.primaryColor,
-//             fontWeight: FontWeight.w700,
-//             fontFamily: CommonFontStyle.plusJakartaSans,
-//           ),
-//         ),
-//         centerTitle: true,
-//         actions: [
-//           TextButton(
-//               onPressed: () {
-//                 Get.back();
-//               },
-//               child: Text(
-//                 'Cancel',
-//                 style: TextStyle(
-//                   color: AppColor.black,
-//                   fontSize: 16,
-//                   fontWeight: FontWeight.w700,
-//                   fontFamily: CommonFontStyle.plusJakartaSans,
-//                 ),
-//               ))
-//         ],
-//       ),
-//       body: Column(
-//         children: [
-//           Divider(
-//             color: AppColor.originalgrey,
-//             thickness: 1,
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Align(
-//               alignment: Alignment.topLeft,
-//               child: Text(
-//                 'Filter by days /date range',
-//                 style: TextStyle(
-//                   color: AppColor.black,
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                   fontFamily: CommonFontStyle.plusJakartaSans,
-//                 ),
-//               ),
-//             ),
-//           ),
-//           Column(
-//             children: filterOptions.map((option) {
-//               return RadioListTile<String>(
-//                 title: Text(option, style: TextStyle(fontSize: 16)),
-//                 value: option,
-//                 groupValue: selectedFilter,
-//                 onChanged: (value) {
-//                   selectedFilter = value!;
-//                   // updare lkhvanu
-//                 },
-//                 activeColor: Colors.black,
-//               );
-//             }).toList(),
-//           ),
-//           Divider(color: Colors.black, thickness: 1),
-//           SizedBox(height: 10),
-//           Align(
-//             alignment: Alignment.topLeft,
-//             child: Text(
-//               "Filter by tags",
-//               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-//             ),
-//           ),
-//           SizedBox(height: 10),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Column(
-//               children: tagFilters.map((tag) {
-//                 return Padding(
-//                   padding: const EdgeInsets.symmetric(vertical: 4.0),
-//                   child: Row(
-//                     children: [
-//                       Icon(Icons.check_circle, color: Colors.black, size: 20),
-//                       SizedBox(width: 10),
-//                       Text(tag, style: TextStyle(fontSize: 18)),
-//                     ],
-//                   ),
-//                 );
-//               }).toList(),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   // ✅ **Bottom Sheet for Date Range**
-//   void _showDateRangeBottomSheet(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-//       ),
-//       builder: (context) {
-//         return Padding(
-//           padding: const EdgeInsets.all(16.0),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text("Select Date Range", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//               SizedBox(height: 10),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   ElevatedButton(
-//                     onPressed: () {}, // Open Date Picker (Future Scope)
-//                     child: Text("From Date"),
-//                   ),
-//                   ElevatedButton(
-//                     onPressed: () {}, // Open Date Picker (Future Scope)
-//                     child: Text("To Date"),
-//                   ),
-//                 ],
-//               ),
-//               SizedBox(height: 20),
-//               Center(
-//                 child: ElevatedButton(
-//                   onPressed: () => Navigator.pop(context),
-//                   child: Text("Apply"),
-//                   style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
