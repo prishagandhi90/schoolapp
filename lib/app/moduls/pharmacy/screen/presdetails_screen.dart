@@ -151,11 +151,25 @@ class PresdetailsScreen extends StatelessWidget {
                             SizedBox(height: getDynamicHeight(size: 0.005)),
 
                             // Doctor Name
-                            Text(
-                              controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                              style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].org.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontWeight: FontWeight.w600),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         )
@@ -177,13 +191,11 @@ class PresdetailsScreen extends StatelessWidget {
                         LayoutBuilder(builder: (context, constraints) {
                           double ConstraintsHeight = constraints.maxHeight; // Ensure scrolling
                           print('Constraints Height: $ConstraintsHeight');
-                          // int listItemsCount = controller.presdetailList.length; // Ensure scrolling
-                          // bool isScrollable = (ConstraintsHeight) > availableHeight;
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 9), // Adjust as needed
                             child: ListView.builder(
-                              shrinkWrap: true,
                               controller: controller.pharmacyScrollController,
+                              shrinkWrap: true,
                               physics: const AlwaysScrollableScrollPhysics(), // Disable internal scrolling
                               itemCount: controller.presdetailList.length,
                               itemBuilder: (context, index) {

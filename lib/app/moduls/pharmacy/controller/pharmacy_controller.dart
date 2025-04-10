@@ -29,7 +29,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   List<PresdetailList> presdetailList = [];
   List<PresviewerList> filterpresviewerList = [];
   ScrollController pharmacyScrollController = ScrollController();
-  final ScrollController pharmacyviewScrollController = ScrollController();
+  // final ScrollController pharmacyviewScrollController = ScrollController();
   FocusNode focusNode = FocusNode();
   TextEditingController textEditingController = TextEditingController();
   bool hasFocus = false;
@@ -70,19 +70,16 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     //   showScrollUpArrow.value = currentScroll > 0;
     //   update();
     // });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (pharmacyScrollController.hasClients) {
-        pharmacyScrollController.addListener(() {
-          double maxScroll = pharmacyScrollController.position.maxScrollExtent;
-          double currentScroll = pharmacyScrollController.position.pixels;
+    pharmacyScrollController.addListener(() {
+      double maxScroll = pharmacyScrollController.position.maxScrollExtent;
+      double currentScroll = pharmacyScrollController.offset;
 
-          // Scroll position check
-          showScrollDownArrow.value = maxScroll > 0 && currentScroll < maxScroll;
-          showScrollUpArrow.value = currentScroll > 0;
+      print("Current: $currentScroll | Max: $maxScroll");
 
-          update();
-        });
-      }
+      showScrollDownArrow.value = currentScroll < maxScroll - 20;
+      showScrollUpArrow.value = currentScroll > 20;
+
+      update();
     });
   }
 

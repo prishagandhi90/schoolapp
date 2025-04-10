@@ -233,8 +233,7 @@ class PresviewerScreen extends StatelessWidget {
                                     : ListView.builder(
                                         itemCount: controller.filterpresviewerList.length,
                                         // controller: scrollController,
-                                        controller: controller.pharmacyviewScrollController,
-                                        shrinkWrap: true,
+                                        // controller: controller.pharmacyviewScrollController,
                                         physics: AlwaysScrollableScrollPhysics(),
                                         itemBuilder: (context, index) {
                                           return Padding(
