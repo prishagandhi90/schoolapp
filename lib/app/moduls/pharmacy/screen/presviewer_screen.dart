@@ -288,11 +288,11 @@ class PresviewerScreen extends StatelessWidget {
                                                 controller.isPresMedicineNavigating.value = false;
                                               },
                                               child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: getDynamicHeight(size: 0.012), horizontal: getDynamicHeight(size: 0.012)),
+                                                padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.012), horizontal: getDynamicHeight(size: 0.012)),
                                                 decoration: BoxDecoration(
-                                                  color: controller.filterpresviewerList[index].printStatus.toString().toLowerCase() ==
-                                                          "printed"
+                                                  // color: controller.filterpresviewerList[index].printStatus.toString().toLowerCase() ==
+                                                  //         "printed"
+                                                  color: controller.filterpresviewerList[index].rxStatus.toString().toLowerCase() == "working"
                                                       ? AppColor.lightyellow
                                                       : AppColor.lightblue,
                                                 ),
@@ -304,9 +304,7 @@ class PresviewerScreen extends StatelessWidget {
                                                       children: [
                                                         // Left side: Index
                                                         Padding(
-                                                          padding: EdgeInsets.symmetric(
-                                                              horizontal:
-                                                                  getDynamicHeight(size: 0.007)), // Space between index and right side
+                                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007)), // Space between index and right side
                                                           child: Text(
                                                             "${index + 1}", // Dynamic index
                                                             style: AppStyle.w50018.copyWith(
@@ -319,14 +317,12 @@ class PresviewerScreen extends StatelessWidget {
                                                         // Right side: Text and Container
                                                         Expanded(
                                                           child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment.end, // Align text and container to the right
+                                                            mainAxisAlignment: MainAxisAlignment.end, // Align text and container to the right
                                                             crossAxisAlignment: CrossAxisAlignment.center,
                                                             children: [
                                                               // Text
                                                               Text(
-                                                                controller.filterpresviewerList[index].org
-                                                                    .toString(), // Add your custom text
+                                                                controller.filterpresviewerList[index].org.toString(), // Add your custom text
                                                                 style: TextStyle(
                                                                   // fontSize: 16,
                                                                   fontSize: getDynamicHeight(size: 0.018),
@@ -339,8 +335,7 @@ class PresviewerScreen extends StatelessWidget {
                                                               Container(
                                                                 // height: 35, // Small container size
                                                                 height: getDynamicHeight(size: 0.037),
-                                                                margin: EdgeInsets.only(
-                                                                    bottom: getDynamicHeight(size: 0.007)), // Adjust positioning if needed
+                                                                margin: EdgeInsets.only(bottom: getDynamicHeight(size: 0.007)), // Adjust positioning if needed
                                                                 decoration: BoxDecoration(
                                                                   color: Colors.grey[200],
                                                                   borderRadius: BorderRadius.circular(8),
@@ -435,8 +430,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                             fontSize: getDynamicHeight(size: 0.018),
                                                                           )),
                                                                       TextSpan(
-                                                                          text: controller.filterpresviewerList[index].printStatus
-                                                                              .toString(), // Data
+                                                                          text: controller.filterpresviewerList[index].printStatus.toString(), // Data
                                                                           style: AppStyle.w50018.copyWith(
                                                                             // fontSize: 16,
                                                                             fontSize: getDynamicHeight(size: 0.018),
@@ -444,8 +438,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                SizedBox(
-                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
+                                                                SizedBox(height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
                                                                 Text.rich(
                                                                   TextSpan(
                                                                     children: [
@@ -456,8 +449,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                             fontSize: getDynamicHeight(size: 0.018),
                                                                           )),
                                                                       TextSpan(
-                                                                          text: controller.filterpresviewerList[index].lastUser
-                                                                              .toString(), // Data
+                                                                          text: controller.filterpresviewerList[index].lastUser.toString(), // Data
                                                                           style: AppStyle.w50018.copyWith(
                                                                             // fontSize: 16,
                                                                             fontSize: getDynamicHeight(size: 0.018),
@@ -465,8 +457,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                SizedBox(
-                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
+                                                                SizedBox(height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
                                                                 Text.rich(
                                                                   TextSpan(
                                                                     children: [
@@ -477,8 +468,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                             fontSize: getDynamicHeight(size: 0.018),
                                                                           )),
                                                                       TextSpan(
-                                                                          text:
-                                                                              controller.filterpresviewerList[index].ipd.toString(), // Data
+                                                                          text: controller.filterpresviewerList[index].ipd.toString(), // Data
                                                                           style: AppStyle.w50018.copyWith(
                                                                             // fontSize: 16,
                                                                             fontSize: getDynamicHeight(size: 0.018),
@@ -507,8 +497,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                               fontSize: getDynamicHeight(size: 0.018),
                                                                             )),
                                                                         TextSpan(
-                                                                            text: controller.filterpresviewerList[index].priority
-                                                                                .toString(), // Data
+                                                                            text: controller.filterpresviewerList[index].priority.toString(), // Data
                                                                             style: AppStyle.w50018.copyWith(
                                                                               // fontSize: 16,
                                                                               fontSize: getDynamicHeight(size: 0.018),
@@ -516,9 +505,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
-                                                                      height:
-                                                                          getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
+                                                                  SizedBox(height: getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
                                                                   Text.rich(
                                                                     TextSpan(
                                                                       children: [
@@ -529,8 +516,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                               fontSize: getDynamicHeight(size: 0.016),
                                                                             )),
                                                                         TextSpan(
-                                                                            text: controller.filterpresviewerList[index].rxStatus
-                                                                                .toString(), // Data
+                                                                            text: controller.filterpresviewerList[index].rxStatus.toString(), // Data
                                                                             style: AppStyle.w50018.copyWith(
                                                                               // fontSize: 16,
                                                                               fontSize: getDynamicHeight(size: 0.016),
@@ -538,9 +524,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
-                                                                      height:
-                                                                          getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
+                                                                  SizedBox(height: getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
                                                                   Text.rich(
                                                                     TextSpan(
                                                                       children: [
@@ -551,8 +535,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                               fontSize: getDynamicHeight(size: 0.018),
                                                                             )),
                                                                         TextSpan(
-                                                                            text: controller.filterpresviewerList[index].tokenNo
-                                                                                .toString(), // Data
+                                                                            text: controller.filterpresviewerList[index].tokenNo.toString(), // Data
                                                                             style: AppStyle.w50018.copyWith(
                                                                               // fontSize: 20,
                                                                               fontSize: getDynamicHeight(size: 0.022),
