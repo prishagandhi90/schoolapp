@@ -35,9 +35,7 @@ class PresdetailsScreen extends StatelessWidget {
             preferredSize: Size.fromHeight(
               controller.calculateAppBarHeight(
                 context,
-                controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
-                    ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
-                    : '',
+                controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0 ? controller.presviewerList[controller.SelectedIndex].patientName.toString() : '',
               ),
             ),
             child: AppBar(
@@ -151,11 +149,34 @@ class PresdetailsScreen extends StatelessWidget {
                             SizedBox(height: getDynamicHeight(size: 0.005)),
 
                             // Doctor Name
-                            Text(
-                              controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                              style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            // Text(
+                            //   controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                            //   style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                            //   maxLines: 2,
+                            //   overflow: TextOverflow.ellipsis,
+                            // ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].org.toString(),
+                                    style: TextStyle(
+                                      fontSize: getDynamicHeight(size: 0.014),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         )
