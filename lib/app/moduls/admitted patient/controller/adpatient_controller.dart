@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -104,13 +105,15 @@ class AdPatientController extends GetxController {
   }
 
   Future<List<PatientdataModel>> fetchDeptwisePatientList({String? searchPrefix, bool isLoader = true}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
     try {
       isLoading = true;
       update();
+
       String url = ConstApiUrl.empfilterpatientdataList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      loginId = pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = pref.getString(AppString.keyToken) ?? "";
 
       var jsonbodyObj = {
         "loginId": loginId,
@@ -123,6 +126,7 @@ class AdPatientController extends GetxController {
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
       patientsData.clear();
+
       if (rsponsedpatientdata.statusCode == 200) {
         patientsData.assignAll(rsponsedpatientdata.data ?? []);
         if (rsponsedpatientdata.data != null && rsponsedpatientdata.data!.isNotEmpty) {
@@ -150,9 +154,68 @@ class AdPatientController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+
+      ApiErrorHandler.handleError(
+        screenName: "DeptwisePatientListScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return patientsData.toList();
   }
+
+  // Future<List<PatientdataModel>> fetchDeptwisePatientList({String? searchPrefix, bool isLoader = true}) async {
+  //   try {
+  //     isLoading = true;
+  //     update();
+  //     String url = ConstApiUrl.empfilterpatientdataList;
+  //     SharedPreferences pref = await SharedPreferences.getInstance();
+  //     loginId = await pref.getString(AppString.keyLoginId) ?? "";
+  //     tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+  //     var jsonbodyObj = {
+  //       "loginId": loginId,
+  //       "prefixText": searchPrefix ?? "",
+  //       "orgs": selectedOrgsList,
+  //       "floors": selectedFloorsList,
+  //       "wards": selectedWardsList
+  //     };
+
+  //     var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+  //     Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
+  //     patientsData.clear();
+  //     if (rsponsedpatientdata.statusCode == 200) {
+  //       patientsData.assignAll(rsponsedpatientdata.data ?? []);
+  //       if (rsponsedpatientdata.data != null && rsponsedpatientdata.data!.isNotEmpty) {
+  //         filterpatientsData = rsponsedpatientdata.data!;
+  //       } else {
+  //         filterpatientsData = [];
+  //       }
+  //       isLoading = false;
+  //     } else if (rsponsedpatientdata.statusCode == 401) {
+  //       filterpatientsData.clear();
+  //       pref.clear();
+  //       Get.offAll(const LoginScreen());
+  //       Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+  //     } else if (rsponsedpatientdata.statusCode == 400) {
+  //       filterpatientsData.clear();
+  //       patientsData.clear();
+  //       isLoading = false;
+  //     } else {
+  //       isLoading = false;
+  //       filterpatientsData.clear();
+  //       patientsData.clear();
+  //       Get.rawSnackbar(message: "Something went wrong");
+  //     }
+  //     update();
+  //   } catch (e) {
+  //     isLoading = false;
+  //     update();
+  //   }
+  //   return patientsData.toList();
+  // }
 
   Future<List<PatientdataModel>> getPatientDashboardFilters({bool isLoader = true}) async {
     try {
@@ -242,6 +305,45 @@ class AdPatientController extends GetxController {
   void updateSearchQuery(String query) {
     searchQuery.value = query;
     update(); // GetBuilder ke liye UI refresh karega
+  }
+
+  int matchCount = 0;
+  int currentMatchIndex = 0;
+
+  void highlightMatches(String query) {
+    if (query.trim().isEmpty) {
+      matchCount = 0;
+      currentMatchIndex = 0;
+      update();
+      return;
+    }
+
+    matchCount = filterlabdata
+        .where((item) =>
+            item.testName!.toLowerCase().contains(query.toLowerCase()) || item.formattest!.toLowerCase().contains(query.toLowerCase()))
+        .length;
+
+    currentMatchIndex = 0;
+    update();
+  }
+
+  void goToNextMatch() {
+    if (matchCount == 0) return;
+    currentMatchIndex = (currentMatchIndex + 1) % matchCount;
+    update();
+  }
+
+  void goToPreviousMatch() {
+    if (matchCount == 0) return;
+    currentMatchIndex = (currentMatchIndex - 1 + matchCount) % matchCount;
+    update();
+  }
+
+  void clearSearch() {
+    matchCount = 0;
+    currentMatchIndex = 0;
+    fetchsummarylabdata();
+    update();
   }
 
   void filterSearchResults(String query) {

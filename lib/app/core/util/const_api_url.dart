@@ -19,6 +19,10 @@ class ConstApiUrl {
   static const empLoginusernameAPI = "$empLoginUrl/GetLoginUserNames";
   static const empSuperLoginCred = "$empLoginUrl/GetLoginAsUserCreds";
 
+  //-------------------Post Issues ---------------
+  static const empPostIssue = "$empLoginUrl/PostIssue";
+
+  //  ----------------dashboard and payroll ---------------
   static const empAttendanceDtlAPI = "$empUrl/GetEmpAttendDtl_EmpInfo";
   static const empAttendanceSummaryAPI = "$empUrl/GetEmpAttendSumm_EmpInfo";
   static const empGetDashboardListAPI = "$empUrl/GetDashboardList";
@@ -55,8 +59,8 @@ class ConstApiUrl {
   static const empfilterpatientdataList = "$empUrl/GetFilteredPatientData";
   static const patientDashboardFilters = "$empUrl/GetPatientDashboardFilters";
   static const getLabReports = "$empUrl/GetPatientLabReports";
-  static const empPatientSummaryLabData="$empUrl/GetPatientSummaryLabData";
-  static const empSortDeptPatientList="$empUrl/SortDeptPatientList";
+  static const empPatientSummaryLabData = "$empUrl/GetPatientSummaryLabData";
+  static const empSortDeptPatientList = "$empUrl/SortDeptPatientList";
 
   //  ----------------Notification ---------------
   static const empNotificationListAPI = "$empUrl/GetEMPNotificationsList";

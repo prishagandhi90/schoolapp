@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -19,7 +20,15 @@ class DashboardController extends GetxController {
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
-  String employeeName = "", mobileNumber = "", emailAddress = "", empCode = "", empType = "", department = "", designation = "", isSuperAdmin = "", isPharmacyUser = "";
+  String employeeName = "",
+      mobileNumber = "",
+      emailAddress = "",
+      empCode = "",
+      empType = "",
+      department = "",
+      designation = "",
+      isSuperAdmin = "",
+      isPharmacyUser = "";
 
   // String HIMS_MODULE_YN = "",
   //     OPD_Module_YN = "",
@@ -258,13 +267,16 @@ class DashboardController extends GetxController {
   }
 
   Future<void> getDashboardDataUsingToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       isLoading.value = true;
       update();
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
-        String token = prefs.getString(AppString.keyToken) ?? '';
-        String loginId = prefs.getString(AppString.keyLoginId) ?? '';
+
+      String token = prefs.getString(AppString.keyToken) ?? '';
+      String loginId = prefs.getString(AppString.keyLoginId) ?? '';
+      String empId = prefs.getString(AppString.keyEmpId) ?? ''; // Assuming empCode = empID
+
+      if (token.isNotEmpty && loginId.isNotEmpty) {
         var jsonbodyObj = {"loginId": loginId};
         String url = ConstApiUrl.empGetDashboardListAPI;
         final ApiController apiController = Get.put(ApiController());
@@ -274,7 +286,6 @@ class DashboardController extends GetxController {
         if (responseDashboardData.statusCode == 200) {
           if (responseDashboardData.data != null) {
             dashboardTable = responseDashboardData.data!;
-            // var dashboardController = Get.put(DashboardController());
             employeeName = dashboardTable.employeeName.toString();
             mobileNumber = dashboardTable.mobileNumber.toString();
             emailAddress = dashboardTable.emailAddress.toString();
@@ -284,8 +295,6 @@ class DashboardController extends GetxController {
             designation = dashboardTable.designation.toString();
             isSuperAdmin = dashboardTable.isSuperAdmin.toString();
             isPharmacyUser = dashboardTable.isPharmacyUser.toString();
-
-            // dashboardController.update();
             update();
           } else {
             Get.rawSnackbar(message: "No data found!");
@@ -297,14 +306,71 @@ class DashboardController extends GetxController {
           Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
         }
       } else {
-        // Get.rawSnackbar(message: "Something went wrong");
+        // Handle missing login or token
       }
     } catch (e) {
-      isLoading.value = false;
-      print('Error: $e');
+      // 🔥 Custom error handler call here
+      ApiErrorHandler.handleError(
+        screenName: "DashboardScreen",
+        error: e,
+        loginID: prefs.getString(AppString.keyLoginId) ?? '',
+        tokenNo: prefs.getString(AppString.keyToken) ?? '',
+        empID: prefs.getString(AppString.keyEmpId) ?? '',
+      );
     } finally {
       isLoading.value = false;
       update();
     }
   }
+
+  // Future<void> getDashboardDataUsingToken() async {
+  //   try {
+  //     isLoading.value = true;
+  //     update();
+  //     SharedPreferences prefs = await SharedPreferences.getInstance();
+  //     if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
+  //       String token = prefs.getString(AppString.keyToken) ?? '';
+  //       String loginId = prefs.getString(AppString.keyLoginId) ?? '';
+  //       var jsonbodyObj = {"loginId": loginId};
+  //       String url = ConstApiUrl.empGetDashboardListAPI;
+  //       final ApiController apiController = Get.put(ApiController());
+  //       var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
+  //       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
+
+  //       if (responseDashboardData.statusCode == 200) {
+  //         if (responseDashboardData.data != null) {
+  //           dashboardTable = responseDashboardData.data!;
+  //           // var dashboardController = Get.put(DashboardController());
+  //           employeeName = dashboardTable.employeeName.toString();
+  //           mobileNumber = dashboardTable.mobileNumber.toString();
+  //           emailAddress = dashboardTable.emailAddress.toString();
+  //           empCode = dashboardTable.empCode.toString();
+  //           empType = dashboardTable.empType.toString();
+  //           department = dashboardTable.department.toString();
+  //           designation = dashboardTable.designation.toString();
+  //           isSuperAdmin = dashboardTable.isSuperAdmin.toString();
+  //           isPharmacyUser = dashboardTable.isPharmacyUser.toString();
+
+  //           // dashboardController.update();
+  //           update();
+  //         } else {
+  //           Get.rawSnackbar(message: "No data found!");
+  //         }
+  //         update();
+  //       } else if (responseDashboardData.statusCode == 401) {
+  //         prefs.clear();
+  //         Get.offAll(LoginScreen());
+  //         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+  //       }
+  //     } else {
+  //       // Get.rawSnackbar(message: "Something went wrong");
+  //     }
+  //   } catch (e) {
+  //     isLoading.value = false;
+  //     print('Error: $e');
+  //   } finally {
+  //     isLoading.value = false;
+  //     update();
+  //   }
+  // }
 }
