@@ -5,6 +5,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -23,16 +24,12 @@ void main() async {
   try {
     await InitFirebaseSettings();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isSuperAdmin = prefs.getString(AppString.keySuperAdmin) != null &&
-            prefs.getString(AppString.keySuperAdmin) != '' &&
-            prefs.getString(AppString.keySuperAdmin) == 'True'
-        ? true
-        : false;
+    bool isSuperAdmin =
+        prefs.getString(AppString.keySuperAdmin) != null && prefs.getString(AppString.keySuperAdmin) != '' && prefs.getString(AppString.keySuperAdmin) == 'True' ? true : false;
     if (isSuperAdmin) {
       await prefs.setString(AppString.keySuperAdmin, '');
     }
-    bool isLoggedIn =
-        prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
+    bool isLoggedIn = prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
 
     // Set up Firebase messaging
     await setupFirebaseMessaging();
@@ -149,11 +146,28 @@ Future<void> setupFirebaseMessaging() async {
     }
   });
 
+  void _handleNotificationNavigation(RemoteMessage message) {
+    // Use message.data['screen'] to navigate
+    // if (message.data['screen'] == 'notification') {
+    Get.to(() => NotificationScreen());
+    // } else {
+    //   // default screen
+    //   Get.to(() => NotificationScreen());
+    // }
+  }
+
   // Listen for when the app is opened from a notification
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
       print('Message title: ${message.notification!.title}');
       print('Message body: ${message.notification!.body}');
+      _handleNotificationNavigation(message);
     }
   });
+
+  RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
+  if (initialMessage != null) {
+    print('App launched from notification (terminated):');
+    _handleNotificationNavigation(initialMessage);
+  }
 }
