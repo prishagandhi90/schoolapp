@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class ResponseDashboardData {
   int? statusCode;
   String? isSuccess;

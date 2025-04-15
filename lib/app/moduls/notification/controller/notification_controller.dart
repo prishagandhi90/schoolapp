@@ -77,8 +77,8 @@ class NotificationController extends GetxController {
     try {
       isLoading = true;
       update();
-      notificationlist.clear(); // 👈 Important: Clear previous list
-      filternotificationlist.clear();
+      // notificationlist.clear(); // 👈 Important: Clear previous list
+      // filternotificationlist.clear();
       String url = ConstApiUrl.empNotificationListAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -109,12 +109,18 @@ class NotificationController extends GetxController {
         }
         isLoading = false;
       } else if (responseNotificationList.statusCode == 401) {
+        notificationlist.clear(); // 👈 Important: Clear previous list
+        filternotificationlist.clear();
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseNotificationList.statusCode == 400) {
+        notificationlist.clear(); // 👈 Important: Clear previous list
+        filternotificationlist.clear();
         isLoading = false;
       } else {
+        notificationlist.clear(); // 👈 Important: Clear previous list
+        filternotificationlist.clear();
         Get.rawSnackbar(message: "Something went wrong");
       }
       update();
@@ -137,6 +143,12 @@ class NotificationController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+
+      if (notificationlist.isEmpty || index >= notificationlist.length) {
+        Get.rawSnackbar(message: "No notification found for the selected index.");
+        isLoading = false;
+        return [];
+      }
       String url = ConstApiUrl.empNotificationFileAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";

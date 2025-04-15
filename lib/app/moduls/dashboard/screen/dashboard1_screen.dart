@@ -12,6 +12,7 @@ import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart'
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class Dashboard1Screen extends GetView<DashboardController> {
   Dashboard1Screen({super.key});
@@ -61,7 +62,15 @@ class Dashboard1Screen extends GetView<DashboardController> {
                 padding: EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => NotificationScreen());
+                    // Get.to(() => NotificationScreen());
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      await controller.getDashboardDataUsingToken();
+                    });
                   },
                   child: Stack(
                     clipBehavior: Clip.none,

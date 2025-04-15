@@ -11,6 +11,7 @@ import 'package:emp_app/app/moduls/notification/screen/filter_tag_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -182,7 +183,15 @@ class NotificationScreen extends StatelessWidget {
                                 await controller.fetchNotificationFile(index);
                                 // Hide loader
                                 Get.back();
-                                Get.to(() => FilterTagScreen(index: index));
+                                // Get.to(() => FilterTagScreen(index: index));
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: FilterTagScreen(index: index),
+                                  withNavBar: false,
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                ).then((value) async {
+                                  await controller.fetchNotificationList();
+                                });
                               },
                               child: Column(
                                 children: [
