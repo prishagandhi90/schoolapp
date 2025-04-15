@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -45,10 +46,10 @@ class DutyscheduleController extends GetxController {
   }
 
   Future<List<sheduledrpdwnlst>> fetchdutyScheduledrpdwn() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
-      String url = ConstApiUrl.empdutyscheduledrpdwnList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
+      String url = ConstApiUrl.empDutyscheduledrpdwnList;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -80,6 +81,13 @@ class DutyscheduleController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "DutyScheduleScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return [];
   }
@@ -151,10 +159,10 @@ class DutyscheduleController extends GetxController {
       weekData.add({
         'date': formattedDate,
       });
+      SharedPreferences pref = await SharedPreferences.getInstance();
       try {
         isLoading = true;
         String url = ConstApiUrl.empDutyScheduleShiftReport;
-        SharedPreferences pref = await SharedPreferences.getInstance();
         loginId = await pref.getString(AppString.keyLoginId) ?? "";
         tokenNo = await pref.getString(AppString.keyToken) ?? "";
         empId = await pref.getString(AppString.keyEmpId) ?? "";
@@ -162,8 +170,7 @@ class DutyscheduleController extends GetxController {
         var jsonbodyObj = {"loginId": loginId, "empId": empId, "DtRange": DutyDropdownNameController.text};
 
         var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-        ResponseGetDutyScheduleShift responseGetDutyScheduleShift =
-            ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
+        ResponseGetDutyScheduleShift responseGetDutyScheduleShift = ResponseGetDutyScheduleShift.fromJson(jsonDecode(response));
 
         if (responseGetDutyScheduleShift.statusCode == 200) {
           dutySchSftData = responseGetDutyScheduleShift.data!;
@@ -182,6 +189,13 @@ class DutyscheduleController extends GetxController {
       } catch (e) {
         isLoading = false;
         update();
+        ApiErrorHandler.handleError(
+          screenName: "DutyScheduleScreen",
+          error: e.toString(),
+          loginID: pref.getString(AppString.keyLoginId) ?? '',
+          tokenNo: pref.getString(AppString.keyToken) ?? '',
+          empID: pref.getString(AppString.keyEmpId) ?? '',
+        );
       }
       return [];
     }

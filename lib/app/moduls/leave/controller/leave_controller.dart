@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -106,7 +107,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   void _onNotesFocusChange() {
     if (!notesFocusNode.hasFocus) {
       isNotesFieldFocused.value = notesFocusNode.hasFocus;
-      
+
       update();
     }
   }
@@ -344,10 +345,10 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   Future<List<LeaveNamesTable>> fetchLeaveNames() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveNamesAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -374,6 +375,13 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
@@ -416,10 +424,10 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   Future<List<LeaveReasonTable>> fetchLeaveReason() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveReasonAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -445,17 +453,24 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return leavereason.toList();
   }
 
   Future<List<LeaveDelayReason>> fetchLeaveReliverName() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       update();
       isLoading = true;
       String url = ConstApiUrl.empLeaveReliverNameAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -480,16 +495,23 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<LeaveDelayReason>> fetchLeaveDelayReason() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveDelayReasonAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -515,16 +537,23 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<HeaderList>> fetchHeaderList(String flag) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveHeaderList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -554,16 +583,23 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<LeaveEntryList>> fetchLeaveEntryList(String flag) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveEntryListAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -593,6 +629,13 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
@@ -732,6 +775,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   Future<List<SaveLeaveEntryList>> saveLeaveEntryList(String flag) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       if (!validateSaveLeaveEntry(flag)) {
         return [];
@@ -739,7 +783,6 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       isSaveBtnLoading = true;
       update();
       String url = ConstApiUrl.empSaveLeaveEntryList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
       // delayreasonIdController.text = delayreasonNameController.text == '' ? '0' : delayreasonIdController.text;
@@ -790,6 +833,13 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     } catch (e) {
       print(e);
       isSaveBtnLoading = false;
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isSaveBtnLoading = false;
     return [];

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:convert';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -302,10 +303,10 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
   // }
 
   Future<List<HeaderList>> fetchHeaderList(String flag) async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveHeaderList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -335,16 +336,23 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "OverTimeScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<LeaveEntryList>> fetchLeaveEntryList(String flag) async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empLeaveEntryListAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -375,12 +383,20 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "OverTimeScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<SaveLeaveEntryList>> saveLeaveEntryList(String flag) async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       var leaveController = Get.find<LeaveController>();
       if (!leaveController.validateSaveLeaveEntry(flag)) {
@@ -390,7 +406,6 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
       isSaveBtnLoading = true;
       update();
       String url = ConstApiUrl.empSaveLeaveEntryList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -441,6 +456,13 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
       print(e);
       // isLoading = false;
       isSaveBtnLoading = false;
+      ApiErrorHandler.handleError(
+        screenName: "OverTimeScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     // isLoading = false;
     isSaveBtnLoading = false;

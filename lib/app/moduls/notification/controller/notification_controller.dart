@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -70,17 +71,18 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<List<NotificationlistModel>> fetchNotificationList({int days = 0, String tag = "",String fromDate="",String toDate=""}) async {
+  Future<List<NotificationlistModel>> fetchNotificationList(
+      {int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
-      
       update();
       notificationlist.clear(); // 👈 Important: Clear previous list
       filternotificationlist.clear();
       String url = ConstApiUrl.empNotificationListAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
 
       var jsonbodyObj;
       if (fromDate == "" && toDate == "") {
@@ -119,16 +121,23 @@ class NotificationController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "NotificationScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return notificationlist.toList();
   }
 
   Future<List<NotificationfileModel>> fetchNotificationFile(int index) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empNotificationFileAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -168,9 +177,40 @@ class NotificationController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "NotificationScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return notificationfile.toList();
+  }
+
+  Future<void> updateNotificationRead(int index) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empUpdateNotificationReadAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "notificationId": notificationlist[index].id.toString(), "index": 0};
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "NotificationScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
   }
 
   void filterSearchResults(String query) {

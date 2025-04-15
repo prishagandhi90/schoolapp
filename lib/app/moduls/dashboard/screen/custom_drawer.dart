@@ -268,7 +268,7 @@ class CustomDrawer extends StatelessWidget {
                               ));
                             },
                             child: Text(
-                              'Admin Login',
+                              AppString.adminlogin,
                               style: TextStyle(
                                 color: AppColor.black,
                                 overflow: TextOverflow.clip,

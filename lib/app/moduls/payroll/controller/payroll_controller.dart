@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:emp_app/app/core/common/common_methods.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
@@ -109,12 +110,12 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   }
 
   Future<dynamic> getProfileData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance(); // 👈 moved outside for global access
     try {
-      // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
       String url = ConstApiUrl.empDashboardSummaryAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      loginId = pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = pref.getString(AppString.keyToken) ?? "";
 
       var jsonbodyObj = {"loginId": loginId};
 
@@ -145,9 +146,59 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     } catch (e) {
       isLoading.value = false;
       update();
+
+      // 👇 Error handler with device info & user info
+      ApiErrorHandler.handleError(
+        screenName: "PayrollScreen",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return [];
   }
+
+  // Future<dynamic> getProfileData() async {
+  //   try {
+  //     // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
+  //     String url = ConstApiUrl.empDashboardSummaryAPI;
+  //     SharedPreferences pref = await SharedPreferences.getInstance();
+  //     loginId = await pref.getString(AppString.keyLoginId) ?? "";
+  //     tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+  //     var jsonbodyObj = {"loginId": loginId};
+
+  //     final ApiController apiController = Get.find<ApiController>();
+  //     var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+  //     ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
+
+  //     if (empSummDashboardDataResponse.statusCode == 200) {
+  //       if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
+  //         isLoading.value = false;
+  //         empSummDashboardTable = empSummDashboardDataResponse.data!;
+  //         update();
+  //         return empSummDashboardTable;
+  //       } else {
+  //         empSummDashboardTable = [];
+  //       }
+  //       update();
+  //     } else if (empSummDashboardDataResponse.statusCode == 401) {
+  //       pref.clear();
+  //       Get.offAll(const LoginScreen());
+  //       Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+  //     } else if (empSummDashboardDataResponse.statusCode == 400) {
+  //       empSummDashboardTable = [];
+  //     } else {
+  //       Get.rawSnackbar(message: "Something went wrong");
+  //     }
+  //     update();
+  //   } catch (e) {
+  //     isLoading.value = false;
+  //     update();
+  //   }
+  //   return [];
+  // }
 
   Future<void> payrolListOnClk(int index, BuildContext context) async {
     switch (index) {

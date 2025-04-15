@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -197,6 +198,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   }
 
   Future<List<LeaveotlistModel>> fetchLeaveOTList(String role, String leaveType) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoader.value = true;
       selectedRole = role;
@@ -204,7 +206,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       update();
       // await changeTab(0);
       String url = ConstApiUrl.empLeaveOTapprovalList;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
       var jsonbodyObj;
@@ -248,6 +249,13 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     } catch (e) {
       isLoader.value = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LV/OTApprovalScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoader.value = false;
     return [];
@@ -261,6 +269,7 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   }
 
   Future<List<SaveAppRejLeaveList>> fetchLeave_app_rej_List(String action, int index) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       String UpdFlag = "";
       if (selectedRole.toString().toLowerCase() == "incharge") {
@@ -273,7 +282,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       isLoader.value = true;
       update();
       String url = ConstApiUrl.empLeaveAppRejListData;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       empId = await pref.getString(AppString.keyEmpId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -312,6 +320,13 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       }
     } catch (e) {
       Get.rawSnackbar(message: "An error occurred");
+      ApiErrorHandler.handleError(
+        screenName: "LV/OTApprovalScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoader.value = false;
     noteController.text = "";
@@ -367,10 +382,10 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
   }
 
   Future<List<ReasonList>> fetchOTReason() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empGetLeaveRejectReason;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -396,6 +411,13 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "LV/OTApprovalScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return reasonList.toList();

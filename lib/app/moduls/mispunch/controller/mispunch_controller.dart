@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/moduls/attendence/screen/dropdown_attendance.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
@@ -118,10 +119,10 @@ class MispunchController extends GetxController {
   }
 
   Future<List<MispunchTable>> getmonthyrempinfotable() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading.value = true;
       String url = ConstApiUrl.empMispunchDetailAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -159,6 +160,13 @@ class MispunchController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "MispunchScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return [];
   }

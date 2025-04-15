@@ -84,7 +84,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DASHBOARD,
-      page: () => const Dashboard1Screen(),
+      page: () => Dashboard1Screen(),
       binding: DashboardBinding(),
     ),
     GetPage(

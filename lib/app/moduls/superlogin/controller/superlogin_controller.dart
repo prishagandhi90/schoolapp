@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/moduls/superlogin/model/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -51,11 +52,11 @@ class SuperloginController extends GetxController {
   }
 
   Future<List<DropdownTable>> fetchUserName() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
-      String url = ConstApiUrl.empLoginusernameAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
+      String url = ConstApiUrl.empLoginUsernameAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -80,17 +81,24 @@ class SuperloginController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "SuperLoginScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<SuperlogincredModel>> fetchSperLoginCred() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empSuperLoginCred;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       // loginId = await pref.getString(AppString.keyLoginId) ?? "";
       // tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -134,6 +142,13 @@ class SuperloginController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "SuperLoginScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];

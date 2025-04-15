@@ -1,6 +1,5 @@
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -73,7 +72,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: getDynamicHeight(size: 0.011)), //10),
+                      // SizedBox(height: getDynamicHeight(size: 0.011)), //10),
                       Column(
                         children: controller.filterOptions.map((option) {
                           return GestureDetector(
@@ -140,17 +139,17 @@ class _FilterScreenState extends State<FilterScreen> {
                                 children: [
                                   Container(
                                     width: 24,
-                                    height: 24,
+                                    height: getDynamicHeight(size: 0.024),
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black, width: 2),
+                                      border: Border.all(color: AppColor.black, width: 2),
                                       borderRadius: BorderRadius.circular(4), // square corners
-                                      color: isSelected ? Colors.black : Colors.transparent,
+                                      color: isSelected ? AppColor.black : AppColor.transparent,
                                     ),
                                     child: isSelected
                                         ? Icon(
                                             Icons.check,
-                                            color: Colors.white,
-                                            size: 18,
+                                            color: AppColor.white,
+                                            size: getDynamicHeight(size: 0.018),
                                           )
                                         : null,
                                   ),
@@ -268,7 +267,7 @@ class _FilterScreenState extends State<FilterScreen> {
         return GetBuilder<NotificationController>(
           builder: (controller) {
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(getDynamicHeight(size: 0.016)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,7 +279,7 @@ class _FilterScreenState extends State<FilterScreen> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Select Date",
+                          AppString.selectdate,
                           style: TextStyle(
                             color: AppColor.primaryColor,
                             fontSize: getDynamicHeight(size: 0.020),
@@ -312,9 +311,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             onDateSelected: () async => await controller.selectFromDate(context),
                           ),
                         ),
-                        SizedBox(
-                          width: 12.0,
-                        ),
+                        SizedBox(width: 12.0),
                         Expanded(
                           child: CustomDatePicker(
                             dateController: controller.toDateController,
@@ -325,7 +322,7 @@ class _FilterScreenState extends State<FilterScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: getDynamicHeight(size: 0.020)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -359,11 +356,8 @@ class _FilterScreenState extends State<FilterScreen> {
                           ),
                           child: Text(
                             AppString.confirm,
-                            style: TextStyle(
+                            style: AppStyle.plusblack20w700.copyWith(
                               color: AppColor.white,
-                              fontSize: getDynamicHeight(size: 0.022),
-                              fontWeight: FontWeight.w700,
-                              fontFamily: CommonFontStyle.plusJakartaSans,
                             ),
                           ),
                         ),
@@ -390,11 +384,8 @@ class _FilterScreenState extends State<FilterScreen> {
                           ),
                           child: Text(
                             AppString.cancel,
-                            style: TextStyle(
+                            style: AppStyle.plusblack20w700.copyWith(
                               color: AppColor.white,
-                              fontSize: getDynamicHeight(size: 0.022),
-                              fontWeight: FontWeight.w700,
-                              fontFamily: CommonFontStyle.plusJakartaSans,
                             ),
                           ),
                         ),

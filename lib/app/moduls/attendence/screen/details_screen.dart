@@ -29,12 +29,12 @@ class DetailsScreen extends GetView<AttendenceController> {
                     controller: controller,
                     scrollController: controller.monthScrollControllerDetail,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: getDynamicHeight(size: 0.020)), //10),
                   Expanded(
                     child: controller.isLoader.value
-                        ? const Center(
+                        ? Center(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 100),
+                              padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.10)),
                               child: ProgressWithIcon(),
                             ),
                           )
@@ -101,7 +101,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         style: AppStyle.fontfamilyplus.copyWith(
                                                           color: controller.attendenceDetailTable[index].redYNINTM == 'Y'
                                                               ? AppColor.red
-                                                              : AppColor.black, // redYNINTM se color set kiya
+                                                              : AppColor.black,
                                                         ),
                                                       ),
                                                     ),
@@ -214,9 +214,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                               SizedBox(width: getDynamicHeight(size: 0.032)), //30),
                               const Spacer(),
                               Container(
-                                width: getDynamicHeight(size: 0.092),//90,
+                                width: getDynamicHeight(size: 0.092), //90,
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                                child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                                child: Divider(height: getDynamicHeight(size: 0.020), color: AppColor.originalgrey, thickness: 5),
                               ),
                               const Spacer(),
                               GestureDetector(
@@ -225,8 +225,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                 },
                                 child: const Icon(Icons.close),
                               ),
-                               SizedBox(
-                                width: getDynamicHeight(size: 0.032),//30,
+                              SizedBox(
+                                width: getDynamicHeight(size: 0.032), //30,
                               ),
                             ],
                           ),
@@ -243,7 +243,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   width: double.infinity,
-                                  height: 45,
+                                  height: getDynamicHeight(size: 0.045), //40,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: AppColor.primaryColor),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 15),

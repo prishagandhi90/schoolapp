@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -75,6 +76,7 @@ class OtpController extends GetxController {
   }
 
   Future<String> getDashboardData(String otp, BuildContext context, String deviceToken, String Password) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       // String url = 'http://117.217.126.127:44166/api/Employee/authentication';
       String url = ConstApiUrl.loginWithOTP_Pass;
@@ -90,7 +92,6 @@ class OtpController extends GetxController {
       };
 
       // var loginEmp = await apiController.getDynamicData(url, '', jsonbodyObj);
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       final ApiController apiController = Get.put(ApiController());
       var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
@@ -98,9 +99,9 @@ class OtpController extends GetxController {
 
       if (responseDashboardData.statusCode == 200) {
         if (responseDashboardData.data != null && responseDashboardData.isSuccess.toString() == "true") {
-          await prefs.setString(AppString.keyToken, dashboardTable.token ?? '');
-          await prefs.setString(AppString.keyLoginId, dashboardTable.loginId.toString());
-          await prefs.setString(AppString.keyEmpId, dashboardTable.employeeId.toString());
+          await pref.setString(AppString.keyToken, dashboardTable.token ?? '');
+          await pref.setString(AppString.keyLoginId, dashboardTable.loginId.toString());
+          await pref.setString(AppString.keyEmpId, dashboardTable.employeeId.toString());
 
           // var dashboardController = Get.put(DashboardController());
           final DashboardController dashboardController = Get.put(DashboardController());
@@ -118,7 +119,7 @@ class OtpController extends GetxController {
           Get.rawSnackbar(message: responseDashboardData.message.toString());
         }
       } else if (responseDashboardData.statusCode == 401) {
-        prefs.clear();
+        pref.clear();
         Get.offAll(LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseDashboardData.statusCode == 400) {
@@ -132,6 +133,13 @@ class OtpController extends GetxController {
       }
       return "false";
     } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: "LV/OTApprovalScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
       return "false";
     } finally {
       isLoadingLogin = false;

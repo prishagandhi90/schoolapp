@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
@@ -8,9 +9,9 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
-class CircularScreen extends StatelessWidget {
+class FilterTagScreen extends StatelessWidget {
   final int index;
-  const CircularScreen({Key? key, required this.index}) : super(key: key);
+  const FilterTagScreen({Key? key, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +112,20 @@ class CircularScreen extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             isImage
-                                                ? Image.memory(base64Decode(file["content"]!), width: 100, height: 100, fit: BoxFit.cover)
-                                                : Icon(Icons.insert_drive_file, size: 100, color: Colors.blue),
-                                            SizedBox(height: 5),
-                                            Text("File $index", style: TextStyle(fontSize: 12)), // ✅ Fixed name like "File 1", "File 2"
+                                                ? Image.memory(
+                                                    base64Decode(file["content"]!),
+                                                    width: getDynamicHeight(size: 0.10),
+                                                    height: getDynamicHeight(size: 0.10),
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Icon(
+                                                    Icons.insert_drive_file,
+                                                    size: getDynamicHeight(size: 0.10),
+                                                    color: AppColor.blue,
+                                                  ),
+                                            SizedBox(height: Sizes.px7),
+                                            Text("File $index",
+                                                style: TextStyle(fontSize: Sizes.px12)), // ✅ Fixed name like "File 1", "File 2"
                                           ],
                                         ),
                                       ),
@@ -126,7 +137,7 @@ class CircularScreen extends StatelessWidget {
                     )
                   : Center(
                       child: Text(
-                        "No Data Available",
+                        AppString.nodataavailable,
                         style: TextStyle(
                           fontSize: getDynamicHeight(size: 0.020),
                           color: AppColor.black,

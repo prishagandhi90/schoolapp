@@ -45,7 +45,7 @@ class BottomBarController extends GetxController {
         }
       }),
       AttendanceScreen(),
-      const Dashboard1Screen(),
+      Dashboard1Screen(),
       LeaveMainScreen(),
       OvertimeMainScreen(),
     ];

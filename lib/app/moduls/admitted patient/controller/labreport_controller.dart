@@ -120,9 +120,9 @@ class LabReportsController extends GetxController {
     String loginId = prefs.getString(AppString.keyLoginId) ?? '';
     Map data = {"loginId": loginId, "ipdNo": ipdNo, "uhid": uhidNo};
     apiCall = true;
-    String apiUrl = ConstApiUrl.getLabReports;
-    dio_package.Response finalData = await ApiController.postMethodWithHeaderDioMapData(
-        body: data, apiUrl: apiUrl, token: token, isShowLoader: isLoader);
+    String apiUrl = ConstApiUrl.empGetLabReports;
+    dio_package.Response finalData =
+        await ApiController.postMethodWithHeaderDioMapData(body: data, apiUrl: apiUrl, token: token, isShowLoader: isLoader);
     if (finalData.statusCode == 200) {
       var responseData = jsonDecode(finalData.data);
 

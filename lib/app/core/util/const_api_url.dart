@@ -15,10 +15,14 @@ class ConstApiUrl {
   static const baseApiUrl = empLoginUrl;
   static const loginWithOTP_Pass = "$empUrl/authentication";
   static const validMobileNo = "$empLoginUrl/ValidateMobileNo";
-  static const generatenewpass = "$empLoginUrl/GenerateNewPassword";
-  static const empLoginusernameAPI = "$empLoginUrl/GetLoginUserNames";
+  static const generateNewPass = "$empLoginUrl/GenerateNewPassword";
+  static const empLoginUsernameAPI = "$empLoginUrl/GetLoginUserNames";
   static const empSuperLoginCred = "$empLoginUrl/GetLoginAsUserCreds";
 
+  //-------------------Post Issues ---------------
+  static const empPostIssue = "$empLoginUrl/PostIssue";
+
+  //  ----------------dashboard and payroll ---------------
   static const empAttendanceDtlAPI = "$empUrl/GetEmpAttendDtl_EmpInfo";
   static const empAttendanceSummaryAPI = "$empUrl/GetEmpAttendSumm_EmpInfo";
   static const empGetDashboardListAPI = "$empUrl/GetDashboardList";
@@ -36,7 +40,7 @@ class ConstApiUrl {
   static const empLeaveHeaderList = "$empUrl/EmpApp_GetheaderList";
   static const empLeaveEntryListAPI = "$empUrl/EmpApp_GetLeaveEntryList";
   static const empSaveLeaveEntryList = "$empUrl/EmpApp_SaveLeaveEntryList";
-  static const empdutyscheduledrpdwnList = "$empUrl/GetShiftWeekList";
+  static const empDutyscheduledrpdwnList = "$empUrl/GetShiftWeekList";
   static const empDutyScheduleShiftReport = "$empUrl/GetEmpShiftReport";
 
   //pharmacy
@@ -52,13 +56,14 @@ class ConstApiUrl {
   static const empAppRejLeaveOTEntryList = "$empUrl/EmpApp_Appr_Rej_LV_OT_Entry_List";
 
   //  ----------------Admitted patient ---------------
-  static const empfilterpatientdataList = "$empUrl/GetFilteredPatientData";
-  static const patientDashboardFilters = "$empUrl/GetPatientDashboardFilters";
-  static const getLabReports = "$empUrl/GetPatientLabReports";
-  static const empPatientSummaryLabData="$empUrl/GetPatientSummaryLabData";
-  static const empSortDeptPatientList="$empUrl/SortDeptPatientList";
+  static const empFilterpatientdataList = "$empUrl/GetFilteredPatientData";
+  static const empPatientDashboardFilters = "$empUrl/GetPatientDashboardFilters";
+  static const empGetLabReports = "$empUrl/GetPatientLabReports";
+  static const empPatientSummaryLabData = "$empUrl/GetPatientSummaryLabData";
+  static const empSortDeptPatientList = "$empUrl/SortDeptPatientList";
 
   //  ----------------Notification ---------------
   static const empNotificationListAPI = "$empUrl/GetEMPNotificationsList";
   static const empNotificationFileAPI = "$empUrl/GetNotificationFiles";
+  static const empUpdateNotificationReadAPI = "$empUrl/UpdateNotification_Read";
 }

@@ -42,6 +42,8 @@ class ApiController extends GetxController {
     }
 
     final body = jsonEncode(jsonBodyObj);
+    print("body: $body");
+    print("jsonBodyObj: $jsonBodyObj");
     try {
       final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
       return response.body; // This returns a String
@@ -162,8 +164,7 @@ class ApiController extends GetxController {
   }
 
   /* DIO methods below */
-  static dynamic postMethodWithHeaderDioMapData(
-      {String? apiUrl, String? token, Map? body, bool isShowLoader = true}) async {
+  static dynamic postMethodWithHeaderDioMapData({String? apiUrl, String? token, Map? body, bool isShowLoader = true}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -210,11 +211,7 @@ class ApiController extends GetxController {
 
 //get dio api
   static dynamic getMethodWithHeaderDio(
-      {String? apiUrl,
-      String? token,
-      bool isShowLoader = true,
-      Map<String, dynamic>? queryData,
-      bool? headerChange}) async {
+      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -261,11 +258,7 @@ class ApiController extends GetxController {
   }
 
   static dynamic deleteMethodWithHeaderDio(
-      {String? apiUrl,
-      String? token,
-      bool isShowLoader = true,
-      Map<String, dynamic>? queryData,
-      bool? headerChange}) async {
+      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -312,11 +305,7 @@ class ApiController extends GetxController {
   }
 
   static dynamic putMethodWithHeaderDio(
-      {String? apiUrl,
-      String? token,
-      bool isShowLoader = true,
-      Map<String, dynamic>? queryData,
-      bool? headerChange}) async {
+      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
