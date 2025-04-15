@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class ResponseDashboardData {
   int? statusCode;
   String? isSuccess;
@@ -41,6 +43,7 @@ class DashboardTable {
   String? empType;
   String? isSuperAdmin;
   String? isPharmacyUser;
+  int? notificationCount;
 
   DashboardTable(
       {this.isValidToken,
@@ -57,7 +60,8 @@ class DashboardTable {
       this.designation,
       this.empType,
       this.isSuperAdmin,
-      this.isPharmacyUser});
+      this.isPharmacyUser,
+      this.notificationCount});
 
   DashboardTable.fromJson(Map<String, dynamic> json) {
     isValidToken = json['is_valid_token'];
@@ -75,6 +79,7 @@ class DashboardTable {
     empType = json['emp_Type'];
     isSuperAdmin = json['isSuperAdmin'];
     isPharmacyUser = json['isPharmacyUser'];
+    notificationCount = json['notificationCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +99,7 @@ class DashboardTable {
     data['emp_Type'] = this.empType;
     data['isSuperAdmin'] = this.isSuperAdmin;
     data['isPharmacyUser'] = this.isPharmacyUser;
+    data['notificationCount'] = this.notificationCount;
     return data;
   }
 }

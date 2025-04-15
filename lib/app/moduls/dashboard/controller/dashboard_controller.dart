@@ -29,11 +29,12 @@ class DashboardController extends GetxController {
       department = "",
       designation = "",
       isSuperAdmin = "",
-      isPharmacyUser = "";
+      isPharmacyUser = "",
+      notificationCount = "";
 
   late DashboardTable dashboardTable;
   List<ModuleScreenRights> empModuleScreenRightsTable = [];
-  final  notificationController = Get.put(NotificationController());
+  final notificationController = Get.put(NotificationController());
 
   @override
   void onInit() {
@@ -286,6 +287,7 @@ class DashboardController extends GetxController {
             designation = dashboardTable.designation.toString();
             isSuperAdmin = dashboardTable.isSuperAdmin.toString();
             isPharmacyUser = dashboardTable.isPharmacyUser.toString();
+            notificationCount = dashboardTable.notificationCount.toString();
             update();
           } else {
             Get.rawSnackbar(message: "No data found!");

@@ -15,7 +15,6 @@ import 'package:get/get.dart';
 
 class Dashboard1Screen extends GetView<DashboardController> {
   Dashboard1Screen({super.key});
-  final NotificationController notificationController = Get.put(NotificationController());
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +80,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
                             shape: BoxShape.circle,
                           ),
                           child: Text(
-                            '3', // 👈 yahan unread count daalo
+                            controller.notificationCount, // 👈 yahan unread count daalo
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,

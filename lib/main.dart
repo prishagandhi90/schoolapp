@@ -25,12 +25,16 @@ void main() async {
   try {
     await InitFirebaseSettings();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isSuperAdmin =
-        prefs.getString(AppString.keySuperAdmin) != null && prefs.getString(AppString.keySuperAdmin) != '' && prefs.getString(AppString.keySuperAdmin) == 'True' ? true : false;
+    bool isSuperAdmin = prefs.getString(AppString.keySuperAdmin) != null &&
+            prefs.getString(AppString.keySuperAdmin) != '' &&
+            prefs.getString(AppString.keySuperAdmin) == 'True'
+        ? true
+        : false;
     if (isSuperAdmin) {
       await prefs.setString(AppString.keySuperAdmin, '');
     }
-    bool isLoggedIn = prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
+    bool isLoggedIn =
+        prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
 
     // Set up Firebase messaging
     await setupFirebaseMessaging();
@@ -149,12 +153,7 @@ Future<void> setupFirebaseMessaging() async {
 
   void _handleNotificationNavigation(RemoteMessage message) {
     // Use message.data['screen'] to navigate
-    // if (message.data['screen'] == 'notification') {
     Get.to(() => NotificationScreen());
-    // } else {
-    //   // default screen
-    //   Get.to(() => NotificationScreen());
-    // }
   }
 
   // Listen for when the app is opened from a notification
