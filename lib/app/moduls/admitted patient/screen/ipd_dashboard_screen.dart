@@ -101,7 +101,6 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           onTap: () {
                             if (controller.isPresViewerNavigating.value) return;
                             controller.isPresViewerNavigating.value = true;
-
                             Navigator.pop(context);
                             PersistentNavBarNavigator.pushNewScreen(
                               context,
@@ -238,21 +237,21 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                     children: [
                       Text(
                         title, // Dynamic Title
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: Sizes.px18, fontWeight: FontWeight.bold),
                       ),
                       Icon(Icons.arrow_forward_ios),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: Sizes.px8),
                   Text(
                     "$count", // Dynamic Count
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: Sizes.px20, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               Icon(
                 Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
-                size: 40,
+                size: Sizes.px40,
                 color: AppColor.teal,
               ),
             ],

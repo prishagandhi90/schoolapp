@@ -9,6 +9,7 @@ import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -30,19 +31,9 @@ class DashboardController extends GetxController {
       isSuperAdmin = "",
       isPharmacyUser = "";
 
-  // String HIMS_MODULE_YN = "",
-  //     OPD_Module_YN = "",
-  //     IPD_Module_YN = "",
-  //     Store_Module_YN = "",
-  //     Radiology_Module_YN = "",
-  //     Pathology_Module_YN = "",
-  //     Pharmacy_Module_YN = "",
-  //     Payroll_Module_YN = "",
-  //     OT_Module_YN = "",
-  //     NABH_MODULE_YN = "";
-
   late DashboardTable dashboardTable;
   List<ModuleScreenRights> empModuleScreenRightsTable = [];
+  final  notificationController = Get.put(NotificationController());
 
   @override
   void onInit() {
@@ -312,7 +303,7 @@ class DashboardController extends GetxController {
       // 🔥 Custom error handler call here
       ApiErrorHandler.handleError(
         screenName: "DashboardScreen",
-        error: e,
+        error: e.toString(),
         loginID: prefs.getString(AppString.keyLoginId) ?? '',
         tokenNo: prefs.getString(AppString.keyToken) ?? '',
         empID: prefs.getString(AppString.keyEmpId) ?? '',

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:device_preview/device_preview.dart';
 import 'package:emp_app/app/core/common/common_firebase.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
@@ -9,15 +10,16 @@ import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 RxBool hideBottomBar = false.obs;
-           
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();        
+  WidgetsFlutterBinding.ensureInitialized();
 
   try {
     await InitFirebaseSettings();
@@ -47,53 +49,23 @@ void main() async {
     //   ),
     // );
 
-    // runApp(
-    //   Builder(
-    //     builder: (context) {
-    //       Get.put(NoInternetController());
-    //       Sizes.init(context);
-    //       return GetMaterialApp(
-    //         initialBinding: NoInternetBinding(),
-    //         debugShowCheckedModeBanner: false,
-    //         // useInheritedMediaQuery: true,
-    //         // locale: DevicePreview.locale(context),
-    //         // builder: DevicePreview.appBuilder,
-    //         builder: EasyLoading.init(),
-    //         popGesture: true,
-    //         defaultTransition: Transition.cupertino,
-    //         title: 'Flutter Demo',
-    //         theme: ThemeData(
-    //           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-    //           useMaterial3: true,
-    //         ),
-    //         // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
-    //         initialRoute: AppPages.getInitialRoute(isLoggedIn),
-    //         getPages: AppPages.routes,
-    //         navigatorObservers: [
-    //           NavigatorObserver(),
-    //         ],
-    //       );
-    //     },
-    //   ),
-    // );
-
     runApp(
-      DevicePreview(
-        enabled: !kReleaseMode,
+      Builder(
         builder: (context) {
-          Sizes.init(context);
           Get.put(NoInternetController());
           Sizes.init(context);
           return GetMaterialApp(
             initialBinding: NoInternetBinding(),
             debugShowCheckedModeBanner: false,
             // useInheritedMediaQuery: true,
-            locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
-            // builder: EasyLoading.init(),
+            // locale: DevicePreview.locale(context),
+            // builder: DevicePreview.appBuilder,
+            builder: EasyLoading.init(),
+            popGesture: true,
+            defaultTransition: Transition.cupertino,
             title: 'Flutter Demo',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+              colorScheme: ColorScheme.fromSeed(seedColor: AppColor.white),
               useMaterial3: true,
             ),
             // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
@@ -106,6 +78,36 @@ void main() async {
         },
       ),
     );
+
+    // runApp(
+    //   DevicePreview(
+    //     enabled: !kReleaseMode,
+    //     builder: (context) {
+    //       Sizes.init(context);
+    //       Get.put(NoInternetController());
+    //       Sizes.init(context);
+    //       return GetMaterialApp(
+    //         initialBinding: NoInternetBinding(),
+    //         debugShowCheckedModeBanner: false,
+    //         // useInheritedMediaQuery: true,
+    //         locale: DevicePreview.locale(context),
+    //         builder: DevicePreview.appBuilder,
+    //         // builder: EasyLoading.init(),
+    //         title: 'Flutter Demo',
+    //         theme: ThemeData(
+    //           colorScheme: ColorScheme.fromSeed(seedColor: AppColor.white),
+    //           useMaterial3: true,
+    //         ),
+    //         // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
+    //         initialRoute: AppPages.getInitialRoute(isLoggedIn),
+    //         getPages: AppPages.routes,
+    //         navigatorObservers: [
+    //           NavigatorObserver(),
+    //         ],
+    //       );
+    //     },
+    //   ),
+    // );
   } catch (e) {
     print('An error occurred: $e');
     // You can add additional code here to handle the error

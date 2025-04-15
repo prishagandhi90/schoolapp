@@ -7,7 +7,7 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_controller.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view_copy.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/main.dart';
@@ -207,7 +207,7 @@ class AdpatientScreen extends StatelessWidget {
                               padding: EdgeInsets.all(10),
                               itemCount: controller.filterpatientsData.length,
                               itemBuilder: (context, index) {
-                                return _buildPatientCard(index, context);
+                                return _buildPatientCard(index, context, controller);
                               },
                             ),
                           ),
@@ -219,189 +219,211 @@ class AdpatientScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPatientCard(int index, BuildContext context) {
-    return GetBuilder<AdPatientController>(
-      builder: (controller) => controller.filterpatientsData.isNotEmpty
-          ? Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColor.primaryColor,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                    ),
-                    padding: EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          controller.filterpatientsData[index].bedNo.toString(),
-                          style: TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          controller.filterpatientsData[index].ipdNo.toString(),
-                          style: TextStyle(color: AppColor.white),
-                        ),
-                        Text(
-                          controller.filterpatientsData[index].floor.toString(),
-                          style: TextStyle(color: AppColor.white),
-                        ),
-                      ],
-                    ),
+  Widget _buildPatientCard(int index, BuildContext context, AdPatientController controller) {
+    return controller.filterpatientsData.isNotEmpty
+        ? Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            margin: EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColor.primaryColor,
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8, top: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                controller.filterpatientsData[index].patientName.toString(),
-                                maxLines: 2,
+                  padding: EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        controller.filterpatientsData[index].bedNo.toString(),
+                        style: TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        controller.filterpatientsData[index].ipdNo.toString(),
+                        style: TextStyle(color: AppColor.white),
+                      ),
+                      Text(
+                        controller.filterpatientsData[index].floor.toString(),
+                        style: TextStyle(color: AppColor.white),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8, top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              controller.filterpatientsData[index].patientName.toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.visible,
+                              style: TextStyle(
+                                fontSize: Sizes.px16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.primaryColor,
                                 overflow: TextOverflow.visible,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.primaryColor,
-                                  overflow: TextOverflow.visible,
-                                ),
                               ),
                             ),
-                            SizedBox(width: 10),
-                            SizedBox(
-                              width: 40,
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton2<String>(
-                                  customButton: Icon(Icons.menu, color: Colors.black),
-                                  items: ["Lab Summary", "Lab Report"].map((String item) {
-                                    return DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(item, style: TextStyle(fontSize: 14)),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? value) async {
-                                    if (value == "Lab Summary") {
-                                      // Get.to(LabSummaryScreen());
-                                      var adPatientController = Get.put(AdPatientController());
-                                      adPatientController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                                      adPatientController.uhid = controller.filterpatientsData[index].uhid ?? '';
-                                      adPatientController.update();
-                                      await adPatientController.fetchsummarylabdata();
-                                      await adPatientController.resetForm();
-                                      Get.to(() => LabSummaryScreen());
-                                    } else if (value == "Lab Report") {
-                                      // Get.to(LabReportScreen());
-                                      var labreportsController = Get.put(LabReportsController());
-                                      labreportsController.showSwipe = true;
-                                      hideBottomBar.value = true;
-                                      labreportsController.labReportsList = [];
-                                      labreportsController.allReportsList = [];
-                                      labreportsController.allDatesList = [];
-                                      labreportsController.update();
-                                      labreportsController.showSwipe = true;
-                                      hideBottomBar.value = true;
-                                      labreportsController.getLabReporst(
-                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                          uhidNo: controller.filterpatientsData[index].uhid ?? '');
-                                      labreportsController.commonList = [];
-                                      labreportsController.dataContain = [];
-                                      labreportsController.scrollLister();
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: LabReportsViewCopy(
-                                          bedNumber: controller.filterpatientsData[index].bedNo ?? '',
-                                          patientName: controller.filterpatientsData[index].patientName ?? "",
-                                        ),
-                                        withNavBar: true,
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      ).then((value) {
-                                        hideBottomBar.value = true;
+                          ),
+                          SizedBox(width: getDynamicHeight(size: 0.010)),
+                          SizedBox(
+                            width: getDynamicHeight(size: 0.040),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton2<String>(
+                                customButton: Icon(Icons.menu, color: AppColor.black),
+                                items: ["Lab Summary", "Lab Report"].map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(item, style: TextStyle(fontSize: Sizes.px14)),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) async {
+                                  if (value == "Lab Summary") {
+                                    // Get.to(LabSummaryScreen());
+                                    // var adPatientController = Get.put(AdPatientController());
+                                    controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                                    controller.uhid = controller.filterpatientsData[index].uhid ?? '';
+                                    controller.update();
+                                    Future.microtask(() async {
+                                      await controller.fetchsummarylabdata();
+                                      await controller.resetForm();
+                                    });
+                                    // Get.to(() => LabSummaryScreen());
+                                    await PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: LabSummaryScreen(),
+                                      withNavBar: false,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ).then((value) async {
+                                      // if (!context.mounted) return;
+                                      // hideBottomBar.value = true;
+                                      Future.microtask(() async {
+                                        if (controller.sortBySelected != null) {
+                                          await controller.getSortData(isLoader: true);
+                                          return;
+                                        }
+                                        await controller.fetchDeptwisePatientList();
                                       });
-                                    }
-                                  },
-                                  dropdownStyleData: DropdownStyleData(
-                                    width: 150, padding: EdgeInsets.only(right: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    // offset: Offset(10, 5), // ✅ Dropdown menu exact menu end se start hoga
+                                    });
+                                  } else if (value == "Lab Report") {
+                                    // Get.to(LabReportScreen());
+                                    var labreportsController = Get.put(LabReportsController());
+                                    labreportsController.showSwipe = true;
+                                    hideBottomBar.value = true;
+                                    labreportsController.labReportsList = [];
+                                    labreportsController.allReportsList = [];
+                                    labreportsController.allDatesList = [];
+                                    labreportsController.update();
+                                    labreportsController.showSwipe = true;
+                                    hideBottomBar.value = true;
+                                    labreportsController.getLabReporst(
+                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                        uhidNo: controller.filterpatientsData[index].uhid ?? '');
+                                    labreportsController.commonList = [];
+                                    labreportsController.dataContain = [];
+                                    labreportsController.scrollLister();
+                                    await PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: LabReportsView(
+                                        bedNumber: controller.filterpatientsData[index].bedNo ?? '',
+                                        patientName: controller.filterpatientsData[index].patientName ?? "",
+                                      ),
+                                      withNavBar: false,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ).then((value) async {
+                                      // if (!context.mounted) return;
+                                      // hideBottomBar.value = true;
+                                      if (controller.sortBySelected != null) {
+                                        await controller.getSortData(isLoader: true);
+                                        return;
+                                      }
+                                      await controller.fetchDeptwisePatientList();
+                                    });
+                                  }
+                                },
+                                dropdownStyleData: DropdownStyleData(
+                                  width: getDynamicHeight(size: 0.15),
+                                  padding: EdgeInsets.only(right: 10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: AppColor.white,
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  controller.filterpatientsData[index].admType.toString(),
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(height: 5),
-                                Text.rich(TextSpan(
-                                  text: AppString.doa,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                      text: controller.filterpatientsData[index].doa.toString(),
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                )),
-                                // Text(controller.filterpatientdata[index].doa.toString()),
-                              ],
-                            ),
-                            Spacer(), // 🟢 Yeh `referredDr` ko center lane me help karega
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center, // ✅ Yeh text ko center karega
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  controller.filterpatientsData[index].referredDr.toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(height: 5),
-                                Text.rich(TextSpan(
-                                  text: AppString.totaldays,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                      text: controller.filterpatientsData[index].totalDays.toString(),
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                )),
-                                // Text(controller.filterpatientdata[index].totalDays.toString(), textAlign: TextAlign.center),
-                              ],
-                            ),
-                            Spacer(), // 🟢 Yeh dono columns ke beech equal space dega
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.filterpatientsData[index].admType.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text.rich(TextSpan(
+                                text: AppString.doa,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                    text: controller.filterpatientsData[index].doa.toString(),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              )),
+                              // Text(controller.filterpatientdata[index].doa.toString()),
+                            ],
+                          ),
+                          Spacer(), // 🟢 Yeh `referredDr` ko center lane me help karega
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Yeh text ko center karega
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                controller.filterpatientsData[index].referredDr.toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text.rich(TextSpan(
+                                text: AppString.totaldays,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                    text: controller.filterpatientsData[index].totalDays.toString(),
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              )),
+                              // Text(controller.filterpatientdata[index].totalDays.toString(), textAlign: TextAlign.center),
+                            ],
+                          ),
+                          Spacer(), // 🟢 Yeh dono columns ke beech equal space dega
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          : Center(
-              child: Text(
-                AppString.nopatientavaiable,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColor.red1),
-              ),
+                ),
+              ],
             ),
-    );
+          )
+        : Center(
+            child: Text(
+              AppString.nopatientavaiable,
+              style: TextStyle(fontSize: Sizes.px16, fontWeight: FontWeight.bold, color: AppColor.red1),
+            ),
+          );
   }
 }

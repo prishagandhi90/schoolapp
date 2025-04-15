@@ -7,13 +7,15 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Dashboard1Screen extends GetView<DashboardController> {
-  const Dashboard1Screen({super.key});
+  Dashboard1Screen({super.key});
+  final NotificationController notificationController = Get.put(NotificationController());
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
           },
           drawer: CustomDrawer(),
           appBar: AppBar(
-            backgroundColor: AppColor.white,            
+            backgroundColor: AppColor.white,
             title: Text(
               AppString.venushospital,
               style: TextStyle(
@@ -56,21 +58,42 @@ class Dashboard1Screen extends GetView<DashboardController> {
             ),
             centerTitle: true,
             actions: [
-              IconButton(
-                  onPressed: () {
-                    Get.to(NotificationScreen());
-                    // Get.snackbar(
-                    //   AppString.comingsoon,
-                    //   '',
-                    //   colorText: AppColor.white,
-                    //   backgroundColor: AppColor.black,
-                    //   duration: const Duration(seconds: 1),
-                    // );
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(() => NotificationScreen());
                   },
-                  icon: Image.asset(
-                    AppImage.notification,
-                    width: getDynamicHeight(size: 0.022),
-                  ))
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(
+                        AppImage.notification,
+                        width: getDynamicHeight(size: 0.022),
+                      ),
+                      Positioned(
+                        right: -2,
+                        top: -6,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '3', // 👈 yahan unread count daalo
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           body: controller.isLoading.value

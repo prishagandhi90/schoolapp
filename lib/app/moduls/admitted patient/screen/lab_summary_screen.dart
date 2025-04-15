@@ -28,17 +28,10 @@ class LabSummaryScreen extends StatelessWidget {
           ),
           leading: IconButton(
               onPressed: () {
-                // final bottomBarController = Get.find<BottomBarController>();
-                // bottomBarController.isAdmittedPatient.value = true;
                 controller.labSummarySearchController.clear(); // Search text clear karna
-                // controller.activateSearch(false); // Search mode deactivate karna
-                // print("After reset: sortBySelected = ${controller.sortBySelected}");
                 controller.sortBySelected = null;
                 controller.update();
-
-                // **Fresh Data fetch karna**
                 controller.fetchDeptwisePatientList();
-
                 Navigator.pop(context); // UI ko refresh karna
               },
               icon: Icon(Icons.arrow_back_ios, color: AppColor.black)),
@@ -300,7 +293,6 @@ class LabSummaryScreen extends StatelessWidget {
   }) {
     List<String> dateKeys = labData.dateValues?.keys.toList() ?? [];
 
-    // ✅ Extract all column texts
     List<String> columnTexts = [
       labData.formattest ?? "",
       labData.testName ?? "",
@@ -318,11 +310,7 @@ class LabSummaryScreen extends StatelessWidget {
         colWidth = getDynamicHeight(size: 0.090);
       } else if (i == 1) {
         colWidth = getDynamicHeight(size: 0.080);
-      }
-      // else if (i == 2) {
-      //   colWidth = getDynamicHeight(size: 0.085);
-      // }
-      else {
+      } else {
         colWidth = getDynamicHeight(size: 0.130);
       }
 

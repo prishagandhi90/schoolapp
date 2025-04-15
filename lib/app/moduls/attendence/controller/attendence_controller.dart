@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:convert';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/moduls/attendence/screen/dropdown_attendance.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
@@ -203,11 +204,11 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
   }
 
   Future<List<AttendanceDetailTable>> getattendeceinfotable() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoader.value = true;
       String url = ConstApiUrl.empAttendanceDtlAPI;
 
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -240,17 +241,24 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
     } catch (e) {
       isLoader.value = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "AttendanceScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoader.value = false;
     return [];
   }
 
   Future<List<AttendenceSummarytable>> getattendeceprsnttable() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoader.value = true;
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpAttendSumm_EmpInfo';
       String url = ConstApiUrl.empAttendanceSummaryAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -282,6 +290,13 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
     } catch (e) {
       isLoader.value = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "AttendanceScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoader.value = false;
     return [];

@@ -1,3 +1,4 @@
+import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
@@ -6,7 +7,7 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/circular_screen.dart';
+import 'package:emp_app/app/moduls/notification/screen/filter_tag_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,12 +28,12 @@ class NotificationScreen extends StatelessWidget {
             backgroundColor: AppColor.white,
             title: controller.isSearching
                 ? Container(
-                    height: 40,
+                    height: getDynamicHeight(size: 0.04),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.08)),
                     child: Row(
                       children: [
                         Expanded(
@@ -61,16 +62,19 @@ class NotificationScreen extends StatelessWidget {
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.cancel, color: Colors.black, size: 24), // ✅ Cancel button color
+                                        child: Icon(Icons.cancel,
+                                            color: Colors.black, size: getDynamicHeight(size: 0.024)), // ✅ Cancel button color
                                       ),
                                     )
                                   : null,
                               prefixIcon: Padding(
                                 padding: EdgeInsets.all(10),
-                                child: Icon(Icons.search, color: AppColor.black, size: 24), // ✅ Search icon color
+                                child:
+                                    Icon(Icons.search, color: AppColor.black, size: getDynamicHeight(size: 0.024)), // ✅ Search icon color
                               ),
                               hintText: AppString.search,
-                              hintStyle: AppStyle.plusgrey.copyWith(fontSize: 14, color: AppColor.lightgrey1), // ✅ Hint text style
+                              hintStyle: AppStyle.plusgrey
+                                  .copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
                               filled: true,
                               fillColor: AppColor.white, // ✅ Background color
                             ),
@@ -95,7 +99,7 @@ class NotificationScreen extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    AppString.notificationScreen,
+                    AppString.notification,
                     style: AppStyle.primaryplusw700,
                   ),
             centerTitle: true,
@@ -117,7 +121,6 @@ class NotificationScreen extends StatelessWidget {
               Row(
                 children: [
                   if (!controller.isSearching) // Search icon tabhi dikhe jab search enable na ho
-
                     IconButton(
                       onPressed: () {
                         controller.isSearching = true;
@@ -157,11 +160,11 @@ class NotificationScreen extends StatelessWidget {
                   child: controller.filternotificationlist.isEmpty
                       ? Center(
                           child: Text(
-                            'No Data Found',
+                            AppString.nodatafound,
                             style: TextStyle(
                               fontSize: getDynamicHeight(size: 0.02),
                               fontWeight: FontWeight.w600,
-                              color: Colors.grey,
+                              color: AppColor.originalgrey,
                             ),
                           ),
                         )
@@ -171,8 +174,15 @@ class NotificationScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () async {
+                                Get.dialog(
+                                  Center(child: ProgressWithIcon()),
+                                  barrierDismissible: false,
+                                );
+                                await controller.updateNotificationRead(index);
                                 await controller.fetchNotificationFile(index);
-                                Get.to(CircularScreen(index: index));
+                                // Hide loader
+                                Get.back();
+                                Get.to(() => FilterTagScreen(index: index));
                               },
                               child: Column(
                                 children: [
@@ -183,7 +193,9 @@ class NotificationScreen extends StatelessWidget {
                                         color: AppColor.black,
                                         // fontSize: 18,
                                         fontSize: getDynamicHeight(size: 0.020),
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight:
+                                            controller.filternotificationlist[index].boldYN == "Y" ? FontWeight.bold : FontWeight.normal,
+
                                         fontFamily: CommonFontStyle.plusJakartaSans,
                                       ),
                                     ),
@@ -224,7 +236,7 @@ class NotificationScreen extends StatelessWidget {
                                   ),
                                   Divider(
                                     color: AppColor.black,
-                                    height: 1,
+                                    height: getDynamicHeight(size: 0.001),
                                   ),
                                 ],
                               ),

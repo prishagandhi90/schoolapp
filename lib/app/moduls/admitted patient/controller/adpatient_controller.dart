@@ -97,9 +97,9 @@ class AdPatientController extends GetxController {
 
   @override
   void onClose() {
-    verticalScrollControllerLeft.dispose();
-    verticalScrollControllerRight.dispose();
-    horizontalScrollController.dispose();
+    // verticalScrollControllerLeft.dispose();
+    // verticalScrollControllerRight.dispose();
+    // horizontalScrollController.dispose();
     // searchController.dispose();
     super.onClose();
   }
@@ -111,7 +111,7 @@ class AdPatientController extends GetxController {
       isLoading = true;
       update();
 
-      String url = ConstApiUrl.empfilterpatientdataList;
+      String url = ConstApiUrl.empFilterpatientdataList;
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
@@ -156,7 +156,7 @@ class AdPatientController extends GetxController {
       update();
 
       ApiErrorHandler.handleError(
-        screenName: "DeptwisePatientListScreen",
+        screenName: "adPatientListScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -218,10 +218,10 @@ class AdPatientController extends GetxController {
   // }
 
   Future<List<PatientdataModel>> getPatientDashboardFilters({bool isLoader = true}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
-      String url = ConstApiUrl.patientDashboardFilters;
-      SharedPreferences pref = await SharedPreferences.getInstance();
+      String url = ConstApiUrl.empPatientDashboardFilters;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -243,16 +243,23 @@ class AdPatientController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "adPatientListScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return [];
   }
 
   Future<List<LabData>> fetchsummarylabdata({bool isLoader = true}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empPatientSummaryLabData;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -295,6 +302,13 @@ class AdPatientController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "adPatientListScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return labdata.toList();
@@ -397,9 +411,9 @@ class AdPatientController extends GetxController {
   }
 
   getSortData({bool isLoader = true}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       isLoading = isLoader;
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       loginId = await prefs.getString(AppString.keyLoginId) ?? "";
       tokenNo = await prefs.getString(AppString.keyToken) ?? "";
       Map data = {
@@ -435,6 +449,14 @@ class AdPatientController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
+
+      ApiErrorHandler.handleError(
+        screenName: "DeptwisePatientListScreen",
+        error: e.toString(),
+        loginID: prefs.getString(AppString.keyLoginId) ?? '',
+        tokenNo: prefs.getString(AppString.keyToken) ?? '',
+        empID: prefs.getString(AppString.keyEmpId) ?? '',
+      );
     }
   }
 

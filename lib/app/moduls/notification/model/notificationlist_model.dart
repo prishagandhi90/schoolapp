@@ -42,8 +42,9 @@ class NotificationlistModel {
   String? createdDate;
   String? scheduleDate;
   String? inactiveDate;
-  Null? sendToAll;
+  String? sendToAll;
   String? createdBy;
+  String? boldYN;
 
   NotificationlistModel(
       {this.id,
@@ -58,7 +59,8 @@ class NotificationlistModel {
       this.scheduleDate,
       this.inactiveDate,
       this.sendToAll,
-      this.createdBy});
+      this.createdBy,
+      this.boldYN});
 
   NotificationlistModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -74,6 +76,7 @@ class NotificationlistModel {
     inactiveDate = json['inactiveDate'];
     sendToAll = json['sendToAll'];
     createdBy = json['createdBy'];
+    boldYN = json['boldYN'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +94,7 @@ class NotificationlistModel {
     data['inactiveDate'] = this.inactiveDate;
     data['sendToAll'] = this.sendToAll;
     data['createdBy'] = this.createdBy;
+    data['boldYN'] = this.boldYN;
     return data;
   }
 }

@@ -81,7 +81,7 @@ class AppStyle {
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
   static TextStyle blackbold = TextStyle(
-    color: Colors.black,
+    color: AppColor.black,
     fontWeight: FontWeight.bold,
   );
   static TextStyle plusblack20w700 = TextStyle(

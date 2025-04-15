@@ -23,6 +23,7 @@ class AppString {
   static String home = "Home";
   static String attendance = "Attendance";
   static String dashboard = "Dashboard";
+  static String adminlogin = "Admin Login";
   static String leave = "Leave";
   static String overtime = "Over Time";
   static String select = "Select";
@@ -159,11 +160,6 @@ class AppString {
   static String employeenote = "Employee Note";
   static String inchargestatus = "In-Charge Status";
   static String confirm = "Confirm";
-  static String filters = "Filters";
-  static String filterbydays = "Filter by days / date range";
-  static String filterbytags = "Filter by tags";
-  static String notificationScreen = "Notification Screen";
-  static String circularScreen = "Circular Screen";
 
   //Admitted Patient
   static String admittedPatient = "Admitted Patients";
@@ -175,4 +171,13 @@ class AppString {
   static String labreport = "Lab Report";
   static String true1 = "True";
   static String provisional = "provisional";
+
+  //Notification
+  static String notification = "Notification";
+  static String nodatafound = "No Data Found";
+  static String filters = "Filters";
+  static String filterbydays = "Filter by days / date range";
+  static String filterbytags = "Filter by tags";
+  static String circularScreen = "Circular Screen";
+  static String selectdate = "Select Date";
 }

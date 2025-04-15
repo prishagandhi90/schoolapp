@@ -44,7 +44,7 @@ class ResetpassController extends GetxController {
   }
 
   resetPassWordApi() async {
-    String url = ConstApiUrl.generatenewpass;
+    String url = ConstApiUrl.generateNewPass;
     var jsonbodyObj = {"mobileNo": mobileNo, "password": passwordController.text.trim()};
     var decodedResp = await apiController.parseJsonBody(url, '', jsonbodyObj);
     ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));

@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:emp_app/app/core/common/common_methods.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
+import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -101,11 +102,11 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   }
 
   Future<List<PresviewerList>> fetchpresViewer({String? searchPrefix, bool isLoader = true}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empPresViewerListAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -147,17 +148,24 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "PharmacyScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return presviewerList.toList();
   }
 
   Future<List<PresdetailList>> fetchpresDetailList(String Mst_Id) async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empPresDetailListAPI;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -184,16 +192,23 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "PharmacyScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     isLoading = false;
     return [];
   }
 
   Future<List<PresdetailList>> GetPharmaFilterData() async {
+      SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empPharmaFilterDataApi;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
@@ -215,6 +230,13 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     } catch (e) {
       isLoading = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "PharmacyScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return [];
   }
