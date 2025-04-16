@@ -20,7 +20,7 @@ class BottomBarController extends GetxController {
   RxInt currentIndex = (2).obs;
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
   RxBool isPharmacyHome = false.obs;
-  RxBool isAdmittedPatient = false.obs;
+  RxBool isIPDHome = false.obs;
   RxBool isPayrollHome = false.obs;
 
   @override
@@ -36,7 +36,7 @@ class BottomBarController extends GetxController {
       Obx(() {
         if (isPharmacyHome.value) {
           return PharmacyScreen();
-        } else if (isAdmittedPatient.value) {
+        } else if (isIPDHome.value) {
           return IpdDashboardScreen();
         } else if (isPayrollHome.value) {
           return PayrollScreen();
@@ -76,7 +76,7 @@ class BottomBarController extends GetxController {
     } else if (index == 2) {
       persistentController.value.index = index;
       isPharmacyHome.value = false;
-      isAdmittedPatient.value = false;
+      isIPDHome.value = false;
       isPayrollHome.value = false;
       return;
     }
@@ -90,7 +90,7 @@ class BottomBarController extends GetxController {
   void resetAndInitialize() {
     currentIndex.value = 2;
     isPharmacyHome.value = false;
-    isAdmittedPatient.value = false;
+    isIPDHome.value = false;
     isPayrollHome.value = false;
     persistentController.value = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
@@ -105,7 +105,7 @@ class BottomBarController extends GetxController {
     hideBottomBar.value = false;
     if (index == 2) {
       isPharmacyHome.value = false;
-      isAdmittedPatient.value = false;
+      isIPDHome.value = false;
       isPayrollHome.value = false;
     }
     // update();

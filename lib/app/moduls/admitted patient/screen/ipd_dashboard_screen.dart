@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -7,6 +8,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_contr
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -112,7 +114,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                               bottomBarController.currentIndex.value = -1;
                               bottomBarController.persistentController.value.index = 0;
                               bottomBarController.currentIndex.value = 0;
-                              bottomBarController.isAdmittedPatient.value = true;
+                              bottomBarController.isIPDHome.value = true;
                               hideBottomBar.value = true;
                               var dashboardController = Get.put(DashboardController());
                               await dashboardController.getDashboardDataUsingToken();
@@ -151,7 +153,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                                       bottomBarController.currentIndex.value = -1;
                                       bottomBarController.persistentController.value.index = 0;
                                       bottomBarController.currentIndex.value = 0;
-                                      bottomBarController.isAdmittedPatient.value = true;
+                                      bottomBarController.isIPDHome.value = true;
                                       hideBottomBar.value = true;
                                       var dashboardController = Get.put(DashboardController());
                                       await dashboardController.getDashboardDataUsingToken();
@@ -172,6 +174,66 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
             title: Text(AppString.ipd, style: AppStyle.primaryplusw700),
             backgroundColor: AppColor.white,
             centerTitle: true,
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: Image.asset(
+                    AppImage.drawer,
+                    width: getDynamicHeight(size: 0.022),
+                    color: AppColor.black,
+                  ),
+                );
+              },
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    // Get.to(() => NotificationScreen());
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      await adPatientController.fetchDeptwisePatientList();
+                    });
+                  },
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(
+                        AppImage.notification,
+                        width: getDynamicHeight(size: 0.022),
+                      ),
+                      Positioned(
+                        right: -2,
+                        top: -6,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '', //controller.notificationCount,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           body: GetBuilder<AdPatientController>(
             builder: (controller) {
@@ -212,7 +274,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
           await _fetchData();
           final bottomBarController = Get.find<BottomBarController>();
           bottomBarController.currentIndex.value = 0;
-          bottomBarController.isAdmittedPatient.value = true;
+          bottomBarController.isIPDHome.value = true;
           hideBottomBar.value = false;
           var dashboardController = Get.put(DashboardController());
           await dashboardController.getDashboardDataUsingToken();
@@ -249,11 +311,15 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                   ),
                 ],
               ),
-              Icon(
-                Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
-                size: Sizes.px40,
-                color: AppColor.teal,
-              ),
+              Image.asset('assets/image/AdPatient.png', // Image ko bhi dynamic kar sakte ho agar chaho
+                  height: Sizes.px40,
+                  width: Sizes.px40,
+                  color: AppColor.teal),
+              // Icon(
+              //   Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
+              //   size: Sizes.px40,
+              //   color: AppColor.teal,
+              // ),
             ],
           ),
         ),

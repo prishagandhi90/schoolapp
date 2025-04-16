@@ -36,6 +36,14 @@ class LabSummaryScreen extends StatelessWidget {
               },
               icon: Icon(Icons.arrow_back_ios, color: AppColor.black)),
           centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.info_outline_rounded, color: AppColor.black),
+              onPressed: () {
+                controller.showInfoDialog(context);
+              },
+            ),
+          ],
         ),
         body: CustomScrollView(slivers: [
           SliverAppBar(

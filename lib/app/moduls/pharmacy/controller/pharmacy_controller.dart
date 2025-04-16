@@ -161,7 +161,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   }
 
   Future<List<PresdetailList>> fetchpresDetailList(String Mst_Id) async {
-      SharedPreferences pref = await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
@@ -205,7 +205,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   }
 
   Future<List<PresdetailList>> GetPharmaFilterData() async {
-      SharedPreferences pref = await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empPharmaFilterDataApi;

@@ -126,7 +126,7 @@ class DashboardController extends GetxController {
         break;
       case 2:
         var bottomBarController = Get.put(BottomBarController());
-        bottomBarController.isAdmittedPatient.value = true;
+        bottomBarController.isIPDHome.value = true;
         bottomBarController.isPayrollHome.value = false;
         bottomBarController.isPharmacyHome.value = false;
         hideBottomBar.value = false;
@@ -174,7 +174,7 @@ class DashboardController extends GetxController {
         var bottomBarController = Get.put(BottomBarController());
         bottomBarController.isPharmacyHome.value = true;
         bottomBarController.isPayrollHome.value = false;
-        bottomBarController.isAdmittedPatient.value = false;
+        bottomBarController.isIPDHome.value = false;
         hideBottomBar.value = false;
         // bottomBarController.onItemTapped(0, true, context);
         bottomBarController.resetAndInitialize_new(0);
@@ -192,7 +192,7 @@ class DashboardController extends GetxController {
       case 7:
         var bottomBarController = Get.put(BottomBarController());
         hideBottomBar.value = false;
-        bottomBarController.isAdmittedPatient.value = false;
+        bottomBarController.isIPDHome.value = false;
         bottomBarController.isPharmacyHome.value = false;
         bottomBarController.isPayrollHome.value = true;
         bottomBarController.resetAndInitialize_new(0);

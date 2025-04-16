@@ -882,6 +882,38 @@ class AdPatientController extends GetxController {
     );
   }
 
+   void showInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Information"),
+         content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed."),
+              SizedBox(height: 8),
+              Text("b. Any test values that are abnormal will be displayed in red colour for clear identification."),
+              SizedBox(height: 8),
+              Text("c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist."),
+            ],
+          ),
+        ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog close karega
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   resetForm() async {
     selectedOrgsList.clear();
     selectedWardsList.clear();

@@ -51,7 +51,7 @@ class AdpatientScreen extends StatelessWidget {
               leading: IconButton(
                   onPressed: () {
                     final bottomBarController = Get.find<BottomBarController>();
-                    bottomBarController.isAdmittedPatient.value = true;
+                    bottomBarController.isIPDHome.value = true;
                     controller.searchController.clear(); // Search text clear karna
                     controller.activateSearch(false); // Search mode deactivate karna
                     // print("After reset: sortBySelected = ${controller.sortBySelected}");
