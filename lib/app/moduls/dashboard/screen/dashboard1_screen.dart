@@ -61,7 +61,6 @@ class Dashboard1Screen extends GetView<DashboardController> {
                 padding: EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () {
-                    // Get.to(() => NotificationScreen());
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: NotificationScreen(),
@@ -78,25 +77,26 @@ class Dashboard1Screen extends GetView<DashboardController> {
                         AppImage.notification,
                         width: getDynamicHeight(size: 0.022),
                       ),
-                      Positioned(
-                        right: -2,
-                        top: -6,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            controller.notificationCount, // 👈 yahan unread count daalo
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                      if (controller.notificationCount != "0") // 👈 Condition lagayi
+                        Positioned(
+                          right: -2,
+                          top: -6,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              controller.notificationCount,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
