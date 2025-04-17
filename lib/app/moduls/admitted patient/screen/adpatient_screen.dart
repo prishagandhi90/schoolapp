@@ -288,24 +288,24 @@ class AdpatientScreen extends StatelessWidget {
                                 }).toList(),
                                 onChanged: (String? value) async {
                                   if (value == "Lab Summary") {
-                                    // Get.to(LabSummaryScreen());
-                                    // var adPatientController = Get.put(AdPatientController());
+                                    // Get.dialog(
+                                    //   Center(child: ProgressWithIcon()),
+                                    //   barrierDismissible: false,
+                                    // );
                                     controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
                                     controller.uhid = controller.filterpatientsData[index].uhid ?? '';
                                     controller.update();
                                     Future.microtask(() async {
-                                      await controller.fetchsummarylabdata();
+                                      controller.fetchsummarylabdata();
                                       await controller.resetForm();
                                     });
                                     // Get.to(() => LabSummaryScreen());
-                                    await PersistentNavBarNavigator.pushNewScreen(
+                                    PersistentNavBarNavigator.pushNewScreen(
                                       context,
                                       screen: LabSummaryScreen(),
                                       withNavBar: false,
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ).then((value) async {
-                                      // if (!context.mounted) return;
-                                      // hideBottomBar.value = true;
                                       Future.microtask(() async {
                                         if (controller.sortBySelected != null) {
                                           await controller.getSortData(isLoader: true);
@@ -336,6 +336,8 @@ class AdpatientScreen extends StatelessWidget {
                                       screen: LabReportsView(
                                         bedNumber: controller.filterpatientsData[index].bedNo ?? '',
                                         patientName: controller.filterpatientsData[index].patientName ?? "",
+                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                        uhidNo: controller.filterpatientsData[index].uhid ?? '',
                                       ),
                                       withNavBar: false,
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,

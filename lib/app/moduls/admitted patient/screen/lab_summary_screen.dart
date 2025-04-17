@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:math';
+import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -45,239 +46,229 @@ class LabSummaryScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: CustomScrollView(slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: MediaQuery.of(context).orientation == Orientation.portrait
-                ? MediaQuery.of(context).size.height * 0.105 // Portrait Mode Height
-                : MediaQuery.of(context).size.height * 0.24, // Dynamic Height
-            pinned: false,
-            floating: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: getDynamicHeight(size: 0.005),
-                    right: getDynamicHeight(size: 0.005),
-                    // bottom: getDynamicHeight(size: 0.003),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            controller.patientName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getDynamicHeight(size: 0.013),
-                            ),
-                          ),
-                          Text(
-                            controller.bedNo,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getDynamicHeight(size: 0.013),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: getDynamicHeight(size: 0.005)),
-                      SizedBox(
-                        height: getDynamicHeight(size: 0.050),
-                        child: TextFormField(
-                          cursorColor: AppColor.black,
-                          controller: controller.labSummarySearchController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColor.lightgrey1,
-                                width: getDynamicHeight(size: 0.00105),
-                              ),
-                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                              borderSide: BorderSide(
-                                color: AppColor.black,
-                              ),
-                            ),
-                            suffixIcon: controller.labSummarySearchController.text.trim().isNotEmpty
-                                ? GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).unfocus();
-                                      controller.labSummarySearchController.clear();
-                                      controller.fetchsummarylabdata();
-                                    },
-                                    child: const Icon(Icons.cancel_outlined))
-                                : const SizedBox(),
-                            prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                            hintText: AppString.search,
-                            hintStyle: AppStyle.plusgrey,
-                            filled: true,
-                            fillColor: AppColor.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
-                            ),
-                          ),
-                          onTap: () {
-                            controller.update();
-                          },
-                          onChanged: (value) {
-                            controller.filterLabSummarySearchResults(value);
-                            // controller.searchController.clear();
-                          },
-                          onTapOutside: (event) {
-                            FocusScope.of(context).unfocus();
-                            Future.delayed(const Duration(milliseconds: 300));
-                            controller.update();
-                          },
-                          onFieldSubmitted: (v) {
-                            if (controller.labSummarySearchController.text.trim().isNotEmpty) {
-                              controller.fetchsummarylabdata();
-                              controller.labSummarySearchController.clear();
-                            }
-                            Future.delayed(const Duration(milliseconds: 800));
-                            controller.update();
-                          },
+        body: controller.isLoading
+            ? Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: getDynamicHeight(size: 0.102),
+                ),
+                child: Center(child: ProgressWithIcon()),
+              )
+            : CustomScrollView(slivers: [
+                SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  expandedHeight: MediaQuery.of(context).orientation == Orientation.portrait
+                      ? MediaQuery.of(context).size.height * 0.105 // Portrait Mode Height
+                      : MediaQuery.of(context).size.height * 0.24, // Dynamic Height
+                  pinned: false,
+                  floating: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: getDynamicHeight(size: 0.005),
+                          right: getDynamicHeight(size: 0.005),
+                          // bottom: getDynamicHeight(size: 0.003),
                         ),
-                        // TextFormField(
-                        //   cursorColor: AppColor.black,
-                        //   controller: controller.searchController,
-                        //   decoration: InputDecoration(
-                        //     contentPadding: EdgeInsets.symmetric(
-                        //       horizontal: getDynamicHeight(size: 0.010),
-                        //     ),
-                        //     focusedBorder: OutlineInputBorder(
-                        //       borderSide: BorderSide(color: AppColor.lightgrey1, width: getDynamicHeight(size: 0.0005)),
-                        //       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                        //     ),
-                        //     enabledBorder: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                        //       borderSide: BorderSide(color: AppColor.black),
-                        //     ),
-                        //     prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                        //     hintText: AppString.search,
-                        //     hintStyle: AppStyle.plusgrey,
-                        //     filled: true,
-                        //     fillColor: AppColor.white,
-                        //     border: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
-                        //     ),
-                        //   ),
-                        // ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  controller.patientName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: getDynamicHeight(size: 0.013),
+                                  ),
+                                ),
+                                Text(
+                                  controller.bedNo,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: getDynamicHeight(size: 0.013),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+                            SizedBox(
+                              height: getDynamicHeight(size: 0.050),
+                              child: TextFormField(
+                                cursorColor: AppColor.black,
+                                controller: controller.labSummarySearchController,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: AppColor.lightgrey1,
+                                      width: getDynamicHeight(size: 0.00105),
+                                    ),
+                                    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                                    borderSide: BorderSide(
+                                      color: AppColor.black,
+                                    ),
+                                  ),
+                                  suffixIcon: controller.labSummarySearchController.text.trim().isNotEmpty
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            FocusScope.of(context).unfocus();
+                                            controller.labSummarySearchController.clear();
+                                            controller.fetchsummarylabdata();
+                                          },
+                                          child: const Icon(Icons.cancel_outlined))
+                                      : const SizedBox(),
+                                  prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                  hintText: AppString.search,
+                                  hintStyle: AppStyle.plusgrey,
+                                  filled: true,
+                                  fillColor: AppColor.white,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
+                                  ),
+                                ),
+                                onTap: () {
+                                  controller.update();
+                                },
+                                onChanged: (value) {
+                                  controller.filterLabSummarySearchResults(value);
+                                  // controller.searchController.clear();
+                                },
+                                onTapOutside: (event) {
+                                  FocusScope.of(context).unfocus();
+                                  Future.delayed(const Duration(milliseconds: 300));
+                                  controller.update();
+                                },
+                                onFieldSubmitted: (v) {
+                                  if (controller.labSummarySearchController.text.trim().isNotEmpty) {
+                                    controller.fetchsummarylabdata();
+                                    controller.labSummarySearchController.clear();
+                                  }
+                                  Future.delayed(const Duration(milliseconds: 800));
+                                  controller.update();
+                                },
+                              ),
+                            ),
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: getDynamicHeight(size: 0.005)),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          SliverFillRemaining(
-            hasScrollBody: true,
-            child: SizedBox(
-              height: double.infinity,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Left side (ID & Name) - Independent vertical scroll
-                  Column(
-                    children: [
-                      Row(
+                SliverFillRemaining(
+                  hasScrollBody: true,
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await controller.fetchsummarylabdata();
+                    },
+                    child: SizedBox(
+                      height: double.infinity,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildFixedHeaderCell("Report", width: getDynamicHeight(size: 0.090)),
-                          _buildFixedHeaderCell("Test", width: getDynamicHeight(size: 0.080)),
-                          // _buildFixedHeaderCell(
-                          //   "Range",
-                          //   width: getDynamicHeight(size: 0.085),
-                          // ),
-                        ],
-                      ),
-                      Flexible(
-                        child: SingleChildScrollView(
-                          controller: controller.verticalScrollControllerLeft,
-                          child: Column(
-                            children: List.generate(controller.filterlabdata.length, (index) {
-                              var item = controller.filterlabdata[index]; // API data
-                              // double maxHeight = _getMaxRowHeight(index, controller);
-                              double rowHeights = 0.00;
-                              rowHeights = getLabRowHeights(
-                                labData: controller.filterlabdata[index],
-                                rowIndex: index,
-                                context: context,
-                              );
-                              return Row(
+                          // Left side (ID & Name) - Independent vertical scroll
+                          Column(
+                            children: [
+                              Row(
                                 children: [
-                                  _buildFixedCell(
-                                    "${item.formattest.toString()}",
-                                    context,
-                                    index,
-                                    height: rowHeights,
-                                    width: getDynamicHeight(size: 0.090),
-                                  ),
-                                  _buildFixedCell(
-                                    "${item.testName.toString()}", context,
-                                    height: rowHeights, index,
-                                    width: getDynamicHeight(size: 0.080),
-                                    // heightContainer: maxHeight_Container,
-                                  ),
-                                  // _buildFixedCell(
-                                  //   "${item.normalRange.toString()}", context, index,
-                                  //   height: rowHeights,
+                                  _buildFixedHeaderCell("Report", width: getDynamicHeight(size: 0.090)),
+                                  _buildFixedHeaderCell("Test", width: getDynamicHeight(size: 0.080)),
+                                  // _buildFixedHeaderCell(
+                                  //   "Range",
                                   //   width: getDynamicHeight(size: 0.085),
-                                  //   // heightContainer: maxHeight_Container,
                                   // ),
                                 ],
-                              );
-                            }),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      controller: controller.horizontalScrollController,
-                      scrollDirection: Axis.horizontal,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: controller.filterlabdata.isNotEmpty
-                                ? controller.filterlabdata[0].dateValues!.keys.map((date) {
-                                    return _buildHeaderCell(date, width: getDynamicHeight(size: 0.130));
-                                  }).toList()
-                                : [],
-                          ),
-                          Flexible(
-                            child: SingleChildScrollView(
-                              controller: controller.verticalScrollControllerRight,
-                              child: Column(
-                                children: List.generate(controller.filterlabdata.length, (index) {
-                                  var item = controller.filterlabdata[index]; // API data
-                                  double rowHeights = 0.00;
-                                  rowHeights = getLabRowHeights(
-                                    labData: controller.filterlabdata[index],
-                                    rowIndex: index,
-                                    context: context,
-                                  );
-
-                                  return Row(
-                                    children: item.dateValues!.entries.map((entry) {
-                                      return _buildDataCell(
-                                        "${entry.value}", context, index,
-                                        width: getDynamicHeight(size: 0.130),
-                                        height: rowHeights,
-                                        // containerHeight: maxHeight_Container,
+                              ),
+                              Flexible(
+                                child: SingleChildScrollView(
+                                  controller: controller.verticalScrollControllerLeft,
+                                  child: Column(
+                                    children: List.generate(controller.filterlabdata.length, (index) {
+                                      var item = controller.filterlabdata[index]; // API data
+                                      // double maxHeight = _getMaxRowHeight(index, controller);
+                                      double rowHeights = 0.00;
+                                      rowHeights = getLabRowHeights(
+                                        labData: controller.filterlabdata[index],
+                                        rowIndex: index,
+                                        context: context,
                                       );
-                                    }).toList(),
-                                  );
-                                }),
+                                      return Row(
+                                        children: [
+                                          _buildFixedCell(
+                                            "${item.formattest.toString()}",
+                                            context,
+                                            index,
+                                            height: rowHeights,
+                                            width: getDynamicHeight(size: 0.090),
+                                          ),
+                                          _buildFixedCell(
+                                            "${item.testName.toString()}", context,
+                                            height: rowHeights, index,
+                                            width: getDynamicHeight(size: 0.080),
+                                            // heightContainer: maxHeight_Container,
+                                          ),
+                                          // _buildFixedCell(
+                                          //   "${item.normalRange.toString()}", context, index,
+                                          //   height: rowHeights,
+                                          //   width: getDynamicHeight(size: 0.085),
+                                          //   // heightContainer: maxHeight_Container,
+                                          // ),
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              controller: controller.horizontalScrollController,
+                              scrollDirection: Axis.horizontal,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: controller.filterlabdata.isNotEmpty
+                                        ? controller.filterlabdata[0].dateValues!.keys.map((date) {
+                                            return _buildHeaderCell(date, width: getDynamicHeight(size: 0.130));
+                                          }).toList()
+                                        : [],
+                                  ),
+                                  Flexible(
+                                    child: SingleChildScrollView(
+                                      controller: controller.verticalScrollControllerRight,
+                                      child: Column(
+                                        children: List.generate(controller.filterlabdata.length, (index) {
+                                          var item = controller.filterlabdata[index]; // API data
+                                          double rowHeights = 0.00;
+                                          rowHeights = getLabRowHeights(
+                                            labData: controller.filterlabdata[index],
+                                            rowIndex: index,
+                                            context: context,
+                                          );
+
+                                          return Row(
+                                            children: item.dateValues!.entries.map((entry) {
+                                              return _buildDataCell(
+                                                "${entry.value}", context, index,
+                                                width: getDynamicHeight(size: 0.130),
+                                                height: rowHeights,
+                                                // containerHeight: maxHeight_Container,
+                                              );
+                                            }).toList(),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -285,11 +276,8 @@ class LabSummaryScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ]),
+                ),
+              ]),
       );
     });
   }

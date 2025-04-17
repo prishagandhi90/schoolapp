@@ -310,7 +310,6 @@ class AdPatientController extends GetxController {
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
     }
-    isLoading = false;
     return labdata.toList();
   }
 
@@ -321,41 +320,7 @@ class AdPatientController extends GetxController {
     update(); // GetBuilder ke liye UI refresh karega
   }
 
-  int matchCount = 0;
-  int currentMatchIndex = 0;
-
-  void highlightMatches(String query) {
-    if (query.trim().isEmpty) {
-      matchCount = 0;
-      currentMatchIndex = 0;
-      update();
-      return;
-    }
-
-    matchCount = filterlabdata
-        .where((item) =>
-            item.testName!.toLowerCase().contains(query.toLowerCase()) || item.formattest!.toLowerCase().contains(query.toLowerCase()))
-        .length;
-
-    currentMatchIndex = 0;
-    update();
-  }
-
-  void goToNextMatch() {
-    if (matchCount == 0) return;
-    currentMatchIndex = (currentMatchIndex + 1) % matchCount;
-    update();
-  }
-
-  void goToPreviousMatch() {
-    if (matchCount == 0) return;
-    currentMatchIndex = (currentMatchIndex - 1 + matchCount) % matchCount;
-    update();
-  }
-
   void clearSearch() {
-    matchCount = 0;
-    currentMatchIndex = 0;
     fetchsummarylabdata();
     update();
   }
@@ -882,25 +847,26 @@ class AdPatientController extends GetxController {
     );
   }
 
-   void showInfoDialog(BuildContext context) {
+  void showInfoDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Information"),
-         content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed."),
-              SizedBox(height: 8),
-              Text("b. Any test values that are abnormal will be displayed in red colour for clear identification."),
-              SizedBox(height: 8),
-              Text("c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist."),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed."),
+                SizedBox(height: 8),
+                Text("b. Any test values that are abnormal will be displayed in red colour for clear identification."),
+                SizedBox(height: 8),
+                Text("c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist."),
+              ],
+            ),
           ),
-        ),
           actions: [
             TextButton(
               onPressed: () {
