@@ -16,12 +16,12 @@ if (localPropertiesFile.exists()) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '49'
+    flutterVersionCode = '50'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.49'
+    flutterVersionName = '1.50'
 }
 
 android {
@@ -45,8 +45,8 @@ android {
         // versionName = flutterVersionName
         minSdk = 21
         targetSdk = 34
-        versionCode = 49
-        versionName = 1.49
+        versionCode = 50
+        versionName = 1.50
     }
 
     signingConfigs {
