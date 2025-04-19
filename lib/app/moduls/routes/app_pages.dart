@@ -11,6 +11,7 @@ import 'package:emp_app/app/moduls/bottombar/bindings/bottombar_binding.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/bindings/DashboardBinding.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/force_update/bindings/force_update_binding.dart';
 import 'package:emp_app/app/moduls/force_update/screen/force_update_screen.dart';
 import 'package:emp_app/app/moduls/forgotpassword/binding/forgotpassword_binding.dart';
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
@@ -75,7 +76,7 @@ class AppPages {
     GetPage(
       name: _Paths.Force_update,
       page: () => ForceUpdateScreen(),
-      binding: NoInternetBinding(),
+      binding: ForceUpdateBinding(),
     ),
     GetPage(
       name: _Paths.VERIFYOTP,

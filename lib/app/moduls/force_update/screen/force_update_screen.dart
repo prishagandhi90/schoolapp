@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ForceUpdateScreen extends StatefulWidget {
-  @override
-  _ForceUpdateScreenState createState() => _ForceUpdateScreenState();
-}
-
-class _ForceUpdateScreenState extends State<ForceUpdateScreen> {
+class ForceUpdateScreen extends StatelessWidget {
+  
   void _launchStore() async {
     final Uri storeUrl = Uri.parse("https://play.google.com/store/apps/details?id=com.venus_hospital.emp_app");
     if (await canLaunchUrl(storeUrl)) {
