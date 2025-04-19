@@ -11,6 +11,7 @@ import 'package:emp_app/app/moduls/bottombar/bindings/bottombar_binding.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/bindings/DashboardBinding.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
+import 'package:emp_app/app/moduls/force_update/screen/force_update_screen.dart';
 import 'package:emp_app/app/moduls/forgotpassword/binding/forgotpassword_binding.dart';
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
@@ -52,9 +53,12 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  // static const initial = Routes.SPLASH;
-  static String getInitialRoute(bool isLoggedIn) {
-    return isLoggedIn ? _Paths.BOTTOMBAR : _Paths.LOGIN; // Redirect based on login status
+  static String getInitialRoute(bool isLoggedIn, bool isForceUpdate) {
+    if (isForceUpdate) {
+      return _Paths.Force_update;
+    } else {
+      return isLoggedIn ? _Paths.BOTTOMBAR : _Paths.LOGIN;
+    }
   }
 
   static final routes = [
@@ -67,6 +71,11 @@ class AppPages {
       name: _Paths.LOGIN,
       page: () => const LoginScreen(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.Force_update,
+      page: () => ForceUpdateScreen(),
+      binding: NoInternetBinding(),
     ),
     GetPage(
       name: _Paths.VERIFYOTP,

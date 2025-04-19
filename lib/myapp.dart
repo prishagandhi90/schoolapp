@@ -1,5 +1,4 @@
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
-import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  var loginController = Get.put(LoginController());
 
   @override
   void initState() {

@@ -23,6 +23,7 @@ class AppImage {
   static String filter1 = "assets/image/filter.png";
   static String note = "assets/image/notes.png";
   static String attach = "assets/image/attach.png";
+  static String nointernet = "assets/image/notinternet.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }

@@ -3,6 +3,7 @@ import 'package:emp_app/app/core/common/common_firebase.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/force_update/controller/force_update_controller.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
@@ -35,6 +36,8 @@ void main() async {
     bool isLoggedIn =
         prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
 
+    bool isForceUpdate = await ForceUpdateController().isForceUpdateRequired();
+
     // Set up Firebase messaging
     await setupFirebaseMessaging();
 
@@ -42,12 +45,6 @@ void main() async {
       FlutterError.dumpErrorToConsole(details);
       if (kReleaseMode) exit(1);
     };
-
-    // runApp(
-    //   MyApp(
-    //     isLoggedIn: isLoggedIn,
-    //   ),
-    // );
 
     runApp(
       Builder(
@@ -69,7 +66,7 @@ void main() async {
               useMaterial3: true,
             ),
             // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
-            initialRoute: AppPages.getInitialRoute(isLoggedIn),
+            initialRoute: AppPages.getInitialRoute(isLoggedIn, isForceUpdate),
             getPages: AppPages.routes,
             navigatorObservers: [
               NavigatorObserver(),
@@ -78,36 +75,6 @@ void main() async {
         },
       ),
     );
-
-    // runApp(
-    //   DevicePreview(
-    //     enabled: !kReleaseMode,
-    //     builder: (context) {
-    //       Sizes.init(context);
-    //       Get.put(NoInternetController());
-    //       Sizes.init(context);
-    //       return GetMaterialApp(
-    //         initialBinding: NoInternetBinding(),
-    //         debugShowCheckedModeBanner: false,
-    //         // useInheritedMediaQuery: true,
-    //         locale: DevicePreview.locale(context),
-    //         builder: DevicePreview.appBuilder,
-    //         // builder: EasyLoading.init(),
-    //         title: 'Flutter Demo',
-    //         theme: ThemeData(
-    //           colorScheme: ColorScheme.fromSeed(seedColor: AppColor.white),
-    //           useMaterial3: true,
-    //         ),
-    //         // home: widget.isLoggedIn ? BottomBarView() : LoginScreen(),
-    //         initialRoute: AppPages.getInitialRoute(isLoggedIn),
-    //         getPages: AppPages.routes,
-    //         navigatorObservers: [
-    //           NavigatorObserver(),
-    //         ],
-    //       );
-    //     },
-    //   ),
-    // );
   } catch (e) {
     print('An error occurred: $e');
     // You can add additional code here to handle the error

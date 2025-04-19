@@ -72,4 +72,6 @@ abstract class _Paths {
 
   static const IPDDASHBOARDSCREEN = '/ipd-dashboard-screen';
   static const IPDADMITTEDPATIENTS = '/ipd-admitted-patients';
+
+  static const Force_update = '/force-update';
 }

@@ -21,6 +21,8 @@ class ConstApiUrl {
 
   //-------------------Post Issues ---------------
   static const empPostIssue = "$empLoginUrl/PostIssue";
+  //----------------Force Update ---------------
+  static const empForceUpdateAPI = "$empLoginUrl/ForceUpdateYN";
 
   //  ----------------dashboard and payroll ---------------
   static const empAttendanceDtlAPI = "$empUrl/GetEmpAttendDtl_EmpInfo";

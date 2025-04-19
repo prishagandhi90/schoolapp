@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/common_elevated_button.dart';
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class NoInternetView extends GetView<NoInternetController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          "assets/image/notinternet.png",
+                          AppImage.nointernet,
                           height: 73,
                           width: 156,
                         ),
