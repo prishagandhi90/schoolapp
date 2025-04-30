@@ -283,23 +283,17 @@ class LabSummaryScreen extends StatelessWidget {
   }
 
   double getLabRowHeights({
-    required LabData labData, // List of LabData objects
+    required LabData labData,
     required int rowIndex,
-    BuildContext? context, // Current row index
+    BuildContext? context,
   }) {
     List<String> dateKeys = labData.dateValues?.keys.toList() ?? [];
 
-    List<String> columnTexts = [
-      labData.formattest ?? "",
-      labData.testName ?? "",
-      // labData.normalRange ?? "",
-      labData.unit ?? "",
-      ...dateKeys.map((date) => labData.dateValues?[date] ?? "")
-    ];
+    List<String> columnTexts = [labData.formattest ?? "", labData.testName ?? "", labData.unit ?? "", ...dateKeys.map((date) => labData.dateValues?[date] ?? "")];
 
     List<double> rowHeights = [];
     double colWidth = 0;
-    double padding = getDynamicHeight(size: 0.0178); // ✅ Padding added
+    double padding = getDynamicHeight(size: 0.0178);
 
     for (int i = 0; i < columnTexts.length; i++) {
       if (i == 0) {
@@ -310,49 +304,65 @@ class LabSummaryScreen extends StatelessWidget {
         colWidth = getDynamicHeight(size: 0.130);
       }
 
-      // ✅ Split text based on "|" to check for highlighting condition
-      List<String> parts = columnTexts[i].split("|");
-      String textPart = parts.first;
-      bool isHighlighted = parts.length > 1 && parts.last.trim() == "True";
-      List<String> labStatusParts = parts.length > 1 ? parts.last.trim().split("~") : [];
-      bool isFontColorRed = false;
-      if (labStatusParts.length > 1) {
-        isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
-      }
+      // Split by newline first (CHAR(10) or \n)
+      List<String> lines = columnTexts[i].split('\n');
+      List<double> lineHeights = [];
+      String textPart = "";
 
-      isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == "True";
+      for (String line in lines) {
+        if (line.isEmpty) continue; // Skip empty lines
 
-      double normalPadding = 0.012;
-      if (i > 2 && textPart.length <= 24 && MediaQuery.of(context!).size.height > 680) {
-        normalPadding = 0.012;
-      } else if (i > 2 && textPart.length > 24 && MediaQuery.of(context!).size.height > 680) {
-        normalPadding = 0.0185;
-      }
+        // Split each line by "|"
+        List<String> parts = line.split("|");
+        textPart += parts.isNotEmpty ? parts[0].trim() : ""; // Get the part before "|"
+        bool isHighlighted = false;
+        bool isFontColorRed = false;
 
-      double adaptivePadding = getDynamicHeight(
-        size: MediaQuery.of(context!).size.height < 680 ? 0.029 : normalPadding,
-      );
-      padding = adaptivePadding;
-      // ✅ Adjust maxWidth for padding
-      double adjustedColWidth = colWidth - (getDynamicHeight(size: 0.0021) * padding);
+        // Process the part after "|" for highlighting and color
+        if (parts.length > 1) {
+          List<String> labStatusParts = parts[1].trim().split("~");
+          isHighlighted = labStatusParts.length > 1 && labStatusParts.last.trim().toLowerCase() == "provisional";
+          isFontColorRed = labStatusParts.isNotEmpty && labStatusParts[0].trim() == "True";
+        }
 
-      TextPainter textPainter = TextPainter(
-        text: TextSpan(
-          text: textPart,
-          style: TextStyle(
-            fontSize: getDynamicHeight(size: 0.013),
-            backgroundColor: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
-            color: isFontColorRed ? AppColor.red1 : AppColor.black,
+        double normalPadding = 0.012;
+        if (i > 2 && textPart.length <= 24 && MediaQuery.of(context!).size.height > 680) {
+          normalPadding = 0.012;
+        } else if (i > 2 && textPart.length > 24 && MediaQuery.of(context!).size.height > 680) {
+          normalPadding = 0.0182;
+        }
+
+        double adaptivePadding = getDynamicHeight(
+          size: MediaQuery.of(context!).size.height < 680 ? 0.029 : normalPadding,
+        );
+        padding = adaptivePadding;
+        double adjustedColWidth = colWidth - (getDynamicHeight(size: 0.0021) * padding);
+
+        TextPainter textPainter = TextPainter(
+          text: TextSpan(
+            text: textPart,
+            style: TextStyle(
+              fontSize: getDynamicHeight(size: 0.013),
+              backgroundColor: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
+              color: isFontColorRed ? AppColor.red1 : AppColor.black,
+            ),
           ),
-        ),
-        maxLines: null,
-        textDirection: TextDirection.ltr,
-      )..layout(maxWidth: adjustedColWidth); // ✅ Adjust width to account for padding
+          maxLines: null,
+          textDirection: TextDirection.ltr,
+        )..layout(maxWidth: adjustedColWidth);
 
-      rowHeights.add(textPainter.height + (getDynamicHeight(size: 0.0022) * padding)); // ✅ Add padding to final height
+        if (lines.length > 1) {
+          lineHeights.add(textPainter.height + getDynamicHeight(size: 0.005) + (getDynamicHeight(size: 0.0022) * padding));
+        } else {
+          lineHeights.add(textPainter.height + (getDynamicHeight(size: 0.0022) * padding));
+        }
+      }
+
+      // Add the maximum height for this column's lines
+      rowHeights.add(lineHeights.isNotEmpty ? lineHeights.reduce((a, b) => a > b ? a : b) : 0);
     }
 
-    return rowHeights.isNotEmpty ? rowHeights.reduce(max) : 0;
+    return rowHeights.isNotEmpty ? rowHeights.reduce((a, b) => a > b ? a : b) : 0;
   }
 
   Widget _buildFixedHeaderCell(String text, {double width = 100}) {
@@ -468,7 +478,9 @@ class LabSummaryScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: lines.map((line) {
+              children: lines.asMap().entries.map((entry) {
+                int idx = entry.key;
+                String line = entry.value;
                 List<String> parts = line.split("|");
                 String textPart = parts.first;
                 List<String> labStatusParts = parts.length > 1 ? parts.last.trim().split("~") : [];
@@ -480,27 +492,32 @@ class LabSummaryScreen extends StatelessWidget {
 
                 isFontColorRed = parts.length > 1 && labStatusParts.first.trim() == AppString.true1;
 
-                return Container(
-                  width: double.infinity,
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.all(
-                    getDynamicHeight(size: 0.00417),
-                  ),
-                  decoration: BoxDecoration(
-                    color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
-                    borderRadius: BorderRadius.circular(
-                      getDynamicHeight(size: 0.00417),
+                return Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(
+                        getDynamicHeight(size: 0.00417),
+                      ),
+                      decoration: BoxDecoration(
+                        color: isHighlighted ? Colors.lightBlueAccent.withOpacity(0.5) : AppColor.transparent,
+                        borderRadius: BorderRadius.circular(
+                          getDynamicHeight(size: 0.00417),
+                        ),
+                      ),
+                      child: Text(
+                        textPart,
+                        style: TextStyle(
+                          fontSize: getDynamicHeight(size: 0.013),
+                          color: isFontColorRed ? AppColor.red1 : AppColor.black,
+                          // fontWeight: isFontColorRed ? FontWeight.bold : FontWeight.normal,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    textPart,
-                    style: TextStyle(
-                      fontSize: getDynamicHeight(size: 0.013),
-                      color: isFontColorRed ? AppColor.red1 : AppColor.black,
-                      // fontWeight: isFontColorRed ? FontWeight.bold : FontWeight.normal,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
+                    if (idx < lines.length - 1) SizedBox(height: getDynamicHeight(size: 0.005)),
+                  ],
                 );
               }).toList(),
             ),
@@ -525,8 +542,7 @@ class LabSummaryScreen extends StatelessWidget {
       if (index > startIndex) {
         spans.add(TextSpan(text: text.substring(startIndex, index), style: TextStyle(color: Colors.black)));
       }
-      spans.add(TextSpan(
-          text: text.substring(index, index + query.length), style: TextStyle(color: Colors.black, backgroundColor: Colors.yellow)));
+      spans.add(TextSpan(text: text.substring(index, index + query.length), style: TextStyle(color: Colors.black, backgroundColor: Colors.yellow)));
       startIndex = index + query.length;
       index = lowerText.indexOf(lowerQuery, startIndex);
     }
