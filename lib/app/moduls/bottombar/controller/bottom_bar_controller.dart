@@ -22,6 +22,7 @@ class BottomBarController extends GetxController {
   RxBool isPharmacyHome = false.obs;
   RxBool isIPDHome = false.obs;
   RxBool isPayrollHome = false.obs;
+  RxBool isDashboardHome = false.obs;
 
   @override
   void onInit() {
@@ -75,6 +76,7 @@ class BottomBarController extends GetxController {
       return; // This sets PayrollScreen tab
     } else if (index == 2) {
       persistentController.value.index = index;
+
       isPharmacyHome.value = false;
       isIPDHome.value = false;
       isPayrollHome.value = false;

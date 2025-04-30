@@ -266,7 +266,6 @@ class DashboardController extends GetxController {
 
       String token = prefs.getString(AppString.keyToken) ?? '';
       String loginId = prefs.getString(AppString.keyLoginId) ?? '';
-      String empId = prefs.getString(AppString.keyEmpId) ?? ''; // Assuming empCode = empID
 
       if (token.isNotEmpty && loginId.isNotEmpty) {
         var jsonbodyObj = {"loginId": loginId};
