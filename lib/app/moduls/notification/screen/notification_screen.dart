@@ -180,7 +180,7 @@ class NotificationScreen extends StatelessWidget {
                                   barrierDismissible: false,
                                 );
                                 await controller.updateNotificationRead(index);
-                                await controller.fetchNotificationFile(index);
+                                // await controller.fetchNotificationFile(index);
                                 // Hide loader
                                 Get.back();
                                 // Get.to(() => FilterTagScreen(index: index));

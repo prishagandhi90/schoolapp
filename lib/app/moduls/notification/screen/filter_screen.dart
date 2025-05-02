@@ -346,7 +346,7 @@ class _FilterScreenState extends State<FilterScreen> {
                               toDate: controller.toDateController.text,
                             );
 
-                            // Get.to(NotificationScreen());
+                            Get.to(NotificationScreen());
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColor.primaryColor,

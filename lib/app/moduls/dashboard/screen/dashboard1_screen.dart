@@ -61,14 +61,14 @@ class Dashboard1Screen extends GetView<DashboardController> {
                 padding: EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () {
-                    // PersistentNavBarNavigator.pushNewScreen(
-                    //   context,
-                    //   screen: NotificationScreen(),
-                    //   withNavBar: false,
-                    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                    // ).then((value) async {
-                    //   await controller.getDashboardDataUsingToken();
-                    // });
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      await controller.getDashboardDataUsingToken();
+                    });
                   },
                   child: Stack(
                     clipBehavior: Clip.none,

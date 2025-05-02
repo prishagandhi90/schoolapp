@@ -193,15 +193,15 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                 padding: EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () {
-                    // Get.to(() => NotificationScreen());
-                    // PersistentNavBarNavigator.pushNewScreen(
-                    //   context,
-                    //   screen: NotificationScreen(),
-                    //   withNavBar: false,
-                    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                    // ).then((value) async {
-                    //   await adPatientController.fetchDeptwisePatientList();
-                    // });
+                    Get.to(() => NotificationScreen());
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      await adPatientController.fetchDeptwisePatientList();
+                    });
                   },
                   child: Stack(
                     clipBehavior: Clip.none,
