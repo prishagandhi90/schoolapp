@@ -10,9 +10,9 @@ import 'package:emp_app/app/moduls/notification/model/notificationlist_model.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:open_filex/open_filex.dart';
 
 class NotificationController extends GetxController {
   TextEditingController fromDateController = TextEditingController();
@@ -71,8 +71,7 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<List<NotificationlistModel>> fetchNotificationList(
-      {int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
+  Future<List<NotificationlistModel>> fetchNotificationList({int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -249,16 +248,38 @@ class NotificationController extends GetxController {
   }
 
   Future<void> openFile(String fileName, String fileContent, String contentType) async {
-    // final bytes = base64Decode(fileContent);
-    // final tempDir = await getTemporaryDirectory();
-    // final file = File('${tempDir.path}/$fileName');
+    try {
+      final bytes = base64Decode(fileContent);
+      final tempDir = await getTemporaryDirectory();
+      final filePath = '${tempDir.path}/$fileName';
+      final file = File(filePath);
 
-    // await file.writeAsBytes(bytes);
-    writeBase64ToFile(fileContent, fileName).then((file) {
-      OpenFilex.open(file.path);
-    });
-    // OpenFilex.open(file.path);
+      await file.writeAsBytes(bytes);
+      final result = await OpenFilex.open(file.path);
+
+      if (result.type != ResultType.done) {
+        print("OpenFilex failed: ${result.message}");
+      }
+    } catch (e) {
+      print("Error while opening file: $e");
+    }
   }
+
+//   Future<void> openFile(String fileName, String fileContent, String mimeType) async {
+//   final bytes = base64Decode(fileContent);
+//   final tempDir = await getTemporaryDirectory();
+//   final filePath = '${tempDir.path}/$fileName';
+//   final file = File(filePath);
+//   await file.writeAsBytes(bytes);
+
+//   // Launch using safe intent
+//   final params = OpenFileDialogParams(
+//     filePath: file.path,
+//     mimeType: mimeType,
+//   );
+
+//   await FlutterFileDialog.openFile(params: params);
+// }
 
   final List<String> filterOptions = [
     "Today",
