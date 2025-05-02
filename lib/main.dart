@@ -119,7 +119,7 @@ Future<void> setupFirebaseMessaging() async {
 
   void _handleNotificationNavigation(RemoteMessage message) {
     // Use message.data['screen'] to navigate
-    Get.to(() => NotificationScreen());
+    // Get.to(() => NotificationScreen());
   }
 
   // Listen for when the app is opened from a notification

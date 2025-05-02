@@ -106,7 +106,7 @@ class FilterTagScreen extends StatelessWidget {
                                     bool isImage = file["contentType"]!.startsWith("image");
 
                                     return GestureDetector(
-                                      onTap: () => controller.openFile(file["fileName"]!, file["content"]!, file["contentType"]!),
+                                      // onTap: () => controller.openFile(file["fileName"]!, file["content"]!, file["contentType"]!),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(

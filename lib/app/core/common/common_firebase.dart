@@ -34,7 +34,7 @@ Future<void> InitFirebaseSettings() async {
     onDidReceiveNotificationResponse: (NotificationResponse response) {
       // This runs when user taps on local notification
       print('Local notification clicked!');
-      Get.to(() => NotificationScreen()); // Ya koi aur logic
+      // Get.to(() => NotificationScreen()); // Ya koi aur logic
     },
   );
 }
