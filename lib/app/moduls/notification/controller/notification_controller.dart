@@ -10,6 +10,7 @@ import 'package:emp_app/app/moduls/notification/model/notificationlist_model.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -246,6 +247,38 @@ class NotificationController extends GetxController {
     return file;
   }
 
+  Future<void> openFile({
+    required String fileName,
+    required String base64Content,
+    required String contentType,
+  }) async {
+    try {
+      // Base64 string ko bytes mein convert karna
+      final bytes = base64Decode(base64Content);
+
+      // Temporary directory ka path lena
+      final tempDir = await getTemporaryDirectory();
+
+      // File ka path define karna
+      final filePath = '${tempDir.path}/$fileName';
+
+      // File ko write karna
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+
+      // File ko open karna
+      final result = await OpenFile.open(filePath);
+
+      if (result.type != ResultType.done) {
+        // Agar file open nahi hoti toh error handle karo
+        print('Error: ${result.message}');
+      }
+    } catch (e) {
+      // Exception ko handle karna
+      print('Error: $e');
+    }
+  }
+
   // Future<void> openFile(String fileName, String fileContent, String contentType) async {
   //   try {
   //     final bytes = base64Decode(fileContent);
@@ -304,6 +337,25 @@ class NotificationController extends GetxController {
   //     }
   //   } catch (e) {
   //     print("Error while opening file: $e");
+  //   }
+  // }
+
+  // Future<void> openFile(String fileName, String base64Content, String contentType) async {
+  //   final bytes = base64Decode(base64Content);
+  //   final tempDir = await getTemporaryDirectory();
+  //   final filePath = '${tempDir.path}/$fileName';
+  //   final file = File(filePath);
+  //   await file.writeAsBytes(bytes);
+
+  //   if (contentType.startsWith("image/")) {
+  //     // Show image preview in your app
+  //     Get.to(() => ImagePreviewScreen(imageFile: file));
+  //   } else if (contentType == "application/pdf") {
+  //     // Open PDF viewer
+  //     Get.to(() => PdfViewerScreen(filePath: file.path));
+  //   } else {
+  //     // For audio, video, Word, Excel etc. - use system default intent
+  //     await OpenFile.open(file.path);
   //   }
   // }
 
