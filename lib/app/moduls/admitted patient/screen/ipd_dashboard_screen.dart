@@ -36,6 +36,14 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    late final DashboardController dashboardController;
+    try {
+      // Try to find the existing controller
+      dashboardController = Get.find<DashboardController>();
+    } catch (e) {
+      // Agar controller nahi milta to put karenge
+      dashboardController = Get.put(DashboardController());
+    }
     return GetBuilder<AdPatientController>(
       builder: (controller) {
         return Scaffold(
@@ -193,14 +201,21 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                 padding: EdgeInsets.only(right: 12),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(() => NotificationScreen());
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: NotificationScreen(),
                       withNavBar: false,
                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                     ).then((value) async {
+                      Get.back();
                       await adPatientController.fetchDeptwisePatientList();
+                      // var dashboardController = Get.put(DashboardController());
+                      await dashboardController.getDashboardDataUsingToken();
+                      var bottomBarController = Get.find<BottomBarController>();
+                      bottomBarController.currentIndex.value = 0;
+                      bottomBarController.persistentController.value.index = 0;
+                      bottomBarController.isIPDHome.value = true;
+                      hideBottomBar.value = false;
                     });
                   },
                   child: Stack(
@@ -210,25 +225,26 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                         AppImage.notification,
                         width: getDynamicHeight(size: 0.022),
                       ),
-                      Positioned(
-                        right: -2,
-                        top: -6,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            '', //controller.notificationCount,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                      if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
+                        Positioned(
+                          right: -2,
+                          top: -6,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              dashboardController.notificationCount,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

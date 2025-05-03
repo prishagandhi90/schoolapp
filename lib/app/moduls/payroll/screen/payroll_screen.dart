@@ -17,6 +17,7 @@ import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controll
 import 'package:emp_app/app/moduls/lvotApproval/screen/lvotapproval_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/payroll/controller/payroll_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,16 @@ class PayrollScreen extends GetView<PayrollController> {
   @override
   Widget build(BuildContext context) {
     Get.put(PayrollController());
+    // final dashboardController = Get.find<DashboardController>();
+    late final DashboardController dashboardController;
+
+    try {
+      // Try to find the existing controller
+      dashboardController = Get.find<DashboardController>();
+    } catch (e) {
+      // Agar controller nahi milta to put karenge
+      dashboardController = Get.put(DashboardController());
+    }
 
     double screenHeight = MediaQuery.of(context).size.height;
     double availableHeight = screenHeight - 85.0; // 70.0 is the height of BottomNavigationBar
@@ -168,20 +179,57 @@ class PayrollScreen extends GetView<PayrollController> {
                 },
               ),
               actions: [
-                IconButton(
-                    onPressed: () {
-                      Get.snackbar(
-                        AppString.comingsoon,
-                        '',
-                        colorText: AppColor.white,
-                        backgroundColor: AppColor.black,
-                        duration: const Duration(seconds: 1),
-                      );
+                Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: GestureDetector(
+                    onTap: () {
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: NotificationScreen(),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      ).then((value) async {
+                        Get.back();
+                        // var dashboardController = Get.put(DashboardController());
+                        await dashboardController.getDashboardDataUsingToken();
+                        var bottomBarController = Get.find<BottomBarController>();
+                        bottomBarController.currentIndex.value = 0;
+                        bottomBarController.persistentController.value.index = 0;
+                        bottomBarController.isPayrollHome.value = true;
+                        hideBottomBar.value = false;
+                      });
                     },
-                    icon: Image.asset(
-                      AppImage.notification,
-                      width: getDynamicHeight(size: 0.022), //20,
-                    ))
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Image.asset(
+                          AppImage.notification,
+                          width: getDynamicHeight(size: 0.022),
+                        ),
+                        if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
+                          Positioned(
+                            right: -2,
+                            top: -6,
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                dashboardController.notificationCount,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
               centerTitle: true,
             ),
