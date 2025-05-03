@@ -95,7 +95,7 @@ class FilterTagScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        controller.filesList.isEmpty
+                        controller.filesList.isEmpty && controller.notificationlist[index].fileYN == "Y"
                             ? Center(child: CircularProgressIndicator())
                             : SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,

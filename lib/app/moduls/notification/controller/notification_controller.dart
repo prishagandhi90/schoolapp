@@ -388,4 +388,18 @@ class NotificationController extends GetxController {
       selectedTags.add(tag);
     }
   }
+
+  Future<void> clearFilters() async {
+    fromDateController.clear();
+    toDateController.clear();
+    searchController.clear();
+    selectedTags.clear();
+    isSearching = false;
+    isLoading = false;
+    filternotificationlist.clear();
+    filesList.clear();
+    notificationfile.clear();
+    update();
+    // await fetchNotificationList(); // Fetch all notifications again
+  }
 }

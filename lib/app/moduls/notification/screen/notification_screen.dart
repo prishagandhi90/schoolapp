@@ -34,7 +34,7 @@ class NotificationScreen extends StatelessWidget {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.08)),
+                    // padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.0)),
                     child: Row(
                       children: [
                         Expanded(
@@ -176,8 +176,17 @@ class NotificationScreen extends StatelessWidget {
                                   Center(child: ProgressWithIcon()),
                                   barrierDismissible: false,
                                 );
+                                controller.searchController.clear();
+                                controller.selectedTags.clear();
+                                controller.isSearching = false;
+
                                 await controller.updateNotificationRead(index);
-                                await controller.fetchNotificationFile(index);
+                                if (controller.filternotificationlist[index].fileYN == "Y") {
+                                  await controller.fetchNotificationFile(index);
+                                } else {
+                                  controller.filesList.clear();
+                                  controller.update();
+                                }
                                 // Hide loader
                                 Get.back();
                                 // Get.to(() => FilterTagScreen(index: index));
@@ -187,6 +196,7 @@ class NotificationScreen extends StatelessWidget {
                                   withNavBar: false,
                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                 ).then((value) async {
+                                  await controller.clearFilters();
                                   await controller.fetchNotificationList();
                                 });
                               },
