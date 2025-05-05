@@ -92,11 +92,11 @@ class LoginController extends GetxController {
         otpController.numberController.text = numberController.text;
         update();
         String isValidLogin = "false";
-        isValidLogin =
-            await otpController.getDashboardData("", context, otpController.deviceTok, passwordController.text);
+        isValidLogin = await otpController.getDashboardData("", context, otpController.deviceTok, passwordController.text);
         if (isValidLogin == "true") {
           final bottomBarController = Get.put(BottomBarController());
           bottomBarController.resetAndInitialize();
+          await bottomBarController.loadPayrollScreens_Rights();
 
           Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
             Get.put(BottomBarController());

@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/common/common_methods.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -5,6 +6,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/ipd_dashboard_screen.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:emp_app/app/moduls/attendence/screen/attendance_screen.dart';
+import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/leave_main_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/dashboard1_screen.dart';
@@ -23,13 +25,20 @@ class BottomBarController extends GetxController {
   RxBool isIPDHome = false.obs;
   RxBool isPayrollHome = false.obs;
   RxBool isDashboardHome = false.obs;
+  List<ModuleScreenRights> payrollModuleScreenRightsTable = [];
 
   @override
   void onInit() {
     super.onInit();
+    loadPayrollScreens_Rights();
     // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
     // update();
+  }
+
+  Future<void> loadPayrollScreens_Rights() async {
+    payrollModuleScreenRightsTable = await CommonMethods.fetchModuleScreens("Payroll");
+    update();
   }
 
   List<Widget> buildScreens() {
@@ -149,8 +158,7 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home,
-                  color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
+              Image.asset(AppImage.home, color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
                 AppString.home,
