@@ -4,18 +4,19 @@ class Rsponsedpatientdata {
   String? message;
   List<PatientdataModel>? data;
 
-  Rsponsedpatientdata(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  Rsponsedpatientdata({this.statusCode, this.isSuccess, this.message, this.data});
 
   Rsponsedpatientdata.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <PatientdataModel>[];
       json['data'].forEach((v) {
         data!.add(new PatientdataModel.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

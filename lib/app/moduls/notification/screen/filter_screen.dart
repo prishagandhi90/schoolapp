@@ -18,7 +18,7 @@ class FilterScreen extends StatefulWidget {
 class _FilterScreenState extends State<FilterScreen> {
   String selectedFilter = "Today"; // Default Selected Value
 
-  final List<String> tagFilters = ["Training", "Circular", "Notice"];
+  final List<String> tagFilters = ["Training", "Circular", "Notice", "Minutes of Meeting"];
 
   @override
   Widget build(BuildContext context) {
@@ -234,8 +234,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                         ),
                         child: Text(
                           AppString.reset,
@@ -379,8 +378,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColor.primaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                           ),
                           child: Text(
                             AppString.cancel,
