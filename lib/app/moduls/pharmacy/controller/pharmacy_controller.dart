@@ -329,7 +329,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       text: TextSpan(
         text: patientName,
         style: TextStyle(
-          fontSize: getDynamicHeight(size: 0.015),
+          fontSize: getDynamicHeight(size: 0.016),
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -341,7 +341,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     double baseHeight = 0.0;
     baseHeight = textPainter.size.height > 0.0 ? textPainter.size.height * lines : baseHeight; // minimum for 1 line
     baseHeight += isEmergency.toUpperCase() == "Y"
-        ? getDynamicHeight(size: 0.120)
+        ? getDynamicHeight(size: 0.113)
         : getDynamicHeight(
             size: 0.123,
           );
