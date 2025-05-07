@@ -10,6 +10,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/controller/labreport_contr
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -273,6 +274,23 @@ class AdpatientScreen extends StatelessWidget {
                                 overflow: TextOverflow.visible,
                               ),
                             ),
+                          ),
+                          SizedBox(width: getDynamicHeight(size: 0.010)),
+                          GestureDetector(
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: VoiceScreen(
+                                  bedNo: controller.filterpatientsData[index].bedNo ?? '',
+                                  patientName: controller.filterpatientsData[index].patientName ?? "",
+                                  ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                  uhid: controller.filterpatientsData[index].uhid ?? '',
+                                ),
+                                withNavBar: false,
+                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                              );
+                            },
+                            child: const Icon(Icons.mic_none_rounded),
                           ),
                           SizedBox(width: getDynamicHeight(size: 0.010)),
                           SizedBox(
