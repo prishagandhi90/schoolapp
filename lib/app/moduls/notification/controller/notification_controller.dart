@@ -10,6 +10,7 @@ import 'package:emp_app/app/moduls/notification/model/notificationlist_model.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -246,66 +247,37 @@ class NotificationController extends GetxController {
     return file;
   }
 
-  // Future<void> openFile(String fileName, String fileContent, String contentType) async {
-  //   try {
-  //     final bytes = base64Decode(fileContent);
-  //     final tempDir = await getTemporaryDirectory();
-  //     final filePath = '${tempDir.path}/$fileName';
-  //     final file = File(filePath);
+  Future<void> openFile({
+    required String fileName,
+    required String base64Content,
+    required String contentType,
+  }) async {
+    try {
+      // Base64 string ko bytes mein convert karna
+      final bytes = base64Decode(base64Content);
 
-  //     await file.writeAsBytes(bytes);
-  //     final result = await OpenFilex.open(file.path);
+      // Temporary directory ka path lena
+      final tempDir = await getTemporaryDirectory();
 
-  //     if (result.type != ResultType.done) {
-  //       print("OpenFilex failed: ${result.message}");
-  //     }
-  //   } catch (e) {
-  //     print("Error while opening file: $e");
-  //   }
-  // }
+      // File ka path define karna
+      final filePath = '${tempDir.path}/$fileName';
 
-  // Future<void> openFile(String fileName, String fileContent, String contentType) async {
-  //   try {
-  //     // If contentType is image, open the file picker to pick an image
-  //     if (contentType == "image") {
-  //       // Pick an image file using FilePicker
-  //       FilePickerResult? result = await FilePicker.platform.pickFiles(
-  //         type: FileType.image,
-  //       );
+      // File ko write karna
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
 
-  //       if (result != null) {
-  //         // Get the selected file
-  //         File file = File(result.files.single.path!);
+      // File ko open karna
+      final result = await OpenFile.open(filePath);
 
-  //         // Open the selected file using OpenFilex
-  //         final openResult = await OpenFilex.open(file.path);
-
-  //         if (openResult.type != ResultType.done) {
-  //           print("OpenFilex failed: ${openResult.message}");
-  //         }
-  //       } else {
-  //         print("No file selected");
-  //       }
-  //     } else {
-  //       // If it's a regular file (not an image), decode the base64 and save it to a temporary file
-  //       final bytes = base64Decode(fileContent);
-  //       final tempDir = await getTemporaryDirectory();
-  //       final filePath = '${tempDir.path}/$fileName';
-  //       final file = File(filePath);
-
-  //       await file.writeAsBytes(bytes);
-
-  //       // Open the saved file
-  //       final openResult = await OpenFilex.open(file.path);
-
-  //       if (openResult.type != ResultType.done) {
-  //         print("OpenFilex failed: ${openResult.message}");
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print("Error while opening file: $e");
-  //   }
-  // }
+      if (result.type != ResultType.done) {
+        // Agar file open nahi hoti toh error handle karo
+        print('Error: ${result.message}');
+      }
+    } catch (e) {
+      // Exception ko handle karna
+      print('Error: $e');
+    }
+  }
 
   final List<String> filterOptions = [
     "Today",
@@ -335,5 +307,19 @@ class NotificationController extends GetxController {
     } else {
       selectedTags.add(tag);
     }
+  }
+
+  Future<void> clearFilters() async {
+    fromDateController.clear();
+    toDateController.clear();
+    searchController.clear();
+    selectedTags.clear();
+    isSearching = false;
+    isLoading = false;
+    filternotificationlist.clear();
+    filesList.clear();
+    notificationfile.clear();
+    update();
+    // await fetchNotificationList(); // Fetch all notifications again
   }
 }

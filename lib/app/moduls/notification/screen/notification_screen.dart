@@ -34,7 +34,7 @@ class NotificationScreen extends StatelessWidget {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.08)),
+                    // padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.0)),
                     child: Row(
                       children: [
                         Expanded(
@@ -63,19 +63,16 @@ class NotificationScreen extends StatelessWidget {
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.all(10),
-                                        child: Icon(Icons.cancel,
-                                            color: Colors.black, size: getDynamicHeight(size: 0.024)), // ✅ Cancel button color
+                                        child: Icon(Icons.cancel, color: Colors.black, size: getDynamicHeight(size: 0.024)), // ✅ Cancel button color
                                       ),
                                     )
                                   : null,
                               prefixIcon: Padding(
                                 padding: EdgeInsets.all(10),
-                                child:
-                                    Icon(Icons.search, color: AppColor.black, size: getDynamicHeight(size: 0.024)), // ✅ Search icon color
+                                child: Icon(Icons.search, color: AppColor.black, size: getDynamicHeight(size: 0.024)), // ✅ Search icon color
                               ),
                               hintText: AppString.search,
-                              hintStyle: AppStyle.plusgrey
-                                  .copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
+                              hintStyle: AppStyle.plusgrey.copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
                               filled: true,
                               fillColor: AppColor.white, // ✅ Background color
                             ),
@@ -179,8 +176,17 @@ class NotificationScreen extends StatelessWidget {
                                   Center(child: ProgressWithIcon()),
                                   barrierDismissible: false,
                                 );
+                                controller.searchController.clear();
+                                controller.selectedTags.clear();
+                                controller.isSearching = false;
+
                                 await controller.updateNotificationRead(index);
-                                // await controller.fetchNotificationFile(index);
+                                if (controller.filternotificationlist[index].fileYN == "Y") {
+                                  await controller.fetchNotificationFile(index);
+                                } else {
+                                  controller.filesList.clear();
+                                  controller.update();
+                                }
                                 // Hide loader
                                 Get.back();
                                 // Get.to(() => FilterTagScreen(index: index));
@@ -190,6 +196,7 @@ class NotificationScreen extends StatelessWidget {
                                   withNavBar: false,
                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                 ).then((value) async {
+                                  await controller.clearFilters();
                                   await controller.fetchNotificationList();
                                 });
                               },
@@ -202,8 +209,7 @@ class NotificationScreen extends StatelessWidget {
                                         color: AppColor.black,
                                         // fontSize: 18,
                                         fontSize: getDynamicHeight(size: 0.020),
-                                        fontWeight:
-                                            controller.filternotificationlist[index].boldYN == "Y" ? FontWeight.bold : FontWeight.normal,
+                                        fontWeight: controller.filternotificationlist[index].boldYN == "Y" ? FontWeight.bold : FontWeight.normal,
 
                                         fontFamily: CommonFontStyle.plusJakartaSans,
                                       ),

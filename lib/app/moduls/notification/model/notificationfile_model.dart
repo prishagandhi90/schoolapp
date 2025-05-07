@@ -4,18 +4,19 @@ class ResponseNotificationfile {
   String? message;
   List<NotificationfileModel>? data;
 
-  ResponseNotificationfile(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  ResponseNotificationfile({this.statusCode, this.isSuccess, this.message, this.data});
 
   ResponseNotificationfile.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <NotificationfileModel>[];
       json['data'].forEach((v) {
         data!.add(new NotificationfileModel.fromJson(v));
       });
+    } else {
+      data = [];
     }
   }
 

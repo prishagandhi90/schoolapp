@@ -4,8 +4,7 @@ class AdpatientFilterModel {
   String? message;
   FilterPatientList? data;
 
-  AdpatientFilterModel(
-      {this.statusCode, this.isSuccess, this.message, this.data});
+  AdpatientFilterModel({this.statusCode, this.isSuccess, this.message, this.data});
 
   AdpatientFilterModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
@@ -40,12 +39,14 @@ class FilterPatientList {
         orgs!.add(new Orgs.fromJson(v));
       });
     }
+
     if (json['floors'] != null) {
       floors = <Floors>[];
       json['floors'].forEach((v) {
         floors!.add(new Floors.fromJson(v));
       });
     }
+
     if (json['wards'] != null) {
       wards = <Wards>[];
       json['wards'].forEach((v) {

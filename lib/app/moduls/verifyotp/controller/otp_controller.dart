@@ -240,7 +240,7 @@ class OtpController extends GetxController {
             // Get.offAll(BottomBarView());
             final bottomBarController = Get.put(BottomBarController());
             bottomBarController.resetAndInitialize();
-
+            await bottomBarController.loadPayrollScreens_Rights();
             Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
               Get.put(BottomBarController());
             }));

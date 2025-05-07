@@ -81,13 +81,30 @@ class BottomBarView extends GetView<BottomBarController> {
                 // bottomScreenMargin: Sizes.crossLength * 0.020,
                 bottomScreenMargin: getDynamicHeight(size: 0.020),
                 onItemSelected: (index) async {
-                  if ((controller.isIPDHome.value || controller.isDashboardHome.value) &&
-                      (index == 0 || index == 1 || index == 3 || index == 4)) {
+                  if (controller.payrollModuleScreenRightsTable.isNotEmpty &&
+                      controller.isIPDHome.value == false &&
+                      controller.isPharmacyHome.value == false &&
+                      controller.isPayrollHome.value == false) {
+                    if (controller.payrollModuleScreenRightsTable[0].rightsYN == "N" && index != 2) {
+                      Get.snackbar(
+                        "You don't have access to this screen",
+                        '',
+                        colorText: AppColor.white,
+                        backgroundColor: AppColor.black,
+                        duration: const Duration(seconds: 1),
+                      );
+                      controller.currentIndex.value = 2;
+                      controller.persistentController.value.index = 2;
+                      controller.update();
+                      return;
+                    }
+                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) && (index == 0 || index == 1 || index == 3 || index == 4)) {
                     controller.persistentController.value.index = 0;
                     controller.currentIndex.value = 0;
                     controller.update();
                     return;
                   }
+
                   await controller.onItemTapped(index, false, context, false);
                 },
                 // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,

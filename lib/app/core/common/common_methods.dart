@@ -23,7 +23,8 @@ class CommonMethods {
       };
 
       if (loginId.isNotEmpty) {
-        final ApiController apiController = Get.find<ApiController>();
+        // final ApiController apiController = Get.find<ApiController>();
+        final ApiController apiController = Get.isRegistered<ApiController>() ? Get.find<ApiController>() : Get.put(ApiController());
         var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
         ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
 

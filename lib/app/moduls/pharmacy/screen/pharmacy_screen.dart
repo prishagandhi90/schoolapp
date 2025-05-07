@@ -6,6 +6,7 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:emp_app/app/moduls/pharmacy/screen/presviewer_screen.dart';
 import 'package:emp_app/main.dart';
@@ -19,6 +20,17 @@ class PharmacyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(PharmacyController());
+    // final dashboardController = Get.find<DashboardController>();
+    late final DashboardController dashboardController;
+
+    try {
+      // Try to find the existing controller
+      dashboardController = Get.find<DashboardController>();
+    } catch (e) {
+      // Agar controller nahi milta to put karenge
+      dashboardController = Get.put(DashboardController());
+    }
+
     return GetBuilder<PharmacyController>(
       init: PharmacyController(),
       builder: (controller) {
@@ -207,20 +219,57 @@ class PharmacyScreen extends StatelessWidget {
               },
             ),
             actions: [
-              IconButton(
-                  onPressed: () {
-                    Get.snackbar(
-                      AppString.comingsoon,
-                      '',
-                      colorText: AppColor.white,
-                      backgroundColor: AppColor.black,
-                      duration: const Duration(seconds: 1),
-                    );
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      Get.back();
+                      // var dashboardController = Get.put(DashboardController());
+                      await dashboardController.getDashboardDataUsingToken();
+                      var bottomBarController = Get.find<BottomBarController>();
+                      bottomBarController.currentIndex.value = 0;
+                      bottomBarController.persistentController.value.index = 0;
+                      bottomBarController.isPharmacyHome.value = true;
+                      hideBottomBar.value = false;
+                    });
                   },
-                  icon: Image.asset(
-                    AppImage.notification,
-                    width: 20,
-                  ))
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(
+                        AppImage.notification,
+                        width: getDynamicHeight(size: 0.022),
+                      ),
+                      if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
+                        Positioned(
+                          right: -2,
+                          top: -6,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              dashboardController.notificationCount,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             ],
             centerTitle: true,
           ),

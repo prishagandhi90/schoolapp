@@ -95,7 +95,7 @@ class FilterTagScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        controller.filesList.isEmpty
+                        controller.filesList.isEmpty && controller.notificationlist[index].fileYN == "Y"
                             ? Center(child: CircularProgressIndicator())
                             : SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
@@ -106,7 +106,7 @@ class FilterTagScreen extends StatelessWidget {
                                     bool isImage = file["contentType"]!.startsWith("image");
 
                                     return GestureDetector(
-                                      // onTap: () => controller.openFile(file["fileName"]!, file["content"]!, file["contentType"]!),
+                                      onTap: () => controller.openFile(fileName: file["fileName"]!, base64Content: file["content"]!, contentType: file["contentType"]!),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
@@ -124,8 +124,7 @@ class FilterTagScreen extends StatelessWidget {
                                                     color: AppColor.blue,
                                                   ),
                                             SizedBox(height: Sizes.px7),
-                                            Text("File $index",
-                                                style: TextStyle(fontSize: Sizes.px12)), // ✅ Fixed name like "File 1", "File 2"
+                                            Text("File $index", style: TextStyle(fontSize: Sizes.px12)), // ✅ Fixed name like "File 1", "File 2"
                                           ],
                                         ),
                                       ),
