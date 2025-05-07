@@ -477,7 +477,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(width: getDynamicHeight(size: 0.007)),
+                                                                  SizedBox(width: getDynamicHeight(size: 0.005)),
                                                                   Expanded(
                                                                     child: Column(
                                                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -501,14 +501,14 @@ class PresviewerScreen extends StatelessWidget {
                                                                             ],
                                                                           ),
                                                                         ),
-                                                                        SizedBox(height: getDynamicHeight(size: 0.003)),
+                                                                        SizedBox(height: getDynamicHeight(size: 0.005)),
                                                                         Text.rich(
                                                                           TextSpan(
                                                                             children: [
                                                                               TextSpan(
                                                                                 text: AppString.rxStatus,
                                                                                 style: AppStyle.plusbold16.copyWith(
-                                                                                  fontSize: getDynamicHeight(size: 0.016),
+                                                                                  fontSize: getDynamicHeight(size: 0.017),
                                                                                 ),
                                                                               ),
                                                                               TextSpan(
@@ -526,7 +526,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                   ),
                                                                 ],
                                                               ),
-                                                              SizedBox(height: getDynamicHeight(size: 0.005)),
+                                                              SizedBox(height: getDynamicHeight(size: 0.002)),
                                                               Row(
                                                                 children: [
                                                                   Expanded(
@@ -572,7 +572,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                   ),
                                                                 ],
                                                               ),
-                                                              SizedBox(height: getDynamicHeight(size: 0.005)),
+                                                              SizedBox(height: getDynamicHeight(size: 0.004)),
                                                               Row(
                                                                 children: [
                                                                   Expanded(
