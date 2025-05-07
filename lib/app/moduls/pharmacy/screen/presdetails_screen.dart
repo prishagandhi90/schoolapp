@@ -129,9 +129,7 @@ class PresdetailsScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-
                             SizedBox(height: getDynamicHeight(size: 0.005)),
-
                             // Date & Token
                             Row(
                               children: [

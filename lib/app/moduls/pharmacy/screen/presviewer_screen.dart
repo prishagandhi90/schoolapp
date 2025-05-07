@@ -422,170 +422,180 @@ class PresviewerScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                                                      child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        children: [
-                                                          Expanded(
-                                                            child: Column(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: AppString.rxview, // Heading
-                                                                          style: AppStyle.plusbold16.copyWith(
-                                                                            // fontSize: 16,
-                                                                            fontSize: getDynamicHeight(size: 0.018),
-                                                                          )),
-                                                                      TextSpan(
-                                                                          text: controller.filterpresviewerList[index].printStatus
-                                                                              .toString(), // Data
-                                                                          style: AppStyle.w50018.copyWith(
-                                                                            // fontSize: 16,
-                                                                            fontSize: getDynamicHeight(size: 0.018),
-                                                                          )),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: AppString.lastuser, // Heading
-                                                                          style: AppStyle.plusbold16.copyWith(
-                                                                            // fontSize: 16,
-                                                                            fontSize: getDynamicHeight(size: 0.018),
-                                                                          )),
-                                                                      TextSpan(
-                                                                          text: controller.filterpresviewerList[index].lastUser
-                                                                              .toString(), // Data
-                                                                          style: AppStyle.w50018.copyWith(
-                                                                            // fontSize: 16,
-                                                                            fontSize: getDynamicHeight(size: 0.018),
-                                                                          )),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: AppString.ipdNo, // Heading
-                                                                          style: AppStyle.plusbold16.copyWith(
-                                                                            // fontSize: 16,
-                                                                            fontSize: getDynamicHeight(size: 0.018),
-                                                                          )),
-                                                                      TextSpan(
-                                                                          text:
-                                                                              controller.filterpresviewerList[index].ipd.toString(), // Data
-                                                                          style: AppStyle.w50018.copyWith(
-                                                                            // fontSize: 16,
-                                                                            fontSize: getDynamicHeight(size: 0.018),
-                                                                          )),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
-                                                                if (controller.filterpresviewerList[index].fromEmergency == "Y")
-                                                                  Text.rich(
-                                                                    TextSpan(
-                                                                      children: [
-                                                                        TextSpan(
-                                                                            text: 'From ER', // Heading
-                                                                            style: AppStyle.plusbold16.copyWith(
-                                                                              fontSize: getDynamicHeight(size: 0.018),
-                                                                            )),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Padding(
-                                                              padding: EdgeInsets.symmetric(
-                                                                horizontal: getDynamicHeight(size: 0.011),
-                                                              ),
-                                                              child: Column(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Row(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: [
-                                                                  Text.rich(
-                                                                    TextSpan(
+                                                                  Expanded(
+                                                                    child: Column(
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                                       children: [
-                                                                        TextSpan(
-                                                                            text: AppString.priority, // Heading
-                                                                            style: AppStyle.plusbold16.copyWith(
-                                                                              // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.018),
-                                                                            )),
-                                                                        TextSpan(
-                                                                            text: controller.filterpresviewerList[index].priority
-                                                                                .toString(), // Data
-                                                                            style: AppStyle.w50018.copyWith(
-                                                                              // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.018),
-                                                                            )),
+                                                                        Text.rich(
+                                                                          TextSpan(
+                                                                            children: [
+                                                                              TextSpan(
+                                                                                text: AppString.rxview,
+                                                                                style: AppStyle.plusbold16.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.018),
+                                                                                ),
+                                                                              ),
+                                                                              TextSpan(
+                                                                                text: controller.filterpresviewerList[index].printStatus
+                                                                                    .toString(),
+                                                                                style: AppStyle.w50018.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.018),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(height: getDynamicHeight(size: 0.003)),
+                                                                        Text.rich(
+                                                                          TextSpan(
+                                                                            children: [
+                                                                              TextSpan(
+                                                                                text: AppString.lastuser,
+                                                                                style: AppStyle.plusbold16.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.018),
+                                                                                ),
+                                                                              ),
+                                                                              TextSpan(
+                                                                                text: controller.filterpresviewerList[index].lastUser
+                                                                                    .toString(),
+                                                                                style: AppStyle.w50018.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.016),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
-                                                                      height:
-                                                                          getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
-                                                                  Text.rich(
-                                                                    TextSpan(
+                                                                  SizedBox(width: getDynamicHeight(size: 0.007)),
+                                                                  Expanded(
+                                                                    child: Column(
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                                       children: [
-                                                                        TextSpan(
-                                                                            text: AppString.rxStatus, // Heading
-                                                                            style: AppStyle.plusbold16.copyWith(
-                                                                              // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.016),
-                                                                            )),
-                                                                        TextSpan(
-                                                                            text: controller.filterpresviewerList[index].rxStatus
-                                                                                .toString(), // Data
-                                                                            style: AppStyle.w50018.copyWith(
-                                                                              // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.015),
-                                                                            )),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height:
-                                                                          getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
-                                                                  Text.rich(
-                                                                    TextSpan(
-                                                                      children: [
-                                                                        TextSpan(
-                                                                            text: AppString.tokenNo, // Heading
-                                                                            style: AppStyle.plusbold16.copyWith(
-                                                                              // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.018),
-                                                                            )),
-                                                                        TextSpan(
-                                                                            text: controller.filterpresviewerList[index].tokenNo
-                                                                                .toString(), // Data
-                                                                            style: AppStyle.w50018.copyWith(
-                                                                              // fontSize: 20,
-                                                                              fontSize: getDynamicHeight(size: 0.022),
-                                                                            )),
+                                                                        Text.rich(
+                                                                          TextSpan(
+                                                                            children: [
+                                                                              TextSpan(
+                                                                                text: AppString.priority,
+                                                                                style: AppStyle.plusbold16.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.018),
+                                                                                ),
+                                                                              ),
+                                                                              TextSpan(
+                                                                                text: controller.filterpresviewerList[index].priority
+                                                                                    .toString(),
+                                                                                style: AppStyle.w50018.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.018),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(height: getDynamicHeight(size: 0.003)),
+                                                                        Text.rich(
+                                                                          TextSpan(
+                                                                            children: [
+                                                                              TextSpan(
+                                                                                text: AppString.rxStatus,
+                                                                                style: AppStyle.plusbold16.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.016),
+                                                                                ),
+                                                                              ),
+                                                                              TextSpan(
+                                                                                text: controller.filterpresviewerList[index].rxStatus
+                                                                                    .toString(),
+                                                                                style: AppStyle.w50018.copyWith(
+                                                                                  fontSize: getDynamicHeight(size: 0.015),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
                                                                       ],
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
+                                                              SizedBox(height: getDynamicHeight(size: 0.005)),
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text.rich(
+                                                                      TextSpan(
+                                                                        children: [
+                                                                          TextSpan(
+                                                                            text: AppString.ipdNo,
+                                                                            style: AppStyle.plusbold16.copyWith(
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            ),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text: controller.filterpresviewerList[index].ipd.toString(),
+                                                                            style: AppStyle.w50018.copyWith(
+                                                                              fontSize: getDynamicHeight(size: 0.016),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(width: getDynamicHeight(size: 0.007)),
+                                                                  Expanded(
+                                                                    child: Text.rich(
+                                                                      TextSpan(
+                                                                        children: [
+                                                                          TextSpan(
+                                                                            text: AppString.tokenNo,
+                                                                            style: AppStyle.plusbold16.copyWith(
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            ),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text: controller.filterpresviewerList[index].tokenNo.toString(),
+                                                                            style: AppStyle.w50018.copyWith(
+                                                                              fontSize: getDynamicHeight(size: 0.022),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(height: getDynamicHeight(size: 0.005)),
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: controller.filterpresviewerList[index].fromEmergency == "Y"
+                                                                        ? Text.rich(
+                                                                            TextSpan(
+                                                                              children: [
+                                                                                TextSpan(
+                                                                                  text: 'From ER', // Heading
+                                                                                  style: AppStyle.plusbold16.copyWith(
+                                                                                    fontSize: getDynamicHeight(size: 0.018),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          )
+                                                                        : SizedBox(), // Agar condition false ho toh kuch na dikhaye
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                        )),
                                                   ],
                                                 ),
                                               ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -15,6 +16,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/widgets/organization_check
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:record/record.dart';
@@ -24,6 +26,7 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as dio;
 
 class AdPatientController extends GetxController {
   final TextEditingController searchController = TextEditingController();
@@ -1132,6 +1135,88 @@ class AdPatientController extends GetxController {
     }
   }
 
+  // Future<void> uploadfile(
+  //     {required String imagePAth, required String filename}) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String token = prefs.getString('token') ?? '';
+  //   String loginId = prefs.getString('loginId') ?? '';
+  //   String? mimeType = lookupMimeType(imagePAth);
+
+  //   mimeType ??= 'application/octet-stream';
+
+  //   debugPrint("Login Id=== $loginId");
+  //   apiCall = true;
+  //   String apiUrl = uploadDrPhoto;
+  //   EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+
+  //   dio.FormData formData = dio.FormData.fromMap({
+  //     'file': await dio.MultipartFile.fromFile(imagePAth.trimRight(),
+  //         filename: filename.trimRight(),
+  //         contentType: dio.DioMediaType.parse(mimeType)),
+  //     'loginId': loginId,
+  //   });
+
+  //   debugPrint("File Path ==== $imagePAth");
+  //   debugPrint("File Name ==== $filename");
+
+  //   try {
+  //     final dioPackage = Dio();
+  //     dio.Response response = await dioPackage
+  //         .request(
+  //           apiUrl,
+  //           data: formData,
+  //           options: dio.Options(
+  //             method: "POST",
+  //             validateStatus: (_) => true,
+  //             headers: {
+  //               'Authorization': token.isNotEmpty ? 'Bearer $token' : '',
+  //               'Content-Type': 'multipart/form-data',
+  //             },
+  //           ),
+  //         )
+  //         .timeout(const Duration(seconds: 45));
+
+  //     if (kDebugMode) {
+  //       print("api response == $response");
+  //     }
+  //     EasyLoading.dismiss();
+  //     if (response.statusCode == 200) {
+  //       if (response.data != null) {
+  //         // Get.rawSnackbar(
+  //         //   snackPosition: SnackPosition.BOTTOM,
+  //         //   message: "Photo Uploaded SuccessFully",
+  //         // );
+  //       }
+  //     } else if (response.statusCode == 400) {
+  //       Get.rawSnackbar(
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         message: response.statusMessage,
+  //       );
+  //     } else if (response.statusCode == 401) {
+  //       Get.rawSnackbar(
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         message: 'unauthorized',
+  //       );
+  //     } else if (response.statusCode == 500) {
+  //       Get.rawSnackbar(
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         message: 'Internal server error',
+  //       );
+  //     } else {
+  //       // Handle unsuccessful response
+  //       debugPrint("Error: ${response.statusCode}, ${response.statusMessage}");
+  //       Get.rawSnackbar(
+  //         snackPosition: SnackPosition.BOTTOM,
+  //         message: response.statusMessage,
+  //       );
+  //     }
+  //   } on DioException catch (e) {
+  //     // Handle any exceptions that occur during the API call
+  //     debugPrint("Exception occurred during API call: $e");
+  //   }
+  //   update();
+  // }
+  
   @override
   void onClose() {
     speech.stop();
