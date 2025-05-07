@@ -36,7 +36,9 @@ class PresdetailsScreen extends StatelessWidget {
             preferredSize: Size.fromHeight(
               controller.calculateAppBarHeight(
                   context,
-                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0 ? controller.presviewerList[controller.SelectedIndex].patientName.toString() : '',
+                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
+                      ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
+                      : '',
                   controller.filterpresviewerList[controller.SelectedIndex].fromEmergency.toString()),
             ),
             child: AppBar(
@@ -77,7 +79,7 @@ class PresdetailsScreen extends StatelessWidget {
                             SizedBox(height: getDynamicHeight(size: 0.003)),
 
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: Column(
@@ -87,81 +89,99 @@ class PresdetailsScreen extends StatelessWidget {
                                         controller.presviewerList[controller.SelectedIndex].ipd.toString(),
                                         style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
                                       ),
-                                      SizedBox(height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
+                                      SizedBox(height: getDynamicHeight(size: 0.003)),
                                       Text(
-                                        controller.presviewerList[controller.SelectedIndex].bed.toString(),
-                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                                      ),
-                                      SizedBox(height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].dte.toString(),
-                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                                      ),
-                                      SizedBox(height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
-                                      Text(
-                                        controller.presviewerList[controller.SelectedIndex].doctor.toString(),
-                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
+                                        controller.presviewerList[controller.SelectedIndex].mop.toString(),
+                                        style: TextStyle(
+                                          fontSize: getDynamicHeight(size: 0.014),
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
+                                SizedBox(width: getDynamicHeight(size: 0.007)),
                                 Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.010),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        controller.presviewerList[controller.SelectedIndex].bed.toString(),
+                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                      ),
+                                      SizedBox(height: getDynamicHeight(size: 0.003)),
+                                      RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(fontSize: getDynamicHeight(size: 0.014), color: AppColor.black),
+                                          children: [
+                                            TextSpan(
+                                              text: '${AppString.intercom}: ',
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            TextSpan(
+                                              text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+
+                            // Date & Token
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].dte.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                  ),
+                                ),
+                                SizedBox(width: getDynamicHeight(size: 0.007)),
+                                Expanded(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(fontSize: getDynamicHeight(size: 0.014), color: AppColor.black),
                                       children: [
-                                        Text(
-                                          controller.presviewerList[controller.SelectedIndex].mop.toString(),
-                                          style: TextStyle(
-                                            fontSize: getDynamicHeight(size: 0.014),
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                        TextSpan(
+                                          text: '${AppString.tokenNo}: ',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(height: getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
-                                        RichText(
-                                          text: TextSpan(
-                                            style: TextStyle(fontSize: getDynamicHeight(size: 0.014), color: AppColor.black),
-                                            children: [
-                                              TextSpan(
-                                                text: '${AppString.intercom}: ',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                              ),
-                                              TextSpan(
-                                                text: controller.presviewerList[controller.SelectedIndex].intercom.toString(),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
-                                        RichText(
-                                          text: TextSpan(
-                                            style: TextStyle(fontSize: getDynamicHeight(size: 0.014), color: AppColor.black),
-                                            children: [
-                                              TextSpan(
-                                                text: '${AppString.tokenNo}: ',
-                                                style: TextStyle(fontWeight: FontWeight.bold),
-                                              ),
-                                              TextSpan(
-                                                text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
-                                                style: const TextStyle(fontWeight: FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: getDynamicHeight(size: 0.005)), // Space between Bed and Intercom
-                                        Text(
-                                          controller.presviewerList[controller.SelectedIndex].org.toString(),
-                                          style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontWeight: FontWeight.w600),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
+                                        TextSpan(
+                                          text: controller.presviewerList[controller.SelectedIndex].tokenNo.toString(),
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                       ],
                                     ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: getDynamicHeight(size: 0.005)),
+
+                            // Doctor Name
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].doctor.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                SizedBox(width: getDynamicHeight(size: 0.007)),
+                                Expanded(
+                                  child: Text(
+                                    controller.presviewerList[controller.SelectedIndex].org.toString(),
+                                    style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontWeight: FontWeight.w600),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ],
