@@ -110,13 +110,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": searchPrefix ?? '',
-        "wards": selectedWardList,
-        "floors": selectedFloorList,
-        "beds": selectedBedList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? '', "wards": selectedWardList, "floors": selectedFloorList, "beds": selectedBedList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedrpresviewer rsponsedrpresviewer = Rsponsedrpresviewer.fromJson(jsonDecode(response));
@@ -307,6 +301,29 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     }
   }
 
+  // double calculateAppBarHeight(BuildContext context, String patientName, String isEmergency) {
+  //   final TextPainter textPainter = TextPainter(
+  //     text: TextSpan(
+  //       text: patientName,
+  //       style: TextStyle(
+  //         fontSize: getDynamicHeight(size: 0.015),
+  //         fontWeight: FontWeight.bold,
+  //       ),
+  //     ),
+  //     maxLines: 2,
+  //     textDirection: TextDirection.ltr,
+  //   )..layout(maxWidth: MediaQuery.of(context).size.width * 0.8);
+
+  //   int lines = (textPainter.size.height / textPainter.preferredLineHeight).ceil();
+
+  //   // Adjusted values: Add your own layout heights
+  //   double baseHeight = 0.0;
+  //   baseHeight = isEmergency.toUpperCase() == "Y" ? getDynamicHeight(size: 0.145) : getDynamicHeight(size: 0.123); // minimum for 1 line
+  //   double extraLineHeight = getDynamicHeight(size: 0.018); // for second line
+
+  //   return lines > 1 ? baseHeight + extraLineHeight : baseHeight;
+  // }
+
   double calculateAppBarHeight(BuildContext context, String patientName, String isEmergency) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(
@@ -318,16 +335,26 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       ),
       maxLines: 2,
       textDirection: TextDirection.ltr,
-    )..layout(maxWidth: MediaQuery.of(context).size.width * 0.10);
+    )..layout(maxWidth: MediaQuery.of(context).size.width * 0.8); // Wider width
 
     int lines = (textPainter.size.height / textPainter.preferredLineHeight).ceil();
-
-    // Adjusted values: Add your own layout heights
     double baseHeight = 0.0;
-    baseHeight = isEmergency.toUpperCase() == "Y" ? getDynamicHeight(size: 0.145) : getDynamicHeight(size: 0.123); // minimum for 1 line
-    double extraLineHeight = getDynamicHeight(size: 0.018); // for second line
+    baseHeight = textPainter.size.height > 0.0 ? textPainter.size.height * lines : baseHeight; // minimum for 1 line
+    baseHeight += isEmergency.toUpperCase() == "Y"
+        ? getDynamicHeight(size: 0.120)
+        : getDynamicHeight(
+            size: 0.123,
+          );
 
-    return lines > 1 ? baseHeight + extraLineHeight : baseHeight;
+    double extraLineHeight = 0;
+
+    double finalHeight = baseHeight > 0.0 ? baseHeight + extraLineHeight : baseHeight;
+
+    print('Lines: $lines');
+    print('Text Height: ${textPainter.size.height}');
+    print('Final AppBar Height: $finalHeight');
+
+    return finalHeight;
   }
 
   List<Map<String, dynamic>> originalList = AppConst.pharmacygrid;

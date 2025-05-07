@@ -36,9 +36,7 @@ class PresdetailsScreen extends StatelessWidget {
             preferredSize: Size.fromHeight(
               controller.calculateAppBarHeight(
                   context,
-                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
-                      ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
-                      : '',
+                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0 ? controller.presviewerList[controller.SelectedIndex].patientName.toString() : '',
                   controller.filterpresviewerList[controller.SelectedIndex].fromEmergency.toString()),
             ),
             child: AppBar(
@@ -77,7 +75,7 @@ class PresdetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             SizedBox(height: getDynamicHeight(size: 0.003)),
-                            
+
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
