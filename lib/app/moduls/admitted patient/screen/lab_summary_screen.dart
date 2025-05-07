@@ -19,7 +19,6 @@ class LabSummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(AdPatientController());
-
     return GetBuilder<AdPatientController>(builder: (controller) {
       return Scaffold(
         appBar: AppBar(
@@ -289,7 +288,12 @@ class LabSummaryScreen extends StatelessWidget {
   }) {
     List<String> dateKeys = labData.dateValues?.keys.toList() ?? [];
 
-    List<String> columnTexts = [labData.formattest ?? "", labData.testName ?? "", labData.unit ?? "", ...dateKeys.map((date) => labData.dateValues?[date] ?? "")];
+    List<String> columnTexts = [
+      labData.formattest ?? "",
+      labData.testName ?? "",
+      labData.unit ?? "",
+      ...dateKeys.map((date) => labData.dateValues?[date] ?? "")
+    ];
 
     List<double> rowHeights = [];
     double colWidth = 0;
@@ -542,7 +546,8 @@ class LabSummaryScreen extends StatelessWidget {
       if (index > startIndex) {
         spans.add(TextSpan(text: text.substring(startIndex, index), style: TextStyle(color: Colors.black)));
       }
-      spans.add(TextSpan(text: text.substring(index, index + query.length), style: TextStyle(color: Colors.black, backgroundColor: Colors.yellow)));
+      spans.add(TextSpan(
+          text: text.substring(index, index + query.length), style: TextStyle(color: Colors.black, backgroundColor: Colors.yellow)));
       startIndex = index + query.length;
       index = lowerText.indexOf(lowerQuery, startIndex);
     }

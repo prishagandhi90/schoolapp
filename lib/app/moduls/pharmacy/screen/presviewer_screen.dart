@@ -322,33 +322,6 @@ class PresviewerScreen extends StatelessWidget {
                                                             ),
                                                           ),
                                                         ),
-
-                                                        Expanded(
-                                                          child: controller.filterpresviewerList[index].fromEmergency == "Y"
-                                                              ? Center(
-                                                                  child: Padding(
-                                                                    padding: EdgeInsets.only(left: 10),
-                                                                    child: Text.rich(
-                                                                      TextSpan(
-                                                                        children: [
-                                                                          TextSpan(
-                                                                              text: 'Fr. EME:', // Heading
-                                                                              style: AppStyle.plusbold16.copyWith(
-                                                                                fontSize: getDynamicHeight(size: 0.018),
-                                                                              )),
-                                                                          TextSpan(
-                                                                              text: controller.filterpresviewerList[index].fromEmergency
-                                                                                  .toString(),
-                                                                              style: AppStyle.w50018.copyWith(
-                                                                                fontSize: getDynamicHeight(size: 0.018),
-                                                                              )),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              : SizedBox.shrink(),
-                                                        ),
                                                         Expanded(
                                                           child: Row(
                                                             mainAxisAlignment:
@@ -518,6 +491,20 @@ class PresviewerScreen extends StatelessWidget {
                                                                     ],
                                                                   ),
                                                                 ),
+                                                                SizedBox(
+                                                                    height: getDynamicHeight(size: 0.007)), // Space between IPD and MOP
+                                                                if (controller.filterpresviewerList[index].fromEmergency == "Y")
+                                                                  Text.rich(
+                                                                    TextSpan(
+                                                                      children: [
+                                                                        TextSpan(
+                                                                            text: 'From ER', // Heading
+                                                                            style: AppStyle.plusbold16.copyWith(
+                                                                              fontSize: getDynamicHeight(size: 0.018),
+                                                                            )),
+                                                                      ],
+                                                                    ),
+                                                                  ),
                                                               ],
                                                             ),
                                                           ),
@@ -565,7 +552,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                                 .toString(), // Data
                                                                             style: AppStyle.w50018.copyWith(
                                                                               // fontSize: 16,
-                                                                              fontSize: getDynamicHeight(size: 0.016),
+                                                                              fontSize: getDynamicHeight(size: 0.015),
                                                                             )),
                                                                       ],
                                                                     ),

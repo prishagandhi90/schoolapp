@@ -5,6 +5,7 @@ import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:flutter/material.dart';
@@ -34,18 +35,18 @@ class PresdetailsScreen extends StatelessWidget {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(
               controller.calculateAppBarHeight(
-                context,
-                controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
-                    ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
-                    : '',
-              ),
+                  context,
+                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
+                      ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
+                      : '',
+                  controller.filterpresviewerList[controller.SelectedIndex].fromEmergency.toString()),
             ),
             child: AppBar(
               backgroundColor: AppColor.lightblue,
               automaticallyImplyLeading: false,
               flexibleSpace: SafeArea(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.011), vertical: getDynamicHeight(size: 0.007)),
+                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012), vertical: getDynamicHeight(size: 0.008)),
                   child: controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,6 +54,7 @@ class PresdetailsScreen extends StatelessWidget {
                             // Patient Name
                             Text(
                               controller.presviewerList[controller.SelectedIndex].patientName.toString(),
+                              // 'munna bhai mbbs circuit bhai Dr J.ashthana jhdsfjkhdsfkj', // Sample text for testing
                               style: TextStyle(
                                 fontSize: getDynamicHeight(size: 0.016),
                                 fontWeight: FontWeight.bold,
@@ -61,10 +63,21 @@ class PresdetailsScreen extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
-
-                            SizedBox(height: getDynamicHeight(size: 0.005)),
-
-                            // IPD & MOP
+                            SizedBox(height: getDynamicHeight(size: 0.005)), // Space between IPD and MOP
+                            if (controller.filterpresviewerList[controller.SelectedIndex].fromEmergency == "Y")
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                        text: 'From ER', // Heading
+                                        style: AppStyle.plusbold16.copyWith(
+                                          fontSize: getDynamicHeight(size: 0.015),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            SizedBox(height: getDynamicHeight(size: 0.003)),
+                            
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

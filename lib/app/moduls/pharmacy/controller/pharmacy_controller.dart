@@ -307,7 +307,7 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     }
   }
 
-  double calculateAppBarHeight(BuildContext context, String patientName) {
+  double calculateAppBarHeight(BuildContext context, String patientName, String isEmergency) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: patientName,
@@ -323,7 +323,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
     int lines = (textPainter.size.height / textPainter.preferredLineHeight).ceil();
 
     // Adjusted values: Add your own layout heights
-    double baseHeight = getDynamicHeight(size: 0.120); // minimum for 1 line
+    double baseHeight = 0.0;
+    baseHeight = isEmergency.toUpperCase() == "Y" ? getDynamicHeight(size: 0.145) : getDynamicHeight(size: 0.123); // minimum for 1 line
     double extraLineHeight = getDynamicHeight(size: 0.018); // for second line
 
     return lines > 1 ? baseHeight + extraLineHeight : baseHeight;
