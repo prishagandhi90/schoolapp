@@ -339,12 +339,15 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
 
     int lines = (textPainter.size.height / textPainter.preferredLineHeight).ceil();
     double baseHeight = 0.0;
-    baseHeight = textPainter.size.height > 0.0 ? textPainter.size.height * lines : baseHeight; // minimum for 1 line
+    baseHeight = lines > 0 ? (textPainter.size.height / lines) : baseHeight; // minimum for 1 line
     baseHeight += isEmergency.toUpperCase() == "Y"
-        ? getDynamicHeight(size: 0.113)
+        ? getDynamicHeight(size: 0.147)
         : getDynamicHeight(
             size: 0.123,
           );
+    if (lines > 1) {
+      baseHeight += (textPainter.size.height / lines); // for second line
+    }
 
     double extraLineHeight = 0;
 
