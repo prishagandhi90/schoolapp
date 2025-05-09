@@ -123,7 +123,13 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? "",
+        "orgs": selectedOrgsList,
+        "floors": selectedFloorsList,
+        "wards": selectedWardsList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -898,7 +904,7 @@ class AdPatientController extends GetxController {
           throw Exception('Unable to get directory for saving audio');
         }
 
-        filePath = p.join(dir!.path, 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a');
+        filePath = p.join(dir.path, 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a');
 
         await audioRecorder.start(
           const RecordConfig(encoder: AudioEncoder.aacLc, sampleRate: 48000, bitRate: 128000),
@@ -1125,9 +1131,9 @@ class AdPatientController extends GetxController {
         await player.seek(Duration.zero);
       }
 
-      if (player.audioSource == null) {
-        await player.setFilePath(filePath!);
-      }
+      // if (player.audioSource == null) {
+      await player.setFilePath(filePath!);
+      // }
 
       await player.play();
     }
