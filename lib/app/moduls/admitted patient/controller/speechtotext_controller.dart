@@ -114,6 +114,26 @@ class VoiceController extends GetxController {
     isPlaying = !isPlaying;
     update();
   }
+   // Future<void> togglePlayback() async {
+  //   if (filePath == null || !File(filePath!).existsSync()) return;
+
+  //   if (isPlaying) {
+  //     await player.pause();
+  //   } else {
+  //     await player.setFilePath(filePath!);
+  //     await player.play();
+  //     player.playerStateStream.listen((state) {
+  //       if (state.processingState == ProcessingState.completed) {
+  //         isPlaying = false;
+  //         update();
+  //       }
+  //     });
+  //   }
+
+  //   isPlaying = !isPlaying;
+  //   update();
+  // }
+
 
   Future<void> _transcribeAndTranslateAudio(String audioPath) async {
     try {

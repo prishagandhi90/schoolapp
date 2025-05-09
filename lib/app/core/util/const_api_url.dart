@@ -68,4 +68,7 @@ class ConstApiUrl {
   static const empNotificationListAPI = "$empUrl/GetEMPNotificationsList";
   static const empNotificationFileAPI = "$empUrl/GetNotificationFiles";
   static const empUpdateNotificationReadAPI = "$empUrl/UpdateNotification_Read";
+  
+  //  ----------------Voice Api ---------------
+  static const empVoiceApi = "$empUrl/UploadPatientVoiceNote";
 }

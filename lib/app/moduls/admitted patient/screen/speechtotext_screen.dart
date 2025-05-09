@@ -95,7 +95,9 @@ class VoiceScreen extends StatelessWidget {
                   ElevatedButton.icon(
                     icon: Icon(controller.isRecording ? Icons.stop : Icons.mic),
                     label: Text(controller.isRecording ? 'Stop Recording' : 'Start Recording'),
-                    onPressed: controller.isRecording ? controller.stopListeningAndRecording : controller.startListeningAndRecording,
+                    onPressed: controller.isRecording
+                        ? () => controller.stopListeningAndRecording(uhid: uhid, ipdNo: ipdNo, patientName: patientName)
+                        : controller.startListeningAndRecording,
                     // onPressed: controller.stopListeningAndRecording,
                     style: ElevatedButton.styleFrom(backgroundColor: controller.isRecording ? Colors.red : null),
                   ),

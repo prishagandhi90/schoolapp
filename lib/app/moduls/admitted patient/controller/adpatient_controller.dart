@@ -16,9 +16,9 @@ import 'package:emp_app/app/moduls/admitted%20patient/widgets/organization_check
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:mime/mime.dart';
 import 'package:record/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/adpatientfilter_model.dart';
@@ -857,11 +857,12 @@ class AdPatientController extends GetxController {
   bool isListening = false;
   bool isRecording = false;
   bool isPlaying = false;
+  List<int> audioBytes = [];
 
   String recognizedText = '';
   String translatedText = '';
   String? filePath;
-
+  bool apiCall = false;
   int seconds = 0;
   late DateTime startTime;
   late Timer timer;
@@ -878,6 +879,7 @@ class AdPatientController extends GetxController {
         isRecording = true;
         seconds = 0;
         startTime = DateTime.now();
+        audioBytes.remove;
 
         Directory? dir;
 
@@ -892,7 +894,14 @@ class AdPatientController extends GetxController {
 
         filePath = p.join(dir!.path, 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a');
 
-        await audioRecorder.start(const RecordConfig(encoder: AudioEncoder.aacLc, sampleRate: 48000, bitRate: 128000), path: filePath!);
+        await audioRecorder.start(
+          const RecordConfig(encoder: AudioEncoder.aacLc, sampleRate: 48000, bitRate: 128000),
+          path: filePath!,
+        );
+        if (filePath != null) {
+          final file = File(filePath!);
+          audioBytes = await file.readAsBytes(); // ✅ collect after recording
+        }
 
         timer = Timer.periodic(const Duration(seconds: 1), (_) {
           seconds = DateTime.now().difference(startTime).inSeconds;
@@ -914,7 +923,11 @@ class AdPatientController extends GetxController {
     }
   }
 
-  Future<void> stopListeningAndRecording() async {
+  Future<void> stopListeningAndRecording({
+    required String uhid,
+    required String ipdNo,
+    required String patientName,
+  }) async {
     try {
       if (isListening) await speech.stop();
       if (isRecording) await audioRecorder.stop();
@@ -924,6 +937,19 @@ class AdPatientController extends GetxController {
 
       timer.cancel();
       update();
+      if (audioBytes.isNotEmpty) {
+        await uploadVoiceToServer(
+          bytes: audioBytes,
+          filename: 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a',
+          loginId: loginId,
+          empId: empId,
+          uhid: uhid,
+          ipdNo: ipdNo,
+          patientName: patientName,
+          doctorName: '',
+          createdUser: '',
+        );
+      }
 
       if (filePath != null) {
         await _transcribeAndTranslateAudio(filePath!);
@@ -958,26 +984,6 @@ class AdPatientController extends GetxController {
     }
   }
 
-  // Future<void> togglePlayback() async {
-  //   if (filePath == null || !File(filePath!).existsSync()) return;
-
-  //   if (isPlaying) {
-  //     await player.pause();
-  //   } else {
-  //     await player.setFilePath(filePath!);
-  //     await player.play();
-  //     player.playerStateStream.listen((state) {
-  //       if (state.processingState == ProcessingState.completed) {
-  //         isPlaying = false;
-  //         update();
-  //       }
-  //     });
-  //   }
-
-  //   isPlaying = !isPlaying;
-  //   update();
-  // }
-
   Future<void> _transcribeAndTranslateAudio(String audioPath) async {
     try {
       String transcribedText = await translateAudioToEnglish(audioPath);
@@ -993,87 +999,6 @@ class AdPatientController extends GetxController {
       update();
     }
   }
-
-  // Future<String> _convertAudioToText(String audioPath) async {
-  //   File audioFile = File(audioPath);
-  //   List<int> audioBytes = await audioFile.readAsBytes();
-  //   String audioBase64 = base64Encode(audioBytes);
-  //   try {
-  //     final initialResponse = await http.post(
-  //       Uri.parse('https://speech.googleapis.com/v1/speech:longrunningrecognize?key=$googleCloudApiKey'),
-  //       headers: {'Content-Type': 'application/json'},
-  //       body: jsonEncode({
-  //         "audio": {"content": audioBase64},
-  //         "config": {
-  //           "encoding": "MP3", // or LINEAR16 for .wav
-  //           "sampleRateHertz": 44100,
-  //           "languageCode": "und",
-  //           "alternativeLanguageCodes": ["en-IN", "hi-IN", "gu-IN"],
-  //           "enableAutomaticPunctuation": true,
-  //           "model": "latest_long",
-  //         },
-  //       }),
-  //     );
-  //     if (initialResponse.statusCode != 200) {
-  //       throw Exception("Failed to start transcription: ${initialResponse.body}");
-  //     }
-  //     String operationName = json.decode(initialResponse.body)['name'];
-  //     String transcript = '';
-  //     bool done = false;
-  //     int retries = 0;
-  //     while (!done && retries < 20) {
-  //       await Future.delayed(const Duration(seconds: 5));
-  //       final resultResponse = await http.get(
-  //         Uri.parse('https://speech.googleapis.com/v1/operations/$operationName?key=$googleCloudApiKey'),
-  //       );
-  //       if (resultResponse.statusCode != 200) {
-  //         throw Exception('Polling error: ${resultResponse.body}');
-  //       }
-  //       final resultJson = json.decode(resultResponse.body);
-  //       done = resultJson['done'] ?? false;
-  //       if (done && resultJson.containsKey('response')) {
-  //         List results = resultJson['response']['results'];
-  //         transcript = results.map((e) => e['alternatives'][0]['transcript']).join('\n');
-  //         break;
-  //       }
-  //       retries++;
-  //     }
-  //     return transcript.isNotEmpty ? transcript : 'No transcript available';
-  //   } catch (e) {
-  //     throw Exception('Error during long audio transcription: $e');
-  //   }
-  // }
-
-  // Future<void> translateText(String text) async {
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('https://api.deepseek.com/v1/chat/completions'),
-  //       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $translateApiKey'},
-  //       body: json.encode({
-  //         "model": "deepseek-chat",
-  //         "messages": [
-  //           {
-  //             "role": "system",
-  //             "content":
-  //                 "You are a medical translator. Convert patient's Hinglish/Hindi/Indian language input into PROFESSIONAL MEDICAL ENGLISH TERMINOLOGY for doctors.",
-  //           },
-  //           {"role": "user", "content": text},
-  //         ],
-  //       }),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       var data = json.decode(response.body);
-  //       translatedText = data['choices'][0]['message']['content'].toString().trim();
-  //       update();
-  //     } else {
-  //       translatedText = 'Translation failed: ${response.body}';
-  //       update();
-  //     }
-  //   } catch (e) {
-  //     translatedText = 'Error: $e';
-  //     update();
-  //   }
-  // }
 
   Future<String> translateAudioToEnglish(String audioPath) async {
     File audioFile = File(audioPath);
@@ -1135,88 +1060,70 @@ class AdPatientController extends GetxController {
     }
   }
 
-  // Future<void> uploadfile(
-  //     {required String imagePAth, required String filename}) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String token = prefs.getString('token') ?? '';
-  //   String loginId = prefs.getString('loginId') ?? '';
-  //   String? mimeType = lookupMimeType(imagePAth);
+  Future<void> uploadVoiceToServer({
+    required List<int> bytes,
+    required String filename,
+    required String loginId,
+    required String empId,
+    required String uhid,
+    required String ipdNo,
+    required String patientName,
+    required String doctorName,
+    required String createdUser,
+  }) async {
+    // final dio = Dio();
+    String token = ''; // Add your token logic here if needed
 
-  //   mimeType ??= 'application/octet-stream';
+    // Determine the MIME type of the file
+    final mimeType = lookupMimeType(filename) ?? 'audio/m4a';
 
-  //   debugPrint("Login Id=== $loginId");
-  //   apiCall = true;
-  //   String apiUrl = uploadDrPhoto;
-  //   EasyLoading.show(maskType: EasyLoadingMaskType.clear);
+    // Prepare form data
+    final formData = dio.FormData.fromMap({
+      'file': dio.MultipartFile.fromBytes(
+        bytes,
+        filename: filename,
+        contentType: dio.DioMediaType.parse(mimeType),
+      ),
+      'loginId': loginId,
+      'empID': empId,
+      'uHID': uhid,
+      'iPDNo': ipdNo,
+      'patientName': patientName,
+      'voiceFileName': filename,
+      'doctorName': doctorName,
+      'createdUser': createdUser,
+      'contentType': mimeType,
+    });
 
-  //   dio.FormData formData = dio.FormData.fromMap({
-  //     'file': await dio.MultipartFile.fromFile(imagePAth.trimRight(),
-  //         filename: filename.trimRight(),
-  //         contentType: dio.DioMediaType.parse(mimeType)),
-  //     'loginId': loginId,
-  //   });
+    // Set headers
+    final headers = {
+      'Content-Type': 'application/json',
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+    };
 
-  //   debugPrint("File Path ==== $imagePAth");
-  //   debugPrint("File Name ==== $filename");
+    try {
+      // Send the request
+      final dioPackage = Dio();
+      final response = await dioPackage.request(
+        ConstApiUrl.empVoiceApi, // Replace with the actual API endpoint URL
+        data: formData,
+        options: Options(
+          method: 'POST',
+          headers: headers,
+        ),
+      );
 
-  //   try {
-  //     final dioPackage = Dio();
-  //     dio.Response response = await dioPackage
-  //         .request(
-  //           apiUrl,
-  //           data: formData,
-  //           options: dio.Options(
-  //             method: "POST",
-  //             validateStatus: (_) => true,
-  //             headers: {
-  //               'Authorization': token.isNotEmpty ? 'Bearer $token' : '',
-  //               'Content-Type': 'multipart/form-data',
-  //             },
-  //           ),
-  //         )
-  //         .timeout(const Duration(seconds: 45));
+      // Handle the response
+      if (response.statusCode == 200) {
+        print('Upload success: ${response.data}');
+      } else {
+        print('Upload failed: ${response.statusCode} - ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Upload Exception: $e');
+    }
+  }
 
-  //     if (kDebugMode) {
-  //       print("api response == $response");
-  //     }
-  //     EasyLoading.dismiss();
-  //     if (response.statusCode == 200) {
-  //       if (response.data != null) {
-  //         // Get.rawSnackbar(
-  //         //   snackPosition: SnackPosition.BOTTOM,
-  //         //   message: "Photo Uploaded SuccessFully",
-  //         // );
-  //       }
-  //     } else if (response.statusCode == 400) {
-  //       Get.rawSnackbar(
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         message: response.statusMessage,
-  //       );
-  //     } else if (response.statusCode == 401) {
-  //       Get.rawSnackbar(
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         message: 'unauthorized',
-  //       );
-  //     } else if (response.statusCode == 500) {
-  //       Get.rawSnackbar(
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         message: 'Internal server error',
-  //       );
-  //     } else {
-  //       // Handle unsuccessful response
-  //       debugPrint("Error: ${response.statusCode}, ${response.statusMessage}");
-  //       Get.rawSnackbar(
-  //         snackPosition: SnackPosition.BOTTOM,
-  //         message: response.statusMessage,
-  //       );
-  //     }
-  //   } on DioException catch (e) {
-  //     // Handle any exceptions that occur during the API call
-  //     debugPrint("Exception occurred during API call: $e");
-  //   }
-  //   update();
-  // }
-  
   @override
   void onClose() {
     speech.stop();
