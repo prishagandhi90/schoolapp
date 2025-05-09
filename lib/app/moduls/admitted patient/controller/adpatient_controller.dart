@@ -123,13 +123,7 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": searchPrefix ?? "",
-        "orgs": selectedOrgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedWardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -879,6 +873,7 @@ class AdPatientController extends GetxController {
         isRecording = true;
         seconds = 0;
         startTime = DateTime.now();
+        // audioBytes.remove;
         audioBytes.remove;
 
         Directory? dir;
@@ -887,9 +882,20 @@ class AdPatientController extends GetxController {
           dir = Directory('/storage/emulated/0/Download');
           if (!(await dir.exists())) {
             dir = await getExternalStorageDirectory();
+            if (dir != null) {
+              // Optional: Create a subdirectory for organization
+              dir = Directory(p.join(dir.path, 'VoiceRecordings'));
+              if (!await dir.exists()) {
+                await dir.create(recursive: true);
+              }
+            }
           }
         } else {
           dir = await getApplicationDocumentsDirectory();
+        }
+
+        if (dir == null) {
+          throw Exception('Unable to get directory for saving audio');
         }
 
         filePath = p.join(dir!.path, 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a');
@@ -898,10 +904,10 @@ class AdPatientController extends GetxController {
           const RecordConfig(encoder: AudioEncoder.aacLc, sampleRate: 48000, bitRate: 128000),
           path: filePath!,
         );
-        if (filePath != null) {
-          final file = File(filePath!);
-          audioBytes = await file.readAsBytes(); // ✅ collect after recording
-        }
+        // if (filePath != null) {
+        //   final file = File(filePath!);
+        //   audioBytes = await file.readAsBytes(); // ✅ collect after recording
+        // }
 
         timer = Timer.periodic(const Duration(seconds: 1), (_) {
           seconds = DateTime.now().difference(startTime).inSeconds;
@@ -937,6 +943,19 @@ class AdPatientController extends GetxController {
 
       timer.cancel();
       update();
+
+      if (filePath != null) {
+        final file = File(filePath!);
+        if (await file.exists()) {
+          audioBytes = await file.readAsBytes(); // Read bytes into audioBytes
+          print('Audio bytes read successfully, length: ${audioBytes.length}');
+        } else {
+          throw Exception('Recorded file does not exist at $filePath');
+        }
+      } else {
+        throw Exception('File path is null');
+      }
+
       if (audioBytes.isNotEmpty) {
         await uploadVoiceToServer(
           bytes: audioBytes,
@@ -958,6 +977,136 @@ class AdPatientController extends GetxController {
       Get.snackbar('Error', 'Failed to stop: $e');
     }
   }
+
+  Future<void> uploadVoiceToServer({
+    required List<int> bytes,
+    required String filename,
+    required String loginId,
+    required String empId,
+    required String uhid,
+    required String ipdNo,
+    required String patientName,
+    required String doctorName,
+    required String createdUser,
+  }) async {
+    String token = ''; // Add your token logic here if needed, e.g., from GetX state
+
+    // Determine the MIME type of the file
+    final mimeType = lookupMimeType(filename) ?? 'audio/m4a';
+
+    // Prepare form data with correct keys and casing
+    final formData = dio.FormData.fromMap({
+      'voiceFile': dio.MultipartFile.fromBytes(
+        bytes,
+        filename: filename,
+        contentType: DioMediaType.parse(mimeType),
+      ),
+      'LoginId': loginId,
+      'EmpID': empId,
+      'UHID': uhid,
+      'IPDNo': ipdNo,
+      'PatientName': patientName,
+      'VoiceFileName': filename,
+      'DoctorName': doctorName,
+      'CreatedUser': createdUser,
+    });
+
+    // Set headers (only include Authorization if token exists)
+    final headers = {
+      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+    };
+
+    try {
+      final dioPackage = Dio();
+      final response = await dioPackage.post(
+        ConstApiUrl.empVoiceApi, // Ensure this matches your API endpoint, e.g., "/UploadPatientVoiceNote"
+        data: formData,
+        options: Options(
+          headers: headers,
+        ),
+      );
+
+      // Handle the response based on status code and response data
+      if (response.statusCode == 200) {
+        var responseData = response.data;
+        if (responseData['isSuccess'] == 'true') {
+          print('Upload success: ${responseData['message']}');
+        } else {
+          print('Upload failed: ${responseData['message']}');
+        }
+      } else if (response.statusCode == 400) {
+        print('Bad request: ${response.data}');
+      } else {
+        print('Upload failed: ${response.statusCode} - ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Upload Exception: $e');
+    }
+  }
+
+  // Future<void> uploadVoiceToServer({
+  //   required List<int> bytes,
+  //   required String filename,
+  //   required String loginId,
+  //   required String empId,
+  //   required String uhid,
+  //   required String ipdNo,
+  //   required String patientName,
+  //   required String doctorName,
+  //   required String createdUser,
+  // }) async {
+  //   // final dio = Dio();
+  //   String token = ''; // Add your token logic here if needed
+
+  //   // Determine the MIME type of the file
+  //   final mimeType = lookupMimeType(filename) ?? 'audio/m4a';
+
+  //   // Prepare form data
+  //   final formData = dio.FormData.fromMap({
+  //     'file': dio.MultipartFile.fromBytes(
+  //       bytes,
+  //       filename: filename,
+  //       contentType: dio.DioMediaType.parse(mimeType),
+  //     ),
+  //     'loginId': loginId,
+  //     'empID': empId,
+  //     'uHID': uhid,
+  //     'iPDNo': ipdNo,
+  //     'patientName': patientName,
+  //     'voiceFileName': filename,
+  //     'doctorName': doctorName,
+  //     'createdUser': createdUser,
+  //     'contentType': mimeType,
+  //   });
+
+  //   // Set headers
+  //   final headers = {
+  //     'Content-Type': 'application/json',
+  //     if (token.isNotEmpty) 'Authorization': 'Bearer $token',
+  //   };
+
+  //   try {
+  //     // Send the request
+  //     final dioPackage = Dio();
+  //     final response = await dioPackage.request(
+  //       ConstApiUrl.empVoiceApi, // Replace with the actual API endpoint URL
+  //       data: formData,
+  //       options: Options(
+  //         method: 'POST',
+  //         headers: headers,
+  //       ),
+  //     );
+
+  //     // Handle the response
+  //     if (response.statusCode == 200) {
+  //       print('Upload success: ${response.data}');
+  //     } else {
+  //       print('Upload failed: ${response.statusCode} - ${response.statusMessage}');
+  //     }
+  //   } catch (e) {
+  //     print('Upload Exception: $e');
+  //   }
+  // }
 
   Future<void> togglePlayback() async {
     if (filePath == null || !File(filePath!).existsSync()) return;
@@ -1057,70 +1206,6 @@ class AdPatientController extends GetxController {
       return responseBody['choices'][0]['message']['content'];
     } else {
       return 'Error: ${response.statusCode}\n${response.body}';
-    }
-  }
-
-  Future<void> uploadVoiceToServer({
-    required List<int> bytes,
-    required String filename,
-    required String loginId,
-    required String empId,
-    required String uhid,
-    required String ipdNo,
-    required String patientName,
-    required String doctorName,
-    required String createdUser,
-  }) async {
-    // final dio = Dio();
-    String token = ''; // Add your token logic here if needed
-
-    // Determine the MIME type of the file
-    final mimeType = lookupMimeType(filename) ?? 'audio/m4a';
-
-    // Prepare form data
-    final formData = dio.FormData.fromMap({
-      'file': dio.MultipartFile.fromBytes(
-        bytes,
-        filename: filename,
-        contentType: dio.DioMediaType.parse(mimeType),
-      ),
-      'loginId': loginId,
-      'empID': empId,
-      'uHID': uhid,
-      'iPDNo': ipdNo,
-      'patientName': patientName,
-      'voiceFileName': filename,
-      'doctorName': doctorName,
-      'createdUser': createdUser,
-      'contentType': mimeType,
-    });
-
-    // Set headers
-    final headers = {
-      'Content-Type': 'application/json',
-      if (token.isNotEmpty) 'Authorization': 'Bearer $token',
-    };
-
-    try {
-      // Send the request
-      final dioPackage = Dio();
-      final response = await dioPackage.request(
-        ConstApiUrl.empVoiceApi, // Replace with the actual API endpoint URL
-        data: formData,
-        options: Options(
-          method: 'POST',
-          headers: headers,
-        ),
-      );
-
-      // Handle the response
-      if (response.statusCode == 200) {
-        print('Upload success: ${response.data}');
-      } else {
-        print('Upload failed: ${response.statusCode} - ${response.statusMessage}');
-      }
-    } catch (e) {
-      print('Upload Exception: $e');
     }
   }
 
