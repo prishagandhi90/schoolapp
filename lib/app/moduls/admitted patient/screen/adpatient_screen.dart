@@ -278,14 +278,14 @@ class AdpatientScreen extends StatelessWidget {
                           SizedBox(width: getDynamicHeight(size: 0.010)),
                           GestureDetector(
                             onTap: () {
+                              controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                              controller.uhid = controller.filterpatientsData[index].uhid ?? '';
+                              controller.patientName = controller.filterpatientsData[index].patientName ?? '';
+                              controller.bedNo = controller.filterpatientsData[index].bedNo ?? '';
+                              controller.update();
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
-                                screen: VoiceScreen(
-                                  bedNo: controller.filterpatientsData[index].bedNo ?? '',
-                                  patientName: controller.filterpatientsData[index].patientName ?? "",
-                                  ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                  uhid: controller.filterpatientsData[index].uhid ?? '',
-                                ),
+                                screen: VoiceScreen(),
                                 withNavBar: false,
                                 pageTransitionAnimation: PageTransitionAnimation.cupertino,
                               );

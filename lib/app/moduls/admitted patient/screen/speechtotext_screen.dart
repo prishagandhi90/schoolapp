@@ -5,11 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class VoiceScreen extends StatelessWidget {
-  String patientName;
-  String bedNo;
-  String ipdNo = '';
-  String uhid = '';
-  VoiceScreen({Key? key, required this.patientName, required this.bedNo, required this.ipdNo, required this.uhid}) : super(key: key);
+  VoiceScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetBuilder<AdPatientController>(
@@ -39,23 +35,23 @@ class VoiceScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: Text(patientName),
+                                child: Text(controller.patientName),
                               ),
                               SizedBox(
                                 width: Sizes.crossLength * 0.015,
                               ),
-                              Text(bedNo)
+                              Text(controller.bedNo)
                             ],
                           ),
                           SizedBox(height: Sizes.crossLength * 0.01),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(child: Text(ipdNo)),
+                              Expanded(child: Text(controller.ipdNo)),
                               SizedBox(
                                 width: Sizes.crossLength * 0.015,
                               ),
-                              Text(uhid)
+                              Text(controller.uhid)
                             ],
                           ),
                         ],
@@ -95,9 +91,8 @@ class VoiceScreen extends StatelessWidget {
                   ElevatedButton.icon(
                     icon: Icon(controller.isRecording ? Icons.stop : Icons.mic),
                     label: Text(controller.isRecording ? 'Stop Recording' : 'Start Recording'),
-                    onPressed: controller.isRecording
-                        ? () => controller.stopListeningAndRecording(uhid: uhid, ipdNo: ipdNo, patientName: patientName)
-                        : controller.startListeningAndRecording,
+                    onPressed:
+                        controller.isRecording ? () => controller.stopListeningAndRecording() : controller.startListeningAndRecording,
                     // onPressed: controller.stopListeningAndRecording,
                     style: ElevatedButton.styleFrom(backgroundColor: controller.isRecording ? Colors.red : null),
                   ),

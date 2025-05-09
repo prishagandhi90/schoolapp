@@ -935,11 +935,7 @@ class AdPatientController extends GetxController {
     }
   }
 
-  Future<void> stopListeningAndRecording({
-    required String uhid,
-    required String ipdNo,
-    required String patientName,
-  }) async {
+  Future<void> stopListeningAndRecording() async {
     try {
       if (isListening) await speech.stop();
       if (isRecording) await audioRecorder.stop();
@@ -949,38 +945,79 @@ class AdPatientController extends GetxController {
 
       timer.cancel();
       update();
+      await _transcribeAndTranslateAudio(filePath!);
 
-      if (filePath != null) {
-        final file = File(filePath!);
-        if (await file.exists()) {
-          audioBytes = await file.readAsBytes(); // Read bytes into audioBytes
-          print('Audio bytes read successfully, length: ${audioBytes.length}');
-        } else {
-          throw Exception('Recorded file does not exist at $filePath');
-        }
-      } else {
-        throw Exception('File path is null');
-      }
+      // if (filePath != null) {
+      //   final file = File(filePath!);
+      //   if (await file.exists()) {
+      //     audioBytes = await file.readAsBytes(); // Read bytes into audioBytes
+      //     print('Audio bytes read successfully, length: ${audioBytes.length}');
+      //   } else {
+      //     throw Exception('Recorded file does not exist at $filePath');
+      //   }
+      // } else {
+      //   throw Exception('File path is null');
+      // }
 
-      if (audioBytes.isNotEmpty) {
-        await uploadVoiceToServer(
-          bytes: audioBytes,
-          filename: 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a',
-          loginId: loginId,
-          empId: empId,
-          uhid: uhid,
-          ipdNo: ipdNo,
-          patientName: patientName,
-          doctorName: '',
-          createdUser: '',
-        );
-      }
-
-      if (filePath != null) {
-        await _transcribeAndTranslateAudio(filePath!);
-      }
+      // if (audioBytes.isNotEmpty) {
+      //   await uploadVoiceToServer(
+      //     bytes: audioBytes,
+      //     filename: 'voice_${DateTime.now().millisecondsSinceEpoch}.m4a',
+      //     loginId: loginId,
+      //     empId: empId,
+      //     uhid: uhid,
+      //     ipdNo: ipdNo,
+      //     patientName: patientName,
+      //     doctorName: '',
+      //     createdUser: '',
+      //     translatedText: 'ascgfgdf',
+      //   );
+      // }
     } catch (e) {
       Get.snackbar('Error', 'Failed to stop: $e');
+    }
+  }
+
+  Future<void> _transcribeAndTranslateAudio(String audioPath) async {
+    try {
+      final file = File(filePath!);
+      audioBytes = await file.readAsBytes();
+      String transcribedText = await translateAudioToEnglish(audioPath);
+      if (transcribedText.isNotEmpty) {
+        recognizedText = transcribedText;
+        // await translateAudioToEnglish(audioPath);
+        await SaveFileDetails(recognizedText, file, audioBytes);
+      } else {
+        translatedText = 'No text recognized from audio.';
+        update();
+      }
+    } catch (e) {
+      translatedText = 'Audio processing error: $e';
+      update();
+    }
+  }
+
+  Future<void> SaveFileDetails(String translatedText, File file, List<int> audioBytes) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? loginId = pref.getString(AppString.keyLoginId);
+    String? empId = pref.getString(AppString.keyEmpId);
+
+    if (filePath != null) {
+      print('Audio bytes read successfully, length: ${audioBytes.length}');
+      await uploadVoiceToServer(
+        bytes: audioBytes,
+        filename: p.basename(file.path),
+        loginId: loginId ?? '',
+        empId: empId ?? '',
+        uhid: uhid,
+        ipdNo: ipdNo,
+        patientName: patientName,
+        doctorName: '',
+        createdUser: '',
+        translatedText: translatedText,
+      );
+    } else {
+      Get.snackbar('Error', 'File path is null');
     }
   }
 
@@ -994,6 +1031,7 @@ class AdPatientController extends GetxController {
     required String patientName,
     required String doctorName,
     required String createdUser,
+    required String translatedText,
   }) async {
     String token = ''; // Add your token logic here if needed, e.g., from GetX state
 
@@ -1015,6 +1053,7 @@ class AdPatientController extends GetxController {
       'VoiceFileName': filename,
       'DoctorName': doctorName,
       'CreatedUser': createdUser,
+      'TranslatedText': translatedText,
     });
 
     // Set headers (only include Authorization if token exists)
@@ -1139,26 +1178,10 @@ class AdPatientController extends GetxController {
     }
   }
 
-  Future<void> _transcribeAndTranslateAudio(String audioPath) async {
-    try {
-      String transcribedText = await translateAudioToEnglish(audioPath);
-      if (transcribedText.isNotEmpty) {
-        recognizedText = transcribedText;
-        // await translateAudioToEnglish(audioPath);
-      } else {
-        translatedText = 'No text recognized from audio.';
-        update();
-      }
-    } catch (e) {
-      translatedText = 'Audio processing error: $e';
-      update();
-    }
-  }
-
   Future<String> translateAudioToEnglish(String audioPath) async {
     File audioFile = File(audioPath);
     final apiKey =
-        'sk-proj-ymlqvji-D5Rg2vV9Ey6pODBdyL0Oz_un_BQYCqz-arB7vsy8UpHj0i-smnA5iHtVh4gxPhOu6DT3BlbkFJ7y9Se54fzFGvntE3AfmuwLlZzrlkkoK-Z6E1KXkJ8OF89rfm1bnD41s-SNJjs_xZ-2ET1RSpUAa';
+        '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';
 
     final uri = Uri.parse('https://api.openai.com/v1/audio/translations');
 
@@ -1188,7 +1211,7 @@ class AdPatientController extends GetxController {
 
   Future<String> makeMedicalStyleTranslation(String translatedText) async {
     final apiKey =
-        'sk-proj-ymlqvji-D5Rg2vV9Ey6pODBdyL0Oz_un_BQYCqz-arB7vsy8UpHj0i-smnA5iHtVh4gxPhOu6DT3BlbkFJ7y9Se54fzFGvntE3AfmuwLlZzrlkkoK-Z6E1KXkJ8OF89rfm1bnD41s-SNJjs_xZ-2ET1RSpUAa';
+        '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';
     final url = Uri.parse("https://api.openai.com/v1/chat/completions");
 
     final response = await http.post(
