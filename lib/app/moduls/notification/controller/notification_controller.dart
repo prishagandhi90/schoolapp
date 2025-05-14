@@ -31,6 +31,7 @@ class NotificationController extends GetxController {
 
   @override
   void onInit() {
+    clearFilters();
     fetchNotificationList();
     searchController.clear();
     searchFocusNode.unfocus();
@@ -71,7 +72,8 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<List<NotificationlistModel>> fetchNotificationList({int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
+  Future<List<NotificationlistModel>> fetchNotificationList(
+      {int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -316,7 +318,7 @@ class NotificationController extends GetxController {
     selectedTags.clear();
     isSearching = false;
     isLoading = false;
-    filternotificationlist.clear();
+    // filternotificationlist.clear();
     filesList.clear();
     notificationfile.clear();
     update();

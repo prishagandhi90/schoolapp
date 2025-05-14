@@ -40,13 +40,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 icon: Icon(Icons.arrow_back_ios_new, color: AppColor.black)),
             actions: [
               TextButton(
-                  onPressed: () {
-                    FocusScope.of(context).unfocus();
-                    controller.fetchNotificationList();
-                    controller.selectedTags.clear();
-                    controller.filesList.clear();
+                  onPressed: () async {
+                    // FocusScope.of(context).unfocus();
+                    // controller.searchFocusNode.unfocus();
+                    await controller.fetchNotificationList();
                     Navigator.pop(context);
-                    controller.update();
+                    await controller.clearFilters();
                   },
                   child: Text(
                     AppString.cancel,
@@ -198,7 +197,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
                           print("Selected Days: $days"); // ✅ Check in console
                           print("Selected Tags: $tagString");
-
+                          await controller.clearFilters();
                           await controller.fetchNotificationList(days: days, tag: tagString);
 
                           Get.back();
@@ -234,7 +233,8 @@ class _FilterScreenState extends State<FilterScreen> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                         ),
                         child: Text(
                           AppString.reset,
@@ -337,7 +337,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
                             print("Selected Days: $days"); // ✅ Check in console
                             print("Selected Tags: $tagString");
-
+                            await controller.clearFilters();
                             await controller.fetchNotificationList(
                               days: days,
                               tag: tagString,
@@ -378,7 +378,8 @@ class _FilterScreenState extends State<FilterScreen> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColor.primaryColor,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                           ),
                           child: Text(
                             AppString.cancel,

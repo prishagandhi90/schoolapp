@@ -34,7 +34,6 @@ class DashboardController extends GetxController {
 
   late DashboardTable dashboardTable;
   List<ModuleScreenRights> empModuleScreenRightsTable = [];
-  final notificationController = Get.put(NotificationController());
 
   @override
   void onInit() {
