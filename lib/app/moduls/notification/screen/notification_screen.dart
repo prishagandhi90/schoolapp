@@ -76,12 +76,10 @@ class NotificationScreen extends StatelessWidget {
                               ),
                               prefixIcon: Padding(
                                 padding: EdgeInsets.all(10),
-                                child:
-                                    Icon(Icons.search, color: AppColor.black, size: getDynamicHeight(size: 0.024)), // ✅ Search icon color
+                                child: Icon(Icons.search, color: AppColor.black, size: getDynamicHeight(size: 0.024)), // ✅ Search icon color
                               ),
                               hintText: AppString.search,
-                              hintStyle: AppStyle.plusgrey
-                                  .copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
+                              hintStyle: AppStyle.plusgrey.copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
                               filled: true,
                               fillColor: AppColor.white, // ✅ Background color
                             ),
@@ -146,9 +144,11 @@ class NotificationScreen extends StatelessWidget {
                       // controller.searchFocusNode.unfocus();
                       // controller.selectedTags.clear();
                       // controller.filesList.clear();
-                      controller.fetchNotificationList();
+                      if (controller.selectedTags.isEmpty && controller.fromDateController.text.isEmpty && controller.toDateController.text.isEmpty) {
+                        controller.fetchNotificationList();
+                      }
                       Get.to(FilterScreen());
-                      controller.clearFilters();
+                      // controller.clearFilters();
                       // controller.update();
                     },
                     icon: Image.asset(
@@ -192,9 +192,9 @@ class NotificationScreen extends StatelessWidget {
                                   Center(child: ProgressWithIcon()),
                                   barrierDismissible: false,
                                 );
-                                controller.searchController.clear();
-                                controller.selectedTags.clear();
-                                controller.isSearching = false;
+                                // controller.searchController.clear();
+                                // controller.selectedTags.clear();
+                                // controller.isSearching = false;
 
                                 await controller.updateNotificationRead(index);
                                 if (controller.filternotificationlist[index].fileYN == "Y") {
@@ -212,8 +212,10 @@ class NotificationScreen extends StatelessWidget {
                                   withNavBar: false,
                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                 ).then((value) async {
-                                  await controller.clearFilters();
-                                  await controller.fetchNotificationList();
+                                  if (controller.selectedTags.isEmpty && controller.fromDateController.text.isEmpty && controller.toDateController.text.isEmpty) {
+                                    await controller.clearFilters();
+                                    await controller.fetchNotificationList();
+                                  }
                                 });
                               },
                               child: Column(
@@ -225,8 +227,7 @@ class NotificationScreen extends StatelessWidget {
                                         color: AppColor.black,
                                         // fontSize: 18,
                                         fontSize: getDynamicHeight(size: 0.020),
-                                        fontWeight:
-                                            controller.filternotificationlist[index].boldYN == "Y" ? FontWeight.bold : FontWeight.normal,
+                                        fontWeight: controller.filternotificationlist[index].boldYN == "Y" ? FontWeight.bold : FontWeight.normal,
 
                                         fontFamily: CommonFontStyle.plusJakartaSans,
                                       ),
