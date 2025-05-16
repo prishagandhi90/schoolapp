@@ -9,7 +9,6 @@ import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';

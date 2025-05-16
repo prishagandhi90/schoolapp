@@ -8,6 +8,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_contr
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -265,7 +266,58 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                 padding: EdgeInsets.all(10),
                 itemCount: 1,
                 itemBuilder: (context, index) {
-                  return _buildPatientCard(AppString.admittedPatient, controller.patientsData.length, context, index);
+                  return Column(
+                    children: [
+                      _buildPatientCard(
+                        title: AppString.admittedPatient,
+                        count: controller.patientsData.length,
+                        context: context,
+                        index: index,
+                        imagePath: 'assets/image/AdPatient.png',
+                        onTap: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: AdpatientScreen(),
+                            withNavBar: false,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ).then((value) async {
+                            final controller = Get.put(AdPatientController());
+                            controller.sortBySelected = -1;
+                            await controller.resetForm();
+                            await _fetchData();
+                            final bottomBarController = Get.find<BottomBarController>();
+                            bottomBarController.currentIndex.value = 0;
+                            bottomBarController.isIPDHome.value = true;
+                            hideBottomBar.value = false;
+                            var dashboardController = Get.put(DashboardController());
+                            await dashboardController.getDashboardDataUsingToken();
+                          });
+                        },
+                      ),
+                      _buildPatientCard(
+                        title: 'Investigation Requisition',
+                        onTap: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: InvestRequisitScreen(),
+                            withNavBar: false,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ).then((value) async {
+                            final controller = Get.put(AdPatientController());
+                            controller.sortBySelected = -1;
+                            await controller.resetForm();
+                            await _fetchData();
+                            final bottomBarController = Get.find<BottomBarController>();
+                            bottomBarController.currentIndex.value = 0;
+                            bottomBarController.isIPDHome.value = true;
+                            hideBottomBar.value = false;
+                            var dashboardController = Get.put(DashboardController());
+                            await dashboardController.getDashboardDataUsingToken();
+                          });
+                        },
+                      ),
+                    ],
+                  );
                 },
               );
             },
@@ -275,27 +327,18 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
     );
   }
 
-  Widget _buildPatientCard(String title, int count, BuildContext context, int index) {
+  Widget _buildPatientCard({
+    required String title,
+    BuildContext? context,
+    int? count,
+    int? index,
+    String? imagePath,
+    IconData? icon,
+    VoidCallback? onTap,
+  }) {
+    const double cardHeight = 100; // Fixed height for uniformity
     return GestureDetector(
-      onTap: () {
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: AdpatientScreen(),
-          withNavBar: false,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) async {
-          final controller = Get.put(AdPatientController());
-          controller.sortBySelected = -1;
-          await controller.resetForm();
-          await _fetchData();
-          final bottomBarController = Get.find<BottomBarController>();
-          bottomBarController.currentIndex.value = 0;
-          bottomBarController.isIPDHome.value = true;
-          hideBottomBar.value = false;
-          var dashboardController = Get.put(DashboardController());
-          await dashboardController.getDashboardDataUsingToken();
-        });
-      },
+      onTap: onTap,
       child: Card(
         color: AppColor.white,
         shape: RoundedRectangleBorder(
@@ -303,43 +346,140 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
           side: BorderSide(color: AppColor.teal, width: 1),
         ),
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-        child: Padding(
-          padding: EdgeInsets.all(15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        title, // Dynamic Title
-                        style: TextStyle(fontSize: Sizes.px18, fontWeight: FontWeight.bold),
+        child: SizedBox(
+          height: cardHeight,
+          child: Padding(
+            padding: EdgeInsets.all(15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Left Column (Title + Count if available)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: Sizes.px18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Icon(Icons.arrow_forward_ios, size: 14),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: Sizes.px8),
+                    Text(
+                      count != null ? "$count" : " ", // Empty space for alignment
+                      style: TextStyle(
+                        fontSize: Sizes.px20,
+                        fontWeight: FontWeight.bold,
+                        color: count != null ? Colors.black : Colors.transparent,
                       ),
-                      Icon(Icons.arrow_forward_ios),
-                    ],
-                  ),
-                  SizedBox(height: Sizes.px8),
-                  Text(
-                    "$count", // Dynamic Count
-                    style: TextStyle(fontSize: Sizes.px20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              Image.asset('assets/image/AdPatient.png', // Image ko bhi dynamic kar sakte ho agar chaho
+                    ),
+                  ],
+                ),
+                // Right Side (Image/Icon Placeholder)
+                Container(
                   height: Sizes.px40,
                   width: Sizes.px40,
-                  color: AppColor.teal),
-              // Icon(
-              //   Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
-              //   size: Sizes.px40,
-              //   color: AppColor.teal,
-              // ),
-            ],
+                  alignment: Alignment.center,
+                  child: imagePath != null
+                      ? Image.asset(
+                          imagePath,
+                          height: Sizes.px40,
+                          width: Sizes.px40,
+                          color: AppColor.teal,
+                        )
+                      : icon != null
+                          ? Icon(
+                              icon,
+                              size: Sizes.px40,
+                              color: AppColor.teal,
+                            )
+                          : SizedBox(
+                              height: Sizes.px40,
+                              width: Sizes.px40,
+                            ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  // Widget _buildPatientCard(String title, int count, BuildContext context, int index) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       PersistentNavBarNavigator.pushNewScreen(
+  //         context,
+  //         screen: AdpatientScreen(),
+  //         withNavBar: false,
+  //         pageTransitionAnimation: PageTransitionAnimation.cupertino,
+  //       ).then((value) async {
+  //         final controller = Get.put(AdPatientController());
+  //         controller.sortBySelected = -1;
+  //         await controller.resetForm();
+  //         await _fetchData();
+  //         final bottomBarController = Get.find<BottomBarController>();
+  //         bottomBarController.currentIndex.value = 0;
+  //         bottomBarController.isIPDHome.value = true;
+  //         hideBottomBar.value = false;
+  //         var dashboardController = Get.put(DashboardController());
+  //         await dashboardController.getDashboardDataUsingToken();
+  //       });
+  //     },
+  //     child: Card(
+  //       color: AppColor.white,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(10),
+  //         side: BorderSide(color: AppColor.teal, width: 1),
+  //       ),
+  //       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+  //       child: Padding(
+  //         padding: EdgeInsets.all(15),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Row(
+  //                   children: [
+  //                     Text(
+  //                       title, // Dynamic Title
+  //                       style: TextStyle(fontSize: Sizes.px18, fontWeight: FontWeight.bold),
+  //                     ),
+  //                     Icon(Icons.arrow_forward_ios),
+  //                   ],
+  //                 ),
+  //                 SizedBox(height: Sizes.px8),
+  //                 Text(
+  //                   "$count", // Dynamic Count
+  //                   style: TextStyle(fontSize: Sizes.px20, fontWeight: FontWeight.bold),
+  //                 ),
+  //               ],
+  //             ),
+  //             Image.asset('assets/image/AdPatient.png', // Image ko bhi dynamic kar sakte ho agar chaho
+  //                 height: Sizes.px40,
+  //                 width: Sizes.px40,
+  //                 color: AppColor.teal),
+  //             // Icon(
+  //             //   Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
+  //             //   size: Sizes.px40,
+  //             //   color: AppColor.teal,
+  //             // ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

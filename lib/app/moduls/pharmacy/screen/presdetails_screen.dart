@@ -98,7 +98,7 @@ class PresdetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: getDynamicHeight(size: 0.007)),
+                                SizedBox(width: getDynamicHeight(size: 0.007)), 
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,

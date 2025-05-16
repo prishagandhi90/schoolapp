@@ -71,4 +71,9 @@ class ConstApiUrl {
   
   //  ----------------Voice Api ---------------
   static const empVoiceApi = "$empUrl/UploadPatientVoiceNote";
+
+  //  ----------------Investigation Requisition ---------------
+  static const empExternalLabList = "$empUrl/EmpApp_GetExternalLabName";
+  static const empServiceGroupAPI = "$empUrl/EmpApp_InvReq_GetServiceGrp";
+  static const empPatientNm_UHID_IPDAPI = "$empUrl/EmpApp_InvReq_GetPatientNm_UHID_IPD";
 }
