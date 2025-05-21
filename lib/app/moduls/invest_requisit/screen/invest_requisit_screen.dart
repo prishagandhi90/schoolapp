@@ -6,7 +6,9 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/screen/invest_service_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,276 +25,290 @@ class InvestRequisitScreen extends StatelessWidget {
             backgroundColor: AppColor.white,
             appBar: AppBar(
               backgroundColor: AppColor.white,
-              title: const Text('Investigation Requisition'),
+              title: Text('Investigation Requisition', style: AppStyle.primaryplusw700),
+              centerTitle: true,
             ),
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: getDynamicHeight(size: 0.050),
-                    child: TextFormField(
-                      cursorColor: AppColor.black,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: AppColor.lightgrey1,
-                            width: getDynamicHeight(size: 0.00105),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          // borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                          borderSide: BorderSide(color: AppColor.red),
-                        ),
-                        filled: true,
-                        fillColor: AppColor.white,
-                        hintText: 'Patient/UHID/IPD',
-                        hintStyle: AppStyle.plusgrey,
-                        border: OutlineInputBorder(borderSide: BorderSide(color: AppColor.red)),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CustomDropdown(
-                            text: 'Type',
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColor.red),
-                                borderRadius: BorderRadius.circular(0),
-                                color: AppColor.white,
-                              ),
-                            ),
-                            controller: controller.typeController,
-                            items: [
-                              {'value': '', 'text': '--select--'}, // Empty value so that it doesn't save
-                              {'value': 'Lab', 'text': 'Lab'},
-                              {'value': 'Radio', 'text': 'Radio'},
-                              {'value': 'Other Investigation', 'text': 'Other Investigation'},
-                            ].map((Map<String, String> item) {
-                              return DropdownMenuItem<Map<String, String>>(
-                                value: item,
-                                child: Text(
-                                  item['text'] ?? '',
-                                  style: AppStyle.black,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (val) {},
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: CustomDropdown(
-                            text: 'Normal',
-                            buttonStyleData: ButtonStyleData(
-                              height: 50,
-                              padding: const EdgeInsets.symmetric(horizontal: 0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(0),
-                                color: AppColor.white,
-                              ),
-                            ),
-                            controller: controller.priorityController,
-                            items: [
-                              {'value': 'Normal', 'text': 'Normal'},
-                              {'value': 'Urgent', 'text': 'Urgent'},
-                            ].map((Map<String, String> item) {
-                              return DropdownMenuItem<Map<String, String>>(
-                                value: item,
-                                child: Text(
-                                  item['text'] ?? '',
-                                  style: AppStyle.black,
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              print("Selected Priority: ${val?['text']}");
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CustomDropdown(
-                      text: 'Internal',
-                      controller: controller.InExController,
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(0),
-                          color: AppColor.white,
-                        ),
-                      ),
-                      onChanged: (value) {},
-                      width: double.infinity,
-                      items: [
-                        {'value': 'Internal', 'text': 'Internal'},
-                        {'value': 'External', 'text': 'External'},
-                      ].map((Map<String, String> item) {
-                        return DropdownMenuItem<Map<String, String>>(
-                          value: item,
-                          child: Text(
-                            item['text'] ?? '',
-                            style: AppStyle.black,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                child: Column(
+                  children: [
+                    Autocomplete<SearchserviceModel>(
+                      displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                      optionsBuilder: (TextEditingValue textEditingValue) async {
+                        await controller.getSuggestions(textEditingValue.text);
+                        return controller.suggestions;
+                      },
+                      onSelected: (SearchserviceModel selection) {
+                        print('Selected City: ${selection.txt} (ID: ${selection.name})');
+                        // controller.setPatientName(selection.txt ?? '');
+                        controller.nameController.text = selection.txt ?? '';
+                        controller.ipdNo = selection.name ?? '';
+                        controller.update();
+                      },
+                      fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                        // controller.addListener(() {
+                        //   controller.setPatientName(nameController.text);
+                        // });
+                        return TextFormField(
+                          controller: nameController,
+                          focusNode: focusNode,
+                          minLines: 1,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            labelText: 'Patient/UHID/IPD',
+                            border: OutlineInputBorder(),
                           ),
                         );
-                      }).toList(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CustomDropdown(
-                      text: 'External lab',
-                      controller: controller.InExController,
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(0),
-                          color: AppColor.white,
-                        ),
-                      ),
-                      onChanged: (value) {
-                        controller.update();
                       },
-                      width: double.infinity,
-                      items: controller.externalLab
-                          .map((ExternallabModel item) => DropdownMenuItem<Map<String, String>>(
-                                value: {
-                                  'value': item.name ?? '', // Use the value as the item value
-                                  'text': item.name ?? '', // Display the name in the dropdown
-                                },
-                                child: Text(
-                                  item.name ?? '', // Display the name in the dropdown
-                                  style: AppStyle.black.copyWith(
-                                    // fontSize: 14,
-                                    fontSize: getDynamicHeight(size: 0.016),
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomDropdown(
+                              text: 'Type',
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                padding: const EdgeInsets.symmetric(horizontal: 0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColor.red),
+                                  borderRadius: BorderRadius.circular(0),
+                                  color: AppColor.white,
                                 ),
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CustomDropdown(
-                      text: 'Service group',
-                      controller: controller.serviceGroupController,
-                      buttonStyleData: ButtonStyleData(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(0),
-                          color: AppColor.white,
-                        ),
-                      ),
-                      onChanged: (value) {
-                        controller.update();
-                      },
-                      width: double.infinity,
-                      items: controller.serviceGroup
-                          .map((ServicegrpModel item) => DropdownMenuItem<Map<String, String>>(
-                                value: {
-                                  'value': item.name ?? '', // Use the value as the item value
-                                  'text': item.name ?? '', // Display the name in the dropdown
-                                },
-                                child: Text(
-                                  item.name ?? '', // Display the name in the dropdown
-                                  style: AppStyle.black.copyWith(
-                                    // fontSize: 14,
-                                    fontSize: getDynamicHeight(size: 0.016),
+                              ),
+                              controller: controller.typeController,
+                              items: [
+                                {'value': '', 'text': '--select--'}, // Empty value so that it doesn't save
+                                {'value': 'Lab', 'text': 'Lab'},
+                                {'value': 'Radio', 'text': 'Radio'},
+                                {'value': 'Other Investigation', 'text': 'Other Investigation'},
+                              ].map((Map<String, String> item) {
+                                return DropdownMenuItem<Map<String, String>>(
+                                  value: item,
+                                  child: Text(
+                                    item['text'] ?? '',
+                                    style: AppStyle.black,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                controller.typeController.text = val?['text'] ?? '';
+                                controller.update();
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: CustomDropdown(
+                              text: 'Normal',
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                padding: const EdgeInsets.symmetric(horizontal: 0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColor.black),
+                                  borderRadius: BorderRadius.circular(0),
+                                  color: AppColor.white,
                                 ),
-                              ))
-                          .toList(),
+                              ),
+                              controller: controller.priorityController,
+                              items: [
+                                {'value': 'Normal', 'text': 'Normal'},
+                                {'value': 'Urgent', 'text': 'Urgent'},
+                              ].map((Map<String, String> item) {
+                                return DropdownMenuItem<Map<String, String>>(
+                                  value: item,
+                                  child: Text(
+                                    item['text'] ?? '',
+                                    style: AppStyle.black,
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                controller.priorityController.text = val?['text'] ?? '';
+                                print("Selected Priority: ${val?['text']}");
+                                controller.update();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CustomTextFormField(
-                      hint: 'Diagnosis/Complaints...',
-                      hintStyle: AppStyle.black.copyWith(
-                        // fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontSize: getDynamicHeight(size: 0.016),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CustomDropdown(
+                        text: 'Internal',
+                        controller: controller.InExController,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
+                        onChanged: (value) {},
+                        width: double.infinity,
+                        items: [
+                          {'value': 'Internal', 'text': 'Internal'},
+                          {'value': 'External', 'text': 'External'},
+                        ].map((Map<String, String> item) {
+                          return DropdownMenuItem<Map<String, String>>(
+                            value: item,
+                            child: Text(
+                              item['text'] ?? '',
+                              style: AppStyle.black,
+                            ),
+                          );
+                        }).toList(),
                       ),
-                      minLines: 3,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      scrollPhysics: BouncingScrollPhysics(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black, width: 1),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black, width: 1),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      onChanged: (value) {},
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      onFieldSubmitted: (value) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppString.notesisrequired;
-                        }
-                        return null;
-                      },
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CustomTextFormField(
-                      hint: 'Clinical Remarks...',
-                      hintStyle: AppStyle.black.copyWith(
-                        // fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        fontSize: getDynamicHeight(size: 0.016),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CustomDropdown(
+                        text: 'External lab',
+                        controller: controller.InExController,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          controller.update();
+                        },
+                        width: double.infinity,
+                        items: controller.externalLab
+                            .map((ExternallabModel item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.name ?? '', // Use the value as the item value
+                                    'text': item.name ?? '', // Display the name in the dropdown
+                                  },
+                                  child: Text(
+                                    item.name ?? '', // Display the name in the dropdown
+                                    style: AppStyle.black.copyWith(
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
                       ),
-                      minLines: 3,
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      scrollPhysics: BouncingScrollPhysics(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black, width: 1),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black, width: 1),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      onChanged: (value) {},
-                      onTapOutside: (event) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      onFieldSubmitted: (value) {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppString.notesisrequired;
-                        }
-                        return null;
-                      },
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CustomDropdown(
+                        text: 'Service group',
+                        controller: controller.serviceGroupController,
+                        buttonStyleData: ButtonStyleData(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          controller.update();
+                        },
+                        width: double.infinity,
+                        items: controller.serviceGroup
+                            .map((ServicegrpModel item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.name ?? '', // Use the value as the item value
+                                    'text': item.name ?? '', // Display the name in the dropdown
+                                  },
+                                  child: Text(
+                                    item.name ?? '', // Display the name in the dropdown
+                                    style: AppStyle.black.copyWith(
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CustomTextFormField(
+                        hint: 'Diagnosis/Complaints...',
+                        hintStyle: AppStyle.black.copyWith(
+                          // fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontSize: getDynamicHeight(size: 0.016),
+                        ),
+                        minLines: 3,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        scrollPhysics: BouncingScrollPhysics(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        onChanged: (value) {},
+                        onTapOutside: (event) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                        onFieldSubmitted: (value) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppString.notesisrequired;
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CustomTextFormField(
+                        hint: 'Clinical Remarks...',
+                        hintStyle: AppStyle.black.copyWith(
+                          // fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          fontSize: getDynamicHeight(size: 0.016),
+                        ),
+                        minLines: 3,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        scrollPhysics: BouncingScrollPhysics(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        onChanged: (value) {},
+                        onTapOutside: (event) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                        onFieldSubmitted: (value) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppString.notesisrequired;
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             bottomNavigationBar: Padding(
@@ -339,7 +355,15 @@ class InvestRequisitScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // TODO: Submit logic
+                        // controller.ipdNo = controller.extractMiddleValue(controller.nameController.text);
+                        // controller.selectedTop = 20;
+                        // controller.update();
+                        if (controller.ipdNo == null || controller.ipdNo == '') {
+                          Get.snackbar('Error', 'Please select a valid patient');
+                          return;
+                        }
+                        controller.fetchGetQueryList(controller.ipdNo);
+                        Get.to(() => InvestServiceScreen());
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primaryColor,

@@ -1,12 +1,18 @@
+import 'dart:async';
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
+import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/invest_requisit/model/city_model.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/getquerylist_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/requestsheetdetail_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +20,35 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvestRequisitController extends GetxController {
-  @override
-  void onInit() {
-    fetchExternalLab();
-    fetchServiceGroup();
-    super.onInit();
-  }
-
+  final TextEditingController nameController = TextEditingController();
   final typeController = TextEditingController();
   final priorityController = TextEditingController();
   final InExController = TextEditingController();
   final serviceGroupController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+  FocusNode focusNode = FocusNode();
+  bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
-  String tokenNo = '', loginId = '', empId = '';
+  String tokenNo = '', loginId = '', empId = '', ipdNo = '';
   bool isLoading = false;
   var externalLab = <ExternallabModel>[].obs;
   var serviceGroup = <ServicegrpModel>[].obs;
+  var searchService = <SearchserviceModel>[].obs;
+  var getQueryList = <GetquerylistModel>[].obs;
+  Timer? debounce;
+  List<RequestSheetDetailsIPD> selectedServices = [];
+  final List<int> topOptions = [10, 20, 30, 40];
+  int selectedTop = 10;
+  @override
+  void onInit() {
+    fetchExternalLab();
+    fetchServiceGroup();
+    focusNode.addListener(() {
+      hasFocus = focusNode.hasFocus;
+      update();
+    });
+    super.onInit();
+  }
 
   final List<DropdownMenuItem<Map<String, String>>> typeItems = [
     DropdownMenuItem(
@@ -141,22 +160,381 @@ class InvestRequisitController extends GetxController {
     return serviceGroup.toList();
   }
 
-  static Future<List<CityModel>> fetchCitySuggestions(String query) async {
+  Future<List<SearchserviceModel>> fetchSearchService(String flag) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      final response = await Dio().get(
-        ConstApiUrl.empPatientNm_UHID_IPDAPI,
-        queryParameters: {'search': query},
-      );
+      isLoading = true;
+      String url = ConstApiUrl.empSearchServiceAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      if (response.statusCode == 200) {
-        List data = response.data as List;
-        return data.map((e) => CityModel.fromJson(e)).toList();
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseSearchService responseSearchService = ResponseSearchService.fromJson(jsonDecode(response));
+
+      if (responseSearchService.statusCode == 200) {
+        // searchService.clear();
+        searchService.assignAll(responseSearchService.data ?? []);
+        isLoading = false;
+      } else if (responseSearchService.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseSearchService.statusCode == 400) {
+        isLoading = false;
       } else {
-        return [];
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return searchService.toList();
+  }
+
+  // Controller me:
+  String patientName = '';
+
+  void setPatientName(String name) {
+    patientName = name.trim();
+    update(); // this will rebuild widgets using GetBuilder
+  }
+
+  // final TextEditingController controller = TextEditingController();
+  List<SearchserviceModel> suggestions = [];
+
+  Future<void> getSuggestions(String query) async {
+    if (query.isEmpty) return;
+    List<SearchserviceModel> results = await fetchSearchService(query);
+
+    suggestions = results;
+    update();
+  }
+
+  Future<List<GetquerylistModel>> fetchGetQueryList(String ipdNo, {String searchText = ""}) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      update(); // show loader if any
+
+      String url = ConstApiUrl.empGetQueryListAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "type": "IR_TOP_SRVC_LIST",
+        "top10_40": selectedTop.toString(),
+        "ipd": ipdNo,
+        "srchService": searchText,
+        "invType": "LAB",
+        "srvGrp": "",
+        "extLabNm": "",
+        "val7": ""
+      };
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseGetQueryList responseGetQueryList = ResponseGetQueryList.fromJson(jsonDecode(response));
+      if (responseGetQueryList.statusCode == 200) {
+        getQueryList.assignAll(responseGetQueryList.data ?? []);
+      } else if (responseGetQueryList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Session expired, login again.');
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
-      print('API Error: $e');
-      return [];
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+    }
+    isLoading = false;
+    update();
+    return getQueryList;
+  }
+
+  Future<void> searchservice(String query, String ipdNo) async {
+    await fetchGetQueryList(ipdNo, searchText: query);
+  }
+
+  void onSearchChanged(String query, String ipdNo) {
+    if (debounce?.isActive ?? false) debounce?.cancel();
+    debounce = Timer(Duration(milliseconds: 500), () {
+      searchservice(query, ipdNo);
+    });
+  }
+
+  Future<void> changeTop(int top) async {
+    selectedTop = top;
+    await fetchGetQueryList(ipdNo);
+    update();
+  }
+
+  void addService(SearchserviceModel service) {
+    final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.value);
+
+    if (!isAlreadyAdded) {
+      selectedServices.add(
+        RequestSheetDetailsIPD(
+          serviceName: service.name ?? '',
+          serviceId: int.tryParse(service.value ?? '0') ?? 0,
+          username: nameController.text, // Replace with real user
+          invSrc: "MobileApp",
+          reqTyp: "IPD",
+          rowState: "Unchanged",
+          action: "Insert",
+          uhidNo: "UHID123",
+          ipdNo: ipdNo,
+          drName: "Dr. John", // Replace with actual doctor
+        ),
+      );
+      update();
+    } else {
+      Get.snackbar(
+        'Notice',
+        'Service already added',
+        backgroundColor: Colors.orange.shade100,
+        colorText: Colors.black,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 1),
+      );
     }
   }
+
+  // void addService(String service) {
+  //   if (!selectedServices.contains(service)) {
+  //     selectedServices.add(service);
+  //     update();
+  //     // Get.snackbar(
+  //     //   'Success',
+  //     //   'Service added successfully',
+  //     //   backgroundColor: Colors.green.shade100,
+  //     //   colorText: Colors.black,
+  //     //   snackPosition: SnackPosition.BOTTOM,
+  //     //   duration: Duration(seconds: 2),
+  //     // );
+  //   } else {
+  //     Get.snackbar(
+  //       'Notice',
+  //       'Service already added',
+  //       backgroundColor: Colors.orange.shade100,
+  //       colorText: Colors.black,
+  //       snackPosition: SnackPosition.BOTTOM,
+  //       duration: Duration(seconds: 1),
+  //     );
+  //   }
+  // }
+
+//   Future<void> HistoryBottomSheet() async {
+//     showModalBottomSheet(
+//       context: Get.context!,
+//       isScrollControlled: true,
+//       isDismissible: true,
+//       useSafeArea: true,
+//       backgroundColor: AppColor.transparent,
+//       builder: (context) => DraggableScrollableSheet(
+//         expand: false,
+//         initialChildSize: 0.7,
+//         minChildSize: 0.4,
+//         maxChildSize: 0.9,
+//         builder: (context, scrollController) {
+//           return Container(
+//             decoration: BoxDecoration(
+//               color: AppColor.white,
+//               borderRadius: BorderRadius.only(
+//                 topLeft: Radius.circular(20),
+//                 topRight: Radius.circular(20),
+//               ),
+//             ),
+//             child: GetBuilder<InvestRequisitController>(
+//               builder: (controller) {
+//                 return Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     // Header
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+//                       child: Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         children: [
+//                           SizedBox(width: 24), // For alignment
+//                           Text(
+//                             'Investigation History',
+//                             style: TextStyle(
+//                               fontSize: 18,
+//                               fontWeight: FontWeight.w700,
+//                               color: Colors.teal,
+//                             ),
+//                           ),
+//                           IconButton(
+//                             onPressed: () => Navigator.pop(context),
+//                             icon: Icon(Icons.cancel, color: Colors.grey),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+
+//                     // Dropdown
+//                     Padding(
+//                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+//                       child: CustomDropdown(
+//                         text: 'Select',
+//                         buttonStyleData: ButtonStyleData(
+//                           height: 48,
+//                           decoration: BoxDecoration(
+//                             border: Border.all(color: Colors.black),
+//                             borderRadius: BorderRadius.circular(4),
+//                             color: Colors.white,
+//                           ),
+//                         ),
+//                         controller: controller.typeController,
+//                         items: [
+//                           {'value': '', 'text': 'Select'},
+//                           {'value': 'Lab', 'text': 'LAB'},
+//                           {'value': 'Radio', 'text': 'Radio'},
+//                           {'value': 'Other Investigation', 'text': 'OTHER INVESTIGATION'},
+//                         ].map((item) {
+//                           return DropdownMenuItem<Map<String, String>>(
+//                             value: item,
+//                             child: Text(item['text'] ?? '', style: TextStyle(fontSize: 14)),
+//                           );
+//                         }).toList(),
+//                         onChanged: (val) {
+//                           controller.typeController.text = val?['text'] ?? '';
+//                           controller.update();
+//                         },
+//                       ),
+//                     ),
+
+//                     const SizedBox(height: 10),
+
+//                     // History List
+//                     Expanded(
+//                       child: ListView.builder(
+//                         controller: scrollController,
+//                         padding: EdgeInsets.symmetric(horizontal: 12),
+//                         itemCount: controller.historyList.length,
+//                         itemBuilder: (context, index) {
+//                           final item = controller.historyList[index];
+//                           return Card(
+//                             margin: EdgeInsets.only(bottom: 12),
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(10),
+//                             ),
+//                             elevation: 2,
+//                             child: Padding(
+//                               padding: const EdgeInsets.all(12),
+//                               child: Column(
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   // Req No and menu icon
+//                                   Row(
+//                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                                     children: [
+//                                       Text(
+//                                         'Req No: ${item.reqNo}',
+//                                         style: TextStyle(
+//                                           color: Colors.grey[700],
+//                                           fontWeight: FontWeight.bold,
+//                                         ),
+//                                       ),
+//                                       Icon(Icons.menu),
+//                                     ],
+//                                   ),
+//                                   SizedBox(height: 4),
+//                                   Text(
+//                                     item.dateTime, // e.g. 27/04/2025 04:14 PM
+//                                     style: TextStyle(fontSize: 12, color: Colors.black),
+//                                   ),
+//                                   SizedBox(height: 6),
+//                                   // Type label
+//                                   Container(
+//                                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+//                                     decoration: BoxDecoration(
+//                                       border: Border.all(color: Colors.teal),
+//                                       borderRadius: BorderRadius.circular(20),
+//                                     ),
+//                                     child: Text(
+//                                       item.type, // e.g. LAB / Radio / Other Investigation
+//                                       style: TextStyle(
+//                                         fontSize: 12,
+//                                         color: Colors.teal,
+//                                         fontWeight: FontWeight.bold,
+//                                       ),
+//                                     ),
+//                                   ),
+//                                   SizedBox(height: 6),
+//                                   Text(
+//                                     item.patientName,
+//                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                     ),
+//                   ],
+//                 );
+//               },
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+
+//   final List<InvestigationModel> historyList = [
+//     InvestigationModel(
+//       reqNo: '354065',
+//       dateTime: '27/04/2025 04:14 PM',
+//       type: 'LAB',
+//       patientName: 'VISHAL S. SAVANT',
+//     ),
+//     InvestigationModel(
+//       reqNo: '354083',
+//       dateTime: '27/04/2025 04:14 PM',
+//       type: 'Radio',
+//       patientName: 'PATEL MANSI DHARMESHBHAI',
+//     ),
+//     InvestigationModel(
+//       reqNo: '353827',
+//       dateTime: '27/04/2025 05:14 PM',
+//       type: 'OTHER INVESTIGATION',
+//       patientName: 'SALMAN WAZA',
+//     ),
+//   ];
+// }
+
+// // Define the model class inside controller (or even better: below the controller if it gets big)
+// class InvestigationModel {
+//   final String reqNo;
+//   final String dateTime;
+//   final String type;
+//   final String patientName;
+
+//   InvestigationModel({
+//     required this.reqNo,
+//     required this.dateTime,
+//     required this.type,
+//     required this.patientName,
+//   });
 }
