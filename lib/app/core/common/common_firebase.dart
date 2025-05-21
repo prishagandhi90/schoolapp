@@ -41,5 +41,18 @@ Future<void> InitFirebaseSettings() async {
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  // String? title = message.notification?.title ?? message.data['title'];
+  // String? body = message.notification?.body ?? message.data['body'];
+  // print('Message title: ${message.notification!.title}');
+  // print('Message body: ${message.notification!.body}');
+  // if (title != null && title.toLowerCase() == 'code blue') {
+  //   await player.setAudioSource(AudioSource.asset('assets/sounds/codeblue.mp3'));
+  //   player.play();
+  //   Get.to(() => CodeAlertScreen(codeType: body.toString(), patientId: "patientId"));
+  // } else if (title != null && title.toLowerCase() == 'code red') {
+  //   // await player.setAudioSource(AudioSource.asset('assets/sounds/codered.mp3'));
+  //   // player.play();
+  //   Get.to(() => CodeAlertScreen(codeType: title, patientId: "patientId"));
+  // }
   print("Handling a background message: ${message.messageId}");
 }

@@ -14,10 +14,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 RxBool hideBottomBar = false.obs;
+final AudioPlayer player = AudioPlayer();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,16 +27,12 @@ void main() async {
   try {
     await InitFirebaseSettings();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isSuperAdmin = prefs.getString(AppString.keySuperAdmin) != null &&
-            prefs.getString(AppString.keySuperAdmin) != '' &&
-            prefs.getString(AppString.keySuperAdmin) == 'True'
-        ? true
-        : false;
+    bool isSuperAdmin =
+        prefs.getString(AppString.keySuperAdmin) != null && prefs.getString(AppString.keySuperAdmin) != '' && prefs.getString(AppString.keySuperAdmin) == 'True' ? true : false;
     if (isSuperAdmin) {
       await prefs.setString(AppString.keySuperAdmin, '');
     }
-    bool isLoggedIn =
-        prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
+    bool isLoggedIn = prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
 
     bool isForceUpdate = await ForceUpdateController().isForceUpdateRequired();
 
@@ -89,14 +87,51 @@ Future<void> setupFirebaseMessaging() async {
   await _firebaseMessaging.requestPermission();
 
   // Listen for foreground messages
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Received a message while in the foreground!');
-    print('Message data: ${message.data}');
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    // print('Received a message while in the foreground!');
+    // print('Message data: ${message.data}');
 
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
     }
 
+    // print('📲 Foreground message received!');
+    // print('🔹 Data: ${message.data}');
+
+    // String? title = message.notification?.title ?? message.data['title'];
+    // String? body = message.notification?.body ?? message.data['body'];
+
+    // if (title != null && (title.toLowerCase() == 'code blue' || title.toLowerCase() == 'code red')) {
+    //   // Play custom sound
+    //   if (title.toLowerCase() == 'code blue') {
+    //     await player.setAudioSource(AudioSource.asset('assets/sounds/codeblue.mp3'));
+    //     player.play();
+    //   } else if (title.toLowerCase() == 'code red') {
+    //     await player.setAudioSource(AudioSource.asset('assets/sounds/codered.mp3'));
+    //     player.play();
+    //   }
+
+    //   // Navigate to alert screen
+    //   Get.to(() => CodeAlertScreen(codeType: body.toString(), patientId: "patientId"));
+    //   RemoteNotification? notification = message.notification;
+    //   AndroidNotification? android = message.notification?.android;
+
+    //   if (notification != null && android != null) {
+    //     flutterLocalNotificationsPlugin.show(
+    //       notification.hashCode,
+    //       notification.title,
+    //       notification.body,
+    //       NotificationDetails(
+    //         android: AndroidNotificationDetails(
+    //           '1',
+    //           'channel.name',
+    //           channelDescription: 'channel.description',
+    //           icon: android.smallIcon,
+    //         ),
+    //       ),
+    //     );
+    //   }
+    // } else {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
@@ -115,25 +150,49 @@ Future<void> setupFirebaseMessaging() async {
         ),
       );
     }
+    // }
   });
 
-  void _handleNotificationNavigation(RemoteMessage message) {
-    // Use message.data['screen'] to navigate
+  void _handleNotificationNavigation(RemoteMessage message) async {
+    print('hvg:' + message.data.toString());
+    // String? title = message.notification?.title ?? message.data['title'];
     Get.to(() => NotificationScreen());
   }
 
   // Listen for when the app is opened from a notification
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     if (message.notification != null) {
-      print('Message title: ${message.notification!.title}');
-      print('Message body: ${message.notification!.body}');
+      // String? title = message.notification?.title ?? message.data['title'];
+      // String? body = message.notification?.body ?? message.data['body'];
+      // print('Message title: ${message.notification!.title}');
+      // print('Message body: ${message.notification!.body}');
+      // if (title != null && title.toLowerCase() == 'code blue') {
+      //   await player.setAudioSource(AudioSource.asset('assets/sounds/codeblue.mp3'));
+      //   player.play();
+      //   Get.to(() => CodeAlertScreen(codeType: body.toString(), patientId: "patientId"));
+      // } else if (title != null && title.toLowerCase() == 'code red') {
+      //   await player.setAudioSource(AudioSource.asset('assets/sounds/codered.mp3'));
+      //   player.play();
+      //   Get.to(() => CodeAlertScreen(codeType: title, patientId: "patientId"));
+      // } else {
       _handleNotificationNavigation(message);
+      // }
     }
   });
 
   RemoteMessage? initialMessage = await _firebaseMessaging.getInitialMessage();
   if (initialMessage != null) {
     print('App launched from notification (terminated):');
+    // if (title != null && title.toLowerCase() == 'code blue') {
+    //   await player.setAudioSource(AudioSource.asset('assets/sounds/codeblue.mp3'));
+    //   player.play();
+    //   Get.to(() => CodeAlertScreen(codeType: body.toString(), patientId: "patientId"));
+    // } else if (title != null && title.toLowerCase() == 'code red') {
+    //   // await player.setAudioSource(AudioSource.asset('assets/sounds/codered.mp3'));
+    //   // player.play();
+    //   Get.to(() => CodeAlertScreen(codeType: title, patientId: "patientId"));
+    // } else {
     _handleNotificationNavigation(initialMessage);
+    // }
   }
 }

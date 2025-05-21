@@ -7,6 +7,7 @@ import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
 import 'package:emp_app/app/moduls/verifyotp/screen/otp_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -89,6 +90,14 @@ class LoginController extends GetxController {
     try {
       if (withPaasword) {
         final OtpController otpController = Get.put(OtpController());
+        if (otpController.deviceTok.isEmpty) {
+          await FirebaseMessaging.instance.requestPermission();
+          final token = await FirebaseMessaging.instance.getToken();
+          if (token != null) {
+            otpController.deviceTok = token;
+          }
+        }
+
         otpController.numberController.text = numberController.text;
         update();
         String isValidLogin = "false";
