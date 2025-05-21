@@ -5,7 +5,7 @@ class RequestSheetDetailsIPD {
   String username;
   String invSrc;
   String reqTyp;
-  String rowState;
+  int? rowState;
   String action;
   int? drInstId;
   int? billDetailId;

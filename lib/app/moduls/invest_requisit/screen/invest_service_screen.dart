@@ -126,8 +126,8 @@ class InvestServiceScreen extends StatelessWidget {
                                 title: Text(service.name.toString(), style: TextStyle(fontSize: 14)),
                                 trailing: IconButton(
                                   icon: Icon(Icons.add_circle, color: Colors.teal, size: 20),
-                                  onPressed: () {
-                                    // controller.addService(service);
+                                  onPressed: () async {
+                                    await controller.addService(service);
                                   },
                                 ),
                               );
@@ -155,6 +155,7 @@ class InvestServiceScreen extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: controller.selectedServices.length,
                           itemBuilder: (context, index) {
+                            final service = controller.selectedServices[index];
                             return Container(
                               margin: EdgeInsets.symmetric(vertical: 4),
                               padding: EdgeInsets.symmetric(horizontal: 8),
@@ -166,10 +167,10 @@ class InvestServiceScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: Text(''
-                                        // controller.selectedServices[index],
-                                        // style: TextStyle(fontSize: 14),
-                                        ),
+                                    child: Text(
+                                      service.serviceName.toString(),
+                                      style: TextStyle(fontSize: 14),
+                                    ),
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.cancel, color: Colors.black),
@@ -222,7 +223,7 @@ class InvestServiceScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Text(
-                        'Hoistory',
+                        'History',
                         style: TextStyle(color: AppColor.white),
                       ),
                     ),
@@ -230,7 +231,9 @@ class InvestServiceScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        controller.saveSelectedServiceList(controller.ipdNo);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primaryColor,
                         shape: RoundedRectangleBorder(

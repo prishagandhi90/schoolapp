@@ -68,7 +68,7 @@ class ConstApiUrl {
   static const empNotificationListAPI = "$empUrl/GetEMPNotificationsList";
   static const empNotificationFileAPI = "$empUrl/GetNotificationFiles";
   static const empUpdateNotificationReadAPI = "$empUrl/UpdateNotification_Read";
-  
+
   //  ----------------Voice Api ---------------
   static const empVoiceApi = "$empUrl/UploadPatientVoiceNote";
 
@@ -78,4 +78,5 @@ class ConstApiUrl {
   static const empPatientNm_UHID_IPDAPI = "$empUrl/EmpApp_InvReq_GetPatientNm_UHID_IPD";
   static const empSearchServiceAPI = "$empUrl/EmpApp_InvReq_SearchService";
   static const empGetQueryListAPI = "$empUrl/EmpApp_InvReq_Get_Query";
+  static const empSaveSelSrvListAPI = "$empUrl/SaveRequestSheetIPD";
 }

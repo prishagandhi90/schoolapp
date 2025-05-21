@@ -12,6 +12,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/getquerylist_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/requestsheetdetail_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/save_selsrv_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -287,22 +288,26 @@ class InvestRequisitController extends GetxController {
     update();
   }
 
-  void addService(SearchserviceModel service) {
-    final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.value);
+  Future<void> addService(GetquerylistModel service) async {
+    final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.id.toString());
 
     if (!isAlreadyAdded) {
       selectedServices.add(
         RequestSheetDetailsIPD(
+          mReqId: 0,
           serviceName: service.name ?? '',
-          serviceId: int.tryParse(service.value ?? '0') ?? 0,
-          username: nameController.text, // Replace with real user
-          invSrc: "MobileApp",
-          reqTyp: "IPD",
-          rowState: "Unchanged",
-          action: "Insert",
-          uhidNo: "UHID123",
+          serviceId: int.tryParse(service.id.toString()) ?? 0,
+          username: 'manans', // Replace with real user
+          invSrc: "INTERNAL",
+          reqTyp: "labRequest",
+          uhidNo: "",
           ipdNo: ipdNo,
-          drName: "Dr. John", // Replace with actual doctor
+          drId: 0,
+          drName: "", // Replace with actual doctor
+          drInstId: 0,
+          billDetailId: 0,
+          rowState: 1,
+          action: "Insert",
         ),
       );
       update();
@@ -318,29 +323,84 @@ class InvestRequisitController extends GetxController {
     }
   }
 
-  // void addService(String service) {
-  //   if (!selectedServices.contains(service)) {
-  //     selectedServices.add(service);
-  //     update();
-  //     // Get.snackbar(
-  //     //   'Success',
-  //     //   'Service added successfully',
-  //     //   backgroundColor: Colors.green.shade100,
-  //     //   colorText: Colors.black,
-  //     //   snackPosition: SnackPosition.BOTTOM,
-  //     //   duration: Duration(seconds: 2),
-  //     // );
-  //   } else {
-  //     Get.snackbar(
-  //       'Notice',
-  //       'Service already added',
-  //       backgroundColor: Colors.orange.shade100,
-  //       colorText: Colors.black,
-  //       snackPosition: SnackPosition.BOTTOM,
-  //       duration: Duration(seconds: 1),
-  //     );
-  //   }
-  // }
+  Future<void> saveSelectedServiceList(String ipdNo) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      update(); // show loader if any
+
+      String url = ConstApiUrl.empSaveSelSrvListAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+
+      var jsonbodyObj = {
+        "request": {},
+        // "loginId": loginId,
+        // "empId": empId,
+        "uhidNo": "U/119225/17",
+        "ipdNo": ipdNo,
+        "reqType": "labRequest",
+        "remark": "",
+        "username": "manans",
+        "dt": "2025-05-21T11:40:23.182Z",
+        "action": "insert",
+        "isEmergency": "",
+        "clinicRemark": "bvbcvbcv",
+        "investPriority": "NORMAL",
+        "reqId": 0,
+        "dr_Inst_Id": 0,
+        "bill_Detail_Id": 0,
+        "labDetail": selectedServices
+            .map<Map<String, dynamic>>((service) => {
+                  "MReqId": service.mReqId,
+                  "ServiceName": service.serviceName,
+                  "ServiceId": service.serviceId,
+                  "Username": service.username,
+                  "InvSrc": service.invSrc,
+                  "ReqTyp": service.reqTyp,
+                  "RowState": 1,
+                  "Action": service.action,
+                  "Dr_Inst_Id": service.drInstId,
+                  "Bill_Detail_Id": service.billDetailId,
+                  "UHIDNo": service.uhidNo,
+                  "IPDNo": ipdNo,
+                  "DrID": service.drId,
+                  "DrNAME": service.drName,
+                })
+            .toList(),
+        "radioDetail": [],
+        "otherDetail": [],
+        "rowState": 1,
+      };
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseSaveSelSrvList responseSaveSelSrvList = ResponseSaveSelSrvList.fromJson(jsonDecode(response));
+      if (responseSaveSelSrvList.status == "success") {
+        print("Service saved successfully");
+        Get.snackbar(
+          'Success',
+          'Service saved successfully',
+          backgroundColor: Colors.green.shade100,
+          colorText: Colors.black,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 1),
+        );
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+    }
+    isLoading = false;
+    update();
+  }
 
 //   Future<void> HistoryBottomSheet() async {
 //     showModalBottomSheet(
