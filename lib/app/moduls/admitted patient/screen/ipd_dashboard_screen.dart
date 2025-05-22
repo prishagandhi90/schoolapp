@@ -8,6 +8,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_contr
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
@@ -296,7 +297,9 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                       ),
                       _buildPatientCard(
                         title: 'Investigation Requisition',
-                        onTap: () {
+                        onTap: () async {
+                          final envReqController = Get.put(InvestRequisitController());
+                          await envReqController.resetForm();
                           PersistentNavBarNavigator.pushNewScreen(
                             context,
                             screen: InvestRequisitScreen(),

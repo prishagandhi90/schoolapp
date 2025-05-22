@@ -44,12 +44,10 @@ class InvestRequisitScreen extends StatelessWidget {
                         // controller.setPatientName(selection.txt ?? '');
                         controller.nameController.text = selection.txt ?? '';
                         controller.ipdNo = selection.name ?? '';
+                        controller.uhid = controller.getUHId(selection.txt ?? '');
                         controller.update();
                       },
                       fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                        // controller.addListener(() {
-                        //   controller.setPatientName(nameController.text);
-                        // });
                         return TextFormField(
                           controller: nameController,
                           focusNode: focusNode,
@@ -57,9 +55,33 @@ class InvestRequisitScreen extends StatelessWidget {
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
-                            labelText: 'Patient/UHID/IPD',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Patient/UHID/IPD',
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black, width: 1.0),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: AppColor.black,
+                                ),
+                              ),
+                              prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.cancel_outlined,
+                                  color: AppColor.black,
+                                ),
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  controller.nameController.text = '';
+                                  nameController.clear();
+                                  controller.suggestions.clear();
+                                  controller.ipdNo = '';
+                                  controller.update();
+                                },
+                              )),
                         );
                       },
                     ),
@@ -149,7 +171,12 @@ class InvestRequisitScreen extends StatelessWidget {
                             color: AppColor.white,
                           ),
                         ),
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          if (controller.InExController.text.toLowerCase() == 'internal') {
+                            controller.ExternalLabController.text = '';
+                          }
+                          controller.update();
+                        },
                         width: double.infinity,
                         items: [
                           {'value': 'Internal', 'text': 'Internal'},
@@ -169,7 +196,8 @@ class InvestRequisitScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CustomDropdown(
                         text: 'External lab',
-                        controller: controller.InExController,
+                        controller: controller.ExternalLabController,
+                        enabled: controller.InExController.text.toLowerCase() == 'external',
                         buttonStyleData: ButtonStyleData(
                           height: 50,
                           decoration: BoxDecoration(
@@ -346,7 +374,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Text(
-                        'Hoistory',
+                        'History',
                         style: TextStyle(color: AppColor.white),
                       ),
                     ),
@@ -354,17 +382,25 @@ class InvestRequisitScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // controller.ipdNo = controller.extractMiddleValue(controller.nameController.text);
-                        // controller.selectedTop = 20;
-                        // controller.update();
-                        if (controller.ipdNo == null || controller.ipdNo == '') {
-                          Get.snackbar('Error', 'Please select a valid patient');
-                          return;
-                        }
-                        controller.fetchGetQueryList(controller.ipdNo);
-                        Get.to(() => InvestServiceScreen());
-                      },
+                      // onPressed: () {
+
+                      //   if (controller.ipdNo == null || controller.ipdNo == '') {
+                      //     Get.snackbar('Error', 'Please select a valid patient');
+                      //     return;
+                      //   }
+                      //   controller.fetchGetQueryList(controller.ipdNo);
+                      //   Get.to(() => InvestServiceScreen());
+                      // },
+                      onPressed: controller.isNextButtonEnabled()
+                          ? () async {
+                              controller.getQueryList.clear();
+                              controller.selectedServices.clear();
+                              controller.selectedTop = 20;
+                              controller.searchController.text = '';
+                              controller.fetchGetQueryList(controller.ipdNo);
+                              Get.to(() => InvestServiceScreen());
+                            } // disables button
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primaryColor,
                         shape: RoundedRectangleBorder(

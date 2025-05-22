@@ -1,18 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/getquerylist_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/requestsheetdetail_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/save_selsrv_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/search_dr_nm_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -22,24 +19,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InvestRequisitController extends GetxController {
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController drNameController = TextEditingController();
+  final TextEditingController drIdController = TextEditingController();
+
   final typeController = TextEditingController();
   final priorityController = TextEditingController();
   final InExController = TextEditingController();
+  final ExternalLabController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
-  String tokenNo = '', loginId = '', empId = '', ipdNo = '';
+  String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '';
   bool isLoading = false;
   var externalLab = <ExternallabModel>[].obs;
   var serviceGroup = <ServicegrpModel>[].obs;
   var searchService = <SearchserviceModel>[].obs;
+  var searchDrNm = <SearchDrNmModel>[].obs;
   var getQueryList = <GetquerylistModel>[].obs;
   Timer? debounce;
   List<RequestSheetDetailsIPD> selectedServices = [];
   final List<int> topOptions = [10, 20, 30, 40];
   int selectedTop = 10;
+
   @override
   void onInit() {
     fetchExternalLab();
@@ -49,6 +52,38 @@ class InvestRequisitController extends GetxController {
       update();
     });
     super.onInit();
+  }
+
+  bool isNextButtonEnabled() {
+    if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
+      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
+          InExController.text.toLowerCase() == 'internal') {
+        return true;
+      } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
+        if (ExternalLabController.text.isNotEmpty) {
+          return true;
+        }
+      }
+      // else if (typeController.text == 'radio') {
+      //   if (serviceGroup.isNotEmpty) {
+      //     return true;
+      //   } else {
+      //     // Get.rawSnackbar(message: "Please select service group");
+      //   }
+      // }
+    }
+    return false;
+  }
+
+  bool isSaveButtonEnabled() {
+    return selectedServices.isNotEmpty;
+  }
+
+  String getUHId(String patientName) {
+    if (patientName.isEmpty) return "";
+
+    List<String> parts = patientName.split('|');
+    return parts.last.trim(); // last part with trimmed spaces
   }
 
   final List<DropdownMenuItem<Map<String, String>>> typeItems = [
@@ -203,6 +238,48 @@ class InvestRequisitController extends GetxController {
     return searchService.toList();
   }
 
+  Future<List<SearchDrNmModel>> fetchSearchDrNm(String searchText, String serviceId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empSearchDrnmAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "searchText": searchText, "srv": serviceId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      RespSearchDrNm respSearchDrNm = RespSearchDrNm.fromJson(jsonDecode(response));
+
+      if (respSearchDrNm.statusCode == 200) {
+        // searchService.clear();
+        searchDrNm.assignAll(respSearchDrNm.data ?? []);
+        isLoading = false;
+      } else if (respSearchDrNm.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (respSearchDrNm.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return searchDrNm.toList();
+  }
+
   // Controller me:
   String patientName = '';
 
@@ -213,12 +290,21 @@ class InvestRequisitController extends GetxController {
 
   // final TextEditingController controller = TextEditingController();
   List<SearchserviceModel> suggestions = [];
+  List<SearchDrNmModel> suggestions_DrNm = [];
 
   Future<void> getSuggestions(String query) async {
     if (query.isEmpty) return;
     List<SearchserviceModel> results = await fetchSearchService(query);
 
     suggestions = results;
+    update();
+  }
+
+  Future<void> getDrNmSuggest(String query, String ServiceId) async {
+    if (query.isEmpty) return;
+    List<SearchDrNmModel> results = await fetchSearchDrNm(query, ServiceId);
+
+    suggestions_DrNm = results;
     update();
   }
 
@@ -240,7 +326,7 @@ class InvestRequisitController extends GetxController {
         "top10_40": selectedTop.toString(),
         "ipd": ipdNo,
         "srchService": searchText,
-        "invType": "LAB",
+        "invType": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase(),
         "srvGrp": "",
         "extLabNm": "",
         "val7": ""
@@ -288,6 +374,15 @@ class InvestRequisitController extends GetxController {
     update();
   }
 
+  bool isDuplicateService(String serviceId) {
+    final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == serviceId);
+
+    if (isAlreadyAdded) {
+      return true;
+    }
+    return false;
+  }
+
   Future<void> addService(GetquerylistModel service) async {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.id.toString());
 
@@ -298,12 +393,12 @@ class InvestRequisitController extends GetxController {
           serviceName: service.name ?? '',
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: 'manans', // Replace with real user
-          invSrc: "INTERNAL",
-          reqTyp: "labRequest",
-          uhidNo: "",
+          invSrc: InExController.text.toUpperCase() == "internal" ? "Internal" : "External",
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHER INVESTIGATIONS"),
+          uhidNo: uhid,
           ipdNo: ipdNo,
-          drId: 0,
-          drName: "", // Replace with actual doctor
+          drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -338,12 +433,12 @@ class InvestRequisitController extends GetxController {
         "request": {},
         // "loginId": loginId,
         // "empId": empId,
-        "uhidNo": "U/119225/17",
+        "uhidNo": uhid,
         "ipdNo": ipdNo,
         "reqType": "labRequest",
         "remark": "",
         "username": "manans",
-        "dt": "2025-05-21T11:40:23.182Z",
+        "dt": DateTime.now().toIso8601String(),
         "action": "insert",
         "isEmergency": "",
         "clinicRemark": "bvbcvbcv",
@@ -402,199 +497,144 @@ class InvestRequisitController extends GetxController {
     update();
   }
 
-//   Future<void> HistoryBottomSheet() async {
-//     showModalBottomSheet(
-//       context: Get.context!,
-//       isScrollControlled: true,
-//       isDismissible: true,
-//       useSafeArea: true,
-//       backgroundColor: AppColor.transparent,
-//       builder: (context) => DraggableScrollableSheet(
-//         expand: false,
-//         initialChildSize: 0.7,
-//         minChildSize: 0.4,
-//         maxChildSize: 0.9,
-//         builder: (context, scrollController) {
-//           return Container(
-//             decoration: BoxDecoration(
-//               color: AppColor.white,
-//               borderRadius: BorderRadius.only(
-//                 topLeft: Radius.circular(20),
-//                 topRight: Radius.circular(20),
-//               ),
-//             ),
-//             child: GetBuilder<InvestRequisitController>(
-//               builder: (controller) {
-//                 return Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     // Header
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                         children: [
-//                           SizedBox(width: 24), // For alignment
-//                           Text(
-//                             'Investigation History',
-//                             style: TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.w700,
-//                               color: Colors.teal,
-//                             ),
-//                           ),
-//                           IconButton(
-//                             onPressed: () => Navigator.pop(context),
-//                             icon: Icon(Icons.cancel, color: Colors.grey),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
+  Future<void> otherInvestDialog(BuildContext context, GetquerylistModel serviceModel) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Service',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      serviceModel.name ?? '',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 20),
+                    Autocomplete<SearchDrNmModel>(
+                      displayStringForOption: (SearchDrNmModel option) => option.name ?? '',
+                      optionsBuilder: (TextEditingValue textEditingValue) async {
+                        await getDrNmSuggest(textEditingValue.text, serviceModel.id.toString());
+                        return suggestions_DrNm;
+                      },
+                      onSelected: (SearchDrNmModel selection) {
+                        print('Selected Dr Name: ${selection.name} (ID: ${selection.id})');
+                        // controller.setPatientName(selection.txt ?? '');
+                        drNameController.text = selection.name ?? '';
+                        drIdController.text = selection.id != null ? selection.id.toString() : '';
+                        update();
+                      },
+                      fieldViewBuilder: (context, drNameController, focusNode, onEditingComplete) {
+                        return TextFormField(
+                          controller: drNameController,
+                          focusNode: focusNode,
+                          minLines: 1,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                              labelText: 'Type to search Dr Name...',
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black, width: 1.0),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: AppColor.black,
+                                ),
+                              ),
+                              prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.cancel_outlined,
+                                  color: AppColor.black,
+                                ),
+                                onPressed: () {
+                                  FocusScope.of(context).unfocus();
+                                  drNameController.text = '';
+                                  drNameController.clear();
+                                  drIdController.text = '';
+                                  drIdController.clear();
+                                  suggestions_DrNm.clear();
+                                  update();
+                                },
+                              )),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal, // Button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () async {
+                        await addService(serviceModel);
+                        Navigator.of(context).pop();
+                        // Aap yahan searchController.text use kar sakte ho
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        child: Text("OK"),
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  right: 0,
+                  top: 0,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(Icons.close),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-//                     // Dropdown
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-//                       child: CustomDropdown(
-//                         text: 'Select',
-//                         buttonStyleData: ButtonStyleData(
-//                           height: 48,
-//                           decoration: BoxDecoration(
-//                             border: Border.all(color: Colors.black),
-//                             borderRadius: BorderRadius.circular(4),
-//                             color: Colors.white,
-//                           ),
-//                         ),
-//                         controller: controller.typeController,
-//                         items: [
-//                           {'value': '', 'text': 'Select'},
-//                           {'value': 'Lab', 'text': 'LAB'},
-//                           {'value': 'Radio', 'text': 'Radio'},
-//                           {'value': 'Other Investigation', 'text': 'OTHER INVESTIGATION'},
-//                         ].map((item) {
-//                           return DropdownMenuItem<Map<String, String>>(
-//                             value: item,
-//                             child: Text(item['text'] ?? '', style: TextStyle(fontSize: 14)),
-//                           );
-//                         }).toList(),
-//                         onChanged: (val) {
-//                           controller.typeController.text = val?['text'] ?? '';
-//                           controller.update();
-//                         },
-//                       ),
-//                     ),
+  resetForm() {
+    // Get.back();
 
-//                     const SizedBox(height: 10),
+    nameController.text = '';
+    drNameController.text = '';
+    drIdController.text = '';
+    typeController.text = '--select--';
+    priorityController.text = 'normal';
+    InExController.text = 'Internal';
+    ExternalLabController..text = '';
+    serviceGroupController.clear();
+    searchController.text = '';
+    tokenNo = '';
+    loginId = '';
+    empId = '';
+    ipdNo = '';
+    isLoading = false;
+    getQueryList.clear();
+    selectedServices.clear();
+    selectedTop = 20;
 
-//                     // History List
-//                     Expanded(
-//                       child: ListView.builder(
-//                         controller: scrollController,
-//                         padding: EdgeInsets.symmetric(horizontal: 12),
-//                         itemCount: controller.historyList.length,
-//                         itemBuilder: (context, index) {
-//                           final item = controller.historyList[index];
-//                           return Card(
-//                             margin: EdgeInsets.only(bottom: 12),
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(10),
-//                             ),
-//                             elevation: 2,
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(12),
-//                               child: Column(
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: [
-//                                   // Req No and menu icon
-//                                   Row(
-//                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                     children: [
-//                                       Text(
-//                                         'Req No: ${item.reqNo}',
-//                                         style: TextStyle(
-//                                           color: Colors.grey[700],
-//                                           fontWeight: FontWeight.bold,
-//                                         ),
-//                                       ),
-//                                       Icon(Icons.menu),
-//                                     ],
-//                                   ),
-//                                   SizedBox(height: 4),
-//                                   Text(
-//                                     item.dateTime, // e.g. 27/04/2025 04:14 PM
-//                                     style: TextStyle(fontSize: 12, color: Colors.black),
-//                                   ),
-//                                   SizedBox(height: 6),
-//                                   // Type label
-//                                   Container(
-//                                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-//                                     decoration: BoxDecoration(
-//                                       border: Border.all(color: Colors.teal),
-//                                       borderRadius: BorderRadius.circular(20),
-//                                     ),
-//                                     child: Text(
-//                                       item.type, // e.g. LAB / Radio / Other Investigation
-//                                       style: TextStyle(
-//                                         fontSize: 12,
-//                                         color: Colors.teal,
-//                                         fontWeight: FontWeight.bold,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   SizedBox(height: 6),
-//                                   Text(
-//                                     item.patientName,
-//                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                   ],
-//                 );
-//               },
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-
-//   final List<InvestigationModel> historyList = [
-//     InvestigationModel(
-//       reqNo: '354065',
-//       dateTime: '27/04/2025 04:14 PM',
-//       type: 'LAB',
-//       patientName: 'VISHAL S. SAVANT',
-//     ),
-//     InvestigationModel(
-//       reqNo: '354083',
-//       dateTime: '27/04/2025 04:14 PM',
-//       type: 'Radio',
-//       patientName: 'PATEL MANSI DHARMESHBHAI',
-//     ),
-//     InvestigationModel(
-//       reqNo: '353827',
-//       dateTime: '27/04/2025 05:14 PM',
-//       type: 'OTHER INVESTIGATION',
-//       patientName: 'SALMAN WAZA',
-//     ),
-//   ];
-// }
-
-// // Define the model class inside controller (or even better: below the controller if it gets big)
-// class InvestigationModel {
-//   final String reqNo;
-//   final String dateTime;
-//   final String type;
-//   final String patientName;
-
-//   InvestigationModel({
-//     required this.reqNo,
-//     required this.dateTime,
-//     required this.type,
-//     required this.patientName,
-//   });
+    update();
+  }
 }
