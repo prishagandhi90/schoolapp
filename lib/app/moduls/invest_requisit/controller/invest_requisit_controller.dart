@@ -393,8 +393,8 @@ class InvestRequisitController extends GetxController {
           serviceName: service.name ?? '',
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: 'manans', // Replace with real user
-          invSrc: InExController.text.toUpperCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHER INVESTIGATIONS"),
+          invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
@@ -430,42 +430,81 @@ class InvestRequisitController extends GetxController {
       empId = await pref.getString(AppString.keyEmpId) ?? "";
 
       var jsonbodyObj = {
-        "request": {},
         // "loginId": loginId,
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": "labRequest",
-        "remark": "",
+        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "remark": null,
         "username": "manans",
         "dt": DateTime.now().toIso8601String(),
         "action": "insert",
-        "isEmergency": "",
-        "clinicRemark": "bvbcvbcv",
+        "isEmergency": null,
+        "clinicRemark": null,
         "investPriority": "NORMAL",
         "reqId": 0,
         "dr_Inst_Id": 0,
         "bill_Detail_Id": 0,
-        "labDetail": selectedServices
-            .map<Map<String, dynamic>>((service) => {
-                  "MReqId": service.mReqId,
-                  "ServiceName": service.serviceName,
-                  "ServiceId": service.serviceId,
-                  "Username": service.username,
-                  "InvSrc": service.invSrc,
-                  "ReqTyp": service.reqTyp,
-                  "RowState": 1,
-                  "Action": service.action,
-                  "Dr_Inst_Id": service.drInstId,
-                  "Bill_Detail_Id": service.billDetailId,
-                  "UHIDNo": service.uhidNo,
-                  "IPDNo": ipdNo,
-                  "DrID": service.drId,
-                  "DrNAME": service.drName,
-                })
-            .toList(),
-        "radioDetail": [],
-        "otherDetail": [],
+        "labDetail": typeController.text.toLowerCase() == 'lab'
+            ? selectedServices
+                .map<Map<String, dynamic>>((service) => {
+                      "mReqId": service.mReqId,
+                      "serviceName": service.serviceName,
+                      "serviceId": service.serviceId,
+                      "username": service.username,
+                      "invSrc": service.invSrc,
+                      "reqTyp": service.reqTyp,
+                      "rowState": 1,
+                      "action": service.action,
+                      "dr_Inst_Id": service.drInstId,
+                      "bill_Detail_Id": service.billDetailId,
+                      "uHIDNo": service.uhidNo,
+                      "iPDNo": ipdNo,
+                      "drID": service.drId,
+                      "drNAME": service.drName,
+                    })
+                .toList()
+            : [],
+        "radioDetail": typeController.text.toLowerCase() == 'radio'
+            ? selectedServices
+                .map<Map<String, dynamic>>((service) => {
+                      "mReqId": service.mReqId,
+                      "serviceName": service.serviceName,
+                      "serviceId": service.serviceId,
+                      "username": service.username,
+                      "invSrc": service.invSrc,
+                      "reqTyp": service.reqTyp,
+                      "rowState": 1,
+                      "action": service.action,
+                      "dr_Inst_Id": service.drInstId,
+                      "bill_Detail_Id": service.billDetailId,
+                      "uHIDNo": service.uhidNo,
+                      "iPDNo": ipdNo,
+                      "drID": service.drId,
+                      "drNAME": service.drName,
+                    })
+                .toList()
+            : [],
+        "otherDetail": typeController.text.toLowerCase() == 'other investigation'
+            ? selectedServices
+                .map<Map<String, dynamic>>((service) => {
+                      "mReqId": service.mReqId,
+                      "serviceName": service.serviceName,
+                      "serviceId": service.serviceId,
+                      "username": service.username,
+                      "invSrc": service.invSrc,
+                      "reqTyp": service.reqTyp,
+                      "rowState": 1,
+                      "action": service.action,
+                      "dr_Inst_Id": service.drInstId,
+                      "bill_Detail_Id": service.billDetailId,
+                      "uHIDNo": service.uhidNo,
+                      "iPDNo": ipdNo,
+                      "drID": service.drId,
+                      "drNAME": service.drName,
+                    })
+                .toList()
+            : [],
         "rowState": 1,
       };
 
