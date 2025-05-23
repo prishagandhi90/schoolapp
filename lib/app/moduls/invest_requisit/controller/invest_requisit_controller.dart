@@ -690,7 +690,12 @@ class InvestRequisitController extends GetxController {
                             ),
                           ),
                           IconButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              FocusScope.of(context).unfocus();
+                              focusNode.unfocus();
+                              update();
+                            },
                             icon: Icon(Icons.cancel, color: Colors.grey),
                           ),
                         ],
@@ -914,17 +919,6 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'verified':
-        return Colors.green.shade200;
-      case 'pending':
-        return Colors.yellow.shade200;
-      default:
-        return Colors.grey.shade300;
-    }
-  }
-
   Future<void> otherInvestDialog(BuildContext context, GetquerylistModel serviceModel) async {
     await showDialog(
       context: context,
@@ -1043,8 +1037,6 @@ class InvestRequisitController extends GetxController {
   }
 
   resetForm() {
-    // Get.back();
-
     nameController.text = '';
     drNameController.text = '';
     drIdController.text = '';

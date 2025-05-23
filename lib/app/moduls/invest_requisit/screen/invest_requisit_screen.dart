@@ -45,6 +45,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         controller.nameController.text = selection.txt ?? '';
                         controller.ipdNo = selection.name ?? '';
                         controller.uhid = controller.getUHId(selection.txt ?? '');
+                        FocusScope.of(context).unfocus();
                         controller.update();
                       },
                       fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
@@ -363,8 +364,13 @@ class InvestRequisitScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // TODO: Save logic
+                      onPressed: () async {
+                        if (controller.ipdNo == '') {
+                          Get.snackbar('Error', 'Please select a valid patient');
+                          return;
+                        }
+                        await controller.fetchGetHistoryList(controller.ipdNo);
+                        controller.HistoryBottomSheet();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primaryColor,
