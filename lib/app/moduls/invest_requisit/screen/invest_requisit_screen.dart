@@ -41,48 +41,55 @@ class InvestRequisitScreen extends StatelessWidget {
                       },
                       onSelected: (SearchserviceModel selection) {
                         print('Selected City: ${selection.txt} (ID: ${selection.name})');
-                        // controller.setPatientName(selection.txt ?? '');
                         controller.nameController.text = selection.txt ?? '';
                         controller.ipdNo = selection.name ?? '';
                         controller.uhid = controller.getUHId(selection.txt ?? '');
-                        FocusScope.of(context).unfocus();
+                        controller.suggestions.clear();
+
                         controller.update();
                       },
                       fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                        return TextFormField(
+                        return CustomTextFormField(
                           controller: nameController,
                           focusNode: focusNode,
                           minLines: 1,
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
-                              labelText: 'Patient/UHID/IPD',
-                              border: OutlineInputBorder(),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.0),
-                                borderRadius: BorderRadius.circular(10),
+                            labelText: 'Patient/UHID/IPD',
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AppColor.black, width: 1.0),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: AppColor.black,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: AppColor.black,
-                                ),
+                            ),
+                            prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                Icons.cancel_outlined,
+                                color: AppColor.black,
                               ),
-                              prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  Icons.cancel_outlined,
-                                  color: AppColor.black,
-                                ),
-                                onPressed: () {
-                                  FocusScope.of(context).unfocus();
-                                  controller.nameController.text = '';
-                                  nameController.clear();
-                                  controller.suggestions.clear();
-                                  controller.ipdNo = '';
-                                  controller.update();
-                                },
-                              )),
+                              onPressed: () {
+                                focusNode.unfocus();
+                                controller.nameController.text = '';
+                                nameController.clear();
+                                controller.suggestions.clear();
+                                controller.ipdNo = '';
+                                controller.update();
+                              },
+                            ),
+                          ),
+                          onTapOutside: (event) {
+                            focusNode.unfocus();
+                          },
+                          onFieldSubmitted: (value) {
+                            focusNode.unfocus();
+                          },
                         );
                       },
                     ),

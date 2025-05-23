@@ -62,9 +62,7 @@ class InvestRequisitController extends GetxController {
 
   bool isNextButtonEnabled() {
     if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' ||
-              typeController.text.toLowerCase() == 'radio' ||
-              typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -402,15 +400,11 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: 'manans', // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
-              ? "LAB CHARGES"
-              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
-              ? drNameController.text.trim()
-              : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -446,9 +440,7 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab'
-            ? "LabRequest"
-            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": "manans",
         "dt": DateTime.now().toIso8601String(),
@@ -691,10 +683,10 @@ class InvestRequisitController extends GetxController {
                           ),
                           IconButton(
                             onPressed: () {
+                              // Future.delayed(Duration(milliseconds: 300), () {
+                              //   FocusScope.of(context).unfocus();
+                              // });
                               Navigator.pop(context);
-                              FocusScope.of(context).unfocus();
-                              focusNode.unfocus();
-                              update();
                             },
                             icon: Icon(Icons.cancel, color: Colors.grey),
                           ),
@@ -986,13 +978,15 @@ class InvestRequisitController extends GetxController {
                                   color: AppColor.black,
                                 ),
                                 onPressed: () {
-                                  FocusScope.of(context).unfocus();
                                   drNameController.text = '';
                                   drNameController.clear();
                                   drIdController.text = '';
                                   drIdController.clear();
                                   suggestions_DrNm.clear();
                                   update();
+                                  // Future.delayed(Duration(milliseconds: 300), () {
+                                  //   FocusScope.of(context).unfocus();
+                                  // });
                                 },
                               )),
                         );
