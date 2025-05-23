@@ -79,4 +79,6 @@ class ConstApiUrl {
   static const empSearchServiceAPI = "$empUrl/EmpApp_InvReq_SearchService";
   static const empGetQueryListAPI = "$empUrl/EmpApp_InvReq_Get_Query";
   static const empSaveSelSrvListAPI = "$empUrl/SaveRequestSheetIPD";
+  static const empGetHistoryListAPI = "$empUrl/EmpApp_InvReq_Get_HistoryData";
+  static const empSelReqHistoryDetailAPI = "$empUrl/EmpApp_InvReq_SelReq_HistoryDetail";
 }

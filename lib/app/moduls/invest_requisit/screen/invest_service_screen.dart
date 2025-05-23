@@ -212,8 +212,9 @@ class InvestServiceScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // controller.HistoryBottomSheet();
+                      onPressed: () async {
+                        await controller.fetchGetHistoryList(controller.ipdNo);
+                        controller.HistoryBottomSheet();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primaryColor,

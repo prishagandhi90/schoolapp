@@ -6,14 +6,14 @@ import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/gethistory_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/getquerylist_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/requestsheetdetail_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/save_selsrv_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/selreqhistorydetail_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,8 @@ class InvestRequisitController extends GetxController {
   var serviceGroup = <ServicegrpModel>[].obs;
   var searchService = <SearchserviceModel>[].obs;
   var getQueryList = <GetquerylistModel>[].obs;
+  var gethistoryList = <GethistoryModelList>[].obs;
+  var selReqHistoryDetailList = <SelReqHistoryDetailModel>[].obs;
   Timer? debounce;
   List<RequestSheetDetailsIPD> selectedServices = [];
   final List<int> topOptions = [10, 20, 30, 40];
@@ -108,7 +110,7 @@ class InvestRequisitController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "InvestRequisit",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -150,7 +152,7 @@ class InvestRequisitController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "InvestRequisit",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -192,7 +194,7 @@ class InvestRequisitController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "InvestRequisit",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -259,7 +261,7 @@ class InvestRequisitController extends GetxController {
       }
     } catch (e) {
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "InvestRequisit",
         error: e.toString(),
         loginID: loginId,
         tokenNo: tokenNo,
@@ -391,7 +393,7 @@ class InvestRequisitController extends GetxController {
       }
     } catch (e) {
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "InvestRequisit",
         error: e.toString(),
         loginID: loginId,
         tokenNo: tokenNo,
@@ -402,199 +404,453 @@ class InvestRequisitController extends GetxController {
     update();
   }
 
-//   Future<void> HistoryBottomSheet() async {
-//     showModalBottomSheet(
-//       context: Get.context!,
-//       isScrollControlled: true,
-//       isDismissible: true,
-//       useSafeArea: true,
-//       backgroundColor: AppColor.transparent,
-//       builder: (context) => DraggableScrollableSheet(
-//         expand: false,
-//         initialChildSize: 0.7,
-//         minChildSize: 0.4,
-//         maxChildSize: 0.9,
-//         builder: (context, scrollController) {
-//           return Container(
-//             decoration: BoxDecoration(
-//               color: AppColor.white,
-//               borderRadius: BorderRadius.only(
-//                 topLeft: Radius.circular(20),
-//                 topRight: Radius.circular(20),
-//               ),
-//             ),
-//             child: GetBuilder<InvestRequisitController>(
-//               builder: (controller) {
-//                 return Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     // Header
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//                       child: Row(
-//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                         children: [
-//                           SizedBox(width: 24), // For alignment
-//                           Text(
-//                             'Investigation History',
-//                             style: TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.w700,
-//                               color: Colors.teal,
-//                             ),
-//                           ),
-//                           IconButton(
-//                             onPressed: () => Navigator.pop(context),
-//                             icon: Icon(Icons.cancel, color: Colors.grey),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
+  Future<List<GethistoryModelList>> fetchGetHistoryList(String ipdNo) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      update(); // show loader if any
 
-//                     // Dropdown
-//                     Padding(
-//                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-//                       child: CustomDropdown(
-//                         text: 'Select',
-//                         buttonStyleData: ButtonStyleData(
-//                           height: 48,
-//                           decoration: BoxDecoration(
-//                             border: Border.all(color: Colors.black),
-//                             borderRadius: BorderRadius.circular(4),
-//                             color: Colors.white,
-//                           ),
-//                         ),
-//                         controller: controller.typeController,
-//                         items: [
-//                           {'value': '', 'text': 'Select'},
-//                           {'value': 'Lab', 'text': 'LAB'},
-//                           {'value': 'Radio', 'text': 'Radio'},
-//                           {'value': 'Other Investigation', 'text': 'OTHER INVESTIGATION'},
-//                         ].map((item) {
-//                           return DropdownMenuItem<Map<String, String>>(
-//                             value: item,
-//                             child: Text(item['text'] ?? '', style: TextStyle(fontSize: 14)),
-//                           );
-//                         }).toList(),
-//                         onChanged: (val) {
-//                           controller.typeController.text = val?['text'] ?? '';
-//                           controller.update();
-//                         },
-//                       ),
-//                     ),
+      String url = ConstApiUrl.empGetHistoryListAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
 
-//                     const SizedBox(height: 10),
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "type": "IR_TOP_SRVC_LIST",
+        "top10_40": ipdNo,
+        "ipd": "",
+        "srchService": "",
+        "invType": "LAB",
+        "srvGrp": "",
+        "extLabNm": "",
+        "val7": ""
+      };
 
-//                     // History List
-//                     Expanded(
-//                       child: ListView.builder(
-//                         controller: scrollController,
-//                         padding: EdgeInsets.symmetric(horizontal: 12),
-//                         itemCount: controller.historyList.length,
-//                         itemBuilder: (context, index) {
-//                           final item = controller.historyList[index];
-//                           return Card(
-//                             margin: EdgeInsets.only(bottom: 12),
-//                             shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(10),
-//                             ),
-//                             elevation: 2,
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(12),
-//                               child: Column(
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: [
-//                                   // Req No and menu icon
-//                                   Row(
-//                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                     children: [
-//                                       Text(
-//                                         'Req No: ${item.reqNo}',
-//                                         style: TextStyle(
-//                                           color: Colors.grey[700],
-//                                           fontWeight: FontWeight.bold,
-//                                         ),
-//                                       ),
-//                                       Icon(Icons.menu),
-//                                     ],
-//                                   ),
-//                                   SizedBox(height: 4),
-//                                   Text(
-//                                     item.dateTime, // e.g. 27/04/2025 04:14 PM
-//                                     style: TextStyle(fontSize: 12, color: Colors.black),
-//                                   ),
-//                                   SizedBox(height: 6),
-//                                   // Type label
-//                                   Container(
-//                                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-//                                     decoration: BoxDecoration(
-//                                       border: Border.all(color: Colors.teal),
-//                                       borderRadius: BorderRadius.circular(20),
-//                                     ),
-//                                     child: Text(
-//                                       item.type, // e.g. LAB / Radio / Other Investigation
-//                                       style: TextStyle(
-//                                         fontSize: 12,
-//                                         color: Colors.teal,
-//                                         fontWeight: FontWeight.bold,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   SizedBox(height: 6),
-//                                   Text(
-//                                     item.patientName,
-//                                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                   ],
-//                 );
-//               },
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseGetHistoryList responseGetHistoryList = ResponseGetHistoryList.fromJson(jsonDecode(response));
+      if (responseGetHistoryList.statusCode == 200) {
+        gethistoryList.assignAll(responseGetHistoryList.data ?? []);
+      } else if (responseGetHistoryList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Session expired, login again.');
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: "InvestRequisit",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+    }
+    isLoading = false;
+    update();
+    return gethistoryList;
+  }
 
-//   final List<InvestigationModel> historyList = [
-//     InvestigationModel(
-//       reqNo: '354065',
-//       dateTime: '27/04/2025 04:14 PM',
-//       type: 'LAB',
-//       patientName: 'VISHAL S. SAVANT',
-//     ),
-//     InvestigationModel(
-//       reqNo: '354083',
-//       dateTime: '27/04/2025 04:14 PM',
-//       type: 'Radio',
-//       patientName: 'PATEL MANSI DHARMESHBHAI',
-//     ),
-//     InvestigationModel(
-//       reqNo: '353827',
-//       dateTime: '27/04/2025 05:14 PM',
-//       type: 'OTHER INVESTIGATION',
-//       patientName: 'SALMAN WAZA',
-//     ),
-//   ];
-// }
+  Future<List<SelReqHistoryDetailModel>> SelReqqHistoryDetailList(int requisitionNo) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      update(); // show loader if any
 
-// // Define the model class inside controller (or even better: below the controller if it gets big)
-// class InvestigationModel {
-//   final String reqNo;
-//   final String dateTime;
-//   final String type;
-//   final String patientName;
+      String url = ConstApiUrl.empSelReqHistoryDetailAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
 
-//   InvestigationModel({
-//     required this.reqNo,
-//     required this.dateTime,
-//     required this.type,
-//     required this.patientName,
-//   });
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "type": "IR_TOP_SRVC_LIST",
+        "top10_40": requisitionNo.toString(),
+        "ipd": "",
+        "srchService": "",
+        "invType": "",
+        "srvGrp": "",
+        "extLabNm": "",
+        "val7": ""
+      };
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseSelReqHistoryDetailList responseSelReqHistoryDetailList = ResponseSelReqHistoryDetailList.fromJson(jsonDecode(response));
+      if (responseSelReqHistoryDetailList.statusCode == 200) {
+        selReqHistoryDetailList.assignAll(responseSelReqHistoryDetailList.data ?? []);
+      } else if (responseSelReqHistoryDetailList.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Session expired, login again.');
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: "InvestRequisit",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+    }
+    isLoading = false;
+    update();
+    return selReqHistoryDetailList;
+  }
+
+  Future<void> HistoryBottomSheet() async {
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: true,
+      isDismissible: true,
+      useSafeArea: true,
+      backgroundColor: AppColor.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.7,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) {
+          return Container(
+            decoration: BoxDecoration(
+              color: AppColor.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            child: GetBuilder<InvestRequisitController>(
+              builder: (controller) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(width: 24), // For alignment
+                          Text(
+                            'Investigation History',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.teal,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icon(Icons.cancel, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Dropdown
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      child: CustomDropdown(
+                        text: 'Select',
+                        buttonStyleData: ButtonStyleData(
+                          height: 48,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.white,
+                          ),
+                        ),
+                        controller: controller.typeController,
+                        items: [
+                          {'value': '', 'text': 'Select'},
+                          {'value': 'Lab', 'text': 'LAB'},
+                          {'value': 'Radio', 'text': 'Radio'},
+                          {'value': 'Other Investigation', 'text': 'OTHER INVESTIGATION'},
+                        ].map((item) {
+                          return DropdownMenuItem<Map<String, String>>(
+                            value: item,
+                            child: Text(item['text'] ?? '', style: TextStyle(fontSize: 14)),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          controller.typeController.text = val?['text'] ?? '';
+                          controller.update();
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    // History List
+                    Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        itemCount: controller.gethistoryList.length,
+                        itemBuilder: (context, index) {
+                          final item = controller.gethistoryList[index];
+                          return Card(
+                            margin: EdgeInsets.only(bottom: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Req No and menu icon
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Req No: ${item.requisitionNo}',
+                                        style: TextStyle(
+                                          color: Colors.grey[700],
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () async {
+                                          // Call the function to show history detail dialog
+                                          List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
+
+                                          // 2. Show dialog with data
+                                          showSimpleInvestigationDialog(context, list);
+                                        },
+                                        icon: Icon(Icons.menu, color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    item.entryDate.toString(), // e.g. 27/04/2025 04:14 PM
+                                    style: TextStyle(fontSize: 12, color: Colors.black),
+                                  ),
+                                  SizedBox(height: 6),
+                                  // Type label
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.teal),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Text(
+                                          item.investigationType.toString(), // e.g. LAB / Radio / Other Investigation
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 6),
+                                      Text(
+                                        item.user.toString(),
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10), // spacing before bottom buttons
+
+                    /// 🟩 Bottom Buttons
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          /// 🟥 Only Cancel Button (1/3 Width)
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey.shade300,
+                                foregroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: 14),
+                              ),
+                              child: Text('Cancel'),
+                            ),
+                          ),
+
+                          /// 🟦 Empty space jahan pe pehle dusre buttons the (2/3 width)
+                          Spacer(flex: 2),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  // void otherInvestDialog(BuildContext context, String serviceName) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10),
+  //         ),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(16.0),
+  //           child: Stack(
+  //             children: [
+  //               Column(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   const SizedBox(height: 10),
+  //                   const Text(
+  //                     'Service',
+  //                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  //                   ),
+  //                   const SizedBox(height: 10),
+  //                   Text(
+  //                     serviceName,
+  //                     textAlign: TextAlign.center,
+  //                     style: const TextStyle(fontSize: 16),
+  //                   ),
+  //                   const SizedBox(height: 20),
+  //                   TextField(
+  //                     controller: searchController,
+  //                     decoration: InputDecoration(
+  //                       hintText: "Type To Search Dr Name...",
+  //                       filled: true,
+  //                       fillColor: Colors.grey[100],
+  //                       border: OutlineInputBorder(
+  //                         borderRadius: BorderRadius.circular(10),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(height: 20),
+  //                   ElevatedButton(
+  //                     style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Colors.teal, // Button color
+  //                       shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(8),
+  //                       ),
+  //                     ),
+  //                     onPressed: () {
+  //                       Navigator.of(context).pop();
+  //                       // Aap yahan searchController.text use kar sakte ho
+  //                     },
+  //                     child: const Padding(
+  //                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  //                       child: Text("OK"),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               Positioned(
+  //                 right: 0,
+  //                 top: 0,
+  //                 child: InkWell(
+  //                   onTap: () {
+  //                     Navigator.of(context).pop();
+  //                   },
+  //                   child: const Icon(Icons.close),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  Future<void> showSimpleInvestigationDialog(BuildContext context, List<SelReqHistoryDetailModel> dataList) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: AppColor.white,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Investigation History',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                ...dataList.map((item) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item.serviceName.toString()),
+                                  Text(item.reqTyp.toString(), style: const TextStyle(fontSize: 12)),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(item.status.toString()),
+                                ),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.delete, size: 20),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'verified':
+        return Colors.green.shade200;
+      case 'pending':
+        return Colors.yellow.shade200;
+      default:
+        return Colors.grey.shade300;
+    }
+  }
 }
