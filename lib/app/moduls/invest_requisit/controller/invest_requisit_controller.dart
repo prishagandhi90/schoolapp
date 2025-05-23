@@ -16,6 +16,7 @@ import 'package:emp_app/app/moduls/invest_requisit/model/search_dr_nm_model.dart
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/selreqhistorydetail_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -993,7 +994,7 @@ class InvestRequisitController extends GetxController {
           content: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 35),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -1047,9 +1048,7 @@ class InvestRequisitController extends GetxController {
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // You can access:
-                        // controller.mobileController.text
-                        // controller.passwordController.text
+                        Get.to(() => InvestRequisitScreen());
                       },
                       child: const Text("LOG IN"),
                     ),
