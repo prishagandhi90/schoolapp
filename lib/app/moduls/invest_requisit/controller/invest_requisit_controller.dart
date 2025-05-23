@@ -25,13 +25,15 @@ class InvestRequisitController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController drNameController = TextEditingController();
   final TextEditingController drIdController = TextEditingController();
-
   final typeController = TextEditingController();
   final priorityController = TextEditingController();
   final InExController = TextEditingController();
   final ExternalLabController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
@@ -60,9 +62,18 @@ class InvestRequisitController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    mobileController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
+
   bool isNextButtonEnabled() {
     if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' ||
+              typeController.text.toLowerCase() == 'radio' ||
+              typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -400,11 +411,15 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: 'manans', // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
+              ? "LAB CHARGES"
+              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -440,7 +455,9 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab'
+            ? "LabRequest"
+            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": "manans",
         "dt": DateTime.now().toIso8601String(),
@@ -735,11 +752,12 @@ class InvestRequisitController extends GetxController {
                         itemBuilder: (context, index) {
                           final item = controller.gethistoryList[index];
                           return Card(
+                            color: AppColor.white,
                             margin: EdgeInsets.only(bottom: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(color: Colors.black),
                             ),
-                            elevation: 2,
                             child: Padding(
                               padding: const EdgeInsets.all(12),
                               child: Column(
@@ -749,22 +767,36 @@ class InvestRequisitController extends GetxController {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Req No: ${item.requisitionNo}',
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontWeight: FontWeight.bold,
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text: 'Req No: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.black, // or any color you prefer for label
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: '${item.requisitionNo}',
+                                              style: TextStyle(
+                                                color: Colors.grey[700],
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       IconButton(
                                         onPressed: () async {
-                                          // Call the function to show history detail dialog
                                           List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
-
-                                          // 2. Show dialog with data
-                                          showSimpleInvestigationDialog(context, list);
+                                          InvestigationHistoryDialog(context, list);
                                         },
-                                        icon: Icon(Icons.menu, color: Colors.black),
+                                        icon: Icon(
+                                          Icons.menu,
+                                          color: Colors.black,
+                                          size: 15,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -849,62 +881,192 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Future<void> showSimpleInvestigationDialog(BuildContext context, List<SelReqHistoryDetailModel> dataList) async {
+  Future<void> InvestigationHistoryDialog(BuildContext context, List<SelReqHistoryDetailModel> dataList) async {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
+        return AlertDialog(
           backgroundColor: AppColor.white,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'Investigation History',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          titlePadding: const EdgeInsets.only(top: 10, left: 16, right: 8),
+          title: Stack(
+            children: [
+              // Centered Title
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 11),
+                  child: Text(
+                    'Investigation History',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                const SizedBox(height: 10),
-                ...dataList.map((item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black12),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+              // Close Button
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close),
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          content: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.6,
+              maxWidth: MediaQuery.of(context).size.width * 0.9,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: dataList
+                    .map(
+                      (item) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(item.serviceName.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                    Text(
+                                      item.reqTyp.toString(),
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
                                 children: [
-                                  Text(item.serviceName.toString()),
-                                  Text(item.reqTyp.toString(), style: const TextStyle(fontSize: 12)),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(item.status.toString()),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(Icons.delete, size: 20),
                                 ],
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(item.status.toString()),
-                                ),
-                                const SizedBox(width: 8),
-                                const Icon(Icons.delete, size: 20),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    )),
-              ],
+                    )
+                    .toList(),
+              ),
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  void togglePasswordVisibility() {
+    obscurePassword = !obscurePassword;
+    update(); // notify listeners
+  }
+
+  Future<void> loginAlertDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: const EdgeInsets.all(16),
+          content: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Please log in with your registered mobile number and password to continue",
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: mobileController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: "Enter Mobile Number",
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: passwordController,
+                      obscureText: obscurePassword,
+                      decoration: InputDecoration(
+                        hintText: "Enter Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          ),
+                          onPressed: togglePasswordVisibility,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.teal),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // You can access:
+                        // controller.mobileController.text
+                        // controller.passwordController.text
+                      },
+                      child: const Text("LOG IN"),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(Icons.close),
+                ),
+              ),
+            ],
           ),
         );
       },
