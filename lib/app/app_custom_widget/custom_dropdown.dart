@@ -17,16 +17,21 @@ class CustomDropdown extends StatelessWidget {
   final ButtonStyleData? buttonStyleData;
   final DropdownSearchData<Map<String, String>>? dropdownSearchData;
 
-  CustomDropdown(
-      {required this.text,
-      required this.controller,
-      required this.onChanged,
-      required this.items,
-      this.width = double.infinity,
-      this.decoration,
-      this.onMenuStateChange,
-      this.buttonStyleData,
-      this.dropdownSearchData});
+  /// ✅ New field added
+  final bool enabled;
+
+  CustomDropdown({
+    required this.text,
+    required this.controller,
+    required this.onChanged,
+    required this.items,
+    this.width = double.infinity,
+    this.decoration,
+    this.onMenuStateChange,
+    this.buttonStyleData,
+    this.dropdownSearchData,
+    this.enabled = true, // ✅ default true
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,23 +45,24 @@ class CustomDropdown extends StatelessWidget {
           hint: Text(
             text,
             style: TextStyle(
-              // fontSize: 14,
               fontSize: getDynamicHeight(size: 0.016),
-              color: AppColor.black,
+              color: enabled ? AppColor.black : AppColor.black.withOpacity(0.4), // faded if disabled
             ),
           ),
-          items: items,
+          items: enabled ? items : [], // ✅ disable item selection
           value: items
               .firstWhereOrNull(
                 (item) => item.value?['text'] == controller.text,
               )
               ?.value,
-          onChanged: (value) {
-            if (value != null) {
-              controller.text = value['text'] ?? '';
-              onChanged(value);
-            }
-          },
+          onChanged: enabled
+              ? (value) {
+                  if (value != null) {
+                    controller.text = value['text'] ?? '';
+                    onChanged(value);
+                  }
+                }
+              : null, // ✅ disable interaction
           buttonStyleData: buttonStyleData,
           menuItemStyleData: const MenuItemStyleData(
             height: 40,

@@ -77,6 +77,7 @@ class ConstApiUrl {
   static const empServiceGroupAPI = "$empUrl/EmpApp_InvReq_GetServiceGrp";
   static const empPatientNm_UHID_IPDAPI = "$empUrl/EmpApp_InvReq_GetPatientNm_UHID_IPD";
   static const empSearchServiceAPI = "$empUrl/EmpApp_InvReq_SearchService";
+  static const empSearchDrnmAPI = "$empUrl/EmpApp_InvReq_SearchDrName";
   static const empGetQueryListAPI = "$empUrl/EmpApp_InvReq_Get_Query";
   static const empSaveSelSrvListAPI = "$empUrl/SaveRequestSheetIPD";
   static const empGetHistoryListAPI = "$empUrl/EmpApp_InvReq_Get_HistoryData";
