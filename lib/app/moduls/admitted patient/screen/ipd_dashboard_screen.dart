@@ -295,30 +295,30 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           });
                         },
                       ),
-                      _buildPatientCard(
-                        title: 'Investigation Requisition',
-                        onTap: () async {
-                          final envReqController = Get.put(InvestRequisitController());
-                          await envReqController.resetForm();
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: InvestRequisitScreen(),
-                            withNavBar: false,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          ).then((value) async {
-                            final controller = Get.put(AdPatientController());
-                            controller.sortBySelected = -1;
-                            await controller.resetForm();
-                            await _fetchData();
-                            final bottomBarController = Get.find<BottomBarController>();
-                            bottomBarController.currentIndex.value = 0;
-                            bottomBarController.isIPDHome.value = true;
-                            hideBottomBar.value = false;
-                            var dashboardController = Get.put(DashboardController());
-                            await dashboardController.getDashboardDataUsingToken();
-                          });
-                        },
-                      ),
+                      // _buildPatientCard(
+                      //   title: 'Investigation Requisition',
+                      //   onTap: () async {
+                      //     final envReqController = Get.put(InvestRequisitController());
+                      //     await envReqController.resetForm();
+                      //     PersistentNavBarNavigator.pushNewScreen(
+                      //       context,
+                      //       screen: InvestRequisitScreen(),
+                      //       withNavBar: false,
+                      //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      //     ).then((value) async {
+                      //       final controller = Get.put(AdPatientController());
+                      //       controller.sortBySelected = -1;
+                      //       await controller.resetForm();
+                      //       await _fetchData();
+                      //       final bottomBarController = Get.find<BottomBarController>();
+                      //       bottomBarController.currentIndex.value = 0;
+                      //       bottomBarController.isIPDHome.value = true;
+                      //       hideBottomBar.value = false;
+                      //       var dashboardController = Get.put(DashboardController());
+                      //       await dashboardController.getDashboardDataUsingToken();
+                      //     });
+                      //   },
+                      // ),
                     ],
                   );
                 },
