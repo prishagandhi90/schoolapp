@@ -300,23 +300,22 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                       //   onTap: () async {
                       //     final envReqController = Get.put(InvestRequisitController());
                       //     await envReqController.resetForm();
-                      //     PersistentNavBarNavigator.pushNewScreen(
-                      //       context,
-                      //       screen: InvestRequisitScreen(),
-                      //       withNavBar: false,
-                      //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                      //     ).then((value) async {
-                      //       final controller = Get.put(AdPatientController());
-                      //       controller.sortBySelected = -1;
-                      //       await controller.resetForm();
-                      //       await _fetchData();
-                      //       final bottomBarController = Get.find<BottomBarController>();
-                      //       bottomBarController.currentIndex.value = 0;
-                      //       bottomBarController.isIPDHome.value = true;
-                      //       hideBottomBar.value = false;
-                      //       var dashboardController = Get.put(DashboardController());
-                      //       await dashboardController.getDashboardDataUsingToken();
-                      //     });
+                      //     // ⬇️ Call the dialog function directly
+                      //     await envReqController.loginAlertDialog(context);
+
+                      //     // ⬇️ Ye tab chalega jab dialog band ho jayega
+                      //     final controller = Get.put(AdPatientController());
+                      //     controller.sortBySelected = -1;
+                      //     await controller.resetForm();
+                      //     await _fetchData();
+
+                      //     final bottomBarController = Get.find<BottomBarController>();
+                      //     bottomBarController.currentIndex.value = 0;
+                      //     bottomBarController.isIPDHome.value = true;
+                      //     hideBottomBar.value = false;
+
+                      //     var dashboardController = Get.put(DashboardController());
+                      //     await dashboardController.getDashboardDataUsingToken();
                       //   },
                       // ),
                     ],
