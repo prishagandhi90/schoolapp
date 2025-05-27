@@ -159,47 +159,6 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
     return [];
   }
 
-  // Future<dynamic> getProfileData() async {
-  //   try {
-  //     // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
-  //     String url = ConstApiUrl.empDashboardSummaryAPI;
-  //     SharedPreferences pref = await SharedPreferences.getInstance();
-  //     loginId = await pref.getString(AppString.keyLoginId) ?? "";
-  //     tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
-  //     var jsonbodyObj = {"loginId": loginId};
-
-  //     final ApiController apiController = Get.find<ApiController>();
-  //     var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-  //     ResponseEmpSummDashboardData empSummDashboardDataResponse = ResponseEmpSummDashboardData.fromJson(jsonDecode(decodedResp));
-
-  //     if (empSummDashboardDataResponse.statusCode == 200) {
-  //       if (empSummDashboardDataResponse.data != null && empSummDashboardDataResponse.data!.isNotEmpty) {
-  //         isLoading.value = false;
-  //         empSummDashboardTable = empSummDashboardDataResponse.data!;
-  //         update();
-  //         return empSummDashboardTable;
-  //       } else {
-  //         empSummDashboardTable = [];
-  //       }
-  //       update();
-  //     } else if (empSummDashboardDataResponse.statusCode == 401) {
-  //       pref.clear();
-  //       Get.offAll(const LoginScreen());
-  //       Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //     } else if (empSummDashboardDataResponse.statusCode == 400) {
-  //       empSummDashboardTable = [];
-  //     } else {
-  //       Get.rawSnackbar(message: "Something went wrong");
-  //     }
-  //     update();
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     update();
-  //   }
-  //   return [];
-  // }
-
   Future<void> payrolListOnClk(int index, BuildContext context) async {
     switch (index) {
       case 0:

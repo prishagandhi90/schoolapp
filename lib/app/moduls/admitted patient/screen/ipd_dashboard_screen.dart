@@ -9,7 +9,6 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.da
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
-import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
@@ -26,15 +25,15 @@ class IpdDashboardScreen extends StatefulWidget {
 class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
   final adPatientController = Get.put(AdPatientController());
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchData();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _fetchData();
+  // }
 
-  Future<void> _fetchData() async {
-    await adPatientController.fetchDeptwisePatientList();
-  }
+  // Future<void> _fetchData() async {
+  //   await adPatientController.fetchDeptwisePatientList();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -111,25 +110,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            if (controller.isPresViewerNavigating.value) return;
-                            controller.isPresViewerNavigating.value = true;
-                            Navigator.pop(context);
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: AdpatientScreen(),
-                              withNavBar: false,
-                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                            ).then((value) async {
-                              final bottomBarController = Get.put(BottomBarController());
-                              bottomBarController.currentIndex.value = -1;
-                              bottomBarController.persistentController.value.index = 0;
-                              bottomBarController.currentIndex.value = 0;
-                              bottomBarController.isIPDHome.value = true;
-                              hideBottomBar.value = true;
-                              var dashboardController = Get.put(DashboardController());
-                              await dashboardController.getDashboardDataUsingToken();
-                            });
-                            controller.isPresViewerNavigating.value = false;
+                            controller.drawerListInClk(context, index);
                           },
                           child: SizedBox(
                             height: getDynamicHeight(size: 0.040),
@@ -151,23 +132,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                               trailing: IconButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    // controller.payrolListOnClk(index, context);
-                                    hideBottomBar.value = true;
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: AdpatientScreen(),
-                                      withNavBar: false,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ).then((value) async {
-                                      final bottomBarController = Get.put(BottomBarController());
-                                      bottomBarController.currentIndex.value = -1;
-                                      bottomBarController.persistentController.value.index = 0;
-                                      bottomBarController.currentIndex.value = 0;
-                                      bottomBarController.isIPDHome.value = true;
-                                      hideBottomBar.value = true;
-                                      var dashboardController = Get.put(DashboardController());
-                                      await dashboardController.getDashboardDataUsingToken();
-                                    });
+                                    controller.drawerListInClk(context, index);
                                   },
                                   icon: const Icon(Icons.arrow_forward_ios)),
                             ),
@@ -285,7 +250,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                             final controller = Get.put(AdPatientController());
                             controller.sortBySelected = -1;
                             await controller.resetForm();
-                            await _fetchData();
+                            await controller.fetchData();
                             final bottomBarController = Get.find<BottomBarController>();
                             bottomBarController.currentIndex.value = 0;
                             bottomBarController.isIPDHome.value = true;
@@ -301,13 +266,13 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();
                           // ⬇️ Call the dialog function directly
-                          await envReqController.loginAlertDialog(context);
+                          await envReqController.loginAlertDialog(context, "", "");
 
                           // ⬇️ Ye tab chalega jab dialog band ho jayega
                           final controller = Get.put(AdPatientController());
                           controller.sortBySelected = -1;
                           await controller.resetForm();
-                          await _fetchData();
+                          await controller.fetchData();
 
                           final bottomBarController = Get.find<BottomBarController>();
                           bottomBarController.currentIndex.value = 0;

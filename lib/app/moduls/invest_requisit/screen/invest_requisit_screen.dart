@@ -19,6 +19,7 @@ class InvestRequisitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(InvestRequisitController());
+
     return GetBuilder<InvestRequisitController>(
       builder: (controller) {
         return Scaffold(
@@ -34,65 +35,62 @@ class InvestRequisitScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Autocomplete<SearchserviceModel>(
-                      displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                      optionsBuilder: (TextEditingValue textEditingValue) async {
-                        await controller.getSuggestions(textEditingValue.text);
-                        return controller.suggestions;
-                      },
-                      onSelected: (SearchserviceModel selection) {
-                        print('Selected City: ${selection.txt} (ID: ${selection.name})');
-                        controller.nameController.text = selection.txt ?? '';
-                        controller.ipdNo = selection.name ?? '';
-                        controller.uhid = controller.getUHId(selection.txt ?? '');
-                        controller.suggestions.clear();
+                        displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                        optionsBuilder: (TextEditingValue textEditingValue) async {
+                          await controller.getSuggestions(textEditingValue.text);
+                          return controller.suggestions;
+                        },
+                        onSelected: (SearchserviceModel selection) {
+                          print('Selected City: ${selection.txt} (ID: ${selection.name})');
+                          controller.nameController.text = selection.txt ?? '';
+                          controller.ipdNo = selection.name ?? '';
+                          controller.uhid = controller.getUHId(selection.txt ?? '');
+                          controller.suggestions.clear();
 
-                        controller.update();
-                      },
-                      fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                        return CustomTextFormField(
-                          controller: nameController,
-                          focusNode: focusNode,
-                          minLines: 1,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                            labelText: 'Patient/UHID/IPD',
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.black, width: 1.0),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: AppColor.black,
+                          controller.update();
+                        },
+                        fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                          return CustomTextFormField(
+                            controller: nameController,
+                            focusNode: focusNode,
+                            // readOnly: patientname != null, // 👈 make readonly if patientname passed
+                            minLines: 1,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                              hintText: 'Patient/UHID/IPD',
+                              border: OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.red, width: 1.0),
+                                borderRadius: BorderRadius.circular(0),
                               ),
-                            ),
-                            prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                Icons.cancel_outlined,
-                                color: AppColor.black,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                borderSide: BorderSide(color: AppColor.red),
                               ),
-                              onPressed: () {
-                                focusNode.unfocus();
-                                controller.nameController.text = '';
-                                nameController.clear();
-                                controller.suggestions.clear();
-                                controller.ipdNo = '';
-                                controller.update();
-                              },
+                              prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                              suffixIcon: nameController.text.isNotEmpty
+                                  ? IconButton(
+                                      icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                                      onPressed: () {
+                                        focusNode.unfocus();
+                                        controller.nameController.clear();
+                                        nameController.clear();
+                                        controller.suggestions.clear();
+                                        controller.ipdNo = '';
+                                        controller.update();
+                                      },
+                                    )
+                                  : null,
                             ),
-                          ),
-                          onTapOutside: (event) {
-                            focusNode.unfocus();
-                          },
-                          onFieldSubmitted: (value) {
-                            focusNode.unfocus();
-                          },
-                        );
-                      },
-                    ),
+                            onTapOutside: (event) {
+                              focusNode.unfocus();
+                            },
+                            onFieldSubmitted: (value) {
+                              focusNode.unfocus();
+                            },
+                          );
+                        }),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
@@ -354,9 +352,7 @@ class InvestRequisitScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // TODO: Cancel logic
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey.shade300,
                         foregroundColor: Colors.black,
@@ -373,7 +369,8 @@ class InvestRequisitScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (controller.ipdNo == '') {
-                          Get.snackbar('Error', 'Please select a valid patient');
+                          Get.snackbar('Error', 'Please select a valid patient',
+                              snackPosition: SnackPosition.TOP, backgroundColor: Colors.red.withOpacity(0.8), colorText: Colors.white);
                           return;
                         }
                         await controller.fetchGetHistoryList(controller.ipdNo);
@@ -396,7 +393,6 @@ class InvestRequisitScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       // onPressed: () {
-
                       //   if (controller.ipdNo == null || controller.ipdNo == '') {
                       //     Get.snackbar('Error', 'Please select a valid patient');
                       //     return;

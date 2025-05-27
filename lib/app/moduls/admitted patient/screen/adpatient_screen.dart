@@ -11,6 +11,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view.da
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
+import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -298,7 +299,8 @@ class AdpatientScreen extends StatelessWidget {
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton2<String>(
                                 customButton: Icon(Icons.menu, color: AppColor.black),
-                                items: ["Lab Summary", "Lab Report"].map((String item) {
+                                items:
+                                    ["Lab Summary", "Lab Report", "Investigation Requisition", "Investigation History"].map((String item) {
                                   return DropdownMenuItem<String>(
                                     value: item,
                                     child: Text(item, style: TextStyle(fontSize: Sizes.px14)),
@@ -368,6 +370,31 @@ class AdpatientScreen extends StatelessWidget {
                                       }
                                       await controller.fetchDeptwisePatientList();
                                     });
+                                  } else if (value == "Investigation Requisition") {
+                                    //  var investRequisitController = Get.put(InvestRequisitController());
+                                    // labreportsController.showSwipe = true;
+                                    // hideBottomBar.value = true;
+                                    // labreportsController.labReportsList = [];
+                                    // labreportsController.allReportsList = [];
+                                    // labreportsController.allDatesList = [];
+                                    // labreportsController.update();
+                                    // labreportsController.showSwipe = true;
+                                    // hideBottomBar.value = true;
+                                    // labreportsController.getLabReporst(
+                                    //     ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                    //     uhidNo: controller.filterpatientsData[index].uhid ?? '');
+                                    // labreportsController.commonList = [];
+                                    // labreportsController.dataContain = [];
+                                    // labreportsController.scrollLister();
+                                    final investRequisitController = Get.put(InvestRequisitController());
+                                    String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+                                        '${controller.filterpatientsData[index].ipdNo} | '
+                                        '${controller.filterpatientsData[index].uhid}';
+                                    investRequisitController.loginAlertDialog(
+                                      context,
+                                      patientDetails ?? "",
+                                      controller.filterpatientsData[index].ipdNo ?? "",
+                                    );
                                   }
                                 },
                                 dropdownStyleData: DropdownStyleData(

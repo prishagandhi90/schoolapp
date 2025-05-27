@@ -57,5 +57,6 @@ class AppConst {
 
   static const List<Map<String, dynamic>> adpatientgrid = [
     {'image': 'assets/image/AdPatient.png', 'label': 'Admitted Patients'},
+    {'image': 'assets/image/invest_requisite.png', 'label': 'Investigation Requisition'},
   ];
 }

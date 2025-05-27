@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/custom_login_dialogbox.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/gethistory_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/getquerylist_model.dart';
@@ -16,10 +20,13 @@ import 'package:emp_app/app/moduls/invest_requisit/model/search_dr_nm_model.dart
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/selreqhistorydetail_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/webUserlogincred_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvestRequisitController extends GetxController {
@@ -32,14 +39,15 @@ class InvestRequisitController extends GetxController {
   final ExternalLabController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController mobileController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController mobileController = TextEditingController(text: '9429728770');
+  TextEditingController passwordController = TextEditingController(text: 'venus9');
   bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
   String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '';
   bool isLoading = false;
+  var isPresViewerNavigating = false.obs;
   var externalLab = <ExternallabModel>[].obs;
   var serviceGroup = <ServicegrpModel>[].obs;
   var searchService = <SearchserviceModel>[].obs;
@@ -47,10 +55,12 @@ class InvestRequisitController extends GetxController {
   var getQueryList = <GetquerylistModel>[].obs;
   var gethistoryList = <GethistoryModelList>[].obs;
   var selReqHistoryDetailList = <SelReqHistoryDetailModel>[].obs;
+  var loginWebUserCreds = <LoginWebUserCreds>[].obs;
   Timer? debounce;
   List<RequestSheetDetailsIPD> selectedServices = [];
   final List<int> topOptions = [10, 20, 30, 40];
   int selectedTop = 10;
+  String webUserName = '';
 
   @override
   void onInit() {
@@ -63,12 +73,12 @@ class InvestRequisitController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    mobileController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   mobileController.dispose();
+  //   passwordController.dispose();
+  //   super.onClose();
+  // }
 
   bool isNextButtonEnabled() {
     if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
@@ -417,10 +427,8 @@ class InvestRequisitController extends GetxController {
               : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
-          drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
-              ? drNameController.text.trim()
-              : "", // Replace with actual doctor
+          drId: drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
+          drName: drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -982,94 +990,102 @@ class InvestRequisitController extends GetxController {
     update(); // notify listeners
   }
 
-  Future<void> loginAlertDialog(BuildContext context) async {
-    showDialog(
+  Future<void> loginAlertDialog(BuildContext context, String patientDetails, String IPDNo) async {
+    final adPatientController = Get.find<AdPatientController>();
+    await showDialog(
       context: context,
+      barrierDismissible: false, // Disable dismiss on tap outside
       builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          contentPadding: const EdgeInsets.all(16),
-          content: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 35),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      "Please log in with your registered mobile number and password to continue",
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    TextField(
-                      controller: mobileController,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: "Enter Mobile Number",
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: obscurePassword,
-                      decoration: InputDecoration(
-                        hintText: "Enter Password",
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            obscurePassword ? Icons.visibility_off : Icons.visibility,
-                          ),
-                          onPressed: togglePasswordVisibility,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.teal),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Get.to(() => InvestRequisitScreen());
-                      },
-                      child: const Text("LOG IN"),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(Icons.close),
-                ),
-              ),
-            ],
-          ),
+        return CustomLoginDialogBox(
+          text: 'Please enter your mobile number and password to login.',
+          hintText: 'Mobile Number',
+          controller: mobileController,
+          obscurePassword: obscurePassword,
+          togglePasswordVisibility: togglePasswordVisibility,
+          passwordHintText: 'Password',
+          passcontroller: passwordController,
+          onLoginPressed: () async {
+            bool isLoggedIn = await fetchWebUserLoginCreds(context);
+            if (isLoggedIn) {
+              Navigator.of(context).pop(); // Close dialog ONLY IF success
+              await Future.delayed(const Duration(milliseconds: 300));
+
+              if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+                nameController.text = patientDetails;
+                ipdNo = IPDNo;
+                update();
+              }
+
+              PersistentNavBarNavigator.pushNewScreen(
+                Get.context!,
+                screen: InvestRequisitScreen(),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              ).then((value) async {
+                final controller = Get.put(InvestRequisitController());
+                await controller.resetForm();
+                final bottomBarController = Get.find<BottomBarController>();
+                bottomBarController.currentIndex.value = 0;
+                bottomBarController.isIPDHome.value = true;
+                hideBottomBar.value = false;
+                var dashboardController = Get.put(DashboardController());
+                await dashboardController.getDashboardDataUsingToken();
+                return;
+              });
+            }
+          },
         );
       },
     );
+  }
+
+  Future<bool> fetchWebUserLoginCreds(BuildContext context) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empWebUserLoginCredsAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "mobileNo": mobileController.text.trim(), "password": passwordController.text.trim()};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseWebuselogin responseWebuselogin = ResponseWebuselogin.fromJson(jsonDecode(response));
+
+      if (responseWebuselogin.statusCode == 200) {
+        loginWebUserCreds.assignAll(responseWebuselogin.data ?? []);
+        if (loginWebUserCreds.isNotEmpty && loginWebUserCreds.first.isValidCreds == 'True') {
+          webUserName = loginWebUserCreds.first.webEmpName ?? '';
+
+          Get.rawSnackbar(message: "Login successful");
+          isLoading = false;
+          update();
+
+          return true;
+        } else {
+          Get.rawSnackbar(message: loginWebUserCreds.first.message ?? "Invalid credentials", duration: Duration(seconds: 10));
+          isLoading = false;
+          update();
+          return false;
+        }
+      } else if (responseWebuselogin.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Session expired');
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: "InvestRequisit",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return false;
   }
 
   Future<void> otherInvestDialog(BuildContext context, GetquerylistModel serviceModel) async {

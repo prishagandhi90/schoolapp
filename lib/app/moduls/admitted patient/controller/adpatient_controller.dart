@@ -11,14 +11,19 @@ import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/model/patientdata_model.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/model/patientsummary_labdata_model.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/organization_checkbox.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:mime/mime.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:record/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/adpatientfilter_model.dart';
@@ -79,6 +84,7 @@ class AdPatientController extends GetxController {
         update();
       }
     });
+    fetchData();
     // update();
     // fetchsummarylabdata();
 
@@ -96,6 +102,10 @@ class AdPatientController extends GetxController {
     //   }
     // });
     filteredList = List.from(originalList);
+  }
+
+  Future<void> fetchData() async {
+    await fetchDeptwisePatientList();
   }
 
   void _syncScrollControllers() {
@@ -835,6 +845,49 @@ class AdPatientController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> drawerListInClk(BuildContext context, int index) async {
+    switch (index) {
+      case 0:
+        if (isPresViewerNavigating.value) return;
+        isPresViewerNavigating.value = true;
+        Navigator.pop(context);
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: AdpatientScreen(),
+          withNavBar: false,
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        ).then((value) async {
+          final bottomBarController = Get.put(BottomBarController());
+          bottomBarController.currentIndex.value = -1;
+          bottomBarController.persistentController.value.index = 0;
+          bottomBarController.currentIndex.value = 0;
+          bottomBarController.isIPDHome.value = true;
+          hideBottomBar.value = true;
+          var dashboardController = Get.put(DashboardController());
+          await dashboardController.getDashboardDataUsingToken();
+        });
+        isPresViewerNavigating.value = false;
+        break;
+      case 1:
+        final envReqController = Get.put(InvestRequisitController());
+        await envReqController.resetForm();
+        // ⬇️ Call the dialog function directly
+        await envReqController.loginAlertDialog(context, "", "");
+
+        // ⬇️ Ye tab chalega jab dialog band ho jayega
+        final controller = Get.put(AdPatientController());
+        controller.sortBySelected = -1;
+        await controller.resetForm();
+        await fetchData();
+
+        final bottomBarController = Get.find<BottomBarController>();
+        bottomBarController.currentIndex.value = 0;
+        bottomBarController.isIPDHome.value = true;
+        hideBottomBar.value = false;
+        break;
+    }
   }
 
   resetForm() async {
