@@ -260,6 +260,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           });
                         },
                       ),
+
                       _buildPatientCard(
                         title: 'Investigation Requisition',
                         onTap: () async {
@@ -273,16 +274,18 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           controller.sortBySelected = -1;
                           await controller.resetForm();
                           await controller.fetchData();
-
-                          final bottomBarController = Get.find<BottomBarController>();
-                          bottomBarController.currentIndex.value = 0;
-                          bottomBarController.isIPDHome.value = true;
-                          hideBottomBar.value = false;
-
-                          var dashboardController = Get.put(DashboardController());
-                          await dashboardController.getDashboardDataUsingToken();
                         },
                       ),
+
+                      //     final bottomBarController = Get.find<BottomBarController>();
+                      //     bottomBarController.currentIndex.value = 0;
+                      //     bottomBarController.isIPDHome.value = true;
+                      //     hideBottomBar.value = false;
+
+                      //     var dashboardController = Get.put(DashboardController());
+                      //     await dashboardController.getDashboardDataUsingToken();
+                      //   },
+                      // ),
                     ],
                   );
                 },

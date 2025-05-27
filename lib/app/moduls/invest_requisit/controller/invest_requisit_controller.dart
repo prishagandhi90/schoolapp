@@ -427,8 +427,10 @@ class InvestRequisitController extends GetxController {
               : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
-          drId: drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -552,8 +554,16 @@ class InvestRequisitController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 1),
         );
+        selectedServices.clear();
       } else {
-        Get.rawSnackbar(message: "Something went wrong");
+        Get.snackbar(
+          'Error',
+          jsonDecode(response)['message'].toString(),
+          backgroundColor: Colors.green.shade100,
+          colorText: Colors.black,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+        );
       }
     } catch (e) {
       ApiErrorHandler.handleError(
@@ -563,6 +573,8 @@ class InvestRequisitController extends GetxController {
         tokenNo: tokenNo,
         empID: empId,
       );
+      isLoading = false;
+      update();
     }
     isLoading = false;
     update();

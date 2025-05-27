@@ -273,8 +273,6 @@ class InvestServiceScreen extends StatelessWidget {
                       onPressed: controller.isSaveButtonEnabled()
                           ? () async {
                               await controller.saveSelectedServiceList(controller.ipdNo);
-                              controller.selectedServices.clear();
-                              controller.update();
                             }
                           : null,
                       // onPressed: () {

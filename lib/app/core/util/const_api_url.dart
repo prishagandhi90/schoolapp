@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class ConstApiUrl {
   static const isMobile = kIsWeb ? false : true;
-  // static const portNo = "44166"; //LIVE
+  // static const portNo = "44166"; //live
   static const portNo = "55555"; //"Backup";
   // static const baseURL = 'http://117.217.126.127:$portNo';
   static const baseURL = isMobile ? 'http://117.217.126.127:$portNo' : 'http://192.168.1.35:$portNo';
