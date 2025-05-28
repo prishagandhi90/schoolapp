@@ -1042,7 +1042,6 @@ class InvestRequisitController extends GetxController {
                 ipdNo = IPDNo;
                 update();
               }
-
               PersistentNavBarNavigator.pushNewScreen(
                 Get.context!,
                 screen: InvestRequisitScreen(),
@@ -1060,6 +1059,11 @@ class InvestRequisitController extends GetxController {
                 return;
               });
             }
+          },
+          onTap: () {
+            mobileController.clear();
+            passwordController.clear();
+            Navigator.of(context).pop(); // Close dialog on cancel
           },
         );
       },

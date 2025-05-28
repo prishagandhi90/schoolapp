@@ -341,6 +341,10 @@ class AdPatientController extends GetxController {
     isSearchActive = isActive;
     update();
   }
+  double getResponsiveFontSize(BuildContext context, double size) {
+    final width = MediaQuery.of(context).size.width;
+    return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
+  }
 
   getSortData({bool isLoader = true}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

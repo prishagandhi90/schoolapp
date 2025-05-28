@@ -9,6 +9,7 @@ class CustomLoginDialogBox extends StatelessWidget {
   final String? passwordHintText;
   final TextEditingController? controller;
   final TextEditingController? passcontroller;
+  final Function()? onTap;
   const CustomLoginDialogBox({
     Key? key,
     this.obscurePassword = false,
@@ -18,7 +19,7 @@ class CustomLoginDialogBox extends StatelessWidget {
     this.hintText,
     this.controller,
     this.passcontroller,
-    this.passwordHintText,
+    this.passwordHintText, this.onTap,
   }) : super(key: key);
 
   @override
@@ -91,7 +92,7 @@ class CustomLoginDialogBox extends StatelessWidget {
             top: 0,
             right: 0,
             child: GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: onTap,
               child: const Icon(Icons.close),
             ),
           ),

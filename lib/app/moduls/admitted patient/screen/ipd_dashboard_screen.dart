@@ -15,25 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
-class IpdDashboardScreen extends StatefulWidget {
-  const IpdDashboardScreen({Key? key}) : super(key: key);
+class IpdDashboardScreen extends StatelessWidget {
+  IpdDashboardScreen({Key? key}) : super(key: key);
 
-  @override
-  State<IpdDashboardScreen> createState() => _IpdDashboardScreenState();
-}
-
-class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
   final adPatientController = Get.put(AdPatientController());
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _fetchData();
-  // }
-
-  // Future<void> _fetchData() async {
-  //   await adPatientController.fetchDeptwisePatientList();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +38,9 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
             backgroundColor: AppColor.white,
             child: ListView(
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                Padding(padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.022))),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)),
                   child: TextFormField(
                     focusNode: controller.focusNode,
                     cursorColor: AppColor.grey,
@@ -63,10 +48,10 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.027)),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.027)),
                         borderSide: BorderSide(
                           color: AppColor.lightgrey1,
                         ),
@@ -104,30 +89,32 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                 GetBuilder<AdPatientController>(
                   builder: (controller) {
                     return ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.032)),
                       shrinkWrap: true,
                       itemCount: controller.filteredList.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
+                            Navigator.pop(context);
                             controller.drawerListInClk(context, index);
                           },
                           child: SizedBox(
-                            height: getDynamicHeight(size: 0.040),
+                            height: getDynamicHeight(size: 0.050),
                             child: ListTile(
                               leading: Image.asset(
                                 controller.filteredList[index]['image'],
-                                height: getDynamicHeight(size: 0.025),
-                                width: 25,
+                                height: getDynamicHeight(size: 0.027),
+                                width: getDynamicHeight(size: 0.027),
                                 color: AppColor.primaryColor,
                               ),
                               title: Text(
                                 controller.filteredList[index]['label'],
                                 style: TextStyle(
                                   // fontSize: 16.0,
-                                  fontSize: getDynamicHeight(size: 0.018),
+                                  fontSize: controller.getResponsiveFontSize(context, 16),
                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                 ),
+                                maxLines: 2,
                               ),
                               trailing: IconButton(
                                   onPressed: () {
@@ -267,6 +254,8 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();
                           // ⬇️ Call the dialog function directly
+                          envReqController.mobileController.clear();
+                          envReqController.passwordController.clear();
                           await envReqController.loginAlertDialog(context, "", "");
 
                           // ⬇️ Ye tab chalega jab dialog band ho jayega
@@ -384,72 +373,4 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
       ),
     );
   }
-
-  // Widget _buildPatientCard(String title, int count, BuildContext context, int index) {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       PersistentNavBarNavigator.pushNewScreen(
-  //         context,
-  //         screen: AdpatientScreen(),
-  //         withNavBar: false,
-  //         pageTransitionAnimation: PageTransitionAnimation.cupertino,
-  //       ).then((value) async {
-  //         final controller = Get.put(AdPatientController());
-  //         controller.sortBySelected = -1;
-  //         await controller.resetForm();
-  //         await _fetchData();
-  //         final bottomBarController = Get.find<BottomBarController>();
-  //         bottomBarController.currentIndex.value = 0;
-  //         bottomBarController.isIPDHome.value = true;
-  //         hideBottomBar.value = false;
-  //         var dashboardController = Get.put(DashboardController());
-  //         await dashboardController.getDashboardDataUsingToken();
-  //       });
-  //     },
-  //     child: Card(
-  //       color: AppColor.white,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(10),
-  //         side: BorderSide(color: AppColor.teal, width: 1),
-  //       ),
-  //       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-  //       child: Padding(
-  //         padding: EdgeInsets.all(15),
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //           children: [
-  //             Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Row(
-  //                   children: [
-  //                     Text(
-  //                       title, // Dynamic Title
-  //                       style: TextStyle(fontSize: Sizes.px18, fontWeight: FontWeight.bold),
-  //                     ),
-  //                     Icon(Icons.arrow_forward_ios),
-  //                   ],
-  //                 ),
-  //                 SizedBox(height: Sizes.px8),
-  //                 Text(
-  //                   "$count", // Dynamic Count
-  //                   style: TextStyle(fontSize: Sizes.px20, fontWeight: FontWeight.bold),
-  //                 ),
-  //               ],
-  //             ),
-  //             Image.asset('assets/image/AdPatient.png', // Image ko bhi dynamic kar sakte ho agar chaho
-  //                 height: Sizes.px40,
-  //                 width: Sizes.px40,
-  //                 color: AppColor.teal),
-  //             // Icon(
-  //             //   Icons.person, // Icon ko bhi dynamic kar sakte ho agar chaho
-  //             //   size: Sizes.px40,
-  //             //   color: AppColor.teal,
-  //             // ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

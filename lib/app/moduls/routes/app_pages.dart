@@ -193,7 +193,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.IPDDASHBOARDSCREEN,
-      page: () => const IpdDashboardScreen(),
+      page: () => IpdDashboardScreen(),
       binding: AdmittedPatientBinding(),
     ),
     GetPage(
