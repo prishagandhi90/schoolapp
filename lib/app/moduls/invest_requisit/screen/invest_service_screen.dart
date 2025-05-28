@@ -301,7 +301,7 @@ class InvestServiceScreen extends StatelessWidget {
             ),
             bottomNavigationBar: Padding(
               padding: EdgeInsets.only(
-                bottom: getDynamicHeight(size: 0.0375),
+                bottom: getDynamicHeight(size: 0.002),
                 left: getDynamicHeight(size: 0.007),
                 right: getDynamicHeight(size: 0.007),
               ),
