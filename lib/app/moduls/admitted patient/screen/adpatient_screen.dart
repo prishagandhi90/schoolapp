@@ -298,114 +298,100 @@ class AdpatientScreen extends StatelessWidget {
                             width: getDynamicHeight(size: 0.040),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton2<String>(
-                                customButton: Icon(Icons.menu, color: AppColor.black),
-                                items:
-                                    ["Lab Summary", "Lab Report", "Investigation Requisition", "Investigation History"].map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item, style: TextStyle(fontSize: Sizes.px14)),
-                                  );
-                                }).toList(),
-                                onChanged: (String? value) async {
-                                  if (value == "Lab Summary") {
-                                    // Get.dialog(
-                                    //   Center(child: ProgressWithIcon()),
-                                    //   barrierDismissible: false,
-                                    // );
-                                    controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                                    controller.uhid = controller.filterpatientsData[index].uhid ?? '';
-                                    controller.update();
-                                    Future.microtask(() async {
-                                      controller.fetchsummarylabdata();
-                                      await controller.resetForm();
-                                    });
-                                    // Get.to(() => LabSummaryScreen());
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: LabSummaryScreen(),
-                                      withNavBar: false,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ).then((value) async {
+                                  customButton: Icon(Icons.menu, color: AppColor.black),
+                                  items: [
+                                    _buildMenuItem("Lab Summary"),
+                                    _buildDivider(),
+                                    _buildMenuItem("Lab Reports"),
+                                    _buildDivider(),
+                                    _buildMenuItem("Investigation Requisition"),
+                                    _buildDivider(),
+                                    _buildMenuItem("Investigation History"),
+                                  ],
+                                  onChanged: (String? value) async {
+                                    if (value == "Lab Summary") {
+                                      controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                                      controller.uhid = controller.filterpatientsData[index].uhid ?? '';
+                                      controller.update();
                                       Future.microtask(() async {
+                                        controller.fetchsummarylabdata();
+                                        await controller.resetForm();
+                                      });
+                                      PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: LabSummaryScreen(),
+                                        withNavBar: false,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) async {
+                                        Future.microtask(() async {
+                                          if (controller.sortBySelected != null) {
+                                            await controller.getSortData(isLoader: true);
+                                            return;
+                                          }
+                                          await controller.fetchDeptwisePatientList();
+                                        });
+                                      });
+                                    } else if (value == "Lab Report") {
+                                      var labreportsController = Get.put(LabReportsController());
+                                      labreportsController.showSwipe = true;
+                                      hideBottomBar.value = true;
+                                      labreportsController.labReportsList = [];
+                                      labreportsController.allReportsList = [];
+                                      labreportsController.allDatesList = [];
+                                      labreportsController.update();
+                                      labreportsController.getLabReporst(
+                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                        uhidNo: controller.filterpatientsData[index].uhid ?? '',
+                                      );
+                                      labreportsController.commonList = [];
+                                      labreportsController.dataContain = [];
+                                      labreportsController.scrollLister();
+                                      await PersistentNavBarNavigator.pushNewScreen(
+                                        context,
+                                        screen: LabReportsView(
+                                          bedNumber: controller.filterpatientsData[index].bedNo ?? '',
+                                          patientName: controller.filterpatientsData[index].patientName ?? "",
+                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                          uhidNo: controller.filterpatientsData[index].uhid ?? '',
+                                        ),
+                                        withNavBar: false,
+                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                      ).then((value) async {
                                         if (controller.sortBySelected != null) {
                                           await controller.getSortData(isLoader: true);
                                           return;
                                         }
                                         await controller.fetchDeptwisePatientList();
                                       });
-                                    });
-                                  } else if (value == "Lab Report") {
-                                    // Get.to(LabReportScreen());
-                                    var labreportsController = Get.put(LabReportsController());
-                                    labreportsController.showSwipe = true;
-                                    hideBottomBar.value = true;
-                                    labreportsController.labReportsList = [];
-                                    labreportsController.allReportsList = [];
-                                    labreportsController.allDatesList = [];
-                                    labreportsController.update();
-                                    labreportsController.showSwipe = true;
-                                    hideBottomBar.value = true;
-                                    labreportsController.getLabReporst(
-                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                        uhidNo: controller.filterpatientsData[index].uhid ?? '');
-                                    labreportsController.commonList = [];
-                                    labreportsController.dataContain = [];
-                                    labreportsController.scrollLister();
-                                    await PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: LabReportsView(
-                                        bedNumber: controller.filterpatientsData[index].bedNo ?? '',
-                                        patientName: controller.filterpatientsData[index].patientName ?? "",
-                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                        uhidNo: controller.filterpatientsData[index].uhid ?? '',
-                                      ),
-                                      withNavBar: false,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ).then((value) async {
-                                      // if (!context.mounted) return;
-                                      // hideBottomBar.value = true;
-                                      if (controller.sortBySelected != null) {
-                                        await controller.getSortData(isLoader: true);
-                                        return;
-                                      }
-                                      await controller.fetchDeptwisePatientList();
-                                    });
-                                  } else if (value == "Investigation Requisition") {
-                                    //  var investRequisitController = Get.put(InvestRequisitController());
-                                    // labreportsController.showSwipe = true;
-                                    // hideBottomBar.value = true;
-                                    // labreportsController.labReportsList = [];
-                                    // labreportsController.allReportsList = [];
-                                    // labreportsController.allDatesList = [];
-                                    // labreportsController.update();
-                                    // labreportsController.showSwipe = true;
-                                    // hideBottomBar.value = true;
-                                    // labreportsController.getLabReporst(
-                                    //     ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                    //     uhidNo: controller.filterpatientsData[index].uhid ?? '');
-                                    // labreportsController.commonList = [];
-                                    // labreportsController.dataContain = [];
-                                    // labreportsController.scrollLister();
-                                    final investRequisitController = Get.put(InvestRequisitController());
-                                    String patientDetails = '${controller.filterpatientsData[index].patientName} | '
-                                        '${controller.filterpatientsData[index].ipdNo} | '
-                                        '${controller.filterpatientsData[index].uhid}';
-                                    investRequisitController.loginAlertDialog(
-                                      context,
-                                      patientDetails ?? "",
-                                      controller.filterpatientsData[index].ipdNo ?? "",
-                                    );
-                                  }
-                                },
-                                dropdownStyleData: DropdownStyleData(
-                                  width: getDynamicHeight(size: 0.15),
-                                  padding: EdgeInsets.only(right: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: AppColor.white,
+                                    } else if (value == "Investigation Requisition") {
+                                      final investRequisitController = Get.put(InvestRequisitController());
+                                      String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+                                          '${controller.filterpatientsData[index].ipdNo} | '
+                                          '${controller.filterpatientsData[index].uhid}';
+                                      investRequisitController.loginAlertDialog(
+                                        context,
+                                        patientDetails,
+                                        controller.filterpatientsData[index].ipdNo ?? "",
+                                      );
+                                    }
+                                  },
+                                  dropdownStyleData: DropdownStyleData(
+                                    width: getDynamicHeight(size: 0.22), // 👈 wider dropdown dynamically
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: getDynamicHeight(size: 0.004),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: AppColor.white,
+                                    ),
+                                    elevation: 4,
                                   ),
-                                ),
-                              ),
+                                  menuItemStyleData: MenuItemStyleData(
+                                    height: getDynamicHeight(size: 0.020), // 👈 shorter item height dynamically
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.02),
+                                    ),
+                                  )),
                             ),
                           ),
                         ],
@@ -472,5 +458,28 @@ class AdpatientScreen extends StatelessWidget {
               style: TextStyle(fontSize: Sizes.px16, fontWeight: FontWeight.bold, color: AppColor.red1),
             ),
           );
+  }
+
+  DropdownMenuItem<String> _buildMenuItem(String value) {
+    return DropdownMenuItem<String>(
+      value: value,
+      child: Text(
+        value,
+        style: TextStyle(fontSize: Sizes.px14, color: AppColor.black),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+    );
+  }
+
+  DropdownMenuItem<String> _buildDivider() {
+    return DropdownMenuItem<String>(
+      enabled: false,
+      child: Divider(
+        height: 1,
+        thickness: 1,
+        color: Colors.black,
+      ),
+    );
   }
 }
