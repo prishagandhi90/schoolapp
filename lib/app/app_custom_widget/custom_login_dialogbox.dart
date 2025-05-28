@@ -1,3 +1,4 @@
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
 class CustomLoginDialogBox extends StatelessWidget {
@@ -19,27 +20,39 @@ class CustomLoginDialogBox extends StatelessWidget {
     this.hintText,
     this.controller,
     this.passcontroller,
-    this.passwordHintText, this.onTap,
+    this.passwordHintText,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      contentPadding: const EdgeInsets.all(16),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+        getDynamicHeight(size: 0.007),
+      )),
+      contentPadding: EdgeInsets.all(
+        getDynamicHeight(size: 0.015),
+      ),
       content: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 35),
+            padding: EdgeInsets.only(
+              top: getDynamicHeight(size: 0.032),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   text!,
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: getDynamicHeight(size: 0.015),
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(
+                  height: getDynamicHeight(size: 0.018),
+                ),
                 TextField(
                   controller: controller,
                   keyboardType: TextInputType.phone,
@@ -53,7 +66,9 @@ class CustomLoginDialogBox extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(
+                  height: getDynamicHeight(size: 0.0145),
+                ),
                 TextField(
                   controller: passcontroller,
                   obscureText: obscurePassword,
@@ -73,14 +88,19 @@ class CustomLoginDialogBox extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(
+                  height: getDynamicHeight(size: 0.018),
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: getDynamicHeight(size: 0.030),
+                      vertical: getDynamicHeight(size: 0.010),
+                    ),
                   ),
                   onPressed: onLoginPressed,
                   child: const Text("LOG IN"),
