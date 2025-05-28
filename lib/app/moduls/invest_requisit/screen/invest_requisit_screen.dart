@@ -26,7 +26,7 @@ class InvestRequisitScreen extends StatelessWidget {
             backgroundColor: AppColor.white,
             appBar: AppBar(
               backgroundColor: AppColor.white,
-              title: Text('Investigation Requisition', style: AppStyle.primaryplusw700),
+              title: Text(AppString.investigationrequisition, style: AppStyle.primaryplusw700),
               centerTitle: true,
             ),
             body: SingleChildScrollView(

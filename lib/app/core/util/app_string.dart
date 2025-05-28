@@ -171,6 +171,7 @@ class AppString {
   static String labreport = "Lab Report";
   static String true1 = "True";
   static String provisional = "provisional";
+  static String investigationrequisition="Investigation Requisition";
 
   //Notification
   static String notification = "Notification";
