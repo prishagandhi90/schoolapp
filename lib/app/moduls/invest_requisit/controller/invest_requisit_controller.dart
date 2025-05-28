@@ -927,36 +927,29 @@ class InvestRequisitController extends GetxController {
                     /// 🟩 Bottom Buttons
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          /// 🟥 Only Cancel Button (1/3 Width)
-                          Expanded(
-                            flex: 1,
-                            child: TextButton(
-                              onPressed: () {},
-                              style: TextButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 167, 166, 166), // Same as ElevatedButton
-                                foregroundColor: Colors.black,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero, // No border radius
-                                ),
-                                padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
-                              ),
-                              child: Text(
-                                controller.webUserName ?? '',
-                                style: TextStyle(
-                                  color: AppColor.white,
-                                  fontSize: getDynamicHeight(size: 0.013),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                      child: SizedBox(
+                        width: double.infinity, // Full width
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 167, 166, 166),
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 12),
+                            alignment: Alignment.center,
+                          ),
+                          child: Text(
+                            controller.webUserName ?? '',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppColor.white,
+                              fontSize: getDynamicHeight(size: 0.013),
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-
-                          /// 🟦 Empty space jahan pe pehle dusre buttons the (2/3 width)
-                          Spacer(flex: 2),
-                        ],
+                        ),
                       ),
                     ),
                   ],

@@ -250,7 +250,7 @@ class InvestServiceScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.only(bottom: 40, left: 8, right: 8),
+              padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -266,16 +266,18 @@ class InvestServiceScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
                       ),
                       child: Text(
-                        controller.webUserName ?? '',
+                        controller.webUserName,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: AppColor.white,
                           fontSize: getDynamicHeight(size: 0.013),
                           fontWeight: FontWeight.w500,
                         ),
+                        maxLines: 3,
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 5),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -295,7 +297,7 @@ class InvestServiceScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 5),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: controller.isSaveButtonEnabled()

@@ -350,7 +350,7 @@ class InvestRequisitScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.only(bottom: 40, left: 8, right: 8),
+              padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -366,12 +366,13 @@ class InvestRequisitScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
                       ),
                       child: Text(
-                        controller.webUserName ?? '',
+                        controller.webUserName,
                         style: TextStyle(
                           color: AppColor.white,
                           fontSize: getDynamicHeight(size: 0.013),
                           fontWeight: FontWeight.w500,
                         ),
+                        maxLines: 3,
                       ),
                     ),
                   ),
