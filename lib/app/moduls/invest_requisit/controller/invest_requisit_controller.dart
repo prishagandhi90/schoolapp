@@ -43,7 +43,7 @@ class InvestRequisitController extends GetxController {
   TextEditingController searchController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool obscurePassword = true;
+  bool obscurePassword = false;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
@@ -1097,70 +1097,72 @@ class InvestRequisitController extends GetxController {
       context: context,
       barrierDismissible: false, // Disable dismiss on tap outside
       builder: (context) {
-        return CustomLoginDialogBox(
-          text: 'Please enter your mobile number and password to login.',
-          hintText: 'Mobile Number',
-          controller: mobileController,
-          obscurePassword: obscurePassword,
-          togglePasswordVisibility: togglePasswordVisibility,
-          passwordHintText: 'Password',
-          passcontroller: passwordController,
-          onLoginPressed: () async {
-            bool isLoggedIn = await fetchWebUserLoginCreds(context);
-            if (isLoggedIn) {
-              Navigator.of(context).pop(); // Close dialog ONLY IF success
-              await Future.delayed(const Duration(milliseconds: 300));
+        return GetBuilder<InvestRequisitController>(builder: (controller) {
+          return CustomLoginDialogBox(
+            text: 'Please enter your mobile number and password to login.',
+            hintText: 'Mobile Number',
+            controller: mobileController,
+            obscurePassword: obscurePassword,
+            togglePasswordVisibility: togglePasswordVisibility,
+            passwordHintText: 'Password',
+            passcontroller: passwordController,
+            onLoginPressed: () async {
+              bool isLoggedIn = await fetchWebUserLoginCreds(context);
+              if (isLoggedIn) {
+                Navigator.of(context).pop(); // Close dialog ONLY IF success
+                await Future.delayed(const Duration(milliseconds: 300));
 
-              if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
-                if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
-                  fromAdmittedScreen = true;
-                  nameController.text = patientDetails;
-                  ipdNo = IPDNo;
-                  uhid = UHID;
-                } else {
-                  fromAdmittedScreen = false;
-                  nameController.text = '';
-                  ipdNo = '';
-                  uhid = '';
+                if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+                  if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+                    fromAdmittedScreen = true;
+                    nameController.text = patientDetails;
+                    ipdNo = IPDNo;
+                    uhid = UHID;
+                  } else {
+                    fromAdmittedScreen = false;
+                    nameController.text = '';
+                    ipdNo = '';
+                    uhid = '';
+                  }
+
+                  update();
+
+                  PersistentNavBarNavigator.pushNewScreen(
+                    Get.context!,
+                    screen: InvestRequisitScreen(),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  ).then((value) async {
+                    final controller = Get.put(InvestRequisitController());
+                    await controller.resetForm();
+                    final bottomBarController = Get.find<BottomBarController>();
+                    bottomBarController.currentIndex.value = 0;
+                    bottomBarController.isIPDHome.value = true;
+                    hideBottomBar.value = false;
+                    var dashboardController = Get.put(DashboardController());
+                    await dashboardController.getDashboardDataUsingToken();
+                    return;
+                  });
+                } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+                  await fetchGetHistoryList(IPDNo);
+                  HistoryBottomSheet();
                 }
-
-                update();
-
-                PersistentNavBarNavigator.pushNewScreen(
-                  Get.context!,
-                  screen: InvestRequisitScreen(),
-                  withNavBar: false,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                ).then((value) async {
-                  final controller = Get.put(InvestRequisitController());
-                  await controller.resetForm();
-                  final bottomBarController = Get.find<BottomBarController>();
-                  bottomBarController.currentIndex.value = 0;
-                  bottomBarController.isIPDHome.value = true;
-                  hideBottomBar.value = false;
-                  var dashboardController = Get.put(DashboardController());
-                  await dashboardController.getDashboardDataUsingToken();
-                  return;
-                });
-              } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
-                await fetchGetHistoryList(IPDNo);
-                HistoryBottomSheet();
+              } else {
+                Get.rawSnackbar(
+                  message: "Login failed. Please check your credentials.",
+                  duration: Duration(seconds: 5),
+                  backgroundColor: Colors.red.shade100,
+                  snackPosition: SnackPosition.BOTTOM,
+                );
               }
-            } else {
-              Get.rawSnackbar(
-                message: "Login failed. Please check your credentials.",
-                duration: Duration(seconds: 5),
-                backgroundColor: Colors.red.shade100,
-                snackPosition: SnackPosition.BOTTOM,
-              );
-            }
-          },
-          onTap: () {
-            // mobileController.clear();
-            // passwordController.clear();
-            Navigator.of(context).pop(); // Close dialog on cancel
-          },
-        );
+            },
+            onTap: () {
+              // mobileController.clear();
+              // passwordController.clear();
+              Navigator.of(context).pop(); // Close dialog on cancel
+            },
+          );
+        });
       },
     );
   }
