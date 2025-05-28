@@ -403,12 +403,13 @@ class InvestRequisitScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.0135)), // Same vertical padding
                       ),
                       child: Text(
-                        controller.webUserName ?? '',
+                        controller.webUserName,
                         style: TextStyle(
                           color: AppColor.white,
                           fontSize: getDynamicHeight(size: 0.013),
                           fontWeight: FontWeight.w500,
                         ),
+                        maxLines: 3,
                       ),
                     ),
                   ),
