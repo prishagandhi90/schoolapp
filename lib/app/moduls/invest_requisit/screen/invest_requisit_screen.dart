@@ -31,7 +31,14 @@ class InvestRequisitScreen extends StatelessWidget {
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+                padding: EdgeInsets.symmetric(
+                  horizontal: getDynamicHeight(
+                    size: 0.007,
+                  ),
+                  vertical: getDynamicHeight(
+                    size: 0.018,
+                  ),
+                ),
                 child: Column(
                   children: [
                     Autocomplete<SearchserviceModel>(
@@ -50,14 +57,11 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
-                              ? controller.nameController
-                              : nameController;
+                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
-                            readOnly: controller.nameController.text.isNotEmpty &&
-                                controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                            readOnly: controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                             minLines: 1,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -65,7 +69,10 @@ class InvestRequisitScreen extends StatelessWidget {
                               hintText: 'Patient/UHID/IPD',
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.red, width: 1.0),
+                                borderSide: BorderSide(
+                                  color: AppColor.red,
+                                  width: getDynamicHeight(size: 0.0008),
+                                ),
                                 borderRadius: BorderRadius.circular(0),
                               ),
                               enabledBorder: OutlineInputBorder(
@@ -96,14 +103,16 @@ class InvestRequisitScreen extends StatelessWidget {
                           );
                         }),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: getDynamicHeight(size: 0.007),
+                      ),
                       child: Row(
                         children: [
                           Expanded(
                             child: CustomDropdown(
                               text: 'Type',
                               buttonStyleData: ButtonStyleData(
-                                height: 50,
+                                height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: AppColor.red),
@@ -132,12 +141,14 @@ class InvestRequisitScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          SizedBox(width: 12),
+                          SizedBox(
+                            width: getDynamicHeight(size: 0.01055),
+                          ),
                           Expanded(
                             child: CustomDropdown(
                               text: 'Normal',
                               buttonStyleData: ButtonStyleData(
-                                height: 50,
+                                height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: AppColor.black),
@@ -169,12 +180,14 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: getDynamicHeight(size: 0.007),
+                      ),
                       child: CustomDropdown(
                         text: 'Internal',
                         controller: controller.InExController,
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.0475),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
                             borderRadius: BorderRadius.circular(0),
@@ -203,13 +216,15 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: getDynamicHeight(size: 0.007),
+                      ),
                       child: CustomDropdown(
                         text: 'External lab',
                         controller: controller.ExternalLabController,
                         enabled: controller.InExController.text.toLowerCase() == 'external',
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.0475),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
                             borderRadius: BorderRadius.circular(0),
@@ -239,12 +254,14 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: getDynamicHeight(size: 0.007),
+                      ),
                       child: CustomDropdown(
                         text: 'Service group',
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.0475),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
                             borderRadius: BorderRadius.circular(0),
@@ -274,7 +291,9 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: getDynamicHeight(size: 0.007),
+                      ),
                       child: CustomTextFormField(
                         hint: 'Diagnosis/Complaints...',
                         hintStyle: AppStyle.black.copyWith(
@@ -287,11 +306,17 @@ class InvestRequisitScreen extends StatelessWidget {
                         keyboardType: TextInputType.multiline,
                         scrollPhysics: BouncingScrollPhysics(),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderSide: BorderSide(
+                            color: AppColor.black,
+                            width: getDynamicHeight(size: 0.0008),
+                          ),
                           borderRadius: BorderRadius.circular(0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderSide: BorderSide(
+                            color: AppColor.black,
+                            width: getDynamicHeight(size: 0.0008),
+                          ),
                           borderRadius: BorderRadius.circular(0),
                         ),
                         onChanged: (value) {},
@@ -310,7 +335,9 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: getDynamicHeight(size: 0.007),
+                      ),
                       child: CustomTextFormField(
                         hint: 'Clinical Remarks...',
                         hintStyle: AppStyle.black.copyWith(
@@ -323,11 +350,17 @@ class InvestRequisitScreen extends StatelessWidget {
                         keyboardType: TextInputType.multiline,
                         scrollPhysics: BouncingScrollPhysics(),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderSide: BorderSide(
+                            color: AppColor.black,
+                            width: getDynamicHeight(size: 0.0008),
+                          ),
                           borderRadius: BorderRadius.circular(0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderSide: BorderSide(
+                            color: AppColor.black,
+                            width: getDynamicHeight(size: 0.0008),
+                          ),
                           borderRadius: BorderRadius.circular(0),
                         ),
                         onChanged: (value) {},
@@ -350,7 +383,11 @@ class InvestRequisitScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
+              padding: EdgeInsets.only(
+                bottom: getDynamicHeight(size: 0.0375),
+                left: getDynamicHeight(size: 0.007),
+                right: getDynamicHeight(size: 0.007),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -363,7 +400,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero, // No border radius
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
+                        padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.0135)), // Same vertical padding
                       ),
                       child: Text(
                         controller.webUserName,
@@ -376,7 +413,9 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 5),
+                  SizedBox(
+                    width: getDynamicHeight(size: 0.004),
+                  ),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -393,7 +432,9 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          vertical: getDynamicHeight(size: 0.0125),
+                        ),
                       ),
                       child: Text(
                         'History',
@@ -404,7 +445,9 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 5),
+                  SizedBox(
+                    width: getDynamicHeight(size: 0.004),
+                  ),
                   Expanded(
                     child: ElevatedButton(
                       // onPressed: () {
@@ -431,7 +474,9 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          vertical: getDynamicHeight(size: 0.0125),
+                        ),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -443,7 +488,9 @@ class InvestRequisitScreen extends StatelessWidget {
                               fontSize: getDynamicHeight(size: 0.016),
                             ),
                           ),
-                          SizedBox(width: 5),
+                          SizedBox(
+                            width: getDynamicHeight(size: 0.004),
+                          ),
                           Icon(Icons.skip_next_outlined, color: Colors.white),
                         ],
                       ),
