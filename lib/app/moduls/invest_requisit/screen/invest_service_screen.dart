@@ -2,6 +2,7 @@ import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,26 @@ class InvestServiceScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColor.white,
+                      border: Border.all(color: AppColor.black, width: 1.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
+                      child: Text(
+                        controller.patientName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: getDynamicHeight(size: 0.013),
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
                   TextFormField(
                     focusNode: controller.focusNode,
                     onTapOutside: (event) {
@@ -234,17 +255,24 @@ class InvestServiceScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: ElevatedButton(
+                    child: TextButton(
                       onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade300,
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 167, 166, 166), // Same as ElevatedButton
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
+                          borderRadius: BorderRadius.zero, // No border radius
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
                       ),
-                      child: Text('Cancel'),
+                      child: Text(
+                        controller.webUserName ?? '',
+                        style: TextStyle(
+                          color: AppColor.white,
+                          fontSize: getDynamicHeight(size: 0.013),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(width: 10),

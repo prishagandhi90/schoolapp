@@ -50,11 +50,14 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
+                              ? controller.nameController
+                              : nameController;
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
-                            readOnly: controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                            readOnly: controller.nameController.text.isNotEmpty &&
+                                controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                             minLines: 1,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -347,16 +350,30 @@ class InvestRequisitScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.only(bottom: 10, left: 8, right: 8),
+              padding: const EdgeInsets.only(bottom: 40, left: 8, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: Text(controller.webUserName ?? '',
-                        style: AppStyle.black.copyWith(
+                    child: TextButton(
+                      onPressed: () {},
+                      style: TextButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 167, 166, 166), // Same as ElevatedButton
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero, // No border radius
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
+                      ),
+                      child: Text(
+                        controller.webUserName ?? '',
+                        style: TextStyle(
+                          color: AppColor.white,
                           fontSize: getDynamicHeight(size: 0.013),
                           fontWeight: FontWeight.w500,
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(width: 5),
                   Expanded(
@@ -375,7 +392,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 4),
+                        padding: EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Text(
                         'History',
@@ -404,6 +421,7 @@ class InvestRequisitScreen extends StatelessWidget {
                               controller.selectedTop = 20;
                               controller.searchController.text = '';
                               controller.fetchGetQueryList(controller.ipdNo);
+                              controller.patientName = controller.nameController.text;
                               Get.to(() => InvestServiceScreen());
                             } // disables button
                           : null,
@@ -412,7 +430,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 4),
+                        padding: EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
