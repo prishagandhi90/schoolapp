@@ -409,10 +409,12 @@ class AdpatientScreen extends StatelessWidget {
                                       vertical: getDynamicHeight(size: 0.004),
                                     ),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.circular(
+                                        getDynamicHeight(size: 0.007),
+                                      ),
                                       color: AppColor.white,
                                     ),
-                                    elevation: 4,
+                                    elevation: getDynamicHeight(size: 0.003),
                                   ),
                                   menuItemStyleData: MenuItemStyleData(
                                     height: getDynamicHeight(size: 0.020), // 👈 shorter item height dynamically
