@@ -83,4 +83,5 @@ class ConstApiUrl {
   static const empGetHistoryListAPI = "$empUrl/EmpApp_InvReq_Get_HistoryData";
   static const empSelReqHistoryDetailAPI = "$empUrl/EmpApp_InvReq_SelReq_HistoryDetail";
   static const empWebUserLoginCredsAPI = "$empUrl/WebUserLoginCreds";
+  static const empDelReqDtlSrvAPI = "$empUrl/EmpApp_Delete_InvReq_DetailSrv";
 }
