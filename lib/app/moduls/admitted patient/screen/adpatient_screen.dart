@@ -373,8 +373,10 @@ class AdpatientScreen extends StatelessWidget {
                                       String patientDetails = '${controller.filterpatientsData[index].patientName} | '
                                           '${controller.filterpatientsData[index].ipdNo} | '
                                           '${controller.filterpatientsData[index].uhid}';
-                                      investRequisitController.mobileController.clear();
-                                      investRequisitController.passwordController.clear();    
+
+                                      // investRequisitController.mobileController.clear();
+                                      // investRequisitController.passwordController.clear();
+                                      await investRequisitController.resetForm();
                                       investRequisitController.loginAlertDialog(
                                         context,
                                         patientDetails,

@@ -1036,14 +1036,15 @@ class InvestRequisitController extends GetxController {
                 nameController.text = patientDetails;
                 ipdNo = IPDNo;
                 uhid = UHID;
-                update();
               } else {
                 fromAdmittedScreen = false;
                 nameController.text = '';
                 ipdNo = '';
                 uhid = '';
-                update();
               }
+
+              update();
+
               PersistentNavBarNavigator.pushNewScreen(
                 Get.context!,
                 screen: InvestRequisitScreen(),
@@ -1063,8 +1064,8 @@ class InvestRequisitController extends GetxController {
             }
           },
           onTap: () {
-            mobileController.clear();
-            passwordController.clear();
+            // mobileController.clear();
+            // passwordController.clear();
             Navigator.of(context).pop(); // Close dialog on cancel
           },
         );
@@ -1259,6 +1260,8 @@ class InvestRequisitController extends GetxController {
     selectedServices.clear();
     selectedTop = 20;
     fromAdmittedScreen = false;
+    mobileController.clear();
+    passwordController.clear();
 
     update();
   }
