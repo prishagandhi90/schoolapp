@@ -256,7 +256,8 @@ class IpdDashboardScreen extends StatelessWidget {
                           // ⬇️ Call the dialog function directly
                           envReqController.mobileController.clear();
                           envReqController.passwordController.clear();
-                          await envReqController.loginAlertDialog(context, "", "");
+                          await envReqController.loginAlertDialog(context, "", "","");
+
 
                           // ⬇️ Ye tab chalega jab dialog band ho jayega
                           final controller = Get.put(AdPatientController());

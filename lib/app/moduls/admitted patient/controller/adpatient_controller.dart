@@ -133,13 +133,7 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": searchPrefix ?? "",
-        "orgs": selectedOrgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedWardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -875,10 +869,17 @@ class AdPatientController extends GetxController {
         isPresViewerNavigating.value = false;
         break;
       case 1:
-        final envReqController = Get.put(InvestRequisitController());
+        final envReqController = Get.put(
+          InvestRequisitController(),
+        );
         await envReqController.resetForm();
         // ⬇️ Call the dialog function directly
-        await envReqController.loginAlertDialog(context, "", "");
+        await envReqController.loginAlertDialog(
+          context,
+          "",
+          "",
+          "",
+        );
 
         // ⬇️ Ye tab chalega jab dialog band ho jayega
         final controller = Get.put(AdPatientController());
@@ -922,7 +923,7 @@ class AdPatientController extends GetxController {
   bool apiCall = false;
   int seconds = 0;
   late DateTime startTime;
-  late Timer timer;
+  Timer? timer;
 
   Future<void> startListeningAndRecording() async {
     try {
@@ -1000,7 +1001,7 @@ class AdPatientController extends GetxController {
       isListening = false;
       isRecording = false;
 
-      timer.cancel();
+      timer?.cancel();
       update();
       await _transcribeAndTranslateAudio(filePath!);
 
@@ -1299,7 +1300,9 @@ class AdPatientController extends GetxController {
   void onClose() {
     speech.stop();
     audioRecorder.dispose();
-    if (timer.isActive) timer.cancel();
+    if (timer != null && timer!.isActive) {
+      timer!.cancel();
+    }
     player.dispose();
     super.onClose();
   }

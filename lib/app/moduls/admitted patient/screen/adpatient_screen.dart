@@ -310,9 +310,14 @@ class AdpatientScreen extends StatelessWidget {
                                   ],
                                   onChanged: (String? value) async {
                                     if (value == "Lab Summary") {
+                                      // Get.dialog(
+                                      //   Center(child: ProgressWithIcon()),
+                                      //   barrierDismissible: false,
+                                      // );
                                       controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
                                       controller.uhid = controller.filterpatientsData[index].uhid ?? '';
                                       controller.update();
+
                                       Future.microtask(() async {
                                         controller.fetchsummarylabdata();
                                         await controller.resetForm();
@@ -374,6 +379,7 @@ class AdpatientScreen extends StatelessWidget {
                                         context,
                                         patientDetails,
                                         controller.filterpatientsData[index].ipdNo ?? "",
+                                        controller.filterpatientsData[index].uhid ?? "",
                                       );
                                     }
                                   },

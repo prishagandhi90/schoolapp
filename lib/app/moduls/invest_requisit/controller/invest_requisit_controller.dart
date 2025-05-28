@@ -62,6 +62,7 @@ class InvestRequisitController extends GetxController {
   final List<int> topOptions = [10, 20, 30, 40];
   int selectedTop = 10;
   String webUserName = '';
+  bool fromAdmittedScreen = false;
 
   @override
   void onInit() {
@@ -82,10 +83,8 @@ class InvestRequisitController extends GetxController {
   // }
 
   bool isNextButtonEnabled() {
-    if ((ipdNo != null && ipdNo.isNotEmpty) && (typeController.text != null && typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' ||
-              typeController.text.toLowerCase() == 'radio' ||
-              typeController.text.toLowerCase() == 'other investigation') &&
+    if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
+      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -421,15 +420,13 @@ class InvestRequisitController extends GetxController {
           mReqId: 0,
           serviceName: service.name ?? '',
           serviceId: int.tryParse(service.id.toString()) ?? 0,
-          username: 'manans', // Replace with real user
+          username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
-              ? "LAB CHARGES"
-              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
-          drId: drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -465,11 +462,9 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab'
-            ? "LabRequest"
-            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
-        "username": "manans",
+        "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
         "action": "insert",
         "isEmergency": null,
@@ -1017,8 +1012,7 @@ class InvestRequisitController extends GetxController {
     update(); // notify listeners
   }
 
-  Future<void> loginAlertDialog(BuildContext context, String patientDetails, String IPDNo) async {
-    final adPatientController = Get.find<AdPatientController>();
+  Future<void> loginAlertDialog(BuildContext context, String patientDetails, String IPDNo, String UHID) async {
     await showDialog(
       context: context,
       barrierDismissible: false, // Disable dismiss on tap outside
@@ -1038,8 +1032,16 @@ class InvestRequisitController extends GetxController {
               await Future.delayed(const Duration(milliseconds: 300));
 
               if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+                fromAdmittedScreen = true;
                 nameController.text = patientDetails;
                 ipdNo = IPDNo;
+                uhid = UHID;
+                update();
+              } else {
+                fromAdmittedScreen = false;
+                nameController.text = '';
+                ipdNo = '';
+                uhid = '';
                 update();
               }
               PersistentNavBarNavigator.pushNewScreen(
@@ -1256,6 +1258,7 @@ class InvestRequisitController extends GetxController {
     getQueryList.clear();
     selectedServices.clear();
     selectedTop = 20;
+    fromAdmittedScreen = false;
 
     update();
   }
