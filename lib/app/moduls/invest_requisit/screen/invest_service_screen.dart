@@ -23,15 +23,22 @@ class InvestServiceScreen extends StatelessWidget {
               centerTitle: true,
             ),
             body: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(
+                getDynamicHeight(size: 0.007),
+              ),
               child: Column(
                 children: [
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: AppColor.white,
-                      border: Border.all(color: AppColor.black, width: 1.0),
-                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: AppColor.black,
+                        width: getDynamicHeight(size: 0.0015),
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        getDynamicHeight(size: 0.008),
+                      ),
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
@@ -45,7 +52,9 @@ class InvestServiceScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(
+                    height: getDynamicHeight(size: 0.004),
+                  ),
                   TextFormField(
                     focusNode: controller.focusNode,
                     onTapOutside: (event) {
@@ -57,11 +66,18 @@ class InvestServiceScreen extends StatelessWidget {
                     controller: controller.searchController,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.black, width: 1.0),
-                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          color: AppColor.black,
+                          width: getDynamicHeight(size: 0.0008),
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          getDynamicHeight(size: 0.008),
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(
+                          getDynamicHeight(size: 0.008),
+                        ),
                         borderSide: BorderSide(
                           color: AppColor.black,
                         ),
@@ -91,8 +107,12 @@ class InvestServiceScreen extends StatelessWidget {
                       filled: true,
                       focusColor: AppColor.originalgrey,
                       fillColor: AppColor.white,
-                      border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            getDynamicHeight(size: 0.023),
+                          ),
+                        ),
                       ),
                     ),
                     onChanged: (value) {
@@ -100,14 +120,18 @@ class InvestServiceScreen extends StatelessWidget {
                       // controller.filterSearchAdPatientResults(value);
                     },
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(
+                    height: getDynamicHeight(size: 0.009),
+                  ),
 
                   // 👇 Suggested + Selected Services
                   Expanded(
                       child: controller.isLoading
-                          ? const Center(
+                          ? Center(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 100),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: getDynamicHeight(size: 0.097),
+                                ),
                                 child: ProgressWithIcon(),
                               ),
                             )
@@ -115,7 +139,7 @@ class InvestServiceScreen extends StatelessWidget {
                               children: [
                                 // SizedBox(height: 10),
                                 Container(
-                                  height: 40,
+                                  height: getDynamicHeight(size: 0.038),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: controller.topOptions.map((top) {
@@ -134,10 +158,12 @@ class InvestServiceScreen extends StatelessWidget {
                                                 color: Colors.black,
                                               ),
                                             ),
-                                            SizedBox(height: 6),
+                                            SizedBox(
+                                              height: getDynamicHeight(size: 0.005),
+                                            ),
                                             Container(
-                                              height: 4,
-                                              width: 60,
+                                              height: getDynamicHeight(size: 0.0035),
+                                              width: getDynamicHeight(size: 0.058),
                                               color: isSelected ? AppColor.primaryColor : Colors.transparent,
                                             )
                                           ],
@@ -146,13 +172,16 @@ class InvestServiceScreen extends StatelessWidget {
                                     }).toList(),
                                   ),
                                 ),
-                                Divider(thickness: 1, height: 1),
+                                Divider(
+                                  thickness: getDynamicHeight(size: 0.0008),
+                                  height: getDynamicHeight(size: 0.0008),
+                                ),
                                 Expanded(
                                     flex: 5,
                                     child: ListView.separated(
                                       itemCount: controller.getQueryList.length,
                                       separatorBuilder: (context, index) => Divider(
-                                        height: 1,
+                                        height: getDynamicHeight(size: 0.0008),
                                         thickness: 0.8,
                                         color: AppColor.darkgery,
                                       ),
@@ -160,10 +189,21 @@ class InvestServiceScreen extends StatelessWidget {
                                         final service = controller.getQueryList[index];
                                         return ListTile(
                                           dense: true,
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                                          title: Text(service.name.toString(), style: TextStyle(fontSize: 14)),
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.007),
+                                          ),
+                                          title: Text(
+                                            service.name.toString(),
+                                            style: TextStyle(
+                                              fontSize: getDynamicHeight(size: 0.0125),
+                                            ),
+                                          ),
                                           trailing: IconButton(
-                                            icon: Icon(Icons.add_circle, color: Colors.teal, size: 20),
+                                            icon: Icon(
+                                              Icons.add_circle,
+                                              color: Colors.teal,
+                                              size: getDynamicHeight(size: 0.018),
+                                            ),
                                             onPressed: () async {
                                               if (controller.typeController.text.toLowerCase() == 'other investigation') {
                                                 bool isDuplicateService = true;
@@ -197,11 +237,13 @@ class InvestServiceScreen extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: getDynamicHeight(size: 0.008),
+                                    ),
                                     child: Text(
                                       "Selected Services",
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: getDynamicHeight(size: 0.015),
                                         fontWeight: FontWeight.bold,
                                         color: Colors.teal,
                                       ),
@@ -216,11 +258,17 @@ class InvestServiceScreen extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       final service = controller.selectedServices[index];
                                       return Container(
-                                        margin: EdgeInsets.symmetric(vertical: 4),
-                                        padding: EdgeInsets.symmetric(horizontal: 8),
+                                        margin: EdgeInsets.symmetric(
+                                          vertical: getDynamicHeight(size: 0.003),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: getDynamicHeight(size: 0.007),
+                                        ),
                                         decoration: BoxDecoration(
                                           border: Border.all(color: AppColor.darkgery),
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius: BorderRadius.circular(
+                                            getDynamicHeight(size: 0.007),
+                                          ),
                                         ),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,7 +276,9 @@ class InvestServiceScreen extends StatelessWidget {
                                             Expanded(
                                               child: Text(
                                                 service.serviceName.toString(),
-                                                style: TextStyle(fontSize: 14),
+                                                style: TextStyle(
+                                                  fontSize: getDynamicHeight(size: 0.0125),
+                                                ),
                                               ),
                                             ),
                                             IconButton(
@@ -250,7 +300,11 @@ class InvestServiceScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.only(bottom: 40, left: 8, right: 8),
+              padding: EdgeInsets.only(
+                bottom: getDynamicHeight(size: 0.0375),
+                left: getDynamicHeight(size: 0.007),
+                right: getDynamicHeight(size: 0.007),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -263,7 +317,9 @@ class InvestServiceScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero, // No border radius
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
+                        padding: EdgeInsets.symmetric(
+                          vertical: getDynamicHeight(size: 0.0135),
+                        ), // Same vertical padding
                       ),
                       child: Text(
                         controller.webUserName ?? '',
@@ -275,7 +331,7 @@ class InvestServiceScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: getDynamicHeight(size: 0.0085)),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -287,7 +343,9 @@ class InvestServiceScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          vertical: getDynamicHeight(size: 0.0125),
+                        ),
                       ),
                       child: Text(
                         'History',
@@ -295,7 +353,9 @@ class InvestServiceScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(
+                    width: getDynamicHeight(size: 0.0085),
+                  ),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: controller.isSaveButtonEnabled()
@@ -311,7 +371,9 @@ class InvestServiceScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          vertical: getDynamicHeight(size: 0.0125),
+                        ),
                       ),
                       child: Text(
                         'Save',

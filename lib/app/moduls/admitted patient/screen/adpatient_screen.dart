@@ -435,7 +435,9 @@ class AdpatientScreen extends StatelessWidget {
                                 controller.filterpatientsData[index].admType.toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 5),
+                              SizedBox(
+                                height: getDynamicHeight(size: 0.004),
+                              ),
                               Text.rich(TextSpan(
                                 text: AppString.doa,
                                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -459,7 +461,9 @@ class AdpatientScreen extends StatelessWidget {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 5),
+                              SizedBox(
+                                height: getDynamicHeight(size: 0.004),
+                              ),
                               Text.rich(TextSpan(
                                 text: AppString.totaldays,
                                 style: TextStyle(fontWeight: FontWeight.bold),
