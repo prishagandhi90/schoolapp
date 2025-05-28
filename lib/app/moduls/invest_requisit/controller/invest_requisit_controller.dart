@@ -16,6 +16,7 @@ import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart'
 import 'package:emp_app/app/moduls/invest_requisit/model/gethistory_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/getquerylist_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/requestsheetdetail_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/resp_req_dtl_srv_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/save_selsrv_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/search_dr_nm_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
@@ -632,6 +633,62 @@ class InvestRequisitController extends GetxController {
     return gethistoryList;
   }
 
+  Future<void> Delete_ReqDtl_Srv(String reqDtlSrvId) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      update(); // show loader if any
+
+      String url = ConstApiUrl.empDelReqDtlSrvAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "req_sht_dtl_id": reqDtlSrvId,
+        "UserName": webUserName,
+        "FormName": 'InvReq',
+      };
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      Resp_DelReqDtlSrv_model resp_DelReqDtlSrv_model = Resp_DelReqDtlSrv_model.fromJson(jsonDecode(response));
+      if (resp_DelReqDtlSrv_model.statusCode == 200) {
+        Get.snackbar(
+          'Success',
+          'Service deleted successfully',
+          backgroundColor: Colors.green.shade100,
+          colorText: Colors.black,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 1),
+        );
+        // Refresh the history list after deletion
+      } else if (resp_DelReqDtlSrv_model.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Session expired, login again.');
+      } else {
+        Get.rawSnackbar(message: resp_DelReqDtlSrv_model.message ?? "Something went wrong");
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: "InvestRequisit",
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+
+      Get.rawSnackbar(
+        message: "Exception: ${e.toString()}",
+        backgroundColor: Colors.red.shade100,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+    isLoading = false;
+    update();
+  }
+
   void initHistoryFilter() {
     filteredList = gethistoryList;
     update();
@@ -962,58 +1019,81 @@ class InvestRequisitController extends GetxController {
               maxHeight: MediaQuery.of(context).size.height * 0.6,
               maxWidth: MediaQuery.of(context).size.width * 0.9,
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: dataList
-                    .map(
-                      (item) => Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black12),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Obx(
+              () {
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: dataList.asMap().entries.map(
+                      (entry) {
+                        int index = entry.key;
+                        SelReqHistoryDetailModel item = entry.value;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(item.serviceName.toString(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                          )),
+                                      Text(
+                                        item.reqTyp.toString(),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
                                   children: [
-                                    Text(item.serviceName.toString(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        )),
-                                    Text(
-                                      item.reqTyp.toString(),
-                                      style: const TextStyle(fontSize: 12),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(item.status.toString()),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    InkWell(
+                                      onTap: () {
+                                        print('Delete pressed for item: ${item.serviceName}, index: $index');
+
+                                        showDeleteReqSrv_Dialog(
+                                          context, // current dialog context
+                                          item.requestID ?? 0,
+                                          item.id.toString(),
+                                          index,
+                                        );
+                                      },
+                                      child: const Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                        color: Colors.red,
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(item.status.toString()),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Icon(Icons.delete, size: 20),
-                                ],
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                );
+              },
             ),
           ),
         );
@@ -1253,6 +1333,41 @@ class InvestRequisitController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> showDeleteReqSrv_Dialog(BuildContext context, int reqDtlId, String reqDtlSrvId, int index) async {
+    bool? shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppString.logout),
+          content: Text(AppString.areyousuretologout),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(AppString.no),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(AppString.yes),
+            ),
+          ],
+        );
+      },
+    );
+    if (shouldDelete == true) {
+      // final OtpController otpController = Get.find();
+      await Delete_ReqDtl_Srv(reqDtlSrvId);
+      // Navigator.pop(context);
+      selReqHistoryDetailList.removeAt(index);
+      update();
+      // List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(reqDtlId ?? 0);
+      // InvestigationHistoryDialog(context, list);
+    }
   }
 
   resetForm() {
