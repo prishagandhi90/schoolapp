@@ -50,10 +50,11 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
                           return CustomTextFormField(
-                            controller: nameController,
+                            controller: effectiveController,
                             focusNode: focusNode,
-                            // readOnly: patientname != null, // 👈 make readonly if patientname passed
+                            readOnly: controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                             minLines: 1,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -346,25 +347,18 @@ class InvestRequisitScreen extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.only(bottom: 40, left: 8, right: 8),
+              padding: const EdgeInsets.only(bottom: 10, left: 8, right: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade300,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: Text('Cancel'),
-                    ),
+                    child: Text(controller.webUserName ?? '',
+                        style: AppStyle.black.copyWith(
+                          fontSize: getDynamicHeight(size: 0.013),
+                          fontWeight: FontWeight.w500,
+                        )),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 5),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -381,15 +375,18 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(vertical: 4),
                       ),
                       child: Text(
                         'History',
-                        style: TextStyle(color: AppColor.white),
+                        style: TextStyle(
+                          color: AppColor.white,
+                          fontSize: getDynamicHeight(size: 0.016),
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 5),
                   Expanded(
                     child: ElevatedButton(
                       // onPressed: () {
@@ -415,16 +412,19 @@ class InvestRequisitScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(vertical: 4),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             'Next',
-                            style: TextStyle(color: AppColor.white),
+                            style: TextStyle(
+                              color: AppColor.white,
+                              fontSize: getDynamicHeight(size: 0.016),
+                            ),
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 5),
                           Icon(Icons.skip_next_outlined, color: Colors.white),
                         ],
                       ),

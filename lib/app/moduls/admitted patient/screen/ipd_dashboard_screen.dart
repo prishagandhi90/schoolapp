@@ -267,7 +267,7 @@ class _IpdDashboardScreenState extends State<IpdDashboardScreen> {
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();
                           // ⬇️ Call the dialog function directly
-                          await envReqController.loginAlertDialog(context, "", "");
+                          await envReqController.loginAlertDialog(context, "", "", "");
 
                           // ⬇️ Ye tab chalega jab dialog band ho jayega
                           final controller = Get.put(AdPatientController());
