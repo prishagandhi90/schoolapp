@@ -39,8 +39,8 @@ class InvestRequisitController extends GetxController {
   final ExternalLabController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController mobileController = TextEditingController(text: '9429728770');
-  TextEditingController passwordController = TextEditingController(text: 'venus9');
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
@@ -54,6 +54,7 @@ class InvestRequisitController extends GetxController {
   var searchDrNm = <SearchDrNmModel>[].obs;
   var getQueryList = <GetquerylistModel>[].obs;
   var gethistoryList = <GethistoryModelList>[].obs;
+  List<GethistoryModelList> filteredList = []; // Filtered list
   var selReqHistoryDetailList = <SelReqHistoryDetailModel>[].obs;
   var loginWebUserCreds = <LoginWebUserCreds>[].obs;
   Timer? debounce;
@@ -622,6 +623,20 @@ class InvestRequisitController extends GetxController {
     return gethistoryList;
   }
 
+  void initHistoryFilter() {
+    filteredList = gethistoryList;
+    update();
+  }
+
+  void filterHistoryByType(String type) {
+    if (type.isEmpty || type == 'Select') {
+      filteredList = gethistoryList;
+    } else {
+      filteredList = gethistoryList.where((item) => item.investigationType?.toLowerCase() == type.toLowerCase()).toList();
+    }
+    update();
+  }
+
   Future<List<SelReqHistoryDetailModel>> SelReqqHistoryDetailList(int requisitionNo) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -672,6 +687,7 @@ class InvestRequisitController extends GetxController {
   }
 
   Future<void> HistoryBottomSheet() async {
+    initHistoryFilter();
     showModalBottomSheet(
       context: Get.context!,
       isScrollControlled: true,
@@ -752,6 +768,7 @@ class InvestRequisitController extends GetxController {
                         }).toList(),
                         onChanged: (val) {
                           controller.typeController.text = val?['text'] ?? '';
+                          controller.filterHistoryByType(val?['text'] ?? '');
                           controller.update();
                         },
                       ),
@@ -762,9 +779,9 @@ class InvestRequisitController extends GetxController {
                       child: ListView.builder(
                         controller: scrollController,
                         padding: EdgeInsets.symmetric(horizontal: 12),
-                        itemCount: controller.gethistoryList.length,
+                        itemCount: controller.filteredList.length,
                         itemBuilder: (context, index) {
-                          final item = controller.gethistoryList[index];
+                          final item = controller.filteredList[index];
                           return Card(
                             color: AppColor.white,
                             margin: EdgeInsets.only(bottom: 12),
