@@ -8,6 +8,7 @@ import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -45,7 +46,7 @@ class InvestRequisitController extends GetxController {
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
-  String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '';
+  String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '', patientname = '';
   bool isLoading = false;
   var isPresViewerNavigating = false.obs;
   var externalLab = <ExternallabModel>[].obs;
@@ -84,7 +85,9 @@ class InvestRequisitController extends GetxController {
 
   bool isNextButtonEnabled() {
     if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' ||
+              typeController.text.toLowerCase() == 'radio' ||
+              typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -422,11 +425,15 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
+              ? "LAB CHARGES"
+              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -462,7 +469,9 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab'
+            ? "LabRequest"
+            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -881,19 +890,24 @@ class InvestRequisitController extends GetxController {
                           /// 🟥 Only Cancel Button (1/3 Width)
                           Expanded(
                             flex: 1,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey.shade300,
+                            child: TextButton(
+                              onPressed: () {},
+                              style: TextButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 167, 166, 166), // Same as ElevatedButton
                                 foregroundColor: Colors.black,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero,
+                                  borderRadius: BorderRadius.zero, // No border radius
                                 ),
-                                padding: EdgeInsets.symmetric(vertical: 14),
+                                padding: EdgeInsets.symmetric(vertical: 15), // Same vertical padding
                               ),
-                              child: Text('Cancel'),
+                              child: Text(
+                                controller.webUserName ?? '',
+                                style: TextStyle(
+                                  color: AppColor.white,
+                                  fontSize: getDynamicHeight(size: 0.013),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ),
 
