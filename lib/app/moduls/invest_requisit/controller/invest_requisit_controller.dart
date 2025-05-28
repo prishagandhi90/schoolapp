@@ -77,13 +77,6 @@ class InvestRequisitController extends GetxController {
     super.onInit();
   }
 
-  // @override
-  // void onClose() {
-  //   mobileController.dispose();
-  //   passwordController.dispose();
-  //   super.onClose();
-  // }
-
   bool isNextButtonEnabled() {
     if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
       if ((typeController.text.toLowerCase() == 'lab' ||
@@ -96,13 +89,6 @@ class InvestRequisitController extends GetxController {
           return true;
         }
       }
-      // else if (typeController.text == 'radio') {
-      //   if (serviceGroup.isNotEmpty) {
-      //     return true;
-      //   } else {
-      //     // Get.rawSnackbar(message: "Please select service group");
-      //   }
-      // }
     }
     return false;
   }
@@ -1106,7 +1092,7 @@ class InvestRequisitController extends GetxController {
     update(); // notify listeners
   }
 
-  Future<void> loginAlertDialog(BuildContext context, String patientDetails, String IPDNo, String UHID) async {
+  Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
     await showDialog(
       context: context,
       barrierDismissible: false, // Disable dismiss on tap outside
@@ -1125,36 +1111,48 @@ class InvestRequisitController extends GetxController {
               Navigator.of(context).pop(); // Close dialog ONLY IF success
               await Future.delayed(const Duration(milliseconds: 300));
 
-              if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
-                fromAdmittedScreen = true;
-                nameController.text = patientDetails;
-                ipdNo = IPDNo;
-                uhid = UHID;
-              } else {
-                fromAdmittedScreen = false;
-                nameController.text = '';
-                ipdNo = '';
-                uhid = '';
+              if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+                if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+                  fromAdmittedScreen = true;
+                  nameController.text = patientDetails;
+                  ipdNo = IPDNo;
+                  uhid = UHID;
+                } else {
+                  fromAdmittedScreen = false;
+                  nameController.text = '';
+                  ipdNo = '';
+                  uhid = '';
+                }
+
+                update();
+
+                PersistentNavBarNavigator.pushNewScreen(
+                  Get.context!,
+                  screen: InvestRequisitScreen(),
+                  withNavBar: false,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                ).then((value) async {
+                  final controller = Get.put(InvestRequisitController());
+                  await controller.resetForm();
+                  final bottomBarController = Get.find<BottomBarController>();
+                  bottomBarController.currentIndex.value = 0;
+                  bottomBarController.isIPDHome.value = true;
+                  hideBottomBar.value = false;
+                  var dashboardController = Get.put(DashboardController());
+                  await dashboardController.getDashboardDataUsingToken();
+                  return;
+                });
+              } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+                await fetchGetHistoryList(IPDNo);
+                HistoryBottomSheet();
               }
-
-              update();
-
-              PersistentNavBarNavigator.pushNewScreen(
-                Get.context!,
-                screen: InvestRequisitScreen(),
-                withNavBar: false,
-                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-              ).then((value) async {
-                final controller = Get.put(InvestRequisitController());
-                await controller.resetForm();
-                final bottomBarController = Get.find<BottomBarController>();
-                bottomBarController.currentIndex.value = 0;
-                bottomBarController.isIPDHome.value = true;
-                hideBottomBar.value = false;
-                var dashboardController = Get.put(DashboardController());
-                await dashboardController.getDashboardDataUsingToken();
-                return;
-              });
+            } else {
+              Get.rawSnackbar(
+                message: "Login failed. Please check your credentials.",
+                duration: Duration(seconds: 5),
+                backgroundColor: Colors.red.shade100,
+                snackPosition: SnackPosition.BOTTOM,
+              );
             }
           },
           onTap: () {

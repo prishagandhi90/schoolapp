@@ -379,6 +379,24 @@ class AdpatientScreen extends StatelessWidget {
                                       await investRequisitController.resetForm();
                                       investRequisitController.loginAlertDialog(
                                         context,
+                                        "INVESTIGATION REQUISITION",
+                                        patientDetails,
+                                        controller.filterpatientsData[index].ipdNo ?? "",
+                                        controller.filterpatientsData[index].uhid ?? "",
+                                      );
+                                    } else if (value == "Investigation History") {
+                                      final investRequisitController = Get.put(InvestRequisitController());
+                                      String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+                                          '${controller.filterpatientsData[index].ipdNo} | '
+                                          '${controller.filterpatientsData[index].uhid}';
+
+                                      // investRequisitController.mobileController.clear();
+                                      // investRequisitController.passwordController.clear();
+                                      await investRequisitController.resetForm();
+                                      // investRequisitController.HistoryBottomSheet();
+                                      investRequisitController.loginAlertDialog(
+                                        context,
+                                        "INVESTIGATION HISTORY",
                                         patientDetails,
                                         controller.filterpatientsData[index].ipdNo ?? "",
                                         controller.filterpatientsData[index].uhid ?? "",

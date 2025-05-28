@@ -133,7 +133,13 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? "",
+        "orgs": selectedOrgsList,
+        "floors": selectedFloorsList,
+        "wards": selectedWardsList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -335,6 +341,7 @@ class AdPatientController extends GetxController {
     isSearchActive = isActive;
     update();
   }
+
   double getResponsiveFontSize(BuildContext context, double size) {
     final width = MediaQuery.of(context).size.width;
     return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
@@ -876,6 +883,7 @@ class AdPatientController extends GetxController {
         // ⬇️ Call the dialog function directly
         await envReqController.loginAlertDialog(
           context,
+          "INVESTIGATION REQUISITION",
           "",
           "",
           "",
