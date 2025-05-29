@@ -11,15 +11,18 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view.da
 import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class AdpatientScreen extends StatelessWidget {
-  const AdpatientScreen({super.key});
-
+  AdpatientScreen({super.key});
+  final adPatientController = Get.find<AdPatientController>();
+  final dashboardController = Get.find<DashboardController>();
   @override
   Widget build(BuildContext context) {
     Get.put(AdPatientController());
@@ -34,20 +37,58 @@ class AdpatientScreen extends StatelessWidget {
                 style: AppStyle.primaryplusw700,
               ),
               actions: [
-                IconButton(
-                    onPressed: () {
-                      Get.snackbar(
-                        AppString.comingsoon,
-                        '',
-                        colorText: AppColor.white,
-                        backgroundColor: AppColor.black,
-                        duration: const Duration(seconds: 1),
-                      );
+                Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: GestureDetector(
+                    onTap: () {
+                      PersistentNavBarNavigator.pushNewScreen(
+                        context,
+                        screen: NotificationScreen(),
+                        withNavBar: false,
+                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      ).then((value) async {
+                        Get.back();
+                        await adPatientController.fetchDeptwisePatientList();
+                        // var dashboardController = Get.put(DashboardController());
+                        await dashboardController.getDashboardDataUsingToken();
+                        var bottomBarController = Get.find<BottomBarController>();
+                        bottomBarController.currentIndex.value = 0;
+                        bottomBarController.persistentController.value.index = 0;
+                        bottomBarController.isIPDHome.value = true;
+                        hideBottomBar.value = false;
+                      });
                     },
-                    icon: Image.asset(
-                      AppImage.notification,
-                      width: getDynamicHeight(size: 0.022), //20,
-                    ))
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Image.asset(
+                          AppImage.notification,
+                          width: getDynamicHeight(size: 0.022),
+                        ),
+                        if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
+                          Positioned(
+                            right: -2,
+                            top: -6,
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                dashboardController.notificationCount,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
               centerTitle: true,
               leading: IconButton(
