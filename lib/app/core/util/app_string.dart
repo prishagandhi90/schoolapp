@@ -176,6 +176,27 @@ class AppString {
   static String type1 = "Type";
   static String normal = "Normal";
   static String internal = "Internal";
+  static String externallab = "External lab";
+  static String servicegroup = "Service group";
+  static String diagnosiscomplaint = "Diagnosis/Complaints...";
+  static String clinicalremarks = "Clinical Remarks...";
+  static String history = "History";
+  static String next = "Next";
+  static String investigationservices = "Investigation Services";
+  static String searchtest = "Search Test";
+  static String notice = "Notice";
+  static String servicealreadyadded = "Service already added";
+  static String selectedservices = "Selected Services";
+  static String investigationhistory = "Investigation History";
+  static String service = "Service";
+  static String reqno = "Req No: ";
+  static String plzenteryourmobilenumberandpasstologin = "Please enter your mobile number and password to login.";
+  static String mobilenumber = "Mobile Number";
+  static String password = "Password";
+  static String loginsuccessful = "Login successful";
+  static String typetosearchdrname = "Type to search Dr Name...";
+  static String ok = "OK";
+
 
   //Notification
   static String notification = "Notification";

@@ -433,7 +433,7 @@ class InvestRequisitController extends GetxController {
         'Notice',
         'Service already added',
         backgroundColor: Colors.orange.shade100,
-        colorText: Colors.black,
+        colorText: AppColor.black,
         snackPosition: SnackPosition.BOTTOM,
         duration: Duration(seconds: 1),
       );
@@ -540,7 +540,7 @@ class InvestRequisitController extends GetxController {
           'Success',
           'Service saved successfully',
           backgroundColor: Colors.green.shade100,
-          colorText: Colors.black,
+          colorText: AppColor.black,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 1),
         );
@@ -550,7 +550,7 @@ class InvestRequisitController extends GetxController {
           'Error',
           jsonDecode(response)['message'].toString(),
           backgroundColor: Colors.green.shade100,
-          colorText: Colors.black,
+          colorText: AppColor.black,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),
         );
@@ -644,7 +644,7 @@ class InvestRequisitController extends GetxController {
           'Success',
           'Service deleted successfully',
           backgroundColor: Colors.green.shade100,
-          colorText: Colors.black,
+          colorText: AppColor.black,
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 1),
         );
@@ -773,11 +773,11 @@ class InvestRequisitController extends GetxController {
                         children: [
                           SizedBox(width: 24), // For alignment
                           Text(
-                            'Investigation History',
+                            AppString.investigationhistory,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: Colors.teal,
+                              color: AppColor.teal,
                             ),
                           ),
                           IconButton(
@@ -797,7 +797,7 @@ class InvestRequisitController extends GetxController {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                       child: CustomDropdown(
-                        text: 'Select',
+                        text: AppString.select,
                         buttonStyleData: ButtonStyleData(
                           height: 48,
                           decoration: BoxDecoration(
@@ -839,7 +839,7 @@ class InvestRequisitController extends GetxController {
                             margin: EdgeInsets.only(bottom: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: Colors.black),
+                              side: BorderSide(color: AppColor.black),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(12),
@@ -854,10 +854,10 @@ class InvestRequisitController extends GetxController {
                                         TextSpan(
                                           children: [
                                             TextSpan(
-                                              text: 'Req No: ',
+                                              text: AppString.reqno,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
-                                                color: Colors.black, // or any color you prefer for label
+                                                color: AppColor.black, // or any color you prefer for label
                                               ),
                                             ),
                                             TextSpan(
@@ -886,7 +886,7 @@ class InvestRequisitController extends GetxController {
                                   SizedBox(height: 4),
                                   Text(
                                     item.entryDate.toString(), // e.g. 27/04/2025 04:14 PM
-                                    style: TextStyle(fontSize: 12, color: Colors.black),
+                                    style: TextStyle(fontSize: 12, color: AppColor.black),
                                   ),
                                   SizedBox(height: 6),
                                   // Type label
@@ -896,14 +896,14 @@ class InvestRequisitController extends GetxController {
                                       Container(
                                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.teal),
+                                          border: Border.all(color: AppColor.teal),
                                           borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Text(
                                           item.investigationType.toString(), // e.g. LAB / Radio / Other Investigation
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color: Colors.teal,
+                                            color: AppColor.teal,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -911,7 +911,10 @@ class InvestRequisitController extends GetxController {
                                       SizedBox(height: 6),
                                       Text(
                                         item.user.toString(),
-                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -933,7 +936,7 @@ class InvestRequisitController extends GetxController {
                           onPressed: () {},
                           style: TextButton.styleFrom(
                             backgroundColor: const Color.fromARGB(255, 167, 166, 166),
-                            foregroundColor: Colors.black,
+                            foregroundColor: AppColor.black,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
@@ -941,7 +944,7 @@ class InvestRequisitController extends GetxController {
                             alignment: Alignment.center,
                           ),
                           child: Text(
-                            controller.webUserName ?? '',
+                            controller.webUserName,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: AppColor.white,
@@ -977,7 +980,7 @@ class InvestRequisitController extends GetxController {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 11),
                   child: Text(
-                    'Investigation History',
+                    AppString.investigationhistory,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -988,7 +991,7 @@ class InvestRequisitController extends GetxController {
                 child: IconButton(
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.close),
-                  color: Colors.black,
+                  color: AppColor.black,
                 ),
               ),
             ],
@@ -1056,10 +1059,10 @@ class InvestRequisitController extends GetxController {
                                           index,
                                         );
                                       },
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.delete,
                                         size: 20,
-                                        color: Colors.red,
+                                        color: AppColor.red,
                                       ),
                                     ),
                                   ],
@@ -1092,12 +1095,12 @@ class InvestRequisitController extends GetxController {
       builder: (context) {
         return GetBuilder<InvestRequisitController>(builder: (controller) {
           return CustomLoginDialogBox(
-            text: 'Please enter your mobile number and password to login.',
-            hintText: 'Mobile Number',
+            text: AppString.plzenteryourmobilenumberandpasstologin,
+            hintText: AppString.mobilenumber,
             controller: mobileController,
             obscurePassword: obscurePassword,
             togglePasswordVisibility: togglePasswordVisibility,
-            passwordHintText: 'Password',
+            passwordHintText: AppString.password,
             passcontroller: passwordController,
             onLoginPressed: () async {
               bool isLoggedIn = await fetchWebUserLoginCreds(context);
@@ -1178,7 +1181,7 @@ class InvestRequisitController extends GetxController {
         if (loginWebUserCreds.isNotEmpty && loginWebUserCreds.first.isValidCreds == 'True') {
           webUserName = loginWebUserCreds.first.webEmpName ?? '';
 
-          Get.rawSnackbar(message: "Login successful");
+          Get.rawSnackbar(message: AppString.loginsuccessful);
           isLoading = false;
           update();
 
@@ -1225,8 +1228,8 @@ class InvestRequisitController extends GetxController {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 10),
-                    const Text(
-                      'Service',
+                    Text(
+                      AppString.service,
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
@@ -1257,7 +1260,7 @@ class InvestRequisitController extends GetxController {
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
-                              labelText: 'Type to search Dr Name...',
+                              labelText: AppString.typetosearchdrname,
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: AppColor.black, width: 1.0),
@@ -1293,7 +1296,7 @@ class InvestRequisitController extends GetxController {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.teal, // Button color
+                        backgroundColor: AppColor.teal, // Button color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -1303,9 +1306,9 @@ class InvestRequisitController extends GetxController {
                         Navigator.of(context).pop();
                         // Aap yahan searchController.text use kar sakte ho
                       },
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Text("OK"),
+                        child: Text(AppString.ok),
                       ),
                     ),
                   ],
