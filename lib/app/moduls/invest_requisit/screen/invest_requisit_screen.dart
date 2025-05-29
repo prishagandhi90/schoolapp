@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -413,8 +415,10 @@ class InvestRequisitScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (controller.ipdNo == '') {
-                          Get.snackbar('Error', 'Please select a valid patient',
-                              snackPosition: SnackPosition.TOP, backgroundColor: AppColor.red.withOpacity(0.8), colorText: Colors.white);
+                          Get.snackbar(AppString.error, AppString.plzselectavalidpatient,
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: AppColor.red.withOpacity(0.8),
+                              colorText: AppColor.white);
                           return;
                         }
                         await controller.fetchGetHistoryList(controller.ipdNo);

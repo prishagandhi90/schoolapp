@@ -196,7 +196,7 @@ class AppString {
   static String loginsuccessful = "Login successful";
   static String typetosearchdrname = "Type to search Dr Name...";
   static String ok = "OK";
-
+  static String plzselectavalidpatient = "Please select a valid patient";
 
   //Notification
   static String notification = "Notification";
