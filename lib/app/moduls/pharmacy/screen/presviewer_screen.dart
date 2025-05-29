@@ -6,9 +6,11 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/controller/pharmacy_controller.dart';
 import 'package:emp_app/app/moduls/pharmacy/screen/presdetails_screen.dart';
 import 'package:emp_app/main.dart';
@@ -18,6 +20,8 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class PresviewerScreen extends StatelessWidget {
   PresviewerScreen({Key? key}) : super(key: key);
+  final DashboardController dashboardController = Get.put(DashboardController());
+  final AdPatientController adPatientController = Get.put(AdPatientController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,20 +69,58 @@ class PresviewerScreen extends StatelessWidget {
               },
             ),
             actions: [
-              IconButton(
-                  onPressed: () {
-                    Get.snackbar(
-                      AppString.comingsoon,
-                      '',
-                      colorText: AppColor.white,
-                      backgroundColor: AppColor.black,
-                      duration: const Duration(seconds: 1),
-                    );
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      Get.back();
+                      await adPatientController.fetchDeptwisePatientList();
+                      // var dashboardController = Get.put(DashboardController());
+                      await dashboardController.getDashboardDataUsingToken();
+                      var bottomBarController = Get.find<BottomBarController>();
+                      bottomBarController.currentIndex.value = 0;
+                      bottomBarController.persistentController.value.index = 0;
+                      bottomBarController.isIPDHome.value = true;
+                      hideBottomBar.value = false;
+                    });
                   },
-                  icon: Image.asset(
-                    AppImage.notification,
-                    width: getDynamicHeight(size: 0.022),
-                  ))
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(
+                        AppImage.notification,
+                        width: getDynamicHeight(size: 0.022),
+                      ),
+                      if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
+                        Positioned(
+                          right: -2,
+                          top: -6,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              dashboardController.notificationCount,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             ],
             centerTitle: true,
           ),
@@ -294,11 +336,13 @@ class PresviewerScreen extends StatelessWidget {
                                                 controller.isPresMedicineNavigating.value = false;
                                               },
                                               child: Container(
-                                                padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.005), horizontal: getDynamicHeight(size: 0.005)),
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: getDynamicHeight(size: 0.005), horizontal: getDynamicHeight(size: 0.005)),
                                                 decoration: BoxDecoration(
-                                                  color: controller.filterpresviewerList[index].rxStatus.toString().toLowerCase() == "working"
-                                                      ? AppColor.lightyellow
-                                                      : AppColor.lightblue,
+                                                  color:
+                                                      controller.filterpresviewerList[index].rxStatus.toString().toLowerCase() == "working"
+                                                          ? AppColor.lightyellow
+                                                          : AppColor.lightblue,
                                                 ),
                                                 child: Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +352,9 @@ class PresviewerScreen extends StatelessWidget {
                                                       children: [
                                                         // Left side: Index
                                                         Padding(
-                                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007)), // Space between index and right side
+                                                          padding: EdgeInsets.symmetric(
+                                                              horizontal:
+                                                                  getDynamicHeight(size: 0.007)), // Space between index and right side
                                                           child: Text(
                                                             "${index + 1}", // Dynamic index
                                                             style: AppStyle.w50018.copyWith(
@@ -320,12 +366,14 @@ class PresviewerScreen extends StatelessWidget {
                                                         ),
                                                         Expanded(
                                                           child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.end, // Align text and container to the right
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.end, // Align text and container to the right
                                                             crossAxisAlignment: CrossAxisAlignment.center,
                                                             children: [
                                                               // Text
                                                               Text(
-                                                                controller.filterpresviewerList[index].org.toString(), // Add your custom text
+                                                                controller.filterpresviewerList[index].org
+                                                                    .toString(), // Add your custom text
                                                                 style: TextStyle(
                                                                   // fontSize: 16,
                                                                   fontSize: getDynamicHeight(size: 0.018),
@@ -338,7 +386,8 @@ class PresviewerScreen extends StatelessWidget {
                                                               Container(
                                                                 // height: 35, // Small container size
                                                                 height: getDynamicHeight(size: 0.037),
-                                                                margin: EdgeInsets.only(bottom: getDynamicHeight(size: 0.007)), // Adjust positioning if needed
+                                                                margin: EdgeInsets.only(
+                                                                    bottom: getDynamicHeight(size: 0.007)), // Adjust positioning if needed
                                                                 decoration: BoxDecoration(
                                                                   color: Colors.grey[200],
                                                                   borderRadius: BorderRadius.circular(8),
@@ -436,7 +485,8 @@ class PresviewerScreen extends StatelessWidget {
                                                                             ),
                                                                           ),
                                                                           TextSpan(
-                                                                            text: controller.filterpresviewerList[index].printStatus.toString(),
+                                                                            text: controller.filterpresviewerList[index].printStatus
+                                                                                .toString(),
                                                                             style: AppStyle.w50018.copyWith(
                                                                               fontSize: getDynamicHeight(size: 0.018),
                                                                             ),
@@ -455,7 +505,8 @@ class PresviewerScreen extends StatelessWidget {
                                                                             ),
                                                                           ),
                                                                           TextSpan(
-                                                                            text: controller.filterpresviewerList[index].lastUser.toString(),
+                                                                            text:
+                                                                                controller.filterpresviewerList[index].lastUser.toString(),
                                                                             style: AppStyle.w50018.copyWith(
                                                                               fontSize: getDynamicHeight(size: 0.016),
                                                                             ),
@@ -481,7 +532,8 @@ class PresviewerScreen extends StatelessWidget {
                                                                             ),
                                                                           ),
                                                                           TextSpan(
-                                                                            text: controller.filterpresviewerList[index].priority.toString(),
+                                                                            text:
+                                                                                controller.filterpresviewerList[index].priority.toString(),
                                                                             style: AppStyle.w50018.copyWith(
                                                                               fontSize: getDynamicHeight(size: 0.018),
                                                                             ),
@@ -500,7 +552,8 @@ class PresviewerScreen extends StatelessWidget {
                                                                             ),
                                                                           ),
                                                                           TextSpan(
-                                                                            text: controller.filterpresviewerList[index].rxStatus.toString(),
+                                                                            text:
+                                                                                controller.filterpresviewerList[index].rxStatus.toString(),
                                                                             style: AppStyle.w50018.copyWith(
                                                                               fontSize: getDynamicHeight(size: 0.015),
                                                                             ),

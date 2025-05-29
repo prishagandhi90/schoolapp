@@ -251,7 +251,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
 
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: const DutyscheduleScreen(),
+          screen:  DutyscheduleScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {

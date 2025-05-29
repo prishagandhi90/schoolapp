@@ -198,7 +198,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.IPDADMITTEDPATIENTS,
-      page: () => const AdpatientScreen(),
+      page: () => AdpatientScreen(),
       binding: AdmittedPatientBinding(),
     )
   ];

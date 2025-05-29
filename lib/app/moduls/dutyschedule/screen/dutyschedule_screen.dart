@@ -7,13 +7,21 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:emp_app/app/moduls/dutyschedule/model/dropdown_model.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class DutyscheduleScreen extends GetView<DutyscheduleController> {
-  const DutyscheduleScreen({Key? key}) : super(key: key);
+  DutyscheduleScreen({Key? key}) : super(key: key);
+final DashboardController dashboardController = Get.put(DashboardController());
+  final AdPatientController adPatientController = Get.put(AdPatientController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,18 +45,58 @@ class DutyscheduleScreen extends GetView<DutyscheduleController> {
               ),
             ),
             actions: [
-              IconButton(
-                onPressed: () {
-                  Get.snackbar(
-                    AppString.comingsoon,
-                    '',
-                    colorText: AppColor.white,
-                    backgroundColor: AppColor.black,
-                    duration: const Duration(seconds: 1),
-                  );
-                },
-                icon: Image.asset(AppImage.notification, width: 20),
-              )
+              Padding(
+                padding: EdgeInsets.only(right: 12),
+                child: GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: NotificationScreen(),
+                      withNavBar: false,
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    ).then((value) async {
+                      Get.back();
+                      await adPatientController.fetchDeptwisePatientList();
+                      // var dashboardController = Get.put(DashboardController());
+                      await dashboardController.getDashboardDataUsingToken();
+                      var bottomBarController = Get.find<BottomBarController>();
+                      bottomBarController.currentIndex.value = 0;
+                      bottomBarController.persistentController.value.index = 0;
+                      bottomBarController.isIPDHome.value = true;
+                      hideBottomBar.value = false;
+                    });
+                  },
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Image.asset(
+                        AppImage.notification,
+                        width: getDynamicHeight(size: 0.022),
+                      ),
+                      if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
+                        Positioned(
+                          right: -2,
+                          top: -6,
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              dashboardController.notificationCount,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             ],
             centerTitle: true,
           ),

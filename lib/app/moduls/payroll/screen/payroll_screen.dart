@@ -311,8 +311,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     Container(
                                                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColor.lightblue2, border: Border.all(color: AppColor.primaryColor), borderRadius: BorderRadius.circular(20)),
-                                                      child: controller.empSummDashboardTable.isNotEmpty && controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
+                                                          color: AppColor.lightblue2,
+                                                          border: Border.all(color: AppColor.primaryColor),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty &&
+                                                              controller.empSummDashboardTable[0].inPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].inPunchTime}',
                                                               style: TextStyle(
@@ -338,8 +341,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     Container(
                                                       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                                                       decoration: BoxDecoration(
-                                                          color: AppColor.lightblue2, border: Border.all(color: AppColor.primaryColor), borderRadius: BorderRadius.circular(20)),
-                                                      child: controller.empSummDashboardTable.isNotEmpty && controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
+                                                          color: AppColor.lightblue2,
+                                                          border: Border.all(color: AppColor.primaryColor),
+                                                          borderRadius: BorderRadius.circular(20)),
+                                                      child: controller.empSummDashboardTable.isNotEmpty &&
+                                                              controller.empSummDashboardTable[0].outPunchTime.toString().isNotEmpty
                                                           ? Text(
                                                               'Done at ${controller.empSummDashboardTable[0].outPunchTime}',
                                                               style: AppStyle.plus10,
@@ -375,7 +381,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   children: [
                                                     Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                                     if (controller.empSummDashboardTable.isNotEmpty)
-                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
+                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
+                                                          style: AppStyle.plus16w600)
                                                     else
                                                       Text('-- ', style: AppStyle.plus16w600),
                                                   ],
@@ -750,7 +757,7 @@ class PayrollScreen extends GetView<PayrollController> {
 
                                                 PersistentNavBarNavigator.pushNewScreen(
                                                   context,
-                                                  screen: const DutyscheduleScreen(),
+                                                  screen: DutyscheduleScreen(),
                                                   withNavBar: true,
                                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                                 ).then((value) async {
@@ -866,7 +873,9 @@ class PayrollScreen extends GetView<PayrollController> {
                                             ),
                                             const SizedBox(height: 5),
                                             Text(
-                                              controller.empModuleScreenRightsTable.isNotEmpty ? controller.empModuleScreenRightsTable[5].screenName.toString() : "",
+                                              controller.empModuleScreenRightsTable.isNotEmpty
+                                                  ? controller.empModuleScreenRightsTable[5].screenName.toString()
+                                                  : "",
                                               style: AppStyle.plus12,
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
