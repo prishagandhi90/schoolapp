@@ -1,6 +1,7 @@
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
@@ -19,7 +20,7 @@ class InvestServiceScreen extends StatelessWidget {
             backgroundColor: AppColor.white,
             appBar: AppBar(
               backgroundColor: AppColor.white,
-              title: Text('Investigation Services', style: AppStyle.primaryplusw700),
+              title: Text(AppString.investigationservices, style: AppStyle.primaryplusw700),
               centerTitle: true,
             ),
             body: Padding(
@@ -99,7 +100,7 @@ class InvestServiceScreen extends StatelessWidget {
                               },
                             )
                           : null,
-                      hintText: 'Search Test',
+                      hintText: AppString.searchtest,
                       hintStyle: TextStyle(
                         color: AppColor.lightgrey1,
                         fontFamily: CommonFontStyle.plusJakartaSans,
@@ -155,7 +156,7 @@ class InvestServiceScreen extends StatelessWidget {
                                               'Top $top',
                                               style: TextStyle(
                                                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                                color: Colors.black,
+                                                color: AppColor.black,
                                               ),
                                             ),
                                             SizedBox(
@@ -164,7 +165,7 @@ class InvestServiceScreen extends StatelessWidget {
                                             Container(
                                               height: getDynamicHeight(size: 0.0035),
                                               width: getDynamicHeight(size: 0.058),
-                                              color: isSelected ? AppColor.primaryColor : Colors.transparent,
+                                              color: isSelected ? AppColor.primaryColor : AppColor.transparent,
                                             )
                                           ],
                                         ),
@@ -201,7 +202,7 @@ class InvestServiceScreen extends StatelessWidget {
                                           trailing: IconButton(
                                             icon: Icon(
                                               Icons.add_circle,
-                                              color: Colors.teal,
+                                              color: AppColor.teal,
                                               size: getDynamicHeight(size: 0.018),
                                             ),
                                             onPressed: () async {
@@ -210,8 +211,8 @@ class InvestServiceScreen extends StatelessWidget {
                                                 isDuplicateService = controller.isDuplicateService(service.id.toString());
                                                 if (isDuplicateService) {
                                                   Get.snackbar(
-                                                    'Notice',
-                                                    'Service already added',
+                                                    AppString.notice,
+                                                    AppString.servicealreadyadded,
                                                     backgroundColor: Colors.orange.shade100,
                                                     colorText: Colors.black,
                                                     snackPosition: SnackPosition.BOTTOM,
@@ -241,11 +242,11 @@ class InvestServiceScreen extends StatelessWidget {
                                       vertical: getDynamicHeight(size: 0.008),
                                     ),
                                     child: Text(
-                                      "Selected Services",
+                                      AppString.selectedservices,
                                       style: TextStyle(
                                         fontSize: getDynamicHeight(size: 0.015),
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.teal,
+                                        color: AppColor.teal,
                                       ),
                                     ),
                                   ),
@@ -282,7 +283,7 @@ class InvestServiceScreen extends StatelessWidget {
                                               ),
                                             ),
                                             IconButton(
-                                              icon: Icon(Icons.cancel, color: Colors.black),
+                                              icon: Icon(Icons.cancel, color: AppColor.black),
                                               onPressed: () {
                                                 controller.selectedServices.removeAt(index);
                                                 controller.update();
@@ -313,7 +314,7 @@ class InvestServiceScreen extends StatelessWidget {
                       onPressed: () {},
                       style: TextButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 167, 166, 166), // Same as ElevatedButton
-                        foregroundColor: Colors.black,
+                        foregroundColor: AppColor.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero, // No border radius
                         ),
@@ -350,7 +351,7 @@ class InvestServiceScreen extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'History',
+                        AppString.history,
                         style: TextStyle(color: AppColor.white),
                       ),
                     ),
@@ -378,7 +379,7 @@ class InvestServiceScreen extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        'Save',
+                        AppString.save,
                         style: TextStyle(color: AppColor.white),
                       ),
                     ),
