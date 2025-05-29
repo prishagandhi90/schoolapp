@@ -54,6 +54,8 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
   RxBool showScrollDownArrow = false.obs; // RxBool
   RxBool showScrollUpArrow = false.obs;
   List<ModuleScreenRights> screens = [];
+  List<Map<String, dynamic>> originalList = AppConst.pharmacygrid;
+  List<Map<String, dynamic>> filteredList = [];
   List<ModuleScreenRights> empModuleScreenRightsTable = [];
 
   @override
@@ -359,9 +361,6 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
 
     return finalHeight;
   }
-
-  List<Map<String, dynamic>> originalList = AppConst.pharmacygrid;
-  List<Map<String, dynamic>> filteredList = [];
 
   void filterSearchpharmaResults(String query) {
     List<Map<String, dynamic>> tempList = [];

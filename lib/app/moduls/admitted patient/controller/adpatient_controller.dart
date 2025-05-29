@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:emp_app/app/core/common/common_methods.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -15,6 +16,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.da
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/floor_checkbox.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/widgets/organization_checkbox.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
@@ -70,6 +72,11 @@ class AdPatientController extends GetxController {
   final ScrollController adPatientScrollController = ScrollController();
   final bottomBarController = Get.put(BottomBarController());
   late final String date1, date2, date3, date4, date5, date6, date7;
+  List<Map<String, dynamic>> originalList = AppConst.adpatientgrid;
+  List<Map<String, dynamic>> filteredList = [];
+  var isAdmittedPatients_Navigating = false.obs;
+  var isInvestigationReq_Navigating = false.obs;
+  List<ModuleScreenRights> screenRightsTable = [];
 
   @override
   void onInit() {
@@ -78,6 +85,7 @@ class AdPatientController extends GetxController {
     _syncScrollControllers();
     // fetchDeptwisePatientList();
     getPatientDashboardFilters();
+    loadScreens();
     player.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {
         isPlaying = false;
@@ -102,6 +110,12 @@ class AdPatientController extends GetxController {
     //   }
     // });
     filteredList = List.from(originalList);
+  }
+
+  void loadScreens() async {
+    screenRightsTable = await CommonMethods.fetchModuleScreens("IPD");
+    filteredList = originalList;
+    update();
   }
 
   Future<void> fetchData() async {
@@ -133,13 +147,7 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": searchPrefix ?? "",
-        "orgs": selectedOrgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedWardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -321,9 +329,6 @@ class AdPatientController extends GetxController {
     }
     update();
   }
-
-  List<Map<String, dynamic>> originalList = AppConst.adpatientgrid;
-  List<Map<String, dynamic>> filteredList = [];
 
   void filterSearchAdPatientResults(String query) {
     List<Map<String, dynamic>> tempList = [];
@@ -855,8 +860,23 @@ class AdPatientController extends GetxController {
   Future<void> drawerListInClk(BuildContext context, int index) async {
     switch (index) {
       case 0:
-        if (isPresViewerNavigating.value) return;
-        isPresViewerNavigating.value = true;
+        if (isAdmittedPatients_Navigating.value) return;
+        isAdmittedPatients_Navigating.value = true;
+
+        if (screenRightsTable.isNotEmpty) {
+          if (screenRightsTable[0].rightsYN == "N") {
+            isAdmittedPatients_Navigating.value = false;
+            Get.snackbar(
+              "You don't have access to this screen",
+              '',
+              colorText: AppColor.white,
+              backgroundColor: AppColor.black,
+              duration: const Duration(seconds: 1),
+            );
+            return;
+          }
+        }
+
         Navigator.pop(context);
         PersistentNavBarNavigator.pushNewScreen(
           context,
@@ -873,9 +893,27 @@ class AdPatientController extends GetxController {
           var dashboardController = Get.put(DashboardController());
           await dashboardController.getDashboardDataUsingToken();
         });
-        isPresViewerNavigating.value = false;
+
+        isAdmittedPatients_Navigating.value = false;
         break;
       case 1:
+        if (isInvestigationReq_Navigating.value) return;
+        isInvestigationReq_Navigating.value = true;
+
+        if (screenRightsTable.isNotEmpty) {
+          if (screenRightsTable[1].rightsYN == "N") {
+            isInvestigationReq_Navigating.value = false;
+            Get.snackbar(
+              "You don't have access to this screen",
+              '',
+              colorText: AppColor.white,
+              backgroundColor: AppColor.black,
+              duration: const Duration(seconds: 1),
+            );
+            return;
+          }
+        }
+
         final envReqController = Get.put(
           InvestRequisitController(),
         );
@@ -899,6 +937,7 @@ class AdPatientController extends GetxController {
         bottomBarController.currentIndex.value = 0;
         bottomBarController.isIPDHome.value = true;
         hideBottomBar.value = false;
+        isInvestigationReq_Navigating.value = false;
         break;
     }
   }

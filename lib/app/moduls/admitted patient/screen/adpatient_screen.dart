@@ -410,6 +410,23 @@ class AdpatientScreen extends StatelessWidget {
                                         await controller.fetchDeptwisePatientList();
                                       });
                                     } else if (value == "Investigation Requisition") {
+                                      if (controller.isInvestigationReq_Navigating.value) return;
+                                      controller.isInvestigationReq_Navigating.value = true;
+
+                                      if (controller.screenRightsTable.isNotEmpty) {
+                                        if (controller.screenRightsTable[1].rightsYN == "N") {
+                                          controller.isInvestigationReq_Navigating.value = false;
+                                          Get.snackbar(
+                                            "You don't have access to this screen",
+                                            '',
+                                            colorText: AppColor.white,
+                                            backgroundColor: AppColor.black,
+                                            duration: const Duration(seconds: 1),
+                                          );
+                                          return;
+                                        }
+                                      }
+
                                       final investRequisitController = Get.put(InvestRequisitController());
                                       String patientDetails = '${controller.filterpatientsData[index].patientName} | '
                                           '${controller.filterpatientsData[index].ipdNo} | '
@@ -425,7 +442,25 @@ class AdpatientScreen extends StatelessWidget {
                                         controller.filterpatientsData[index].ipdNo ?? "",
                                         controller.filterpatientsData[index].uhid ?? "",
                                       );
+                                      controller.isInvestigationReq_Navigating.value = false;
                                     } else if (value == "Investigation History") {
+                                      if (controller.isInvestigationReq_Navigating.value) return;
+                                      controller.isInvestigationReq_Navigating.value = true;
+
+                                      if (controller.screenRightsTable.isNotEmpty) {
+                                        if (controller.screenRightsTable[1].rightsYN == "N") {
+                                          controller.isInvestigationReq_Navigating.value = false;
+                                          Get.snackbar(
+                                            "You don't have access to this screen",
+                                            '',
+                                            colorText: AppColor.white,
+                                            backgroundColor: AppColor.black,
+                                            duration: const Duration(seconds: 1),
+                                          );
+                                          return;
+                                        }
+                                      }
+
                                       final investRequisitController = Get.put(InvestRequisitController());
                                       String patientDetails = '${controller.filterpatientsData[index].patientName} | '
                                           '${controller.filterpatientsData[index].ipdNo} | '
@@ -442,6 +477,7 @@ class AdpatientScreen extends StatelessWidget {
                                         controller.filterpatientsData[index].ipdNo ?? "",
                                         controller.filterpatientsData[index].uhid ?? "",
                                       );
+                                      controller.isInvestigationReq_Navigating.value = false;
                                     }
                                   },
                                   dropdownStyleData: DropdownStyleData(
