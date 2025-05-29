@@ -57,26 +57,27 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
+                              ? controller.nameController
+                              : nameController;
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
-                            readOnly: controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                            readOnly: controller.nameController.text.isNotEmpty &&
+                                controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                             minLines: 1,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
-                              hintText: 'Patient/UHID/IPD',
+                              hintText: AppString.patientuhidipd,
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: AppColor.red,
                                   width: getDynamicHeight(size: 0.0008),
                                 ),
-                                borderRadius: BorderRadius.circular(0),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(0),
                                 borderSide: BorderSide(color: AppColor.red),
                               ),
                               prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
@@ -110,7 +111,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CustomDropdown(
-                              text: 'Type',
+                              text: AppString.type1,
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -146,7 +147,7 @@ class InvestRequisitScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: CustomDropdown(
-                              text: 'Normal',
+                              text: AppString.normal,
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -184,7 +185,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         vertical: getDynamicHeight(size: 0.007),
                       ),
                       child: CustomDropdown(
-                        text: 'Internal',
+                        text: AppString.internal,
                         controller: controller.InExController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),

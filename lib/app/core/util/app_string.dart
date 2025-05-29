@@ -161,7 +161,7 @@ class AppString {
   static String inchargestatus = "In-Charge Status";
   static String confirm = "Confirm";
 
-  //Admitted Patient
+  //IPD
   static String admittedPatient = "Admitted Patients";
   static String doa = "DOA: ";
   static String totaldays = "Total Days: ";
@@ -172,6 +172,10 @@ class AppString {
   static String true1 = "True";
   static String provisional = "provisional";
   static String investigationrequisition="Investigation Requisition";
+  static String patientuhidipd="Patient/UHID/IPD";
+  static String type1 = "Type";
+  static String normal = "Normal";
+  static String internal = "Internal";
 
   //Notification
   static String notification = "Notification";
