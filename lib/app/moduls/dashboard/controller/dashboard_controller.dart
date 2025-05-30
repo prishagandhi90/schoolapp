@@ -37,12 +37,12 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getDashboardDataUsingToken();
-      fetchModuleRights();
-      hideBottomBar.value = false;
-      update();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    getDashboardDataUsingToken();
+    fetchModuleRights();
+    hideBottomBar.value = false;
+    update();
+    // });
   }
 
   Future<List<ModuleScreenRights>> fetchModuleRights() async {
