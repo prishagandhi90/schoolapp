@@ -197,7 +197,7 @@ class OvertimeController extends GetxController with SingleGetTickerProviderMixi
 
   Future<void> selectTime(BuildContext context, TextEditingController controller) async {
     TimeOfDay? picked;
-    if (controller.text == null || controller.text == "") {
+    if (controller.text == "") {
       picked = await showTimePicker(
         context: context,
         initialTime: TimeOfDay.now(),

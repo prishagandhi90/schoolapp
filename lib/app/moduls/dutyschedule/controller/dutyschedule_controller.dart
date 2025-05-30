@@ -153,7 +153,7 @@ class DutyscheduleController extends GetxController {
     DateTime startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Monday
     List<Map<String, String>> weekData = [];
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 7;) {
       DateTime date = startOfWeek.add(Duration(days: i));
       String formattedDate = DateFormat('d\nMMM').format(date); // Format: day \n month
       weekData.add({

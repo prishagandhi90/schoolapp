@@ -663,7 +663,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       DateFormat dateFormat = DateFormat("dd-MM-yyyy");
       DateTime dateTime = dateFormat.parse(dateString);
 
-      if (flag.toLowerCase() == 'ot' && dateString != null) {
+      if (flag.toLowerCase() == 'ot') {
         // OT ke liye, manually passed time ka use karein
         DateFormat dateTimeFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
         dateTime = dateTimeFormat.parse(dateString);
