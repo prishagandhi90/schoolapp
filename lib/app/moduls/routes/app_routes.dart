@@ -72,6 +72,20 @@ abstract class _Paths {
 
   static const IPDDASHBOARDSCREEN = '/ipd-dashboard-screen';
   static const IPDADMITTEDPATIENTS = '/ipd-admitted-patients';
+  static const LABREPORTSSCREEN = '/lab-reports-screen';
+  static const LABSUMMARYSCREEN = '/lab-summary-screen';
+  static const VOICESCREEN = '/voice-screen';
+
+  static const INVESTIGATIONREQUISITIONSCREEN = '/inv-req-screen';
+  static const INVESTIGATIONREQUISITIONSERVICE = '/inv-service-screen';
+
+  static const FILTERSCREEN = '/filter-screen';
+  static const FILTERTAGSCREEN = '/filter-tag-screen';
+  static const NOTIFICATIONSCREEN = '/notification-screen';
+
+  static const PHARMACYSCREEN = '/pharmacy-screen';
+  static const PRESCRIPTIONDETAILSSCREEN = '/pres-details-screen';
+  static const PRESCRIPTIONVIEWERSCREEN = '/pres-viewer-screen';
 
   static const Force_update = '/force-update';
 }
