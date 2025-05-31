@@ -24,6 +24,7 @@ class DetailsScreen extends GetView<AttendenceController> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // MonthPicker widget jo month select karne ke liye use hota hai
                   MonthPicker(
                     controller: controller,
                     scrollController: controller.monthScrollControllerDetail,
@@ -34,7 +35,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                         ? Center(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.10)),
-                              child: ProgressWithIcon(),
+                              child: ProgressWithIcon(), // Loading indicator jab data load ho raha ho
                             ),
                           )
                         : controller.attendenceDetailTable.isNotEmpty
@@ -61,7 +62,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                       Expanded(
                                         child: RefreshIndicator(
                                           onRefresh: () async {
-                                            await await controller.getattendeceinfotable();
+                                            await await controller.getattendeceinfotable(); // Refresh karne par data fetch karna
                                           },
                                           child: SingleChildScrollView(
                                             controller: controller.attendanceScrollController,
@@ -74,6 +75,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                 3: FixedColumnWidth(constraints.maxWidth * 0.2),
                                                 4: FixedColumnWidth(constraints.maxWidth * 0.2),
                                               },
+                                              // Table ke rows generate karna
                                               children: List.generate(
                                                 controller.attendenceDetailTable.length,
                                                 (index) => TableRow(
@@ -130,7 +132,8 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         onTap: () {
                                                           detailbottomsheet(context, index);
                                                         },
-                                                        child: const Icon(Icons.arrow_drop_down_circle),
+                                                        child: const Icon(
+                                                            Icons.arrow_drop_down_circle), // Arrow icon to open details bottom sheet
                                                       ),
                                                     ),
                                                   ],
@@ -144,8 +147,9 @@ class DetailsScreen extends GetView<AttendenceController> {
                                   ),
                                 ),
                               )
+                            // Agar attendance data empty ho
                             : Padding(
-                                padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15),
+                                padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15,
                                 child: Center(
                                   child: Text(
                                     AppString.noattendencedata,
@@ -272,6 +276,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                             ),
                           ),
                           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                          // Shift, ST, LV Section
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
@@ -359,6 +364,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                             ),
                           ),
                           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                          // LC, EG Section
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(
@@ -431,6 +437,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                             ),
                           ),
                           const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+                          // OTENTMIN and OTMIN Section
                           Container(
                             height: MediaQuery.of(context).size.height * 0.15,
                             decoration: BoxDecoration(

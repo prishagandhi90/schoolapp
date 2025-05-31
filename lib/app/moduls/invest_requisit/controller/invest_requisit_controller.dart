@@ -77,7 +77,7 @@ class InvestRequisitController extends GetxController {
   }
 
   bool isNextButtonEnabled() {
-    if ((ipdNo != null && ipdNo!.isNotEmpty) && (typeController.text != null && typeController.text!.isNotEmpty)) {
+    if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
       if ((typeController.text.toLowerCase() == 'lab' ||
               typeController.text.toLowerCase() == 'radio' ||
               typeController.text.toLowerCase() == 'other investigation') &&
@@ -286,7 +286,7 @@ class InvestRequisitController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "InvestRequisit",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
