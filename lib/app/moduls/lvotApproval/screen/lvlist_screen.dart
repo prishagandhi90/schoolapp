@@ -87,26 +87,11 @@ class LvList extends StatelessWidget {
                                                   foregroundColor: Colors.black,
                                                   icon: Icons.close,
                                                 ),
-                                                // SlidableAction(
-                                                //   onPressed: (_) async {
-                                                //     if (controller.selectedRole.toLowerCase() == "incharge") {
-                                                //       controller.noteController.text = controller.filteredList[index].inchargeNote.toString();
-                                                //     } else if (controller.selectedRole == "HOD") {
-                                                //       controller.noteController.text = controller.filteredList[index].hoDNote.toString();
-                                                //     } else if (controller.selectedRole == "HR") {
-                                                //       controller.noteController.text = controller.filteredList[index].hrNote.toString();
-                                                //     }
-
-                                                //     controller.showNoteDialog(context, index);
-                                                //   },
-                                                //   backgroundColor: AppColor.lightblue,
-                                                //   foregroundColor: Colors.black,
-                                                //   icon: Icons.note,
-                                                // ),
                                                 CustomSlidableAction(
                                                   onPressed: (_) async {
                                                     if (controller.selectedRole.toLowerCase() == "incharge") {
-                                                      controller.noteController.text = controller.filteredList[index].inchargeNote.toString();
+                                                      controller.noteController.text =
+                                                          controller.filteredList[index].inchargeNote.toString();
                                                     } else if (controller.selectedRole == "HOD") {
                                                       controller.noteController.text = controller.filteredList[index].hoDNote.toString();
                                                     } else if (controller.selectedRole == "HR") {

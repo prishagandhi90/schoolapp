@@ -22,34 +22,6 @@ class NoInternetView extends GetView<NoInternetController> {
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 20),
-                //   child: Row(
-                //     children: [
-                //       Flexible(
-                //         child: Image.asset(
-                //           AssetPngs.tfgLogo, // ConstAsset.tfgLogoPNG,
-                //         ),
-                //       ),
-                //       const SizedBox(
-                //         width: 10,
-                //       ),
-                //       Flexible(
-                //         flex: 5,
-                //         child: AppText(
-                //           text: Strings.togetherForGood,
-                //           textAlign: TextAlign.center,
-                //           fontSize: Responsive.isTablet ? 30 : 20.spMin,
-                //           fontWeight: FontWeight.w600,
-                //           fontFamily: FontConst.museoSlab,
-                //           fontColor: const Color(0xff00313C),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // const Spacer(),
-                // sizedBox40,
                 Expanded(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height,

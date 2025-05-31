@@ -67,15 +67,18 @@ class InvestRequisitController extends GetxController {
 
   @override
   void onInit() {
-    fetchExternalLab();
+    fetchExternalLab(); // External lab and service group data ko fetch karte hi controller initialize hote hi
     fetchServiceGroup();
+    // Focus listener add kiya gaya hai taaki focus change hone par update() call ho
     focusNode.addListener(() {
       hasFocus = focusNode.hasFocus;
       update();
     });
     super.onInit();
   }
-
+  // 'Next' button enable hoga sirf tab jab IPD No aur Type filled ho
+// Saath hi 'internal' ke liye type 'lab', 'radio', 'other investigation' ho
+// Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
       if ((typeController.text.toLowerCase() == 'lab' ||
@@ -91,18 +94,18 @@ class InvestRequisitController extends GetxController {
     }
     return false;
   }
-
+  // Agar koi service select ki gayi hai toh 'Save' button enable hoga
   bool isSaveButtonEnabled() {
     return selectedServices.isNotEmpty;
   }
-
+  // Patient name se UHID extract karta hai
   String getUHId(String patientName) {
     if (patientName.isEmpty) return "";
 
     List<String> parts = patientName.split('|');
     return parts.last.trim(); // last part with trimmed spaces
   }
-
+  // Investigation type ke dropdown ke items
   final List<DropdownMenuItem<Map<String, String>>> typeItems = [
     DropdownMenuItem(
       value: {'text': '--select--'},
@@ -117,7 +120,7 @@ class InvestRequisitController extends GetxController {
       child: Text('radio'),
     ),
   ];
-
+  // Priority ke dropdown items (normal / urgent)
   final List<DropdownMenuItem<Map<String, String>>> priorityItems = [
     DropdownMenuItem(
       value: {'text': 'normal'},
@@ -305,10 +308,9 @@ class InvestRequisitController extends GetxController {
     update(); // this will rebuild widgets using GetBuilder
   }
 
-  // final TextEditingController controller = TextEditingController();
   List<SearchserviceModel> suggestions = [];
   List<SearchDrNmModel> suggestions_DrNm = [];
-
+  // Service search ke suggestions fetch karne ke liye
   Future<void> getSuggestions(String query) async {
     if (query.isEmpty) return;
     List<SearchserviceModel> results = await fetchSearchService(query);
@@ -316,7 +318,7 @@ class InvestRequisitController extends GetxController {
     suggestions = results;
     update();
   }
-
+  // Doctor name search ke suggestions fetch karne ke liye
   Future<void> getDrNmSuggest(String query, String ServiceId) async {
     if (query.isEmpty) return;
     List<SearchDrNmModel> results = await fetchSearchDrNm(query, ServiceId);
@@ -324,7 +326,7 @@ class InvestRequisitController extends GetxController {
     suggestions_DrNm = results;
     update();
   }
-
+  // Query list API call karta hai (List dikhane ke liye - services etc.)
   Future<List<GetquerylistModel>> fetchGetQueryList(String ipdNo, {String searchText = ""}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -373,24 +375,24 @@ class InvestRequisitController extends GetxController {
     update();
     return getQueryList;
   }
-
+  // Query field pe search karne par API call karta hai
   Future<void> searchservice(String query, String ipdNo) async {
     await fetchGetQueryList(ipdNo, searchText: query);
   }
-
+  // Text change hone pe debounce karke API call karta hai
   void onSearchChanged(String query, String ipdNo) {
     if (debounce?.isActive ?? false) debounce?.cancel();
     debounce = Timer(Duration(milliseconds: 500), () {
       searchservice(query, ipdNo);
     });
   }
-
+  // Top 10 ya 40 list change karne par list ko fetch karta hai
   Future<void> changeTop(int top) async {
     selectedTop = top;
     await fetchGetQueryList(ipdNo);
     update();
   }
-
+  // Duplicate service check karta hai
   bool isDuplicateService(String serviceId) {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == serviceId);
 
@@ -399,7 +401,7 @@ class InvestRequisitController extends GetxController {
     }
     return false;
   }
-
+  // Service list me add karta hai agar duplicate na ho
   Future<void> addService(GetquerylistModel service) async {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.id.toString());
 
@@ -438,7 +440,7 @@ class InvestRequisitController extends GetxController {
       );
     }
   }
-
+  // Selected service list save karta hai (API call)
   Future<void> saveSelectedServiceList(String ipdNo) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -653,7 +655,7 @@ class InvestRequisitController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Session expired, login again.');
       } else {
-        Get.rawSnackbar(message: resp_DelReqDtlSrv_model.message ?? "Something went wrong");
+        Get.rawSnackbar(message: resp_DelReqDtlSrv_model.message);
       }
     } catch (e) {
       ApiErrorHandler.handleError(

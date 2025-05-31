@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class ForgotpassScreen extends GetView<ForgotpassController> {
-  final String mobileNumber;
+  final String mobileNumber; // Mobile number jo constructor se pass hota hai
 
   const ForgotpassScreen({Key? key, required this.mobileNumber}) : super(key: key);
 
@@ -21,7 +21,8 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
     Get.put(ForgotpassController());
     return GetBuilder<ForgotpassController>(builder: (controller) {
       return PopScope(
-        canPop: false,
+        canPop: false, // User ko back button press karke is screen se bahar jaane se rokne ke liye canPop:false
+        // Jab user back button press kare toh LoginScreen pe redirect karein with animation
         onPopInvoked: (v) {
           Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
         },
@@ -32,8 +33,9 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 15),
+                // Form widget for validation
                 child: Form(
-                  key: controller.passFormKey,
+                  key: controller.passFormKey, // Form key from controller for validation
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -66,10 +68,12 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                           TextFormField(
                             controller: controller.numberController..text = mobileNumber,
                             keyboardType: TextInputType.number,
+                            // Validation logic for mobile number
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return AppString.plzentermobileno;
                               }
+                              // Regex to check exactly 10 digits
                               if (!RegExp(r'^\d{10}$').hasMatch(value)) {
                                 return AppString.entervalidmobileno;
                               }
@@ -79,6 +83,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                               fontFamily: CommonFontStyle.plusJakartaSans,
                               fontSize: getDynamicHeight(size: 0.016),
                             ),
+                            // Input restrictions: digits only and max length 10
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly,
                               LengthLimitingTextInputFormatter(10),
@@ -154,6 +159,7 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                                 width: MediaQuery.of(context).size.width * 0.35,
                                 child: ElevatedButton(
                                   onPressed: () {
+                                    // Navigate back to LoginScreen with animation
                                     Get.offAll(const LoginScreen(), duration: const Duration(milliseconds: 700));
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -177,15 +183,6 @@ class ForgotpassScreen extends GetView<ForgotpassController> {
                           )
                         ],
                       ),
-                      // MediaQuery.of(context).viewInsets.bottom > 0
-                      //     ? const Spacer()
-                      //     : Align(
-                      //         alignment: Alignment.bottomCenter,
-                      //         child: Image.asset(
-                      //           'assets/Venus_Hospital_New_Logo-removebg-preview.png',
-                      //           width: MediaQuery.of(context).size.width * 0.8,
-                      //         ),
-                      //       ),
                     ],
                   ),
                 ),

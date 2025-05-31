@@ -25,15 +25,13 @@ class MispunchController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   setCurrentMonthYear();
-    // });
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
     setCurrentMonthYear();
   }
 
+  // Set scroll position and initiate data load
   void setCurrentMonthYear() {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     if (monthScrollController_mispunch.hasClients) {
@@ -49,23 +47,22 @@ class MispunchController extends GetxController {
       } else if (targetScrollPosition > maxScrollExtent) {
         targetScrollPosition = maxScrollExtent;
       }
-
+      // Animate scroll to selected month
       monthScrollController_mispunch.animateTo(
         targetScrollPosition,
         duration: Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
     }
-    // });
-
+    // Create year dropdown (value passed through selValue)
     DropDownAttendance(
       selValue: YearSel_selIndex,
       onPressed: (index) {
-        upd_YearSelIndex(index);
-        showHideMsg();
+        upd_YearSelIndex(index); // Update year when dropdown changes
+        showHideMsg(); // Show prompt if month/year not selected
       },
     );
-
+    // Fetch data if both month and year are selected
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       getmonthyrempinfotable();
     }
@@ -73,30 +70,21 @@ class MispunchController extends GetxController {
     update();
   }
 
-  @override
-  void onClose() {
-    // monthScrollController_mispunch.dispose(); //
-    super.onClose();
-  }
-  // void clearData() {
-  //   MonthSel_selIndex.value = 0;
-  //   YearSel_selIndex = "";
-  //   mispunchTable.clear();
-  //   isLoading.value = false;
-  // }
-
+  // Update selected month and fetch new data
   void upd_MonthSelIndex(int index) async {
     MonthSel_selIndex.value = index;
     update();
     await getmonthyrempinfotable();
   }
 
+  // Update selected year and fetch new data
   void upd_YearSelIndex(String index) async {
     YearSel_selIndex = index;
     update();
     await fetchDataIfReady();
   }
 
+  // Show snackbar messages based on current selection
   void showHideMsg() {
     String msg = "";
     if (MonthSel_selIndex.value == -1 && YearSel_selIndex.isEmpty) {
@@ -112,6 +100,7 @@ class MispunchController extends GetxController {
     }
   }
 
+  // Check if both month and year are selected before fetching data
   Future fetchDataIfReady() async {
     if (MonthSel_selIndex.value != -1 && YearSel_selIndex.isNotEmpty) {
       await getmonthyrempinfotable();

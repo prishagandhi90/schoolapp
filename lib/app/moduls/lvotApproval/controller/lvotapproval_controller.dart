@@ -336,14 +336,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
 
   Future<List<SaveAppRejLeaveList>> SelectAll_Leave_app_rej_List() async {
     try {
-      // String UpdFlag = "";
-      // if (selectedRole.toString().toLowerCase() == "incharge") {
-      //   UpdFlag = "INC"; // Incharge
-      // } else if (selectedRole.toString().toLowerCase() == "hr") {
-      //   UpdFlag = "HR"; // HR
-      // } else if (selectedRole.toString().toLowerCase() == "hod") {
-      //   UpdFlag = "HOD"; // Admin
-      // }
       isLoader.value = true;
       update();
 
@@ -863,100 +855,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     );
   }
 
-  // void showNoteDialog(BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return GetBuilder<LvotapprovalController>(
-  //           // Wrap with GetBuilder
-  //           builder: (controller) {
-  //             return AlertDialog(
-  //                 // titlePadding: EdgeInsets.zero,
-  //                 // contentPadding: const EdgeInsets.all(16.0),
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(12.0),
-  //                 ),
-  //                 title: Stack(
-  //                   children: [
-  //                     Align(
-  //                       alignment: Alignment.topRight,
-  //                       child: IconButton(
-  //                         onPressed: () async {
-  //                           Navigator.pop(context);
-  //                         },
-  //                         icon: const Icon(Icons.close),
-  //                         color: Colors.black,
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 content: Column(
-  //                   children: [
-  //                     CustomTextFormField(
-  //                       hint: AppString.note,
-  //                       hintStyle: AppStyle.black.copyWith(
-  //                         // fontSize: 14,
-  //                         fontSize: getDynamicHeight(size: 0.016),
-  //                       ),
-  //                       minLines: 3,
-  //                       maxLines: null,
-  //                       keyboardType: TextInputType.multiline,
-  //                       controller: controller.noteController,
-  //                       focusNode: controller.notesFocusNode,
-  //                       scrollPhysics: BouncingScrollPhysics(),
-  //                       onChanged: (value) {},
-  //                       onTapOutside: (event) {
-  //                         FocusManager.instance.primaryFocus?.unfocus();
-  //                       },
-  //                       onFieldSubmitted: (value) {
-  //                         // Move focus to the next field
-  //                         // FocusScope.of(context).requestFocus(passwordFocusNode);
-  //                         FocusManager.instance.primaryFocus?.unfocus();
-  //                       },
-  //                       validator: (value) {
-  //                         if (value == null || value.isEmpty) {
-  //                           return AppString.notesisrequired;
-  //                         }
-  //                         return null;
-  //                       },
-  //                     ),
-  //                     SizedBox(
-  //                       height: MediaQuery.of(context).size.width * 0.13,
-  //                       width: MediaQuery.of(context).size.width * 0.40,
-  //                       child: ElevatedButton(
-  //                         onPressed: () {},
-  //                         // controller.isSaveBtnLoading
-  //                         //     ? null
-  //                         //     : () async {
-  //                         //         await controller.saveLeaveEntryList("LV");
-  //                         //         controller.update();
-  //                         //       },
-  //                         style: ElevatedButton.styleFrom(
-  //                           backgroundColor: AppColor.lightgreen,
-  //                           shape: RoundedRectangleBorder(
-  //                             borderRadius: BorderRadius.circular(10),
-  //                           ),
-  //                         ),
-  //                         child:
-  //                             // controller.isSaveBtnLoading
-  //                             //     ? const CircularProgressIndicator()
-  //                             //     :
-  //                             Text(
-  //                           AppString.save,
-  //                           style: AppStyle.black.copyWith(
-  //                             // fontSize: 20,
-  //                             fontSize: getDynamicHeight(size: 0.022),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ));
-  //           },
-  //         );
-  //       });
-  // }
-
   Future<void> lvlistbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
       backgroundColor: AppColor.white,
@@ -1102,47 +1000,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
       },
     );
   }
-
-  // Widget parameterWidget({required String title, required String value,}) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
-  //     child: IntrinsicHeight(
-  //       child: Container(
-  //         constraints: BoxConstraints(
-  //           maxHeight: MediaQuery.of(context).size.height * 0.30,
-  //         ),
-  //         decoration: BoxDecoration(
-  //           color: AppColor.lightblue,
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         child: Column(
-  //           children: [
-  //             Container(
-  //               padding: const EdgeInsets.all(10),
-  //               decoration: BoxDecoration(
-  //                 borderRadius: BorderRadius.circular(20),
-  //                 color: AppColor.primaryColor,
-  //               ),
-  //               child: Row(
-  //                 children: [
-  //                   Text(title, style: AppStyle.w50018.copyWith(fontWeight: FontWeight.w600)),
-  //                 ],
-  //               ),
-  //             ),
-  //             Container(
-  //               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-  //               alignment: Alignment.centerLeft,
-  //               child: Text(
-  //                 value,
-  //                 style: AppStyle.fontfamilyplus.copyWith(fontWeight: FontWeight.w600),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Future<void> otlistbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
@@ -1296,16 +1153,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     HRYN_c = false.obs;
     isSearchActive = false;
     roleStatus.clear();
-    // overtimeController.fromDateController.clear();
-    // overtimeController.toDateController.clear();
-    // overtimeController.fromTimeController.clear();
-    // overtimeController.toTimeController.clear();
-    // overtimeController.noteController.clear();
-    // overtimeController.otMinutesController.clear();
-    // overtimeController.delayreasonName_OT_Controller.clear();
-    // overtimeController.delayreasonId_OT_Controller.clear();
-    // tabController_Leave.animateTo(0);
-    // overtimeController.tabController_OT.animateTo(0);
     update();
   }
 }

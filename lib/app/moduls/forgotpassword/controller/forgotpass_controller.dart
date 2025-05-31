@@ -17,7 +17,7 @@ class ForgotpassController extends GetxController {
   late MobileTable mobileTable;
   bool isLoadingLogin = false;
   String devToken = "";
-
+  // Sends OTP to the entered mobile number using the API
   Future<MobileTable?> sendotp() async {
     isLoadingLogin = true;
     update();
@@ -59,6 +59,7 @@ class ForgotpassController extends GetxController {
     }
   }
 
+  // Validates the form and navigates to OTP screen if OTP is received
   Future<void> requestOTP(BuildContext context) async {
     isLoadingLogin = true;
     String mobNo = numberController.text;
@@ -66,6 +67,7 @@ class ForgotpassController extends GetxController {
     try {
       if (passFormKey.currentState!.validate()) {
         MobileTable? response = await sendotp();
+        // If OTP is received successfully
         if (response != null && response.otpNo != null && response.otpNo != "") {
           final respOTP = response.otpNo.toString();
           var loginController = Get.put(LoginController());
@@ -83,11 +85,6 @@ class ForgotpassController extends GetxController {
           );
           // }
         }
-        // else {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     SnackBar(content: Text(AppString.failedtorequestotp)),
-        //   );
-        // }
       }
     } catch (e) {
       // Handle exception

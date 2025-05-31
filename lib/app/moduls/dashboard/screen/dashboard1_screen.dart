@@ -26,11 +26,9 @@ class Dashboard1Screen extends GetView<DashboardController> {
           resizeToAvoidBottomInset: true,
           backgroundColor: AppColor.white,
           onDrawerChanged: (isop) {
-            // var bottomBarController = Get.put(BottomBarController());
             hideBottomBar.value = isop;
-            // bottomBarController.update();
           },
-          drawer: CustomDrawer(),
+          drawer: CustomDrawer(), // Drawer open ya close hone par bottom nav bar chhupana/show karna
           appBar: AppBar(
             backgroundColor: AppColor.white,
             title: Text(
@@ -63,9 +61,11 @@ class Dashboard1Screen extends GetView<DashboardController> {
                 child: GestureDetector(
                   onTap: () {
                     final notificationController = Get.put(NotificationController());
+                    // Agar notifications list khali hai to fetch karo
                     if (notificationController.filternotificationlist.isEmpty) {
                       notificationController.fetchNotificationList();
                     }
+                    // NotificationScreen par navigate karna (PersistentNavBar ke sath)
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
                       screen: NotificationScreen(),
@@ -83,6 +83,7 @@ class Dashboard1Screen extends GetView<DashboardController> {
                         AppImage.notification,
                         width: getDynamicHeight(size: 0.022),
                       ),
+                      // Notification badge dikha rahe hain agar count > 0 ho
                       if (controller.notificationCount != "0") // 👈 Condition lagayi
                         Positioned(
                           right: -2,
@@ -90,13 +91,13 @@ class Dashboard1Screen extends GetView<DashboardController> {
                           child: Container(
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: AppColor.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               controller.notificationCount,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColor.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),

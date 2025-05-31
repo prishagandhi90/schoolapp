@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
@@ -29,23 +30,13 @@ class BottomBarView extends GetView<BottomBarController> {
                   return false;
                 }
                 if (controller.currentIndex.value == 0) {
-                  // final bottomBarController = Get.find<BottomBarController>();
-                  // bottomBarController.resetAndInitialize();
                   hideBottomBar.value = false;
-                  // bottomBarController.onItemTapped(2, false, context);
                   controller.resetAndInitializeToScreen(2);
                   return false;
-                  // bottomBarController.resetAndInitialize();
-                  // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-                  //   Get.put(BottomBarController());
-                  // }));
-                  // controller.currentIndex.value = 2;
                 } else if (controller.currentIndex.value == 2) {
                   return false;
                 }
-                // else if (controller.currentIndex.value < 0) {
-                //   return false;
-                // }
+
                 return true;
               },
               child: PersistentTabView(
@@ -78,7 +69,6 @@ class BottomBarView extends GetView<BottomBarController> {
                 navBarStyle: controller.currentIndex.value != -1 ? NavBarStyle.style6 : NavBarStyle.style8,
                 stateManagement: true,
                 resizeToAvoidBottomInset: true,
-                // bottomScreenMargin: Sizes.crossLength * 0.020,
                 bottomScreenMargin: getDynamicHeight(size: 0.020),
                 onItemSelected: (index) async {
                   if (controller.payrollModuleScreenRightsTable.isNotEmpty &&
@@ -87,7 +77,7 @@ class BottomBarView extends GetView<BottomBarController> {
                       controller.isPayrollHome.value == false) {
                     if (controller.payrollModuleScreenRightsTable[0].rightsYN == "N" && index != 2) {
                       Get.snackbar(
-                        "You don't have access to this screen",
+                        AppString.youdonthaveaccesstothisscreen,
                         '',
                         colorText: AppColor.white,
                         backgroundColor: AppColor.black,
@@ -98,7 +88,8 @@ class BottomBarView extends GetView<BottomBarController> {
                       controller.update();
                       return;
                     }
-                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) && (index == 0 || index == 1 || index == 3 || index == 4)) {
+                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) &&
+                      (index == 0 || index == 1 || index == 3 || index == 4)) {
                     controller.persistentController.value.index = 0;
                     controller.currentIndex.value = 0;
                     controller.update();
@@ -107,8 +98,6 @@ class BottomBarView extends GetView<BottomBarController> {
 
                   await controller.onItemTapped(index, false, context, false);
                 },
-                // popBehaviorOnSelectedNavBarItemPress: PopBehavior.all,
-                // popAllScreensOnTapOfSelectedTab: true,
               ),
             ),
           ),

@@ -307,16 +307,6 @@ class LvotapprovalScreen extends StatelessWidget {
                                                           color: AppColor.black,
                                                         ),
                                                       ),
-                                                      // suffixIcon: controller.searchController.text.trim().isNotEmpty
-                                                      //     ? GestureDetector(
-                                                      //         onTap: () {
-                                                      //           FocusScope.of(context).unfocus();
-                                                      //           controller.searchController.clear();
-                                                      //           controller.fetchLeaveOTList(
-                                                      //               controller.selectedRole, controller.selectedLeaveType);
-                                                      //         },
-                                                      //         child: const Icon(Icons.cancel_outlined))
-                                                      //     : const SizedBox(),
                                                       prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                                                       contentPadding: EdgeInsets.symmetric(horizontal: 16),
                                                       hintStyle: AppStyle.plusgrey,
@@ -363,90 +353,6 @@ class LvotapprovalScreen extends StatelessWidget {
                                   ],
                                 );
                         }),
-                        // Dynamic TabBar & Search Bar
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left: 8.0),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       // Conditionally show TabBar
-                        //       if (!controller.isSearchActive)
-                        //         Container(
-                        //           padding: const EdgeInsets.symmetric(vertical: 10),
-                        //           width: MediaQuery.of(context).size.width * 0.45,
-                        //           child: Container(
-                        //             // padding: const EdgeInsets.all(4),
-                        //             decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(10),
-                        //               color: AppColor.lightblue,
-                        //             ),
-                        //             child: TabBar(
-                        //               controller: controller.tabController_Lv,
-                        //               labelColor: AppColor.white,
-                        //               unselectedLabelColor: AppColor.black,
-                        //               dividerColor: AppColor.transparent,
-                        //               indicatorSize: TabBarIndicatorSize.tab,
-                        //               onTap: (value) async {
-                        //                 await controller.updateFilteredList(
-                        //                   controller.selectedRole,
-                        //                   value == 0 ? 'LV' : 'OT',
-                        //                 );
-                        //               },
-                        //               labelStyle: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans),
-                        //               indicator: BoxDecoration(
-                        //                 borderRadius: BorderRadius.circular(10),
-                        //                 color: AppColor.primaryColor,
-                        //               ),
-                        //               tabs: const [Tab(text: 'LV'), Tab(text: 'OT')],
-                        //               physics: const NeverScrollableScrollPhysics(),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       if (!controller.isSearchActive)
-                        //         IconButton(
-                        //           icon: const Icon(Icons.search),
-                        //           onPressed: () {
-                        //             controller.activateSearch(true);
-                        //           },
-                        //         ),
-                        //       if (controller.isSearchActive)
-                        //         Expanded(
-                        //           child: Container(
-                        //             height: 50,
-                        //             decoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(10),
-                        //               color: Colors.grey[200],
-                        //             ),
-                        //             child: Row(
-                        //               children: [
-                        //                 Expanded(
-                        //                   child: TextField(
-                        //                     controller: controller.searchController,
-                        //                     decoration: const InputDecoration(
-                        //                       hintText: "Search...",
-                        //                       border: InputBorder.none,
-                        //                       contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                        //                     ),
-                        //                     onChanged: (value) {
-                        //                       controller.filterSearchResults(value, controller.selectedLeaveType);
-                        //                     },
-                        //                   ),
-                        //                 ),
-                        //                 IconButton(
-                        //                   icon: const Icon(Icons.cancel),
-                        //                   onPressed: () {
-                        //                     controller.clearSearch();
-                        //                     controller.activateSearch(false);
-                        //                   },
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 10),
                         Expanded(
                           child: TabBarView(
                             controller: controller.tabController_Lv,

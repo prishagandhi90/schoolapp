@@ -88,7 +88,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     notesFocusNode.addListener(_onNotesFocusChange);
     // isLoading = false;
     update();
-
+    // Scroll hone par bottom navigation bar ko hide/show karna
     leaveScrollController.addListener(() {
       if (leaveScrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (hideBottomBar.value) {
@@ -105,6 +105,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   void _onNotesFocusChange() {
+    // Notes field ka focus change hone par UI update karna
     if (!notesFocusNode.hasFocus) {
       isNotesFieldFocused.value = notesFocusNode.hasFocus;
 
@@ -114,24 +115,20 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onClose() {
-    // leaveScrollController.dispose();
-    // tabController_Leave.dispose();
-
-    // notesFocusNode.removeListener(_onNotesFocusChange);
-    // notesFocusNode.dispose();
     super.onClose();
   }
 
+  // Bottom bar ko hide karne ka function
   void hideBottomNavBar() {
     hideBottomBar.value = true;
-    // bottomBarController.update();
   }
 
+  // Bottom bar ko show karne ka function
   void showBottomNavBar() {
     hideBottomBar.value = false;
-    // bottomBarController.update();
   }
 
+  // Tab change hone par perform hone wale actions
   void _handleTabSelection() async {
     if (tabController_Leave.indexIsChanging) {
       initialIndex.value = tabController_Leave.index;
@@ -146,9 +143,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
+  // Tab change karne ka function
   changeTab(int index) async {
     tabController_Leave.animateTo(index);
     currentTabIndex.value = index;
+    // Agar Leave History tab pe jaa rahe hain aur data empty hai to fetch karo
     if (index == 1 && leaveentryList.isEmpty) {
       inchargeAction.value = "";
       hodAction.value = "";
@@ -159,6 +158,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     update();
   }
 
+  // Leave days calculate karna based on selected from and to date
   updateLeaveDays() async {
     final String formDateText = fromDateController.text;
     final String toDateText = toDateController.text;
@@ -191,7 +191,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       }
 
       isDaysFieldEnabled.value = true;
-
+      // Agar leave type selected hai to left leaves check karo
       if (leaveNameController.text != '') {
         await getLeftLeaves();
         update();
@@ -226,11 +226,13 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     // update();
   }
 
+  // Responsive font size return karta hai (mobile/tablet ke hisaab se)
   double getResponsiveFontSize(BuildContext context, double size) {
     final width = MediaQuery.of(context).size.width;
     return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
   }
 
+  // Leave days dropdown ko clear karne ka function
   clearLeaveDays() async {
     daysController.clear();
     dropdownItems123.assignAll(
@@ -245,6 +247,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     );
   }
 
+  // Row select karne ka function (Leave history ke liye)
   void setSelectedRow(int index) {
     selectedRowIndex = index;
     // update(); // Notify the UI to rebuild
@@ -276,6 +279,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     }
   }
 
+  // API call to get left leave balance for employee
   Future<void> getLeftLeaves() async {
     try {
       if (toDateController.value == '' || toDateController.text == '') {
@@ -640,25 +644,10 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     isLoading = false;
     return [];
   }
-
-  // String formatDateWithTime(String dateString) {
-  //   String jsonDateTime = "";
-  //   if (dateString != "") {
-  //     // DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
-  //     // return DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(parsedDate);
-  //     DateFormat dateFormat = DateFormat("dd-MM-yyyy");
-
-  //     // Parse karke DateTime me convert karo aur time append karo
-  //     DateTime dateTime = dateFormat.parse(dateString).add(Duration(hours: 0, minutes: 0, seconds: 0, milliseconds: 0));
-
-  //     // Convert karo JSON format (ISO 8601) me
-  //     jsonDateTime = dateTime.toIso8601String();
-  //   }
-  //   return jsonDateTime;
-  // }
-
+  // Date formatting function with optional time handling based on flag (OT or LV)
   String formatDateWithTime(String dateString, String flag) {
     String jsonDateTime = "";
+     // Check if the date string is not empty
     if (dateString != "") {
       DateFormat dateFormat = DateFormat("dd-MM-yyyy");
       DateTime dateTime = dateFormat.parse(dateString);
@@ -676,11 +665,12 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     }
     return jsonDateTime;
   }
-
+  // Function to format the FromDateTime or ToDateTime for Overtime using controller
   String formatOTDateTime(OvertimeController overtimeController, String flag) {
     String jsonDateTime = "";
 
     if (flag == "FromDateTime") {
+      // Validate and build FromDateTime using selected date and time
       if (overtimeController.selectedFromDate != null && overtimeController.selectedFromTime != null) {
         DateTime fromDateTime = DateTime(
           overtimeController.selectedFromDate!.year,

@@ -37,6 +37,7 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Dashboard data aur module rights fetch karte hi controller initialize hota hai
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     getDashboardDataUsingToken();
     fetchModuleRights();
@@ -45,11 +46,12 @@ class DashboardController extends GetxController {
     // });
   }
 
+// Module access rights ko fetch karta hai backend se
   Future<List<ModuleScreenRights>> fetchModuleRights() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       // String url = 'http://117.217.126.127:44166/api/Employee/GetEmpSummary_Dashboard';
       String url = ConstApiUrl.empAppModuleRights;
-      SharedPreferences pref = await SharedPreferences.getInstance();
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       empId = await pref.getString(AppString.keyEmpId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -61,6 +63,7 @@ class DashboardController extends GetxController {
         ResponseModuleData responseModuleData = ResponseModuleData.fromJson(jsonDecode(decodedResp));
 
         if (responseModuleData.statusCode == 200) {
+          // Agar rights milte hain to store karo
           if (responseModuleData.data != null && responseModuleData.data!.isNotEmpty) {
             isLoading.value = false;
             empModuleScreenRightsTable = responseModuleData.data!;
@@ -83,6 +86,13 @@ class DashboardController extends GetxController {
     } catch (e) {
       isLoading.value = false;
       update();
+      ApiErrorHandler.handleError(
+        screenName: "Dashboardscreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     }
     return [];
   }
@@ -123,6 +133,7 @@ class DashboardController extends GetxController {
         );
         break;
       case 2:
+        // IPD ke liye bottom bar setup
         var bottomBarController = Get.put(BottomBarController());
         bottomBarController.isIPDHome.value = true;
         bottomBarController.isPayrollHome.value = false;
@@ -169,6 +180,7 @@ class DashboardController extends GetxController {
         );
         break;
       case 6:
+        // Pharmacy screen ke liye bottom bar setup
         var bottomBarController = Get.put(BottomBarController());
         bottomBarController.isPharmacyHome.value = true;
         bottomBarController.isPayrollHome.value = false;
@@ -188,6 +200,7 @@ class DashboardController extends GetxController {
         // );
         break;
       case 7:
+        // Payroll screen ke liye bottom bar setup
         var bottomBarController = Get.put(BottomBarController());
         hideBottomBar.value = false;
         bottomBarController.isIPDHome.value = false;
@@ -256,6 +269,7 @@ class DashboardController extends GetxController {
     return [];
   }
 
+  // Dashboard ka main data token ke through fetch karta hai
   Future<void> getDashboardDataUsingToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -312,55 +326,4 @@ class DashboardController extends GetxController {
       update();
     }
   }
-
-  // Future<void> getDashboardDataUsingToken() async {
-  //   try {
-  //     isLoading.value = true;
-  //     update();
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     if (prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '') {
-  //       String token = prefs.getString(AppString.keyToken) ?? '';
-  //       String loginId = prefs.getString(AppString.keyLoginId) ?? '';
-  //       var jsonbodyObj = {"loginId": loginId};
-  //       String url = ConstApiUrl.empGetDashboardListAPI;
-  //       final ApiController apiController = Get.put(ApiController());
-  //       var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);
-  //       ResponseDashboardData responseDashboardData = ResponseDashboardData.fromJson(jsonDecode(decodedResp));
-
-  //       if (responseDashboardData.statusCode == 200) {
-  //         if (responseDashboardData.data != null) {
-  //           dashboardTable = responseDashboardData.data!;
-  //           // var dashboardController = Get.put(DashboardController());
-  //           employeeName = dashboardTable.employeeName.toString();
-  //           mobileNumber = dashboardTable.mobileNumber.toString();
-  //           emailAddress = dashboardTable.emailAddress.toString();
-  //           empCode = dashboardTable.empCode.toString();
-  //           empType = dashboardTable.empType.toString();
-  //           department = dashboardTable.department.toString();
-  //           designation = dashboardTable.designation.toString();
-  //           isSuperAdmin = dashboardTable.isSuperAdmin.toString();
-  //           isPharmacyUser = dashboardTable.isPharmacyUser.toString();
-
-  //           // dashboardController.update();
-  //           update();
-  //         } else {
-  //           Get.rawSnackbar(message: "No data found!");
-  //         }
-  //         update();
-  //       } else if (responseDashboardData.statusCode == 401) {
-  //         prefs.clear();
-  //         Get.offAll(LoginScreen());
-  //         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-  //       }
-  //     } else {
-  //       // Get.rawSnackbar(message: "Something went wrong");
-  //     }
-  //   } catch (e) {
-  //     isLoading.value = false;
-  //     print('Error: $e');
-  //   } finally {
-  //     isLoading.value = false;
-  //     update();
-  //   }
-  // }
 }

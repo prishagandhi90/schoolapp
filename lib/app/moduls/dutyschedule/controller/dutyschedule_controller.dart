@@ -29,7 +29,7 @@ class DutyscheduleController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    // Hide or show bottom bar based on scroll direction
     dutyScrollController.addListener(() {
       if (dutyScrollController.position.userScrollDirection == ScrollDirection.forward) {
         if (hideBottomBar.value) {
@@ -45,6 +45,7 @@ class DutyscheduleController extends GetxController {
     });
   }
 
+  // Fetches duty week dropdown list and sets current week
   Future<List<sheduledrpdwnlst>> fetchdutyScheduledrpdwn() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -61,11 +62,12 @@ class DutyscheduleController extends GetxController {
       if (rsponsedropden.statusCode == 200) {
         Sheduledrpdwnlst = rsponsedropden.data!;
         isLoading = false;
-
+        // Automatically select current week from dropdown list
         sheduledrpdwnlst? currentWeek = getCurrentWeek(Sheduledrpdwnlst);
         DutyDropdownNameController.text = currentWeek!.name ?? '';
         DutyDropdownValueController.text = currentWeek.value ?? '';
         CurrentWeekItem = currentWeek.name ?? '';
+        // Fetch shifts for selected week
         await getShiftData();
         // update(); // UI refresh karna
       } else if (rsponsedropden.statusCode == 401) {
@@ -92,6 +94,7 @@ class DutyscheduleController extends GetxController {
     return [];
   }
 
+  // On week selection change
   DutyScheduleChangeMethod(Map<String, String>? value) async {
     DutyDropdownValueController.text = value!['value'] ?? '';
     DutyDropdownNameController.text = value['text'] ?? '';
@@ -99,6 +102,7 @@ class DutyscheduleController extends GetxController {
     getShiftData();
   }
 
+  // Returns formatted current week range
   String getCurrentWeekDate() {
     DateTime now = DateTime.now();
     int currentWeekday = now.weekday;

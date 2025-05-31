@@ -12,16 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  bool isObscured = true;
-  bool isVerifyingOtp = false;
-  String devToken = "";
-  bool isLoadingLogin = false;
-  bool withPaasword = false;
-  bool hidePassword = true;
+  bool isObscured = true; // For password visibility toggle
+  bool isVerifyingOtp = false; // OTP verification state
+  String devToken = ""; // Device token for push notifications
+  bool isLoadingLogin = false; // Loader for login process
+  bool withPaasword = false; // Check if login is with password
+  bool hidePassword = true; // Password visibility
   final TextEditingController numberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final loginFormKey = GlobalKey<FormState>();
-  // static final formKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;
   String responseOTPNo = "";
@@ -29,14 +28,7 @@ class LoginController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // saveLoginStatus();
-    // update();
   }
-
-  // Future<void> saveLoginStatus() async {
-  //   var dashboardController = Get.put(DashboardController());
-  //   await dashboardController.getDashboardDataUsingToken();
-  // }
 
   Future<MobileTable?> sendotp() async {
     isLoadingLogin = true;
@@ -79,6 +71,9 @@ class LoginController extends GetxController {
     }
   }
 
+  /// Function to handle login flow
+  /// If [withPaasword] is true, password-based login is performed
+  /// Otherwise, OTP is requested and OTP screen is opened
   Future<void> requestLogin(BuildContext context) async {
     if (withPaasword && passwordController.text.isEmpty) {
       Get.rawSnackbar(message: "Password can not be empty");
@@ -103,6 +98,7 @@ class LoginController extends GetxController {
         String isValidLogin = "false";
         isValidLogin = await otpController.getDashboardData("", context, otpController.deviceTok, passwordController.text);
         if (isValidLogin == "true") {
+          // If login successful, initialize bottom nav and navigate to dashboard
           final bottomBarController = Get.put(BottomBarController());
           bottomBarController.resetAndInitialize();
           await bottomBarController.loadPayrollScreens_Rights();
@@ -111,16 +107,8 @@ class LoginController extends GetxController {
             Get.put(BottomBarController());
           }));
         }
-        // else {
-        //   Get.snackbar(
-        //     AppString.otpincorrect,
-        //     '',
-        //     colorText: AppColor.white,
-        //     backgroundColor: AppColor.black,
-        //     duration: const Duration(seconds: 1),
-        //   );
-        // }
       } else {
+        // If login is via OTP
         if (loginFormKey.currentState!.validate()) {
           MobileTable? response = await sendotp();
           if (response != null && response.otpNo != null && response.otpNo != "") {
@@ -138,13 +126,7 @@ class LoginController extends GetxController {
                 ),
               ),
             );
-            // }
           }
-          // else {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(content: Text(AppString.failedtorequestotp)),
-          //   );
-          // }
         }
       }
     } catch (e) {

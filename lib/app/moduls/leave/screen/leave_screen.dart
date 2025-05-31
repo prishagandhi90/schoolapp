@@ -219,38 +219,6 @@ class LeaveScreen extends GetView<LeaveController> {
                         }).toList(),
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                    //   child: CustomDropdown(
-                    //     text: AppString.hdleaveperiod,
-                    //     controller: controller.hdleaveperiodController,
-                    //     buttonStyleData: ButtonStyleData(
-                    //       height: 50,
-                    //       decoration: BoxDecoration(
-                    //         border: Border.all(color: AppColor.black),
-                    //         borderRadius: BorderRadius.circular(0),
-                    //         color: AppColor.white,
-                    //       ),
-                    //     ),
-                    //     onChanged: (value) {
-                    //       controller.update();
-                    //     },
-                    //     width: double.infinity,
-                    //     items: [
-                    //       {'value': '--select--', 'text': '--select--'},
-                    //       {'value': 'First_Half', 'text': 'First_Half'},
-                    //       {'value': 'Second_Half', 'text': 'Second_Half'},
-                    //     ].map((Map<String, String> item) {
-                    //       return DropdownMenuItem<Map<String, String>>(
-                    //         value: item,
-                    //         child: Text(
-                    //           item['text'] ?? '',
-                    //           style: AppStyle.black,
-                    //         ),
-                    //       );
-                    //     }).toList(),
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: CustomDropdown(
@@ -302,14 +270,14 @@ class LeaveScreen extends GetView<LeaveController> {
                         controller: controller.noteController,
                         focusNode: controller.notesFocusNode,
                         scrollPhysics: BouncingScrollPhysics(),
-                         enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.black, width: 1),
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.black,width: 1),
-                              borderRadius: BorderRadius.circular(0),
-                            ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black, width: 1),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
                         onChanged: (value) {
                           print('Password changed: $value');
                         },

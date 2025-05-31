@@ -31,6 +31,7 @@ class NotificationController extends GetxController {
 
   @override
   void onInit() {
+    // Initial setup: clear filters, fetch data, and setup focus handling
     clearFilters();
     fetchNotificationList();
     searchController.clear();
@@ -38,14 +39,14 @@ class NotificationController extends GetxController {
     searchFocusNode.addListener(_onsearchFocusChange);
     super.onInit();
   }
-
+  // Called when search text field's focus changes
   void _onsearchFocusChange() {
     if (!searchFocusNode.hasFocus) {
       isNotesFieldFocused.value = searchFocusNode.hasFocus;
       update();
     }
   }
-
+  // Open a date picker and set selected value to fromDateController
   Future<void> selectFromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
