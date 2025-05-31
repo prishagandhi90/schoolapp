@@ -163,7 +163,6 @@ class IpdDashboardScreen extends StatelessWidget {
                     ).then((value) async {
                       Get.back();
                       await adPatientController.fetchDeptwisePatientList();
-                      // var dashboardController = Get.put(DashboardController());
                       await dashboardController.getDashboardDataUsingToken();
                       var bottomBarController = Get.find<BottomBarController>();
                       bottomBarController.currentIndex.value = 0;
@@ -179,6 +178,7 @@ class IpdDashboardScreen extends StatelessWidget {
                         AppImage.notification,
                         width: getDynamicHeight(size: 0.022),
                       ),
+                      // 🔹 Show red badge if there are new notifications
                       if (dashboardController.notificationCount != "0") // 👈 Condition lagayi
                         Positioned(
                           right: -2,
@@ -186,13 +186,13 @@ class IpdDashboardScreen extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: AppColor.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               dashboardController.notificationCount,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColor.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -226,7 +226,7 @@ class IpdDashboardScreen extends StatelessWidget {
                         count: controller.patientsData.length,
                         context: context,
                         index: index,
-                        imagePath: 'assets/image/AdPatient.png',
+                        imagePath: AppImage.adpatient,
                         onTap: () {
                           if (controller.isAdmittedPatients_Navigating.value) return;
                           controller.isAdmittedPatients_Navigating.value = true;
@@ -292,8 +292,7 @@ class IpdDashboardScreen extends StatelessWidget {
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();
                           // ⬇️ Call the dialog function directly
-                          // envReqController.mobileController.clear();
-                          // envReqController.passwordController.clear();
+
                           await envReqController.loginAlertDialog(
                             context,
                             "INVESTIGATION REQUISITION",

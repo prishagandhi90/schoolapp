@@ -49,10 +49,8 @@ class AttendanceScreen extends StatelessWidget {
                   });
                 },
               ),
-              // bottom: TabBar(
-              //   controller: controller.tabController,
-              // ),
               actions: [
+                //custom dropdown widget for year selection
                 DropDownAttendance(
                   selValue: controller.YearSel_selIndex,
                   onPressed: (index) {

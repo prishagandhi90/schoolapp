@@ -32,7 +32,7 @@ dependencies:
   stepper_list_view: ^0.0.2
   anim_search_bar: ^2.0.3
   flutter_slidable: ^3.1.2
-  universal_platform: ^1.0.0+1
+  # universal_platform: ^1.0.0+1     //for web support
   device_info_plus: ^11.3.3
   package_info_plus: ^8.3.0
   url_launcher: ^6.3.1
@@ -41,6 +41,7 @@ dependencies:
   open_file: ^3.5.10
   speech_to_text: ^7.0.0
   mime: ^2.0.0
+  device_marketing_names: ^1.1.0
 
   
 dev_dependencies:

@@ -178,10 +178,6 @@ class LabSummaryScreen extends StatelessWidget {
                                 children: [
                                   _buildFixedHeaderCell("Report", width: getDynamicHeight(size: 0.090)),
                                   _buildFixedHeaderCell("Test", width: getDynamicHeight(size: 0.080)),
-                                  // _buildFixedHeaderCell(
-                                  //   "Range",
-                                  //   width: getDynamicHeight(size: 0.085),
-                                  // ),
                                 ],
                               ),
                               Flexible(
@@ -212,12 +208,6 @@ class LabSummaryScreen extends StatelessWidget {
                                             width: getDynamicHeight(size: 0.080),
                                             // heightContainer: maxHeight_Container,
                                           ),
-                                          // _buildFixedCell(
-                                          //   "${item.normalRange.toString()}", context, index,
-                                          //   height: rowHeights,
-                                          //   width: getDynamicHeight(size: 0.085),
-                                          //   // heightContainer: maxHeight_Container,
-                                          // ),
                                         ],
                                       );
                                     }),
@@ -532,7 +522,7 @@ class LabSummaryScreen extends StatelessWidget {
 
   TextSpan highlightText(String text, String query) {
     if (query.isEmpty) {
-      return TextSpan(text: text, style: TextStyle(color: Colors.black));
+      return TextSpan(text: text, style: TextStyle(color: AppColor.black));
     }
 
     List<TextSpan> spans = [];
@@ -543,16 +533,16 @@ class LabSummaryScreen extends StatelessWidget {
     int index = lowerText.indexOf(lowerQuery);
     while (index != -1) {
       if (index > startIndex) {
-        spans.add(TextSpan(text: text.substring(startIndex, index), style: TextStyle(color: Colors.black)));
+        spans.add(TextSpan(text: text.substring(startIndex, index), style: TextStyle(color: AppColor.black)));
       }
       spans.add(TextSpan(
-          text: text.substring(index, index + query.length), style: TextStyle(color: Colors.black, backgroundColor: Colors.yellow)));
+          text: text.substring(index, index + query.length), style: TextStyle(color: AppColor.black, backgroundColor: AppColor.yellow)));
       startIndex = index + query.length;
       index = lowerText.indexOf(lowerQuery, startIndex);
     }
 
     if (startIndex < text.length) {
-      spans.add(TextSpan(text: text.substring(startIndex), style: TextStyle(color: Colors.black)));
+      spans.add(TextSpan(text: text.substring(startIndex), style: TextStyle(color: AppColor.black)));
     }
 
     return TextSpan(children: spans);

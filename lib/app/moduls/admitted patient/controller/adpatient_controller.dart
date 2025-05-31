@@ -42,7 +42,6 @@ class AdPatientController extends GetxController {
   String tokenNo = '', loginId = '', empId = '';
   String ipdNo = '', uhid = '', patientName = '', bedNo = '';
   final ApiController apiController = Get.put(ApiController());
-  // List<PatientdataModel> patientdata = [];
   List<PatientdataModel> patientsData = [];
   List<PatientdataModel> filterpatientsData = [];
   List<LabData> labdata = [];
@@ -81,47 +80,32 @@ class AdPatientController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // generateLast7Days();
-    _syncScrollControllers();
-    // fetchDeptwisePatientList();
-    getPatientDashboardFilters();
-    loadScreens();
+    _syncScrollControllers(); // Sync both vertical scrolls
+    getPatientDashboardFilters(); // Load dropdown filters
+    loadScreens(); // Load user module rights and grid config
     player.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {
         isPlaying = false;
         update();
       }
     });
-    fetchData();
-    // update();
-    // fetchsummarylabdata();
-
-    // adPatientScrollController.addListener(() {
-    //   if (adPatientScrollController.position.userScrollDirection == ScrollDirection.forward) {
-    //     if (hideBottomBar.value) {
-    //       hideBottomBar.value = false;
-    //       bottomBarController.update();
-    //     }
-    //   } else if (adPatientScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-    //     if (!hideBottomBar.value) {
-    //       hideBottomBar.value = true;
-    //       bottomBarController.update();
-    //     }
-    //   }
-    // });
+    fetchData(); // Fetch admitted patient data
     filteredList = List.from(originalList);
   }
 
+  // Loads rights for different IPD module screens
   void loadScreens() async {
     screenRightsTable = await CommonMethods.fetchModuleScreens("IPD");
     filteredList = originalList;
     update();
   }
 
+  // Fetches department-wise patient list data
   Future<void> fetchData() async {
     await fetchDeptwisePatientList();
   }
 
+  // Synchronizes left and right vertical scroll controllers
   void _syncScrollControllers() {
     verticalScrollControllerLeft.addListener(() {
       if (verticalScrollControllerRight.hasClients && verticalScrollControllerRight.offset != verticalScrollControllerLeft.offset) {
@@ -136,6 +120,7 @@ class AdPatientController extends GetxController {
     });
   }
 
+  // API call to fetch patient list with optional search and filters
   Future<List<PatientdataModel>> fetchDeptwisePatientList({String? searchPrefix, bool isLoader = true}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
@@ -147,7 +132,13 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? "",
+        "orgs": selectedOrgsList,
+        "floors": selectedFloorsList,
+        "wards": selectedWardsList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -192,6 +183,7 @@ class AdPatientController extends GetxController {
     return patientsData.toList();
   }
 
+// API call to get dropdown filters like wards, floors, orgs
   Future<List<PatientdataModel>> getPatientDashboardFilters({bool isLoader = true}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -229,6 +221,7 @@ class AdPatientController extends GetxController {
     return [];
   }
 
+// API call to fetch patient summary lab data based on selected patient
   Future<List<LabData>> fetchsummarylabdata({bool isLoader = true}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
@@ -352,6 +345,7 @@ class AdPatientController extends GetxController {
     return width > 600 ? size * 1.2 : size; // iPad pe 20% zyada, baki normal
   }
 
+// Patient list ko sort karne ke liye API call
   getSortData({bool isLoader = true}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -391,7 +385,6 @@ class AdPatientController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
-
       ApiErrorHandler.handleError(
         screenName: "DeptwisePatientListScreen",
         error: e.toString(),
@@ -402,6 +395,7 @@ class AdPatientController extends GetxController {
     }
   }
 
+  // Bottom Sheet for patient filter
   Future<void> AdpatientFiltterBottomSheet() async {
     showModalBottomSheet(
       context: Get.context!,
@@ -447,6 +441,7 @@ class AdPatientController extends GetxController {
                         ),
                       ],
                     ),
+                    // Filter options
                     Expanded(
                       child: ListView(
                         controller: scrollController,
@@ -562,6 +557,7 @@ class AdPatientController extends GetxController {
         },
       ),
     ).whenComplete(() {
+      // Jab bottom sheet close ho jaaye aur filter apply na hua ho
       if (!callFilterAPi) {
         fetchDeptwisePatientList();
         selectedOrgsList = List.from(tempOrgsList);
@@ -862,7 +858,7 @@ class AdPatientController extends GetxController {
       case 0:
         if (isAdmittedPatients_Navigating.value) return;
         isAdmittedPatients_Navigating.value = true;
-
+        // Check access rights
         if (screenRightsTable.isNotEmpty) {
           if (screenRightsTable[0].rightsYN == "N") {
             isAdmittedPatients_Navigating.value = false;
@@ -1194,70 +1190,6 @@ class AdPatientController extends GetxController {
     }
   }
 
-  // Future<void> uploadVoiceToServer({
-  //   required List<int> bytes,
-  //   required String filename,
-  //   required String loginId,
-  //   required String empId,
-  //   required String uhid,
-  //   required String ipdNo,
-  //   required String patientName,
-  //   required String doctorName,
-  //   required String createdUser,
-  // }) async {
-  //   // final dio = Dio();
-  //   String token = ''; // Add your token logic here if needed
-
-  //   // Determine the MIME type of the file
-  //   final mimeType = lookupMimeType(filename) ?? 'audio/m4a';
-
-  //   // Prepare form data
-  //   final formData = dio.FormData.fromMap({
-  //     'file': dio.MultipartFile.fromBytes(
-  //       bytes,
-  //       filename: filename,
-  //       contentType: dio.DioMediaType.parse(mimeType),
-  //     ),
-  //     'loginId': loginId,
-  //     'empID': empId,
-  //     'uHID': uhid,
-  //     'iPDNo': ipdNo,
-  //     'patientName': patientName,
-  //     'voiceFileName': filename,
-  //     'doctorName': doctorName,
-  //     'createdUser': createdUser,
-  //     'contentType': mimeType,
-  //   });
-
-  //   // Set headers
-  //   final headers = {
-  //     'Content-Type': 'application/json',
-  //     if (token.isNotEmpty) 'Authorization': 'Bearer $token',
-  //   };
-
-  //   try {
-  //     // Send the request
-  //     final dioPackage = Dio();
-  //     final response = await dioPackage.request(
-  //       ConstApiUrl.empVoiceApi, // Replace with the actual API endpoint URL
-  //       data: formData,
-  //       options: Options(
-  //         method: 'POST',
-  //         headers: headers,
-  //       ),
-  //     );
-
-  //     // Handle the response
-  //     if (response.statusCode == 200) {
-  //       print('Upload success: ${response.data}');
-  //     } else {
-  //       print('Upload failed: ${response.statusCode} - ${response.statusMessage}');
-  //     }
-  //   } catch (e) {
-  //     print('Upload Exception: $e');
-  //   }
-  // }
-
   Future<void> togglePlayback() async {
     if (filePath == null || !File(filePath!).existsSync()) return;
 
@@ -1314,7 +1246,9 @@ class AdPatientController extends GetxController {
     return 'Translation failed: ${response.statusCode}';
   }
 
+  // Function to translate plain English into medically appropriate text
   Future<String> makeMedicalStyleTranslation(String translatedText) async {
+    // OpenAI API key (make sure not to expose this in production apps)
     final apiKey =
         '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';
     final url = Uri.parse("https://api.openai.com/v1/chat/completions");
@@ -1326,6 +1260,7 @@ class AdPatientController extends GetxController {
         "model": "gpt-3.5-turbo",
         "messages": [
           {
+            // System message sets the behavior of the assistant
             "role": "system",
             "content":
                 "You are a professional medical doctor. Convert the provided plain English text into a medically appropriate version using clinical terminology and doctor-style explanation.",

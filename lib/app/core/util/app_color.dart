@@ -20,6 +20,7 @@ class AppColor {
 
   //yellow
   static Color lightyellow = Color.fromARGB(255, 240, 225, 183);
+  static Color yellow = Color.fromARGB(255, 255, 204, 0);
 
   //blue & teal
   static Color teal = Color.fromRGBO(0, 121, 113, 1);

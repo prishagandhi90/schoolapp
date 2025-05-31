@@ -94,7 +94,7 @@ class VoiceScreen extends StatelessWidget {
                     onPressed:
                         controller.isRecording ? () => controller.stopListeningAndRecording() : controller.startListeningAndRecording,
                     // onPressed: controller.stopListeningAndRecording,
-                    style: ElevatedButton.styleFrom(backgroundColor: controller.isRecording ? Colors.red : null),
+                    style: ElevatedButton.styleFrom(backgroundColor: controller.isRecording ? AppColor.red : null),
                   ),
                   SizedBox(height: 20),
                   // Playback button for recorded audio

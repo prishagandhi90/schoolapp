@@ -1,6 +1,11 @@
+// ignore_for_file: dead_code
+
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
+import 'package:device_marketing_names/device_marketing_names.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
@@ -76,7 +81,18 @@ class OtpController extends GetxController {
   }
 
   Future<String> getDashboardData(String otp, BuildContext context, String deviceToken, String Password) async {
+    AndroidDeviceInfo? androidInfo;
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final deviceNames = DeviceMarketingNames();
+    IosDeviceInfo? iosInfo;
+    String? singleDeviceName;
     SharedPreferences pref = await SharedPreferences.getInstance();
+    if (Platform.isAndroid) {
+      androidInfo = await deviceInfo.androidInfo;
+    } else {
+      singleDeviceName = await deviceNames.getSingleName();
+      iosInfo = await deviceInfo.iosInfo;
+    }
     try {
       // String url = 'http://117.217.126.127:44166/api/Employee/authentication';
       String url = ConstApiUrl.loginWithOTP_Pass;
@@ -85,8 +101,8 @@ class OtpController extends GetxController {
         "password": Password,
         "otp": otp,
         "deviceType": "1",
-        "deviceName": "string",
-        "osType": "string",
+        "deviceName": Platform.isAndroid ? androidInfo!.model.toString() : singleDeviceName.toString(),
+        "osType": Platform.isAndroid ? androidInfo?.version.release.toString() : iosInfo!.systemVersion.toString(),
         "deviceToken": deviceToken,
         "firebaseId": deviceToken,
       };

@@ -19,8 +19,9 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class BottomBarController extends GetxController {
-  RxInt currentIndex = (2).obs;
+  RxInt currentIndex = (2).obs; // Current selected index of bottom navigation
   Rx<PersistentTabController> persistentController = PersistentTabController(initialIndex: 2).obs;
+  // Flags to determine which screen to load inside the first tab
   RxBool isPharmacyHome = false.obs;
   RxBool isIPDHome = false.obs;
   RxBool isPayrollHome = false.obs;
@@ -30,7 +31,7 @@ class BottomBarController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadPayrollScreens_Rights();
+    loadPayrollScreens_Rights(); // Load Payroll screen rights when controller initializes
     // persistentController = PersistentTabController(initialIndex: 2);
     hideBottomBar.value = false;
     // update();
@@ -43,6 +44,7 @@ class BottomBarController extends GetxController {
 
   List<Widget> buildScreens() {
     return [
+      // First tab switches dynamically based on flags
       Obx(() {
         if (isPharmacyHome.value) {
           return PharmacyScreen();
@@ -98,6 +100,7 @@ class BottomBarController extends GetxController {
     update();
   }
 
+// Reset tab controller and flags to default (Dashboard)
   void resetAndInitialize() {
     currentIndex.value = 2;
     isPharmacyHome.value = false;
@@ -108,12 +111,12 @@ class BottomBarController extends GetxController {
     // update();
   }
 
+  // Reset and navigate to a specific screen/tab by index
   void resetAndInitializeToScreen(int index) {
     currentIndex.value = index;
-    //deliberately commented below to eliminate onItemtapped in dashboardscreen to go to payroll screen
-    // persistentController.value = PersistentTabController(initialIndex: index);
     persistentController.value.index = index;
     hideBottomBar.value = false;
+    // Reset flags if Dashboard tab is selected
     if (index == 2) {
       isPharmacyHome.value = false;
       isIPDHome.value = false;
@@ -122,6 +125,7 @@ class BottomBarController extends GetxController {
     // update();
   }
 
+  // Another reset method to force recreate controller with a different tab
   void resetAndInitialize_new(int index) {
     currentIndex.value = index;
     persistentController.value = PersistentTabController(initialIndex: index);
@@ -158,7 +162,8 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home, color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
+              Image.asset(AppImage.home,
+                  color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
                 AppString.home,
@@ -173,11 +178,6 @@ class BottomBarController extends GetxController {
         ),
         activeColorPrimary: AppColor.primaryColor,
         inactiveColorPrimary: AppColor.black,
-        // onPressed: (index) {
-        //   if (index != 0) {
-        //     // Add your functionality here
-        //   }
-        // },
       ),
       PersistentBottomNavBarItem(
         icon: Container(
@@ -244,7 +244,6 @@ class BottomBarController extends GetxController {
               Text(AppString.dashboard,
                   style: TextStyle(
                     color: currentIndex.value != -1 ? AppColor.primaryColor : AppColor.black,
-                    // fontSize: 12,
                     fontSize: getDynamicHeight(size: 0.014),
                   )),
             ],

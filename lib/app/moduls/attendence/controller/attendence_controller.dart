@@ -48,23 +48,8 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
     DateTime now = DateTime.now();
     MonthSel_selIndex.value = now.month - 1;
     YearSel_selIndex = now.year.toString();
-    // monthScrollControllerSummary = ScrollController();
-    // monthScrollControllerDetail = ScrollController();
-    // attendanceScrollController = ScrollController();
     setCurrentMonthYear("SummaryScreen");
     update();
-
-    // attendanceScrollController.addListener(() {
-    //   if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
-    //     hideBottomBar = false.obs;
-    //     update();
-    //     bottomBarController.update();
-    //   } else if (attendanceScrollController.position.userScrollDirection == ScrollDirection.reverse) {
-    //     hideBottomBar = true.obs;
-    //     update();
-    //     bottomBarController.update();
-    //   }
-    // });
 
     attendanceScrollController.addListener(() {
       if (attendanceScrollController.position.userScrollDirection == ScrollDirection.forward) {
@@ -91,17 +76,6 @@ class AttendenceController extends GetxController with SingleGetTickerProviderMi
       }
       update();
     }
-  }
-
-  @override
-  void onClose() {
-    // attendanceScrollController.dispose(); //
-    // monthScrollControllerSummary.dispose();
-    // monthScrollControllerDetail.dispose();
-    // tabController.dispose();
-    // monthScrollControllerDetail.dispose();
-
-    super.onClose();
   }
 
   void setCurrentMonthYear(String screenName) {

@@ -14,7 +14,6 @@ class DetailsScreen extends GetView<AttendenceController> {
   @override
   Widget build(BuildContext context) {
     Get.put(AttendenceController());
-
     return GetBuilder<AttendenceController>(
       builder: (controller) {
         return Scaffold(
