@@ -2,6 +2,7 @@ import 'package:emp_app/app/app_custom_widget/custom_containerview.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/app_custom_widget/monthpick.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class SummaryScreen extends GetView<AttendenceController> {
         controller: controller.attendanceScrollController,
         child: Column(
           children: [
+            // Month Picker widget for month selection
             MonthPicker(
               controller: controller,
               scrollController: controller.monthScrollControllerSummary,
@@ -26,14 +28,17 @@ class SummaryScreen extends GetView<AttendenceController> {
               //   controller.showHideMsg();
               // },
             ),
+            // Agar loader true hai toh loading spinner dikhayega
             controller.isLoader.value
                 ? Padding(
                     padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.102)), //100),
                     child: Center(child: ProgressWithIcon()),
                   )
+                // Agar attendance data available hai
                 : controller.attendenceSummaryTable.isNotEmpty
                     ? Column(
                         children: [
+                          // First Row: Total Present, Absent, Total Days, P, A
                           Padding(
                             padding: const EdgeInsets.all(15),
                             child: Container(
@@ -59,6 +64,7 @@ class SummaryScreen extends GetView<AttendenceController> {
                               ),
                             ),
                           ),
+                          // Second Row: PL, HO, SL, CL, ML
                           Padding(
                             padding: EdgeInsets.all(getDynamicHeight(size: 0.017)), //15),
                             child: Container(
@@ -81,6 +87,7 @@ class SummaryScreen extends GetView<AttendenceController> {
                               ),
                             ),
                           ),
+                          // Third Row: LC/EG CNT, LC/EG MIN, WO, CO
                           Padding(
                             padding: EdgeInsets.all(getDynamicHeight(size: 0.015)), //15),
                             child: Container(
@@ -102,6 +109,7 @@ class SummaryScreen extends GetView<AttendenceController> {
                               ),
                             ),
                           ),
+                          // Fourth Row: OT HRS, DUTY HRS, DUTY ST
                           Padding(
                             padding: const EdgeInsets.all(15),
                             child: Container(
@@ -127,9 +135,10 @@ class SummaryScreen extends GetView<AttendenceController> {
                           )
                         ],
                       )
-                    : const Padding(
+                    // Agar data empty hai toh message show karega
+                    : Padding(
                         padding: EdgeInsets.all(15),
-                        child: Center(child: Text('No attendance data available')),
+                        child: Center(child: Text(AppString.nodataavailable)),
                       ),
           ],
         ),

@@ -197,7 +197,13 @@ class AppString {
   static String typetosearchdrname = "Type to search Dr Name...";
   static String ok = "OK";
   static String plzselectavalidpatient = "Please select a valid patient";
-
+  static String youdonthaveaccesstothisscreen = "You don't have access to this screen";
+  static String information = "Information";
+  static String toviewthenormalrange = "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed.";
+  static String anytestvaluesthatareabnormal = "b. Any test values that are abnormal will be displayed in red colour for clear identification.";
+  static String bluebackgroundcolour = "c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist.";
+  static String normalrange = "Normal Range";
+  static String nonormalrangeavailable = "No Normal Range Available";
   //Notification
   static String notification = "Notification";
   static String nodatafound = "No Data Found";

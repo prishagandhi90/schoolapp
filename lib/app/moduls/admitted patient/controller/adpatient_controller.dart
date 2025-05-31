@@ -805,14 +805,14 @@ class AdPatientController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Normal Range"),
-          content: Text((labdata[index].normalRange ?? "No Normal Range Available")),
+          title: Text(AppString.normalrange),
+          content: Text((labdata[index].normalRange ?? AppString.nonormalrangeavailable)),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Dialog close karega
               },
-              child: Text("OK"),
+              child: Text(AppString.ok),
             ),
           ],
         );
@@ -825,18 +825,17 @@ class AdPatientController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Information"),
+          title: Text(AppString.information),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed."),
+                Text(AppString.toviewthenormalrange),
                 SizedBox(height: 8),
-                Text("b. Any test values that are abnormal will be displayed in red colour for clear identification."),
+                Text(AppString.anytestvaluesthatareabnormal),
                 SizedBox(height: 8),
-                Text("c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist."),
+                Text(AppString.bluebackgroundcolour),
               ],
             ),
           ),
@@ -845,7 +844,7 @@ class AdPatientController extends GetxController {
               onPressed: () {
                 Navigator.of(context).pop(); // Dialog close karega
               },
-              child: Text("OK"),
+              child: Text(AppString.ok),
             ),
           ],
         );
@@ -863,7 +862,7 @@ class AdPatientController extends GetxController {
           if (screenRightsTable[0].rightsYN == "N") {
             isAdmittedPatients_Navigating.value = false;
             Get.snackbar(
-              "You don't have access to this screen",
+              AppString.youdonthaveaccesstothisscreen,
               '',
               colorText: AppColor.white,
               backgroundColor: AppColor.black,
@@ -900,7 +899,7 @@ class AdPatientController extends GetxController {
           if (screenRightsTable[1].rightsYN == "N") {
             isInvestigationReq_Navigating.value = false;
             Get.snackbar(
-              "You don't have access to this screen",
+              AppString.youdonthaveaccesstothisscreen,
               '',
               colorText: AppColor.white,
               backgroundColor: AppColor.black,
