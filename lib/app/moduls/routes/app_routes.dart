@@ -83,5 +83,9 @@ abstract class _Paths {
   static const FILTERTAGSCREEN = '/filter-tag-screen';
   static const NOTIFICATIONSCREEN = '/notification-screen';
 
+  static const PHARMACYSCREEN = '/pharmacy-screen';
+  static const PRESCRIPTIONDETAILSSCREEN = '/pres-details-screen';
+  static const PRESCRIPTIONVIEWERSCREEN = '/pres-viewer-screen';
+
   static const Force_update = '/force-update';
 }

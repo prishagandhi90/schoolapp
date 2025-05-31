@@ -58,6 +58,12 @@ import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtimedemo.dart';
 import 'package:emp_app/app/moduls/payroll/bindings/payroll_binding.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
+import 'package:emp_app/app/moduls/pharmacy/bindings/pharmacyScreenBinding.dart';
+import 'package:emp_app/app/moduls/pharmacy/bindings/presdetailsScreenBinding.dart';
+import 'package:emp_app/app/moduls/pharmacy/bindings/presviewerScreenBinding.dart';
+import 'package:emp_app/app/moduls/pharmacy/screen/pharmacy_screen.dart';
+import 'package:emp_app/app/moduls/pharmacy/screen/presdetails_screen.dart';
+import 'package:emp_app/app/moduls/pharmacy/screen/presviewer_screen.dart';
 import 'package:emp_app/app/moduls/resetpassword/binding/reset_password_binding.dart';
 import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
 import 'package:emp_app/app/moduls/superlogin/binding/superlogin_binding.dart';
@@ -272,6 +278,21 @@ class AppPages {
       name: _Paths.NOTIFICATIONSCREEN,
       page: () => NotificationScreen(),
       binding: NotificationScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.PHARMACYSCREEN,
+      page: () => PharmacyScreen(),
+      binding: PharmacyScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRESCRIPTIONDETAILSSCREEN,
+      page: () => PresdetailsScreen(),
+      binding: PresdetailsScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRESCRIPTIONVIEWERSCREEN,
+      page: () => PresviewerScreen(),
+      binding: PresviewerScreenBinding(),
     )
   ];
 }
