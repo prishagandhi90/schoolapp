@@ -1,6 +1,13 @@
 import 'package:emp_app/app/moduls/admitted%20patient/bindings/admittedPatientBinding.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/bindings/ipdDashboardBinding.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/bindings/labReportsViewBinding.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/bindings/labSummaryScreenBinding.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/bindings/voiceScreenBinding.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/ipd_dashboard_screen.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_reports_view.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
 import 'package:emp_app/app/moduls/attendence/bindings/attendance_detail_binding.dart';
 import 'package:emp_app/app/moduls/attendence/bindings/attendance_summary_binding.dart';
 import 'package:emp_app/app/moduls/attendence/bindings/attendance_screen_binding.dart';
@@ -17,6 +24,10 @@ import 'package:emp_app/app/moduls/forgotpassword/binding/forgotpassword_binding
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
 import 'package:emp_app/app/moduls/internetconnection/view/nointernet_screen.dart';
+import 'package:emp_app/app/moduls/invest_requisit/bindings/investRequisitScreenBinding.dart';
+import 'package:emp_app/app/moduls/invest_requisit/bindings/investServiceScreenBinding.dart';
+import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
+import 'package:emp_app/app/moduls/invest_requisit/screen/invest_service_screen.dart';
 import 'package:emp_app/app/moduls/leave/bindings/leave_form_binding.dart';
 import 'package:emp_app/app/moduls/leave/bindings/leave_main_screen_binding.dart';
 import 'package:emp_app/app/moduls/leave/bindings/leave_view_binding.dart';
@@ -33,6 +44,12 @@ import 'package:emp_app/app/moduls/lvotApproval/screen/lvotapproval_screen.dart'
 import 'package:emp_app/app/moduls/lvotApproval/screen/otlist_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/bindings/mispunch_binding.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
+import 'package:emp_app/app/moduls/notification/bindings/filterScreenBinding.dart';
+import 'package:emp_app/app/moduls/notification/bindings/filterTagScreenBinding.dart';
+import 'package:emp_app/app/moduls/notification/bindings/notificationScreenBinding.dart';
+import 'package:emp_app/app/moduls/notification/screen/filter_screen.dart';
+import 'package:emp_app/app/moduls/notification/screen/filter_tag_screen.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_form_binding.dart';
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_main_screen_binding.dart';
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_view_binding.dart';
@@ -194,12 +211,67 @@ class AppPages {
     GetPage(
       name: _Paths.IPDDASHBOARDSCREEN,
       page: () => IpdDashboardScreen(),
-      binding: AdmittedPatientBinding(),
+      binding: IPDDashboardBinding(),
     ),
     GetPage(
       name: _Paths.IPDADMITTEDPATIENTS,
       page: () => AdpatientScreen(),
       binding: AdmittedPatientBinding(),
+    ),
+    GetPage(
+      name: _Paths.LABREPORTSSCREEN,
+      page: () {
+        // You can retrieve parameters from the route here
+        final arguments = Get.arguments; // This will get any arguments passed
+        return LabReportsView(
+          bedNumber: arguments['bedNumber'],
+          ipdNo: arguments['ipdNo'],
+          patientName: arguments['patientName'],
+          uhidNo: arguments['uhidNo'],
+        ); // Pass the required parameter
+      },
+      binding: LabReportsViewBinding(),
+    ),
+    GetPage(
+      name: _Paths.LABSUMMARYSCREEN,
+      page: () => LabSummaryScreen(),
+      binding: LabSummaryScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.VOICESCREEN,
+      page: () => VoiceScreen(),
+      binding: VoiceScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVESTIGATIONREQUISITIONSCREEN,
+      page: () => InvestRequisitScreen(),
+      binding: InvestRequisitScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVESTIGATIONREQUISITIONSERVICE,
+      page: () => InvestServiceScreen(),
+      binding: InvestServiceScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.FILTERSCREEN,
+      page: () => FilterScreen(),
+      binding: FilterScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.FILTERTAGSCREEN,
+      page: () {
+        // You can retrieve parameters from the route here
+        final arguments = Get.arguments; // This will get any arguments passed
+        return FilterTagScreen(
+          index: arguments['index'],
+        ); // Pass the required parameter
+      },
+      binding: FilterTagScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONSCREEN,
+      page: () => NotificationScreen(),
+      binding: NotificationScreenBinding(),
     )
   ];
 }
