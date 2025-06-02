@@ -25,7 +25,6 @@ class OtScreen extends GetView<OvertimeController> {
     double screenHeight = MediaQuery.of(context).size.height;
     double availableHeight = screenHeight - 70.0; // 70.0 is the height of BottomNavigationBar
 
-    // var leaveController = Get.put(LeaveController());
     final leaveController = Get.find<LeaveController>();
     return GetBuilder<OvertimeController>(
       builder: (controller) {
@@ -243,7 +242,7 @@ class OtScreen extends GetView<OvertimeController> {
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
                     child: Container(
-                      color: Colors.black.withOpacity(0.1),
+                      color:AppColor.black.withOpacity(0.1),
                     ),
                   ),
                 ),

@@ -65,12 +65,6 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             controller.hrAction.value = controller.otentryList[index].hrAction ?? '';
                                             controller.setSelectedRow(index);
                                             controller.update();
-                                            //   else {
-                                            //   controller.inchargeAction = ''.obs;
-                                            //   controller.hodAction = ''.obs;
-                                            //   controller.hrAction = ''.obs;
-                                            //   controller.update();
-                                            // }
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -351,7 +345,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             child: Text(
                                               AppString.employeeNotes,
                                               style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
+                                                color: AppColor.white, // Set text color to white
                                               ),
                                             )),
                                       ),
@@ -392,7 +386,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             child: Text(
                                               AppString.inChargeNotes,
                                               style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
+                                                color: AppColor.white, // Set text color to white
                                               ),
                                             )),
                                       ),
@@ -433,7 +427,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             child: Text(
                                               AppString.inchargerejectreason,
                                               style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
+                                                color: AppColor.white, // Set text color to white
                                               ),
                                             )),
                                       ),
@@ -474,7 +468,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             child: Text(
                                               AppString.hodRejectReason,
                                               style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
+                                                color: AppColor.white, // Set text color to white
                                               ),
                                             )),
                                       ),
@@ -770,7 +764,6 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             TextSpan(
                                               text: controller.otentryList[index].hrDate,
                                               style: TextStyle(
-                                                // fontSize: 18,
                                                 fontSize: getDynamicHeight(size: 0.020),
                                                 fontWeight: FontWeight.w500, // Slightly lighter
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
@@ -784,31 +777,6 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                   ],
                                 ),
                               ),
-                              // Column(
-                              //   mainAxisSize: MainAxisSize.min,
-                              //   crossAxisAlignment: CrossAxisAlignment.start,
-                              //   children: [
-                              //     Container(
-                              //       padding: const EdgeInsets.all(10),
-                              //       width: double.infinity,
-                              //       height: MediaQuery.of(context).size.height,
-                              //       decoration: BoxDecoration(color: AppColor.primaryColor),
-                              //       child: Padding(
-                              //         padding: const EdgeInsets.symmetric(horizontal: 15),
-                              //         child: Align(
-                              //             alignment: Alignment.centerLeft,
-                              //             child: Text(
-                              //               'Employee Notes',
-                              //               style: TextStyle(
-                              //                 fontSize: 18,
-                              //                 fontWeight: FontWeight.w500, //20
-                              //                 fontFamily: CommonFontStyle.plusJakartaSans,
-                              //               ),
-                              //             )),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
                             ],
                           ),
                         )

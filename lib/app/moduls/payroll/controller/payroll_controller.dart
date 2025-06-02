@@ -48,7 +48,6 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
   var isLVOTApprovalNavigating = false.obs;
   var isLoaderPayroll = false.obs;
   var isLVOTAppr_Rights = false.obs;
-  // List<ModuleScreenRights> screens = [];
   List<Map<String, dynamic>> originalList = List.from(AppConst.payrollgrid);
   List<Map<String, dynamic>> filteredList = [];
 

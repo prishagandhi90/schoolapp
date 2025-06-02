@@ -146,6 +146,7 @@ class AppString {
   static String branddrug = "Brand Drug: ";
   static String quantity = "Quantity: ";
   static String pkg = "Pkg: ";
+  static String fromer = "From ER";
 
   //Super Login
   static String superlogin = "Only Admins can log In";

@@ -97,7 +97,7 @@ class SuperloginScreen extends GetView<LoginController> {
                             ),
                             disabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
-                                color: Colors.black, // Border color for disabled state
+                                color: AppColor.black, // Border color for disabled state
                               ),
                             ),
                           ),
@@ -121,40 +121,7 @@ class SuperloginScreen extends GetView<LoginController> {
                           searchFocusNode: controller.searchFocusNode,
                           SearchYN: true,
                         ),
-                        // CustomDropdownSearch(
-                        //   text: 'Enter Name',
-                        //   selectedValue: controller.selectedUserName,
-                        //   onChanged: (value) async {
-                        //     await controller.UserNameChangeMethod(value);
-                        //   },
-                        //   items: controller.filteredItems
-                        //       .map((DropdownTable item) => DropdownMenuItem<Dropdown_G>(
-                        //             value: Dropdown_G(
-                        //               value: item.id ?? '',
-                        //               name: item.name ?? '',
-                        //             ),
-                        //             child: Text(
-                        //               item.name ?? '',
-                        //               style: AppStyle.black.copyWith(fontSize: 14),
-                        //               overflow: TextOverflow.ellipsis,
-                        //             ),
-                        //           ))
-                        //       .toList(),
-                        //   buttonStyleData: ButtonStyleData(
-                        //     height: 50,
-                        //     padding: const EdgeInsets.symmetric(horizontal: 0),
-                        //     decoration: BoxDecoration(
-                        //       border: Border.all(color: AppColor.black),
-                        //       borderRadius: BorderRadius.circular(0),
-                        //       color: AppColor.white,
-                        //     ),
-                        //   ),
-                        //   searchcontroller: controller.searchFieldController,
-                        //   searchFocusNode: controller.searchFocusNode,
-                        //   SearchYN: true, // Enable search functionality
-                        // ),
 
-                        // ),
                         SizedBox(height: Sizes.px40),
                         SizedBox(
                           height: Sizes.w * 0.13,

@@ -25,6 +25,7 @@ class AppImage {
   static String attach = "assets/image/attach.png";
   static String nointernet = "assets/image/notinternet.png";
   static String adpatient = "assets/image/AdPatient.png";
+  static String bottomsheet = "assets/image/bottomsheet.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }

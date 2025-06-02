@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
@@ -13,7 +14,13 @@ import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.mobileNumber, required this.deviceToken, required this.fromLogin});
+  const OtpScreen({
+    super.key,
+    required this.mobileNumber,
+    required this.deviceToken,
+    required this.fromLogin,
+  });
+
   final String mobileNumber;
   final String deviceToken;
   final bool fromLogin;
@@ -25,26 +32,15 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final OtpController otpController = Get.put(OtpController());
   final LoginController loginController = Get.put(LoginController());
-  bool isButtonEnabled = false;
-  bool isTimerOver = false;
-  bool isDropdownEnabled = true;
 
   @override
   void dispose() {
-    otpController.timer!.cancel();
+    otpController.timer?.cancel();
     otpController.otpController.clear();
     super.dispose();
   }
 
-  void onResendOtp() {
-    setState(() {
-      otpController.secondsRemaining.value = AppConst.OTPTimer;
-    });
-    startTimer();
-  }
-
   void startTimer() {
-    isButtonEnabled = false;
     otpController.secondsRemaining.value = AppConst.OTPTimer;
     otpController.timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (otpController.secondsRemaining.value > 0) {
@@ -62,21 +58,15 @@ class _OtpScreenState extends State<OtpScreen> {
     otpController.update();
     startTimer();
     try {
-      // final response = await otpController.sendotp();
       var loginController = Get.put(LoginController());
       MobileTable? response = await loginController.sendotp();
-      // final respOTP = json.decode(response)["data"]["otpNo"].toString();
       final respOTP = response!.otpNo.toString();
       setState(() {
-        // widget.otpNo = respOTP;
         loginController.responseOTPNo = respOTP;
       });
-      // Get.snackbar('RespOTP: $respOTP', '', colorText: AppColor.white, backgroundColor: AppColor.black);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppString.failedtoresendotp),
-        ),
+        SnackBar(content: Text(AppString.failedtoresendotp)),
       );
     }
   }
@@ -85,7 +75,6 @@ class _OtpScreenState extends State<OtpScreen> {
     return RichText(
       text: TextSpan(
         style: TextStyle(
-          // fontSize: 15.0,
           fontSize: getDynamicHeight(size: 0.017),
           color: AppColor.black,
           fontFamily: CommonFontStyle.plusJakartaSans,
@@ -95,12 +84,12 @@ class _OtpScreenState extends State<OtpScreen> {
           otpController.secondsRemaining.value > 0
               ? TextSpan(
                   text:
-                      "0${(otpController.secondsRemaining.value / 60).floor().toStringAsFixed(0)} : ${(otpController.secondsRemaining.value % 60).toString().length == 1 ? '0' : ''}${otpController.secondsRemaining.value % 60}",
-                  style: TextStyle(color: AppColor.red, fontFamily: CommonFontStyle.plusJakartaSans),
+                      "0${(otpController.secondsRemaining.value / 60).floor().toStringAsFixed(0)} : ${(otpController.secondsRemaining.value % 60).toString().padLeft(2, '0')}",
+                  style: TextStyle(color: AppColor.red),
                 )
               : TextSpan(
                   text: AppString.resend,
-                  style: TextStyle(color: AppColor.primaryColor, fontFamily: CommonFontStyle.plusJakartaSans),
+                  style: TextStyle(color: AppColor.primaryColor),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       resendOTP(context);
@@ -113,43 +102,40 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
-    startTimer();
     super.initState();
-    print('RespOTP: ${loginController.responseOTPNo}');
+    startTimer();
     otpController.numberController.text = widget.mobileNumber;
-    // otpController.update();
-    // showSnackBar();
-  }
-
-  showSnackBar() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Get.snackbar('RespOTP: ${loginController.responseOTPNo}', '', colorText: AppColor.white, backgroundColor: AppColor.black);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    Sizes.init(context);
+
     final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
+      width: getDynamicHeight(size: 0.06),
+      height: getDynamicHeight(size: 0.06),
       textStyle: TextStyle(
-        // fontSize: 22,
         fontSize: getDynamicHeight(size: 0.024),
         color: AppColor.primaryColor,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
         border: Border.all(color: AppColor.primaryColor),
       ),
     );
+
     String maskedNumber = otpController.maskMobileNumber(widget.mobileNumber);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColor.backgroundcolor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 15),
+            padding: EdgeInsets.symmetric(
+              vertical: getDynamicHeight(size: 0.06),
+              horizontal: getDynamicHeight(size: 0.02),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -160,55 +146,45 @@ class _OtpScreenState extends State<OtpScreen> {
                     children: [
                       Center(
                         child: Image.asset(
-                          'assets/Venus_Hospital_New_Logo-removebg-preview.png',
-                          // scale: 2,
-                          // width: Sizes.crossLength * 0.260,
-                          width: MediaQuery.of(context).size.width * 0.8,
+                          AppImage.venuslogo,
+                          width: getDynamicHeight(size: 0.45),
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                      SizedBox(height: getDynamicHeight(size: 0.03)),
                       Text(
                         AppString.verifyyiurnumber,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          // fontSize: 22,
                           fontSize: getDynamicHeight(size: 0.024),
                           fontFamily: CommonFontStyle.plusJakartaSans,
                         ),
                       ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      SizedBox(height: getDynamicHeight(size: 0.02)),
                       Text(
                         "Please enter the 6 digit code we sent to \n+91 $maskedNumber",
                         style: TextStyle(
-                          // fontSize: 15,
                           fontSize: getDynamicHeight(size: 0.017),
                           fontFamily: CommonFontStyle.plusJakartaSans,
                         ),
                       ),
-                      const SizedBox(height: 50),
+                      SizedBox(height: getDynamicHeight(size: 0.06)),
                       Pinput(
                         controller: otpController.isLoadingLogin ? null : otpController.otpController,
                         showCursor: true,
                         length: 6,
                         keyboardType: TextInputType.number,
                         defaultPinTheme: defaultPinTheme,
-                        separatorBuilder: (index) => const SizedBox(width: 8),
-                        // onCompleted: (pin) async {
-                        //   print('onCompOTP: ${loginController.responseOTPNo}');
-                        //   otpController.isLoadingLogin
-                        //       ? null
-                        //       : await otpController.otpOnClk(context, loginController.responseOTPNo, deviceTok);
-                        // },
+                        separatorBuilder: (index) => SizedBox(width: getDynamicHeight(size: 0.01)),
                         onChanged: (value) {},
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: getDynamicHeight(size: 0.025)),
                       Container(
                         alignment: AlignmentDirectional.centerStart,
                         child: textWidgetInfo(),
                       ),
-                      const SizedBox(height: 50),
+                      SizedBox(height: getDynamicHeight(size: 0.06)),
                       SizedBox(
-                        height: MediaQuery.of(context).size.width * 0.11,
+                        height: getDynamicHeight(size: 0.06),
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: otpController.isLoadingLogin
@@ -225,13 +201,19 @@ class _OtpScreenState extends State<OtpScreen> {
                                   } else {
                                     otpController.fromLogin = widget.fromLogin;
                                     otpController.update();
-                                    await otpController.otpOnClk(context, loginController.responseOTPNo, otpController.deviceTok);
+                                    await otpController.otpOnClk(
+                                      context,
+                                      loginController.responseOTPNo,
+                                      otpController.deviceTok,
+                                    );
                                   }
                                 },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColor.lightgreen,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(
+                                getDynamicHeight(size: 0.012),
+                              ),
                             ),
                           ),
                           child: otpController.isLoadingLogin
@@ -239,7 +221,6 @@ class _OtpScreenState extends State<OtpScreen> {
                               : Text(
                                   AppString.verify,
                                   style: TextStyle(
-                                    // fontSize: 20,
                                     fontSize: getDynamicHeight(size: 0.022),
                                     color: AppColor.black,
                                     fontFamily: CommonFontStyle.plusJakartaSans,
@@ -251,21 +232,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     ],
                   ),
                 ),
-                // MediaQuery.of(context).viewInsets.bottom > 0
-                //     ? const Spacer()
-                //     : Align(
-                //         alignment: Alignment.bottomCenter,
-                //         child: Image.asset(
-                //           'assets/Venus_Hospital_New_Logo-removebg-preview.png',
-                //           width: MediaQuery.of(context).size.width * 0.8,
-                //         ),
-                //       ),
               ],
             ),
           ),
         ),
-        //   },
-        // ),
       ),
     );
   }

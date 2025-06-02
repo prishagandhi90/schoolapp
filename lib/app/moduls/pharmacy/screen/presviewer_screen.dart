@@ -610,7 +610,7 @@ class PresviewerScreen extends StatelessWidget {
                                                                         TextSpan(
                                                                           children: [
                                                                             TextSpan(
-                                                                              text: 'From ER', // Heading
+                                                                              text: AppString.fromer, // Heading
                                                                               style: AppStyle.plusbold16.copyWith(
                                                                                 fontSize: getDynamicHeight(size: 0.018),
                                                                               ),
@@ -665,21 +665,3 @@ class PresviewerScreen extends StatelessWidget {
     );
   }
 }
-// Text.rich(
-//                                                                   TextSpan(
-//                                                                     children: [
-//                                                                       TextSpan(
-//                                                                         text: AppString.tokenNo,
-//                                                                         style: AppStyle.plusbold16.copyWith(
-//                                                                           fontSize: getDynamicHeight(size: 0.018),
-//                                                                         ),
-//                                                                       ),
-//                                                                       TextSpan(
-//                                                                         text: controller.filterpresviewerList[index].tokenNo.toString(),
-//                                                                         style: AppStyle.w50018.copyWith(
-//                                                                           fontSize: getDynamicHeight(size: 0.02),
-//                                                                         ),
-//                                                                       ),
-//                                                                     ],
-//                                                                   ),
-//                                                                 ),

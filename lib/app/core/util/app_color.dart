@@ -38,6 +38,9 @@ class AppColor {
   static Color grey = Color.fromARGB(255, 163, 163, 163);
   static Color darkgery = Color.fromRGBO(150, 150, 150, 1);
 
+  //Purple
+  static Color purple = Color.fromARGB(255, 156, 39, 176);
+
   static const buttonColor = Color(0xff35B6BD);
   static const blackColor = Color(0xff000000);
   static const black6B6B6B = Color(0xff6B6B6B);

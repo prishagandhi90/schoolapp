@@ -53,9 +53,9 @@ import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart'
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_form_binding.dart';
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_main_screen_binding.dart';
 import 'package:emp_app/app/moduls/overtime/bindings/overtime_view_binding.dart';
+import 'package:emp_app/app/moduls/overtime/screens/overtime_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_view_screen.dart';
 import 'package:emp_app/app/moduls/overtime/screens/overtime_main_screen.dart';
-import 'package:emp_app/app/moduls/overtime/screens/overtimedemo.dart';
 import 'package:emp_app/app/moduls/payroll/bindings/payroll_binding.dart';
 import 'package:emp_app/app/moduls/payroll/screen/payroll_screen.dart';
 import 'package:emp_app/app/moduls/pharmacy/bindings/pharmacyScreenBinding.dart';
@@ -172,7 +172,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.OVERTIMEENTRY,
-      page: () => OvertimeScreen(),
+      page: () => OtScreen(),
       binding: OvertimeFormBinding(),
     ),
     GetPage(

@@ -391,7 +391,7 @@ class LvotapprovalScreen extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: isEnabled ? Colors.black : Colors.grey,
+              color: isEnabled ? AppColor.black : Colors.grey,
               fontWeight: FontWeight.bold,
               // fontSize: 16,
               fontSize: getDynamicHeight(size: 0.018),

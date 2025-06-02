@@ -145,7 +145,7 @@ class NotificationController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
-
+      // Index validation
       if (notificationlist.isEmpty || index >= notificationlist.length) {
         Get.rawSnackbar(message: "No notification found for the selected index.");
         isLoading = false;

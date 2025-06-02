@@ -150,7 +150,7 @@ class OtpController extends GetxController {
       return "false";
     } catch (e) {
       ApiErrorHandler.handleError(
-        screenName: "LV/OTApprovalScreen",
+        screenName: "otpScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',

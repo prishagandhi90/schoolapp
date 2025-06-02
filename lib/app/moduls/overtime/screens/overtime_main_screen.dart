@@ -21,8 +21,6 @@ final GlobalKey<ScaffoldState> _scaffoldKeyOT = GlobalKey<ScaffoldState>();
 
 class OvertimeMainScreen extends GetView<OvertimeController> {
   OvertimeMainScreen({super.key});
-  // var scaffoldKey = GlobalKey<ScaffoldState>();
-  // final leaveController = Get.put(LeaveController());
 
   @override
   Widget build(BuildContext context) {
