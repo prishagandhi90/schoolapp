@@ -1,3 +1,5 @@
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
@@ -95,7 +97,11 @@ class CustomLoginDialogBox extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(
+                        getDynamicHeight(
+                          size: 0.008,
+                        ),
+                      ),
                     ),
                     padding: EdgeInsets.symmetric(
                       horizontal: getDynamicHeight(size: 0.030),
@@ -103,7 +109,10 @@ class CustomLoginDialogBox extends StatelessWidget {
                     ),
                   ),
                   onPressed: onLoginPressed,
-                  child: const Text("LOG IN"),
+                  child: Text(
+                    "LOG IN",
+                    style: AppStyle.white,
+                  ),
                 ),
               ],
             ),

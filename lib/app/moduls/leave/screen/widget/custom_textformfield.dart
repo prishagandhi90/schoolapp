@@ -1,3 +1,6 @@
+import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -58,7 +61,9 @@ class CustomTextFormField extends StatelessWidget {
     this.minLines,
     this.scrollPhysics,
     this.hintStyle,
-    this.onTapOutside, this.focusedBorder, this.enabledBorder,
+    this.onTapOutside,
+    this.focusedBorder,
+    this.enabledBorder,
   });
 
   @override
@@ -79,7 +84,13 @@ class CustomTextFormField extends StatelessWidget {
       maxLength: maxLength,
       focusNode: focusNode,
       enabled: enabled,
-      style: style,
+      style: style == null
+          ? TextStyle(
+              // color: AppColor.white,
+              fontFamily: CommonFontStyle.plusJakartaSans,
+              fontSize: getDynamicHeight(size: 0.016),
+            ) // Default style if not provided
+          : style,
       scrollPhysics: scrollPhysics,
       decoration: decoration ??
           InputDecoration(

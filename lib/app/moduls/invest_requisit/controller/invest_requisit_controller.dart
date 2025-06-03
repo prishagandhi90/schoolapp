@@ -40,8 +40,8 @@ class InvestRequisitController extends GetxController {
   final ExternalLabController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController mobileController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController mobileController = TextEditingController(text: '9429728770');
+  TextEditingController passwordController = TextEditingController(text: 'venus9');
   bool obscurePassword = false;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
@@ -70,12 +70,13 @@ class InvestRequisitController extends GetxController {
     fetchExternalLab(); // External lab and service group data ko fetch karte hi controller initialize hote hi
     fetchServiceGroup();
     // Focus listener add kiya gaya hai taaki focus change hone par update() call ho
-    focusNode.addListener(() {
-      hasFocus = focusNode.hasFocus;
-      update();
-    });
+    // focusNode.addListener(() {
+    //   hasFocus = focusNode.hasFocus;
+    //   update();
+    // });
     super.onInit();
   }
+
   // 'Next' button enable hoga sirf tab jab IPD No aur Type filled ho
 // Saath hi 'internal' ke liye type 'lab', 'radio', 'other investigation' ho
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
@@ -94,10 +95,12 @@ class InvestRequisitController extends GetxController {
     }
     return false;
   }
+
   // Agar koi service select ki gayi hai toh 'Save' button enable hoga
   bool isSaveButtonEnabled() {
     return selectedServices.isNotEmpty;
   }
+
   // Patient name se UHID extract karta hai
   String getUHId(String patientName) {
     if (patientName.isEmpty) return "";
@@ -105,6 +108,7 @@ class InvestRequisitController extends GetxController {
     List<String> parts = patientName.split('|');
     return parts.last.trim(); // last part with trimmed spaces
   }
+
   // Investigation type ke dropdown ke items
   final List<DropdownMenuItem<Map<String, String>>> typeItems = [
     DropdownMenuItem(
@@ -318,6 +322,7 @@ class InvestRequisitController extends GetxController {
     suggestions = results;
     update();
   }
+
   // Doctor name search ke suggestions fetch karne ke liye
   Future<void> getDrNmSuggest(String query, String ServiceId) async {
     if (query.isEmpty) return;
@@ -326,6 +331,7 @@ class InvestRequisitController extends GetxController {
     suggestions_DrNm = results;
     update();
   }
+
   // Query list API call karta hai (List dikhane ke liye - services etc.)
   Future<List<GetquerylistModel>> fetchGetQueryList(String ipdNo, {String searchText = ""}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -375,10 +381,12 @@ class InvestRequisitController extends GetxController {
     update();
     return getQueryList;
   }
+
   // Query field pe search karne par API call karta hai
   Future<void> searchservice(String query, String ipdNo) async {
     await fetchGetQueryList(ipdNo, searchText: query);
   }
+
   // Text change hone pe debounce karke API call karta hai
   void onSearchChanged(String query, String ipdNo) {
     if (debounce?.isActive ?? false) debounce?.cancel();
@@ -386,12 +394,14 @@ class InvestRequisitController extends GetxController {
       searchservice(query, ipdNo);
     });
   }
+
   // Top 10 ya 40 list change karne par list ko fetch karta hai
   Future<void> changeTop(int top) async {
     selectedTop = top;
     await fetchGetQueryList(ipdNo);
     update();
   }
+
   // Duplicate service check karta hai
   bool isDuplicateService(String serviceId) {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == serviceId);
@@ -401,6 +411,7 @@ class InvestRequisitController extends GetxController {
     }
     return false;
   }
+
   // Service list me add karta hai agar duplicate na ho
   Future<void> addService(GetquerylistModel service) async {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.id.toString());
@@ -440,6 +451,7 @@ class InvestRequisitController extends GetxController {
       );
     }
   }
+
   // Selected service list save karta hai (API call)
   Future<void> saveSelectedServiceList(String ipdNo) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -749,7 +761,7 @@ class InvestRequisitController extends GetxController {
       backgroundColor: AppColor.transparent,
       builder: (context) => DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.7,
+        initialChildSize: 0.85,
         minChildSize: 0.4,
         maxChildSize: 0.9,
         builder: (context, scrollController) {
@@ -757,7 +769,7 @@ class InvestRequisitController extends GetxController {
             decoration: BoxDecoration(
               color: AppColor.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
+                topLeft: Radius.circular(10),
                 topRight: Radius.circular(20),
               ),
             ),
@@ -788,7 +800,7 @@ class InvestRequisitController extends GetxController {
                               // });
                               Navigator.pop(context);
                             },
-                            icon: Icon(Icons.cancel, color: Colors.grey),
+                            icon: Icon(Icons.cancel, color: AppColor.originalgrey),
                           ),
                         ],
                       ),
@@ -796,15 +808,16 @@ class InvestRequisitController extends GetxController {
 
                     // Dropdown
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: CustomDropdown(
                         text: AppString.select,
                         buttonStyleData: ButtonStyleData(
-                          height: 48,
+                          height: getDynamicHeight(size: 0.05),
+                          width: double.infinity,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(4),
-                            color: Colors.white,
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(10),
+                            color: AppColor.white,
                           ),
                         ),
                         controller: controller.typeController,
@@ -826,7 +839,7 @@ class InvestRequisitController extends GetxController {
                         },
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     // History List
                     Expanded(
                       child: ListView.builder(
@@ -835,97 +848,99 @@ class InvestRequisitController extends GetxController {
                         itemCount: controller.filteredList.length,
                         itemBuilder: (context, index) {
                           final item = controller.filteredList[index];
-                          return Card(
-                            color: AppColor.white,
-                            margin: EdgeInsets.only(bottom: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(color: AppColor.black),
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 8),
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColor.primaryColor.withOpacity(0.2),
+                              border: Border.all(color: AppColor.black, width: 0.7),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Req No and menu icon
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: AppString.reqno,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColor.black, // or any color you prefer for label
-                                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                /// Top Row: Req No + Menu Icon
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '${AppString.reqno} ',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600,
+                                              color: AppColor.black,
                                             ),
-                                            TextSpan(
-                                              text: '${item.requisitionNo}',
-                                              style: TextStyle(
-                                                color: Colors.grey[700],
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () async {
-                                          List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
-                                          InvestigationHistoryDialog(context, list);
-                                        },
-                                        icon: Icon(
-                                          Icons.menu,
-                                          color: Colors.black,
-                                          size: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    item.entryDate.toString(), // e.g. 27/04/2025 04:14 PM
-                                    style: TextStyle(fontSize: 12, color: AppColor.black),
-                                  ),
-                                  SizedBox(height: 6),
-                                  // Type label
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColor.teal),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Text(
-                                          item.investigationType.toString(), // e.g. LAB / Radio / Other Investigation
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: AppColor.teal,
-                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ),
+                                          TextSpan(
+                                            text: '${item.requisitionNo}',
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey.shade500,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 6),
-                                      Text(
-                                        item.user.toString(),
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
+                                    Icon(Icons.menu, size: 18, color: AppColor.black),
+                                  ],
+                                ),
+
+                                /// Entry Date
+                                Text(
+                                  item.entryDate ?? '',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColor.black,
                                   ),
-                                ],
-                              ),
+                                ),
+
+                                /// Bottom Row: Type + User
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: AppColor.teal.withOpacity(0.1),
+                                        border: Border.all(color: AppColor.teal, width: 1),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        item.investigationType ?? '',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColor.teal,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        item.user ?? '',
+                                        style: TextStyle(
+                                          fontSize: 12.5,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.black,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           );
                         },
                       ),
                     ),
+
                     SizedBox(height: 10), // spacing before bottom buttons
 
                     /// 🟩 Bottom Buttons
@@ -1149,7 +1164,7 @@ class InvestRequisitController extends GetxController {
                   message: "Login failed. Please check your credentials.",
                   duration: Duration(seconds: 5),
                   backgroundColor: Colors.red.shade100,
-                  snackPosition: SnackPosition.BOTTOM,
+                  snackPosition: SnackPosition.TOP,
                 );
               }
             },
@@ -1386,8 +1401,8 @@ class InvestRequisitController extends GetxController {
     selectedServices.clear();
     selectedTop = 20;
     fromAdmittedScreen = false;
-    mobileController.clear();
-    passwordController.clear();
+    // mobileController.clear();
+    // passwordController.clear();
 
     update();
   }

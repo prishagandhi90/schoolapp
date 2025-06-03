@@ -3,6 +3,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -13,6 +14,7 @@ import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/screen/invest_service_screen.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 class InvestRequisitScreen extends StatelessWidget {
@@ -34,12 +36,8 @@ class InvestRequisitScreen extends StatelessWidget {
             body: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: getDynamicHeight(
-                    size: 0.007,
-                  ),
-                  vertical: getDynamicHeight(
-                    size: 0.018,
-                  ),
+                  horizontal: getDynamicHeight(size: 0.007),
+                  vertical: getDynamicHeight(size: 0.018),
                 ),
                 child: Column(
                   children: [
@@ -55,7 +53,6 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.ipdNo = selection.name ?? '';
                           controller.uhid = controller.getUHId(selection.txt ?? '');
                           controller.suggestions.clear();
-
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
@@ -72,6 +69,7 @@ class InvestRequisitScreen extends StatelessWidget {
                             keyboardType: TextInputType.multiline,
                             decoration: InputDecoration(
                               hintText: AppString.patientuhidipd,
+                              isDense: true,
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -80,6 +78,7 @@ class InvestRequisitScreen extends StatelessWidget {
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(0)),
                                 borderSide: BorderSide(color: AppColor.red),
                               ),
                               prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
@@ -92,7 +91,9 @@ class InvestRequisitScreen extends StatelessWidget {
                                         nameController.clear();
                                         controller.suggestions.clear();
                                         controller.ipdNo = '';
-                                        controller.update();
+                                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                                          controller.update();
+                                        });
                                       },
                                     )
                                   : null,
@@ -112,6 +113,7 @@ class InvestRequisitScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
+                            flex: 6,
                             child: CustomDropdown(
                               text: AppString.type1,
                               buttonStyleData: ButtonStyleData(
@@ -148,6 +150,7 @@ class InvestRequisitScreen extends StatelessWidget {
                             width: getDynamicHeight(size: 0.01055),
                           ),
                           Expanded(
+                            flex: 4,
                             child: CustomDropdown(
                               text: AppString.normal,
                               buttonStyleData: ButtonStyleData(
@@ -416,9 +419,7 @@ class InvestRequisitScreen extends StatelessWidget {
                       onPressed: () async {
                         if (controller.ipdNo == '') {
                           Get.snackbar(AppString.error, AppString.plzselectavalidpatient,
-                              snackPosition: SnackPosition.TOP,
-                              backgroundColor: AppColor.red.withOpacity(0.8),
-                              colorText: AppColor.white);
+                              snackPosition: SnackPosition.TOP, backgroundColor: AppColor.red.withOpacity(0.8), colorText: AppColor.white);
                           return;
                         }
                         await controller.fetchGetHistoryList(controller.ipdNo);
@@ -474,6 +475,7 @@ class InvestRequisitScreen extends StatelessWidget {
                             AppString.next,
                             style: TextStyle(
                               color: AppColor.white,
+                              fontFamily: CommonFontStyle.plusJakartaSans,
                               fontSize: getDynamicHeight(size: 0.016),
                             ),
                           ),

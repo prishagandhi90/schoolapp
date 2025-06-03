@@ -47,6 +47,7 @@ class InvestServiceScreen extends StatelessWidget {
                         controller.patientName,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontFamily: CommonFontStyle.plusJakartaSans,
                           fontSize: getDynamicHeight(size: 0.013),
                         ),
                         maxLines: 2,
@@ -66,6 +67,7 @@ class InvestServiceScreen extends StatelessWidget {
                     cursorColor: AppColor.grey,
                     controller: controller.searchController,
                     decoration: InputDecoration(
+                      isDense: true,
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: AppColor.black,
@@ -83,7 +85,7 @@ class InvestServiceScreen extends StatelessWidget {
                           color: AppColor.black,
                         ),
                       ),
-                      prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                      prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1, size: getDynamicHeight(size: 0.020)),
                       suffixIcon: controller.hasFocus
                           ? IconButton(
                               icon: Icon(
@@ -118,13 +120,11 @@ class InvestServiceScreen extends StatelessWidget {
                     ),
                     onChanged: (value) {
                       controller.searchservice(value, controller.ipdNo);
-                      // controller.filterSearchAdPatientResults(value);
                     },
                   ),
                   SizedBox(
                     height: getDynamicHeight(size: 0.009),
                   ),
-
                   // 👇 Suggested + Selected Services
                   Expanded(
                       child: controller.isLoading
@@ -140,7 +140,8 @@ class InvestServiceScreen extends StatelessWidget {
                               children: [
                                 // SizedBox(height: 10),
                                 Container(
-                                  height: getDynamicHeight(size: 0.038),
+                                  padding: EdgeInsets.only(bottom: getDynamicHeight(size: 0.004)),
+                                  height: getDynamicHeight(size: 0.045),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: controller.topOptions.map((top) {
@@ -149,61 +150,67 @@ class InvestServiceScreen extends StatelessWidget {
                                         onTap: () async {
                                           await controller.changeTop(top);
                                         },
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Top $top',
-                                              style: TextStyle(
-                                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                                color: AppColor.black,
-                                              ),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: (Sizes.w * 0.7) / controller.topOptions.length, // 👈 half screen width divided equally
+                                          height: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: isSelected ? AppColor.primaryColor : AppColor.lightblue,
+                                            borderRadius: BorderRadius.circular(10), // 👈 no rounding
+                                          ),
+                                          child: Text(
+                                            'Top $top',
+                                            style: AppStyle.black.copyWith(
+                                              color: isSelected ? Colors.white : AppColor.black,
                                             ),
-                                            SizedBox(
-                                              height: getDynamicHeight(size: 0.005),
-                                            ),
-                                            Container(
-                                              height: getDynamicHeight(size: 0.0035),
-                                              width: getDynamicHeight(size: 0.058),
-                                              color: isSelected ? AppColor.primaryColor : AppColor.transparent,
-                                            )
-                                          ],
+                                            // style: TextStyle(
+                                            //   fontWeight: FontWeight.w600,
+                                            //   color: isSelected ? Colors.white : AppColor.black,
+                                            //   fontFamily: CommonFontStyle.plusJakartaSans,
+                                            // ),
+                                          ),
                                         ),
                                       );
                                     }).toList(),
                                   ),
                                 ),
-                                Divider(
-                                  thickness: getDynamicHeight(size: 0.0008),
-                                  height: getDynamicHeight(size: 0.0008),
+                                Padding(
+                                  padding: EdgeInsets.zero,
+                                  child: Container(
+                                    height: 0.3, // very thin divider
+                                    color: AppColor.darkgery,
+                                  ),
                                 ),
                                 Expanded(
                                     flex: 5,
                                     child: ListView.separated(
                                       itemCount: controller.getQueryList.length,
-                                      separatorBuilder: (context, index) => Divider(
-                                        height: getDynamicHeight(size: 0.0008),
-                                        thickness: 0.8,
-                                        color: AppColor.darkgery,
+                                      separatorBuilder: (context, index) => SizedBox(
+                                        height: 0.3, // almost no space
+                                        child: Container(
+                                          color: AppColor.darkgery,
+                                        ),
                                       ),
                                       itemBuilder: (context, index) {
                                         final service = controller.getQueryList[index];
                                         return ListTile(
                                           dense: true,
+                                          visualDensity: VisualDensity(vertical: -4), // Reduce vertical height
                                           contentPadding: EdgeInsets.symmetric(
-                                            horizontal: getDynamicHeight(size: 0.007),
+                                            horizontal: getDynamicHeight(size: 0.003),
+                                            vertical: 0,
                                           ),
                                           title: Text(
                                             service.name.toString(),
-                                            style: TextStyle(
-                                              fontSize: getDynamicHeight(size: 0.0125),
+                                            style: AppStyle.black.copyWith(
+                                              fontSize: getDynamicHeight(size: 0.0135),
                                             ),
                                           ),
                                           trailing: IconButton(
                                             icon: Icon(
                                               Icons.add_circle,
                                               color: AppColor.teal,
-                                              size: getDynamicHeight(size: 0.018),
+                                              size: getDynamicHeight(size: 0.025),
                                             ),
                                             onPressed: () async {
                                               if (controller.typeController.text.toLowerCase() == 'other investigation') {
@@ -215,7 +222,7 @@ class InvestServiceScreen extends StatelessWidget {
                                                     AppString.servicealreadyadded,
                                                     backgroundColor: Colors.orange.shade100,
                                                     colorText: Colors.black,
-                                                    snackPosition: SnackPosition.BOTTOM,
+                                                    snackPosition: SnackPosition.TOP,
                                                     duration: Duration(seconds: 1),
                                                   );
                                                   return;
@@ -247,6 +254,7 @@ class InvestServiceScreen extends StatelessWidget {
                                         fontSize: getDynamicHeight(size: 0.015),
                                         fontWeight: FontWeight.bold,
                                         color: AppColor.teal,
+                                        // decorationColor: AppColor.lightblue,
                                       ),
                                     ),
                                   ),
@@ -255,24 +263,23 @@ class InvestServiceScreen extends StatelessWidget {
                                 Expanded(
                                   flex: 4,
                                   child: ListView.builder(
+                                    padding: EdgeInsets.zero,
                                     itemCount: controller.selectedServices.length,
                                     itemBuilder: (context, index) {
                                       final service = controller.selectedServices[index];
                                       return Container(
                                         margin: EdgeInsets.symmetric(
-                                          vertical: getDynamicHeight(size: 0.003),
+                                          vertical: getDynamicHeight(size: 0.002), // thodi si spacing upar neeche
                                         ),
                                         padding: EdgeInsets.symmetric(
-                                          horizontal: getDynamicHeight(size: 0.007),
+                                          horizontal: getDynamicHeight(size: 0.004), // thoda side space
+                                          vertical: getDynamicHeight(size: 0.005), // thoda vertical padding for height
                                         ),
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: AppColor.darkgery),
-                                          borderRadius: BorderRadius.circular(
-                                            getDynamicHeight(size: 0.007),
-                                          ),
+                                          border: Border.all(color: AppColor.darkgery, width: 0.5),
+                                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.005)),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Expanded(
                                               child: Text(
@@ -282,12 +289,19 @@ class InvestServiceScreen extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                            IconButton(
-                                              icon: Icon(Icons.cancel, color: AppColor.black),
-                                              onPressed: () {
+                                            GestureDetector(
+                                              onTap: () {
                                                 controller.selectedServices.removeAt(index);
                                                 controller.update();
                                               },
+                                              child: Padding(
+                                                padding: EdgeInsets.all(getDynamicHeight(size: 0.002)), // just enough to make icon tappable
+                                                child: Icon(
+                                                  Icons.cancel,
+                                                  color: AppColor.black,
+                                                  size: getDynamicHeight(size: 0.020),
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
