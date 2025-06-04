@@ -7,6 +7,7 @@ import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
+import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
@@ -35,9 +36,11 @@ class InvestRequisitController extends GetxController {
   final TextEditingController drNameController = TextEditingController();
   final TextEditingController drIdController = TextEditingController();
   final typeController = TextEditingController();
+  final typeHistory_Controller = TextEditingController();
   final priorityController = TextEditingController();
   final InExController = TextEditingController();
   final ExternalLabController = TextEditingController();
+  final ExternalLabIdController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   TextEditingController mobileController = TextEditingController(text: '9429728770');
@@ -68,7 +71,6 @@ class InvestRequisitController extends GetxController {
   @override
   void onInit() {
     fetchExternalLab(); // External lab and service group data ko fetch karte hi controller initialize hote hi
-    fetchServiceGroup();
     // Focus listener add kiya gaya hai taaki focus change hone par update() call ho
     // focusNode.addListener(() {
     //   hasFocus = focusNode.hasFocus;
@@ -82,9 +84,7 @@ class InvestRequisitController extends GetxController {
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' ||
-              typeController.text.toLowerCase() == 'radio' ||
-              typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -186,7 +186,7 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseServiceGroup responseServiceGroup = ResponseServiceGroup.fromJson(jsonDecode(response));
@@ -352,8 +352,8 @@ class InvestRequisitController extends GetxController {
         "ipd": ipdNo,
         "srchService": searchText,
         "invType": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase(),
-        "srvGrp": "",
-        "extLabNm": "",
+        "srvGrp": serviceGroupController.text.trim().isNotEmpty ? serviceGroupController.text.trim() : "",
+        "extLabNm": ExternalLabIdController.text.trim().isNotEmpty ? ExternalLabIdController.text.trim() : "",
         "val7": ""
       };
 
@@ -424,15 +424,11 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
-              ? "LAB CHARGES"
-              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
-              ? drNameController.text.trim()
-              : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -469,9 +465,7 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab'
-            ? "LabRequest"
-            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -610,6 +604,7 @@ class InvestRequisitController extends GetxController {
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseGetHistoryList responseGetHistoryList = ResponseGetHistoryList.fromJson(jsonDecode(response));
       if (responseGetHistoryList.statusCode == 200) {
+        typeHistory_Controller.text = '--select--'; // Default type set to Lab
         gethistoryList.assignAll(responseGetHistoryList.data ?? []);
       } else if (responseGetHistoryList.statusCode == 401) {
         pref.clear();
@@ -632,7 +627,7 @@ class InvestRequisitController extends GetxController {
     return gethistoryList;
   }
 
-  Future<void> Delete_ReqDtl_Srv(String reqDtlSrvId) async {
+  Future<void> Delete_ReqDtl_Srv(String reqDtlSrvId, int index) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -661,13 +656,24 @@ class InvestRequisitController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 1),
         );
+        selReqHistoryDetailList.removeAt(index);
         // Refresh the history list after deletion
       } else if (resp_DelReqDtlSrv_model.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Session expired, login again.');
       } else {
-        Get.rawSnackbar(message: resp_DelReqDtlSrv_model.message);
+        Get.rawSnackbar(
+          messageText: Text(
+            resp_DelReqDtlSrv_model.message ?? '',
+            style: AppStyle.white,
+          ),
+          backgroundColor: Colors.red.shade900,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(
+            seconds: 10,
+          ),
+        );
       }
     } catch (e) {
       ApiErrorHandler.handleError(
@@ -682,6 +688,9 @@ class InvestRequisitController extends GetxController {
         message: "Exception: ${e.toString()}",
         backgroundColor: Colors.red.shade100,
         snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(
+          seconds: 10,
+        ),
       );
     }
     isLoading = false;
@@ -820,7 +829,7 @@ class InvestRequisitController extends GetxController {
                             color: AppColor.white,
                           ),
                         ),
-                        controller: controller.typeController,
+                        controller: controller.typeHistory_Controller,
                         items: [
                           {'value': '', 'text': 'Select'},
                           {'value': 'Lab', 'text': 'LAB'},
@@ -833,7 +842,7 @@ class InvestRequisitController extends GetxController {
                           );
                         }).toList(),
                         onChanged: (val) {
-                          controller.typeController.text = val?['text'] ?? '';
+                          controller.typeHistory_Controller.text = val?['text'] ?? '';
                           controller.filterHistoryByType(val?['text'] ?? '');
                           controller.update();
                         },
@@ -885,7 +894,18 @@ class InvestRequisitController extends GetxController {
                                         ],
                                       ),
                                     ),
-                                    Icon(Icons.menu, size: 18, color: AppColor.black),
+                                    // Icon(Icons.menu, size: 18, color: AppColor.black),
+                                    IconButton(
+                                      onPressed: () async {
+                                        List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
+                                        await InvestigationHistoryDialog(context, list);
+                                      },
+                                      icon: Icon(
+                                        Icons.menu,
+                                        color: Colors.black,
+                                        size: 15,
+                                      ),
+                                    ),
                                   ],
                                 ),
 
@@ -1055,13 +1075,16 @@ class InvestRequisitController extends GetxController {
                                 ),
                                 Row(
                                   children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
-                                        borderRadius: BorderRadius.circular(4),
+                                    Visibility(
+                                      visible: item.status != null && item.status!.isNotEmpty,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Text(item.status.toString()),
                                       ),
-                                      child: Text(item.status.toString()),
                                     ),
                                     const SizedBox(width: 8),
                                     InkWell(
@@ -1352,8 +1375,8 @@ class InvestRequisitController extends GetxController {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppString.logout),
-          content: Text(AppString.areyousuretologout),
+          title: Text(AppString.delete),
+          content: Text(AppString.recordDeleteMsg),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -1373,10 +1396,8 @@ class InvestRequisitController extends GetxController {
     );
     if (shouldDelete == true) {
       // final OtpController otpController = Get.find();
-      await Delete_ReqDtl_Srv(reqDtlSrvId);
+      await Delete_ReqDtl_Srv(reqDtlSrvId, index);
       // Navigator.pop(context);
-      selReqHistoryDetailList.removeAt(index);
-      update();
       // List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(reqDtlId ?? 0);
       // InvestigationHistoryDialog(context, list);
     }
@@ -1386,10 +1407,15 @@ class InvestRequisitController extends GetxController {
     nameController.text = '';
     drNameController.text = '';
     drIdController.text = '';
-    typeController.text = '--select--';
+    // typeController.text = '--select--';
+    typeController.clear();
+    // typeHistory_Controller.text = '--select--';
+    typeHistory_Controller.clear();
     priorityController.text = 'normal';
     InExController.text = 'Internal';
-    ExternalLabController..text = '';
+    // ExternalLabController.text = '-- Select External Lab --';
+    ExternalLabController.clear();
+    ExternalLabIdController.clear();
     serviceGroupController.clear();
     searchController.text = '';
     tokenNo = '';

@@ -56,14 +56,11 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
-                              ? controller.nameController
-                              : nameController;
+                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
-                            readOnly: controller.nameController.text.isNotEmpty &&
-                                controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                            readOnly: controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                             minLines: 1,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -140,8 +137,11 @@ class InvestRequisitScreen extends StatelessWidget {
                                   ),
                                 );
                               }).toList(),
-                              onChanged: (val) {
+                              onChanged: (val) async {
+                                await controller.fetchServiceGroup();
                                 controller.typeController.text = val?['text'] ?? '';
+                                controller.serviceGroupController.text = '';
+                                controller.ExternalLabController.text = '';
                                 controller.update();
                               },
                             ),
@@ -225,7 +225,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         vertical: getDynamicHeight(size: 0.007),
                       ),
                       child: CustomDropdown(
-                        text: AppString.externallab,
+                        text: AppString.selectExternallab,
                         controller: controller.ExternalLabController,
                         enabled: controller.InExController.text.toLowerCase() == 'external',
                         buttonStyleData: ButtonStyleData(
@@ -236,13 +236,14 @@ class InvestRequisitScreen extends StatelessWidget {
                           ),
                         ),
                         onChanged: (value) {
+                          controller.ExternalLabIdController.text = value?['value'] ?? '';
                           controller.update();
                         },
                         width: double.infinity,
                         items: controller.externalLab
                             .map((ExternallabModel item) => DropdownMenuItem<Map<String, String>>(
                                   value: {
-                                    'value': item.name ?? '', // Use the value as the item value
+                                    'value': item.id ?? '', // Use the value as the item value
                                     'text': item.name ?? '', // Display the name in the dropdown
                                   },
                                   child: Text(
@@ -262,7 +263,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         vertical: getDynamicHeight(size: 0.007),
                       ),
                       child: CustomDropdown(
-                        text: AppString.servicegroup,
+                        text: AppString.selectServicegroup,
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),

@@ -172,13 +172,15 @@ class AppString {
   static String labreport = "Lab Report";
   static String true1 = "True";
   static String provisional = "provisional";
-  static String investigationrequisition="Investigation Requisition";
-  static String patientuhidipd="Patient/UHID/IPD";
+  static String investigationrequisition = "Investigation Requisition";
+  static String patientuhidipd = "Patient/UHID/IPD";
   static String type1 = "Type";
   static String normal = "Normal";
   static String internal = "Internal";
   static String externallab = "External lab";
+  static String selectExternallab = "-- Select External Lab --";
   static String servicegroup = "Service group";
+  static String selectServicegroup = "-- Select Service Group --";
   static String diagnosiscomplaint = "Diagnosis/Complaints...";
   static String clinicalremarks = "Clinical Remarks...";
   static String history = "History";
@@ -200,7 +202,8 @@ class AppString {
   static String plzselectavalidpatient = "Please select a valid patient";
   static String youdonthaveaccesstothisscreen = "You don't have access to this screen";
   static String information = "Information";
-  static String toviewthenormalrange = "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed.";
+  static String toviewthenormalrange =
+      "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed.";
   static String anytestvaluesthatareabnormal = "b. Any test values that are abnormal will be displayed in red colour for clear identification.";
   static String bluebackgroundcolour = "c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist.";
   static String normalrange = "Normal Range";
@@ -213,4 +216,6 @@ class AppString {
   static String filterbytags = "Filter by tags";
   static String circularScreen = "Circular Screen";
   static String selectdate = "Select Date";
+  static String delete = "Delete";
+  static String recordDeleteMsg = "Are you sure you want to delete this record?";
 }
