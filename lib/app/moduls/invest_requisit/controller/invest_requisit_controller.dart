@@ -71,6 +71,7 @@ class InvestRequisitController extends GetxController {
   bool isHistorySheetOpen = false;
   bool isNextButtonClicked = false;
   bool isSaveButtonClicked = false;
+  var isDrNameValid = false.obs;
 
   @override
   void onInit() {
@@ -1312,6 +1313,11 @@ class InvestRequisitController extends GetxController {
     return false;
   }
 
+  void validateDrName(String value) {
+    isDrNameValid.value = value.trim().isNotEmpty;
+    update();
+  }
+
   Future<void> otherInvestDialog(BuildContext context, GetquerylistModel serviceModel) async {
     await showDialog(
       context: context,
@@ -1359,6 +1365,7 @@ class InvestRequisitController extends GetxController {
                           minLines: 1,
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
+                          onChanged: (val) => validateDrName(val),
                           decoration: InputDecoration(
                               labelText: AppString.typetosearchdrname,
                               border: OutlineInputBorder(),
@@ -1379,6 +1386,7 @@ class InvestRequisitController extends GetxController {
                                   color: AppColor.black,
                                 ),
                                 onPressed: () {
+                                  isDrNameValid.value = false;
                                   drNameController.text = '';
                                   drNameController.clear();
                                   drIdController.text = '';
@@ -1394,26 +1402,27 @@ class InvestRequisitController extends GetxController {
                       },
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.teal, // Button color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () async {
-                        await addService(serviceModel);
-                        Navigator.of(context).pop();
-                        // Aap yahan searchController.text use kar sakte ho
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Text(
-                          AppString.ok,
-                          style: AppStyle.white,
-                        ),
-                      ),
-                    ),
+                    Obx(() => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.teal,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: isDrNameValid.value
+                              ? () async {
+                                  await addService(serviceModel);
+                                  Navigator.of(context).pop();
+                                }
+                              : null,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            child: Text(
+                              AppString.ok,
+                              style: AppStyle.white,
+                            ),
+                          ),
+                        ))
                   ],
                 ),
                 Positioned(
