@@ -65,7 +65,7 @@ class InvestRequisitController extends GetxController {
   Timer? debounce;
   List<RequestSheetDetailsIPD> selectedServices = [];
   final List<int> topOptions = [10, 20, 30, 40];
-  int selectedTop = 10;
+  int selectedTop = 20;
   String webUserName = '';
   bool fromAdmittedScreen = false;
   bool isHistorySheetOpen = false;
