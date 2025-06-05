@@ -2,6 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomLoginDialogBox extends StatelessWidget {
   final bool obscurePassword;
@@ -12,6 +13,7 @@ class CustomLoginDialogBox extends StatelessWidget {
   final String? passwordHintText;
   final TextEditingController? controller;
   final TextEditingController? passcontroller;
+  final List<TextInputFormatter>? inputFormatters;
   final Function()? onTap;
   const CustomLoginDialogBox({
     Key? key,
@@ -23,7 +25,7 @@ class CustomLoginDialogBox extends StatelessWidget {
     this.controller,
     this.passcontroller,
     this.passwordHintText,
-    this.onTap,
+    this.onTap, this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -58,6 +60,7 @@ class CustomLoginDialogBox extends StatelessWidget {
                 TextField(
                   controller: controller,
                   keyboardType: TextInputType.phone,
+                  inputFormatters: inputFormatters,
                   decoration: InputDecoration(
                     hintText: hintText,
                     enabledBorder: OutlineInputBorder(

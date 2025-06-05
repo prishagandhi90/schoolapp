@@ -358,27 +358,31 @@ class InvestServiceScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
-                      child: TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 167, 166, 166), // Same as ElevatedButton
-                          foregroundColor: AppColor.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero, // No border radius
+                      child: SizedBox(
+                        height: getDynamicHeight(size: 0.05), // 👈 Fixed height for all buttons
+                        child: TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 167, 166, 166),
+                            foregroundColor: AppColor.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 0), // 👈 Remove vertical padding
                           ),
-                          padding: EdgeInsets.symmetric(
-                            vertical: getDynamicHeight(size: 0.0135),
-                          ), // Same vertical padding
-                        ),
-                        child: Text(
-                          controller.webUserName,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: getDynamicHeight(size: 0.013),
-                            fontWeight: FontWeight.w500,
+                          child: Center(
+                            child: Text(
+                              controller.webUserName,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: getDynamicHeight(size: 0.013),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
-                          maxLines: 3,
                         ),
                       ),
                     ),
@@ -387,10 +391,13 @@ class InvestServiceScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           // FocusScope.of(context).unfocus();
-
+                          if (controller.isHistorySheetOpen) return;
+                          controller.isHistorySheetOpen = true;
                           await controller.fetchGetHistoryList(controller.ipdNo);
                           await controller.HistoryBottomSheet();
                           await controller.clearSrvScreenSearchFilters();
+                          controller.isHistorySheetOpen = false;
+                          controller.update();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primaryColor,
@@ -412,11 +419,20 @@ class InvestServiceScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: controller.isSaveButtonEnabled()
-                            ? () async {
-                                await controller.saveSelectedServiceList(controller.ipdNo);
-                              }
-                            : null,
+                        onPressed: () async {
+                          if (controller.isSaveButtonClicked) return;
+                          controller.isSaveButtonClicked = true;
+                          if (controller.isSaveButtonEnabled()) {
+                            await controller.saveSelectedServiceList(controller.ipdNo);
+                          } else {
+                            if (controller.isSaveButtonClicked) return;
+                            controller.isSaveButtonClicked = false;
+                            controller.update();
+                            return null;
+                          }
+                          controller.isSaveButtonClicked = false;
+                          controller.update();
+                        },
                         // onPressed: () {
                         //   controller.saveSelectedServiceList(controller.ipdNo);
                         // },

@@ -193,7 +193,7 @@ class AppString {
   static String investigationhistory = "Investigation History";
   static String service = "Service";
   static String reqno = "Req No: ";
-  static String plzenteryourmobilenumberandpasstologin = "Please enter your mobile number and password to login.";
+  static String plzenteryourmobilenumberandpasstologin = "Please log in with your registered mobile number and password to continue.";
   static String mobilenumber = "Mobile Number";
   static String password = "Password";
   static String loginsuccessful = "Login successful";

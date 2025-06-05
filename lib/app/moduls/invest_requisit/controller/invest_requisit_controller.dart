@@ -27,6 +27,7 @@ import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,6 +68,9 @@ class InvestRequisitController extends GetxController {
   int selectedTop = 10;
   String webUserName = '';
   bool fromAdmittedScreen = false;
+  bool isHistorySheetOpen = false;
+  bool isNextButtonClicked = false;
+  bool isSaveButtonClicked = false;
 
   @override
   void onInit() {
@@ -94,7 +98,9 @@ class InvestRequisitController extends GetxController {
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' ||
+              typeController.text.toLowerCase() == 'radio' ||
+              typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -196,7 +202,11 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseServiceGroup responseServiceGroup = ResponseServiceGroup.fromJson(jsonDecode(response));
@@ -434,11 +444,15 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
+              ? "LAB CHARGES"
+              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -475,7 +489,9 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab'
+            ? "LabRequest"
+            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -827,7 +843,9 @@ class InvestRequisitController extends GetxController {
 
                     // Dropdown
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      padding: EdgeInsets.all(
+                        getDynamicHeight(size: 0.0125),
+                      ),
                       child: CustomDropdown(
                         text: AppString.select,
                         buttonStyleData: ButtonStyleData(
@@ -837,6 +855,9 @@ class InvestRequisitController extends GetxController {
                             border: Border.all(color: AppColor.black),
                             borderRadius: BorderRadius.circular(10),
                             color: AppColor.white,
+                          ),
+                          padding: EdgeInsets.all(
+                            getDynamicHeight(size: 0.009),
                           ),
                         ),
                         controller: controller.typeHistory_Controller,
@@ -858,22 +879,31 @@ class InvestRequisitController extends GetxController {
                         },
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    // const SizedBox(height: 5),
                     // History List
                     Expanded(
                       child: ListView.builder(
                         controller: scrollController,
-                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: getDynamicHeight(size: 0.0125),
+                        ),
                         itemCount: controller.filteredList.length,
                         itemBuilder: (context, index) {
                           final item = controller.filteredList[index];
                           return Container(
-                            margin: EdgeInsets.only(bottom: 8),
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                            margin: EdgeInsets.only(
+                              bottom: getDynamicHeight(size: 0.0068),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: getDynamicHeight(size: 0.0085),
+                              vertical: getDynamicHeight(size: 0.004),
+                            ),
                             decoration: BoxDecoration(
                               color: AppColor.primaryColor.withOpacity(0.2),
                               border: Border.all(color: AppColor.black, width: 0.7),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(
+                                getDynamicHeight(size: 0.0068),
+                              ),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -888,7 +918,7 @@ class InvestRequisitController extends GetxController {
                                           TextSpan(
                                             text: '${AppString.reqno} ',
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: getDynamicHeight(size: 0.0115),
                                               fontWeight: FontWeight.w600,
                                               color: AppColor.black,
                                             ),
@@ -896,7 +926,7 @@ class InvestRequisitController extends GetxController {
                                           TextSpan(
                                             text: '${item.requisitionNo}',
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: getDynamicHeight(size: 0.0115),
                                               fontWeight: FontWeight.w400,
                                               color: Colors.grey.shade500,
                                             ),
@@ -904,18 +934,12 @@ class InvestRequisitController extends GetxController {
                                         ],
                                       ),
                                     ),
-                                    // Icon(Icons.menu, size: 18, color: AppColor.black),
-                                    IconButton(
-                                      onPressed: () async {
-                                        List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
-                                        await InvestigationHistoryDialog(context, list, item.user ?? '');
-                                      },
-                                      icon: Icon(
-                                        Icons.menu,
-                                        color: Colors.black,
-                                        size: 15,
-                                      ),
-                                    ),
+                                    GestureDetector(
+                                        onTap: () async {
+                                          List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
+                                          await InvestigationHistoryDialog(context, list, item.user ?? '');
+                                        },
+                                        child: Icon(Icons.menu, size: getDynamicHeight(size: 0.024), color: AppColor.black)),
                                   ],
                                 ),
 
@@ -923,7 +947,7 @@ class InvestRequisitController extends GetxController {
                                 Text(
                                   item.entryDate ?? '',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: getDynamicHeight(size: 0.011),
                                     fontWeight: FontWeight.w500,
                                     color: AppColor.black,
                                   ),
@@ -934,27 +958,35 @@ class InvestRequisitController extends GetxController {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: getDynamicHeight(size: 0.0065),
+                                        vertical: getDynamicHeight(size: 0.0017),
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: AppColor.teal.withOpacity(0.1),
-                                        border: Border.all(color: AppColor.teal, width: 1),
-                                        borderRadius: BorderRadius.circular(20),
+                                        color: AppColor.teal.withOpacity(0.2),
+                                        border: Border.all(
+                                          color: AppColor.teal,
+                                          width: getDynamicHeight(size: 0.0008),
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          getDynamicHeight(size: 0.018),
+                                        ),
                                       ),
                                       child: Text(
                                         item.investigationType ?? '',
                                         style: TextStyle(
-                                          fontSize: 11,
+                                          fontSize: getDynamicHeight(size: 0.011),
                                           fontWeight: FontWeight.w600,
                                           color: AppColor.teal,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 8),
+                                    SizedBox(width: getDynamicHeight(size: 0.0075)),
                                     Expanded(
                                       child: Text(
                                         item.user ?? '',
                                         style: TextStyle(
-                                          fontSize: 12.5,
+                                          fontSize: getDynamicHeight(size: 0.0115),
                                           fontWeight: FontWeight.w500,
                                           color: AppColor.black,
                                         ),
@@ -971,11 +1003,15 @@ class InvestRequisitController extends GetxController {
                       ),
                     ),
 
-                    SizedBox(height: 10), // spacing before bottom buttons
+                    SizedBox(height: getDynamicHeight(size: 0.009)), // spacing before bottom buttons
 
                     /// 🟩 Bottom Buttons
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20, left: 8, right: 8),
+                      padding: EdgeInsets.only(
+                        bottom: getDynamicHeight(size: 0.018),
+                        left: getDynamicHeight(size: 0.007),
+                        right: getDynamicHeight(size: 0.007),
+                      ),
                       child: SizedBox(
                         width: double.infinity, // Full width
                         child: TextButton(
@@ -986,7 +1022,10 @@ class InvestRequisitController extends GetxController {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 12),
+                            padding: EdgeInsets.symmetric(
+                              vertical: getDynamicHeight(size: 0.0135),
+                              horizontal: getDynamicHeight(size: 0.0108),
+                            ),
                             alignment: Alignment.center,
                           ),
                           child: Text(
@@ -1018,16 +1057,20 @@ class InvestRequisitController extends GetxController {
         return AlertDialog(
           backgroundColor: AppColor.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          titlePadding: const EdgeInsets.only(top: 10, left: 16, right: 8),
+          titlePadding: EdgeInsets.only(
+            top: getDynamicHeight(size: 0.008),
+            left: getDynamicHeight(size: 0.015),
+            right: getDynamicHeight(size: 0.008),
+          ),
           title: Stack(
             children: [
               // Centered Title
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 11),
+                  padding: EdgeInsets.only(top: getDynamicHeight(size: 0.010)),
                   child: Text(
                     AppString.investigationhistory,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: getDynamicHeight(size: 0.0145), fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -1058,12 +1101,12 @@ class InvestRequisitController extends GetxController {
                         SelReqHistoryDetailModel item = entry.value;
 
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
+                          padding: EdgeInsets.only(bottom: getDynamicHeight(size: 0.007)),
                           child: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: EdgeInsets.all(getDynamicHeight(size: 0.009)),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black12),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.007)),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1077,8 +1120,10 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
-                                        style: const TextStyle(fontSize: 12),
+                                        item.serviceGroup != '' && item.serviceGroup != null
+                                            ? item.serviceGroup.toString()
+                                            : item.reqTyp.toString(),
+                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.011)),
                                       ),
                                     ],
                                   ),
@@ -1088,15 +1133,16 @@ class InvestRequisitController extends GetxController {
                                     Visibility(
                                       visible: item.status != null && item.status!.isNotEmpty,
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
                                         decoration: BoxDecoration(
                                           color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0035)),
                                         ),
                                         child: Text(item.status.toString()),
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    SizedBox(width: getDynamicHeight(size: 0.007)),
                                     InkWell(
                                       onTap: () {
                                         if (savedUserName != webUserName) {
@@ -1122,7 +1168,7 @@ class InvestRequisitController extends GetxController {
                                       },
                                       child: Icon(
                                         Icons.delete,
-                                        size: 20,
+                                        size: getDynamicHeight(size: 0.018),
                                         color: AppColor.red,
                                       ),
                                     ),
@@ -1163,6 +1209,10 @@ class InvestRequisitController extends GetxController {
             togglePasswordVisibility: togglePasswordVisibility,
             passwordHintText: AppString.password,
             passcontroller: passwordController,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(10),
+            ],
             onLoginPressed: () async {
               bool isLoggedIn = await fetchWebUserLoginCreds(context);
               if (isLoggedIn) {
@@ -1201,8 +1251,12 @@ class InvestRequisitController extends GetxController {
                     return;
                   });
                 } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+                  if (controller.isHistorySheetOpen) return;
+                  controller.isHistorySheetOpen = true;
                   await fetchGetHistoryList(IPDNo);
-                  HistoryBottomSheet();
+                  await HistoryBottomSheet();
+                  controller.isHistorySheetOpen = false;
+                  controller.update();
                 }
               } else {
                 Get.rawSnackbar(
@@ -1369,7 +1423,10 @@ class InvestRequisitController extends GetxController {
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Text(AppString.ok),
+                        child: Text(
+                          AppString.ok,
+                          style: AppStyle.white,
+                        ),
                       ),
                     ),
                   ],
