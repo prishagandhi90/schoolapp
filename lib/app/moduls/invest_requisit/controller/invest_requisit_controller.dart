@@ -44,8 +44,8 @@ class InvestRequisitController extends GetxController {
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   TextEditingController mobileController = TextEditingController(text: '9429728770');
-  TextEditingController passwordController = TextEditingController(text: 'venus9');
-  bool obscurePassword = false;
+  TextEditingController passwordController = TextEditingController(text: '123');
+  bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
   final ApiController apiController = Get.put(ApiController());
@@ -76,7 +76,17 @@ class InvestRequisitController extends GetxController {
     //   hasFocus = focusNode.hasFocus;
     //   update();
     // });
+    searchController.clear();
+    focusNode.unfocus();
+    focusNode.addListener(_onsearchFocusChange);
     super.onInit();
+  }
+
+  void _onsearchFocusChange() {
+    if (!focusNode.hasFocus) {
+      // focusNode.value = focusNode.hasFocus;
+      update();
+    }
   }
 
   // 'Next' button enable hoga sirf tab jab IPD No aur Type filled ho
@@ -898,7 +908,7 @@ class InvestRequisitController extends GetxController {
                                     IconButton(
                                       onPressed: () async {
                                         List<SelReqHistoryDetailModel> list = await SelReqqHistoryDetailList(item.requisitionNo ?? 0);
-                                        await InvestigationHistoryDialog(context, list);
+                                        await InvestigationHistoryDialog(context, list, item.user ?? '');
                                       },
                                       icon: Icon(
                                         Icons.menu,
@@ -1001,7 +1011,7 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Future<void> InvestigationHistoryDialog(BuildContext context, List<SelReqHistoryDetailModel> dataList) async {
+  Future<void> InvestigationHistoryDialog(BuildContext context, List<SelReqHistoryDetailModel> dataList, String savedUserName) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -1067,7 +1077,7 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.reqTyp.toString(),
+                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
@@ -1089,6 +1099,18 @@ class InvestRequisitController extends GetxController {
                                     const SizedBox(width: 8),
                                     InkWell(
                                       onTap: () {
+                                        if (savedUserName != webUserName) {
+                                          Get.rawSnackbar(
+                                            messageText: Text(
+                                              "You cannot delete this item as it was not added by you.",
+                                              style: AppStyle.white,
+                                            ),
+                                            duration: Duration(seconds: 4),
+                                            backgroundColor: Colors.red.shade900,
+                                            snackPosition: SnackPosition.TOP,
+                                          );
+                                          return;
+                                        }
                                         print('Delete pressed for item: ${item.serviceName}, index: $index');
 
                                         showDeleteReqSrv_Dialog(
@@ -1430,6 +1452,12 @@ class InvestRequisitController extends GetxController {
     // mobileController.clear();
     // passwordController.clear();
 
+    update();
+  }
+
+  Future<void> clearSrvScreenSearchFilters() async {
+    focusNode.unfocus();
+    searchController.text = '';
     update();
   }
 }
