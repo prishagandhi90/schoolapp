@@ -282,11 +282,26 @@ class InvestServiceScreen extends StatelessWidget {
                                         child: Row(
                                           children: [
                                             Expanded(
-                                              child: Text(
-                                                service.serviceName.toString(),
-                                                style: TextStyle(
-                                                  fontSize: getDynamicHeight(size: 0.0125),
-                                                ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    service.serviceName.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: getDynamicHeight(size: 0.0125),
+                                                    ),
+                                                  ),
+                                                  if (service.drName.trim().isNotEmpty) ...[
+                                                    SizedBox(height: getDynamicHeight(size: 0.004)),
+                                                    Text(
+                                                      service.drName, // Replace as needed
+                                                      style: TextStyle(
+                                                        fontSize: getDynamicHeight(size: 0.010),
+                                                        color: Colors.grey[600],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
                                               ),
                                             ),
                                             GestureDetector(
@@ -295,7 +310,7 @@ class InvestServiceScreen extends StatelessWidget {
                                                 controller.update();
                                               },
                                               child: Padding(
-                                                padding: EdgeInsets.all(getDynamicHeight(size: 0.002)), // just enough to make icon tappable
+                                                padding: EdgeInsets.all(getDynamicHeight(size: 0.002)),
                                                 child: Icon(
                                                   Icons.cancel,
                                                   color: AppColor.black,

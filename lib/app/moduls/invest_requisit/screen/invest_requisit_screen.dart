@@ -142,6 +142,7 @@ class InvestRequisitScreen extends StatelessWidget {
                                 controller.typeController.text = val?['text'] ?? '';
                                 controller.serviceGroupController.text = '';
                                 controller.ExternalLabController.text = '';
+                                controller.ExternalLabIdController.text = '';
                                 controller.update();
                               },
                             ),
@@ -457,6 +458,8 @@ class InvestRequisitScreen extends StatelessWidget {
                               controller.searchController.text = '';
                               controller.fetchGetQueryList(controller.ipdNo);
                               controller.patientName = controller.nameController.text;
+                              controller.drIdController.text = "";
+                              controller.drNameController.text = "";
                               Get.to(() => InvestServiceScreen());
                             } // disables button
                           : null,
