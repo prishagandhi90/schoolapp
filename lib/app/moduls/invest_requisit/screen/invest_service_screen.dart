@@ -268,12 +268,16 @@ class InvestServiceScreen extends StatelessWidget {
                                       ),
                                       child: Text(
                                         AppString.selectedservices,
-                                        style: TextStyle(
-                                          fontSize: getDynamicHeight(size: 0.015),
-                                          fontWeight: FontWeight.bold,
+                                        style: AppStyle.black.copyWith(
                                           color: AppColor.teal,
-                                          // decorationColor: AppColor.lightblue,
+                                          fontWeight: FontWeight.bold,
                                         ),
+                                        // style: TextStyle(
+                                        //   fontSize: getDynamicHeight(size: 0.015),
+                                        //   fontWeight: FontWeight.bold,
+                                        //   color: AppColor.teal,
+                                        //   // decorationColor: AppColor.lightblue,
+                                        // ),
                                       ),
                                     ),
                                   ),
@@ -305,9 +309,7 @@ class InvestServiceScreen extends StatelessWidget {
                                                   children: [
                                                     Text(
                                                       service.serviceName.toString(),
-                                                      style: TextStyle(
-                                                        fontSize: getDynamicHeight(size: 0.0125),
-                                                      ),
+                                                      style: AppStyle.black.copyWith(fontSize: getDynamicHeight(size: 0.0135)),
                                                     ),
                                                     if (service.drName.trim().isNotEmpty) ...[
                                                       SizedBox(height: getDynamicHeight(size: 0.004)),
