@@ -1206,7 +1206,7 @@ class InvestRequisitController extends GetxController {
     String patientDetails,
     String IPDNo,
     String UHID, {
-    required ScreenType fromScreen, // 🔹 Add parameter
+    required String fromScreen, // 🔹 Add parameter
   }) async {
     await showDialog(
       context: context,
@@ -1226,7 +1226,7 @@ class InvestRequisitController extends GetxController {
               LengthLimitingTextInputFormatter(10),
             ],
             onLoginPressed: () async {
-              bool isLoggedIn = await fetchWebUserLoginCreds(context);
+              bool isLoggedIn = await fetchWebUserLoginCreds(context, fromScreen.toString());
 
               if (isLoggedIn) {
                 Navigator.of(context).pop();
@@ -1375,7 +1375,7 @@ class InvestRequisitController extends GetxController {
   //   );
   // }
 
-  Future<bool> fetchWebUserLoginCreds(BuildContext context) async {
+  Future<bool> fetchWebUserLoginCreds(BuildContext context, String formScreenName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -1383,7 +1383,12 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "mobileNo": mobileController.text.trim(), "password": passwordController.text.trim()};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "mobileNo": mobileController.text.trim(),
+        "password": passwordController.text.trim(),
+        "formScreen": formScreenName
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseWebuselogin responseWebuselogin = ResponseWebuselogin.fromJson(jsonDecode(response));
@@ -1399,7 +1404,11 @@ class InvestRequisitController extends GetxController {
 
           return true;
         } else {
-          Get.rawSnackbar(message: loginWebUserCreds.first.message ?? "Invalid credentials", duration: Duration(seconds: 10));
+          Get.rawSnackbar(
+            message: loginWebUserCreds.first.message ?? "Invalid credentials",
+            duration: Duration(seconds: 10),
+            snackPosition: SnackPosition.TOP,
+          );
           isLoading = false;
           update();
           return false;

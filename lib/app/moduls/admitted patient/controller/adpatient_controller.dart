@@ -915,7 +915,7 @@ class AdPatientController extends GetxController {
         await envReqController.resetForm();
         // ⬇️ Call the dialog function directly
         await envReqController.loginAlertDialog(
-          fromScreen: ScreenType.InvestRequisitScreen,
+          fromScreen: "INVESTIGATION REQUISITION",
           context,
           "INVESTIGATION REQUISITION",
           "",
