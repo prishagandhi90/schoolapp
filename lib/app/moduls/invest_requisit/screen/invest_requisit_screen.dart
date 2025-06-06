@@ -120,6 +120,7 @@ class InvestRequisitScreen extends StatelessWidget {
                             flex: 6,
                             child: CustomDropdown(
                               text: AppString.investigationType,
+                              textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans),
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -275,6 +276,7 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                       child: CustomDropdown(
                         text: AppString.selectServicegroup,
+                        textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans),
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),

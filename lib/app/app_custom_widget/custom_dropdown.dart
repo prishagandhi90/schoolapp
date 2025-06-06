@@ -17,10 +17,8 @@ class CustomDropdown extends StatelessWidget {
   final Function(bool)? onMenuStateChange;
   final ButtonStyleData? buttonStyleData;
   final DropdownSearchData<Map<String, String>>? dropdownSearchData;
-
-  /// ✅ New field added
+  final TextStyle? textStyle;
   final bool enabled;
-
   CustomDropdown({
     required this.text,
     required this.controller,
@@ -31,7 +29,8 @@ class CustomDropdown extends StatelessWidget {
     this.onMenuStateChange,
     this.buttonStyleData,
     this.dropdownSearchData,
-    this.enabled = true, // ✅ default true
+    this.enabled = true,
+    this.textStyle, // ✅ default true
   });
 
   @override
@@ -45,11 +44,12 @@ class CustomDropdown extends StatelessWidget {
           isExpanded: true,
           hint: Text(
             text,
-            style: TextStyle(
-              fontSize: getDynamicHeight(size: 0.016),
-              color: enabled ? AppColor.black : AppColor.black.withOpacity(0.4), // faded if disabled
-              fontFamily: CommonFontStyle.plusJakartaSans,
-            ),
+            style: textStyle ??
+                TextStyle(
+                  fontSize: getDynamicHeight(size: 0.016),
+                  color: enabled ? AppColor.black : AppColor.black.withOpacity(0.4),
+                  fontFamily: CommonFontStyle.plusJakartaSans,
+                ),
           ),
           items: enabled ? items : [], // ✅ disable item selection
           value: items

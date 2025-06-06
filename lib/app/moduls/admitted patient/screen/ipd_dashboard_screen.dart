@@ -295,7 +295,7 @@ class IpdDashboardScreen extends StatelessWidget {
                           // ⬇️ Call the dialog function directly
 
                           await envReqController.loginAlertDialog(
-                            fromScreen: ScreenType.AdpatientScreen,
+                            fromScreen: ScreenType.InvestRequisitScreen,
                             context,
                             "INVESTIGATION REQUISITION",
                             "",

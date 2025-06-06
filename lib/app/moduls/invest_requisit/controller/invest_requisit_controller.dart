@@ -1151,7 +1151,7 @@ class InvestRequisitController extends GetxController {
                                     SizedBox(width: getDynamicHeight(size: 0.007)),
                                     InkWell(
                                       onTap: () {
-                                        if (savedUserName != webUserName) {
+                                        if (savedUserName.toLowerCase() != webUserName.toLowerCase()) {
                                           Get.rawSnackbar(
                                             messageText: Text(
                                               "You cannot delete this item as it was not added by you.",
@@ -1164,7 +1164,6 @@ class InvestRequisitController extends GetxController {
                                           return;
                                         }
                                         print('Delete pressed for item: ${item.serviceName}, index: $index');
-
                                         showDeleteReqSrv_Dialog(
                                           context, // current dialog context
                                           item.requestID ?? 0,
