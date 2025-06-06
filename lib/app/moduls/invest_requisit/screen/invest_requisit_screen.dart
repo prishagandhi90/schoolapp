@@ -112,7 +112,7 @@ class InvestRequisitScreen extends StatelessWidget {
                         }),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: getDynamicHeight(size: 0.007),
+                        vertical: getDynamicHeight(size: 0.01),
                       ),
                       child: Row(
                         children: [
