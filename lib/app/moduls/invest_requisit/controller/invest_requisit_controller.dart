@@ -44,8 +44,8 @@ class InvestRequisitController extends GetxController {
   final ExternalLabIdController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController mobileController = TextEditingController(text: '9429728770');
-  TextEditingController passwordController = TextEditingController(text: '123');
+  TextEditingController mobileController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
   bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
@@ -71,6 +71,7 @@ class InvestRequisitController extends GetxController {
   bool isHistorySheetOpen = false;
   bool isNextButtonClicked = false;
   bool isSaveButtonClicked = false;
+  RxBool isDrNameValid = false.obs;
 
   @override
   void onInit() {
@@ -97,7 +98,7 @@ class InvestRequisitController extends GetxController {
 // Saath hi 'internal' ke liye type 'lab', 'radio', 'other investigation' ho
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
-    if ((ipdNo.isNotEmpty) && typeController.text.isNotEmpty && nameController.text != "") {
+    if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
       if ((typeController.text.toLowerCase() == 'lab' ||
               typeController.text.toLowerCase() == 'radio' ||
               typeController.text.toLowerCase() == 'other investigation') &&
@@ -454,8 +455,10 @@ class InvestRequisitController extends GetxController {
               : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
-          drId: drIdController.text.trim().isNotEmpty ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim().isNotEmpty ? drNameController.text.trim() : "",
+          drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -1197,98 +1200,98 @@ class InvestRequisitController extends GetxController {
     obscurePassword = !obscurePassword;
     update(); // notify listeners
   }
-  
+
   Future<void> loginAlertDialog(
-  BuildContext context,
-  String menuName,
-  String patientDetails,
-  String IPDNo,
-  String UHID, {
-  required ScreenType fromScreen, // 🔹 Add parameter
-}) async {
-  await showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return GetBuilder<InvestRequisitController>(builder: (controller) {
-        return CustomLoginDialogBox(
-          text: AppString.plzenteryourmobilenumberandpasstologin,
-          hintText: AppString.mobilenumber,
-          controller: mobileController,
-          obscurePassword: obscurePassword,
-          togglePasswordVisibility: togglePasswordVisibility,
-          passwordHintText: AppString.password,
-          passcontroller: passwordController,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(10),
-          ],
-          onLoginPressed: () async {
-            bool isLoggedIn = await fetchWebUserLoginCreds(context);
+    BuildContext context,
+    String menuName,
+    String patientDetails,
+    String IPDNo,
+    String UHID, {
+    required ScreenType fromScreen, // 🔹 Add parameter
+  }) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return GetBuilder<InvestRequisitController>(builder: (controller) {
+          return CustomLoginDialogBox(
+            text: AppString.plzenteryourmobilenumberandpasstologin,
+            hintText: AppString.mobilenumber,
+            controller: mobileController,
+            obscurePassword: obscurePassword,
+            togglePasswordVisibility: togglePasswordVisibility,
+            passwordHintText: AppString.password,
+            passcontroller: passwordController,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(10),
+            ],
+            onLoginPressed: () async {
+              bool isLoggedIn = await fetchWebUserLoginCreds(context);
 
-            if (isLoggedIn) {
-              Navigator.of(context).pop();
-              await Future.delayed(const Duration(milliseconds: 300));
+              if (isLoggedIn) {
+                Navigator.of(context).pop();
+                await Future.delayed(const Duration(milliseconds: 300));
 
-              // 🔹 Print or use the fromScreen info
-              print("Login done from screen: $fromScreen");
+                // 🔹 Print or use the fromScreen info
+                print("Login done from screen: $fromScreen");
 
-              if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
-                if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
-                  fromAdmittedScreen = true;
-                  nameController.text = patientDetails;
-                  ipdNo = IPDNo;
-                  uhid = UHID;
-                } else {
-                  fromAdmittedScreen = false;
-                  nameController.text = '';
-                  ipdNo = '';
-                  uhid = '';
+                if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+                  if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+                    fromAdmittedScreen = true;
+                    nameController.text = patientDetails;
+                    ipdNo = IPDNo;
+                    uhid = UHID;
+                  } else {
+                    fromAdmittedScreen = false;
+                    nameController.text = '';
+                    ipdNo = '';
+                    uhid = '';
+                  }
+
+                  update();
+
+                  PersistentNavBarNavigator.pushNewScreen(
+                    Get.context!,
+                    screen: InvestRequisitScreen(),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  ).then((value) async {
+                    final controller = Get.put(InvestRequisitController());
+                    await controller.resetForm();
+                    final bottomBarController = Get.find<BottomBarController>();
+                    bottomBarController.currentIndex.value = 0;
+                    bottomBarController.isIPDHome.value = true;
+                    hideBottomBar.value = false;
+                    var dashboardController = Get.put(DashboardController());
+                    await dashboardController.getDashboardDataUsingToken();
+                    return;
+                  });
+                } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+                  if (controller.isHistorySheetOpen) return;
+                  controller.isHistorySheetOpen = true;
+                  await fetchGetHistoryList(IPDNo);
+                  await HistoryBottomSheet();
+                  controller.isHistorySheetOpen = false;
+                  controller.update();
                 }
-
-                update();
-
-                PersistentNavBarNavigator.pushNewScreen(
-                  Get.context!,
-                  screen: InvestRequisitScreen(),
-                  withNavBar: false,
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                ).then((value) async {
-                  final controller = Get.put(InvestRequisitController());
-                  await controller.resetForm();
-                  final bottomBarController = Get.find<BottomBarController>();
-                  bottomBarController.currentIndex.value = 0;
-                  bottomBarController.isIPDHome.value = true;
-                  hideBottomBar.value = false;
-                  var dashboardController = Get.put(DashboardController());
-                  await dashboardController.getDashboardDataUsingToken();
-                  return;
-                });
-              } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
-                if (controller.isHistorySheetOpen) return;
-                controller.isHistorySheetOpen = true;
-                await fetchGetHistoryList(IPDNo);
-                await HistoryBottomSheet();
-                controller.isHistorySheetOpen = false;
-                controller.update();
+              } else {
+                Get.rawSnackbar(
+                  message: "Login failed. Please check your credentials.",
+                  duration: Duration(seconds: 5),
+                  backgroundColor: Colors.red.shade100,
+                  snackPosition: SnackPosition.TOP,
+                );
               }
-            } else {
-              Get.rawSnackbar(
-                message: "Login failed. Please check your credentials.",
-                duration: Duration(seconds: 5),
-                backgroundColor: Colors.red.shade100,
-                snackPosition: SnackPosition.TOP,
-              );
-            }
-          },
-          onTap: () {
-            Navigator.of(context).pop(); // Cancel login
-          },
-        );
-      });
-    },
-  );
-}
+            },
+            onTap: () {
+              Navigator.of(context).pop(); // Cancel login
+            },
+          );
+        });
+      },
+    );
+  }
 
   // Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
   //   await showDialog(
@@ -1422,124 +1425,135 @@ class InvestRequisitController extends GetxController {
     return false;
   }
 
+  void validateDrName(String value) {
+    isDrNameValid.value = value.trim().isNotEmpty;
+    update();
+  }
+
   Future<void> otherInvestDialog(BuildContext context, GetquerylistModel serviceModel) async {
     await showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 10),
-                    Text(
-                      AppString.service,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      serviceModel.name ?? '',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 20),
-                    Autocomplete<SearchDrNmModel>(
-                      displayStringForOption: (SearchDrNmModel option) => option.name ?? '',
-                      optionsBuilder: (TextEditingValue textEditingValue) async {
-                        await getDrNmSuggest(textEditingValue.text, serviceModel.id.toString());
-                        return suggestions_DrNm;
-                      },
-                      onSelected: (SearchDrNmModel selection) {
-                        print('Selected Dr Name: ${selection.name} (ID: ${selection.id})');
-                        // controller.setPatientName(selection.txt ?? '');
-                        drNameController.text = selection.name ?? '';
-                        drIdController.text = selection.id != null ? selection.id.toString() : '';
-                        update();
-                      },
-                      fieldViewBuilder: (context, drNameController, focusNode, onEditingComplete) {
-                        return TextFormField(
-                          controller: drNameController,
-                          focusNode: focusNode,
-                          minLines: 1,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                              labelText: AppString.typetosearchdrname,
-                              border: OutlineInputBorder(),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.0),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: AppColor.black,
-                                ),
-                              ),
-                              prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  Icons.cancel_outlined,
-                                  color: AppColor.black,
-                                ),
-                                onPressed: () {
-                                  drNameController.text = '';
-                                  drNameController.clear();
-                                  drIdController.text = '';
-                                  drIdController.clear();
-                                  suggestions_DrNm.clear();
-                                  update();
-                                  // Future.delayed(Duration(milliseconds: 300), () {
-                                  //   FocusScope.of(context).unfocus();
-                                  // });
-                                },
-                              )),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.teal, // Button color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () async {
-                        await addService(serviceModel);
-                        Navigator.of(context).pop();
-                        // Aap yahan searchController.text use kar sakte ho
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Text(
-                          AppString.ok,
-                          style: AppStyle.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(Icons.close),
-                  ),
-                ),
-              ],
+        return GetBuilder<InvestRequisitController>(builder: (controller) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-          ),
-        );
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        AppString.service,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        serviceModel.name ?? '',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      Autocomplete<SearchDrNmModel>(
+                        displayStringForOption: (SearchDrNmModel option) => option.name ?? '',
+                        optionsBuilder: (TextEditingValue textEditingValue) async {
+                          await getDrNmSuggest(textEditingValue.text, serviceModel.id.toString());
+                          return suggestions_DrNm;
+                        },
+                        onSelected: (SearchDrNmModel selection) {
+                          print('Selected Dr Name: ${selection.name} (ID: ${selection.id})');
+                          // controller.setPatientName(selection.txt ?? '');
+                          drNameController.text = selection.name ?? '';
+                          drIdController.text = selection.id != null ? selection.id.toString() : '';
+                          isDrNameValid.value = true;
+                          update();
+                        },
+                        fieldViewBuilder: (context, drNameController, focusNode, onEditingComplete) {
+                          return TextFormField(
+                            controller: drNameController,
+                            focusNode: focusNode,
+                            minLines: 1,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            // onChanged: (val) => validateDrName(val),
+                            decoration: InputDecoration(
+                                labelText: AppString.typetosearchdrname,
+                                border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: AppColor.black, width: 1.0),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: AppColor.black,
+                                  ),
+                                ),
+                                prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    Icons.cancel_outlined,
+                                    color: AppColor.black,
+                                  ),
+                                  onPressed: () {
+                                    isDrNameValid.value = false;
+                                    drNameController.text = '';
+                                    drNameController.clear();
+                                    drIdController.text = '';
+                                    drIdController.clear();
+                                    suggestions_DrNm.clear();
+                                    update();
+                                    // Future.delayed(Duration(milliseconds: 300), () {
+                                    //   FocusScope.of(context).unfocus();
+                                    // });
+                                  },
+                                )),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.teal,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: isDrNameValid.value && drIdController.text.isNotEmpty
+                            ? () async {
+                                await addService(serviceModel);
+                                Navigator.of(context).pop();
+                              }
+                            : null,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          child: Text(
+                            AppString.ok,
+                            style: AppStyle.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(Icons.close),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
       },
     );
   }
@@ -1601,8 +1615,8 @@ class InvestRequisitController extends GetxController {
     selectedServices.clear();
     selectedTop = 20;
     fromAdmittedScreen = false;
-    // mobileController.clear();
-    // passwordController.clear();
+    mobileController.clear();
+    passwordController.clear();
 
     update();
   }
