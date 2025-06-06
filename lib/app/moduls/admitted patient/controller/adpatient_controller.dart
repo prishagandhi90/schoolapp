@@ -872,7 +872,7 @@ class AdPatientController extends GetxController {
           }
         }
 
-        Navigator.pop(context);
+        // Navigator.pop(context);
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: AdpatientScreen(),

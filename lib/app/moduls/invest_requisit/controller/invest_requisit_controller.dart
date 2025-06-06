@@ -1398,7 +1398,7 @@ class InvestRequisitController extends GetxController {
         if (loginWebUserCreds.isNotEmpty && loginWebUserCreds.first.isValidCreds == 'True') {
           webUserName = loginWebUserCreds.first.webEmpName ?? '';
 
-          Get.rawSnackbar(message: AppString.loginsuccessful);
+          Get.rawSnackbar(message: AppString.loginsuccessful,snackPosition: SnackPosition.TOP);
           isLoading = false;
           update();
 
