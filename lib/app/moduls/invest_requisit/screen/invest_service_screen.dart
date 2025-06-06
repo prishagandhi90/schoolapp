@@ -245,6 +245,7 @@ class InvestServiceScreen extends StatelessWidget {
                                                     );
                                                     return;
                                                   }
+                                                  controller.isDrNameValid.value = false;
                                                   controller.suggestions_DrNm.clear();
                                                   controller.drNameController.text = '';
                                                   controller.drIdController.text = '';

@@ -71,7 +71,7 @@ class InvestRequisitController extends GetxController {
   bool isHistorySheetOpen = false;
   bool isNextButtonClicked = false;
   bool isSaveButtonClicked = false;
-  var isDrNameValid = false.obs;
+  RxBool isDrNameValid = false.obs;
 
   @override
   void onInit() {
@@ -1322,123 +1322,126 @@ class InvestRequisitController extends GetxController {
     await showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Stack(
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 10),
-                    Text(
-                      AppString.service,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      serviceModel.name ?? '',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 20),
-                    Autocomplete<SearchDrNmModel>(
-                      displayStringForOption: (SearchDrNmModel option) => option.name ?? '',
-                      optionsBuilder: (TextEditingValue textEditingValue) async {
-                        await getDrNmSuggest(textEditingValue.text, serviceModel.id.toString());
-                        return suggestions_DrNm;
-                      },
-                      onSelected: (SearchDrNmModel selection) {
-                        print('Selected Dr Name: ${selection.name} (ID: ${selection.id})');
-                        // controller.setPatientName(selection.txt ?? '');
-                        drNameController.text = selection.name ?? '';
-                        drIdController.text = selection.id != null ? selection.id.toString() : '';
-                        update();
-                      },
-                      fieldViewBuilder: (context, drNameController, focusNode, onEditingComplete) {
-                        return TextFormField(
-                          controller: drNameController,
-                          focusNode: focusNode,
-                          minLines: 1,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          onChanged: (val) => validateDrName(val),
-                          decoration: InputDecoration(
-                              labelText: AppString.typetosearchdrname,
-                              border: OutlineInputBorder(),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.0),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  color: AppColor.black,
-                                ),
-                              ),
-                              prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  Icons.cancel_outlined,
-                                  color: AppColor.black,
-                                ),
-                                onPressed: () {
-                                  isDrNameValid.value = false;
-                                  drNameController.text = '';
-                                  drNameController.clear();
-                                  drIdController.text = '';
-                                  drIdController.clear();
-                                  suggestions_DrNm.clear();
-                                  update();
-                                  // Future.delayed(Duration(milliseconds: 300), () {
-                                  //   FocusScope.of(context).unfocus();
-                                  // });
-                                },
-                              )),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Obx(() => ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.teal,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onPressed: isDrNameValid.value
-                              ? () async {
-                                  await addService(serviceModel);
-                                  Navigator.of(context).pop();
-                                }
-                              : null,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                            child: Text(
-                              AppString.ok,
-                              style: AppStyle.white,
-                            ),
-                          ),
-                        ))
-                  ],
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(Icons.close),
-                  ),
-                ),
-              ],
+        return GetBuilder<InvestRequisitController>(builder: (controller) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-          ),
-        );
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        AppString.service,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        serviceModel.name ?? '',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      Autocomplete<SearchDrNmModel>(
+                        displayStringForOption: (SearchDrNmModel option) => option.name ?? '',
+                        optionsBuilder: (TextEditingValue textEditingValue) async {
+                          await getDrNmSuggest(textEditingValue.text, serviceModel.id.toString());
+                          return suggestions_DrNm;
+                        },
+                        onSelected: (SearchDrNmModel selection) {
+                          print('Selected Dr Name: ${selection.name} (ID: ${selection.id})');
+                          // controller.setPatientName(selection.txt ?? '');
+                          drNameController.text = selection.name ?? '';
+                          drIdController.text = selection.id != null ? selection.id.toString() : '';
+                          isDrNameValid.value = true;
+                          update();
+                        },
+                        fieldViewBuilder: (context, drNameController, focusNode, onEditingComplete) {
+                          return TextFormField(
+                            controller: drNameController,
+                            focusNode: focusNode,
+                            minLines: 1,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            // onChanged: (val) => validateDrName(val),
+                            decoration: InputDecoration(
+                                labelText: AppString.typetosearchdrname,
+                                border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: AppColor.black, width: 1.0),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: AppColor.black,
+                                  ),
+                                ),
+                                prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    Icons.cancel_outlined,
+                                    color: AppColor.black,
+                                  ),
+                                  onPressed: () {
+                                    isDrNameValid.value = false;
+                                    drNameController.text = '';
+                                    drNameController.clear();
+                                    drIdController.text = '';
+                                    drIdController.clear();
+                                    suggestions_DrNm.clear();
+                                    update();
+                                    // Future.delayed(Duration(milliseconds: 300), () {
+                                    //   FocusScope.of(context).unfocus();
+                                    // });
+                                  },
+                                )),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.teal,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: isDrNameValid.value && drIdController.text.isNotEmpty
+                            ? () async {
+                                await addService(serviceModel);
+                                Navigator.of(context).pop();
+                              }
+                            : null,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          child: Text(
+                            AppString.ok,
+                            style: AppStyle.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(Icons.close),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
       },
     );
   }
