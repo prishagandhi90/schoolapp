@@ -66,8 +66,8 @@ class InvestRequisitScreen extends StatelessWidget {
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
-                            readOnly: controller.nameController.text.isNotEmpty &&
-                                controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                            // readOnly: controller.nameController.text.isNotEmpty &&
+                            //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                             minLines: 1,
                             maxLines: null,
                             keyboardType: TextInputType.multiline,
@@ -77,16 +77,16 @@ class InvestRequisitScreen extends StatelessWidget {
                               border: OutlineInputBorder(),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: AppColor.red,
+                                  color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
                                   width: getDynamicHeight(size: 0.0008),
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(0)),
-                                borderSide: BorderSide(color: AppColor.red),
+                                borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
                               ),
                               prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                              suffixIcon: nameController.text.isNotEmpty
+                              suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
                                   ? IconButton(
                                       icon: Icon(Icons.cancel_outlined, color: AppColor.black),
                                       onPressed: () {
@@ -119,12 +119,15 @@ class InvestRequisitScreen extends StatelessWidget {
                           Expanded(
                             flex: 6,
                             child: CustomDropdown(
-                              text: AppString.type1,
+                              text: AppString.investigationType,
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: AppColor.red),
+                                  border: Border.all(
+                                      color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--'
+                                          ? AppColor.red
+                                          : AppColor.black),
                                   borderRadius: BorderRadius.circular(0),
                                   color: AppColor.white,
                                 ),
@@ -435,7 +438,10 @@ class InvestRequisitScreen extends StatelessWidget {
                       onPressed: () async {
                         if (controller.ipdNo == '') {
                           Get.snackbar(AppString.error, AppString.plzselectavalidpatient,
-                              snackPosition: SnackPosition.TOP, backgroundColor: AppColor.red.withOpacity(0.8), colorText: AppColor.white);
+                              duration: Duration(seconds: 5),
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: AppColor.red.withOpacity(0.8),
+                              colorText: AppColor.white);
                           return;
                         }
                         if (controller.isHistorySheetOpen) return;
@@ -468,28 +474,47 @@ class InvestRequisitScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () async {
-                        if (controller.isNextButtonClicked) return;
-                        controller.isNextButtonClicked = true;
+                      onPressed: controller.isNextButtonEnabled()
+                          ? () async {
+                              if (controller.isNextButtonClicked) return;
+                              controller.isNextButtonClicked = true;
 
-                        if (controller.isNextButtonEnabled()) {
-                          controller.getQueryList.clear();
-                          controller.selectedServices.clear();
-                          controller.selectedTop = 20;
-                          controller.searchController.text = '';
-                          controller.fetchGetQueryList(controller.ipdNo);
-                          controller.patientName = controller.nameController.text;
-                          controller.drIdController.text = "";
-                          controller.drNameController.text = "";
-                          Get.to(() => InvestServiceScreen());
-                        } else {
-                          controller.isNextButtonClicked = false;
-                          controller.update();
-                          return null;
-                        }
-                        controller.isNextButtonClicked = false;
-                        controller.update();
-                      },
+                              controller.getQueryList.clear();
+                              controller.selectedServices.clear();
+                              controller.selectedTop = 20;
+                              controller.searchController.text = '';
+                              controller.fetchGetQueryList(controller.ipdNo);
+                              controller.patientName = controller.nameController.text;
+                              controller.drIdController.text = "";
+                              controller.drNameController.text = "";
+                              Get.to(() => InvestServiceScreen());
+
+                              controller.isNextButtonClicked = false;
+                              controller.update();
+                            }
+                          : null,
+                      // onPressed: () async {
+                      //   if (controller.isNextButtonClicked) return;
+                      //   controller.isNextButtonClicked = true;
+
+                      //   if (controller.isNextButtonEnabled()) {
+                      //     controller.getQueryList.clear();
+                      //     controller.selectedServices.clear();
+                      //     controller.selectedTop = 20;
+                      //     controller.searchController.text = '';
+                      //     controller.fetchGetQueryList(controller.ipdNo);
+                      //     controller.patientName = controller.nameController.text;
+                      //     controller.drIdController.text = "";
+                      //     controller.drNameController.text = "";
+                      //     Get.to(() => InvestServiceScreen());
+                      //   } else {
+                      //     controller.isNextButtonClicked = false;
+                      //     controller.update();
+                      //     return null;
+                      //   }
+                      //   controller.isNextButtonClicked = false;
+                      //   controller.update();
+                      // },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.primaryColor,
                         shape: RoundedRectangleBorder(

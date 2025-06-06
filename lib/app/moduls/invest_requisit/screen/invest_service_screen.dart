@@ -105,7 +105,7 @@ class InvestServiceScreen extends StatelessWidget {
                             controller.update();
                           },
                           child: Padding(
-                            padding: EdgeInsets.all(10),
+                            padding: EdgeInsets.all(getDynamicHeight(size: 0.0085)),
                             child: Icon(
                               Icons.cancel,
                               color: Colors.black,
@@ -220,40 +220,55 @@ class InvestServiceScreen extends StatelessWidget {
                                             ),
                                             title: Text(
                                               service.name.toString(),
-                                              style: AppStyle.black.copyWith(
-                                                fontSize: getDynamicHeight(size: 0.0135),
-                                              ),
+                                              style: controller.isDuplicateService(service.id.toString())
+                                                  ? AppStyle.plusgrey
+                                                  : AppStyle.black.copyWith(
+                                                      fontSize: getDynamicHeight(size: 0.0135),
+                                                    ),
                                             ),
                                             trailing: IconButton(
                                               icon: Icon(
                                                 Icons.add_circle,
-                                                color: AppColor.teal,
+                                                color: controller.isDuplicateService(service.id.toString()) ? AppColor.grey : AppColor.teal,
                                                 size: getDynamicHeight(size: 0.025),
                                               ),
-                                              onPressed: () async {
-                                                if (controller.typeController.text.toLowerCase() == 'other investigation') {
-                                                  bool isDuplicateService = true;
-                                                  isDuplicateService = controller.isDuplicateService(service.id.toString());
-                                                  if (isDuplicateService) {
-                                                    Get.snackbar(
-                                                      AppString.notice,
-                                                      AppString.servicealreadyadded,
-                                                      backgroundColor: Colors.orange.shade100,
-                                                      colorText: Colors.black,
-                                                      snackPosition: SnackPosition.TOP,
-                                                      duration: Duration(seconds: 1),
-                                                    );
-                                                    return;
-                                                  }
-                                                  controller.suggestions_DrNm.clear();
-                                                  controller.drNameController.text = '';
-                                                  controller.drIdController.text = '';
-                                                  controller.update();
-                                                  await controller.otherInvestDialog(context, service);
-                                                  return;
-                                                }
-                                                await controller.addService(service);
-                                              },
+                                              onPressed: controller.isDuplicateService(service.id.toString())
+                                                  ? null // disable the button if duplicate
+                                                  : () async {
+                                                      if (controller.typeController.text.toLowerCase() == 'other investigation') {
+                                                        controller.suggestions_DrNm.clear();
+                                                        controller.drNameController.text = '';
+                                                        controller.drIdController.text = '';
+                                                        controller.update();
+                                                        await controller.otherInvestDialog(context, service);
+                                                      } else {
+                                                        await controller.addService(service);
+                                                      }
+                                                    },
+                                              // onPressed: () async {
+                                              //   if (controller.typeController.text.toLowerCase() == 'other investigation') {
+                                              //     bool isDuplicateService = true;
+                                              //     isDuplicateService = controller.isDuplicateService(service.id.toString());
+                                              //     if (isDuplicateService) {
+                                              //       Get.snackbar(
+                                              //         AppString.notice,
+                                              //         AppString.servicealreadyadded,
+                                              //         backgroundColor: Colors.orange.shade100,
+                                              //         colorText: Colors.black,
+                                              //         snackPosition: SnackPosition.TOP,
+                                              //         duration: Duration(seconds: 5),
+                                              //       );
+                                              //       return;
+                                              //     }
+                                              //     controller.suggestions_DrNm.clear();
+                                              //     controller.drNameController.text = '';
+                                              //     controller.drIdController.text = '';
+                                              //     controller.update();
+                                              //     await controller.otherInvestDialog(context, service);
+                                              //     return;
+                                              //   }
+                                              //   await controller.addService(service);
+                                              // },
                                             ),
                                           );
                                         },
@@ -262,23 +277,37 @@ class InvestServiceScreen extends StatelessWidget {
                                   // 🔹 Selected Services Title
                                   Align(
                                     alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: getDynamicHeight(size: 0.008),
-                                      ),
-                                      child: Text(
-                                        AppString.selectedservices,
-                                        style: AppStyle.black.copyWith(
-                                          color: AppColor.teal,
-                                          fontWeight: FontWeight.bold,
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: getDynamicHeight(size: 0.008),
+                                          ),
+                                          child: Text(
+                                            AppString.selectedservices,
+                                            style: AppStyle.black.copyWith(
+                                              color: AppColor.teal,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
-                                        // style: TextStyle(
-                                        //   fontSize: getDynamicHeight(size: 0.015),
-                                        //   fontWeight: FontWeight.bold,
-                                        //   color: AppColor.teal,
-                                        //   // decorationColor: AppColor.lightblue,
-                                        // ),
-                                      ),
+                                        SizedBox(
+                                          width: getDynamicHeight(size: 0.015),
+                                        ),
+                                        Text(
+                                          '(${controller.selectedServices.length})',
+                                          style: AppStyle.black.copyWith(
+                                            color: AppColor.teal,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          // style: TextStyle(
+                                          //   fontSize: getDynamicHeight(size: 0.015),
+                                          //   fontWeight: FontWeight.bold,
+                                          //   color: AppColor.teal,
+                                          //   // decorationColor: AppColor.lightblue,
+                                          // ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   // 🔹 Selected Services List
@@ -334,7 +363,7 @@ class InvestServiceScreen extends StatelessWidget {
                                                   child: Icon(
                                                     Icons.cancel,
                                                     color: AppColor.black,
-                                                    size: getDynamicHeight(size: 0.020),
+                                                    size: getDynamicHeight(size: 0.024),
                                                   ),
                                                 ),
                                               ),

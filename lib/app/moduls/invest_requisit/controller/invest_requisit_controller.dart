@@ -97,7 +97,7 @@ class InvestRequisitController extends GetxController {
 // Saath hi 'internal' ke liye type 'lab', 'radio', 'other investigation' ho
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
-    if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
+    if ((ipdNo.isNotEmpty) && typeController.text.isNotEmpty && nameController.text != "") {
       if ((typeController.text.toLowerCase() == 'lab' ||
               typeController.text.toLowerCase() == 'radio' ||
               typeController.text.toLowerCase() == 'other investigation') &&
@@ -214,6 +214,10 @@ class InvestRequisitController extends GetxController {
       if (responseServiceGroup.statusCode == 200) {
         serviceGroup.clear();
         serviceGroup.assignAll(responseServiceGroup.data ?? []);
+
+        // 🔹 Alphabetical sorting based on `name`
+        serviceGroup.sort((a, b) => (a.name ?? '').toLowerCase().compareTo((b.name ?? '').toLowerCase()));
+
         isLoading = false;
       } else if (responseServiceGroup.statusCode == 401) {
         pref.clear();
@@ -437,7 +441,8 @@ class InvestRequisitController extends GetxController {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.id.toString());
 
     if (!isAlreadyAdded) {
-      selectedServices.add(
+      selectedServices.insert(
+        0, // 👈 Add at top instead of end
         RequestSheetDetailsIPD(
           mReqId: 0,
           serviceName: service.name ?? '',
@@ -449,10 +454,8 @@ class InvestRequisitController extends GetxController {
               : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
-          drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
-              ? drNameController.text.trim()
-              : "", // Replace with actual doctor
+          drId: drIdController.text.trim().isNotEmpty ? int.parse(drIdController.text.trim()) : 0,
+          drName: drNameController.text.trim().isNotEmpty ? drNameController.text.trim() : "",
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -466,8 +469,8 @@ class InvestRequisitController extends GetxController {
         'Service already added',
         backgroundColor: Colors.orange.shade100,
         colorText: AppColor.black,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 1),
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 5),
       );
     }
   }
@@ -574,8 +577,8 @@ class InvestRequisitController extends GetxController {
           'Service saved successfully',
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
         );
         selectedServices.clear();
       } else {
@@ -584,8 +587,8 @@ class InvestRequisitController extends GetxController {
           jsonDecode(response)['message'].toString(),
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 10),
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
         );
       }
     } catch (e) {
@@ -679,8 +682,8 @@ class InvestRequisitController extends GetxController {
           'Service deleted successfully',
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
         );
         selReqHistoryDetailList.removeAt(index);
         // Refresh the history list after deletion
@@ -691,13 +694,13 @@ class InvestRequisitController extends GetxController {
       } else {
         Get.rawSnackbar(
           messageText: Text(
-            resp_DelReqDtlSrv_model.message ?? '',
+            resp_DelReqDtlSrv_model.message,
             style: AppStyle.white,
           ),
           backgroundColor: Colors.red.shade900,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: Duration(
-            seconds: 10,
+            seconds: 5,
           ),
         );
       }
@@ -713,9 +716,9 @@ class InvestRequisitController extends GetxController {
       Get.rawSnackbar(
         message: "Exception: ${e.toString()}",
         backgroundColor: Colors.red.shade100,
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         duration: Duration(
-          seconds: 10,
+          seconds: 5,
         ),
       );
     }
@@ -847,7 +850,7 @@ class InvestRequisitController extends GetxController {
                         getDynamicHeight(size: 0.0125),
                       ),
                       child: CustomDropdown(
-                        text: AppString.select,
+                        text: AppString.investigationType,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.05),
                           width: double.infinity,
@@ -1151,7 +1154,7 @@ class InvestRequisitController extends GetxController {
                                               "You cannot delete this item as it was not added by you.",
                                               style: AppStyle.white,
                                             ),
-                                            duration: Duration(seconds: 4),
+                                            duration: Duration(seconds: 5),
                                             backgroundColor: Colors.red.shade900,
                                             snackPosition: SnackPosition.TOP,
                                           );
@@ -1194,89 +1197,181 @@ class InvestRequisitController extends GetxController {
     obscurePassword = !obscurePassword;
     update(); // notify listeners
   }
+  
+  Future<void> loginAlertDialog(
+  BuildContext context,
+  String menuName,
+  String patientDetails,
+  String IPDNo,
+  String UHID, {
+  required ScreenType fromScreen, // 🔹 Add parameter
+}) async {
+  await showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return GetBuilder<InvestRequisitController>(builder: (controller) {
+        return CustomLoginDialogBox(
+          text: AppString.plzenteryourmobilenumberandpasstologin,
+          hintText: AppString.mobilenumber,
+          controller: mobileController,
+          obscurePassword: obscurePassword,
+          togglePasswordVisibility: togglePasswordVisibility,
+          passwordHintText: AppString.password,
+          passcontroller: passwordController,
+          inputFormatters: [
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(10),
+          ],
+          onLoginPressed: () async {
+            bool isLoggedIn = await fetchWebUserLoginCreds(context);
 
-  Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
-    await showDialog(
-      context: context,
-      barrierDismissible: false, // Disable dismiss on tap outside
-      builder: (context) {
-        return GetBuilder<InvestRequisitController>(builder: (controller) {
-          return CustomLoginDialogBox(
-            text: AppString.plzenteryourmobilenumberandpasstologin,
-            hintText: AppString.mobilenumber,
-            controller: mobileController,
-            obscurePassword: obscurePassword,
-            togglePasswordVisibility: togglePasswordVisibility,
-            passwordHintText: AppString.password,
-            passcontroller: passwordController,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(10),
-            ],
-            onLoginPressed: () async {
-              bool isLoggedIn = await fetchWebUserLoginCreds(context);
-              if (isLoggedIn) {
-                Navigator.of(context).pop(); // Close dialog ONLY IF success
-                await Future.delayed(const Duration(milliseconds: 300));
+            if (isLoggedIn) {
+              Navigator.of(context).pop();
+              await Future.delayed(const Duration(milliseconds: 300));
 
-                if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
-                  if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
-                    fromAdmittedScreen = true;
-                    nameController.text = patientDetails;
-                    ipdNo = IPDNo;
-                    uhid = UHID;
-                  } else {
-                    fromAdmittedScreen = false;
-                    nameController.text = '';
-                    ipdNo = '';
-                    uhid = '';
-                  }
+              // 🔹 Print or use the fromScreen info
+              print("Login done from screen: $fromScreen");
 
-                  update();
-
-                  PersistentNavBarNavigator.pushNewScreen(
-                    Get.context!,
-                    screen: InvestRequisitScreen(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  ).then((value) async {
-                    final controller = Get.put(InvestRequisitController());
-                    await controller.resetForm();
-                    final bottomBarController = Get.find<BottomBarController>();
-                    bottomBarController.currentIndex.value = 0;
-                    bottomBarController.isIPDHome.value = true;
-                    hideBottomBar.value = false;
-                    var dashboardController = Get.put(DashboardController());
-                    await dashboardController.getDashboardDataUsingToken();
-                    return;
-                  });
-                } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
-                  if (controller.isHistorySheetOpen) return;
-                  controller.isHistorySheetOpen = true;
-                  await fetchGetHistoryList(IPDNo);
-                  await HistoryBottomSheet();
-                  controller.isHistorySheetOpen = false;
-                  controller.update();
+              if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+                if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+                  fromAdmittedScreen = true;
+                  nameController.text = patientDetails;
+                  ipdNo = IPDNo;
+                  uhid = UHID;
+                } else {
+                  fromAdmittedScreen = false;
+                  nameController.text = '';
+                  ipdNo = '';
+                  uhid = '';
                 }
-              } else {
-                Get.rawSnackbar(
-                  message: "Login failed. Please check your credentials.",
-                  duration: Duration(seconds: 5),
-                  backgroundColor: Colors.red.shade100,
-                  snackPosition: SnackPosition.TOP,
-                );
+
+                update();
+
+                PersistentNavBarNavigator.pushNewScreen(
+                  Get.context!,
+                  screen: InvestRequisitScreen(),
+                  withNavBar: false,
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                ).then((value) async {
+                  final controller = Get.put(InvestRequisitController());
+                  await controller.resetForm();
+                  final bottomBarController = Get.find<BottomBarController>();
+                  bottomBarController.currentIndex.value = 0;
+                  bottomBarController.isIPDHome.value = true;
+                  hideBottomBar.value = false;
+                  var dashboardController = Get.put(DashboardController());
+                  await dashboardController.getDashboardDataUsingToken();
+                  return;
+                });
+              } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+                if (controller.isHistorySheetOpen) return;
+                controller.isHistorySheetOpen = true;
+                await fetchGetHistoryList(IPDNo);
+                await HistoryBottomSheet();
+                controller.isHistorySheetOpen = false;
+                controller.update();
               }
-            },
-            onTap: () {
-              // mobileController.clear();
-              // passwordController.clear();
-              Navigator.of(context).pop(); // Close dialog on cancel
-            },
-          );
-        });
-      },
-    );
-  }
+            } else {
+              Get.rawSnackbar(
+                message: "Login failed. Please check your credentials.",
+                duration: Duration(seconds: 5),
+                backgroundColor: Colors.red.shade100,
+                snackPosition: SnackPosition.TOP,
+              );
+            }
+          },
+          onTap: () {
+            Navigator.of(context).pop(); // Cancel login
+          },
+        );
+      });
+    },
+  );
+}
+
+  // Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
+  //   await showDialog(
+  //     context: context,
+  //     barrierDismissible: false, // Disable dismiss on tap outside
+  //     builder: (context) {
+  //       return GetBuilder<InvestRequisitController>(builder: (controller) {
+  //         return CustomLoginDialogBox(
+  //           text: AppString.plzenteryourmobilenumberandpasstologin,
+  //           hintText: AppString.mobilenumber,
+  //           controller: mobileController,
+  //           obscurePassword: obscurePassword,
+  //           togglePasswordVisibility: togglePasswordVisibility,
+  //           passwordHintText: AppString.password,
+  //           passcontroller: passwordController,
+  //           inputFormatters: [
+  //             FilteringTextInputFormatter.digitsOnly,
+  //             LengthLimitingTextInputFormatter(10),
+  //           ],
+  //           onLoginPressed: () async {
+  //             bool isLoggedIn = await fetchWebUserLoginCreds(context);
+  //             if (isLoggedIn) {
+  //               Navigator.of(context).pop(); // Close dialog ONLY IF success
+  //               await Future.delayed(const Duration(milliseconds: 300));
+
+  //               if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+  //                 if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+  //                   fromAdmittedScreen = true;
+  //                   nameController.text = patientDetails;
+  //                   ipdNo = IPDNo;
+  //                   uhid = UHID;
+  //                 } else {
+  //                   fromAdmittedScreen = false;
+  //                   nameController.text = '';
+  //                   ipdNo = '';
+  //                   uhid = '';
+  //                 }
+
+  //                 update();
+
+  //                 PersistentNavBarNavigator.pushNewScreen(
+  //                   Get.context!,
+  //                   screen: InvestRequisitScreen(),
+  //                   withNavBar: false,
+  //                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+  //                 ).then((value) async {
+  //                   final controller = Get.put(InvestRequisitController());
+  //                   await controller.resetForm();
+  //                   final bottomBarController = Get.find<BottomBarController>();
+  //                   bottomBarController.currentIndex.value = 0;
+  //                   bottomBarController.isIPDHome.value = true;
+  //                   hideBottomBar.value = false;
+  //                   var dashboardController = Get.put(DashboardController());
+  //                   await dashboardController.getDashboardDataUsingToken();
+  //                   return;
+  //                 });
+  //               } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+  //                 if (controller.isHistorySheetOpen) return;
+  //                 controller.isHistorySheetOpen = true;
+  //                 await fetchGetHistoryList(IPDNo);
+  //                 await HistoryBottomSheet();
+  //                 controller.isHistorySheetOpen = false;
+  //                 controller.update();
+  //               }
+  //             } else {
+  //               Get.rawSnackbar(
+  //                 message: "Login failed. Please check your credentials.",
+  //                 duration: Duration(seconds: 5),
+  //                 backgroundColor: Colors.red.shade100,
+  //                 snackPosition: SnackPosition.TOP,
+  //               );
+  //             }
+  //           },
+  //           onTap: () {
+  //             // mobileController.clear();
+  //             // passwordController.clear();
+  //             Navigator.of(context).pop(); // Close dialog on cancel
+  //           },
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
 
   Future<bool> fetchWebUserLoginCreds(BuildContext context) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
