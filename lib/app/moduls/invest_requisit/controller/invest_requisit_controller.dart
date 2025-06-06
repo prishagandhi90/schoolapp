@@ -99,7 +99,9 @@ class InvestRequisitController extends GetxController {
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' ||
+              typeController.text.toLowerCase() == 'radio' ||
+              typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -201,7 +203,11 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseServiceGroup responseServiceGroup = ResponseServiceGroup.fromJson(jsonDecode(response));
@@ -209,6 +215,10 @@ class InvestRequisitController extends GetxController {
       if (responseServiceGroup.statusCode == 200) {
         serviceGroup.clear();
         serviceGroup.assignAll(responseServiceGroup.data ?? []);
+
+        // 🔹 Alphabetical sorting based on `name`
+        serviceGroup.sort((a, b) => (a.name ?? '').toLowerCase().compareTo((b.name ?? '').toLowerCase()));
+
         isLoading = false;
       } else if (responseServiceGroup.statusCode == 401) {
         pref.clear();
@@ -432,18 +442,23 @@ class InvestRequisitController extends GetxController {
     final isAlreadyAdded = selectedServices.any((item) => item.serviceId.toString() == service.id.toString());
 
     if (!isAlreadyAdded) {
-      selectedServices.add(
+      selectedServices.insert(
+        0, // 👈 Add at top instead of end
         RequestSheetDetailsIPD(
           mReqId: 0,
           serviceName: service.name ?? '',
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
+              ? "LAB CHARGES"
+              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -457,8 +472,8 @@ class InvestRequisitController extends GetxController {
         'Service already added',
         backgroundColor: Colors.orange.shade100,
         colorText: AppColor.black,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 1),
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 5),
       );
     }
   }
@@ -480,7 +495,9 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab'
+            ? "LabRequest"
+            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -563,8 +580,8 @@ class InvestRequisitController extends GetxController {
           'Service saved successfully',
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
         );
         selectedServices.clear();
       } else {
@@ -573,8 +590,8 @@ class InvestRequisitController extends GetxController {
           jsonDecode(response)['message'].toString(),
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 10),
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
         );
       }
     } catch (e) {
@@ -668,8 +685,8 @@ class InvestRequisitController extends GetxController {
           'Service deleted successfully',
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
-          snackPosition: SnackPosition.BOTTOM,
-          duration: Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
         );
         selReqHistoryDetailList.removeAt(index);
         // Refresh the history list after deletion
@@ -680,13 +697,13 @@ class InvestRequisitController extends GetxController {
       } else {
         Get.rawSnackbar(
           messageText: Text(
-            resp_DelReqDtlSrv_model.message ?? '',
+            resp_DelReqDtlSrv_model.message,
             style: AppStyle.white,
           ),
           backgroundColor: Colors.red.shade900,
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
           duration: Duration(
-            seconds: 10,
+            seconds: 5,
           ),
         );
       }
@@ -702,9 +719,9 @@ class InvestRequisitController extends GetxController {
       Get.rawSnackbar(
         message: "Exception: ${e.toString()}",
         backgroundColor: Colors.red.shade100,
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         duration: Duration(
-          seconds: 10,
+          seconds: 5,
         ),
       );
     }
@@ -836,7 +853,7 @@ class InvestRequisitController extends GetxController {
                         getDynamicHeight(size: 0.0125),
                       ),
                       child: CustomDropdown(
-                        text: AppString.select,
+                        text: AppString.investigationType,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.05),
                           width: double.infinity,
@@ -1109,7 +1126,9 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
+                                        item.serviceGroup != '' && item.serviceGroup != null
+                                            ? item.serviceGroup.toString()
+                                            : item.reqTyp.toString(),
                                         style: TextStyle(fontSize: getDynamicHeight(size: 0.011)),
                                       ),
                                     ],
@@ -1120,7 +1139,8 @@ class InvestRequisitController extends GetxController {
                                     Visibility(
                                       visible: item.status != null && item.status!.isNotEmpty,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
                                         decoration: BoxDecoration(
                                           color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
                                           borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0035)),
@@ -1131,20 +1151,19 @@ class InvestRequisitController extends GetxController {
                                     SizedBox(width: getDynamicHeight(size: 0.007)),
                                     InkWell(
                                       onTap: () {
-                                        if (savedUserName != webUserName) {
+                                        if (savedUserName.toLowerCase() != webUserName.toLowerCase()) {
                                           Get.rawSnackbar(
                                             messageText: Text(
                                               "You cannot delete this item as it was not added by you.",
                                               style: AppStyle.white,
                                             ),
-                                            duration: Duration(seconds: 4),
+                                            duration: Duration(seconds: 5),
                                             backgroundColor: Colors.red.shade900,
                                             snackPosition: SnackPosition.TOP,
                                           );
                                           return;
                                         }
                                         print('Delete pressed for item: ${item.serviceName}, index: $index');
-
                                         showDeleteReqSrv_Dialog(
                                           context, // current dialog context
                                           item.requestID ?? 0,
@@ -1181,10 +1200,17 @@ class InvestRequisitController extends GetxController {
     update(); // notify listeners
   }
 
-  Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
+  Future<void> loginAlertDialog(
+    BuildContext context,
+    String menuName,
+    String patientDetails,
+    String IPDNo,
+    String UHID, {
+    required String fromScreen, // 🔹 Add parameter
+  }) async {
     await showDialog(
       context: context,
-      barrierDismissible: false, // Disable dismiss on tap outside
+      barrierDismissible: false,
       builder: (context) {
         return GetBuilder<InvestRequisitController>(builder: (controller) {
           return CustomLoginDialogBox(
@@ -1200,10 +1226,14 @@ class InvestRequisitController extends GetxController {
               LengthLimitingTextInputFormatter(10),
             ],
             onLoginPressed: () async {
-              bool isLoggedIn = await fetchWebUserLoginCreds(context);
+              bool isLoggedIn = await fetchWebUserLoginCreds(context, fromScreen.toString());
+
               if (isLoggedIn) {
-                Navigator.of(context).pop(); // Close dialog ONLY IF success
+                Navigator.of(context).pop();
                 await Future.delayed(const Duration(milliseconds: 300));
+
+                // 🔹 Print or use the fromScreen info
+                print("Login done from screen: $fromScreen");
 
                 if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
                   if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
@@ -1254,9 +1284,7 @@ class InvestRequisitController extends GetxController {
               }
             },
             onTap: () {
-              // mobileController.clear();
-              // passwordController.clear();
-              Navigator.of(context).pop(); // Close dialog on cancel
+              Navigator.of(context).pop(); // Cancel login
             },
           );
         });
@@ -1264,7 +1292,90 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Future<bool> fetchWebUserLoginCreds(BuildContext context) async {
+  // Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
+  //   await showDialog(
+  //     context: context,
+  //     barrierDismissible: false, // Disable dismiss on tap outside
+  //     builder: (context) {
+  //       return GetBuilder<InvestRequisitController>(builder: (controller) {
+  //         return CustomLoginDialogBox(
+  //           text: AppString.plzenteryourmobilenumberandpasstologin,
+  //           hintText: AppString.mobilenumber,
+  //           controller: mobileController,
+  //           obscurePassword: obscurePassword,
+  //           togglePasswordVisibility: togglePasswordVisibility,
+  //           passwordHintText: AppString.password,
+  //           passcontroller: passwordController,
+  //           inputFormatters: [
+  //             FilteringTextInputFormatter.digitsOnly,
+  //             LengthLimitingTextInputFormatter(10),
+  //           ],
+  //           onLoginPressed: () async {
+  //             bool isLoggedIn = await fetchWebUserLoginCreds(context);
+  //             if (isLoggedIn) {
+  //               Navigator.of(context).pop(); // Close dialog ONLY IF success
+  //               await Future.delayed(const Duration(milliseconds: 300));
+
+  //               if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+  //                 if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+  //                   fromAdmittedScreen = true;
+  //                   nameController.text = patientDetails;
+  //                   ipdNo = IPDNo;
+  //                   uhid = UHID;
+  //                 } else {
+  //                   fromAdmittedScreen = false;
+  //                   nameController.text = '';
+  //                   ipdNo = '';
+  //                   uhid = '';
+  //                 }
+
+  //                 update();
+
+  //                 PersistentNavBarNavigator.pushNewScreen(
+  //                   Get.context!,
+  //                   screen: InvestRequisitScreen(),
+  //                   withNavBar: false,
+  //                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+  //                 ).then((value) async {
+  //                   final controller = Get.put(InvestRequisitController());
+  //                   await controller.resetForm();
+  //                   final bottomBarController = Get.find<BottomBarController>();
+  //                   bottomBarController.currentIndex.value = 0;
+  //                   bottomBarController.isIPDHome.value = true;
+  //                   hideBottomBar.value = false;
+  //                   var dashboardController = Get.put(DashboardController());
+  //                   await dashboardController.getDashboardDataUsingToken();
+  //                   return;
+  //                 });
+  //               } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+  //                 if (controller.isHistorySheetOpen) return;
+  //                 controller.isHistorySheetOpen = true;
+  //                 await fetchGetHistoryList(IPDNo);
+  //                 await HistoryBottomSheet();
+  //                 controller.isHistorySheetOpen = false;
+  //                 controller.update();
+  //               }
+  //             } else {
+  //               Get.rawSnackbar(
+  //                 message: "Login failed. Please check your credentials.",
+  //                 duration: Duration(seconds: 5),
+  //                 backgroundColor: Colors.red.shade100,
+  //                 snackPosition: SnackPosition.TOP,
+  //               );
+  //             }
+  //           },
+  //           onTap: () {
+  //             // mobileController.clear();
+  //             // passwordController.clear();
+  //             Navigator.of(context).pop(); // Close dialog on cancel
+  //           },
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
+
+  Future<bool> fetchWebUserLoginCreds(BuildContext context, String formScreenName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -1272,7 +1383,12 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "mobileNo": mobileController.text.trim(), "password": passwordController.text.trim()};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "mobileNo": mobileController.text.trim(),
+        "password": passwordController.text.trim(),
+        "formScreen": formScreenName
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseWebuselogin responseWebuselogin = ResponseWebuselogin.fromJson(jsonDecode(response));
@@ -1288,7 +1404,11 @@ class InvestRequisitController extends GetxController {
 
           return true;
         } else {
-          Get.rawSnackbar(message: loginWebUserCreds.first.message ?? "Invalid credentials", duration: Duration(seconds: 10));
+          Get.rawSnackbar(
+            message: loginWebUserCreds.first.message ?? "Invalid credentials",
+            duration: Duration(seconds: 10),
+            snackPosition: SnackPosition.TOP,
+          );
           isLoading = false;
           update();
           return false;

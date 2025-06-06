@@ -436,6 +436,7 @@ class AdpatientScreen extends StatelessWidget {
                                       // investRequisitController.passwordController.clear();
                                       await investRequisitController.resetForm();
                                       investRequisitController.loginAlertDialog(
+                                        fromScreen: "INVESTIGATION REQUISITION",
                                         context,
                                         "INVESTIGATION REQUISITION",
                                         patientDetails,
@@ -471,6 +472,7 @@ class AdpatientScreen extends StatelessWidget {
                                       await investRequisitController.resetForm();
                                       // investRequisitController.HistoryBottomSheet();
                                       investRequisitController.loginAlertDialog(
+                                        fromScreen: "INVESTIGATION HISTORY",
                                         context,
                                         "INVESTIGATION HISTORY",
                                         patientDetails,

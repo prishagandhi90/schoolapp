@@ -271,6 +271,7 @@ class IpdDashboardScreen extends StatelessWidget {
                         // count: controller.patientsData.length,
                         // context: context,
                         // index: index,
+                        imagePath: 'assets/image/invest_requisite.png',
                         onTap: () async {
                           if (controller.isInvestigationReq_Navigating.value) return;
                           controller.isInvestigationReq_Navigating.value = true;
@@ -294,6 +295,7 @@ class IpdDashboardScreen extends StatelessWidget {
                           // ⬇️ Call the dialog function directly
 
                           await envReqController.loginAlertDialog(
+                            fromScreen: "INVESTIGATION REQUISITION",
                             context,
                             "INVESTIGATION REQUISITION",
                             "",
@@ -396,6 +398,7 @@ class IpdDashboardScreen extends StatelessWidget {
                       ? Image.asset(
                           imagePath,
                           height: Sizes.px40,
+                          fit: BoxFit.contain,
                           width: Sizes.px40,
                           color: AppColor.teal,
                         )

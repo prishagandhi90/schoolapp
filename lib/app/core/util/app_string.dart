@@ -173,8 +173,8 @@ class AppString {
   static String true1 = "True";
   static String provisional = "provisional";
   static String investigationrequisition = "Investigation Requisition";
-  static String patientuhidipd = "Patient/UHID/IPD";
-  static String type1 = "Type";
+  static String patientuhidipd = "Search Patient Name / UHID / IPD No";
+  static String investigationType = "Type";
   static String normal = "Normal";
   static String internal = "Internal";
   static String externallab = "External lab";
@@ -204,8 +204,10 @@ class AppString {
   static String information = "Information";
   static String toviewthenormalrange =
       "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed.";
-  static String anytestvaluesthatareabnormal = "b. Any test values that are abnormal will be displayed in red colour for clear identification.";
-  static String bluebackgroundcolour = "c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist.";
+  static String anytestvaluesthatareabnormal =
+      "b. Any test values that are abnormal will be displayed in red colour for clear identification.";
+  static String bluebackgroundcolour =
+      "c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist.";
   static String normalrange = "Normal Range";
   static String nonormalrangeavailable = "No Normal Range Available";
   //Notification

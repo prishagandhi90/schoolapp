@@ -496,7 +496,7 @@ class AdPatientController extends GetxController {
                                     sortBySelected = -1;
                                     await fetchDeptwisePatientList();
                                   } else {
-                                    Get.rawSnackbar(message: AppString.plzselectoptiontosort);
+                                    Get.rawSnackbar(message: AppString.plzselectoptiontosort,);
                                   }
                                 },
                                 child: Text(
@@ -915,6 +915,7 @@ class AdPatientController extends GetxController {
         await envReqController.resetForm();
         // ⬇️ Call the dialog function directly
         await envReqController.loginAlertDialog(
+          fromScreen: "INVESTIGATION REQUISITION",
           context,
           "INVESTIGATION REQUISITION",
           "",
