@@ -23,7 +23,7 @@ class InvestRequisitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(InvestRequisitController());
-
+    final double buttonHeight = getDynamicHeight(size: 0.047);
     return GetBuilder<InvestRequisitController>(
       builder: (controller) {
         return Scaffold(
@@ -120,7 +120,10 @@ class InvestRequisitScreen extends StatelessWidget {
                             flex: 6,
                             child: CustomDropdown(
                               text: AppString.investigationType,
-                              textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans),
+                              textStyle: TextStyle(
+                                  color: AppColor.black.withOpacity(0.4),
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                  fontSize: getDynamicHeight(size: 0.015)),
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -276,7 +279,10 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                       child: CustomDropdown(
                         text: AppString.selectServicegroup,
-                        textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans),
+                        textStyle: TextStyle(
+                            color: AppColor.black.withOpacity(0.4),
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                            fontSize: getDynamicHeight(size: 0.015)),
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),
@@ -405,7 +411,7 @@ class InvestRequisitScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: getDynamicHeight(size: 0.05), // 👈 Fixed height for all buttons
+                      height: buttonHeight, // 👈 Fixed height for all buttons
                       child: TextButton(
                         onPressed: () {},
                         style: TextButton.styleFrom(

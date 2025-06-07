@@ -57,62 +57,81 @@ class MispunchScreen extends GetView<MispunchController> {
             ],
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: EdgeInsets.symmetric(
+              vertical: getDynamicHeight(size: 0.02),
+            ),
             child: Column(
               children: [
                 MonthPicker_mispunch(
                   controller: controller,
                   scrollController_Mispunch: controller.monthScrollController_mispunch,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: getDynamicHeight(size: 0.02)),
                 Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
                   child: controller.isLoading.value
                       ? const Center(child: ProgressWithIcon())
                       : controller.mispunchTable.isNotEmpty
                           ? ListView.builder(
                               itemCount: controller.mispunchTable.length,
                               shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(getDynamicHeight(size: 0.008)),
                                   child: Container(
-                                    height: MediaQuery.of(context).size.height * 0.23,
-                                    decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.circular(10)),
+                                    height: getDynamicHeight(size: 0.21),
+                                    decoration: BoxDecoration(
+                                      color: AppColor.lightblue1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     child: Column(
                                       children: [
                                         Container(
-                                          padding: const EdgeInsets.all(10),
+                                          padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
                                           width: double.infinity,
-                                          height: 45,
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColor.primaryColor),
+                                          height: getDynamicHeight(size: 0.05),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: AppColor.primaryColor,
+                                          ),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: getDynamicHeight(size: 0.015),
+                                            ),
                                             child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  controller.mispunchTable[index].dt.toString(),
-                                                  style: TextStyle(
-                                                    // fontSize: 20,
-                                                    fontSize: getDynamicHeight(size: 0.022),
-                                                    fontWeight: FontWeight.w500, //20
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                )),
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                controller.mispunchTable[index].dt.toString(),
+                                                style: TextStyle(
+                                                  fontSize: getDynamicHeight(size: 0.022),
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
                                         Flexible(
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(vertical: 10),
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: getDynamicHeight(size: 0.01),
+                                            ),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                                               children: [
                                                 CustomContainerview(
-                                                    text: AppString.type, text1: controller.mispunchTable[index].misPunch.toString()),
+                                                  text: AppString.type,
+                                                  text1: controller.mispunchTable[index].misPunch.toString(),
+                                                ),
                                                 CustomContainerview(
-                                                    text: AppString.punchtime, text1: controller.mispunchTable[index].punchTime.toString()),
+                                                  text: AppString.punchtime,
+                                                  text1: controller.mispunchTable[index].punchTime.toString(),
+                                                ),
                                                 CustomContainerview(
-                                                    text: AppString.shifttime, text1: controller.mispunchTable[index].shiftTime.toString()),
+                                                  text: AppString.shifttime,
+                                                  text1: controller.mispunchTable[index].shiftTime.toString(),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -124,7 +143,7 @@ class MispunchScreen extends GetView<MispunchController> {
                               },
                             )
                           : Padding(
-                              padding: EdgeInsets.all(15),
+                              padding: EdgeInsets.all(getDynamicHeight(size: 0.015)),
                               child: Center(
                                 child: Text(AppString.nomispunchinthismonth),
                               ),

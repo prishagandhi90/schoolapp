@@ -341,7 +341,7 @@ class IpdDashboardScreen extends StatelessWidget {
     IconData? icon,
     VoidCallback? onTap,
   }) {
-    const double cardHeight = 100; // Fixed height for uniformity
+    double cardHeight = Sizes.h * 0.12; // Fixed height for uniformity
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -350,11 +350,14 @@ class IpdDashboardScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(color: AppColor.teal, width: 1),
         ),
-        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        margin: EdgeInsets.symmetric(
+          vertical: getDynamicHeight(size: 0.007),
+          horizontal: getDynamicHeight(size: 0.01),
+        ),
         child: SizedBox(
           height: cardHeight,
           child: Padding(
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

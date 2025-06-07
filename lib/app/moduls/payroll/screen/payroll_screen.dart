@@ -585,35 +585,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 bottomBarController.persistentController.value.index = 3;
                                               }
                                               bottomBarController.update();
-
-                                              // var dashboardController = Get.put(DashboardController());
-
-                                              // var bottomBarController = Get.find<BottomBarController>();
-                                              // bottomBarController.currentIndex.value = 3;
-                                              // bottomBarController.persistentController.value.jumpToTab(3);
-                                              // bottomBarController.update();
-
-                                              // PersistentNavBarNavigator.pushNewScreen(
-                                              //   context,
-                                              //   screen: LeaveMainScreen(),
-                                              //   withNavBar: true,
-                                              //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                              // ).then((value) async {
-                                              //   // if (Get.isRegistered<LeaveController>()) {
-                                              //   //   Get.delete<LeaveController>();
-                                              //   // }
-                                              //   hideBottomBar.value = false;
-                                              //   bottomBarController.update();
-                                              //   await dashboardController.getDashboardDataUsingToken();
-                                              // });
                                             },
-                                            // onTap: () => Get.snackbar(
-                                            //   AppString.comingsoon,
-                                            //   '',
-                                            //   colorText: AppColor.white,
-                                            //   backgroundColor: AppColor.black,
-                                            //   duration: const Duration(seconds: 1),
-                                            // ),
                                             child: Container(
                                               height: MediaQuery.of(context).size.height * 0.06, //0.07
                                               width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -632,7 +604,6 @@ class PayrollScreen extends GetView<PayrollController> {
                                             ),
                                           ),
                                           const SizedBox(height: 5),
-                                          // Text(AppString.leaveentry, style: AppStyle.plus12),
                                           Text(
                                             controller.empModuleScreenRightsTable.isNotEmpty
                                                 ? controller.empModuleScreenRightsTable[2].screenName.toString()
@@ -661,7 +632,6 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   return;
                                                 }
                                               }
-
                                               final bottomBarController = Get.put(BottomBarController());
                                               final leaveController = Get.put(LeaveController());
                                               await leaveController.resetForm();
@@ -670,26 +640,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 bottomBarController.persistentController.value.index = 4;
                                               }
                                               bottomBarController.update();
-                                              // var dashboardController = Get.put(DashboardController());
-                                              // PersistentNavBarNavigator.pushNewScreen(
-                                              //   context,
-                                              //   screen: OvertimeMainScreen(),
-                                              //   withNavBar: true,
-                                              //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                              // ).then((value) async {
-                                              //   // Get.delete<LeaveController>();
-                                              //   Get.delete<OvertimeController>();
-                                              //   hideBottomBar.value = false;
-                                              //   await dashboardController.getDashboardDataUsingToken();
-                                              // });
                                             },
-                                            // onTap: () => Get.snackbar(
-                                            //   AppString.comingsoon,
-                                            //   '',
-                                            //   colorText: AppColor.white,
-                                            //   backgroundColor: AppColor.black,
-                                            //   duration: const Duration(seconds: 1),
-                                            // ),
                                             child: Container(
                                               height: MediaQuery.of(context).size.height * 0.06, //0.07
                                               width: MediaQuery.of(context).size.width * 0.14, //0.17
@@ -771,10 +722,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 controller.isDutyScheduleNavigating.value = false;
                                               },
                                               child: Container(
-                                                height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
-                                                width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
+                                                height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                                width: MediaQuery.of(context).size.width * 0.14, //0.17
                                                 margin: const EdgeInsets.only(
                                                   top: 15,
+                                                  left: 10,
                                                 ),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
@@ -825,10 +777,8 @@ class PayrollScreen extends GetView<PayrollController> {
                                                     return;
                                                   }
                                                 }
-
                                                 final bottomBarController = Get.put(BottomBarController());
                                                 bottomBarController.currentIndex.value = -1;
-
                                                 PersistentNavBarNavigator.pushNewScreen(
                                                   context,
                                                   screen: const LvotapprovalScreen(),
@@ -854,9 +804,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 controller.isLVOTApprovalNavigating.value = false;
                                               },
                                               child: Container(
-                                                height: MediaQuery.of(context).size.width * 0.13, // Dynamic height
-                                                width: MediaQuery.of(context).size.width * 0.14, // Dynamic width
-                                                margin: const EdgeInsets.only(top: 15),
+                                                height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                                width: MediaQuery.of(context).size.width * 0.14, //0.17
+                                                margin: const EdgeInsets.only(
+                                                  top: 15,
+                                                  left: 10,
+                                                ),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
                                                     color: AppColor.primaryColor,

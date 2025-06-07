@@ -26,7 +26,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 20),
+                    SizedBox(height: getDynamicHeight(size: 0.02)),
                     controller.isLoading
                         ? const Center(
                             child: Padding(
@@ -41,6 +41,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                   Container(
                                     color: AppColor.primaryColor,
                                     child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         buildHeaderCell(AppString.from, constraints.maxWidth * 0.3),
                                         buildHeaderCell(AppString.to, constraints.maxWidth * 0.3),
@@ -57,7 +58,6 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                       itemBuilder: (context, index) {
                                         final row = controller.leaveentryList[index];
                                         final isSelected = controller.selectedRowIndex == index; // Check if row is selected
-
                                         return GestureDetector(
                                           onTap: () {
                                             // Trigger API Call here
@@ -186,7 +186,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                 ],
                               )
                             : Padding(
-                                padding: const EdgeInsets.all(15),
+                                padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
                                 child: Center(
                                   child: Text(
                                     AppString.noleavedata,
@@ -220,7 +220,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
   Widget buildHeaderCell(String text, double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(getDynamicHeight(size: 0.008)),
       child: Text(
         text,
         textAlign: TextAlign.center,
@@ -232,16 +232,10 @@ class LeaveViewScreen extends GetView<LeaveController> {
     );
   }
 
-  // Widget buildCell(Widget child) {
-  //   return Container(
-  //     padding: EdgeInsets.all(8),
-  //     child: child,
-  //   );
-  // }
   Widget buildCell(Widget child, double width) {
     return Container(
       width: width,
-      padding: const EdgeInsets.all(8),
+      padding: EdgeInsets.all(getDynamicHeight(size: 0.006)),
       child: child,
     );
   }
@@ -272,62 +266,67 @@ class LeaveViewScreen extends GetView<LeaveController> {
                           controller: scrollController,
                           child: Column(
                             children: [
-                              const SizedBox(height: 10),
+                              SizedBox(height: getDynamicHeight(size: 0.007)),
                               Row(
                                 children: [
-                                  const SizedBox(width: 30),
+                                  SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
                                   const Spacer(),
                                   Container(
-                                    width: 90,
-                                    child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                                    width: getDynamicHeight(size: 0.06), // ~90 dynamically
+                                    child: Divider(
+                                      height: getDynamicHeight(size: 0.025), // ~20 dynamically
+                                      color: AppColor.originalgrey,
+                                      thickness: getDynamicHeight(size: 0.0065), // ~5 dynamically
+                                    ),
                                   ),
                                   const Spacer(),
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
-                                    child: const Icon(Icons.close),
+                                    child: Icon(
+                                      Icons.close,
+                                      size: getDynamicHeight(size: 0.025), // Icon size dynamic
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
+                                  SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
                                 ],
                               ),
-                              const SizedBox(height: 10),
+                              SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
                               Container(
-                                height: MediaQuery.of(context).size.height * 0.12,
+                                height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                                 child: Column(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(getDynamicHeight(size: 0.007)), // was EdgeInsets.all(10)
                                       decoration: BoxDecoration(color: AppColor.primaryColor),
                                       child: Row(
                                         children: [
                                           Flexible(
                                             flex: 1,
                                             child: Container(
-                                                // height: 100,
-                                                width: MediaQuery.of(context).size.height * 0.4,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  AppString.name,
-                                                  style: AppStyle.w50018.copyWith(
-                                                    color: Colors.white, // Set text color to white
-                                                  ),
-                                                )),
+                                              width: getDynamicHeight(size: 0.4), // was height * 0.4
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                AppString.name,
+                                                style: AppStyle.w50018.copyWith(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                           Flexible(
                                             flex: 1,
                                             child: Container(
-                                                // height: 100,
-                                                width: MediaQuery.of(context).size.height * 0.4,
-                                                alignment: Alignment.center,
-                                                child: Text(
-                                                  AppString.reason,
-                                                  style: AppStyle.w50018.copyWith(
-                                                    color: Colors.white, // Set text color to white
-                                                  ),
-                                                )),
+                                              width: getDynamicHeight(size: 0.4), // was height * 0.4
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                AppString.reason,
+                                                style: AppStyle.w50018.copyWith(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -337,9 +336,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         Flexible(
                                           flex: 1,
                                           child: Container(
-                                            width: MediaQuery.of(context).size.height * 0.5,
+                                            width: getDynamicHeight(size: 0.5), // was height * 0.5
                                             alignment: Alignment.center,
-                                            child: controller.leaveentryList.length > 0
+                                            child: controller.leaveentryList.isNotEmpty
                                                 ? Text(
                                                     controller.leaveentryList[index].leaveFullName.toString(),
                                                     style: AppStyle.fontfamilyplus,
@@ -350,10 +349,9 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                         Flexible(
                                           flex: 1,
                                           child: Container(
-                                            // height: 100,
-                                            width: MediaQuery.of(context).size.height * 0.5,
+                                            width: getDynamicHeight(size: 0.5), // was height * 0.5
                                             alignment: Alignment.center,
-                                            child: controller.leaveentryList.length > 0
+                                            child: controller.leaveentryList.isNotEmpty
                                                 ? Text(
                                                     controller.leaveentryList[index].reason.toString(),
                                                     style: AppStyle.fontfamilyplus,
@@ -362,339 +360,18 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                           ),
                                         ),
                                       ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.employeeNotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
                                     ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].note.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
                                   ],
                                 ),
                               ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.inChargeNotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].inchargeNote.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.inchargerejectreason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].inchargeReason.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hodRejectReason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].hodReason.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hodNotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].hoDNote.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hrnotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].hrNote.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hrRejectReason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].hrReason.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text(
-                                            AppString.lateReason,
-                                            style: AppStyle.w50018.copyWith(
-                                              color: Colors.white, // Set text color to white
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    controller.leaveentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.leaveentryList[index].lateReasonName.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
+                              _buildNoteSection(AppString.employeeNotes, controller.leaveentryList[index].note.toString()),
+                              _buildNoteSection(AppString.inChargeNotes, controller.leaveentryList[index].inchargeNote.toString()),
+                              _buildNoteSection(AppString.inchargerejectreason, controller.leaveentryList[index].inchargeReason.toString()),
+                              _buildNoteSection(AppString.hodRejectReason, controller.leaveentryList[index].hodReason.toString()),
+                              _buildNoteSection(AppString.hodNotes, controller.leaveentryList[index].hoDNote.toString()),
+                              _buildNoteSection(AppString.hrnotes, controller.leaveentryList[index].hrNote.toString()),
+                              _buildNoteSection(AppString.hrRejectReason, controller.leaveentryList[index].hrReason.toString()),
+                              _buildNoteSection(AppString.lateReason, controller.leaveentryList[index].lateReasonName.toString()),
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 width: double.infinity,
@@ -829,6 +506,50 @@ class LeaveViewScreen extends GetView<LeaveController> {
               ),
             );
           }),
+    );
+  }
+
+  Widget _buildNoteSection(String title, String content) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
+            width: double.infinity,
+            height: getDynamicHeight(size: 0.045),
+            color: AppColor.primaryColor,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: AppStyle.w50018.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+          controller.leaveentryList.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: getDynamicHeight(size: 0.015),
+                    vertical: getDynamicHeight(size: 0.01),
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      content,
+                      style: content.isNotEmpty ? AppStyle.fontfamilyplus : AppStyle.plus16w600,
+                    ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                ),
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
