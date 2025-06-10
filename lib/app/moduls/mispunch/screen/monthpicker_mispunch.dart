@@ -16,21 +16,24 @@ class MonthPicker_mispunch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize Sizes
+    Sizes.init(context);
+
     return GetBuilder<MispunchController>(
       builder: (controller) {
-        // Use WidgetsBinding.instance.addPostFrameCallback
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (scrollController_Mispunch.hasClients) {
             try {
-              // Avoid unnecessary calculations if the scroll position is already correct
               final index = controller.MonthSel_selIndex;
-              final itemWidth = 100.0;
+              final itemWidth = getDynamicHeight(size: 0.13); // dynamic width
               final screenWidth = MediaQuery.of(context).size.width;
+              final listWidth = itemWidth * 12;
               final offset = (index * itemWidth) - (screenWidth / 2) + (itemWidth / 2);
+              final validOffset = offset.clamp(0.0, listWidth - screenWidth).toDouble();
 
-              if ((offset - scrollController_Mispunch.offset).abs() > 1) {
+              if ((validOffset - scrollController_Mispunch.offset).abs() > 1) {
                 scrollController_Mispunch.animateTo(
-                  offset,
+                  validOffset,
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 );
@@ -43,7 +46,7 @@ class MonthPicker_mispunch extends StatelessWidget {
 
         return Center(
           child: SizedBox(
-            height: 50,
+            height: getDynamicHeight(size: 0.06), // dynamic height (approx 50)
             child: ListView.builder(
               controller: scrollController_Mispunch,
               scrollDirection: Axis.horizontal,
@@ -55,19 +58,18 @@ class MonthPicker_mispunch extends StatelessWidget {
                     controller.showHideMsg();
                   },
                   child: Container(
-                    width: 100,
+                    width: getDynamicHeight(size: 0.1), // dynamic width (approx 100)
                     alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    margin: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007)),
                     decoration: BoxDecoration(
                       color: controller.MonthSel_selIndex == index ? AppColor.primaryColor : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.01)),
                     ),
                     child: Text(
                       getMonthName(index),
                       style: TextStyle(
                         color: controller.MonthSel_selIndex == index ? AppColor.white : AppColor.black,
                         fontWeight: controller.MonthSel_selIndex == index ? FontWeight.bold : FontWeight.normal,
-                        // fontSize: controller.MonthSel_selIndex == index ? 18 : 15,
                         fontSize: controller.MonthSel_selIndex == index ? getDynamicHeight(size: 0.020) : getDynamicHeight(size: 0.017),
                       ),
                     ),

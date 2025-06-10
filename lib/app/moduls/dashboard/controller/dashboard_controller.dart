@@ -37,13 +37,17 @@ class DashboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Future.delayed(Duration.zero, () async {
+      await getDashboardDataUsingToken();
+      await fetchModuleRights();
+      hideBottomBar.value = false;
+      update();
+    });
     // Dashboard data aur module rights fetch karte hi controller initialize hota hai
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    getDashboardDataUsingToken();
-    fetchModuleRights();
-    hideBottomBar.value = false;
-    update();
-    // });
+    // getDashboardDataUsingToken();
+    // fetchModuleRights();
+    // hideBottomBar.value = false;
+    // update();
   }
 
 // Module access rights ko fetch karta hai backend se

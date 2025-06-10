@@ -218,7 +218,8 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
   Widget buildHeaderCell(String text, double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.all(8),
+      height: getDynamicHeight(size: 0.035), // fixed height for consistency
+      alignment: Alignment.center,
       child: Text(
         text,
         textAlign: TextAlign.center,
@@ -233,7 +234,13 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
   Widget buildCell(Widget child, double width) {
     return Container(
       width: width,
-      padding: const EdgeInsets.all(8),
+      height: getDynamicHeight(size: 0.05), // same as header
+      alignment: Alignment.center,
+      // decoration: BoxDecoration(
+      //   border: Border(
+      //     right: BorderSide(color: AppColor.lightgrey, width: 0.5),
+      //   ),
+      // ),
       child: child,
     );
   }
@@ -264,397 +271,43 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                           controller: scrollController,
                           child: Column(
                             children: [
-                              const SizedBox(height: 10),
+                              SizedBox(height: getDynamicHeight(size: 0.007)),
                               Row(
                                 children: [
-                                  const SizedBox(width: 30),
+                                  SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
                                   const Spacer(),
                                   Container(
-                                    width: 90,
-                                    child: Divider(height: 20, color: AppColor.originalgrey, thickness: 5),
+                                    width: getDynamicHeight(size: 0.06), // ~90 dynamically
+                                    child: Divider(
+                                      height: getDynamicHeight(size: 0.025), // ~20 dynamically
+                                      color: AppColor.originalgrey,
+                                      thickness: getDynamicHeight(size: 0.0065), // ~5 dynamically
+                                    ),
                                   ),
                                   const Spacer(),
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.pop(context);
                                     },
-                                    child: const Icon(Icons.close),
+                                    child: Icon(
+                                      Icons.close,
+                                      size: getDynamicHeight(size: 0.025), // Icon size dynamic
+                                    ),
                                   ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
+                                  SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hours,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].otHours.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.employeeNotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: AppColor.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].note.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.inChargeNotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: AppColor.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].inchargeNote.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.inchargerejectreason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: AppColor.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].inchargeReason.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hodRejectReason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: AppColor.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].hodReason.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hodNotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].hoDNote.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hrnotes,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].hrNote.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.hrRejectReason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].hrReason.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                // decoration: BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      height: 45,
-                                      decoration: BoxDecoration(color: AppColor.primaryColor),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                                        child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              AppString.lateReason,
-                                              style: AppStyle.w50018.copyWith(
-                                                color: Colors.white, // Set text color to white
-                                              ),
-                                            )),
-                                      ),
-                                    ),
-                                    controller.otentryList.isNotEmpty
-                                        ? Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                controller.otentryList[index].lateReasonName.toString(),
-                                                style: AppStyle.fontfamilyplus,
-                                              ),
-                                            ),
-                                          )
-                                        : Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
-                                          ),
-                                  ],
-                                ),
-                              ),
+                              SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
+                              _buildNoteSection(AppString.hours, controller.otentryList[index].otHours.toString()),
+                              _buildNoteSection(AppString.employeeNotes, controller.otentryList[index].note.toString()),
+                              _buildNoteSection(AppString.inChargeNotes, controller.otentryList[index].inchargeNote.toString()),
+                              _buildNoteSection(AppString.inchargerejectreason, controller.otentryList[index].inchargeReason.toString()),
+                              _buildNoteSection(AppString.hodRejectReason, controller.otentryList[index].hodReason.toString()),
+                              _buildNoteSection(AppString.hodNotes, controller.otentryList[index].hoDNote.toString()),
+                              _buildNoteSection(AppString.hrnotes, controller.otentryList[index].hrNote.toString()),
+                              _buildNoteSection(AppString.hrRejectReason, controller.otentryList[index].hrReason.toString()),
+                              _buildNoteSection(AppString.lateReason, controller.otentryList[index].lateReasonName.toString()),
+
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 width: double.infinity,
@@ -788,6 +441,50 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
               ),
             );
           }),
+    );
+  }
+
+  Widget _buildNoteSection(String title, String content) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
+            width: double.infinity,
+            height: getDynamicHeight(size: 0.045),
+            color: AppColor.primaryColor,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: AppStyle.w50018.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+          controller.otentryList.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: getDynamicHeight(size: 0.015),
+                    vertical: getDynamicHeight(size: 0.01),
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      content,
+                      style: content.isNotEmpty ? AppStyle.fontfamilyplus : AppStyle.plus16w600,
+                    ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Align(alignment: Alignment.centerLeft, child: Text('--:--', style: AppStyle.plus16w600)),
+                ),
+        ],
+      ),
     );
   }
 }

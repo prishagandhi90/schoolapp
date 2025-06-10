@@ -72,8 +72,8 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onInit() async {
-    super.onInit();
     tabController_Leave = TabController(length: 2, vsync: this);
+    super.onInit();
     tabController_Leave.addListener(_handleTabSelection);
     currentTabIndex.value = 0;
     changeTab(0);
@@ -108,13 +108,13 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     // Notes field ka focus change hone par UI update karna
     if (!notesFocusNode.hasFocus) {
       isNotesFieldFocused.value = notesFocusNode.hasFocus;
-
       update();
     }
   }
 
   @override
   void onClose() {
+    // tabController_Leave.dispose();
     super.onClose();
   }
 
@@ -644,10 +644,11 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     isLoading = false;
     return [];
   }
+
   // Date formatting function with optional time handling based on flag (OT or LV)
   String formatDateWithTime(String dateString, String flag) {
     String jsonDateTime = "";
-     // Check if the date string is not empty
+    // Check if the date string is not empty
     if (dateString != "") {
       DateFormat dateFormat = DateFormat("dd-MM-yyyy");
       DateTime dateTime = dateFormat.parse(dateString);
@@ -665,6 +666,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
     }
     return jsonDateTime;
   }
+
   // Function to format the FromDateTime or ToDateTime for Overtime using controller
   String formatOTDateTime(OvertimeController overtimeController, String flag) {
     String jsonDateTime = "";

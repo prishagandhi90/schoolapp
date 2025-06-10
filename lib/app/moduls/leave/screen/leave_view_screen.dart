@@ -41,7 +41,6 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                   Container(
                                     color: AppColor.primaryColor,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         buildHeaderCell(AppString.from, constraints.maxWidth * 0.3),
                                         buildHeaderCell(AppString.to, constraints.maxWidth * 0.3),
@@ -115,7 +114,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(getDynamicHeight(size: 0.008)),
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
@@ -138,7 +137,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                             headingRowColor: WidgetStateColor.resolveWith(
                                               (states) => AppColor.primaryColor,
                                             ),
-                                            columnSpacing: 35,
+                                            columnSpacing: getDynamicHeight(size: 0.035),
                                             columns: [
                                               DataColumn(
                                                 label: Text(
@@ -220,7 +219,8 @@ class LeaveViewScreen extends GetView<LeaveController> {
   Widget buildHeaderCell(String text, double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.all(getDynamicHeight(size: 0.008)),
+      height: getDynamicHeight(size: 0.045), // fixed height for consistency
+      alignment: Alignment.center,
       child: Text(
         text,
         textAlign: TextAlign.center,
@@ -235,7 +235,13 @@ class LeaveViewScreen extends GetView<LeaveController> {
   Widget buildCell(Widget child, double width) {
     return Container(
       width: width,
-      padding: EdgeInsets.all(getDynamicHeight(size: 0.006)),
+      height: getDynamicHeight(size: 0.04), // same as header
+      alignment: Alignment.center,
+      // decoration: BoxDecoration(
+      //   border: Border(
+      //     right: BorderSide(color: AppColor.lightgrey, width: 0.5),
+      //   ),
+      // ),
       child: child,
     );
   }

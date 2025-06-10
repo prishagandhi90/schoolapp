@@ -137,7 +137,7 @@ class SummaryScreen extends GetView<AttendenceController> {
                       )
                     // Agar data empty hai toh message show karega
                     : Padding(
-                        padding: EdgeInsets.all(15),
+                        padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
                         child: Center(child: Text(AppString.nodataavailable)),
                       ),
           ],
