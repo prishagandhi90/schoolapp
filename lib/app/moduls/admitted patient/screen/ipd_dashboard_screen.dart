@@ -265,7 +265,6 @@ class IpdDashboardScreen extends StatelessWidget {
                           controller.isAdmittedPatients_Navigating.value = false;
                         },
                       ),
-
                       _buildPatientCard(
                         title: 'Investigation Requisition',
                         // count: controller.patientsData.length,
@@ -309,6 +308,50 @@ class IpdDashboardScreen extends StatelessWidget {
                           await controller.resetForm();
                           await controller.fetchData();
                           controller.isInvestigationReq_Navigating.value = false;
+                        },
+                      ),
+                      _buildPatientCard(
+                        title: 'Medication',
+                        // count: controller.patientsData.length,
+                        // context: context,
+                        // index: index,
+                        imagePath: AppImage.adpatient,
+                        onTap: () {
+                          if (controller.isAdmittedPatients_Navigating.value) return;
+                          controller.isAdmittedPatients_Navigating.value = true;
+
+                          if (controller.screenRightsTable.isNotEmpty) {
+                            if (controller.screenRightsTable[0].rightsYN == "N") {
+                              controller.isAdmittedPatients_Navigating.value = false;
+                              Get.snackbar(
+                                "You don't have access to this screen",
+                                '',
+                                colorText: AppColor.white,
+                                backgroundColor: AppColor.black,
+                                duration: const Duration(seconds: 1),
+                              );
+                              return;
+                            }
+                          }
+
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: AdpatientScreen(),
+                            withNavBar: false,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ).then((value) async {
+                            final controller = Get.put(AdPatientController());
+                            controller.sortBySelected = -1;
+                            await controller.resetForm();
+                            await controller.fetchData();
+                            final bottomBarController = Get.find<BottomBarController>();
+                            bottomBarController.currentIndex.value = 0;
+                            bottomBarController.isIPDHome.value = true;
+                            hideBottomBar.value = false;
+                            var dashboardController = Get.put(DashboardController());
+                            await dashboardController.getDashboardDataUsingToken();
+                          });
+                          controller.isAdmittedPatients_Navigating.value = false;
                         },
                       ),
 
