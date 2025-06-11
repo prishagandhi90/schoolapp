@@ -79,7 +79,6 @@ class LoginController extends GetxController {
       Get.rawSnackbar(message: "Password can not be empty");
       return;
     }
-
     isLoadingLogin = true;
     update();
     try {
@@ -92,7 +91,6 @@ class LoginController extends GetxController {
             otpController.deviceTok = token;
           }
         }
-
         otpController.numberController.text = numberController.text;
         update();
         String isValidLogin = "false";
