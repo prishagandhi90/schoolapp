@@ -10,6 +10,8 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
@@ -25,7 +27,9 @@ import 'package:emp_app/app/moduls/invest_requisit/model/servicegrp_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/webUserlogincred_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
+import 'package:emp_app/my_navigator_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -99,9 +103,7 @@ class InvestRequisitController extends GetxController {
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' ||
-              typeController.text.toLowerCase() == 'radio' ||
-              typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -203,11 +205,7 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "empId": empId,
-        "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()
-      };
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseServiceGroup responseServiceGroup = ResponseServiceGroup.fromJson(jsonDecode(response));
@@ -450,15 +448,11 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
-              ? "LAB CHARGES"
-              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
-              ? drNameController.text.trim()
-              : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -495,9 +489,7 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab'
-            ? "LabRequest"
-            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -581,9 +573,17 @@ class InvestRequisitController extends GetxController {
           backgroundColor: Colors.green.shade100,
           colorText: AppColor.black,
           snackPosition: SnackPosition.TOP,
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 3),
+          margin: EdgeInsets.symmetric(
+            horizontal: getDynamicHeight(size: 0.038),
+            vertical: getDynamicHeight(size: 0.038),
+          ), // 👈 yahan padding/margin
+          borderRadius: getDynamicHeight(
+            size: 0.009,
+          ),
         );
         selectedServices.clear();
+        redirectToAdmittedScreen("INVESTIGATION REQUISITION");
       } else {
         Get.snackbar(
           'Error',
@@ -607,6 +607,45 @@ class InvestRequisitController extends GetxController {
     }
     isLoading = false;
     update();
+  }
+
+  redirectToAdmittedScreen(String fromScreenRedirection) {
+    AdPatientController adPatientcontroller;
+    if (Get.isRegistered<AdPatientController>()) {
+      adPatientcontroller = Get.find<AdPatientController>();
+    } else {
+      adPatientcontroller = Get.put(AdPatientController());
+    }
+    adPatientcontroller.FromScreen_Redirection = fromScreenRedirection;
+    adPatientcontroller.WebLoginUser_InvReq = webUserName;
+    adPatientcontroller.update();
+
+    // Get.offUntil(
+    //   GetPageRoute(
+    //     page: () => AdpatientScreen(),
+    //     binding: AdmittedPatientBinding(),
+    //     settings: RouteSettings(name: Paths.IPDADMITTEDPATIENTS),
+    //   ),
+    //   ModalRoute.withName(Paths.IPDDASHBOARDSCREEN),
+    // );
+
+    List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
+    int i = 1;
+    for (var route in stack) {
+      print("Screen ${i}: ${route.settings.name}");
+      i++;
+    }
+
+    Get.until((route) => route.settings.name == Paths.IPDDASHBOARDSCREEN);
+    Get.toNamed(Paths.IPDADMITTEDPATIENTS);
+
+    print("after\n");
+    stack = MyNavigatorObserver.currentStack;
+    i = 1;
+    for (var route in stack) {
+      print("Screen ${i}: ${route.settings.name}");
+      i++;
+    }
   }
 
   Future<List<GethistoryModelList>> fetchGetHistoryList(String ipdNo) async {
@@ -1126,9 +1165,7 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.serviceGroup != '' && item.serviceGroup != null
-                                            ? item.serviceGroup.toString()
-                                            : item.reqTyp.toString(),
+                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
                                         style: TextStyle(fontSize: getDynamicHeight(size: 0.011)),
                                       ),
                                     ],
@@ -1139,8 +1176,7 @@ class InvestRequisitController extends GetxController {
                                     Visibility(
                                       visible: item.status != null && item.status!.isNotEmpty,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
+                                        padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
                                         decoration: BoxDecoration(
                                           color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
                                           borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0035)),
@@ -1207,6 +1243,7 @@ class InvestRequisitController extends GetxController {
     String IPDNo,
     String UHID, {
     required String fromScreen, // 🔹 Add parameter
+    required String fromScreenRedirection,
   }) async {
     await showDialog(
       context: context,
@@ -1235,45 +1272,52 @@ class InvestRequisitController extends GetxController {
                 // 🔹 Print or use the fromScreen info
                 print("Login done from screen: $fromScreen");
 
-                if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
-                  if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
-                    fromAdmittedScreen = true;
-                    nameController.text = patientDetails;
-                    ipdNo = IPDNo;
-                    uhid = UHID;
-                  } else {
-                    fromAdmittedScreen = false;
-                    nameController.text = '';
-                    ipdNo = '';
-                    uhid = '';
-                  }
-
-                  update();
-
-                  PersistentNavBarNavigator.pushNewScreen(
-                    Get.context!,
-                    screen: InvestRequisitScreen(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  ).then((value) async {
-                    final controller = Get.put(InvestRequisitController());
-                    await controller.resetForm();
-                    final bottomBarController = Get.find<BottomBarController>();
-                    bottomBarController.currentIndex.value = 0;
-                    bottomBarController.isIPDHome.value = true;
-                    hideBottomBar.value = false;
-                    var dashboardController = Get.put(DashboardController());
-                    await dashboardController.getDashboardDataUsingToken();
-                    return;
-                  });
-                } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
-                  if (controller.isHistorySheetOpen) return;
-                  controller.isHistorySheetOpen = true;
-                  await fetchGetHistoryList(IPDNo);
-                  await HistoryBottomSheet();
-                  controller.isHistorySheetOpen = false;
-                  controller.update();
+                AdPatientController adPatientcontroller;
+                if (Get.isRegistered<AdPatientController>()) {
+                  adPatientcontroller = Get.find<AdPatientController>();
+                } else {
+                  adPatientcontroller = Get.put(AdPatientController());
                 }
+
+                adPatientcontroller.FromScreen_Redirection = fromScreenRedirection;
+                adPatientcontroller.WebLoginUser_InvReq = webUserName;
+                if (adPatientcontroller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") {
+                  await redirectToClickedMenu(controller, menuName, patientDetails, IPDNo, UHID);
+                  return;
+                }
+
+                adPatientcontroller.update();
+
+                Get.to(() => AdpatientScreen())!.then((value) async {
+                  adPatientcontroller.sortBySelected = -1;
+                  await adPatientcontroller.resetForm();
+                  await adPatientcontroller.fetchData();
+                  final bottomBarController = Get.find<BottomBarController>();
+                  bottomBarController.currentIndex.value = 0;
+                  bottomBarController.isIPDHome.value = true;
+                  hideBottomBar.value = false;
+                  var dashboardController = Get.put(DashboardController());
+                  await dashboardController.getDashboardDataUsingToken();
+                });
+
+                // PersistentNavBarNavigator.pushNewScreen(
+                //   Get.context!,
+                //   screen: AdpatientScreen(),
+                //   withNavBar: false,
+                //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                // ).then((value) async {
+                //   adPatientcontroller.sortBySelected = -1;
+                //   await adPatientcontroller.resetForm();
+                //   await adPatientcontroller.fetchData();
+                //   final bottomBarController = Get.find<BottomBarController>();
+                //   bottomBarController.currentIndex.value = 0;
+                //   bottomBarController.isIPDHome.value = true;
+                //   hideBottomBar.value = false;
+                //   var dashboardController = Get.put(DashboardController());
+                //   await dashboardController.getDashboardDataUsingToken();
+                // });
+
+                // return;
               } else {
                 Get.rawSnackbar(
                   message: "Login failed. Please check your credentials.",
@@ -1290,6 +1334,49 @@ class InvestRequisitController extends GetxController {
         });
       },
     );
+  }
+
+  Future<void> redirectToClickedMenu(InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
+    if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
+      if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
+        fromAdmittedScreen = true;
+        nameController.text = patientDetails;
+        ipdNo = IPDNo;
+        uhid = UHID;
+      } else {
+        fromAdmittedScreen = false;
+        nameController.text = '';
+        ipdNo = '';
+        uhid = '';
+      }
+
+      update();
+
+      PersistentNavBarNavigator.pushNewScreen(
+        Get.context!,
+        screen: InvestRequisitScreen(),
+        withNavBar: false,
+        pageTransitionAnimation: PageTransitionAnimation.cupertino,
+      ).then((value) async {
+        final controller = Get.put(InvestRequisitController());
+        await controller.resetForm();
+        final bottomBarController = Get.find<BottomBarController>();
+        bottomBarController.currentIndex.value = 0;
+        bottomBarController.isIPDHome.value = true;
+        hideBottomBar.value = false;
+        // var dashboardController = Get.put(DashboardController());
+        // await dashboardController.getDashboardDataUsingToken();
+        // Navigator.pop(Get.context!);
+        // return;
+      });
+    } else if (menuName.toUpperCase() == 'INVESTIGATION HISTORY') {
+      if (controller.isHistorySheetOpen) return;
+      controller.isHistorySheetOpen = true;
+      await fetchGetHistoryList(IPDNo);
+      await HistoryBottomSheet();
+      controller.isHistorySheetOpen = false;
+      controller.update();
+    }
   }
 
   // Future<void> loginAlertDialog(BuildContext context, String menuName, String patientDetails, String IPDNo, String UHID) async {
@@ -1383,12 +1470,7 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "mobileNo": mobileController.text.trim(),
-        "password": passwordController.text.trim(),
-        "formScreen": formScreenName
-      };
+      var jsonbodyObj = {"loginId": loginId, "mobileNo": mobileController.text.trim(), "password": passwordController.text.trim(), "formScreen": formScreenName};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseWebuselogin responseWebuselogin = ResponseWebuselogin.fromJson(jsonDecode(response));
@@ -1398,7 +1480,7 @@ class InvestRequisitController extends GetxController {
         if (loginWebUserCreds.isNotEmpty && loginWebUserCreds.first.isValidCreds == 'True') {
           webUserName = loginWebUserCreds.first.webEmpName ?? '';
 
-          Get.rawSnackbar(message: AppString.loginsuccessful,snackPosition: SnackPosition.TOP);
+          Get.rawSnackbar(message: AppString.loginsuccessful, snackPosition: SnackPosition.TOP);
           isLoading = false;
           update();
 

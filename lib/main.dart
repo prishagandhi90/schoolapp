@@ -8,6 +8,7 @@ import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding
 import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
+import 'package:emp_app/my_navigator_observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,8 @@ void main() async {
             initialRoute: AppPages.getInitialRoute(isLoggedIn, isForceUpdate),
             getPages: AppPages.routes,
             navigatorObservers: [
-              NavigatorObserver(),
+              // NavigatorObserver(),
+              MyNavigatorObserver(),
             ],
           );
         },

@@ -245,12 +245,11 @@ class IpdDashboardScreen extends StatelessWidget {
                             }
                           }
 
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: AdpatientScreen(),
-                            withNavBar: false,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          ).then((value) async {
+                          controller.FromScreen_Redirection = "";
+                          controller.WebLoginUser_InvReq = "";
+                          controller.update();
+
+                          Get.to(() => AdpatientScreen())!.then((value) async {
                             final controller = Get.put(AdPatientController());
                             controller.sortBySelected = -1;
                             await controller.resetForm();
@@ -262,6 +261,24 @@ class IpdDashboardScreen extends StatelessWidget {
                             var dashboardController = Get.put(DashboardController());
                             await dashboardController.getDashboardDataUsingToken();
                           });
+
+                          // PersistentNavBarNavigator.pushNewScreen(
+                          //   context,
+                          //   screen: AdpatientScreen(),
+                          //   withNavBar: false,
+                          //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          // ).then((value) async {
+                          //   final controller = Get.put(AdPatientController());
+                          //   controller.sortBySelected = -1;
+                          //   await controller.resetForm();
+                          //   await controller.fetchData();
+                          //   final bottomBarController = Get.find<BottomBarController>();
+                          //   bottomBarController.currentIndex.value = 0;
+                          //   bottomBarController.isIPDHome.value = true;
+                          //   hideBottomBar.value = false;
+                          //   var dashboardController = Get.put(DashboardController());
+                          //   await dashboardController.getDashboardDataUsingToken();
+                          // });
                           controller.isAdmittedPatients_Navigating.value = false;
                         },
                       ),
@@ -290,6 +307,10 @@ class IpdDashboardScreen extends StatelessWidget {
                             }
                           }
 
+                          controller.FromScreen_Redirection = "";
+                          controller.WebLoginUser_InvReq = "";
+                          controller.update();
+
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();
                           // ⬇️ Call the dialog function directly
@@ -301,6 +322,7 @@ class IpdDashboardScreen extends StatelessWidget {
                             "",
                             "",
                             "",
+                            fromScreenRedirection: "INVESTIGATION REQUISITION",
                           );
 
                           // ⬇️ Ye tab chalega jab dialog band ho jayega

@@ -9,8 +9,10 @@ import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
+import 'package:emp_app/my_navigator_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,9 +147,18 @@ class DashboardController extends GetxController {
         hideBottomBar.value = false;
         // bottomBarController.onItemTapped(0, true, context);
         bottomBarController.resetAndInitialize_new(0);
-        Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
-          Get.put(BottomBarController());
-        }));
+        // Get.offAll(() => BottomBarView(), binding: BindingsBuilder(() {
+        //   Get.put(BottomBarController());
+        // }));
+        Get.toNamed(Paths.IPDDASHBOARDSCREEN);
+
+        print("after\n");
+        List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
+        int i = 1;
+        for (var route in stack) {
+          print("Screen ${i}: ${route.settings.name}");
+          i++;
+        }
         // Get.snackbar(
         //   AppString.comingsoon,
         //   '',

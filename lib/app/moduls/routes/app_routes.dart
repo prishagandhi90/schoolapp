@@ -6,40 +6,40 @@ part of 'app_pages.dart';
 abstract class Routes {
   Routes._();
   // static const SPLASH = _Paths.SPLASH;
-  static const LOGIN = _Paths.LOGIN;
-  static const SUPERLOGIN = _Paths.SuperLogin;
-  static const NoInternet = _Paths.NoInterNet;
-  static const VERIFYOTP = _Paths.VERIFYOTP;
-  static const DASHBOARD = _Paths.DASHBOARD;
-  static const BOTTOM_BAR = _Paths.BOTTOMBAR;
-  static const Payroll = _Paths.PAYROLL;
+  static const LOGIN = Paths.LOGIN;
+  static const SUPERLOGIN = Paths.SuperLogin;
+  static const NoInternet = Paths.NoInterNet;
+  static const VERIFYOTP = Paths.VERIFYOTP;
+  static const DASHBOARD = Paths.DASHBOARD;
+  static const BOTTOM_BAR = Paths.BOTTOMBAR;
+  static const Payroll = Paths.PAYROLL;
 
-  static const AttendanceScreen = _Paths.ATTENDANCESCREEN;
-  static const AttendanceSummary = _Paths.ATTENDANCESUMMARY;
-  static const AttendanceDetail = _Paths.ATTENDANCEDETAIL;
-  static const MispunchScreen = _Paths.MISPUNCHSCREEN;
+  static const AttendanceScreen = Paths.ATTENDANCESCREEN;
+  static const AttendanceSummary = Paths.ATTENDANCESUMMARY;
+  static const AttendanceDetail = Paths.ATTENDANCEDETAIL;
+  static const MispunchScreen = Paths.MISPUNCHSCREEN;
 
-  static const LeaveMainScreen = _Paths.LEAVEMAINSCREEN;
-  static const LeaveEntry = _Paths.LEAVEENTRY;
-  static const LeaveView = _Paths.LEAVEVIEW;
+  static const LeaveMainScreen = Paths.LEAVEMAINSCREEN;
+  static const LeaveEntry = Paths.LEAVEENTRY;
+  static const LeaveView = Paths.LEAVEVIEW;
 
-  static const OvertimeMainScreen = _Paths.OVERTIMEMAINSCREEN;
-  static const OvertimeEntry = _Paths.OVERTIMEENTRY;
-  static const OvertimeView = _Paths.OVERTIMEVIEW;
+  static const OvertimeMainScreen = Paths.OVERTIMEMAINSCREEN;
+  static const OvertimeEntry = Paths.OVERTIMEENTRY;
+  static const OvertimeView = Paths.OVERTIMEVIEW;
 
-  static const FORGOTPASSWORD = _Paths.FORGOTPASSWORD;
-  static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  static const FORGOTPASSWORD = Paths.FORGOTPASSWORD;
+  static const RESET_PASSWORD = Paths.RESET_PASSWORD;
 
-  static const LVOTApprovalScreen = _Paths.LVOTApprovalScreen;
-  static const LVListScreen = _Paths.LVListScreen;
-  static const OTListScreen = _Paths.OTListScreen;
+  static const LVOTApprovalScreen = Paths.LVOTApprovalScreen;
+  static const LVListScreen = Paths.LVListScreen;
+  static const OTListScreen = Paths.OTListScreen;
 
-  static const IPDDashboardScreen = _Paths.IPDDASHBOARDSCREEN;
-  static const IPDAdmittedPatients = _Paths.IPDADMITTEDPATIENTS;
+  static const IPDDashboardScreen = Paths.IPDDASHBOARDSCREEN;
+  static const IPDAdmittedPatients = Paths.IPDADMITTEDPATIENTS;
 }
 
-abstract class _Paths {
-  _Paths._();
+abstract class Paths {
+  Paths._();
   // static const SPLASH = '/splash';
   static const LOGIN = '/login';
   static const NoInterNet = '/noInternet';
