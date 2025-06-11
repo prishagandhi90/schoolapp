@@ -1470,7 +1470,12 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "mobileNo": mobileController.text.trim(), "password": passwordController.text.trim(), "formScreen": formScreenName};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "mobileNo": mobileController.text.trim(),
+        "password": passwordController.text.trim(),
+        "formScreen": formScreenName,
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseWebuselogin responseWebuselogin = ResponseWebuselogin.fromJson(jsonDecode(response));

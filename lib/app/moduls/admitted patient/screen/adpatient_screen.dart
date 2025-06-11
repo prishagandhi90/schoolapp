@@ -12,6 +12,7 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/dummy_file.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
@@ -364,6 +365,15 @@ class AdpatientScreen extends StatelessWidget {
                   controller: controller,
                   index: index,
                 );
+              } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser_InvReq.trim() != "") {
+                Get.to(() => DummyScreen())!.then((value) async {
+                  final controller = Get.put(InvestRequisitController());
+                  await controller.resetForm();
+                  hideBottomBar.value = false;
+
+                  var dashboardController = Get.put(DashboardController());
+                  await dashboardController.getDashboardDataUsingToken();
+                });
               }
             },
             child: Card(
