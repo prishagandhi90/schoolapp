@@ -10,15 +10,17 @@ import 'package:emp_app/app/moduls/common/module.dart';
 import 'package:emp_app/app/moduls/dashboard/model/profiledata_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
+import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:emp_app/main.dart';
 import 'package:emp_app/my_navigator_observer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController {
-  String tokenNo = '', loginId = '', empId = '';
+  String tokenNo = '', loginId = '', empId = '', firebaseId = '';
 
   RxBool isLoading = true.obs;
   late List<Profiletable> profiletable = [];
@@ -40,6 +42,7 @@ class DashboardController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(Duration.zero, () async {
+      await getDeviceToken();
       await getDashboardDataUsingToken();
       await fetchModuleRights();
       hideBottomBar.value = false;
@@ -50,6 +53,18 @@ class DashboardController extends GetxController {
     // fetchModuleRights();
     // hideBottomBar.value = false;
     // update();
+  }
+
+  Future<void> getDeviceToken() async {
+    final OtpController otpController = Get.put(OtpController());
+    if (otpController.deviceTok.isEmpty) {
+      await FirebaseMessaging.instance.requestPermission();
+      final token = await FirebaseMessaging.instance.getToken();
+      if (token != null) {
+        otpController.deviceTok = token;
+        firebaseId = token;
+      }
+    }
   }
 
 // Module access rights ko fetch karta hai backend se
@@ -295,7 +310,7 @@ class DashboardController extends GetxController {
       String loginId = prefs.getString(AppString.keyLoginId) ?? '';
 
       if (token.isNotEmpty && loginId.isNotEmpty) {
-        var jsonbodyObj = {"loginId": loginId};
+        var jsonbodyObj = {"loginId": loginId, "FirebaseId": firebaseId};
         String url = ConstApiUrl.empGetDashboardListAPI;
         final ApiController apiController = Get.put(ApiController());
         var decodedResp = await apiController.parseJsonBody(url, token, jsonbodyObj);

@@ -82,15 +82,15 @@ class LoginController extends GetxController {
     isLoadingLogin = true;
     update();
     try {
-      if (withPaasword) {
-        final OtpController otpController = Get.put(OtpController());
-        if (otpController.deviceTok.isEmpty) {
-          await FirebaseMessaging.instance.requestPermission();
-          final token = await FirebaseMessaging.instance.getToken();
-          if (token != null) {
-            otpController.deviceTok = token;
-          }
+      final OtpController otpController = Get.put(OtpController());
+      if (otpController.deviceTok.isEmpty) {
+        await FirebaseMessaging.instance.requestPermission();
+        final token = await FirebaseMessaging.instance.getToken();
+        if (token != null) {
+          otpController.deviceTok = token;
         }
+      }
+      if (withPaasword) {
         otpController.numberController.text = numberController.text;
         update();
         String isValidLogin = "false";
