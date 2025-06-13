@@ -88,8 +88,7 @@ class BottomBarView extends GetView<BottomBarController> {
                       controller.update();
                       return;
                     }
-                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) &&
-                      (index == 0 || index == 1 || index == 3 || index == 4)) {
+                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) && (index == 0 || index == 1 || index == 3 || index == 4)) {
                     controller.persistentController.value.index = 0;
                     controller.currentIndex.value = 0;
                     controller.update();

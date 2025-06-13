@@ -32,6 +32,13 @@ class InvestRequisitScreen extends StatelessWidget {
               backgroundColor: AppColor.white,
               title: Text(AppString.investigationrequisition, style: AppStyle.primaryplusw700),
               centerTitle: true,
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context); // UI ko refresh karna
+                    // Get.back();
+                    // Get.offNamed(Paths.IPDDASHBOARDSCREEN);
+                  },
+                  icon: Icon(Icons.arrow_back_ios, color: AppColor.black)),
             ),
             body: SingleChildScrollView(
               child: Padding(
@@ -60,9 +67,7 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
-                              ? controller.nameController
-                              : nameController;
+                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
@@ -120,18 +125,13 @@ class InvestRequisitScreen extends StatelessWidget {
                             flex: 6,
                             child: CustomDropdown(
                               text: AppString.investigationType,
-                              textStyle: TextStyle(
-                                  color: AppColor.black.withOpacity(0.4),
-                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                  fontSize: getDynamicHeight(size: 0.015)),
+                              textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--'
-                                          ? AppColor.red
-                                          : AppColor.black),
+                                  border:
+                                      Border.all(color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--' ? AppColor.red : AppColor.black),
                                   borderRadius: BorderRadius.circular(0),
                                   color: AppColor.white,
                                 ),
@@ -279,10 +279,7 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                       child: CustomDropdown(
                         text: AppString.selectServicegroup,
-                        textStyle: TextStyle(
-                            color: AppColor.black.withOpacity(0.4),
-                            fontFamily: CommonFontStyle.plusJakartaSans,
-                            fontSize: getDynamicHeight(size: 0.015)),
+                        textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),
@@ -445,11 +442,16 @@ class InvestRequisitScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (controller.ipdNo == '') {
-                          Get.snackbar(AppString.error, AppString.plzselectavalidpatient,
-                              duration: Duration(seconds: 5),
-                              snackPosition: SnackPosition.TOP,
-                              backgroundColor: AppColor.red.withOpacity(0.8),
-                              colorText: AppColor.white);
+                          Get.snackbar(
+                            AppString.error,
+                            AppString.plzselectavalidpatient,
+                            duration: Duration(seconds: 3),
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: AppColor.red.withOpacity(0.8),
+                            colorText: AppColor.white,
+                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 👈 yahan padding/margin
+                            borderRadius: 10,
+                          );
                           return;
                         }
                         if (controller.isHistorySheetOpen) return;

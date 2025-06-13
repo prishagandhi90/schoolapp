@@ -42,6 +42,49 @@ class BottomBarController extends GetxController {
     update();
   }
 
+  // Widget getHomeTab() {
+  //   if (isPharmacyHome.value) return PharmacyScreen();
+  //   if (isIPDHome.value) return IpdDashboardScreen();
+  //   if (isPayrollHome.value) return PayrollScreen();
+  //   return Dashboard1Screen();
+  // }
+
+  Widget getHomeTab() {
+    if (isPharmacyHome.value) {
+      print("➡️ Loading PharmacyScreen");
+      return PharmacyScreen();
+    }
+    if (isIPDHome.value) {
+      print("➡️ Loading IpdDashboardScreen");
+      return IpdDashboardScreen();
+    }
+    if (isPayrollHome.value) {
+      print("➡️ Loading PayrollScreen");
+      return PayrollScreen();
+    }
+    print("➡️ Loading Default Dashboard1Screen");
+    return Dashboard1Screen();
+  }
+
+  // List<Widget> buildScreens() {
+  //   return [
+  //     // First tab switches dynamically based on flags
+  //     Navigator(
+  //       key: Get.nestedKey(1),
+  //       onGenerateRoute: (settings) {
+  //         return MaterialPageRoute(
+  //           builder: (_) => getHomeTab(), // isPharmacyHome/IPDHome check
+  //           settings: RouteSettings(name: 'DynamicHome'),
+  //         );
+  //       },
+  //     ),
+  //     AttendanceScreen(),
+  //     Dashboard1Screen(),
+  //     LeaveMainScreen(),
+  //     OvertimeMainScreen(),
+  //   ];
+  // }
+
   List<Widget> buildScreens() {
     return [
       // First tab switches dynamically based on flags
@@ -162,8 +205,7 @@ class BottomBarController extends GetxController {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImage.home,
-                  color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
+              Image.asset(AppImage.home, color: AppColor.black, height: getDynamicHeight(size: 0.034), width: getDynamicHeight(size: 0.034)),
               SizedBox(height: getDynamicHeight(size: 0.006)),
               Text(
                 AppString.home,

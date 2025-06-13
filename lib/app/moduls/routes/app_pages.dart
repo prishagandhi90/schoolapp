@@ -79,30 +79,30 @@ class AppPages {
 
   static String getInitialRoute(bool isLoggedIn, bool isForceUpdate) {
     if (isForceUpdate) {
-      return _Paths.Force_update;
+      return Paths.Force_update;
     } else {
-      return isLoggedIn ? _Paths.BOTTOMBAR : _Paths.LOGIN;
+      return isLoggedIn ? Paths.BOTTOMBAR : Paths.LOGIN;
     }
   }
 
   static final routes = [
     GetPage(
-      name: _Paths.NoInterNet,
+      name: Paths.NoInterNet,
       page: () => const NoInternetView(),
       binding: NoInternetBinding(),
     ),
     GetPage(
-      name: _Paths.LOGIN,
+      name: Paths.LOGIN,
       page: () => const LoginScreen(),
       binding: LoginBinding(),
     ),
     GetPage(
-      name: _Paths.Force_update,
+      name: Paths.Force_update,
       page: () => ForceUpdateScreen(),
       binding: ForceUpdateBinding(),
     ),
     GetPage(
-      name: _Paths.VERIFYOTP,
+      name: Paths.VERIFYOTP,
       // page: () => const OtpScreen(),
       page: () {
         // You can retrieve parameters from the route here
@@ -116,116 +116,116 @@ class AppPages {
       binding: VerifyotpBinding(),
     ),
     GetPage(
-      name: _Paths.DASHBOARD,
+      name: Paths.DASHBOARD,
       page: () => Dashboard1Screen(),
       binding: DashboardBinding(),
     ),
     GetPage(
-      name: _Paths.BOTTOMBAR,
+      name: Paths.BOTTOMBAR,
       page: () => BottomBarView(),
       binding: BottomBarBinding(),
     ),
     GetPage(
-      name: _Paths.PAYROLL,
+      name: Paths.PAYROLL,
       page: () => PayrollScreen(),
       binding: PayrollBinding(),
     ),
     GetPage(
-      name: _Paths.ATTENDANCESCREEN,
+      name: Paths.ATTENDANCESCREEN,
       page: () => AttendanceScreen(),
       binding: AttendanceScreenBinding(),
     ),
     GetPage(
-      name: _Paths.ATTENDANCESUMMARY,
+      name: Paths.ATTENDANCESUMMARY,
       page: () => const SummaryScreen(),
       binding: AttendanceSummaryBinding(),
     ),
     GetPage(
-      name: _Paths.ATTENDANCEDETAIL,
+      name: Paths.ATTENDANCEDETAIL,
       page: () => const DetailsScreen(),
       binding: AttendanceDetailBinding(),
     ),
     GetPage(
-      name: _Paths.MISPUNCHSCREEN,
+      name: Paths.MISPUNCHSCREEN,
       page: () => const MispunchScreen(),
       binding: MispunchBinding(),
     ),
     GetPage(
-      name: _Paths.LEAVEMAINSCREEN,
+      name: Paths.LEAVEMAINSCREEN,
       page: () => LeaveMainScreen(),
       binding: LeaveMainScreenBinding(),
     ),
     GetPage(
-      name: _Paths.LEAVEENTRY,
+      name: Paths.LEAVEENTRY,
       page: () => LeaveScreen(),
       binding: LeaveFormBinding(),
     ),
     GetPage(
-      name: _Paths.LEAVEVIEW,
+      name: Paths.LEAVEVIEW,
       page: () => const LeaveViewScreen(),
       binding: LeaveViewBinding(),
     ),
     GetPage(
-      name: _Paths.OVERTIMEMAINSCREEN,
+      name: Paths.OVERTIMEMAINSCREEN,
       page: () => OvertimeMainScreen(),
       binding: OvertimeMainScreenBinding(),
     ),
     GetPage(
-      name: _Paths.OVERTIMEENTRY,
+      name: Paths.OVERTIMEENTRY,
       page: () => OtScreen(),
       binding: OvertimeFormBinding(),
     ),
     GetPage(
-      name: _Paths.OVERTIMEVIEW,
+      name: Paths.OVERTIMEVIEW,
       page: () => const OvertimeViewScreen(),
       binding: OvertimeViewBinding(),
     ),
     GetPage(
-      name: _Paths.RESET_PASSWORD,
+      name: Paths.RESET_PASSWORD,
       page: () => const ResetpassScreen(),
       binding: ResetPasswordBinding(),
     ),
     GetPage(
-      name: _Paths.FORGOTPASSWORD,
+      name: Paths.FORGOTPASSWORD,
       page: () => const ForgotpassScreen(
         mobileNumber: '',
       ),
       binding: ForgotpasswordBinding(),
     ),
     GetPage(
-      name: _Paths.SuperLogin,
+      name: Paths.SuperLogin,
       page: () => const SuperloginScreen(
         mobileNo: '',
       ),
       binding: SuperLoginBinding(),
     ),
     GetPage(
-      name: _Paths.LVOTApprovalScreen,
+      name: Paths.LVOTApprovalScreen,
       page: () => const LvotapprovalScreen(),
       binding: lvot_appr_screen_Binding(),
     ),
     GetPage(
-      name: _Paths.LVListScreen,
+      name: Paths.LVListScreen,
       page: () => LvList(),
       binding: lv_screen_Binding(),
     ),
     GetPage(
-      name: _Paths.OTListScreen,
+      name: Paths.OTListScreen,
       page: () => const OtlistScreen(),
       binding: otList_screen_Binding(),
     ),
     GetPage(
-      name: _Paths.IPDDASHBOARDSCREEN,
+      name: Paths.IPDDASHBOARDSCREEN,
       page: () => IpdDashboardScreen(),
       binding: IPDDashboardBinding(),
     ),
     GetPage(
-      name: _Paths.IPDADMITTEDPATIENTS,
+      name: Paths.IPDADMITTEDPATIENTS,
       page: () => AdpatientScreen(),
       binding: AdmittedPatientBinding(),
     ),
     GetPage(
-      name: _Paths.LABREPORTSSCREEN,
+      name: Paths.LABREPORTSSCREEN,
       page: () {
         // You can retrieve parameters from the route here
         final arguments = Get.arguments; // This will get any arguments passed
@@ -239,32 +239,32 @@ class AppPages {
       binding: LabReportsViewBinding(),
     ),
     GetPage(
-      name: _Paths.LABSUMMARYSCREEN,
+      name: Paths.LABSUMMARYSCREEN,
       page: () => LabSummaryScreen(),
       binding: LabSummaryScreenBinding(),
     ),
     GetPage(
-      name: _Paths.VOICESCREEN,
+      name: Paths.VOICESCREEN,
       page: () => VoiceScreen(),
       binding: VoiceScreenBinding(),
     ),
     GetPage(
-      name: _Paths.INVESTIGATIONREQUISITIONSCREEN,
+      name: Paths.INVESTIGATIONREQUISITIONSCREEN,
       page: () => InvestRequisitScreen(),
       binding: InvestRequisitScreenBinding(),
     ),
     GetPage(
-      name: _Paths.INVESTIGATIONREQUISITIONSERVICE,
+      name: Paths.INVESTIGATIONREQUISITIONSERVICE,
       page: () => InvestServiceScreen(),
       binding: InvestServiceScreenBinding(),
     ),
     GetPage(
-      name: _Paths.FILTERSCREEN,
+      name: Paths.FILTERSCREEN,
       page: () => FilterScreen(),
       binding: FilterScreenBinding(),
     ),
     GetPage(
-      name: _Paths.FILTERTAGSCREEN,
+      name: Paths.FILTERTAGSCREEN,
       page: () {
         // You can retrieve parameters from the route here
         final arguments = Get.arguments; // This will get any arguments passed
@@ -275,22 +275,22 @@ class AppPages {
       binding: FilterTagScreenBinding(),
     ),
     GetPage(
-      name: _Paths.NOTIFICATIONSCREEN,
+      name: Paths.NOTIFICATIONSCREEN,
       page: () => NotificationScreen(),
       binding: NotificationScreenBinding(),
     ),
     GetPage(
-      name: _Paths.PHARMACYSCREEN,
+      name: Paths.PHARMACYSCREEN,
       page: () => PharmacyScreen(),
       binding: PharmacyScreenBinding(),
     ),
     GetPage(
-      name: _Paths.PRESCRIPTIONDETAILSSCREEN,
+      name: Paths.PRESCRIPTIONDETAILSSCREEN,
       page: () => PresdetailsScreen(),
       binding: PresdetailsScreenBinding(),
     ),
     GetPage(
-      name: _Paths.PRESCRIPTIONVIEWERSCREEN,
+      name: Paths.PRESCRIPTIONVIEWERSCREEN,
       page: () => PresviewerScreen(),
       binding: PresviewerScreenBinding(),
     )

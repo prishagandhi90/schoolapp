@@ -245,12 +245,11 @@ class IpdDashboardScreen extends StatelessWidget {
                             }
                           }
 
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: AdpatientScreen(),
-                            withNavBar: false,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          ).then((value) async {
+                          controller.FromScreen_Redirection = "";
+                          controller.WebLoginUser_InvReq = "";
+                          controller.update();
+
+                          Get.to(() => AdpatientScreen())!.then((value) async {
                             final controller = Get.put(AdPatientController());
                             controller.sortBySelected = -1;
                             await controller.resetForm();
@@ -262,6 +261,24 @@ class IpdDashboardScreen extends StatelessWidget {
                             var dashboardController = Get.put(DashboardController());
                             await dashboardController.getDashboardDataUsingToken();
                           });
+
+                          // PersistentNavBarNavigator.pushNewScreen(
+                          //   context,
+                          //   screen: AdpatientScreen(),
+                          //   withNavBar: false,
+                          //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          // ).then((value) async {
+                          //   final controller = Get.put(AdPatientController());
+                          //   controller.sortBySelected = -1;
+                          //   await controller.resetForm();
+                          //   await controller.fetchData();
+                          //   final bottomBarController = Get.find<BottomBarController>();
+                          //   bottomBarController.currentIndex.value = 0;
+                          //   bottomBarController.isIPDHome.value = true;
+                          //   hideBottomBar.value = false;
+                          //   var dashboardController = Get.put(DashboardController());
+                          //   await dashboardController.getDashboardDataUsingToken();
+                          // });
                           controller.isAdmittedPatients_Navigating.value = false;
                         },
                       ),
@@ -289,6 +306,10 @@ class IpdDashboardScreen extends StatelessWidget {
                             }
                           }
 
+                          controller.FromScreen_Redirection = "";
+                          controller.WebLoginUser_InvReq = "";
+                          controller.update();
+
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();
                           // ⬇️ Call the dialog function directly
@@ -300,6 +321,7 @@ class IpdDashboardScreen extends StatelessWidget {
                             "",
                             "",
                             "",
+                            fromScreenRedirection: "INVESTIGATION REQUISITION",
                           );
 
                           // ⬇️ Ye tab chalega jab dialog band ho jayega
@@ -310,58 +332,54 @@ class IpdDashboardScreen extends StatelessWidget {
                           controller.isInvestigationReq_Navigating.value = false;
                         },
                       ),
-                      _buildPatientCard(
-                        title: 'Medication',
-                        // count: controller.patientsData.length,
-                        // context: context,
-                        // index: index,
-                        imagePath: AppImage.adpatient,
-                        onTap: () {
-                          if (controller.isAdmittedPatients_Navigating.value) return;
-                          controller.isAdmittedPatients_Navigating.value = true;
+                      // _buildPatientCard(
+                      //   title: 'Medication',
+                      //   // count: controller.patientsData.length,
+                      //   // context: context,
+                      //   // index: index,
+                      //   imagePath: AppImage.adpatient,
+                      //   onTap: () async {
+                      //     if (controller.isInvestigationReq_Navigating.value) return;
+                      //     controller.isInvestigationReq_Navigating.value = true;
 
-                          if (controller.screenRightsTable.isNotEmpty) {
-                            if (controller.screenRightsTable[0].rightsYN == "N") {
-                              controller.isAdmittedPatients_Navigating.value = false;
-                              Get.snackbar(
-                                "You don't have access to this screen",
-                                '',
-                                colorText: AppColor.white,
-                                backgroundColor: AppColor.black,
-                                duration: const Duration(seconds: 1),
-                              );
-                              return;
-                            }
-                          }
+                      //     if (controller.screenRightsTable.isNotEmpty) {
+                      //       if (controller.screenRightsTable[1].rightsYN == "N") {
+                      //         controller.isInvestigationReq_Navigating.value = false;
+                      //         Get.snackbar(
+                      //           "You don't have access to this screen",
+                      //           '',
+                      //           colorText: AppColor.white,
+                      //           backgroundColor: AppColor.black,
+                      //           duration: const Duration(seconds: 1),
+                      //         );
+                      //         return;
+                      //       }
+                      //     }
 
-                          PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: AdpatientScreen(),
-                            withNavBar: false,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          ).then((value) async {
-                            final controller = Get.put(AdPatientController());
-                            controller.sortBySelected = -1;
-                            await controller.resetForm();
-                            await controller.fetchData();
-                            final bottomBarController = Get.find<BottomBarController>();
-                            bottomBarController.currentIndex.value = 0;
-                            bottomBarController.isIPDHome.value = true;
-                            hideBottomBar.value = false;
-                            var dashboardController = Get.put(DashboardController());
-                            await dashboardController.getDashboardDataUsingToken();
-                          });
-                          controller.isAdmittedPatients_Navigating.value = false;
-                        },
-                      ),
+                      //     controller.FromScreen_Redirection = "";
+                      //     controller.WebLoginUser_InvReq = "";
+                      //     controller.update();
 
-                      //     final bottomBarController = Get.find<BottomBarController>();
-                      //     bottomBarController.currentIndex.value = 0;
-                      //     bottomBarController.isIPDHome.value = true;
-                      //     hideBottomBar.value = false;
+                      //     final envReqController = Get.put(InvestRequisitController());
+                      //     await envReqController.resetForm();
+                      //     // ⬇️ Call the dialog function directly
 
-                      //     var dashboardController = Get.put(DashboardController());
-                      //     await dashboardController.getDashboardDataUsingToken();
+                      //     await envReqController.loginAlertDialog(
+                      //       context,
+                      //       "MEDICATION SHEET",
+                      //       "",
+                      //       "",
+                      //       "",
+                      //       fromScreen: "MEDICATION",
+                      //       fromScreenRedirection: "MEDICATION SHEET",
+                      //     );
+
+                      //     // ⬇️ Ye tab chalega jab dialog band ho jayega
+                      //     // final controller = Get.put(AdPatientController());
+                      //     controller.sortBySelected = -1;
+                      //     await controller.resetForm();
+                      //     await controller.fetchData();
+                      //     controller.isInvestigationReq_Navigating.value = false;
                       //   },
                       // ),
                     ],

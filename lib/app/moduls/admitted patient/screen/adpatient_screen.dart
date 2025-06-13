@@ -12,17 +12,24 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/dummy_file.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
+import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
+import 'package:emp_app/my_navigator_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class AdpatientScreen extends StatelessWidget {
   AdpatientScreen({super.key});
-  final adPatientController = Get.find<AdPatientController>();
-  final dashboardController = Get.find<DashboardController>();
+  // final adPatientController = Get.find<AdPatientController>() ?? Get.put(AdPatientController());
+  final adPatientController = Get.isRegistered<AdPatientController>() ? Get.find<AdPatientController>() : Get.put(AdPatientController());
+  // final dashboardController = Get.find<DashboardController>();
+  final dashboardController = Get.isRegistered<DashboardController>() ? Get.find<DashboardController>() : Get.put(DashboardController());
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -113,7 +120,24 @@ class AdpatientScreen extends StatelessWidget {
 
                     // **Fresh Data fetch karna**
                     controller.fetchDeptwisePatientList(); // Fetch data from server
-                    Navigator.pop(context); // UI ko refresh karna
+                    // Navigator.pop(context); // UI ko refresh karna
+                    // Get.back();
+                    // Get.offNamed(Paths.IPDDASHBOARDSCREEN);
+                    Get.until((route) => route.settings.name == Paths.BOTTOMBAR);
+                    Get.toNamed(Paths.IPDDASHBOARDSCREEN);
+                    // if (Get.previousRoute == Paths.IPDDASHBOARDSCREEN) {
+                    //   Get.back();
+                    // } else {
+                    //   Get.toNamed(Paths.IPDDASHBOARDSCREEN);
+                    // }
+                    List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
+                    int i = 1;
+                    for (var route in stack) {
+                      print("Screen ${i}: ${route.settings.name}");
+                      i++;
+                    }
+                    // Get.until((route) => route.settings.name == Paths.DASHBOARD);
+                    // Get.toNamed(Paths.IPDDASHBOARDSCREEN);
                   },
                   icon: Icon(Icons.arrow_back_ios, color: AppColor.black)),
             ),
@@ -284,307 +308,414 @@ class AdpatientScreen extends StatelessWidget {
     );
   }
 
+  void TapToRedirectToInvestigationScreen({
+    required AdPatientController controller,
+    required int index,
+  }) async {
+    final investRequisitController = Get.put(InvestRequisitController());
+
+    String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+        '${controller.filterpatientsData[index].ipdNo} | '
+        '${controller.filterpatientsData[index].uhid}';
+
+    if (patientDetails.isNotEmpty && controller.filterpatientsData[index].ipdNo!.isNotEmpty) {
+      investRequisitController.fromAdmittedScreen = true;
+      investRequisitController.nameController.text = patientDetails;
+      investRequisitController.ipdNo = controller.filterpatientsData[index].ipdNo!;
+      investRequisitController.uhid = controller.filterpatientsData[index].uhid!;
+    } else {
+      investRequisitController.fromAdmittedScreen = false;
+      investRequisitController.nameController.text = '';
+      investRequisitController.ipdNo = '';
+      investRequisitController.uhid = '';
+    }
+
+    investRequisitController.update();
+
+    // PersistentNavBarNavigator.pushNewScreen(
+    //   Get.context!,
+    //   screen: InvestRequisitScreen(),
+    //   withNavBar: false,
+    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+    // ).then((value) async {
+    //   final controller = Get.put(InvestRequisitController());
+    //   await controller.resetForm();
+
+    //   // final bottomBarController = Get.find<BottomBarController>();
+    //   // bottomBarController.currentIndex.value = 0;
+    //   // bottomBarController.isIPDHome.value = true;
+    //   hideBottomBar.value = false;
+
+    //   var dashboardController = Get.put(DashboardController());
+    //   await dashboardController.getDashboardDataUsingToken();
+    // });
+
+    Get.to(() => InvestRequisitScreen())!.then((value) async {
+      final controller = Get.put(InvestRequisitController());
+      await controller.resetForm();
+
+      // final bottomBarController = Get.find<BottomBarController>();
+      // bottomBarController.currentIndex.value = 0;
+      // bottomBarController.isIPDHome.value = true;
+      hideBottomBar.value = false;
+
+      var dashboardController = Get.put(DashboardController());
+      await dashboardController.getDashboardDataUsingToken();
+    });
+  }
+
+  void TapToRedirectToInvestigationHistory({
+    required AdPatientController controller,
+    required int index,
+  }) async {
+    final investHistoryController = Get.put(InvestRequisitController());
+
+    if (investHistoryController.isHistorySheetOpen) return;
+    investHistoryController.isHistorySheetOpen = true;
+    await investHistoryController.fetchGetHistoryList(controller.filterpatientsData[index].ipdNo!);
+    await investHistoryController.HistoryBottomSheet();
+    investHistoryController.isHistorySheetOpen = false;
+    investHistoryController.update();
+  }
+
   Widget _buildPatientCard(int index, BuildContext context, AdPatientController controller) {
     return controller.filterpatientsData.isNotEmpty
-        ? Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.primaryColor,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+        ? InkWell(
+            onTap: () async {
+              if (controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" && controller.WebLoginUser_InvReq.trim() != "") {
+                TapToRedirectToInvestigationScreen(
+                  controller: controller,
+                  index: index,
+                );
+              } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser_InvReq.trim() != "") {
+                Get.to(() => DummyScreen())!.then((value) async {
+                  final controller = Get.put(InvestRequisitController());
+                  await controller.resetForm();
+                  hideBottomBar.value = false;
+
+                  var dashboardController = Get.put(DashboardController());
+                  await dashboardController.getDashboardDataUsingToken();
+                });
+              }
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.primaryColor,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          controller.filterpatientsData[index].bedNo.toString(),
+                          style: TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          controller.filterpatientsData[index].ipdNo.toString(),
+                          style: TextStyle(color: AppColor.white),
+                        ),
+                        Text(
+                          controller.filterpatientsData[index].floor.toString(),
+                          style: TextStyle(color: AppColor.white),
+                        ),
+                      ],
+                    ),
                   ),
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        controller.filterpatientsData[index].bedNo.toString(),
-                        style: TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        controller.filterpatientsData[index].ipdNo.toString(),
-                        style: TextStyle(color: AppColor.white),
-                      ),
-                      Text(
-                        controller.filterpatientsData[index].floor.toString(),
-                        style: TextStyle(color: AppColor.white),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8, top: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              controller.filterpatientsData[index].patientName.toString(),
-                              maxLines: 2,
-                              overflow: TextOverflow.visible,
-                              style: TextStyle(
-                                fontSize: Sizes.px16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColor.primaryColor,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8, top: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                controller.filterpatientsData[index].patientName.toString(),
+                                maxLines: 2,
                                 overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                  fontSize: Sizes.px16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColor.primaryColor,
+                                  overflow: TextOverflow.visible,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: getDynamicHeight(size: 0.010)),
-                          GestureDetector(
-                            onTap: () {
-                              controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                              controller.uhid = controller.filterpatientsData[index].uhid ?? '';
-                              controller.patientName = controller.filterpatientsData[index].patientName ?? '';
-                              controller.bedNo = controller.filterpatientsData[index].bedNo ?? '';
-                              controller.update();
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: VoiceScreen(),
-                                withNavBar: false,
-                                pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                              );
-                            },
-                            child: const Icon(Icons.mic_none_rounded),
-                          ),
-                          SizedBox(width: getDynamicHeight(size: 0.010)),
-                          SizedBox(
-                            width: getDynamicHeight(size: 0.040),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton2<String>(
-                                  customButton: Icon(Icons.menu, color: AppColor.black),
-                                  items: [
-                                    _buildMenuItem("Lab Summary"),
-                                    _buildDivider(),
-                                    _buildMenuItem("Lab Reports"),
-                                    _buildDivider(),
-                                    _buildMenuItem("Investigation Requisition"),
-                                    _buildDivider(),
-                                    _buildMenuItem("Investigation History"),
-                                  ],
-                                  onChanged: (String? value) async {
-                                    if (value == "Lab Summary") {
-                                      // Get.dialog(
-                                      //   Center(child: ProgressWithIcon()),
-                                      //   barrierDismissible: false,
-                                      // );
-                                      controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                                      controller.uhid = controller.filterpatientsData[index].uhid ?? '';
-                                      controller.update();
+                            SizedBox(width: getDynamicHeight(size: 0.010)),
+                            GestureDetector(
+                              onTap: () {
+                                controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                                controller.uhid = controller.filterpatientsData[index].uhid ?? '';
+                                controller.patientName = controller.filterpatientsData[index].patientName ?? '';
+                                controller.bedNo = controller.filterpatientsData[index].bedNo ?? '';
+                                controller.update();
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: VoiceScreen(),
+                                  withNavBar: false,
+                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                );
+                              },
+                              child: const Icon(Icons.mic_none_rounded),
+                            ),
+                            SizedBox(width: getDynamicHeight(size: 0.010)),
+                            SizedBox(
+                              width: getDynamicHeight(size: 0.040),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton2<String>(
+                                    customButton: Icon(Icons.menu, color: AppColor.black),
+                                    items: [
+                                      _buildMenuItem("Lab Summary"),
+                                      _buildDivider(),
+                                      _buildMenuItem("Lab Reports"),
+                                      _buildDivider(),
+                                      _buildMenuItem("Investigation Requisition"),
+                                      _buildDivider(),
+                                      _buildMenuItem("Investigation History"),
+                                    ],
+                                    onChanged: (String? value) async {
+                                      if (value == "Lab Summary") {
+                                        // Get.dialog(
+                                        //   Center(child: ProgressWithIcon()),
+                                        //   barrierDismissible: false,
+                                        // );
+                                        controller.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                                        controller.uhid = controller.filterpatientsData[index].uhid ?? '';
+                                        controller.update();
 
-                                      Future.microtask(() async {
-                                        controller.fetchsummarylabdata();
-                                        await controller.resetForm();
-                                      });
-                                      PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: LabSummaryScreen(),
-                                        withNavBar: false,
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      ).then((value) async {
                                         Future.microtask(() async {
+                                          controller.fetchsummarylabdata();
+                                          await controller.resetForm();
+                                        });
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: LabSummaryScreen(),
+                                          withNavBar: false,
+                                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                        ).then((value) async {
+                                          Future.microtask(() async {
+                                            if (controller.sortBySelected != null) {
+                                              await controller.getSortData(isLoader: true);
+                                              return;
+                                            }
+                                            await controller.fetchDeptwisePatientList();
+                                          });
+                                        });
+                                      } else if (value == "Lab Report") {
+                                        var labreportsController = Get.put(LabReportsController());
+                                        labreportsController.showSwipe = true;
+                                        hideBottomBar.value = true;
+                                        labreportsController.labReportsList = [];
+                                        labreportsController.allReportsList = [];
+                                        labreportsController.allDatesList = [];
+                                        labreportsController.update();
+                                        labreportsController.getLabReporst(
+                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                          uhidNo: controller.filterpatientsData[index].uhid ?? '',
+                                        );
+                                        labreportsController.commonList = [];
+                                        labreportsController.dataContain = [];
+                                        labreportsController.scrollLister();
+                                        await PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: LabReportsView(
+                                            bedNumber: controller.filterpatientsData[index].bedNo ?? '',
+                                            patientName: controller.filterpatientsData[index].patientName ?? "",
+                                            ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
+                                            uhidNo: controller.filterpatientsData[index].uhid ?? '',
+                                          ),
+                                          withNavBar: false,
+                                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                        ).then((value) async {
                                           if (controller.sortBySelected != null) {
                                             await controller.getSortData(isLoader: true);
                                             return;
                                           }
                                           await controller.fetchDeptwisePatientList();
                                         });
-                                      });
-                                    } else if (value == "Lab Report") {
-                                      var labreportsController = Get.put(LabReportsController());
-                                      labreportsController.showSwipe = true;
-                                      hideBottomBar.value = true;
-                                      labreportsController.labReportsList = [];
-                                      labreportsController.allReportsList = [];
-                                      labreportsController.allDatesList = [];
-                                      labreportsController.update();
-                                      labreportsController.getLabReporst(
-                                        ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                        uhidNo: controller.filterpatientsData[index].uhid ?? '',
-                                      );
-                                      labreportsController.commonList = [];
-                                      labreportsController.dataContain = [];
-                                      labreportsController.scrollLister();
-                                      await PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        screen: LabReportsView(
-                                          bedNumber: controller.filterpatientsData[index].bedNo ?? '',
-                                          patientName: controller.filterpatientsData[index].patientName ?? "",
-                                          ipdNo: controller.filterpatientsData[index].ipdNo ?? '',
-                                          uhidNo: controller.filterpatientsData[index].uhid ?? '',
-                                        ),
-                                        withNavBar: false,
-                                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                      ).then((value) async {
-                                        if (controller.sortBySelected != null) {
-                                          await controller.getSortData(isLoader: true);
-                                          return;
-                                        }
-                                        await controller.fetchDeptwisePatientList();
-                                      });
-                                    } else if (value == "Investigation Requisition") {
-                                      if (controller.isInvestigationReq_Navigating.value) return;
-                                      controller.isInvestigationReq_Navigating.value = true;
+                                      } else if (value == "Investigation Requisition") {
+                                        if (controller.isInvestigationReq_Navigating.value) return;
+                                        controller.isInvestigationReq_Navigating.value = true;
 
-                                      if (controller.screenRightsTable.isNotEmpty) {
-                                        if (controller.screenRightsTable[1].rightsYN == "N") {
-                                          controller.isInvestigationReq_Navigating.value = false;
-                                          Get.snackbar(
-                                            "You don't have access to this screen",
-                                            '',
-                                            colorText: AppColor.white,
-                                            backgroundColor: AppColor.black,
-                                            duration: const Duration(seconds: 1),
+                                        if (controller.screenRightsTable.isNotEmpty) {
+                                          if (controller.screenRightsTable[1].rightsYN == "N") {
+                                            controller.isInvestigationReq_Navigating.value = false;
+                                            Get.snackbar(
+                                              "You don't have access to this screen",
+                                              '',
+                                              colorText: AppColor.white,
+                                              backgroundColor: AppColor.black,
+                                              duration: const Duration(seconds: 1),
+                                            );
+                                            return;
+                                          }
+                                        }
+
+                                        if ((controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" ||
+                                                controller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") &&
+                                            controller.WebLoginUser_InvReq.trim() != "") {
+                                          TapToRedirectToInvestigationScreen(
+                                            controller: controller,
+                                            index: index,
                                           );
-                                          return;
-                                        }
-                                      }
-
-                                      final investRequisitController = Get.put(InvestRequisitController());
-                                      String patientDetails = '${controller.filterpatientsData[index].patientName} | '
-                                          '${controller.filterpatientsData[index].ipdNo} | '
-                                          '${controller.filterpatientsData[index].uhid}';
-
-                                      // investRequisitController.mobileController.clear();
-                                      // investRequisitController.passwordController.clear();
-                                      await investRequisitController.resetForm();
-                                      investRequisitController.loginAlertDialog(
-                                        fromScreen: "INVESTIGATION REQUISITION",
-                                        context,
-                                        "INVESTIGATION REQUISITION",
-                                        patientDetails,
-                                        controller.filterpatientsData[index].ipdNo ?? "",
-                                        controller.filterpatientsData[index].uhid ?? "",
-                                      );
-                                      controller.isInvestigationReq_Navigating.value = false;
-                                    } else if (value == "Investigation History") {
-                                      if (controller.isInvestigationReq_Navigating.value) return;
-                                      controller.isInvestigationReq_Navigating.value = true;
-
-                                      if (controller.screenRightsTable.isNotEmpty) {
-                                        if (controller.screenRightsTable[1].rightsYN == "N") {
                                           controller.isInvestigationReq_Navigating.value = false;
-                                          Get.snackbar(
-                                            "You don't have access to this screen",
-                                            '',
-                                            colorText: AppColor.white,
-                                            backgroundColor: AppColor.black,
-                                            duration: const Duration(seconds: 1),
-                                          );
                                           return;
                                         }
+
+                                        final investRequisitController = Get.put(InvestRequisitController());
+                                        String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+                                            '${controller.filterpatientsData[index].ipdNo} | '
+                                            '${controller.filterpatientsData[index].uhid}';
+
+                                        await investRequisitController.resetForm();
+                                        investRequisitController.loginAlertDialog(
+                                          context,
+                                          "INVESTIGATION REQUISITION",
+                                          patientDetails,
+                                          controller.filterpatientsData[index].ipdNo ?? "",
+                                          controller.filterpatientsData[index].uhid ?? "",
+                                          fromScreen: "INVESTIGATION REQUISITION",
+                                          fromScreenRedirection: "ADMITTED PATIENTS",
+                                        );
+
+                                        controller.isInvestigationReq_Navigating.value = false;
+                                      } else if (value == "Investigation History") {
+                                        if (controller.isInvestigationReq_Navigating.value) return;
+                                        controller.isInvestigationReq_Navigating.value = true;
+
+                                        if (controller.screenRightsTable.isNotEmpty) {
+                                          if (controller.screenRightsTable[1].rightsYN == "N") {
+                                            controller.isInvestigationReq_Navigating.value = false;
+                                            Get.snackbar(
+                                              "You don't have access to this screen",
+                                              '',
+                                              colorText: AppColor.white,
+                                              backgroundColor: AppColor.black,
+                                              duration: const Duration(seconds: 1),
+                                            );
+                                            return;
+                                          }
+                                        }
+
+                                        if ((controller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") && controller.WebLoginUser_InvReq.trim() != "") {
+                                          TapToRedirectToInvestigationHistory(
+                                            controller: controller,
+                                            index: index,
+                                          );
+                                          controller.isInvestigationReq_Navigating.value = false;
+                                          return;
+                                        }
+
+                                        final investRequisitController = Get.put(InvestRequisitController());
+                                        String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+                                            '${controller.filterpatientsData[index].ipdNo} | '
+                                            '${controller.filterpatientsData[index].uhid}';
+
+                                        await investRequisitController.resetForm();
+                                        investRequisitController.loginAlertDialog(
+                                          context,
+                                          "INVESTIGATION HISTORY",
+                                          patientDetails,
+                                          controller.filterpatientsData[index].ipdNo ?? "",
+                                          controller.filterpatientsData[index].uhid ?? "",
+                                          fromScreen: "INVESTIGATION REQUISITION",
+                                          fromScreenRedirection: "ADMITTED PATIENTS",
+                                        );
+                                        controller.isInvestigationReq_Navigating.value = false;
                                       }
-
-                                      final investRequisitController = Get.put(InvestRequisitController());
-                                      String patientDetails = '${controller.filterpatientsData[index].patientName} | '
-                                          '${controller.filterpatientsData[index].ipdNo} | '
-                                          '${controller.filterpatientsData[index].uhid}';
-
-                                      // investRequisitController.mobileController.clear();
-                                      // investRequisitController.passwordController.clear();
-                                      await investRequisitController.resetForm();
-                                      // investRequisitController.HistoryBottomSheet();
-                                      investRequisitController.loginAlertDialog(
-                                        fromScreen: "INVESTIGATION REQUISITION",
-                                        context,
-                                        "INVESTIGATION HISTORY",
-                                        patientDetails,
-                                        controller.filterpatientsData[index].ipdNo ?? "",
-                                        controller.filterpatientsData[index].uhid ?? "",
-                                      );
-                                      controller.isInvestigationReq_Navigating.value = false;
-                                    }
-                                  },
-                                  dropdownStyleData: DropdownStyleData(
-                                    width: getDynamicHeight(size: 0.22), // 👈 wider dropdown dynamically
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: getDynamicHeight(size: 0.004),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                        getDynamicHeight(size: 0.007),
+                                    },
+                                    dropdownStyleData: DropdownStyleData(
+                                      width: getDynamicHeight(size: 0.22), // 👈 wider dropdown dynamically
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: getDynamicHeight(size: 0.004),
                                       ),
-                                      color: AppColor.white,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          getDynamicHeight(size: 0.007),
+                                        ),
+                                        color: AppColor.white,
+                                      ),
+                                      elevation: 4,
                                     ),
-                                    elevation: 4,
-                                  ),
-                                  menuItemStyleData: MenuItemStyleData(
-                                    height: getDynamicHeight(size: 0.020), // 👈 shorter item height dynamically
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.02),
-                                    ),
-                                  )),
+                                    menuItemStyleData: MenuItemStyleData(
+                                      height: getDynamicHeight(size: 0.020), // 👈 shorter item height dynamically
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: getDynamicHeight(size: 0.02),
+                                      ),
+                                    )),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                controller.filterpatientsData[index].admType.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: getDynamicHeight(size: 0.004),
-                              ),
-                              Text.rich(TextSpan(
-                                text: AppString.doa,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                children: [
-                                  TextSpan(
-                                    text: controller.filterpatientsData[index].doa.toString(),
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                              // Text(controller.filterpatientdata[index].doa.toString()),
-                            ],
-                          ),
-                          Spacer(), // 🟢 Yeh `referredDr` ko center lane me help karega
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center, // ✅ Yeh text ko center karega
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                controller.filterpatientsData[index].referredDr.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: getDynamicHeight(size: 0.004),
-                              ),
-                              Text.rich(TextSpan(
-                                text: AppString.totaldays,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                                children: [
-                                  TextSpan(
-                                    text: controller.filterpatientsData[index].totalDays.toString(),
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                              // Text(controller.filterpatientdata[index].totalDays.toString(), textAlign: TextAlign.center),
-                            ],
-                          ),
-                          Spacer(), // 🟢 Yeh dono columns ke beech equal space dega
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  controller.filterpatientsData[index].admType.toString(),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: getDynamicHeight(size: 0.004),
+                                ),
+                                Text.rich(TextSpan(
+                                  text: AppString.doa,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  children: [
+                                    TextSpan(
+                                      text: controller.filterpatientsData[index].doa.toString(),
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                                // Text(controller.filterpatientdata[index].doa.toString()),
+                              ],
+                            ),
+                            Spacer(), // 🟢 Yeh `referredDr` ko center lane me help karega
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center, // ✅ Yeh text ko center karega
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  controller.filterpatientsData[index].referredDr.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: getDynamicHeight(size: 0.004),
+                                ),
+                                Text.rich(TextSpan(
+                                  text: AppString.totaldays,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  children: [
+                                    TextSpan(
+                                      text: controller.filterpatientsData[index].totalDays.toString(),
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                                // Text(controller.filterpatientdata[index].totalDays.toString(), textAlign: TextAlign.center),
+                              ],
+                            ),
+                            Spacer(), // 🟢 Yeh dono columns ke beech equal space dega
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         : Center(

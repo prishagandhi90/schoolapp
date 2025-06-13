@@ -76,6 +76,8 @@ class AdPatientController extends GetxController {
   var isAdmittedPatients_Navigating = false.obs;
   var isInvestigationReq_Navigating = false.obs;
   List<ModuleScreenRights> screenRightsTable = [];
+  String FromScreen_Redirection = "";
+  String WebLoginUser_InvReq = "";
 
   @override
   void onInit() {
@@ -132,13 +134,7 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {
-        "loginId": loginId,
-        "prefixText": searchPrefix ?? "",
-        "orgs": selectedOrgsList,
-        "floors": selectedFloorsList,
-        "wards": selectedWardsList
-      };
+      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -496,7 +492,9 @@ class AdPatientController extends GetxController {
                                     sortBySelected = -1;
                                     await fetchDeptwisePatientList();
                                   } else {
-                                    Get.rawSnackbar(message: AppString.plzselectoptiontosort,);
+                                    Get.rawSnackbar(
+                                      message: AppString.plzselectoptiontosort,
+                                    );
                                   }
                                 },
                                 child: Text(
@@ -873,12 +871,23 @@ class AdPatientController extends GetxController {
         }
 
         // Navigator.pop(context);
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: AdpatientScreen(),
-          withNavBar: false,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ).then((value) async {
+        // PersistentNavBarNavigator.pushNewScreen(
+        //   context,
+        //   screen: AdpatientScreen(),
+        //   withNavBar: false,
+        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        // ).then((value) async {
+        //   final bottomBarController = Get.put(BottomBarController());
+        //   bottomBarController.currentIndex.value = -1;
+        //   bottomBarController.persistentController.value.index = 0;
+        //   bottomBarController.currentIndex.value = 0;
+        //   bottomBarController.isIPDHome.value = true;
+        //   hideBottomBar.value = true;
+        //   var dashboardController = Get.put(DashboardController());
+        //   await dashboardController.getDashboardDataUsingToken();
+        // });
+
+        Get.to(() => AdpatientScreen())!.then((value) async {
           final bottomBarController = Get.put(BottomBarController());
           bottomBarController.currentIndex.value = -1;
           bottomBarController.persistentController.value.index = 0;
@@ -915,12 +924,13 @@ class AdPatientController extends GetxController {
         await envReqController.resetForm();
         // ⬇️ Call the dialog function directly
         await envReqController.loginAlertDialog(
-          fromScreen: "INVESTIGATION REQUISITION",
           context,
           "INVESTIGATION REQUISITION",
           "",
           "",
           "",
+          fromScreen: "INVESTIGATION REQUISITION",
+          fromScreenRedirection: "INVESTIGATION REQUISITION",
         );
 
         // ⬇️ Ye tab chalega jab dialog band ho jayega
