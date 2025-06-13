@@ -27,11 +27,11 @@ class AppConst {
     {'image': AppImage.nabh, 'label': 'NABH'},
   ];
 
-  static const List<Map<String, dynamic>> payrolllist = [
-    {'image': 'assets/image/attendence.png', 'label': 'Attendance'},
-    {'image': 'assets/image/mispunch.png', 'label': 'Mispunch Info'},
-    {'image': 'assets/image/leave.png', 'label': 'Leave Entry'},
-    {'image': 'assets/image/overtime.png', 'label': 'Over Time'},
+  static  List<Map<String, dynamic>> payrolllist = [
+    {'image': AppImage.attendance, 'label': 'Attendance'},
+    {'image': AppImage.mispunch, 'label': 'Mispunch Info'},
+    {'image': AppImage.leave, 'label': 'Leave Entry'},
+    {'image': AppImage.overtime, 'label': 'Over Time'},
   ];
 
   static const List<Map<String, dynamic>> bottomview = [
@@ -41,23 +41,23 @@ class AppConst {
     {'icon': Icons.dashboard, 'label': 'Dashboard'},
   ];
 
-  static const List<Map<String, dynamic>> payrollgrid = [
-    {'image': 'assets/image/attendence.png', 'label': 'Attendance'},
-    {'image': 'assets/image/mispunch.png', 'label': 'Mispunch Info'},
-    {'image': 'assets/image/leave.png', 'label': 'Leave Entry'},
-    {'image': 'assets/image/overtime.png', 'label': 'Over Time Entry'},
-    {'image': 'assets/image/dutySchedule.png', 'label': 'Duty Schedule'},
-    {'image': 'assets/image/lvotapp.png', 'label': 'LV/OT Approval'},
+  static  List<Map<String, dynamic>> payrollgrid = [
+    {'image': AppImage.attendance, 'label': 'Attendance'},
+    {'image':AppImage.mispunch, 'label': 'Mispunch Info'},
+    {'image': AppImage.leave, 'label': 'Leave Entry'},
+    {'image': AppImage.overtime, 'label': 'Over Time Entry'},
+    {'image': AppImage.dutySchedule, 'label': 'Duty Schedule'},
+    {'image': AppImage.lvotapproval, 'label': 'LV/OT Approval'},
   ];
 
   static const OTPTimer = 60;
 
-  static const List<Map<String, dynamic>> pharmacygrid = [
-    {'image': 'assets/image/prescription.png', 'label': 'Prescription Viewer'},
+  static  List<Map<String, dynamic>> pharmacygrid = [
+    {'image': AppImage.prescription, 'label': 'Prescription Viewer'},
   ];
 
-  static const List<Map<String, dynamic>> adpatientgrid = [
-    {'image': 'assets/image/AdPatient.png', 'label': 'Admitted Patients'},
-    {'image': 'assets/image/invest_requisite.png', 'label': 'Investigation Requisition'},
+  static  List<Map<String, dynamic>> adpatientgrid = [
+    {'image': AppImage.adpatient, 'label': 'Admitted Patients'},
+    {'image': AppImage.investrequisite, 'label': 'Investigation Requisition'},
   ];
 }

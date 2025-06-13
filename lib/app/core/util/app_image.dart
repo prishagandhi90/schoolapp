@@ -26,11 +26,9 @@ class AppImage {
   static String nointernet = "assets/image/notinternet.png";
   static String adpatient = "assets/image/adpatient.png";
   static String bottomsheet = "assets/image/bottomsheet.png";
-
   static String HIMS = "assets/image/hims.png";
   static String opd = "assets/image/opd.png";
   static String ipd = "assets/image/ipd.png";
-
   static String store = "assets/image/store.png";
   static String radio = "assets/image/radio.png";
   static String patho = "assets/image/path.png";
@@ -41,6 +39,7 @@ class AppImage {
   static String maintnance = "assets/image/maintance.png";
   static String medication = "assets/image/medication.png";
   static String investrequisite = "assets/image/invest_requisite.png";
+  static String prescription = "assets/image/prescription.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }
