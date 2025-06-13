@@ -252,7 +252,7 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter,height: getDynamicHeight(size: 0.02),width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -607,7 +607,9 @@ class AdpatientScreen extends StatelessWidget {
                                           }
                                         }
 
-                                        if ((controller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") && controller.WebLoginUser_InvReq.trim() != "") {
+                                        if ((controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" ||
+                                                controller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") &&
+                                            controller.WebLoginUser_InvReq.trim() != "") {
                                           TapToRedirectToInvestigationHistory(
                                             controller: controller,
                                             index: index,

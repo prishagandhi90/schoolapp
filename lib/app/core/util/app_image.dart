@@ -27,7 +27,7 @@ class AppImage {
   static String adpatient = "assets/image/AdPatient.png";
   static String bottomsheet = "assets/image/bottomsheet.png";
   static String HIMS = "assets/image/HIMS.png";
-  static String opd = "assets/image/opd.png";
+  static String opd = "assets/image/OPD.png";
   static String ipd = "assets/image/IPD.png";
   static String store = "assets/image/store.png";
   static String radio = "assets/image/radio.png";
