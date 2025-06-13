@@ -31,7 +31,7 @@ class PresviewerScreen extends StatelessWidget {
     if (screenWidth < 360) {
       containerHeight = 80; // Small screen fix (static for tiny devices)
     } else if (screenWidth > 600) {
-      containerHeight = getDynamicHeight(size: 0.030) * 1.2; // iPad
+      containerHeight = getDynamicHeight(size: 0.040); // iPad
     } else {
       containerHeight = getDynamicHeight(size: 0.050); // Normal
     }
@@ -215,7 +215,10 @@ class PresviewerScreen extends StatelessWidget {
                             onTap: () {
                               controller.sortBy();
                             },
-                            child: Image.asset(AppImage.filter),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: Image.asset(AppImage.filter,height: getDynamicHeight(size: 0.02),width: getDynamicHeight(size: 0.02),),
+                            ),
                           ),
                         ),
                       ),
@@ -232,7 +235,11 @@ class PresviewerScreen extends StatelessWidget {
                         ),
                         child: Center(
                           child: IconButton(
-                            icon: Icon(Icons.filter_alt, color: AppColor.black, size: getDynamicHeight(size: 0.027)),
+                            icon: Icon(
+                              Icons.filter_alt,
+                              color: AppColor.black,
+                              size: getDynamicHeight(size: 0.027),
+                            ),
                             onPressed: () async {
                               controller.callFilterAPi = false;
                               controller.tempWardList = List.unmodifiable(controller.selectedWardList);

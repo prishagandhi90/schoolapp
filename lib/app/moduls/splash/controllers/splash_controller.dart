@@ -88,6 +88,11 @@ class SplashController extends GetxController {
           if (prefs.getBool('biometric') == true) {
             // Get.offAll(const BiometricauthView());
           } else {
+            // final OtpController otpController = Get.put(OtpController());
+            // if (otpController.dashboardTable.isPasswordSet == "N") {
+            //   otpController.showForceChangePasswordDialog();
+            //   return;
+            // }
             Get.offAll(BottomBarView());
           }
         } else {

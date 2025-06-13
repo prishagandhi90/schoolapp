@@ -51,7 +51,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   final FocusNode notesFocusNode = FocusNode();
 
   var initialIndex = 0.obs;
-  late TabController tabController_Leave;
+  late final TabController tabController_Leave;
   RxInt currentTabIndex = 0.obs;
   int? selectedRowIndex; // Track the selected row index
 

@@ -261,8 +261,8 @@ class LvList extends StatelessWidget {
                                                       },
                                                       child: Image.asset(
                                                         AppImage.bottomsheet,
-                                                        width: getDynamicHeight(size: 0.06), //50,
-                                                        height: getDynamicHeight(size: 0.06), //50,
+                                                        width: getDynamicHeight(size: 0.02), //50,
+                                                        height: getDynamicHeight(size: 0.02), //50,
                                                         alignment: Alignment.topRight,
                                                       ),
                                                     ),

@@ -456,11 +456,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                               bottomBarController.update();
                                             }, //Get.to(const AttendanceScreen()),
                                             child: Container(
-                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              height: MediaQuery.of(context).size.height * 0.07, //0.07
                                               width: MediaQuery.of(context).size.width * 0.14, //0.17
                                               margin: const EdgeInsets.only(
                                                 top: 15,
-                                                left: 10,
+                                                // left: 10,
                                               ),
                                               decoration: BoxDecoration(
                                                   border: Border.all(
@@ -468,10 +468,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: controller.empModuleScreenRightsTable.isNotEmpty
-                                                  ? Image.asset(
-                                                      controller.getImage(controller.empModuleScreenRightsTable[0].screenName.toString()),
-                                                      color: AppColor.primaryColor,
-                                                    )
+                                                  ? Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Image.asset(
+                                                        controller.getImage(controller.empModuleScreenRightsTable[0].screenName.toString()),
+                                                        color: AppColor.primaryColor,
+                                                      ),
+                                                  )
                                                   : SizedBox(),
                                             ),
                                           ),
@@ -529,7 +532,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                             });
                                           }, //Get.to(MispunchScreen()),
                                           child: Container(
-                                            height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                            height: MediaQuery.of(context).size.height * 0.07, //0.07
                                             width: MediaQuery.of(context).size.width * 0.14, //0.17
                                             margin: const EdgeInsets.only(top: 15),
                                             decoration: BoxDecoration(
@@ -538,10 +541,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 ),
                                                 borderRadius: BorderRadius.circular(10)),
                                             child: controller.empModuleScreenRightsTable.isNotEmpty
-                                                ? Image.asset(
-                                                    controller.getImage(controller.empModuleScreenRightsTable[1].screenName.toString()),
-                                                    color: AppColor.primaryColor,
-                                                  )
+                                                ? Padding(
+                                                  padding: const EdgeInsets.all(8.0),
+                                                  child: Image.asset(
+                                                      controller.getImage(controller.empModuleScreenRightsTable[1].screenName.toString()),
+                                                      color: AppColor.primaryColor,
+                                                    ),
+                                                )
                                                 : SizedBox(),
                                           ),
                                         ),
@@ -587,7 +593,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                               bottomBarController.update();
                                             },
                                             child: Container(
-                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              height: MediaQuery.of(context).size.height * 0.07, //0.07
                                               width: MediaQuery.of(context).size.width * 0.14, //0.17
                                               margin: const EdgeInsets.only(top: 15),
                                               decoration: BoxDecoration(
@@ -596,10 +602,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: controller.empModuleScreenRightsTable.isNotEmpty
-                                                  ? Image.asset(
+                                                  ? Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Image.asset(
                                                       controller.getImage(controller.empModuleScreenRightsTable[2].screenName.toString()),
                                                       color: AppColor.primaryColor,
-                                                    )
+                                                    ),
+                                                  )
                                                   : SizedBox(),
                                             ),
                                           ),
@@ -642,7 +651,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                               bottomBarController.update();
                                             },
                                             child: Container(
-                                              height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                              height: MediaQuery.of(context).size.height * 0.07, //0.07
                                               width: MediaQuery.of(context).size.width * 0.14, //0.17
                                               margin: const EdgeInsets.only(top: 15),
                                               decoration: BoxDecoration(
@@ -651,10 +660,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   ),
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: controller.empModuleScreenRightsTable.isNotEmpty
-                                                  ? Image.asset(
-                                                      controller.getImage(controller.empModuleScreenRightsTable[3].screenName.toString()),
-                                                      color: AppColor.primaryColor,
-                                                    )
+                                                  ? Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Image.asset(
+                                                        controller.getImage(controller.empModuleScreenRightsTable[3].screenName.toString()),
+                                                        color: AppColor.primaryColor,
+                                                      ),
+                                                  )
                                                   : SizedBox(),
                                             ),
                                           ),
@@ -722,11 +734,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 controller.isDutyScheduleNavigating.value = false;
                                               },
                                               child: Container(
-                                                height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                                height: MediaQuery.of(context).size.height * 0.07, //0.07
                                                 width: MediaQuery.of(context).size.width * 0.14, //0.17
                                                 margin: const EdgeInsets.only(
                                                   top: 15,
-                                                  left: 10,
+                                                  // left: 10,
                                                 ),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
@@ -735,10 +747,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
                                                 child: controller.empModuleScreenRightsTable.isNotEmpty
-                                                    ? Image.asset(
-                                                        controller.getImage(controller.empModuleScreenRightsTable[4].screenName.toString()),
-                                                        color: AppColor.primaryColor,
-                                                      )
+                                                    ? Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image.asset(
+                                                          controller.getImage(controller.empModuleScreenRightsTable[4].screenName.toString()),
+                                                          color: AppColor.primaryColor,
+                                                        ),
+                                                    )
                                                     : SizedBox(),
                                               ),
                                             ),
@@ -804,11 +819,11 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 controller.isLVOTApprovalNavigating.value = false;
                                               },
                                               child: Container(
-                                                height: MediaQuery.of(context).size.height * 0.06, //0.07
+                                                height: MediaQuery.of(context).size.height * 0.07, //0.07
                                                 width: MediaQuery.of(context).size.width * 0.14, //0.17
                                                 margin: const EdgeInsets.only(
                                                   top: 15,
-                                                  left: 10,
+                                                  // left: 10,
                                                 ),
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
@@ -817,10 +832,13 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
                                                 child: controller.empModuleScreenRightsTable.isNotEmpty
-                                                    ? Image.asset(
-                                                        controller.getImage(controller.empModuleScreenRightsTable[5].screenName.toString()),
-                                                        color: AppColor.primaryColor,
-                                                      )
+                                                    ? Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image.asset(
+                                                          controller.getImage(controller.empModuleScreenRightsTable[5].screenName.toString()),
+                                                          color: AppColor.primaryColor,
+                                                        ),
+                                                    )
                                                     : SizedBox(),
                                               ),
                                             ),

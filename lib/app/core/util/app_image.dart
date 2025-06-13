@@ -16,7 +16,7 @@ class AppImage {
   static String checkmark = "assets/image/check-mark.png";
   static String cross = "assets/image/cross.png";
   static String hourglass = "assets/image/hourglass.png";
-  static String filter = "assets/image/Vector.png";
+  static String filter = "assets/image/sorting.png";
   static String medicine = "assets/image/medicine.png";
   static String qrcode = "assets/image/qr-code.png";
   static String lvotapproval = "assets/image/lvotapp.png";
@@ -26,6 +26,17 @@ class AppImage {
   static String nointernet = "assets/image/notinternet.png";
   static String adpatient = "assets/image/AdPatient.png";
   static String bottomsheet = "assets/image/bottomsheet.png";
+  static String HIMS = "assets/image/HIMS.png";
+  static String opd = "assets/image/opd.png";
+  static String ipd = "assets/image/IPD.png";
+  static String store = "assets/image/store.png";
+  static String radio = "assets/image/radio.png";
+  static String patho = "assets/image/path.png";
+  static String pharma = "assets/image/pharmacy.png";
+  static String payroll = "assets/image/payroll.png";
+  static String OT = "assets/image/OT.png";
+  static String nabh = "assets/image/NABH.png";
+  static String maintnance = "assets/image/maintance.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
 }

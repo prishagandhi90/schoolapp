@@ -96,6 +96,10 @@ class LoginController extends GetxController {
         String isValidLogin = "false";
         isValidLogin = await otpController.getDashboardData("", context, otpController.deviceTok, passwordController.text);
         if (isValidLogin == "true") {
+          if (otpController.dashboardTable.isPasswordSet == "N") {
+            otpController.showForceChangePasswordDialog();
+            return;
+          }
           // If login successful, initialize bottom nav and navigate to dashboard
           final bottomBarController = Get.put(BottomBarController());
           bottomBarController.resetAndInitialize();

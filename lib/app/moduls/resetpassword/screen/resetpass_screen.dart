@@ -61,12 +61,18 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             if (value == null || value.isEmpty) {
                               return "Please enter a password";
                             }
-                            if (!RegExp(r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
-                              return "Password must be at least 8 characters, \ninclude a letter, number, and special character";
+                            // Custom length check: at least 4 alphanumeric characters (letter or digit)
+                            final alphanumericChars = RegExp(r'[a-zA-Z0-9]');
+                            final matchCount = alphanumericChars.allMatches(value).length;
+                            if (matchCount < 4) {
+                              return "Password must contain at least 4 letters or numbers";
                             }
+
+                            // Password mismatch check
                             if (controller.passwordController.text != value) {
-                              return "Passwords do not match"; // This is the validation for password mismatch
+                              return "Passwords do not match";
                             }
+
                             return null;
                           },
                           obscureText: controller.hidePassword,

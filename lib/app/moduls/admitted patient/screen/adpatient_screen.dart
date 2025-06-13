@@ -25,6 +25,16 @@ class AdpatientScreen extends StatelessWidget {
   final dashboardController = Get.find<DashboardController>();
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double containerHeight;
+
+    if (screenWidth < 360) {
+      containerHeight = 80; // Small screen fix (static for tiny devices)
+    } else if (screenWidth > 600) {
+      containerHeight = getDynamicHeight(size: 0.040); // iPad
+    } else {
+      containerHeight = getDynamicHeight(size: 0.050); // Normal
+    }
     Get.put(AdPatientController());
     return GetBuilder<AdPatientController>(
       builder: (controller) {
@@ -199,35 +209,47 @@ class AdpatientScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
+                                // 🔽 Same size as IconButton wala niche container
+
+                                SizedBox(width: getDynamicHeight(size: 0.010)),
+
                                 Expanded(
                                   flex: 1.5.toInt(),
                                   child: Container(
-                                    height: getDynamicHeight(size: 0.052), // Adjust height as needed
+                                    height: containerHeight,
                                     decoration: BoxDecoration(
                                       border: Border.all(color: AppColor.black),
                                       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                                     ),
                                     child: Center(
-                                        child: GestureDetector(
-                                            onTap: () {
-                                              controller.sortBy();
-                                            },
-                                            child: Image.asset(AppImage.filter))),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          controller.sortBy();
+                                        },
+                                        child: FittedBox(
+                                          fit: BoxFit.contain,
+                                          child: Image.asset(AppImage.filter,height: getDynamicHeight(size: 0.02),width: getDynamicHeight(size: 0.02)),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: getDynamicHeight(size: 0.010)), // Space between items
+
+                                SizedBox(width: getDynamicHeight(size: 0.010)),
                                 Expanded(
                                   flex: 1.5.toInt(),
                                   child: Container(
-                                    // height: 50, // Adjust height as needed
                                     decoration: BoxDecoration(
                                       border: Border.all(color: AppColor.black),
                                       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                                     ),
                                     child: Center(
                                       child: IconButton(
-                                        icon: Icon(Icons.filter_alt, color: AppColor.black, size: getDynamicHeight(size: 0.027)),
+                                        icon: Icon(
+                                          Icons.filter_alt,
+                                          color: AppColor.black,
+                                          size: getDynamicHeight(size: 0.027), // 🔁 Same size
+                                        ),
                                         onPressed: () async {
                                           controller.callFilterAPi = false;
                                           controller.tempOrgsList = List.unmodifiable(controller.selectedOrgsList);

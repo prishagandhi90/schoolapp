@@ -42,6 +42,7 @@ class DashboardTable {
   String? isSuperAdmin;
   String? isPharmacyUser;
   int? notificationCount;
+  String? isPasswordSet;
 
   DashboardTable(
       {this.isValidToken,
@@ -59,7 +60,8 @@ class DashboardTable {
       this.empType,
       this.isSuperAdmin,
       this.isPharmacyUser,
-      this.notificationCount});
+      this.notificationCount,
+      this.isPasswordSet});
 
   DashboardTable.fromJson(Map<String, dynamic> json) {
     isValidToken = json['is_valid_token'];
@@ -78,6 +80,7 @@ class DashboardTable {
     isSuperAdmin = json['isSuperAdmin'];
     isPharmacyUser = json['isPharmacyUser'];
     notificationCount = json['notificationCount'];
+    isPasswordSet = json['isPasswordSet'];
   }
 
   Map<String, dynamic> toJson() {
@@ -98,6 +101,7 @@ class DashboardTable {
     data['isSuperAdmin'] = this.isSuperAdmin;
     data['isPharmacyUser'] = this.isPharmacyUser;
     data['notificationCount'] = this.notificationCount;
+    data['isPasswordSet'] = this.isPasswordSet;
     return data;
   }
 }

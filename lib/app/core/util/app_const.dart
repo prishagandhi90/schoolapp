@@ -1,29 +1,30 @@
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:flutter/material.dart';
 
 class AppConst {
-  static const List<Map<String, dynamic>> listItems = [
-    {'image': 'assets/image/HIMS.png', 'label': 'HIMS'},
-    {'image': 'assets/image/OPD.png', 'label': 'OPD'},
-    {'image': 'assets/image/IPD.png', 'label': 'IPD'},
-    {'image': 'assets/image/stores.png', 'label': 'Store'},
-    {'image': 'assets/image/radio.png', 'label': 'Radiology'},
-    {'image': 'assets/image/patho.png', 'label': 'Pathology'},
-    {'image': 'assets/image/pharma.png', 'label': 'Pharmacy'},
-    {'image': 'assets/image/payroll.png', 'label': 'Payroll'},
-    {'image': 'assets/image/OT.png', 'label': 'Operation Theater'},
+  static  List<Map<String, dynamic>> listItems = [
+    {'image': AppImage.HIMS, 'label': 'HIMS'},
+    {'image': AppImage.opd, 'label': 'OPD'},
+    {'image': AppImage.ipd, 'label': 'IPD'},
+    {'image': AppImage.store, 'label': 'Store'},
+    {'image': AppImage.radio, 'label': 'Radiology'},
+    {'image': AppImage.patho, 'label': 'Pathology'},
+    {'image': AppImage.pharma, 'label': 'Pharmacy'},
+    {'image': AppImage.payroll, 'label': 'Payroll'},
+    {'image': AppImage.OT, 'label': 'Operation Theater'},
   ];
 
-  static const List<Map<String, dynamic>> gridview = [
-    {'image': 'assets/image/HIMS.png', 'label': 'HIMS'},
-    {'image': 'assets/image/OPD.png', 'label': 'OPD'},
-    {'image': 'assets/image/IPD.png', 'label': 'IPD'},
-    {'image': 'assets/image/stores.png', 'label': 'STORE'},
-    {'image': 'assets/image/radio.png', 'label': 'RADIOLOGY'},
-    {'image': 'assets/image/patho.png', 'label': 'PATHOLOGY'},
-    {'image': 'assets/image/pharma.png', 'label': 'PHARMACY'},
-    {'image': 'assets/image/payroll.png', 'label': 'PAYROLL'},
-    {'image': 'assets/image/OT.png', 'label': 'OT'},
-    {'image': 'assets/image/NABH.png', 'label': 'NABH'},
+  static  List<Map<String, dynamic>> gridview = [
+    {'image': AppImage.HIMS, 'label': 'HIMS'},
+    {'image': AppImage.opd, 'label': 'OPD'},
+    {'image': AppImage.ipd, 'label': 'IPD'},
+    {'image': AppImage.store, 'label': 'STORE'},
+    {'image': AppImage.radio, 'label': 'RADIOLOGY'},
+    {'image': AppImage.patho, 'label': 'PATHOLOGY'},
+    {'image': AppImage.pharma, 'label': 'PHARMACY'},
+    {'image': AppImage.payroll, 'label': 'PAYROLL'},
+    {'image': AppImage.OT, 'label': 'OT'},
+    {'image': AppImage.nabh, 'label': 'NABH'},
   ];
 
   static const List<Map<String, dynamic>> payrolllist = [

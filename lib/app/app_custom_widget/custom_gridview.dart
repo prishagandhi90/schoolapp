@@ -1,5 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
@@ -17,17 +18,18 @@ class _CustomGridviewState extends State<CustomGridview> {
   int selectedIndex = -1;
   List<Container> containers = [];
 
-  static const List<Map<String, dynamic>> gridview = [
-    {'image': 'assets/image/HIMS.png', 'label': 'HIMS'},
-    {'image': 'assets/image/OPD.png', 'label': 'OPD'},
-    {'image': 'assets/image/IPD.png', 'label': 'IPD'},
-    {'image': 'assets/image/stores.png', 'label': 'STORE'},
-    {'image': 'assets/image/radio.png', 'label': 'RADIOLOGY'},
-    {'image': 'assets/image/patho.png', 'label': 'PATHOLOGY'},
-    {'image': 'assets/image/pharma.png', 'label': 'PHARMACY'},
-    {'image': 'assets/image/payroll.png', 'label': 'PAYROLL'},
-    {'image': 'assets/image/OT.png', 'label': 'OT'},
-    {'image': 'assets/image/NABH.png', 'label': 'NABH'},
+  static  List<Map<String, dynamic>> gridview = [
+    {'image': AppImage.HIMS, 'label': 'HIMS'},
+    {'image': AppImage.opd, 'label': 'OPD'},
+    {'image': AppImage.ipd, 'label': 'IPD'},
+    {'image': AppImage.store, 'label': 'STORE'},
+    {'image': AppImage.radio, 'label': 'RADIOLOGY'},
+    {'image': AppImage.patho, 'label': 'PATHOLOGY'},
+    {'image': AppImage.pharma, 'label': 'PHARMACY'},
+    {'image': AppImage.payroll, 'label': 'PAYROLL'},
+    {'image': AppImage.OT, 'label': 'OT'},
+    {'image': AppImage.maintnance, 'label': 'Maintance'},
+    {'image': AppImage.nabh, 'label': 'NABH'},
   ];
 
   @override

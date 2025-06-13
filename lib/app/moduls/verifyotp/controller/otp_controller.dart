@@ -14,6 +14,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
@@ -250,6 +251,10 @@ class OtpController extends GetxController {
           // update();
           if (isValidLogin == "true") {
             otpController.text = "";
+            if (dashboardTable.isPasswordSet == "N") {
+              showForceChangePasswordDialog();
+              return;
+            }
             // hideBottomBar.value = false;
             // bottomBarController.update();
             // update();
@@ -331,5 +336,20 @@ class OtpController extends GetxController {
     } else {
       Get.rawSnackbar(message: "Otp didn't match");
     }
+  }
+
+  void showForceChangePasswordDialog() {
+    Get.defaultDialog(
+      title: "Reset Password Required",
+      middleText: "You need to reset your password before proceeding.",
+      barrierDismissible: false,
+      confirm: ElevatedButton(
+        onPressed: () {
+          Get.back(); // Close dialog
+          Get.offAll(() => ForgotpassScreen(mobileNumber: numberController.text,)); // Navigate and remove all previous routes
+        },
+        child: Text("Reset Now"),
+      ),
+    );
   }
 }
