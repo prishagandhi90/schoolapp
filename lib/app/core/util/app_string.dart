@@ -210,6 +210,7 @@ class AppString {
       "c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist.";
   static String normalrange = "Normal Range";
   static String nonormalrangeavailable = "No Normal Range Available";
+
   //Notification
   static String notification = "Notification";
   static String nodatafound = "No Data Found";
@@ -220,4 +221,7 @@ class AppString {
   static String selectdate = "Select Date";
   static String delete = "Delete";
   static String recordDeleteMsg = "Are you sure you want to delete this record?";
+
+  //Medication Sheet
+  static String medicationsheet = "Medication Sheet";
 }

@@ -287,7 +287,7 @@ class IpdDashboardScreen extends StatelessWidget {
                         // count: controller.patientsData.length,
                         // context: context,
                         // index: index,
-                        imagePath: 'assets/image/invest_requisite.png',
+                        imagePath: AppImage.investrequisite,
                         onTap: () async {
                           if (controller.isInvestigationReq_Navigating.value) return;
                           controller.isInvestigationReq_Navigating.value = true;
@@ -333,17 +333,17 @@ class IpdDashboardScreen extends StatelessWidget {
                         },
                       ),
                       // _buildPatientCard(
-                      //   title: 'Medication',
+                      //   title: 'Medication Sheet',
                       //   // count: controller.patientsData.length,
                       //   // context: context,
                       //   // index: index,
-                      //   imagePath: AppImage.adpatient,
+                      //   imagePath: AppImage.medication,
                       //   onTap: () async {
                       //     if (controller.isInvestigationReq_Navigating.value) return;
                       //     controller.isInvestigationReq_Navigating.value = true;
 
                       //     if (controller.screenRightsTable.isNotEmpty) {
-                      //       if (controller.screenRightsTable[1].rightsYN == "N") {
+                      //       if (controller.screenRightsTable[2].rightsYN == "N") {
                       //         controller.isInvestigationReq_Navigating.value = false;
                       //         Get.snackbar(
                       //           "You don't have access to this screen",
@@ -373,7 +373,6 @@ class IpdDashboardScreen extends StatelessWidget {
                       //       fromScreen: "MEDICATION",
                       //       fromScreenRedirection: "MEDICATION SHEET",
                       //     );
-
                       //     // ⬇️ Ye tab chalega jab dialog band ho jayega
                       //     // final controller = Get.put(AdPatientController());
                       //     controller.sortBySelected = -1;
