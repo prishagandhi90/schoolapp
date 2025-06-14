@@ -42,9 +42,20 @@ class PresdetailList {
   int? qty;
   String? medicineType;
   String? pkg;
+  String? rack;
 
-  PresdetailList(
-      {this.sr, this.formBrand, this.genericName, this.rmk, this.instructionTyp, this.freq, this.qty, this.medicineType, this.pkg});
+  PresdetailList({
+    this.sr,
+    this.formBrand,
+    this.genericName,
+    this.rmk,
+    this.instructionTyp,
+    this.freq,
+    this.qty,
+    this.medicineType,
+    this.pkg,
+    this.rack,
+  });
 
   PresdetailList.fromJson(Map<String, dynamic> json) {
     sr = json['sr'];
@@ -56,6 +67,7 @@ class PresdetailList {
     qty = json['qty'];
     medicineType = json['medicine_type'];
     pkg = json['pkg'];
+    rack = json['rack'];
   }
 
   Map<String, dynamic> toJson() {
@@ -69,6 +81,7 @@ class PresdetailList {
     data['qty'] = this.qty;
     data['medicine_type'] = this.medicineType;
     data['pkg'] = this.pkg;
+    data['rack'] = this.rack;
     return data;
   }
 }

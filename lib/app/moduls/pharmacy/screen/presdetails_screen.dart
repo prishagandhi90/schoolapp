@@ -77,7 +77,6 @@ class PresdetailsScreen extends StatelessWidget {
                                 ),
                               ),
                             SizedBox(height: getDynamicHeight(size: 0.003)),
-
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -277,15 +276,17 @@ class PresdetailsScreen extends StatelessWidget {
                                                               ),
                                                               SizedBox(width: 8),
                                                               // 'rack:' hamesha first line me dikhega
-                                                              Text(
-                                                                "Rack:",
-                                                                style: TextStyle(
-                                                                  fontWeight: FontWeight.bold,
-                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                                  fontSize: getDynamicHeight(size: 0.017),
-                                                                  color: AppColor.black,
+                                                              if (controller.presdetailList[index].rack != null &&
+                                                                  controller.presdetailList[index].rack!.trim().isNotEmpty)
+                                                                Text(
+                                                                  "Rack: ${controller.presdetailList[index].rack.toString()}",
+                                                                  style: TextStyle(
+                                                                    fontWeight: FontWeight.bold,
+                                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                    fontSize: getDynamicHeight(size: 0.017),
+                                                                    color: AppColor.black,
+                                                                  ),
                                                                 ),
-                                                              ),
                                                             ],
                                                           ),
                                                           Padding(
