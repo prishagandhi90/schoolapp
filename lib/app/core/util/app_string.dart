@@ -144,7 +144,7 @@ class AppString {
   static String intercom = "Intercom: ";
   static String genericdrug = "Generic Drug: ";
   static String branddrug = "Brand Drug: ";
-  static String quantity = "Quantity: ";
+  static String quantity = "Qty: ";
   static String pkg = "Pkg: ";
   static String fromer = "From ER";
 
