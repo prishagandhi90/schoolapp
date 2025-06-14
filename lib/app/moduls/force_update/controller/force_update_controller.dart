@@ -16,11 +16,11 @@ class ForceUpdateController extends GetxController {
       String url = ConstApiUrl.empForceUpdateAPI;
       var response = await apiController.parseJsonBody(url, '', '');
 
-      if (response != null) {
+      if (response != null && response != 'NetworkError' && response != 'Error') {
         var decodedData = jsonDecode(response); // bas ek simple decode
 
         if (decodedData is List && decodedData.isNotEmpty) {
-          var data = decodedData[0]; 
+          var data = decodedData[0];
           String? forceUpdYN = data['forceUpdYN'];
           String? latestVersion = data['versionName'] ?? '';
 

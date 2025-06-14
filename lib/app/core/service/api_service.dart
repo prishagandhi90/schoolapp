@@ -41,7 +41,8 @@ class ApiController extends GetxController {
       headers = {'Authorization': 'Bearer $headerToken', "Content-Type": "application/json"};
     }
 
-    final body = jsonEncode(jsonBodyObj);
+    // final body = jsonEncode(jsonBodyObj);
+    final body = jsonBodyObj == '' ? null : jsonEncode(jsonBodyObj);
     print("body: $body");
     print("jsonBodyObj: $jsonBodyObj");
     try {
@@ -49,12 +50,12 @@ class ApiController extends GetxController {
       return response.body; // This returns a String
     } catch (exception) {
       if (exception.toString().contains('SocketException')) {
-        if (!Get.isSnackbarOpen) {
+        if (Get.overlayContext != null && !Get.isSnackbarOpen) {
           Get.rawSnackbar(message: "Please check your internet connection.");
         }
         return 'NetworkError';
       } else if (exception.toString().contains('TimeoutException')) {
-        if (!Get.isSnackbarOpen) {
+        if (Get.overlayContext != null && !Get.isSnackbarOpen) {
           Get.rawSnackbar(message: "Server Error.");
         }
         return 'NetworkError';

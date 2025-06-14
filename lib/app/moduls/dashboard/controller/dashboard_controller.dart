@@ -341,6 +341,9 @@ class DashboardController extends GetxController {
         }
       } else {
         // Handle missing login or token
+        prefs.clear();
+        Get.offAll(LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       }
     } catch (e) {
       // 🔥 Custom error handler call here

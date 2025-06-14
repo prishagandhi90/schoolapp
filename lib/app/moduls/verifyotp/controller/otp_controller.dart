@@ -216,7 +216,8 @@ class OtpController extends GetxController {
       dashboardController.designation = "";
       dashboardController.update();
 
-      Get.offAll(() => LoginScreen());
+      // Get.offAll(() => LoginScreen());
+      Get.offAllNamed(Paths.LOGIN);
     } catch (e) {
       print('Error during logout: $e');
     }
@@ -346,7 +347,9 @@ class OtpController extends GetxController {
       confirm: ElevatedButton(
         onPressed: () {
           Get.back(); // Close dialog
-          Get.offAll(() => ForgotpassScreen(mobileNumber: numberController.text,)); // Navigate and remove all previous routes
+          Get.offAll(() => ForgotpassScreen(
+                mobileNumber: numberController.text,
+              )); // Navigate and remove all previous routes
         },
         child: Text("Reset Now"),
       ),

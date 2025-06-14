@@ -14,9 +14,9 @@ class LoginScreen extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    Sizes.init(context);
+    // Sizes.init(context);
     Get.put(LoginController());
-    return GetBuilder<LoginController>(builder: (loginController) {
+    return GetBuilder<LoginController>(builder: (controller) {
       return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColor.backgroundcolor,
@@ -66,7 +66,7 @@ class LoginScreen extends GetView<LoginController> {
                         ),
                         SizedBox(height: Sizes.px40), // Dynamic height
                         TextFormField(
-                          controller: loginController.numberController,
+                          controller: controller.numberController,
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -115,12 +115,12 @@ class LoginScreen extends GetView<LoginController> {
                             ),
                           ),
                         ),
-                        loginController.withPaasword
+                        controller.withPaasword
                             ? SizedBox(height: Sizes.px25) // Dynamic height
                             : SizedBox(),
-                        loginController.withPaasword
+                        controller.withPaasword
                             ? TextFormField(
-                                controller: loginController.passwordController,
+                                controller: controller.passwordController,
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -135,7 +135,7 @@ class LoginScreen extends GetView<LoginController> {
                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                   fontSize: getDynamicHeight(size: 0.016),
                                 ),
-                                obscureText: loginController.hidePassword,
+                                obscureText: controller.hidePassword,
                                 inputFormatters: <TextInputFormatter>[
                                   LengthLimitingTextInputFormatter(23),
                                 ],
@@ -216,7 +216,7 @@ class LoginScreen extends GetView<LoginController> {
                           width: Sizes.w * 0.40,
                           child: ElevatedButton(
                             onPressed: () async {
-                              loginController.isLoadingLogin ? null : await loginController.requestLogin(context);
+                              controller.isLoadingLogin ? null : await controller.requestLogin(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColor.lightgreen,
@@ -224,7 +224,7 @@ class LoginScreen extends GetView<LoginController> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            child: loginController.isLoadingLogin
+                            child: controller.isLoadingLogin
                                 ? const CircularProgressIndicator()
                                 : Text(
                                     AppString.login,
@@ -246,7 +246,7 @@ class LoginScreen extends GetView<LoginController> {
                                     onTap: () {
                                       Get.to(
                                         () => ForgotpassScreen(
-                                          mobileNumber: loginController.numberController.text,
+                                          mobileNumber: controller.numberController.text,
                                         ),
                                         duration: const Duration(milliseconds: 700),
                                       );
