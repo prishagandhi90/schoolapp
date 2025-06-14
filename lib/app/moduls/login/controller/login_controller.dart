@@ -18,8 +18,8 @@ class LoginController extends GetxController {
   bool isLoadingLogin = false; // Loader for login process
   bool withPaasword = false; // Check if login is with password
   bool hidePassword = true; // Password visibility
-  final TextEditingController numberController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController numberController = TextEditingController(text: '9925740695');
+  final TextEditingController passwordController = TextEditingController(text: '123');
   final loginFormKey = GlobalKey<FormState>();
   final ApiController apiController = Get.put(ApiController());
   late MobileTable mobileTable;

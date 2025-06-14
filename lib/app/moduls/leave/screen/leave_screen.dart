@@ -26,12 +26,11 @@ class LeaveScreen extends GetView<LeaveController> {
 
     double screenHeight = MediaQuery.of(context).size.height;
     double availableHeight = screenHeight - 70.0; // 70.0 is the height of BottomNavigationBar
-
     return GetBuilder<LeaveController>(builder: (controller) {
       return Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(getDynamicHeight(size: 0.001)),
             child: SingleChildScrollView(
               // physics: AlwaysScrollableScrollPhysics(),
               controller: controller.leaveScrollController,
@@ -43,7 +42,7 @@ class LeaveScreen extends GetView<LeaveController> {
                   children: [
                     // CustomDatePicker(),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(getDynamicHeight(size: 0.016)),
                       child: Row(
                         children: [
                           Expanded(
@@ -53,9 +52,7 @@ class LeaveScreen extends GetView<LeaveController> {
                               onDateSelected: () async => await controller.selectFromDate(context),
                             ),
                           ),
-                          SizedBox(
-                            width: 12.0,
-                          ),
+                          SizedBox(width: getDynamicHeight(size: 0.01)),
                           Expanded(
                             child: CustomDatePicker(
                               dateController: controller.toDateController,
@@ -67,7 +64,7 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.016)),
                       child: Row(
                         children: [
                           Expanded(
@@ -76,7 +73,7 @@ class LeaveScreen extends GetView<LeaveController> {
                               text: AppString.name,
                               controller: controller.leaveNameController,
                               buttonStyleData: ButtonStyleData(
-                                height: 50,
+                                height: getDynamicHeight(size: 0.05),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: AppColor.black),
@@ -111,11 +108,14 @@ class LeaveScreen extends GetView<LeaveController> {
                               width: double.infinity,
                             ),
                           ),
-                          SizedBox(width: 5),
+                          SizedBox(
+                            width: 5,
+                            // height: getDynamicHeight(size: 0.05),
+                          ),
                           Expanded(
                             flex: 2,
                             child: SizedBox(
-                              height: 50,
+                              height: getDynamicHeight(size: 0.05),
                               child: CustomTextFormField(
                                 readOnly: true,
                                 controller: controller.leftLeaveDaysController,
@@ -127,7 +127,7 @@ class LeaveScreen extends GetView<LeaveController> {
                                       // fontSize: 15,
                                       fontSize: getDynamicHeight(size: 0.017),
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                                    contentPadding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.01), vertical: 0),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(color: AppColor.darkGreen),
                                       borderRadius: BorderRadius.circular(0),
@@ -148,7 +148,7 @@ class LeaveScreen extends GetView<LeaveController> {
                               text: AppString.days,
                               controller: controller.daysController,
                               buttonStyleData: ButtonStyleData(
-                                height: 50,
+                                height: getDynamicHeight(size: 0.05),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: AppColor.black),
@@ -182,12 +182,13 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                      padding: EdgeInsets.only(
+                          top: getDynamicHeight(size: 0.016), left: getDynamicHeight(size: 0.016), right: getDynamicHeight(size: 0.016)),
                       child: CustomDropdown(
                         text: AppString.hdleaveperiod,
                         controller: controller.hdleaveperiodController,
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.05),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
                             borderRadius: BorderRadius.circular(0),
@@ -220,12 +221,12 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(getDynamicHeight(size: 0.016)),
                       child: CustomDropdown(
                         text: AppString.reason,
                         controller: controller.reasonController,
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.05),
                           padding: const EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
@@ -256,7 +257,7 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.016)),
                       child: CustomTextFormField(
                         hint: AppString.note,
                         hintStyle: AppStyle.black.copyWith(
@@ -296,12 +297,12 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(getDynamicHeight(size: 0.016)),
                       child: CustomDropdown(
                         text: AppString.relieverName,
                         controller: controller.relieverNameController,
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.05),
                           padding: const EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
@@ -332,12 +333,12 @@ class LeaveScreen extends GetView<LeaveController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.016)),
                       child: CustomDropdown(
                         text: AppString.lateReason,
                         controller: controller.delayreasonNameController,
                         buttonStyleData: ButtonStyleData(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.05),
                           padding: const EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
                             border: Border.all(color: AppColor.black),
@@ -368,7 +369,7 @@ class LeaveScreen extends GetView<LeaveController> {
                             .toList(),
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: getDynamicHeight(size: 0.03)),
                     SizedBox(
                       height: MediaQuery.of(context).size.width * 0.13,
                       width: MediaQuery.of(context).size.width * 0.40,

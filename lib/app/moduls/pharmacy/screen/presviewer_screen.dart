@@ -51,7 +51,7 @@ class PresviewerScreen extends StatelessWidget {
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                color: Colors.white, // Set your default color here
+                color: AppColor.white, // Set your default color here
               ),
             ),
             leading: IconButton(
@@ -70,7 +70,7 @@ class PresviewerScreen extends StatelessWidget {
             ),
             actions: [
               Padding(
-                padding: EdgeInsets.only(right: 12),
+                padding: EdgeInsets.only(right: getDynamicHeight(size: 0.01)),
                 child: GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
@@ -104,14 +104,14 @@ class PresviewerScreen extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: AppColor.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               dashboardController.notificationCount,
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
+                                color: AppColor.white,
+                                fontSize: getDynamicHeight(size: 0.01),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -217,7 +217,11 @@ class PresviewerScreen extends StatelessWidget {
                             },
                             child: FittedBox(
                               fit: BoxFit.contain,
-                              child: Image.asset(AppImage.filter,height: getDynamicHeight(size: 0.02),width: getDynamicHeight(size: 0.02),),
+                              child: Image.asset(
+                                AppImage.filter,
+                                height: getDynamicHeight(size: 0.02),
+                                width: getDynamicHeight(size: 0.02),
+                              ),
                             ),
                           ),
                         ),
@@ -388,7 +392,9 @@ class PresviewerScreen extends StatelessWidget {
                                                                   color: Colors.black,
                                                                 ),
                                                               ),
-                                                              const SizedBox(width: 20), // Minimal space between text and container
+                                                              SizedBox(
+                                                                  width: getDynamicHeight(
+                                                                      size: 0.02)), // Minimal space between text and container
                                                               // Container
                                                               Container(
                                                                 // height: 35, // Small container size

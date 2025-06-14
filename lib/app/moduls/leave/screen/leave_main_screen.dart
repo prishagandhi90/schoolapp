@@ -4,6 +4,7 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
 import 'package:emp_app/app/moduls/leave/controller/leave_controller.dart';
@@ -60,9 +61,9 @@ class LeaveMainScreen extends GetView<LeaveController> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.all(10),
+                                        padding: EdgeInsets.all(10),
                                         width: double.infinity,
-                                        height: 45,
+                                        height: getDynamicHeight(size: 0.045),
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.only(topLeft: Radius.circular(20)), color: AppColor.primaryColor),
                                         child: Padding(

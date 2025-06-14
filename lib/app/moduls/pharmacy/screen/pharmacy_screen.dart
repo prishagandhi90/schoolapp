@@ -20,17 +20,12 @@ class PharmacyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(PharmacyController());
-    // final dashboardController = Get.find<DashboardController>();
     late final DashboardController dashboardController;
-
     try {
-      // Try to find the existing controller
-      dashboardController = Get.find<DashboardController>();
+      dashboardController = Get.find<DashboardController>(); // Try to find the existing controller
     } catch (e) {
-      // Agar controller nahi milta to put karenge
-      dashboardController = Get.put(DashboardController());
+      dashboardController = Get.put(DashboardController()); // Agar controller nahi milta to put karenge
     }
-
     return GetBuilder<PharmacyController>(
       init: PharmacyController(),
       builder: (controller) {
@@ -48,9 +43,9 @@ class PharmacyScreen extends StatelessWidget {
               backgroundColor: AppColor.white,
               child: ListView(
                 children: [
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+                  Padding(padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.022))),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.012)),
                     child: TextFormField(
                       focusNode: controller.focusNode,
                       cursorColor: AppColor.grey,
@@ -58,10 +53,10 @@ class PharmacyScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.027)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.027)),
                           borderSide: BorderSide(
                             color: AppColor.lightgrey1,
                           ),
@@ -87,8 +82,8 @@ class PharmacyScreen extends StatelessWidget {
                         filled: true,
                         focusColor: AppColor.originalgrey,
                         fillColor: AppColor.white,
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.02))),
                         ),
                       ),
                       onChanged: (value) {
@@ -99,7 +94,7 @@ class PharmacyScreen extends StatelessWidget {
                   GetBuilder<PharmacyController>(
                     builder: (controller) {
                       return ListView.builder(
-                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.032)),
                         shrinkWrap: true,
                         itemCount: controller.filteredList.length,
                         itemBuilder: (context, index) {
@@ -146,12 +141,12 @@ class PharmacyScreen extends StatelessWidget {
                               controller.isPresViewerNavigating.value = false;
                             },
                             child: SizedBox(
-                              height: 40,
+                              height: getDynamicHeight(size: 0.050),
                               child: ListTile(
                                 leading: Image.asset(
                                   controller.filteredList[index]['image'],
-                                  height: 25,
-                                  width: 25,
+                                  height: getDynamicHeight(size: 0.027),
+                                  width: getDynamicHeight(size: 0.027),
                                   color: AppColor.primaryColor,
                                 ),
                                 title: Text(
@@ -195,7 +190,7 @@ class PharmacyScreen extends StatelessWidget {
                 ],
               )),
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.white,
             title: Text(
               AppString.pharmacy,
               style: TextStyle(
@@ -212,7 +207,7 @@ class PharmacyScreen extends StatelessWidget {
                   },
                   icon: Image.asset(
                     AppImage.drawer,
-                    width: 20,
+                    width: getDynamicHeight(size: 0.02),
                     color: AppColor.black,
                   ),
                 );
@@ -220,7 +215,7 @@ class PharmacyScreen extends StatelessWidget {
             ),
             actions: [
               Padding(
-                padding: EdgeInsets.only(right: 12),
+                padding: EdgeInsets.only(right: getDynamicHeight(size: 0.01)),
                 child: GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
@@ -253,13 +248,13 @@ class PharmacyScreen extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
-                              color: Colors.red,
+                              color: AppColor.red,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               dashboardController.notificationCount,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppColor.white,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -276,7 +271,7 @@ class PharmacyScreen extends StatelessWidget {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 35),
+                padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.03)),
                 child: GestureDetector(
                     // onTap: () => Get.to(PresviewerScreen()),
                     onTap: () {
@@ -320,7 +315,7 @@ class PharmacyScreen extends StatelessWidget {
                       controller.isPresViewerNavigating.value = false;
                     },
                     child: Container(
-                        height: 100,
+                        height: getDynamicHeight(size: 0.1),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColor.lightblue,
@@ -337,7 +332,7 @@ class PharmacyScreen extends StatelessWidget {
                               flex: 2,
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 20, // 4% of screen width
+                                  horizontal: getDynamicHeight(size: 0.02), // 4% of screen width
                                 ),
                                 child: Text(
                                   AppString.prescriptionviewer,
@@ -363,8 +358,8 @@ class PharmacyScreen extends StatelessWidget {
                                       right: 30,
                                       child: Image.asset(
                                         AppImage.medicine,
-                                        height: 100, // 10% of screen height
-                                        width: 100, // 20% of screen width
+                                        height: getDynamicHeight(size: 0.1), // 10% of screen height
+                                        width: getDynamicHeight(size: 0.1), // 20% of screen width
                                         fit: BoxFit.contain,
                                       ),
                                     ),

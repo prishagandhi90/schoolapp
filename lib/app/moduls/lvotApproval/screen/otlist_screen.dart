@@ -1,6 +1,8 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/lvotApproval/controller/lvotapproval_controller.dart';
@@ -26,15 +28,14 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                           Expanded(
                             child: RefreshIndicator(
                               onRefresh: () async {
-                                await controller.fetchLeaveOTList(
-                                    controller.selectedRole, controller.selectedLeaveType);
+                                await controller.fetchLeaveOTList(controller.selectedRole, controller.selectedLeaveType);
                               },
                               child: Scrollbar(
                                 thickness: 4, //According to your choice
                                 thumbVisibility: false, //
-                                radius: Radius.circular(10),
+                                radius: Radius.circular(getDynamicHeight(size: 0.007)),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 45),
+                                  padding: EdgeInsets.only(bottom: getDynamicHeight(size: 0.045)),
                                   child: SlidableAutoCloseBehavior(
                                     child: ListView.builder(
                                       itemCount: controller.filteredList.length,
@@ -45,8 +46,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                         final isSelected = controller.selectedItems.contains(leaveItem);
 
                                         // Divider color logic
-                                        final showPurpleDivider =
-                                            leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
+                                        final showPurpleDivider = leaveItem.lateReasonName != null && leaveItem.lateReasonName!.isNotEmpty;
                                         final showRedDivider = leaveItem.inchargeAction == "Rejected";
 
                                         return GestureDetector(
@@ -57,7 +57,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                               await controller.exitSelectionMode();
                                           },
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: EdgeInsets.all(getDynamicHeight(size: 0.007)),
                                             child: Slidable(
                                               key: ValueKey(leaveItem.employeeCodeName),
                                               endActionPane: ActionPane(
@@ -68,7 +68,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                       controller.showApproveDialog(context, index);
                                                     },
                                                     backgroundColor: AppColor.lightgreen,
-                                                    foregroundColor: Colors.black,
+                                                    foregroundColor: AppColor.black,
                                                     icon: Icons.check,
                                                     // label: 'Approve',
                                                   ),
@@ -81,7 +81,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                       // controller.update();
                                                     },
                                                     backgroundColor: AppColor.lightred,
-                                                    foregroundColor: Colors.black,
+                                                    foregroundColor: AppColor.black,
                                                     icon: Icons.close,
                                                     // label: 'Reject',
                                                   ),
@@ -91,31 +91,27 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                         controller.noteController.text =
                                                             controller.filteredList[index].inchargeNote.toString();
                                                       } else if (controller.selectedRole == "HOD") {
-                                                        controller.noteController.text =
-                                                            controller.filteredList[index].hoDNote.toString();
+                                                        controller.noteController.text = controller.filteredList[index].hoDNote.toString();
                                                       } else if (controller.selectedRole == "HR") {
-                                                        controller.noteController.text =
-                                                            controller.filteredList[index].hrNote.toString();
+                                                        controller.noteController.text = controller.filteredList[index].hrNote.toString();
                                                       }
                                                       controller.showNoteDialog(context, index);
                                                     },
                                                     backgroundColor: AppColor.lightblue,
                                                     child: Image.asset(
                                                       'assets/image/notes.png',
-                                                      width: 30,
-                                                      height: 30,
+                                                      width: getDynamicHeight(size: 0.02), //50,
+                                                      height: getDynamicHeight(size: 0.02), //50,
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                               child: Container(
                                                 width: double.infinity,
-                                                padding: const EdgeInsets.all(12.0),
+                                                padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
                                                 decoration: BoxDecoration(
-                                                  color: isSelected
-                                                      ? AppColor.darkgery.withOpacity(0.3)
-                                                      : AppColor.lightblue,
-                                                  borderRadius: BorderRadius.circular(10),
+                                                  color: isSelected ? AppColor.darkgery.withOpacity(0.3) : AppColor.lightblue,
+                                                  borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.007)),
                                                 ),
                                                 child: IntrinsicHeight(
                                                   child: Row(
@@ -124,18 +120,18 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                       // Add left divider with dynamic color
                                                       if (showPurpleDivider)
                                                         Container(
-                                                          width: 5,
+                                                          width: getDynamicHeight(size: 0.004),
                                                           height: double.infinity,
-                                                          color: Colors.purple,
+                                                          color: AppColor.purple,
                                                         ),
-                                                      const SizedBox(width: 3),
+                                                      SizedBox(width: getDynamicHeight(size: 0.002)),
                                                       if (showRedDivider)
                                                         Container(
-                                                          width: 5,
+                                                          width: getDynamicHeight(size: 0.004),
                                                           height: double.infinity,
-                                                          color: Colors.red,
+                                                          color: AppColor.red,
                                                         ),
-                                                      const SizedBox(width: 8), // Space after divider
+                                                      SizedBox(width: getDynamicHeight(size: 0.007)), // Space after divider
                                                       // Checkbox logic
                                                       if (controller.isSelectionMode.value)
                                                         Checkbox(
@@ -145,7 +141,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                           },
                                                         ),
                                                       Container(
-                                                        width: 50, // Fixed width for consistent alignment
+                                                        width: getDynamicHeight(size: 0.04), // Fixed width for consistent alignment
                                                         alignment: Alignment.topLeft,
                                                         child: Text(
                                                           leaveItem.otHours.toString(),
@@ -158,27 +154,13 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                       ),
                                                       // Vertical Divider
                                                       Container(
-                                                        width: 2, // Thickness of the divider
+                                                        width: getDynamicHeight(size: 0.001), // Thickness of the divider
                                                         color: AppColor.grey,
                                                       ),
-                                                      // Text(
-                                                      //   leaveItem.otHours.toString(),
-                                                      //   style: const TextStyle(
-                                                      //     fontSize: 20,
-                                                      //     fontWeight: FontWeight.bold,
-                                                      //   ),
-                                                      // ),
-                                                      // Padding(
-                                                      //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                      //   child: VerticalDivider(
-                                                      //     thickness: 2,
-                                                      //     color: AppColor.grey, // Divider color
-                                                      //   ),
-                                                      // ),
                                                       // // Divider and Name
                                                       Expanded(
                                                         child: Padding(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                          padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007)),
                                                           child: Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
@@ -193,7 +175,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                                 maxLines: 2,
                                                                 overflow: TextOverflow.ellipsis,
                                                               ),
-                                                              SizedBox(height: 10),
+                                                              SizedBox(height: getDynamicHeight(size: 0.007)),
                                                               Row(
                                                                 children: [
                                                                   // From Date
@@ -201,14 +183,14 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
                                                                       Text(
-                                                                        "From",
+                                                                        AppString.from,
                                                                         style: TextStyle(
                                                                           fontWeight: FontWeight.bold,
                                                                           // fontSize: 14,
                                                                           fontSize: getDynamicHeight(size: 0.016),
                                                                         ),
                                                                       ),
-                                                                      SizedBox(height: 4),
+                                                                      SizedBox(height: getDynamicHeight(size: 0.003)),
                                                                       Text(
                                                                         leaveItem.fromDate.toString(),
                                                                         style: TextStyle(
@@ -219,24 +201,23 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                                       ),
                                                                     ],
                                                                   ),
-                                                                  SizedBox(width: 16),
+                                                                  SizedBox(width: getDynamicHeight(size: 0.011)),
                                                                   // To Date
                                                                   Column(
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     children: [
                                                                       Text(
-                                                                        "To",
+                                                                        AppString.to,
                                                                         style: TextStyle(
                                                                           fontWeight: FontWeight.bold,
                                                                           // fontSize: 14,
                                                                           fontSize: getDynamicHeight(size: 0.016),
                                                                         ),
                                                                       ),
-                                                                      SizedBox(height: 4),
+                                                                      SizedBox(height: getDynamicHeight(size: 0.003)),
                                                                       Text(
                                                                         leaveItem.toDate.toString(),
                                                                         style: TextStyle(
-                                                                          // fontSize: 14,
                                                                           fontSize: getDynamicHeight(size: 0.016),
                                                                           color: Colors.black54,
                                                                         ),
@@ -254,18 +235,12 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                           await controller.otlistbottomsheet(context, index);
                                                         },
                                                         child: Image.asset(
-                                                          'assets/image/bottomsheet.png',
-                                                          width: 50,
-                                                          height: 50,
+                                                          AppImage.bottomsheet,
+                                                          width: getDynamicHeight(size: 0.02), //50,
+                                                          height: getDynamicHeight(size: 0.02), //50,
                                                           alignment: Alignment.topRight,
                                                         ),
                                                       ),
-                                                      // IconButton(
-                                                      //   icon: Icon(Icons.more_vert),
-                                                      //   onPressed: () {
-                                                      //     controller.otlistbottomsheet(context, index);
-                                                      //   },
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),

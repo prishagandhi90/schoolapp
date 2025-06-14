@@ -36,7 +36,9 @@ class PresdetailsScreen extends StatelessWidget {
             preferredSize: Size.fromHeight(
               controller.calculateAppBarHeight(
                   context,
-                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0 ? controller.presviewerList[controller.SelectedIndex].patientName.toString() : '',
+                  controller.presviewerList.isNotEmpty && controller.SelectedIndex >= 0
+                      ? controller.presviewerList[controller.SelectedIndex].patientName.toString()
+                      : '',
                   controller.filterpresviewerList[controller.SelectedIndex].fromEmergency.toString()),
             ),
             child: AppBar(
@@ -98,7 +100,7 @@ class PresdetailsScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: getDynamicHeight(size: 0.007)), 
+                                SizedBox(width: getDynamicHeight(size: 0.007)),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,31 +248,42 @@ class PresdetailsScreen extends StatelessWidget {
                                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                         children: [
                                                           Row(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
                                                               Text(
-                                                                "${index + 1}.", // Serial number starts from 1
+                                                                "${index + 1}.",
                                                                 style: TextStyle(
                                                                   fontWeight: FontWeight.bold,
-                                                                  // fontSize: 16,
                                                                   fontSize: getDynamicHeight(size: 0.018),
                                                                   color: AppColor.black,
                                                                 ),
-                                                                overflow: TextOverflow.ellipsis,
-                                                                maxLines: 2,
                                                               ),
                                                               SizedBox(width: 8),
                                                               Expanded(
-                                                                child: Text(
-                                                                  controller.presdetailList[index].formBrand.toString(),
-                                                                  style: TextStyle(
-                                                                    fontWeight: FontWeight.w600,
-                                                                    // fontSize: 15,
-                                                                    fontSize: getDynamicHeight(size: 0.017),
-                                                                  ),
-                                                                  overflow: TextOverflow.ellipsis,
-                                                                  maxLines: 2,
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Text(
+                                                                      controller.presdetailList[index].formBrand.toString(),
+                                                                      style: TextStyle(
+                                                                        fontWeight: FontWeight.w600,
+                                                                        fontSize: getDynamicHeight(size: 0.017),
+                                                                      ),
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                      maxLines: 2,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              SizedBox(width: 8),
+                                                              // 'rack:' hamesha first line me dikhega
+                                                              Text(
+                                                                "Rack:",
+                                                                style: TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                                  fontSize: getDynamicHeight(size: 0.017),
+                                                                  color: AppColor.black,
                                                                 ),
                                                               ),
                                                             ],

@@ -66,8 +66,8 @@ class CustomDropdown extends StatelessWidget {
                 }
               : null, // ✅ disable interaction
           buttonStyleData: buttonStyleData,
-          menuItemStyleData: const MenuItemStyleData(
-            height: 40,
+          menuItemStyleData: MenuItemStyleData(
+            height: getDynamicHeight(size: 0.038),
           ),
           dropdownSearchData: dropdownSearchData,
           dropdownStyleData: DropdownStyleData(
@@ -75,9 +75,9 @@ class CustomDropdown extends StatelessWidget {
             useRootNavigator: true,
             maxHeight: screenHeight * 0.4,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
+              border: Border.all(color: AppColor.black),
               borderRadius: BorderRadius.circular(0),
-              color: Colors.white,
+              color: AppColor.white,
             ),
             scrollbarTheme: ScrollbarThemeData(
               radius: const Radius.circular(8),

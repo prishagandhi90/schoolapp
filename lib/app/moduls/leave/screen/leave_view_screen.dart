@@ -316,7 +316,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                               child: Text(
                                                 AppString.name,
                                                 style: AppStyle.w50018.copyWith(
-                                                  color: Colors.white,
+                                                  color: AppColor.white,
                                                 ),
                                               ),
                                             ),
@@ -329,7 +329,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                               child: Text(
                                                 AppString.reason,
                                                 style: AppStyle.w50018.copyWith(
-                                                  color: Colors.white,
+                                                  color: AppColor.white,
                                                 ),
                                               ),
                                             ),
@@ -531,7 +531,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   title,
-                  style: AppStyle.w50018.copyWith(color: Colors.white),
+                  style: AppStyle.w50018.copyWith(color: AppColor.white),
                 ),
               ),
             ),
