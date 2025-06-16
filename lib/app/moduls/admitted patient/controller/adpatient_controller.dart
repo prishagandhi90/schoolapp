@@ -1297,4 +1297,22 @@ class AdPatientController extends GetxController {
     player.dispose();
     super.onClose();
   }
+
+  void resetVoiceControls() {
+    isListening = false;
+    isRecording = false;
+    isPlaying = false;
+
+    audioBytes.clear();
+
+    recognizedText = '';
+    translatedText = '';
+    filePath = null;
+
+    apiCall = false;
+    seconds = 0;
+
+    timer?.cancel();
+    timer = null;
+  }
 }

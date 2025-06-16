@@ -458,6 +458,7 @@ class AdpatientScreen extends StatelessWidget {
                                 controller.uhid = controller.filterpatientsData[index].uhid ?? '';
                                 controller.patientName = controller.filterpatientsData[index].patientName ?? '';
                                 controller.bedNo = controller.filterpatientsData[index].bedNo ?? '';
+                                controller.resetVoiceControls();
                                 controller.update();
                                 PersistentNavBarNavigator.pushNewScreen(
                                   context,
