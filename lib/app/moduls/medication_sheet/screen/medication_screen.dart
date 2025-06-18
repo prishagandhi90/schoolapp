@@ -4,7 +4,9 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
@@ -213,7 +215,11 @@ class MedicationScreen extends StatelessWidget {
                             // 🔹 Icons
                             Row(
                               children: [
-                                Icon(Icons.remove_red_eye_outlined, size: 20),
+                                GestureDetector(
+                                    onTap: () {
+                                      Get.to(ViewMedicationScreen());
+                                    },
+                                    child: Icon(Icons.remove_red_eye_outlined, size: 20)),
                                 SizedBox(width: 5),
                                 IconButton(
                                     onPressed: () {

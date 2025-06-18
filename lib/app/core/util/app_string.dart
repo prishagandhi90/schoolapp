@@ -234,4 +234,5 @@ class AppString {
   static String rxid = "Rx ID";
   static String id = "ID";
   static String user = "User";
+  static String viewmedication = "View Medication";
 }
