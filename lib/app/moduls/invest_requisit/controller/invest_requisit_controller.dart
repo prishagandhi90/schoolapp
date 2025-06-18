@@ -48,8 +48,8 @@ class InvestRequisitController extends GetxController {
   final ExternalLabIdController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController mobileController = TextEditingController(text: '');
-  TextEditingController passwordController = TextEditingController(text: '');
+  TextEditingController mobileController = TextEditingController(text: '9429728770');
+  TextEditingController passwordController = TextEditingController(text: 'venus9');
   bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
@@ -103,7 +103,9 @@ class InvestRequisitController extends GetxController {
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' ||
+              typeController.text.toLowerCase() == 'radio' ||
+              typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -205,7 +207,11 @@ class InvestRequisitController extends GetxController {
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "flag": typeController.text.toLowerCase() == "other investigation" ? "OTHER" : typeController.text.toUpperCase()
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseServiceGroup responseServiceGroup = ResponseServiceGroup.fromJson(jsonDecode(response));
@@ -448,11 +454,15 @@ class InvestRequisitController extends GetxController {
           serviceId: int.tryParse(service.id.toString()) ?? 0,
           username: webUserName, // Replace with real user
           invSrc: InExController.text.toLowerCase() == "internal" ? "Internal" : "External",
-          reqTyp: typeController.text.toString().toUpperCase() == "LAB" ? "LAB CHARGES" : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
+          reqTyp: typeController.text.toString().toUpperCase() == "LAB"
+              ? "LAB CHARGES"
+              : (typeController.text.toUpperCase() == "RADIO" ? "RADIO CHARGES" : "OTHERINVESTIGATIONS"),
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
+              ? drNameController.text.trim()
+              : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -489,7 +499,9 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab'
+            ? "LabRequest"
+            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -1165,7 +1177,9 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
+                                        item.serviceGroup != '' && item.serviceGroup != null
+                                            ? item.serviceGroup.toString()
+                                            : item.reqTyp.toString(),
                                         style: TextStyle(fontSize: getDynamicHeight(size: 0.011)),
                                       ),
                                     ],
@@ -1176,7 +1190,8 @@ class InvestRequisitController extends GetxController {
                                     Visibility(
                                       visible: item.status != null && item.status!.isNotEmpty,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
                                         decoration: BoxDecoration(
                                           color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
                                           borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0035)),
@@ -1319,12 +1334,12 @@ class InvestRequisitController extends GetxController {
 
                 // return;
               } else {
-                Get.rawSnackbar(
-                  message: "Login failed. Please check your credentials.",
-                  duration: Duration(seconds: 5),
-                  backgroundColor: Colors.red.shade100,
-                  snackPosition: SnackPosition.TOP,
-                );
+                // Get.rawSnackbar(
+                //   message: "Login failed. Please check your credentials.",
+                //   duration: Duration(seconds: 5),
+                //   backgroundColor: Colors.red.shade100,
+                //   snackPosition: SnackPosition.TOP,
+                // );
               }
             },
             onTap: () {
@@ -1336,7 +1351,8 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Future<void> redirectToClickedMenu(InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
+  Future<void> redirectToClickedMenu(
+      InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
     if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
       if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
         fromAdmittedScreen = true;
@@ -1710,8 +1726,8 @@ class InvestRequisitController extends GetxController {
     selectedServices.clear();
     selectedTop = 20;
     fromAdmittedScreen = false;
-    mobileController.clear();
-    passwordController.clear();
+    // mobileController.clear();
+    // passwordController.clear();
 
     update();
   }

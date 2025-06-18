@@ -50,6 +50,7 @@ class LeaveScreen extends GetView<LeaveController> {
                               dateController: controller.fromDateController,
                               hintText: AppString.from,
                               onDateSelected: () async => await controller.selectFromDate(context),
+                              
                             ),
                           ),
                           SizedBox(width: getDynamicHeight(size: 0.01)),

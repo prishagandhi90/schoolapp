@@ -12,9 +12,10 @@ import 'package:emp_app/app/moduls/admitted%20patient/screen/lab_summary_screen.
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/screen/speechtotext_screen.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/dummy_file.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/screen/invest_requisit_screen.dart';
+import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/medication_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
@@ -252,7 +253,8 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter,
+                                              height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -382,13 +384,17 @@ class AdpatientScreen extends StatelessWidget {
     return controller.filterpatientsData.isNotEmpty
         ? InkWell(
             onTap: () async {
-              if (controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" && controller.WebLoginUser_InvReq.trim() != "") {
+              if (controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" &&
+                  controller.WebLoginUser_InvReq.trim() != "") {
                 TapToRedirectToInvestigationScreen(
                   controller: controller,
                   index: index,
                 );
-              } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser_InvReq.trim() != "") {
-                Get.to(() => DummyScreen())!.then((value) async {
+              } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" &&
+                  controller.WebLoginUser_InvReq.trim() != "") {
+                final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
+                medicationsheetController.fetchLeaveNames();
+                Get.to(() => MedicationScreen())!.then((value) async {
                   final controller = Get.put(InvestRequisitController());
                   await controller.resetForm();
                   hideBottomBar.value = false;

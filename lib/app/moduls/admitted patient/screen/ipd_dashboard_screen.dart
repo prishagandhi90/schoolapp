@@ -332,55 +332,52 @@ class IpdDashboardScreen extends StatelessWidget {
                           controller.isInvestigationReq_Navigating.value = false;
                         },
                       ),
-                      // _buildPatientCard(
-                      //   title: 'Medication Sheet',
-                      //   // count: controller.patientsData.length,
-                      //   // context: context,
-                      //   // index: index,
-                      //   imagePath: AppImage.medication,
-                      //   onTap: () async {
-                      //     if (controller.isInvestigationReq_Navigating.value) return;
-                      //     controller.isInvestigationReq_Navigating.value = true;
+                      _buildPatientCard(
+                        title: 'Medication Sheet',
+                        // count: controller.patientsData.length,
+                        // context: context,
+                        // index: index,
+                        imagePath: AppImage.medication,
+                        onTap: () async {
+                          if (controller.isInvestigationReq_Navigating.value) return;
+                          controller.isInvestigationReq_Navigating.value = true;
 
-                      //     if (controller.screenRightsTable.isNotEmpty) {
-                      //       if (controller.screenRightsTable[2].rightsYN == "N") {
-                      //         controller.isInvestigationReq_Navigating.value = false;
-                      //         Get.snackbar(
-                      //           "You don't have access to this screen",
-                      //           '',
-                      //           colorText: AppColor.white,
-                      //           backgroundColor: AppColor.black,
-                      //           duration: const Duration(seconds: 1),
-                      //         );
-                      //         return;
-                      //       }
-                      //     }
-
-                      //     controller.FromScreen_Redirection = "";
-                      //     controller.WebLoginUser_InvReq = "";
-                      //     controller.update();
-
-                      //     final envReqController = Get.put(InvestRequisitController());
-                      //     await envReqController.resetForm();
-                      //     // ⬇️ Call the dialog function directly
-
-                      //     await envReqController.loginAlertDialog(
-                      //       context,
-                      //       "MEDICATION SHEET",
-                      //       "",
-                      //       "",
-                      //       "",
-                      //       fromScreen: "MEDICATION",
-                      //       fromScreenRedirection: "MEDICATION SHEET",
-                      //     );
-                      //     // ⬇️ Ye tab chalega jab dialog band ho jayega
-                      //     // final controller = Get.put(AdPatientController());
-                      //     controller.sortBySelected = -1;
-                      //     await controller.resetForm();
-                      //     await controller.fetchData();
-                      //     controller.isInvestigationReq_Navigating.value = false;
-                      //   },
-                      // ),
+                          if (controller.screenRightsTable.isNotEmpty) {
+                            if (controller.screenRightsTable[2].rightsYN == "N") {
+                              controller.isInvestigationReq_Navigating.value = false;
+                              Get.snackbar(
+                                "You don't have access to this screen",
+                                '',
+                                colorText: AppColor.white,
+                                backgroundColor: AppColor.black,
+                                duration: const Duration(seconds: 1),
+                              );
+                              return;
+                            }
+                          }
+                          controller.FromScreen_Redirection = "";
+                          controller.WebLoginUser_InvReq = "";
+                          controller.update();
+                          final envReqController = Get.put(InvestRequisitController());
+                          await envReqController.resetForm();
+                          // ⬇️ Call the dialog function directly
+                          await envReqController.loginAlertDialog(
+                            context,
+                            "MEDICATION SHEET",
+                            "",
+                            "",
+                            "",
+                            fromScreen: "MEDICATION SHEET",
+                            fromScreenRedirection: "MEDICATION SHEET",
+                          );
+                          // ⬇️ Ye tab chalega jab dialog band ho jayega
+                          // final controller = Get.put(AdPatientController());
+                          controller.sortBySelected = -1;
+                          await controller.resetForm();
+                          await controller.fetchData();
+                          controller.isInvestigationReq_Navigating.value = false;
+                        },
+                      ),
                     ],
                   );
                 },

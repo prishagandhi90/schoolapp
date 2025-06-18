@@ -224,4 +224,14 @@ class AppString {
 
   //Medication Sheet
   static String medicationsheet = "Medication Sheet";
+  static String indoorrecordtype = "Indoor Record Type";
+  static String entrydatetime = "Entry Date/Time";
+  static String specialorder = "Special Order";
+  static String templatename = "Template Name";
+  static String provisionaldiagnosis = "Provisional Diagnosis";
+  static String weight = "weight";
+  static String remark = "Remark";
+  static String rxid = "Rx ID";
+  static String id = "ID";
+  static String user = "User";
 }

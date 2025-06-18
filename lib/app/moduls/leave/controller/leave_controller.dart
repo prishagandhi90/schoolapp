@@ -35,11 +35,9 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
   bool isSaveBtnLoading = false;
   var leftleavedays = ''.obs;
   var dropdownItems123 = <DropdownlstTable>[].obs;
-
   var leavereason = <LeaveReasonTable>[].obs;
   var leavedelayreason = <LeaveDelayReason>[].obs;
   var leaverelivername = <LeaveReliverName>[].obs;
-
   RxString days = ''.obs; // To store the calculated days
   RxBool isDaysFieldEnabled = false.obs;
   final overtimeController = Get.put(OvertimeController());
