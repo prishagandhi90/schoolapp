@@ -2,6 +2,7 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -117,85 +118,106 @@ class ViewMedicationScreen extends StatelessWidget {
                     itemCount: medicationList.length,
                     itemBuilder: (context, index) {
                       final item = medicationList[index];
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 🔹 Title Row
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      return LayoutBuilder(
+                        builder: (context, constraints) {
+                          return Slidable(
+                            key: ValueKey(index),
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              extentRatio: 0.18,
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    "${index + 1}. ${item['type']} | ${item['name']} | ${item['composition']} | ${item['qty']}",
-                                    style: const TextStyle(fontWeight: FontWeight.w500),
+                                Container(
+                                  width: 65,
+                                  height: constraints.maxHeight, // 💥 dynamic height from main container
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(color: Colors.grey.shade400, width: 1),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red, size: 22),
+                                    onPressed: () {},
                                   ),
                                 ),
-                                const Icon(Icons.menu),
                               ],
                             ),
-
-                            const SizedBox(height: 6),
-
-                            // 🔹 Remarks
-                            if (item['remarks']!.isNotEmpty)
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    const TextSpan(
-                                      text: 'Remarks: ',
-                                      style: TextStyle(fontWeight: FontWeight.w500),
-                                    ),
-                                    TextSpan(
-                                      text: item['remarks'],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black26),
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          "${index + 1}. ${item['type']} | ${item['name']} | ${item['composition']} | ${item['qty']}",
+                                          style: const TextStyle(fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                      const Icon(Icons.menu),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  if (item['remarks']!.isNotEmpty)
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'Remarks: ',
+                                            style: TextStyle(fontWeight: FontWeight.w500),
+                                          ),
+                                          TextSpan(
+                                            text: item['remarks'],
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-
-                            // 🔹 Flow rate
-                            if (item['flow']!.isNotEmpty)
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    const TextSpan(
-                                      text: 'Flow Rate: ',
-                                      style: TextStyle(fontWeight: FontWeight.w500),
-                                    ),
-                                    TextSpan(
-                                      text: item['flow'],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.grey,
+                                  if (item['flow']!.isNotEmpty)
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'Flow Rate: ',
+                                            style: TextStyle(fontWeight: FontWeight.w500),
+                                          ),
+                                          TextSpan(
+                                            text: item['flow'],
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  if (item['dosage']!.isNotEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(item['dosage']!),
+                                    ),
+                                ],
                               ),
-
-                            // 🔹 Dosage
-                            if (item['dosage']!.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4),
-                                child: Text(item['dosage']!),
-                              ),
-                          ],
-                        ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
-                ),
+                )
               ],
             ),
           ),
