@@ -175,7 +175,8 @@ class MedicationScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: treatmentList.length, // Your list of treatments
+                  itemCount: controller.drTreatMasterList.length, // Your list of treatments
+                  shrinkWrap: true,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.all(getDynamicHeight(
