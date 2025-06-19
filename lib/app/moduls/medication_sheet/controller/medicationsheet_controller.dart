@@ -49,6 +49,17 @@ class MedicationsheetController extends GetxController {
     dateController.text = formattedDate;
   }
 
+  bool isSearchActive = false;
+
+  void activateSearch(bool status) {
+    isSearchActive = status;
+    update(); // Call this inside GetX Controller
+  }
+
+  void clearSearch() {
+    searchController.clear();
+  }
+
   Future<void> selectOperationName() async {
     showModalBottomSheet(
       elevation: 0,

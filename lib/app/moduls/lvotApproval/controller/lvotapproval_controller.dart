@@ -81,14 +81,6 @@ class LvotapprovalController extends GetxController with SingleGetTickerProvider
     });
   }
 
-  void closeSlidableIfOpen(BuildContext context) async {
-    final slidable = Slidable.of(context);
-    if (slidable != null && slidable.actionPaneType.value != ActionPaneType.none) {
-      slidable.close();
-      await Future.delayed(const Duration(milliseconds: 300));
-    }
-  }
-
   @override
   void dispose() {
     // Custom back button action for Android hardware button

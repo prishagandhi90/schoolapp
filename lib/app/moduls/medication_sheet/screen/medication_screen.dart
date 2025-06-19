@@ -1,14 +1,16 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
 
 class MedicationScreen extends StatelessWidget {
   MedicationScreen({Key? key}) : super(key: key);
@@ -168,67 +170,115 @@ class MedicationScreen extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: treatmentList.length, // Your list of treatments
                   itemBuilder: (context, index) {
-                    final item = treatmentList[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        // margin: EdgeInsets.symmetric(vertical: 6),
-                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.primaryColor),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Slidable(
+                        key: ValueKey(index),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          extentRatio: 0.36, // ~18% each
                           children: [
-                            // 🔹 Index and Date
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "${index + 1}.  ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: "Treatment Date:  ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: treatmentList[index],
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
+                            // 🔷 Copy Button
+                            Container(
+                              height: 55,
+                              width: 65,
+                              decoration: BoxDecoration(
+                                color: Colors.teal,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                ),
+                              ),
+                              child: IconButton(
+                                icon: const Icon(Icons.copy, color: Colors.white, size: 22),
+                                onPressed: () {
+                                  controller.showMedicationDialog(context);
+                                },
                               ),
                             ),
-
-                            // 🔹 Icons
-                            Row(
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      Get.to(ViewMedicationScreen());
-                                    },
-                                    child: Icon(Icons.remove_red_eye_outlined, size: 20)),
-                                SizedBox(width: 5),
-                                IconButton(
-                                    onPressed: () {
-                                      controller.medicationbottomsheet(context, index);
-                                    },
-                                    icon: Icon(Icons.menu, size: 20))
-                              ],
+                            // 🔷 Edit Button
+                            Container(
+                              height: 55,
+                              width: 65,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey.shade400, width: 1),
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                ),
+                              ),
+                              child: IconButton(
+                                icon: const Icon(Icons.edit, color: Colors.teal, size: 22),
+                                onPressed: () {
+                                  controller.showMedicationDialog(context);
+                                },
+                              ),
                             ),
                           ],
+                        ),
+                        child: GestureDetector(
+                          onTap: () => Get.to(AddMedicationScreen()),
+                          child: Container(
+                            // margin: EdgeInsets.symmetric(vertical: 6),
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColor.primaryColor),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // 🔹 Index and Date
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: "${index + 1}.  ",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "Treatment Date:  ",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: treatmentList[index],
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                // 🔹 Icons
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          Get.to(ViewMedicationScreen());
+                                        },
+                                        child: Icon(Icons.remove_red_eye_outlined, size: 20)),
+                                    SizedBox(width: 5),
+                                    IconButton(
+                                        onPressed: () {
+                                          controller.medicationbottomsheet(context, index);
+                                        },
+                                        icon: Icon(Icons.menu, size: 20))
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     );
