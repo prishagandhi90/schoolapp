@@ -36,6 +36,7 @@ class MedicationsheetController extends GetxController {
   TextEditingController remarksController = TextEditingController();
   TextEditingController diagnosisController = TextEditingController();
   TextEditingController weightController = TextEditingController();
+
   String? selectedOrder;
   String? selectedTemplate;
   DateTime selectedDate = DateTime.now();
@@ -283,7 +284,8 @@ class MedicationsheetController extends GetxController {
                                     );
 
                                     if (pickedDate != null) {
-                                      final formattedDate = "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                      final formattedDate =
+                                          "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
                                       dateController.text = formattedDate;
                                     }
                                     FocusScope.of(context).unfocus();
