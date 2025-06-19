@@ -14,6 +14,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_master.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,8 @@ class MedicationsheetController extends GetxController {
 
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
+
+  List<DRTreatMasterList> drTreatMasterList = [];
 
   @override
   void onInit() {
@@ -124,6 +127,54 @@ class MedicationsheetController extends GetxController {
       }
     }
     update();
+  }
+
+  Future<List<DRTreatMasterList>> fetchDrTreatmentData({
+    required String ipdNo,
+    required String treatTyp,
+  }) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empDoctorTreatmentMasterAPI;
+      String loginId = pref.getString(AppString.keyLoginId) ?? "";
+      String empId = pref.getString(AppString.keyEmpId) ?? "";
+      String tokenNo = pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "ipdNo": ipdNo, "treatTyp": treatTyp, "userName": 'Harshil'};
+
+      // List<dynamic> responseList = jsonDecode(response);
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      Resp_DrTreatmentMst resp_DrTreatmentMst = Resp_DrTreatmentMst.fromJson(jsonDecode(response));
+
+      if (resp_DrTreatmentMst.statusCode == 200) {
+        if (resp_DrTreatmentMst.data != null && resp_DrTreatmentMst.data!.isNotEmpty) {
+          drTreatMasterList = resp_DrTreatmentMst.data!;
+        } else {}
+        update();
+      } else if (resp_DrTreatmentMst.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (resp_DrTreatmentMst.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return [];
   }
 
   Future<List<DropdownMultifieldsTable>> fetchSpecialOrderList() async {

@@ -21,7 +21,7 @@ class MedicationScreen extends StatelessWidget {
     double containerHeight;
 
     if (screenWidth < 360) {
-      containerHeight = 80; // Small screen fix (static for tiny devices)
+      containerHeight = getDynamicHeight(size: 0.076); // Small screen fix (static for tiny devices)
     } else if (screenWidth > 600) {
       containerHeight = getDynamicHeight(size: 0.040); // iPad
     } else {
@@ -59,7 +59,7 @@ class MedicationScreen extends StatelessWidget {
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.lightgrey1, width: 1.0),
+                              borderSide: BorderSide(color: AppColor.lightgrey1, width: getDynamicHeight(size: 0.001)),
                               borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -83,7 +83,9 @@ class MedicationScreen extends StatelessWidget {
                             filled: true,
                             fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(getDynamicHeight(size: 0.027))),
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                getDynamicHeight(size: 0.027),
+                              )),
                             ),
                           ),
                           onTap: () {
@@ -120,7 +122,9 @@ class MedicationScreen extends StatelessWidget {
                         height: containerHeight,
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                          borderRadius: BorderRadius.circular(
+                            getDynamicHeight(size: 0.012),
+                          ),
                         ),
                         child: Center(
                           child: GestureDetector(
@@ -129,14 +133,17 @@ class MedicationScreen extends StatelessWidget {
                             },
                             child: FittedBox(
                               fit: BoxFit.contain,
-                              child:
-                                  Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                              child: Image.asset(
+                                AppImage.filter,
+                                height: getDynamicHeight(size: 0.02),
+                                width: getDynamicHeight(size: 0.02),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: getDynamicHeight(size: 0.010)),
+                    SizedBox(width: getDynamicHeight(size: 0.008)),
                     Expanded(
                       flex: 1.5.toInt(),
                       child: Container(
@@ -171,17 +178,19 @@ class MedicationScreen extends StatelessWidget {
                   itemCount: treatmentList.length, // Your list of treatments
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(getDynamicHeight(
+                        size: 0.002,
+                      )),
                       child: Slidable(
                         key: ValueKey(index),
                         endActionPane: ActionPane(
                           motion: const ScrollMotion(),
-                          extentRatio: 0.36, // ~18% each
+                          extentRatio: 0.21, // ~18% each
                           children: [
                             // 🔷 Copy Button
                             Container(
-                              height: 55,
-                              width: 65,
+                              height: getDynamicHeight(size: 0.050),
+                              width: getDynamicHeight(size: 0.050),
                               decoration: BoxDecoration(
                                 color: Colors.teal,
                                 borderRadius: const BorderRadius.only(
@@ -190,7 +199,11 @@ class MedicationScreen extends StatelessWidget {
                                 ),
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.copy, color: Colors.white, size: 22),
+                                icon: Icon(
+                                  Icons.copy,
+                                  color: Colors.white,
+                                  size: getDynamicHeight(size: 0.025),
+                                ),
                                 onPressed: () {
                                   controller.showMedicationDialog(context);
                                 },
@@ -198,18 +211,25 @@ class MedicationScreen extends StatelessWidget {
                             ),
                             // 🔷 Edit Button
                             Container(
-                              height: 55,
-                              width: 65,
+                              height: getDynamicHeight(size: 0.050),
+                              width: getDynamicHeight(size: 0.050),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(color: Colors.grey.shade400, width: 1),
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
+                                border: Border.all(
+                                  color: Colors.grey.shade400,
+                                  width: getDynamicHeight(size: 0.001),
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(getDynamicHeight(size: 0.008)),
+                                  bottomRight: Radius.circular(getDynamicHeight(size: 0.008)),
                                 ),
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.edit, color: Colors.teal, size: 22),
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Colors.teal,
+                                  size: getDynamicHeight(size: 0.025),
+                                ),
                                 onPressed: () {
                                   controller.showMedicationDialog(context);
                                 },
@@ -221,10 +241,15 @@ class MedicationScreen extends StatelessWidget {
                           onTap: () => Get.to(AddMedicationScreen()),
                           child: Container(
                             // margin: EdgeInsets.symmetric(vertical: 6),
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: getDynamicHeight(size: 0.003),
+                              vertical: getDynamicHeight(size: 0.000),
+                            ),
                             decoration: BoxDecoration(
                               border: Border.all(color: AppColor.primaryColor),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(
+                                getDynamicHeight(size: 0.0055),
+                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -235,26 +260,15 @@ class MedicationScreen extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text: "${index + 1}.  ",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
+                                        style: AppStyle.black,
                                       ),
                                       TextSpan(
                                         text: "Treatment Date:  ",
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
+                                        style: AppStyle.black,
                                       ),
                                       TextSpan(
-                                        text: treatmentList[index],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 14,
-                                        ),
+                                        text: controller.drTreatMasterList[index].date.toString(),
+                                        style: AppStyle.black,
                                       ),
                                     ],
                                   ),
@@ -267,13 +281,20 @@ class MedicationScreen extends StatelessWidget {
                                         onTap: () {
                                           Get.to(ViewMedicationScreen());
                                         },
-                                        child: Icon(Icons.remove_red_eye_outlined, size: 20)),
-                                    SizedBox(width: 5),
+                                        child: Icon(
+                                          Icons.remove_red_eye_outlined,
+                                          size: getDynamicHeight(size: 0.021),
+                                        )),
+                                    SizedBox(width: getDynamicHeight(size: 0.004)),
                                     IconButton(
-                                        onPressed: () {
-                                          controller.medicationbottomsheet(context, index);
-                                        },
-                                        icon: Icon(Icons.menu, size: 20))
+                                      onPressed: () {
+                                        controller.medicationbottomsheet(context, index);
+                                      },
+                                      icon: Icon(
+                                        Icons.menu,
+                                        size: getDynamicHeight(size: 0.021),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -298,13 +319,15 @@ class MedicationScreen extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(
+              getDynamicHeight(size: 0.007),
+            ),
             child: Container(
               child: TextButton(
                 onPressed: () {},
                 style: TextButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 167, 166, 166),
-                  foregroundColor: AppColor.black,
+                  foregroundColor: AppColor.blackColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
                   ),
@@ -339,93 +362,3 @@ class MedicationScreen extends StatelessWidget {
     "28/06/2025",
   ];
 }
-
-// GestureDetector(
-//                 onTap: () {
-//                   controller.searchLeaveNameListData = null;
-//                   controller.selectOperationName();
-//                 },
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(10),
-//                     color: Colors.white,
-//                     border: Border.all(
-//                       width: 1,
-//                       color: ConstColor.borderColor,
-//                     ),
-//                   ),
-//                   child: Padding(
-//                     padding: EdgeInsets.symmetric(
-//                       horizontal: Sizes.crossLength * 0.010,
-//                       vertical: Sizes.crossLength * 0.015,
-//                     ),
-//                     // padding: const EdgeInsets.only(
-//                     //     left: 10, right: 10, top: 15, bottom: 15),
-//                     child: Row(
-//                       mainAxisSize: MainAxisSize.min,
-//                       children: [
-//                         Expanded(
-//                           child: controller.selectedleaveList.isEmpty
-//                               ? Row(
-//                                   children: [
-//                                     Expanded(
-//                                       child: AppText(
-//                                         text: 'Select Surgery',
-//                                         fontColor: ConstColor.hintTextColor,
-//                                       ),
-//                                     ),
-//                                     // SvgPicture.asset(
-//                                     //   ConstAsset.down,
-//                                     //   height: 20,
-//                                     //   width: 20,
-//                                     //   fit: BoxFit.cover,
-//                                     // ),
-//                                   ],
-//                                 )
-//                               : Wrap(
-//                                   runSpacing: 5,
-//                                   spacing: 8,
-//                                   children: [
-//                                     for (int i = 0; i < controller.selectedleaveList.length; i++)
-//                                       Container(
-//                                         decoration: BoxDecoration(
-//                                             border: Border.all(width: 1, color: ConstColor.hintTextColor),
-//                                             borderRadius: BorderRadius.circular(10),
-//                                             color: Colors.white),
-//                                         child: Padding(
-//                                           padding: const EdgeInsets.only(left: 7, right: 5, top: 5, bottom: 5),
-//                                           child: Row(
-//                                             mainAxisSize: MainAxisSize.min,
-//                                             children: [
-//                                               Flexible(
-//                                                 child: AppText(
-//                                                   text: controller.selectedleaveList[i].name ?? '',
-//                                                   maxLine: 1,
-//                                                   overflow: TextOverflow.ellipsis,
-//                                                 ),
-//                                               ),
-//                                               GestureDetector(
-//                                                 onTap: () {
-//                                                   FocusScope.of(context).unfocus();
-//                                                   controller.selectedOperationId.remove(controller.selectedleaveList[i].value.toString());
-//                                                   controller.selectedleaveList.remove(controller.selectedleaveList[i]);
-//                                                   controller.update();
-//                                                 },
-//                                                 child: const Icon(
-//                                                   Icons.cancel_outlined,
-//                                                   size: 20,
-//                                                   color: ConstColor.errorBorderColor,
-//                                                 ),
-//                                               )
-//                                             ],
-//                                           ),
-//                                         ),
-//                                       )
-//                                   ],
-//                                 ),
-//                         )
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
