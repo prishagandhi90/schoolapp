@@ -1,20 +1,21 @@
 import 'dart:convert';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
+import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/custom_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
-import 'package:emp_app/app/moduls/leave/model/leavenames_model.dart';
-import 'package:emp_app/app/moduls/leave/model/leavereason_model.dart';
+import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/medication_sheet/screen/widget/sample.dart';
+import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -22,11 +23,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MedicationsheetController extends GetxController {
   final InvestRequisitController investRequisitController = Get.put(InvestRequisitController());
-  List<LeaveNamesTable>? searchLeaveNameListData;
-  List<String> selectedOperationId = [];
-  List<LeaveNamesTable> selectedleaveList = [];
-  List<LeaveNamesTable> leaveNameListData = [];
-  var leavereason = <LeaveReasonTable>[].obs;
+  List<DropdownMultifieldsTable>? searchDropdnMultifieldsData;
+  List<String> selectedDropdnOptionId = [];
+  List<DropdownMultifieldsTable> selectedDropdownList = [];
+  List<DropdownMultifieldsTable> dropdownMultifieldsTable = [];
+  List<DropdownNamesTable> templatedropdownTable = [];
   final ApiController apiController = Get.put(ApiController());
   String tokenNo = '', loginId = '', empId = '';
   bool isLoading = false;
@@ -40,10 +41,14 @@ class MedicationsheetController extends GetxController {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
+  final TemplateNameController = TextEditingController();
+  final TemplateIdController = TextEditingController();
+
   @override
   void onInit() {
     super.onInit();
     // Current date ko format karke controller me daalo
+    fetchTemplateList();
     final now = DateTime.now();
     final formattedDate = DateFormat('dd-MM-yyyy').format(now);
     dateController.text = formattedDate;
@@ -76,67 +81,74 @@ class MedicationsheetController extends GetxController {
       builder: (context) => Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.65,
-            width: Get.width,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25.0),
-                topRight: Radius.circular(25.0),
-              ),
+          height: MediaQuery.of(context).size.height * 0.65,
+          width: Get.width,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25.0),
+              topRight: Radius.circular(25.0),
             ),
-            child: const OperationListView()),
+          ),
+          // child: const OperationListView()),
+          child: commonDropdownListview<MedicationsheetController>(
+            controller: Get.find<MedicationsheetController>(),
+            getList: (ctrl) => ctrl.dropdownMultifieldsTable,
+            getSearchList: (ctrl) => ctrl.searchDropdnMultifieldsData,
+            getSelectedIds: (ctrl) => ctrl.selectedDropdnOptionId,
+            onToggle: (ctrl, id, item) {
+              if (ctrl.selectedDropdnOptionId.contains(id)) {
+                ctrl.selectedDropdnOptionId.remove(id);
+                ctrl.selectedDropdownList.remove(item);
+              } else {
+                ctrl.selectedDropdnOptionId.add(id);
+                ctrl.selectedDropdownList.add(item);
+              }
+              ctrl.update();
+            },
+          ),
+        ),
       ),
     );
   }
 
   searchOperationName(String text) {
     if (text.trim().isEmpty) {
-      searchLeaveNameListData = null;
+      searchDropdnMultifieldsData = null;
     } else {
-      searchLeaveNameListData = [];
-      for (var userDetail in leaveNameListData) {
+      searchDropdnMultifieldsData = [];
+      for (var userDetail in dropdownMultifieldsTable) {
         if (userDetail.name!.toLowerCase().contains(text.toLowerCase())) {
-          searchLeaveNameListData!.add(userDetail);
+          searchDropdnMultifieldsData!.add(userDetail);
         }
       }
     }
     update();
   }
 
-  Future<List<LeaveNamesTable>> fetchLeaveNames() async {
+  Future<List<DropdownMultifieldsTable>> fetchSpecialOrderList() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
-      String url = ConstApiUrl.empLeaveNamesAPI;
+      String url = ConstApiUrl.empSpecialOrderListAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      ResponseLeaveNames leaveNames = ResponseLeaveNames.fromJson(jsonDecode(response));
+      Resp_dropdown_multifields dropdownMuliFieldsData = Resp_dropdown_multifields.fromJson(jsonDecode(response));
 
-      if (leaveNames.statusCode == 200) {
-        if (leaveNames.data != null && leaveNames.data!.isNotEmpty) {
-          leaveNameListData = leaveNames.data!;
-
-          if (leaveNameListData.isNotEmpty) {
-            // leaveNameListData. = skillsList.map((e) {
-            //   return ValueItem(label: e.name!, value: e.value!);
-            // }).toList();
-            // selectedSkillList.value = skilldropDownList
-            //     .where((e) => prefillSkills.contains(e.value))
-            //     .toList();
-            // update();
-          }
+      if (dropdownMuliFieldsData.statusCode == 200) {
+        if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
+          dropdownMultifieldsTable = dropdownMuliFieldsData.data!;
         } else {}
         update();
-      } else if (leaveNames.statusCode == 401) {
+      } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
-      } else if (leaveNames.statusCode == 400) {
+      } else if (dropdownMuliFieldsData.statusCode == 400) {
         isLoading = false;
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
@@ -155,6 +167,55 @@ class MedicationsheetController extends GetxController {
     }
     isLoading = false;
     return [];
+  }
+
+  Future<List<DropdownNamesTable>> fetchTemplateList() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empGetTemplatesListAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseDropdownNames dropdownData = ResponseDropdownNames.fromJson(jsonDecode(response));
+
+      if (dropdownData.statusCode == 200) {
+        if (dropdownData.data != null && dropdownData.data!.isNotEmpty) {
+          templatedropdownTable = dropdownData.data!;
+        } else {}
+        update();
+      } else if (dropdownData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (dropdownData.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "MedicationSheet",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return [];
+  }
+
+  templateChangeMethod(Map<String, String>? value) async {
+    TemplateIdController.text = value!['value'] ?? '';
+    TemplateNameController.text = value['text'] ?? '';
+    update();
   }
 
   Future<void> showMedicationDialog(BuildContext context) async {
@@ -222,8 +283,7 @@ class MedicationsheetController extends GetxController {
                                     );
 
                                     if (pickedDate != null) {
-                                      final formattedDate =
-                                          "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                      final formattedDate = "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
                                       dateController.text = formattedDate;
                                     }
                                     FocusScope.of(context).unfocus();
@@ -283,7 +343,7 @@ class MedicationsheetController extends GetxController {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                searchLeaveNameListData = null;
+                                searchDropdnMultifieldsData = null;
                                 selectOperationName();
                               },
                               child: Container(
@@ -304,7 +364,7 @@ class MedicationsheetController extends GetxController {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Expanded(
-                                        child: selectedleaveList.isEmpty
+                                        child: selectedDropdownList.isEmpty
                                             ? Row(
                                                 children: [
                                                   Expanded(
@@ -319,7 +379,7 @@ class MedicationsheetController extends GetxController {
                                                 runSpacing: 5,
                                                 spacing: 8,
                                                 children: [
-                                                  for (int i = 0; i < selectedleaveList.length; i++)
+                                                  for (int i = 0; i < selectedDropdownList.length; i++)
                                                     Container(
                                                       decoration: BoxDecoration(
                                                         border: Border.all(width: 1, color: ConstColor.hintTextColor),
@@ -333,7 +393,7 @@ class MedicationsheetController extends GetxController {
                                                           children: [
                                                             Flexible(
                                                               child: AppText(
-                                                                text: selectedleaveList[i].name ?? '',
+                                                                text: selectedDropdownList[i].name ?? '',
                                                                 maxLine: 1,
                                                                 overflow: TextOverflow.ellipsis,
                                                               ),
@@ -341,8 +401,8 @@ class MedicationsheetController extends GetxController {
                                                             GestureDetector(
                                                               onTap: () {
                                                                 FocusScope.of(context).unfocus();
-                                                                selectedOperationId.remove(selectedleaveList[i].value.toString());
-                                                                selectedleaveList.remove(selectedleaveList[i]);
+                                                                selectedDropdnOptionId.remove(selectedDropdownList[i].value.toString());
+                                                                selectedDropdownList.remove(selectedDropdownList[i]);
                                                                 update();
                                                               },
                                                               child: const Icon(
@@ -407,15 +467,48 @@ class MedicationsheetController extends GetxController {
                       SizedBox(height: 12),
 
                       /// Template Dropdown
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          hintText: "Template Name",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                      CustomDropdown(
+                        text: AppString.name,
+                        controller: controller.TemplateNameController,
+                        buttonStyleData: ButtonStyleData(
+                          height: getDynamicHeight(size: 0.05),
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.black),
+                            borderRadius: BorderRadius.circular(0),
+                            color: AppColor.white,
+                          ),
                         ),
-                        items: ["Template A", "Template B"].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-                        onChanged: (val) => selectedTemplate = val,
+                        onChanged: (value) async {
+                          await controller.templateChangeMethod(value);
+                        },
+                        items: controller.templatedropdownTable
+                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.value ?? '',
+                                    'text': item.name ?? '',
+                                  },
+                                  child: Text(
+                                    item.name ?? '',
+                                    style: AppStyle.black.copyWith(
+                                      // fontSize: 14,
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        width: double.infinity,
                       ),
+                      // DropdownButtonFormField<String>(
+                      //   decoration: InputDecoration(
+                      //     hintText: "Template Name",
+                      //     border: OutlineInputBorder(),
+                      //     contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                      //   ),
+                      //   items: ["Template A", "Template B"].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                      //   onChanged: (val) => selectedTemplate = val,
+                      // ),
                       SizedBox(height: 20),
 
                       /// Save Button
@@ -458,140 +551,125 @@ class MedicationsheetController extends GetxController {
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(
-                height: MediaQuery.of(context).size.height * 0.90,
-                width: Get.width,
-                decoration: BoxDecoration(
-                  color: AppColor.white,
-                ),
-                child:
-                    //  controller.otentryList.isNotEmpty
-                    //     ?
-                    SingleChildScrollView(
-                  controller: scrollController,
-                  child: Column(
-                    children: [
-                      SizedBox(height: getDynamicHeight(size: 0.007)),
-                      Row(
+              height: MediaQuery.of(context).size.height * 0.90,
+              width: Get.width,
+              decoration: BoxDecoration(
+                color: AppColor.white,
+              ),
+              child:
+                  //  controller.otentryList.isNotEmpty
+                  //     ?
+                  SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  children: [
+                    SizedBox(height: getDynamicHeight(size: 0.007)),
+                    Row(
+                      children: [
+                        SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
+                        const Spacer(),
+                        Container(
+                          width: getDynamicHeight(size: 0.06), // ~90 dynamically
+                          child: Divider(
+                            height: getDynamicHeight(size: 0.025), // ~20 dynamically
+                            color: AppColor.originalgrey,
+                            thickness: getDynamicHeight(size: 0.0065), // ~5 dynamically
+                          ),
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.close,
+                            size: getDynamicHeight(size: 0.025), // Icon size dynamic
+                          ),
+                        ),
+                        SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
+                      ],
+                    ),
+                    SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
+                    _buildNoteSection(AppString.indoorrecordtype, ''),
+                    _buildNoteSection(AppString.entrydatetime, ''),
+                    _buildNoteSection(AppString.specialorder, ''),
+                    _buildNoteSection(AppString.templatename, ''),
+                    _buildNoteSection(AppString.provisionaldiagnosis, ''),
+                    _buildNoteSection(AppString.weight, ''),
+                    _buildNoteSection(AppString.remark, ''),
+                    Container(
+                      height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
-                          const Spacer(),
                           Container(
-                            width: getDynamicHeight(size: 0.06), // ~90 dynamically
-                            child: Divider(
-                              height: getDynamicHeight(size: 0.025), // ~20 dynamically
-                              color: AppColor.originalgrey,
-                              thickness: getDynamicHeight(size: 0.0065), // ~5 dynamically
-                            ),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(
-                              Icons.close,
-                              size: getDynamicHeight(size: 0.025), // Icon size dynamic
-                            ),
-                          ),
-                          SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
-                        ],
-                      ),
-                      SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.indoorrecordtype, ''),
-                      _buildNoteSection(AppString.entrydatetime, ''),
-                      _buildNoteSection(AppString.specialorder, ''),
-                      _buildNoteSection(AppString.templatename, ''),
-                      _buildNoteSection(AppString.provisionaldiagnosis, ''),
-                      _buildNoteSection(AppString.weight, ''),
-                      _buildNoteSection(AppString.remark, ''),
-                      Container(
-                        height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: getDynamicHeight(size: 0.045),
-                              padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
-                              decoration: BoxDecoration(color: AppColor.primaryColor),
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
-                                      width: getDynamicHeight(size: 0.3), // was height * 0.4
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        AppString.rxid,
-                                        style: AppStyle.w50018.copyWith(
-                                          color: AppColor.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Container(
-                                      width: getDynamicHeight(size: 0.4), // was height * 0.4
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        AppString.id,
-                                        style: AppStyle.w50018.copyWith(
-                                          color: AppColor.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
+                            height: getDynamicHeight(size: 0.045),
+                            padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
+                            decoration: BoxDecoration(color: AppColor.primaryColor),
+                            child: Row(
                               children: [
                                 Flexible(
                                   flex: 1,
                                   child: Container(
-                                      width: getDynamicHeight(size: 0.5), // was height * 0.5
-                                      alignment: Alignment.center,
-                                      child:
-                                          // controller.leaveentryList.isNotEmpty
-                                          //     ?
-                                          Text(
-                                        '',
-                                        style: AppStyle.fontfamilyplus,
-                                      )
-                                      // : Text('--:-- ', style: AppStyle.plus16w600),
+                                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
+                                    width: getDynamicHeight(size: 0.3), // was height * 0.4
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      AppString.rxid,
+                                      style: AppStyle.w50018.copyWith(
+                                        color: AppColor.white,
                                       ),
+                                    ),
+                                  ),
                                 ),
                                 Flexible(
                                   flex: 1,
                                   child: Container(
-                                      width: getDynamicHeight(size: 0.5), // was height * 0.5
-                                      alignment: Alignment.center,
-                                      child:
-                                          // controller.leaveentryList.isNotEmpty
-                                          // ?
-                                          Text(
-                                        '',
-                                        style: AppStyle.fontfamilyplus,
-                                      )
-                                      // : Text('--:-- ', style: AppStyle.plus16w600),
+                                    width: getDynamicHeight(size: 0.4), // was height * 0.4
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      AppString.id,
+                                      style: AppStyle.w50018.copyWith(
+                                        color: AppColor.white,
                                       ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Row(
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                    width: getDynamicHeight(size: 0.5), // was height * 0.5
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '',
+                                      style: AppStyle.fontfamilyplus,
+                                    )),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                    width: getDynamicHeight(size: 0.5), // was height * 0.5
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '',
+                                      style: AppStyle.fontfamilyplus,
+                                    )),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      _buildNoteSection(AppString.user, ''),
-                    ],
-                  ),
-                )
-                // : Padding(
-                //     padding: EdgeInsets.all(15),
-                //     child: Center(child: Text(AppString.noleavedata)),
-                //   );
-
-                );
+                    ),
+                    _buildNoteSection(AppString.user, ''),
+                  ],
+                ),
+              ),
+            );
           }),
     );
   }

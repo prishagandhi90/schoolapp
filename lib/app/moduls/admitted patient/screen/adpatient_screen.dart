@@ -253,8 +253,7 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter,
-                                              height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -384,16 +383,14 @@ class AdpatientScreen extends StatelessWidget {
     return controller.filterpatientsData.isNotEmpty
         ? InkWell(
             onTap: () async {
-              if (controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" &&
-                  controller.WebLoginUser_InvReq.trim() != "") {
+              if (controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" && controller.WebLoginUser_InvReq.trim() != "") {
                 TapToRedirectToInvestigationScreen(
                   controller: controller,
                   index: index,
                 );
-              } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" &&
-                  controller.WebLoginUser_InvReq.trim() != "") {
+              } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser_InvReq.trim() != "") {
                 final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
-                medicationsheetController.fetchLeaveNames();
+                medicationsheetController.fetchSpecialOrderList();
                 Get.to(() => MedicationScreen())!.then((value) async {
                   final controller = Get.put(InvestRequisitController());
                   await controller.resetForm();
