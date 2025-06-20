@@ -129,7 +129,7 @@ class MedicationScreen extends StatelessWidget {
                         child: Center(
                           child: GestureDetector(
                             onTap: () {
-                              // controller.sortBy();
+                              controller.sortByBottomSheet();
                             },
                             child: FittedBox(
                               fit: BoxFit.contain,
@@ -159,12 +159,7 @@ class MedicationScreen extends StatelessWidget {
                               size: getDynamicHeight(size: 0.027), // 🔁 Same size
                             ),
                             onPressed: () async {
-                              // controller.callFilterAPi = false;
-                              // controller.tempOrgsList = List.unmodifiable(controller.selectedOrgsList);
-                              // controller.tempFloorsList = List.unmodifiable((controller.selectedFloorsList));
-                              // controller.tempWardList = List.unmodifiable(controller.selectedWardsList);
-
-                              // controller.AdpatientFiltterBottomSheet();
+                              controller.showDateBottomSheet(context);
                             },
                           ),
                         ),
@@ -269,7 +264,9 @@ class MedicationScreen extends StatelessWidget {
                                       ),
                                       TextSpan(
                                         text: controller.drTreatMasterList[index].date.toString(),
-                                        style: AppStyle.black,
+                                        style: AppStyle.black.copyWith(
+                                          fontSize: getDynamicHeight(size: 0.013),
+                                        ),
                                       ),
                                     ],
                                   ),

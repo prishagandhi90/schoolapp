@@ -235,4 +235,6 @@ class AppString {
   static String id = "ID";
   static String user = "User";
   static String viewmedication = "View Medication";
+  static String dateoldnew = "Date[Oldest to Newest]";
+  static String datenewold = "Date[Newest to Oldest]";
 }

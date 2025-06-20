@@ -1,6 +1,7 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
+import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -176,7 +177,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                         TextSpan(
-                                          text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                          text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
+                                              ? item.remark.toString()
+                                              : '',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.grey,
@@ -202,7 +205,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                         TextSpan(
-                                          text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
+                                          text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                              ? item.flowRate.toString()
+                                              : '',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.grey,
@@ -223,13 +228,39 @@ class ViewMedicationScreen extends StatelessWidget {
               ],
             ),
           ),
+          bottomNavigationBar: Padding(
+            padding: EdgeInsets.all(
+              getDynamicHeight(size: 0.007),
+            ),
+            child: Container(
+              child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 167, 166, 166),
+                  foregroundColor: AppColor.blackColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: getDynamicHeight(size: 0.0135),
+                    horizontal: getDynamicHeight(size: 0.0108),
+                  ),
+                  alignment: Alignment.center,
+                ),
+                child: Text(
+                  controller.investRequisitController.webUserName,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColor.white,
+                    fontSize: getDynamicHeight(size: 0.013),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ),
         );
       },
     );
   }
-
-  final List<Map<String, String>> medicationList = [
-    {'type': 'Inj', 'name': 'Levofuxin 500 MG Inj', 'composition': 'Levofloxacin', 'qty': '1', 'remarks': '+100 CC NS', 'flow': '30ML/HR', 'dosage': '0 - 1 - 0 - 1'},
-    {'type': 'Cap', 'name': 'Ecosprin AV 75/10 MG Cap', 'composition': 'Aspirin + Atorvastatin', 'qty': '15', 'remarks': '', 'flow': '', 'dosage': '0 - 1 - 0 - 1'},
-  ];
 }
