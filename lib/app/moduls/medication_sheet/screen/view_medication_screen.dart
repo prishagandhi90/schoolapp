@@ -165,11 +165,11 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                      const Icon(Icons.menu),
+                                      GestureDetector(onTap: () => controller.viewbottomsheet(context, index),
+                                        child: Icon(Icons.menu)),
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-
                                   Visibility(
                                     visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
                                     child: Text.rich(
@@ -180,7 +180,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
+                                                ? item.remark.toString()
+                                                : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
@@ -196,10 +198,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                       item.freq1!.isNotEmpty || item.freq2!.isNotEmpty || item.freq3!.isNotEmpty || item.freq4!.isNotEmpty
                                           ? '${item.freq1} - ${item.freq2} - ${item.freq3} - ${item.freq4}'
                                           : 'No Frequency',
-                                      style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
+                                      style: TextStyle(fontWeight: FontWeight.w400, color: AppColor.black1),
                                     ),
                                   ),
-
                                   Visibility(
                                     visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
                                     child: Text.rich(
@@ -210,10 +211,12 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
-                                            style: const TextStyle(
+                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                ? item.flowRate.toString()
+                                                : '',
+                                            style: TextStyle(
                                               fontWeight: FontWeight.w400,
-                                              color: Colors.grey,
+                                              color: AppColor.black1,
                                             ),
                                           ),
                                         ],

@@ -237,4 +237,11 @@ class AppString {
   static String viewmedication = "View Medication";
   static String dateoldnew = "Date[Oldest to Newest]";
   static String datenewold = "Date[Newest to Oldest]";
+  static String medicationtype = "Medication Type";
+  static String instructiontype = "Instruction type";
+  static String dose = "Dose";
+  static String route = "Route";
+  static String Days = "Days";
+  static String quantity1 = "Quantity";
+  static String stoptime = "Stop Time";
 }
