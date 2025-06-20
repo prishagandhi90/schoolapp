@@ -30,7 +30,8 @@ class MedicationsheetController extends GetxController {
   List<DropdownMultifieldsTable> dropdownMultifieldsTable = [];
   List<DropdownNamesTable> templatedropdownTable = [];
   final ApiController apiController = Get.put(ApiController());
-  String tokenNo = '', loginId = '', empId = '';
+  String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '', patientname = '';
+  int admissionId = 0;
   bool isLoading = false;
   final TextEditingController searchController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
@@ -225,6 +226,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empGetTemplatesListAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -262,6 +264,128 @@ class MedicationsheetController extends GetxController {
     }
     isLoading = false;
     return [];
+  }
+
+  Future<int> fetchAdmissionId({
+    required String loginId,
+    required String tokenNo,
+    required String empId,
+    required String ipdNo,
+  }) async {
+    try {
+      final url = ConstApiUrl.empGetAdmIdFrmIPDAPI;
+
+      final jsonbodyObj = {
+        "loginId": loginId,
+        "empId": empId,
+        "ipdNo": ipdNo,
+      };
+
+      final response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+
+      final decoded = jsonDecode(response);
+
+      if (decoded is int) {
+        return decoded;
+      } else if (decoded is Map && decoded.containsKey('data')) {
+        // If API response format is like: { "data": 3 }
+        return decoded['data'] ?? 0;
+      } else {
+        return 0; // fallback
+      }
+    } catch (e) {
+      print("Error fetching treatment count: $e");
+      return 0;
+    }
+  }
+
+  Future<void> saveMedicationSheet() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+      admissionId = await fetchAdmissionId(empId: empId, loginId: loginId, tokenNo: tokenNo, ipdNo: ipdNo);
+      update();
+      String url = ConstApiUrl.empSaveDrTreatmentNoteAPI;
+      // Parse date and time
+      DateTime? parsedDate;
+      try {
+        parsedDate = DateFormat('dd-MM-yyyy').parse(dateController.text);
+      } catch (e) {
+        Get.rawSnackbar(message: 'Invalid date format');
+        isLoading = false;
+        return;
+      }
+      final dateTime = DateTime(
+        parsedDate.year,
+        parsedDate.month,
+        parsedDate.day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
+
+      // Construct RespDrTreatMaster object
+      // Sample data creation (yeh actual user input se aayega)
+      final drTreatMaster = DrTreatMasterList(
+        drMstId: 0, // Example only, dynamically load this
+        admissionId: admissionId, // Example only, dynamically lo
+        date: dateTime,
+        srNo: 1,
+        specialOrder: selectedDropdnOptionId.join('; '),
+        weight: weightController.text.trim(),
+        remark: remarksController.text.trim(),
+        provisionalDiagnosis: diagnosisController.text.trim(),
+        templateName: TemplateNameController.text.trim(),
+        prescriptionType: null, // Sample value
+        statusTyp: null, // Sample value
+        userName: 'Harshil',
+        terminalName: '::1',
+        consDrId: null, // Sample Doctor Id
+        consDrName: null,
+        guid: '12345-67890', // Sample GUID
+        gridName: 'DrTMaster',
+        tmplName: TemplateNameController.text.trim(),
+        tmplId: int.tryParse(TemplateIdController.text.trim()),
+        isValid: true,
+        detail: [], // Aapke entered medication detail list yahaan jayege
+      );
+
+      var jsonBody = {
+        'loginId': loginId,
+        'empId': empId,
+        'drTreatmentMaster': drTreatMaster.toJson(),
+      };
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonBody);
+      RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
+
+      if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
+        Get.rawSnackbar(message: responseData.message ?? 'Data saved successfully');
+        update();
+      } else if (responseData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseData.statusCode == 400) {
+        Get.rawSnackbar(message: responseData.message ?? 'Bad request or no data found');
+      } else {
+        Get.rawSnackbar(message: responseData.message ?? 'Something went wrong');
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: 'MedicationSheet',
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+      Get.rawSnackbar(message: 'Error saving data');
+    } finally {
+      isLoading = false;
+      update();
+    }
   }
 
   templateChangeMethod(Map<String, String>? value) async {
@@ -335,7 +459,8 @@ class MedicationsheetController extends GetxController {
                                     );
 
                                     if (pickedDate != null) {
-                                      final formattedDate = "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                      final formattedDate =
+                                          "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
                                       dateController.text = formattedDate;
                                     }
                                     FocusScope.of(context).unfocus();
@@ -571,9 +696,10 @@ class MedicationsheetController extends GetxController {
                             backgroundColor: Colors.teal,
                             padding: EdgeInsets.symmetric(vertical: 14),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             // Submit logic
-                            Navigator.pop(context);
+                            await saveMedicationSheet();
+                            // Navigator.pop(context);
                           },
                           child: Text("Save", style: TextStyle(fontSize: 16)),
                         ),
