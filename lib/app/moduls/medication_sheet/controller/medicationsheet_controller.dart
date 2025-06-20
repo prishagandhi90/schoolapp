@@ -331,34 +331,44 @@ class MedicationsheetController extends GetxController {
       final drTreatMaster = DrTreatMasterList(
         drMstId: 0, // Example only, dynamically load this
         admissionId: admissionId, // Example only, dynamically lo
-        date: dateTime,
+        date: dateTime.toUtc(),
         srNo: 1,
         specialOrder: selectedDropdnOptionId.join('; '),
         weight: weightController.text.trim(),
         remark: remarksController.text.trim(),
         provisionalDiagnosis: diagnosisController.text.trim(),
         templateName: TemplateNameController.text.trim(),
-        prescriptionType: null, // Sample value
-        statusTyp: null, // Sample value
+        prescriptionType: '', // Sample value
+        statusTyp: '', // Sample value
         userName: 'Harshil',
         terminalName: '::1',
-        consDrId: null, // Sample Doctor Id
-        consDrName: null,
+        consDrId: 0, // Sample Doctor Id
+        consDrName: '',
         guid: '12345-67890', // Sample GUID
         gridName: 'DrTMaster',
         tmplName: TemplateNameController.text.trim(),
-        tmplId: int.tryParse(TemplateIdController.text.trim()),
+        // tmplId: int.tryParse(TemplateIdController.text.trim()),
+        tmplId: 0,
         isValid: true,
-        detail: [], // Aapke entered medication detail list yahaan jayege
+        detail: [],
+        indoorRecordType: DropdownMultifieldsTable(
+          id: 0,
+          name: 'Medication Sheet',
+          value: '0',
+          sort: 0,
+          txt: '',
+          parentId: 0,
+          supName: '',
+          dateValue: null,
+        ), // Aapke entered medication detail list yahaan jayege
       );
 
       var jsonBody = {
-        'loginId': loginId,
-        'empId': empId,
         'drTreatmentMaster': drTreatMaster.toJson(),
       };
 
-      var response = await apiController.parseJsonBody(url, tokenNo, jsonBody);
+      var response = await apiController.parseJsonBody(url, "", jsonBody);
+      print("Response: $response");
       RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
@@ -958,117 +968,116 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<void> sortByBottomSheet() async {
-  showModalBottomSheet(
-    context: Get.context!,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) {
-      return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
           ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            /// 🔹 Title Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 24),
-                const Text(
-                  "Sort By",
-                  style: TextStyle(
-                    color: Color(0xFF169AAA),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(Icons.cancel, color: Colors.grey),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 25),
-
-            /// 🔸 Option 1 - Oldest to Newest
-            InkWell(
-              onTap: () {
-                // Your logic
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.black26, width: 1),
-                  ),
-                ),
-                child: const Text("Date [Oldest to Newest]"),
-              ),
-            ),
-
-            /// 🔸 Option 2 - Newest to Oldest
-            InkWell(
-              onTap: () {
-                // Your logic
-                Navigator.pop(context);
-              },
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.black26, width: 1),
-                  ),
-                ),
-                child: const Text("Date [Newest to Oldest]"),
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            /// 🔘 Reset Button Center
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 130,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF169AAA),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    "Reset",
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              /// 🔹 Title Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 24),
+                  const Text(
+                    "Sort By",
                     style: TextStyle(
-                      fontSize: 16,
+                      color: Color(0xFF169AAA),
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.cancel, color: Colors.grey),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 25),
+
+              /// 🔸 Option 1 - Oldest to Newest
+              InkWell(
+                onTap: () {
+                  // Your logic
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.black26, width: 1),
+                    ),
+                  ),
+                  child: const Text("Date [Oldest to Newest]"),
+                ),
+              ),
+
+              /// 🔸 Option 2 - Newest to Oldest
+              InkWell(
+                onTap: () {
+                  // Your logic
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.black26, width: 1),
+                    ),
+                  ),
+                  child: const Text("Date [Newest to Oldest]"),
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              /// 🔘 Reset Button Center
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  width: 130,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF169AAA),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "Reset",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 10),
-          ],
-        ),
-      );
-    },
-  );
-}
-
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Widget _buildNoteSection(String title, String content) {
     return Container(
