@@ -2,13 +2,13 @@ import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
-import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 class ViewMedicationScreen extends StatelessWidget {
-  ViewMedicationScreen({Key? key}) : super(key: key);
+  int selectedIndex; // Default selected index for the first tab
+  ViewMedicationScreen({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,9 +115,9 @@ class ViewMedicationScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: medicationList.length,
+                    itemCount: controller.drTreatMasterList[selectedIndex].detail.length,
                     itemBuilder: (context, index) {
-                      final item = medicationList[index];
+                      final item = controller.drTreatMasterList[selectedIndex].detail[index];
                       return LayoutBuilder(
                         builder: (context, constraints) {
                           return Slidable(
@@ -160,7 +160,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "${index + 1}. ${item['type']} | ${item['name']} | ${item['composition']} | ${item['qty']}",
+                                          "${index + 1}. ${item.itemName!.txt.toString()}",
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
@@ -168,47 +168,49 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-                                  if (item['remarks']!.isNotEmpty)
-                                    Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text: 'Remarks: ',
-                                            style: TextStyle(fontWeight: FontWeight.w500),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'Remarks: ',
+                                          style: TextStyle(fontWeight: FontWeight.w500),
+                                        ),
+                                        TextSpan(
+                                          text: item.remark.toString().isNotEmpty ? item.remark.toString() : 'No Remarks',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey,
                                           ),
-                                          TextSpan(
-                                            text: item['remarks'],
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  if (item['flow']!.isNotEmpty)
-                                    Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text: 'Flow Rate: ',
-                                            style: TextStyle(fontWeight: FontWeight.w500),
-                                          ),
-                                          TextSpan(
-                                            text: item['flow'],
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4),
+                                    child: Text(
+                                      item.freq1!.isNotEmpty || item.freq2!.isNotEmpty || item.freq3!.isNotEmpty || item.freq4!.isNotEmpty
+                                          ? '${item.freq1} - ${item.freq2} - ${item.freq3} - ${item.freq4}'
+                                          : 'No Frequency',
+                                      style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
                                     ),
-                                  if (item['dosage']!.isNotEmpty)
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 4),
-                                      child: Text(item['dosage']!),
+                                  ),
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'Flow Rate: ',
+                                          style: TextStyle(fontWeight: FontWeight.w500),
+                                        ),
+                                        TextSpan(
+                                          text: item.flowRate.toString().isNotEmpty ? item.flowRate.toString() : 'No Flow Rate',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -227,23 +229,7 @@ class ViewMedicationScreen extends StatelessWidget {
   }
 
   final List<Map<String, String>> medicationList = [
-    {
-      'type': 'Inj',
-      'name': 'Levofuxin 500 MG Inj',
-      'composition': 'Levofloxacin',
-      'qty': '1',
-      'remarks': '+100 CC NS',
-      'flow': '30ML/HR',
-      'dosage': '0 - 1 - 0 - 1'
-    },
-    {
-      'type': 'Cap',
-      'name': 'Ecosprin AV 75/10 MG Cap',
-      'composition': 'Aspirin + Atorvastatin',
-      'qty': '15',
-      'remarks': '',
-      'flow': '',
-      'dosage': '0 - 1 - 0 - 1'
-    },
+    {'type': 'Inj', 'name': 'Levofuxin 500 MG Inj', 'composition': 'Levofloxacin', 'qty': '1', 'remarks': '+100 CC NS', 'flow': '30ML/HR', 'dosage': '0 - 1 - 0 - 1'},
+    {'type': 'Cap', 'name': 'Ecosprin AV 75/10 MG Cap', 'composition': 'Aspirin + Atorvastatin', 'qty': '15', 'remarks': '', 'flow': '', 'dosage': '0 - 1 - 0 - 1'},
   ];
 }

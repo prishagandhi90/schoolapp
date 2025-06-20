@@ -1,39 +1,37 @@
 import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_detail.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 
-class Resp_DrTreatmentMst {
+class RespDrTreatmentMst {
   int? statusCode;
   String? isSuccess;
   String? message;
-  List<DRTreatMasterList>? data;
+  List<DrTreatMasterList>? data;
 
-  Resp_DrTreatmentMst({this.statusCode, this.isSuccess, this.message, this.data});
+  RespDrTreatmentMst({this.statusCode, this.isSuccess, this.message, this.data});
 
-  Resp_DrTreatmentMst.fromJson(Map<String, dynamic> json) {
+  RespDrTreatmentMst.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <DRTreatMasterList>[];
+      data = <DrTreatMasterList>[];
       json['data'].forEach((v) {
-        data!.add(new DRTreatMasterList.fromJson(v));
+        data!.add(DrTreatMasterList.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['isSuccess'] = this.isSuccess;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return {
+      'statusCode': statusCode,
+      'isSuccess': isSuccess,
+      'message': message,
+      'data': data?.map((e) => e.toJson()).toList(),
+    };
   }
 }
 
-class DRTreatMasterList {
+class DrTreatMasterList {
   int? admissionId;
   int? drMstId;
   String? irt;
@@ -66,23 +64,23 @@ class DRTreatMasterList {
   int? tmplId;
   String? guid;
 
-  // NotMapped
+  /// NotMapped
   DropdownMultifieldsTable? indoorRecordType;
   DropdownMultifieldsTable? consDr;
 
-  List<Resp_DRTreatDetail> detail = [];
+  List<RespDrTreatDetail> detail = [];
 
-  DRTreatMasterList();
+  DrTreatMasterList();
 
-  factory DRTreatMasterList.fromJson(Map<String, dynamic> json) {
-    return DRTreatMasterList()
+  factory DrTreatMasterList.fromJson(Map<String, dynamic> json) {
+    final model = DrTreatMasterList()
       ..admissionId = json['admissionId']
       ..drMstId = json['drMstId']
       ..irt = json['irt']
-      ..date = json['date'] != null ? DateTime.parse(json['date']) : null
+      ..date = json['date'] != null ? DateTime.tryParse(json['date']) : null
       ..remark = json['remark']
       ..srNo = json['srNo']
-      ..sysDate = json['sysDate'] != null ? DateTime.parse(json['sysDate']) : null
+      ..sysDate = json['sysDate'] != null ? DateTime.tryParse(json['sysDate']) : null
       ..userName = json['userName']
       ..terminalName = json['terminalName']
       ..specialOrder = json['specialOrder']
@@ -98,7 +96,7 @@ class DRTreatMasterList {
       ..communicationNumber = json['communicationNumber']
       ..consDrName = json['consDrName']
       ..consDrId = json['consDrId']
-      ..dob = json['dob'] != null ? DateTime.parse(json['dob']) : null
+      ..dob = json['dob'] != null ? DateTime.tryParse(json['dob']) : null
       ..frmEmerg = json['frmEmerg']
       ..action = json['action']
       ..isValid = json['isValid']
@@ -107,7 +105,14 @@ class DRTreatMasterList {
       ..tmplId = json['tmplId']
       ..tmplName = json['tmplName']
       ..guid = json['guid']
-      ..detail = (json['detail'] as List<dynamic>?)?.map((e) => Resp_DRTreatDetail.fromJson(e)).toList() ?? [];
+      ..detail = (json['detail'] as List<dynamic>?)?.map((e) => RespDrTreatDetail.fromJson(e)).toList() ?? [];
+
+    // Set NotMapped fields using available base values
+    model.indoorRecordType = model.irt != null ? DropdownMultifieldsTable(name: model.irt) : null;
+
+    model.consDr = (model.consDrName != null || model.consDrId != null) ? DropdownMultifieldsTable(name: model.consDrName, id: model.consDrId) : null;
+
+    return model;
   }
 
   Map<String, dynamic> toJson() {
@@ -144,6 +149,10 @@ class DRTreatMasterList {
       'tmplName': tmplName,
       'guid': guid,
       'detail': detail.map((e) => e.toJson()).toList(),
+
+      // NotMapped fields (optional – for local use only, not needed if sending to server)
+      'indoorRecordType': indoorRecordType?.toJson(),
+      'consDr': consDr?.toJson(),
     };
   }
 }

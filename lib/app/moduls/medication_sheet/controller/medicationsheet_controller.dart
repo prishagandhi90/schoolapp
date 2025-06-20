@@ -46,7 +46,7 @@ class MedicationsheetController extends GetxController {
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
 
-  List<DRTreatMasterList> drTreatMasterList = [];
+  List<DrTreatMasterList> drTreatMasterList = [];
 
   @override
   void onInit() {
@@ -130,7 +130,7 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  Future<List<DRTreatMasterList>> fetchDrTreatmentData({
+  Future<List<DrTreatMasterList>> fetchDrTreatmentData({
     required String ipdNo,
     required String treatTyp,
   }) async {
@@ -146,7 +146,7 @@ class MedicationsheetController extends GetxController {
 
       // List<dynamic> responseList = jsonDecode(response);
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
-      Resp_DrTreatmentMst resp_DrTreatmentMst = Resp_DrTreatmentMst.fromJson(jsonDecode(response));
+      RespDrTreatmentMst resp_DrTreatmentMst = RespDrTreatmentMst.fromJson(jsonDecode(response));
 
       if (resp_DrTreatmentMst.statusCode == 200) {
         if (resp_DrTreatmentMst.data != null && resp_DrTreatmentMst.data!.isNotEmpty) {
@@ -335,8 +335,7 @@ class MedicationsheetController extends GetxController {
                                     );
 
                                     if (pickedDate != null) {
-                                      final formattedDate =
-                                          "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                      final formattedDate = "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
                                       dateController.text = formattedDate;
                                     }
                                     FocusScope.of(context).unfocus();

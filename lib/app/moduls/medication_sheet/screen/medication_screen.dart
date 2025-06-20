@@ -239,7 +239,7 @@ class MedicationScreen extends StatelessWidget {
                           ],
                         ),
                         child: GestureDetector(
-                          onTap: () => Get.to(AddMedicationScreen()),
+                          onTap: () => Get.to(AddMedicationScreen(selectedIndex: index)),
                           child: Container(
                             // margin: EdgeInsets.symmetric(vertical: 6),
                             padding: EdgeInsets.symmetric(
@@ -280,7 +280,9 @@ class MedicationScreen extends StatelessWidget {
                                   children: [
                                     GestureDetector(
                                         onTap: () {
-                                          Get.to(ViewMedicationScreen());
+                                          Get.to(ViewMedicationScreen(
+                                            selectedIndex: index,
+                                          ));
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye_outlined,
@@ -354,12 +356,4 @@ class MedicationScreen extends StatelessWidget {
       },
     );
   }
-
-  List<String> treatmentList = [
-    "02/06/2025",
-    "07/06/2025",
-    "15/06/2025",
-    "20/06/2025",
-    "28/06/2025",
-  ];
 }

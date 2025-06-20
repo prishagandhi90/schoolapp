@@ -9,10 +9,11 @@ import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_scree
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get/instance_manager.dart';
 
 class AddMedicationScreen extends StatelessWidget {
+  int selectedIndex;
+  AddMedicationScreen({Key? key, required this.selectedIndex}) : super(key: key);
+
   final ScrollController formScrollController = ScrollController();
   final ScrollController listScrollController = ScrollController();
 
@@ -439,8 +440,7 @@ class AddMedicationScreen extends StatelessWidget {
                                       );
 
                                       if (pickedDate != null) {
-                                        final formattedDate =
-                                            "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                        final formattedDate = "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
                                         controller.dateController.text = formattedDate;
                                       }
                                       FocusScope.of(context).unfocus();
@@ -602,7 +602,9 @@ class AddMedicationScreen extends StatelessWidget {
                   child: Container(
                     child: TextButton(
                       onPressed: () {
-                        Get.to(ViewMedicationScreen());
+                        Get.to(ViewMedicationScreen(
+                          selectedIndex: selectedIndex,
+                        ));
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 216, 150, 112),

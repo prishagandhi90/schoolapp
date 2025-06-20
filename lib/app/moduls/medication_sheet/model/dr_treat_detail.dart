@@ -1,6 +1,6 @@
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 
-class Resp_DRTreatDetail {
+class RespDrTreatDetail {
   int? drDtlId;
   int? drMstId;
   int? days;
@@ -68,10 +68,10 @@ class Resp_DRTreatDetail {
   DropdownMultifieldsTable? doseGivenBy10;
   DropdownMultifieldsTable? instructionTyp;
 
-  Resp_DRTreatDetail();
+  RespDrTreatDetail();
 
-  factory Resp_DRTreatDetail.fromJson(Map<String, dynamic> json) {
-    return Resp_DRTreatDetail()
+  factory RespDrTreatDetail.fromJson(Map<String, dynamic> json) {
+    final model = RespDrTreatDetail()
       ..drDtlId = json['drDtlId']
       ..drMstId = json['drMstId']
       ..days = json['days']
@@ -79,21 +79,21 @@ class Resp_DRTreatDetail {
       ..qty = json['qty']
       ..dose = json['dose']
       ..remark = json['remark']
-      ..dose1 = json['dose1'] != null ? DateTime.parse(json['dose1']) : null
-      ..dose2 = json['dose2'] != null ? DateTime.parse(json['dose2']) : null
-      ..dose3 = json['dose3'] != null ? DateTime.parse(json['dose3']) : null
-      ..dose4 = json['dose4'] != null ? DateTime.parse(json['dose4']) : null
-      ..dose5 = json['dose5'] != null ? DateTime.parse(json['dose5']) : null
-      ..dose6 = json['dose6'] != null ? DateTime.parse(json['dose6']) : null
-      ..dose7 = json['dose7'] != null ? DateTime.parse(json['dose7']) : null
-      ..dose8 = json['dose8'] != null ? DateTime.parse(json['dose8']) : null
-      ..dose9 = json['dose9'] != null ? DateTime.parse(json['dose9']) : null
-      ..dose10 = json['dose10'] != null ? DateTime.parse(json['dose10']) : null
+      ..dose1 = json['dose1'] != null ? DateTime.tryParse(json['dose1']) : null
+      ..dose2 = json['dose2'] != null ? DateTime.tryParse(json['dose2']) : null
+      ..dose3 = json['dose3'] != null ? DateTime.tryParse(json['dose3']) : null
+      ..dose4 = json['dose4'] != null ? DateTime.tryParse(json['dose4']) : null
+      ..dose5 = json['dose5'] != null ? DateTime.tryParse(json['dose5']) : null
+      ..dose6 = json['dose6'] != null ? DateTime.tryParse(json['dose6']) : null
+      ..dose7 = json['dose7'] != null ? DateTime.tryParse(json['dose7']) : null
+      ..dose8 = json['dose8'] != null ? DateTime.tryParse(json['dose8']) : null
+      ..dose9 = json['dose9'] != null ? DateTime.tryParse(json['dose9']) : null
+      ..dose10 = json['dose10'] != null ? DateTime.tryParse(json['dose10']) : null
       ..userName = json['userName']
-      ..sysDate = json['sysDate'] != null ? DateTime.parse(json['sysDate']) : null
+      ..sysDate = json['sysDate'] != null ? DateTime.tryParse(json['sysDate']) : null
       ..terminalName = json['terminalName']
       ..action = json['action']
-      ..stopTime = json['stopTime'] != null ? DateTime.parse(json['stopTime']) : null
+      ..stopTime = json['stopTime'] != null ? DateTime.tryParse(json['stopTime']) : null
       ..flowRate = json['flowRate']
       ..isValid = json['isValid']
       ..iudId = json['iudId']
@@ -118,6 +118,28 @@ class Resp_DRTreatDetail {
       ..item = json['item']
       ..instType = json['instType']
       ..flowRt = json['flowRt'];
+
+    // NotMapped fields initialization
+    model.medicineType = model.medicationName != null ? DropdownMultifieldsTable(name: model.medicationName) : null;
+    model.itemName = (model.item != null || model.itemTxt != null) ? DropdownMultifieldsTable(name: model.item, txt: model.itemTxt) : null;
+    model.route = model.routeName != null ? DropdownMultifieldsTable(name: model.routeName) : null;
+    model.frequency1 = model.freq1 != null ? DropdownMultifieldsTable(name: model.freq1) : null;
+    model.frequency2 = model.freq2 != null ? DropdownMultifieldsTable(name: model.freq2) : null;
+    model.frequency3 = model.freq3 != null ? DropdownMultifieldsTable(name: model.freq3) : null;
+    model.frequency4 = model.freq4 != null ? DropdownMultifieldsTable(name: model.freq4) : null;
+    model.doseGivenBy1 = model.dGivenBy1 != null ? DropdownMultifieldsTable(name: model.dGivenBy1) : null;
+    model.doseGivenBy2 = model.dGivenBy2 != null ? DropdownMultifieldsTable(name: model.dGivenBy2) : null;
+    model.doseGivenBy3 = model.dGivenBy3 != null ? DropdownMultifieldsTable(name: model.dGivenBy3) : null;
+    model.doseGivenBy4 = model.dGivenBy4 != null ? DropdownMultifieldsTable(name: model.dGivenBy4) : null;
+    model.doseGivenBy5 = model.dGivenBy5 != null ? DropdownMultifieldsTable(name: model.dGivenBy5) : null;
+    model.doseGivenBy6 = model.dGivenBy6 != null ? DropdownMultifieldsTable(name: model.dGivenBy6) : null;
+    model.doseGivenBy7 = model.dGivenBy7 != null ? DropdownMultifieldsTable(name: model.dGivenBy7) : null;
+    model.doseGivenBy8 = model.dGivenBy8 != null ? DropdownMultifieldsTable(name: model.dGivenBy8) : null;
+    model.doseGivenBy9 = model.dGivenBy9 != null ? DropdownMultifieldsTable(name: model.dGivenBy9) : null;
+    model.doseGivenBy10 = model.dGivenBy10 != null ? DropdownMultifieldsTable(name: model.dGivenBy10) : null;
+    model.instructionTyp = model.instType != null ? DropdownMultifieldsTable(name: model.instType) : null;
+
+    return model;
   }
 
   Map<String, dynamic> toJson() {
@@ -168,6 +190,26 @@ class Resp_DRTreatDetail {
       'item': item,
       'instType': instType,
       'flowRt': flowRt,
+
+      // NotMapped (optional for debug/UI only)
+      'medicineType': medicineType?.toJson(),
+      'itemNameObj': itemName?.toJson(),
+      'routeObj': route?.toJson(),
+      'frequency1': frequency1?.toJson(),
+      'frequency2': frequency2?.toJson(),
+      'frequency3': frequency3?.toJson(),
+      'frequency4': frequency4?.toJson(),
+      'doseGivenBy1': doseGivenBy1?.toJson(),
+      'doseGivenBy2': doseGivenBy2?.toJson(),
+      'doseGivenBy3': doseGivenBy3?.toJson(),
+      'doseGivenBy4': doseGivenBy4?.toJson(),
+      'doseGivenBy5': doseGivenBy5?.toJson(),
+      'doseGivenBy6': doseGivenBy6?.toJson(),
+      'doseGivenBy7': doseGivenBy7?.toJson(),
+      'doseGivenBy8': doseGivenBy8?.toJson(),
+      'doseGivenBy9': doseGivenBy9?.toJson(),
+      'doseGivenBy10': doseGivenBy10?.toJson(),
+      'instructionTyp': instructionTyp?.toJson(),
     };
   }
 }

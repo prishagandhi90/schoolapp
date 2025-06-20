@@ -391,7 +391,7 @@ class AdpatientScreen extends StatelessWidget {
               } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser_InvReq.trim() != "") {
                 final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
                 await medicationsheetController.fetchSpecialOrderList();
-                await medicationsheetController.fetchDrTreatmentData(ipdNo: '', treatTyp: '');
+                await medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
                 Get.to(() => MedicationScreen())!.then((value) async {
                   final controller = Get.put(InvestRequisitController());
                   await controller.resetForm();
