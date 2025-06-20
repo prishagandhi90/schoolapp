@@ -160,7 +160,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "${index + 1}. ${item.itemName!.txt.toString()}",
+                                          "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
