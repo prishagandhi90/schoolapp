@@ -176,7 +176,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                         TextSpan(
-                                          text: item.remark.toString().isNotEmpty ? item.remark.toString() : 'No Remarks',
+                                          text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.grey,
@@ -202,7 +202,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                         TextSpan(
-                                          text: item.flowRate.toString().isNotEmpty ? item.flowRate.toString() : 'No Flow Rate',
+                                          text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             color: Colors.grey,
