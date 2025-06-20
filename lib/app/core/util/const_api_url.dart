@@ -88,5 +88,7 @@ class ConstApiUrl {
   //   ---------------------------Medication Sheet----------------------------------
   static const empSpecialOrderListAPI = "$empUrl/EmpApp_GetSpecialOrderList";
   static const empGetTemplatesListAPI = "$empUrl/EmpApp_GetTemplates";
+  static const empSaveDrTreatmentNoteAPI = "$empUrl/EmpApp_SaveDrTreatmentMaster";
   static const empDoctorTreatmentMasterAPI = "$empUrl/EmpApp_GetDrTreatmentMaster";
+  static const empGetAdmIdFrmIPDAPI = "$empUrl/EmpApp_GetAdmissionIdFrmIPD";
 }

@@ -161,7 +161,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "${index + 1}. ${item.itemName!.txt.toString()}",
+                                          "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
@@ -169,23 +169,25 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        const TextSpan(
-                                          text: 'Remarks: ',
-                                          style: TextStyle(fontWeight: FontWeight.w500),
-                                        ),
-                                        TextSpan(
-                                          text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                              ? item.remark.toString()
-                                              : '',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey,
+
+                                  Visibility(
+                                    visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                    child: Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'Remarks: ',
+                                            style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
-                                        ),
-                                      ],
+                                          TextSpan(
+                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColor.black1,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   Padding(
@@ -197,23 +199,25 @@ class ViewMedicationScreen extends StatelessWidget {
                                       style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
                                     ),
                                   ),
-                                  Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        const TextSpan(
-                                          text: 'Flow Rate: ',
-                                          style: TextStyle(fontWeight: FontWeight.w500),
-                                        ),
-                                        TextSpan(
-                                          text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                              ? item.flowRate.toString()
-                                              : '',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey,
+
+                                  Visibility(
+                                    visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
+                                    child: Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'Flow Rate: ',
+                                            style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
-                                        ),
-                                      ],
+                                          TextSpan(
+                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

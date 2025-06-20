@@ -70,7 +70,42 @@ class DrTreatMasterList {
 
   List<RespDrTreatDetail> detail = [];
 
-  DrTreatMasterList();
+  DrTreatMasterList({
+    this.admissionId,
+    this.drMstId,
+    this.irt,
+    this.date,
+    this.remark,
+    this.srNo,
+    this.sysDate,
+    this.userName,
+    this.terminalName,
+    this.specialOrder,
+    this.provisionalDiagnosis,
+    this.weight,
+    this.templateName,
+    this.prescriptionType,
+    this.precedence,
+    this.statusTyp,
+    this.isAlw,
+    this.age,
+    this.patientName,
+    this.communicationNumber,
+    this.consDrName,
+    this.consDrId,
+    this.dob,
+    this.frmEmerg,
+    this.action,
+    this.isValid,
+    this.iudId,
+    this.gridName,
+    this.tmplName,
+    this.tmplId,
+    this.guid,
+    this.indoorRecordType,
+    this.consDr,
+    this.detail = const [],
+  });
 
   factory DrTreatMasterList.fromJson(Map<String, dynamic> json) {
     final model = DrTreatMasterList()
