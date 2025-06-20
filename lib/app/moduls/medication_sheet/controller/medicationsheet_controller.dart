@@ -331,34 +331,44 @@ class MedicationsheetController extends GetxController {
       final drTreatMaster = DrTreatMasterList(
         drMstId: 0, // Example only, dynamically load this
         admissionId: admissionId, // Example only, dynamically lo
-        date: dateTime,
+        date: dateTime.toUtc(),
         srNo: 1,
         specialOrder: selectedDropdnOptionId.join('; '),
         weight: weightController.text.trim(),
         remark: remarksController.text.trim(),
         provisionalDiagnosis: diagnosisController.text.trim(),
         templateName: TemplateNameController.text.trim(),
-        prescriptionType: null, // Sample value
-        statusTyp: null, // Sample value
+        prescriptionType: '', // Sample value
+        statusTyp: '', // Sample value
         userName: 'Harshil',
         terminalName: '::1',
-        consDrId: null, // Sample Doctor Id
-        consDrName: null,
+        consDrId: 0, // Sample Doctor Id
+        consDrName: '',
         guid: '12345-67890', // Sample GUID
         gridName: 'DrTMaster',
         tmplName: TemplateNameController.text.trim(),
-        tmplId: int.tryParse(TemplateIdController.text.trim()),
+        // tmplId: int.tryParse(TemplateIdController.text.trim()),
+        tmplId: 0,
         isValid: true,
-        detail: [], // Aapke entered medication detail list yahaan jayege
+        detail: [],
+        indoorRecordType: DropdownMultifieldsTable(
+          id: 0,
+          name: 'Medication Sheet',
+          value: '0',
+          sort: 0,
+          txt: '',
+          parentId: 0,
+          supName: '',
+          dateValue: null,
+        ), // Aapke entered medication detail list yahaan jayege
       );
 
       var jsonBody = {
-        'loginId': loginId,
-        'empId': empId,
         'drTreatmentMaster': drTreatMaster.toJson(),
       };
 
-      var response = await apiController.parseJsonBody(url, tokenNo, jsonBody);
+      var response = await apiController.parseJsonBody(url, "", jsonBody);
+      print("Response: $response");
       RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
@@ -1071,204 +1081,203 @@ class MedicationsheetController extends GetxController {
 
   Future<void> viewbottomsheet(BuildContext context, int index) async {
     showModalBottomSheet(
-      backgroundColor: AppColor.white,
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: true,
-      context: Get.context!,
-      builder: (context) => DraggableScrollableSheet(
-          initialChildSize: 0.75  ,
-          minChildSize: 0.0,
-          maxChildSize: 0.95,
-          expand: false,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return Container(
-              height: MediaQuery.of(context).size.height * 0.90,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: AppColor.white,
-              ),
-              child:
-                  //  controller.otentryList.isNotEmpty
-                  //     ?
-                  SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  children: [
-                    SizedBox(height: getDynamicHeight(size: 0.007)),
-                    Row(
-                      children: [
-                        SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
-                        const Spacer(),
-                        Container(
-                          width: getDynamicHeight(size: 0.06), // ~90 dynamically
-                          child: Divider(
-                            height: getDynamicHeight(size: 0.025), // ~20 dynamically
-                            color: AppColor.originalgrey,
-                            thickness: getDynamicHeight(size: 0.0065), // ~5 dynamically
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Icon(
-                            Icons.close,
-                            size: getDynamicHeight(size: 0.025), // Icon size dynamic
-                          ),
-                        ),
-                        SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
-                      ],
-                    ),
-                    SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                    _buildNoteSection(AppString.medicationtype, ''),
-                    _buildNoteSection(AppString.instructiontype, ''),
-                    Container(
-                      height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: getDynamicHeight(size: 0.045),
-                            padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
-                            decoration: BoxDecoration(color: AppColor.primaryColor),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  flex: 1,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
-                                    width: getDynamicHeight(size: 0.3), // was height * 0.4
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      AppString.dose,
-                                      style: AppStyle.w50018.copyWith(
-                                        color: AppColor.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Container(
-                                    width: getDynamicHeight(size: 0.4), // was height * 0.4
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      AppString.route,
-                                      style: AppStyle.w50018.copyWith(
-                                        color: AppColor.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                    width: getDynamicHeight(size: 0.5), // was height * 0.5
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '',
-                                      style: AppStyle.fontfamilyplus,
-                                    )),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                    width: getDynamicHeight(size: 0.5), // was height * 0.5
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '',
-                                      style: AppStyle.fontfamilyplus,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: getDynamicHeight(size: 0.045),
-                            padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
-                            decoration: BoxDecoration(color: AppColor.primaryColor),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  flex: 1,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
-                                    width: getDynamicHeight(size: 0.3), // was height * 0.4
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      AppString.days,
-                                      style: AppStyle.w50018.copyWith(
-                                        color: AppColor.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: Container(
-                                    width: getDynamicHeight(size: 0.4), // was height * 0.4
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      AppString.quantity1,
-                                      style: AppStyle.w50018.copyWith(
-                                        color: AppColor.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                    width: getDynamicHeight(size: 0.5), // was height * 0.5
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '',
-                                      style: AppStyle.fontfamilyplus,
-                                    )),
-                              ),
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                    width: getDynamicHeight(size: 0.5), // was height * 0.5
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '',
-                                      style: AppStyle.fontfamilyplus,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    _buildNoteSection(AppString.stoptime, ''),
-                    _buildNoteSection(AppString.user, ''),
-                    _buildNoteSection(AppString.entrydatetime, ''),
-                  ],
+        backgroundColor: AppColor.white,
+        isScrollControlled: true,
+        isDismissible: true,
+        enableDrag: true,
+        context: Get.context!,
+        builder: (context) => DraggableScrollableSheet(
+            initialChildSize: 0.75,
+            minChildSize: 0.0,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.90,
+                width: Get.width,
+                decoration: BoxDecoration(
+                  color: AppColor.white,
                 ),
-              ),
-            );
-          }),
-    );
+                child:
+                    //  controller.otentryList.isNotEmpty
+                    //     ?
+                    SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    children: [
+                      SizedBox(height: getDynamicHeight(size: 0.007)),
+                      Row(
+                        children: [
+                          SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
+                          const Spacer(),
+                          Container(
+                            width: getDynamicHeight(size: 0.06), // ~90 dynamically
+                            child: Divider(
+                              height: getDynamicHeight(size: 0.025), // ~20 dynamically
+                              color: AppColor.originalgrey,
+                              thickness: getDynamicHeight(size: 0.0065), // ~5 dynamically
+                            ),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Icon(
+                              Icons.close,
+                              size: getDynamicHeight(size: 0.025), // Icon size dynamic
+                            ),
+                          ),
+                          SizedBox(width: getDynamicHeight(size: 0.02)), // ~30 dynamically
+                        ],
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
+                      _buildNoteSection(AppString.medicationtype, ''),
+                      _buildNoteSection(AppString.instructiontype, ''),
+                      Container(
+                        height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: getDynamicHeight(size: 0.045),
+                              padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
+                              decoration: BoxDecoration(color: AppColor.primaryColor),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
+                                      width: getDynamicHeight(size: 0.3), // was height * 0.4
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        AppString.dose,
+                                        style: AppStyle.w50018.copyWith(
+                                          color: AppColor.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Container(
+                                      width: getDynamicHeight(size: 0.4), // was height * 0.4
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        AppString.route,
+                                        style: AppStyle.w50018.copyWith(
+                                          color: AppColor.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                      width: getDynamicHeight(size: 0.5), // was height * 0.5
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '',
+                                        style: AppStyle.fontfamilyplus,
+                                      )),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                      width: getDynamicHeight(size: 0.5), // was height * 0.5
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '',
+                                        style: AppStyle.fontfamilyplus,
+                                      )),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: getDynamicHeight(size: 0.045),
+                              padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
+                              decoration: BoxDecoration(color: AppColor.primaryColor),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
+                                      width: getDynamicHeight(size: 0.3), // was height * 0.4
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        AppString.days,
+                                        style: AppStyle.w50018.copyWith(
+                                          color: AppColor.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 1,
+                                    child: Container(
+                                      width: getDynamicHeight(size: 0.4), // was height * 0.4
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        AppString.quantity1,
+                                        style: AppStyle.w50018.copyWith(
+                                          color: AppColor.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                      width: getDynamicHeight(size: 0.5), // was height * 0.5
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '',
+                                        style: AppStyle.fontfamilyplus,
+                                      )),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                      width: getDynamicHeight(size: 0.5), // was height * 0.5
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '',
+                                        style: AppStyle.fontfamilyplus,
+                                      )),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      _buildNoteSection(AppString.stoptime, ''),
+                      _buildNoteSection(AppString.user, ''),
+                      _buildNoteSection(AppString.entrydatetime, ''),
+                    ],
+                  ),
+                ),
+              );
+            }));
   }
 
   Widget _buildNoteSection(String title, String content) {
