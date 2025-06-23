@@ -375,8 +375,8 @@ class MedicationsheetController extends GetxController {
 // 👇👇👇 Proper JSON Body to Send
       var jsonBody = drTreatMaster.toJson(); // ✅ THIS is correct
       var response = await apiController.parseJsonBody(url, "", jsonBody);
-      print("Response: ${response.toString()}");
-      debugPrint("Response: ${response.toString()}");
+      // print("Response: ${response.toString()}");
+      // debugPrint("Response: ${response.toString()}");
       RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
