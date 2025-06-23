@@ -1106,7 +1106,7 @@ class MedicationsheetController extends GetxController {
     );
   }
 
-  Future<void> viewbottomsheet(BuildContext context, int index) async {
+  Future<void> viewbottomsheet(BuildContext context, int selectedMasterIndex, int detailMedicineindex) async {
     showModalBottomSheet(
         backgroundColor: AppColor.white,
         isScrollControlled: true,
@@ -1159,8 +1159,8 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype, ''),
-                      _buildNoteSection(AppString.instructiontype, ''),
+                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -1210,7 +1210,7 @@ class MedicationsheetController extends GetxController {
                                       width: getDynamicHeight(size: 0.5), // was height * 0.5
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '',
+                                        drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].dose ?? '',
                                         style: AppStyle.fontfamilyplus,
                                       )),
                                 ),
@@ -1220,7 +1220,7 @@ class MedicationsheetController extends GetxController {
                                       width: getDynamicHeight(size: 0.5), // was height * 0.5
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '',
+                                        drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].routeName ?? '',
                                         style: AppStyle.fontfamilyplus,
                                       )),
                                 ),
@@ -1278,7 +1278,7 @@ class MedicationsheetController extends GetxController {
                                       width: getDynamicHeight(size: 0.5), // was height * 0.5
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '',
+                                        drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].days.toString(),
                                         style: AppStyle.fontfamilyplus,
                                       )),
                                 ),
@@ -1288,7 +1288,7 @@ class MedicationsheetController extends GetxController {
                                       width: getDynamicHeight(size: 0.5), // was height * 0.5
                                       alignment: Alignment.center,
                                       child: Text(
-                                        '',
+                                        drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].qty.toString(),
                                         style: AppStyle.fontfamilyplus,
                                       )),
                                 ),
@@ -1297,9 +1297,9 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(AppString.stoptime, ''),
-                      _buildNoteSection(AppString.user, ''),
-                      _buildNoteSection(AppString.entrydatetime, ''),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
+                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),

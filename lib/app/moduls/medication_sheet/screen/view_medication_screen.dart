@@ -179,7 +179,10 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                      GestureDetector(onTap: () => controller.viewbottomsheet(context, index), child: Icon(Icons.menu)),
+                                      GestureDetector(
+                                        onTap: () => controller.viewbottomsheet(context, selectedIndex, index),
+                                        child: Icon(Icons.menu),
+                                      ),
                                     ],
                                   ),
                                   SizedBox(height: getDynamicHeight(size: 0.003)),
@@ -193,9 +196,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                                ? item.remark.toString()
-                                                : '',
+                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
@@ -224,9 +225,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                ? item.flowRate.toString()
-                                                : '',
+                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
