@@ -545,7 +545,7 @@ class AddMedicationScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Text(
-                  "Added Medication (${controller.drTreatMasterList[selectedIndex].detail.length})",
+                  "Added Medication (${controller.drTreatMasterList[selectedIndex].detail!.length})",
                   style: TextStyle(color: AppColor.teal, fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
@@ -557,9 +557,9 @@ class AddMedicationScreen extends StatelessWidget {
                   child: ListView.separated(
                     controller: listScrollController,
                     shrinkWrap: true,
-                    itemCount: controller.drTreatMasterList[selectedIndex].detail.length,
+                    itemCount: controller.drTreatMasterList[selectedIndex].detail!.length,
                     itemBuilder: (context, index) {
-                      final item = controller.drTreatMasterList[selectedIndex].detail[index];
+                      final item = controller.drTreatMasterList[selectedIndex].detail![index];
                       return ListTile(
                         title: Text("${index + 1}. ${item.itemName?.txt ?? ''}"),
                       );

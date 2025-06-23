@@ -332,7 +332,6 @@ class MedicationsheetController extends GetxController {
         drMstId: 0,
         admissionId: admissionId,
         date: dateTime.toUtc(),
-
         srNo: 1,
         specialOrder: selectedDropdnOptionId.join('; '),
         weight: weightController.text.trim(),
@@ -844,7 +843,8 @@ class MedicationsheetController extends GetxController {
                           onPressed: () async {
                             // Submit logic
                             await saveMedicationSheet();
-                            // Navigator.pop(context);
+                            await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+                            Navigator.pop(context);
                           },
                           child: Text(
                             "Save",
