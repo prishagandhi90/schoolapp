@@ -21,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class MedicationsheetController extends GetxController {
   final InvestRequisitController investRequisitController = Get.put(InvestRequisitController());
@@ -325,12 +326,11 @@ class MedicationsheetController extends GetxController {
         selectedTime.hour,
         selectedTime.minute,
       );
-
+      final uuid = Uuid();
       // Construct RespDrTreatMaster object
-      // Sample data creation (yeh actual user input se aayega)
       final drTreatMaster = DrTreatMasterList(
-        drMstId: 0, // Example only, dynamically load this
-        admissionId: admissionId, // Example only, dynamically lo
+        drMstId: 0,
+        admissionId: admissionId,
         date: dateTime.toUtc(),
         srNo: 1,
         specialOrder: selectedDropdnOptionId.join('; '),
@@ -338,37 +338,49 @@ class MedicationsheetController extends GetxController {
         remark: remarksController.text.trim(),
         provisionalDiagnosis: diagnosisController.text.trim(),
         templateName: TemplateNameController.text.trim(),
-        prescriptionType: '', // Sample value
-        statusTyp: '', // Sample value
+        prescriptionType: '',
+        statusTyp: '',
         userName: 'Harshil',
         terminalName: '::1',
-        consDrId: 0, // Sample Doctor Id
+        consDrId: 0,
         consDrName: '',
-        guid: '12345-67890', // Sample GUID
+        guid: uuid.v4(), // ✅ Valid GUID
         gridName: 'DrTMaster',
         tmplName: TemplateNameController.text.trim(),
-        // tmplId: int.tryParse(TemplateIdController.text.trim()),
         tmplId: 0,
         isValid: true,
         detail: [],
         indoorRecordType: DropdownMultifieldsTable(
           id: 0,
-          name: 'Medication Sheet',
-          value: '0',
-          sort: 0,
+          name: 'MEDICATION SHEET',
+          value: null,
+          sort: null,
           txt: '',
-          parentId: 0,
+          parentId: null,
           supName: '',
           dateValue: null,
-        ), // Aapke entered medication detail list yahaan jayege
+        ),
+        consDr: DropdownMultifieldsTable(
+          id: 0,
+          name: '',
+          value: null,
+          sort: null,
+          txt: '',
+          parentId: null,
+          supName: '',
+          dateValue: null,
+        ),
       );
 
-      var jsonBody = {
-        'drTreatmentMaster': drTreatMaster.toJson(),
-      };
+// 👇👇👇 Proper JSON Body to Send
+      var jsonBody = drTreatMaster.toJson(); // ✅ THIS is correct
 
+// Debug output
+      // debugPrint(jsonEncode(jsonBody));
       var response = await apiController.parseJsonBody(url, "", jsonBody);
-      print("Response: $response");
+      print("Response: ${response.toString()}");
+      Get.rawSnackbar(message: response.toString());
+      debugPrint("Response: ${response.toString()}");
       RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {

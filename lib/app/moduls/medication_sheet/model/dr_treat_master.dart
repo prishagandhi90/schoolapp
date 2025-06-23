@@ -13,21 +13,31 @@ class RespDrTreatmentMst {
     statusCode = json['statusCode'];
     isSuccess = json['isSuccess'];
     message = json['message'];
-    if (json['data'] != null) {
+    if (json['data'] != null && json['data'] is List) {
       data = <DrTreatMasterList>[];
       json['data'].forEach((v) {
         data!.add(DrTreatMasterList.fromJson(v));
       });
+    } else {
+      data = [];
     }
+    // json['data'].forEach((v) {
+    //   data!.add(new DrTreatMasterList.fromJson(v));
+    // });
   }
 
   Map<String, dynamic> toJson() {
     return {
+      // final Map<String, dynamic> data = new Map<String, dynamic>();
       'statusCode': statusCode,
       'isSuccess': isSuccess,
       'message': message,
+      // if (this.data != null) {
       'data': data?.map((e) => e.toJson()).toList(),
+      // data['data'] = this.data!.map((v) => v.toJson()).toList();
+      // }
     };
+    // return data;
   }
 }
 
@@ -56,19 +66,17 @@ class DrTreatMasterList {
   int? consDrId;
   DateTime? dob;
   String? frmEmerg;
+  int? rowState;
+  List<RespDrTreatDetail>? detail = [];
+  DropdownMultifieldsTable? indoorRecordType;
   String? action;
+  DropdownMultifieldsTable? consDr;
   bool? isValid;
   int? iudId;
   String? gridName;
-  String? tmplName;
-  int? tmplId;
   String? guid;
-
-  /// NotMapped
-  DropdownMultifieldsTable? indoorRecordType;
-  DropdownMultifieldsTable? consDr;
-
-  List<RespDrTreatDetail> detail = [];
+  int? tmplId;
+  String? tmplName;
 
   DrTreatMasterList({
     this.admissionId,
@@ -95,99 +103,105 @@ class DrTreatMasterList {
     this.consDrId,
     this.dob,
     this.frmEmerg,
+    this.rowState,
+    this.detail = const [],
+    this.indoorRecordType,
     this.action,
+    this.consDr,
     this.isValid,
     this.iudId,
     this.gridName,
-    this.tmplName,
-    this.tmplId,
     this.guid,
-    this.indoorRecordType,
-    this.consDr,
-    this.detail = const [],
+    this.tmplId,
+    this.tmplName,
   });
 
-  factory DrTreatMasterList.fromJson(Map<String, dynamic> json) {
-    final model = DrTreatMasterList()
-      ..admissionId = json['admissionId']
-      ..drMstId = json['drMstId']
-      ..irt = json['irt']
-      ..date = json['date'] != null ? DateTime.tryParse(json['date']) : null
-      ..remark = json['remark']
-      ..srNo = json['srNo']
-      ..sysDate = json['sysDate'] != null ? DateTime.tryParse(json['sysDate']) : null
-      ..userName = json['userName']
-      ..terminalName = json['terminalName']
-      ..specialOrder = json['specialOrder']
-      ..provisionalDiagnosis = json['provisionalDiagnosis']
-      ..weight = json['weight']
-      ..templateName = json['templateName']
-      ..prescriptionType = json['prescriptionType']
-      ..precedence = json['precedence']
-      ..statusTyp = json['statusTyp']
-      ..isAlw = json['isAlw']
-      ..age = json['age']
-      ..patientName = json['patientName']
-      ..communicationNumber = json['communicationNumber']
-      ..consDrName = json['consDrName']
-      ..consDrId = json['consDrId']
-      ..dob = json['dob'] != null ? DateTime.tryParse(json['dob']) : null
-      ..frmEmerg = json['frmEmerg']
-      ..action = json['action']
-      ..isValid = json['isValid']
-      ..iudId = json['iudId']
-      ..gridName = json['gridName']
-      ..tmplId = json['tmplId']
-      ..tmplName = json['tmplName']
-      ..guid = json['guid']
-      ..detail = (json['detail'] as List<dynamic>?)?.map((e) => RespDrTreatDetail.fromJson(e)).toList() ?? [];
-
-    // Set NotMapped fields using available base values
-    model.indoorRecordType = model.irt != null ? DropdownMultifieldsTable(name: model.irt) : null;
-
-    model.consDr = (model.consDrName != null || model.consDrId != null) ? DropdownMultifieldsTable(name: model.consDrName, id: model.consDrId) : null;
-
-    return model;
+  DrTreatMasterList.fromJson(Map<String, dynamic> json) {
+    admissionId = json['admissionId'];
+    drMstId = json['drMstId'];
+    irt = json['irt'];
+    date = json['date'] != null ? DateTime.tryParse(json['date']) : null;
+    remark = json['remark'];
+    srNo = json['srNo'];
+    sysDate = json['sysDate'] != null ? DateTime.tryParse(json['sysDate']) : null;
+    userName = json['userName'];
+    terminalName = json['terminalName'];
+    specialOrder = json['specialOrder'];
+    provisionalDiagnosis = json['provisionalDiagnosis'];
+    weight = json['weight'];
+    templateName = json['templateName'];
+    prescriptionType = json['prescriptionType'];
+    precedence = json['precedence'];
+    statusTyp = json['statusTyp'];
+    isAlw = json['isAlw'];
+    age = json['age'];
+    patientName = json['patientName'];
+    communicationNumber = json['communicationNumber'];
+    consDrName = json['consDrName'];
+    consDrId = json['consDrId'];
+    dob = json['dob'] != null ? DateTime.tryParse(json['dob']) : null;
+    frmEmerg = json['frmEmerg'];
+    rowState = json['rowState'];
+    if (json['detail'] != null) {
+      detail = <RespDrTreatDetail>[];
+      json['detail'].forEach((v) {
+        detail!.add(new RespDrTreatDetail.fromJson(v));
+      });
+    }
+    indoorRecordType = json['indoorRecordType'] != null ? new DropdownMultifieldsTable.fromJson(json['indoorRecordType']) : null;
+    action = json['action'];
+    consDr = json['consDr'] != null ? new DropdownMultifieldsTable.fromJson(json['consDr']) : null;
+    isValid = json['isValid'];
+    iudId = json['iudId'];
+    gridName = json['gridName'];
+    guid = json['guid'];
+    tmplId = json['tmplId'];
+    tmplName = json['tmplName'];
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'admissionId': admissionId,
-      'drMstId': drMstId,
-      'irt': irt,
-      'date': date?.toIso8601String(),
-      'remark': remark,
-      'srNo': srNo,
-      'sysDate': sysDate?.toIso8601String(),
-      'userName': userName,
-      'terminalName': terminalName,
-      'specialOrder': specialOrder,
-      'provisionalDiagnosis': provisionalDiagnosis,
-      'weight': weight,
-      'templateName': templateName,
-      'prescriptionType': prescriptionType,
-      'precedence': precedence,
-      'statusTyp': statusTyp,
-      'isAlw': isAlw,
-      'age': age,
-      'patientName': patientName,
-      'communicationNumber': communicationNumber,
-      'consDrName': consDrName,
-      'consDrId': consDrId,
-      'dob': dob?.toIso8601String(),
-      'frmEmerg': frmEmerg,
-      'action': action,
-      'isValid': isValid,
-      'iudId': iudId,
-      'gridName': gridName,
-      'tmplId': tmplId,
-      'tmplName': tmplName,
-      'guid': guid,
-      'detail': detail.map((e) => e.toJson()).toList(),
-
-      // NotMapped fields (optional – for local use only, not needed if sending to server)
-      'indoorRecordType': indoorRecordType?.toJson(),
-      'consDr': consDr?.toJson(),
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['admissionId'] = this.admissionId;
+    data['drMstId'] = this.drMstId;
+    data['irt'] = this.irt;
+    data['date'] = this.date?.toIso8601String();
+    data['remark'] = this.remark;
+    data['srNo'] = this.srNo;
+    data['sysDate'] = sysDate?.toIso8601String();
+    data['userName'] = this.userName;
+    data['terminalName'] = this.terminalName;
+    data['specialOrder'] = this.specialOrder;
+    data['provisionalDiagnosis'] = this.provisionalDiagnosis;
+    data['weight'] = this.weight;
+    data['templateName'] = this.templateName;
+    data['prescriptionType'] = this.prescriptionType;
+    data['precedence'] = this.precedence;
+    data['statusTyp'] = this.statusTyp;
+    data['isAlw'] = this.isAlw;
+    data['age'] = this.age;
+    data['patientName'] = this.patientName;
+    data['communicationNumber'] = this.communicationNumber;
+    data['consDrName'] = this.consDrName;
+    data['consDrId'] = this.consDrId;
+    data['dob'] = dob?.toIso8601String();
+    data['frmEmerg'] = this.frmEmerg;
+    data['rowState'] = this.rowState;
+    if (this.detail != null) {
+      data['detail'] = this.detail!.map((v) => v.toJson()).toList();
+    }
+    if (this.indoorRecordType != null) {
+      data['indoorRecordType'] = this.indoorRecordType!.toJson();
+    }
+    data['action'] = this.action;
+    if (this.consDr != null) {
+      data['consDr'] = this.consDr!.toJson();
+    }
+    data['isValid'] = this.isValid;
+    data['iudId'] = this.iudId;
+    data['gridName'] = this.gridName;
+    data['guid'] = this.guid;
+    data['tmplId'] = this.tmplId;
+    data['tmplName'] = this.tmplName;
+    return data;
   }
 }

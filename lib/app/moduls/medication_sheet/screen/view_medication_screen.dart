@@ -116,9 +116,9 @@ class ViewMedicationScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: controller.drTreatMasterList[selectedIndex].detail.length,
+                    itemCount: controller.drTreatMasterList[selectedIndex].detail?.length,
                     itemBuilder: (context, index) {
-                      final item = controller.drTreatMasterList[selectedIndex].detail[index];
+                      final item = controller.drTreatMasterList[selectedIndex].detail?[index];
                       return LayoutBuilder(
                         builder: (context, constraints) {
                           return Slidable(
@@ -161,7 +161,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
+                                          "${index + 1}. ${item?.itemName?.txt?.isNotEmpty == true && item?.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item?.itemName!.txt! : item?.itemNameMnl?.isNotEmpty == true ? item?.itemNameMnl! : ''}",
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
@@ -169,9 +169,8 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ],
                                   ),
                                   const SizedBox(height: 6),
-
                                   Visibility(
-                                    visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                    visible: item!.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
                                     child: Text.rich(
                                       TextSpan(
                                         children: [
@@ -199,7 +198,6 @@ class ViewMedicationScreen extends StatelessWidget {
                                       style: const TextStyle(fontWeight: FontWeight.w400, color: Colors.grey),
                                     ),
                                   ),
-
                                   Visibility(
                                     visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
                                     child: Text.rich(
