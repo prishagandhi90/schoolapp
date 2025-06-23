@@ -188,7 +188,7 @@ class MedicationScreen extends StatelessWidget {
                               height: getDynamicHeight(size: 0.050),
                               width: getDynamicHeight(size: 0.050),
                               decoration: BoxDecoration(
-                                color: Colors.teal,
+                                color: AppColor.teal,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(0),
                                   bottomLeft: Radius.circular(0),
@@ -197,7 +197,7 @@ class MedicationScreen extends StatelessWidget {
                               child: IconButton(
                                 icon: Icon(
                                   Icons.copy,
-                                  color: Colors.white,
+                                  color: AppColor.white,
                                   size: getDynamicHeight(size: 0.025),
                                 ),
                                 onPressed: () {
@@ -210,7 +210,7 @@ class MedicationScreen extends StatelessWidget {
                               height: getDynamicHeight(size: 0.050),
                               width: getDynamicHeight(size: 0.050),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: AppColor.white,
                                 border: Border.all(
                                   color: Colors.grey.shade400,
                                   width: getDynamicHeight(size: 0.001),
@@ -223,7 +223,7 @@ class MedicationScreen extends StatelessWidget {
                               child: IconButton(
                                 icon: Icon(
                                   Icons.edit,
-                                  color: Colors.teal,
+                                  color: AppColor.teal,
                                   size: getDynamicHeight(size: 0.025),
                                 ),
                                 onPressed: () {
@@ -259,7 +259,7 @@ class MedicationScreen extends StatelessWidget {
                                         style: AppStyle.black,
                                       ),
                                       TextSpan(
-                                        text: "Treatment Date:  ",
+                                        text: AppString.treatmentdate,
                                         style: AppStyle.black,
                                       ),
                                       TextSpan(
@@ -327,7 +327,7 @@ class MedicationScreen extends StatelessWidget {
                 onPressed: () {},
                 style: TextButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 167, 166, 166),
-                  foregroundColor: AppColor.blackColor,
+                  foregroundColor: AppColor.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
                   ),

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -29,39 +31,45 @@ class ViewMedicationScreen extends StatelessWidget {
                 AnimatedCrossFade(
                   duration: const Duration(milliseconds: 300),
                   crossFadeState: controller.isSearchActive ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                  firstChild: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // 🔹 Custom Container with Text (Instead of TabBar)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        decoration: BoxDecoration(
-                          // color: AppColor.lightblue,
-                          border: Border.all(color: AppColor.black1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          "KISHOR PRABHUBHAI DARJI ( A/1469/25 )", // ✅ Replace with any dynamic text you want
-                          style: TextStyle(
-                            color: AppColor.black,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                  firstChild: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // 🔹 Custom Container with Text (Instead of TabBar)
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: getDynamicHeight(size: 0.015),
+                            vertical: getDynamicHeight(size: 0.012),
+                          ),
+                          decoration: BoxDecoration(
+                            // color: AppColor.lightblue,
+                            border: Border.all(color: AppColor.black1),
+                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
+                          ),
+                          child: Text(
+                            "KISHOR PRABHUBHAI DARJI ( A/1469/25 )", // ✅ Replace with any dynamic text you want
+                            style: TextStyle(
+                              color: AppColor.black,
+                              fontSize: Sizes.px12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                      // 🔍 Search icon
-                      IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () async {
-                          final slidable = Slidable.of(context);
-                          if (slidable != null && slidable.actionPaneType.value != ActionPaneType.none) {
-                            slidable.close();
-                            await Future.delayed(const Duration(milliseconds: 300));
-                          }
-                          controller.activateSearch(true);
-                        },
-                      ),
-                    ],
+                        // 🔍 Search icon
+                        IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () async {
+                            final slidable = Slidable.of(context);
+                            if (slidable != null && slidable.actionPaneType.value != ActionPaneType.none) {
+                              slidable.close();
+                              await Future.delayed(const Duration(milliseconds: 300));
+                            }
+                            controller.activateSearch(true);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
 
                   // 🔄 Second View: Search TextField
@@ -73,15 +81,18 @@ class ViewMedicationScreen extends StatelessWidget {
                           decoration: InputDecoration(
                             hintText: "Search...",
                             prefixIcon: const Icon(Icons.search),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: getDynamicHeight(size: 0.015),
+                              vertical: getDynamicHeight(size: 0.012),
+                            ),
                             filled: true,
                             fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
                               borderSide: BorderSide(color: AppColor.black),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
                               borderSide: BorderSide(color: AppColor.black),
                             ),
                           ),
@@ -128,30 +139,33 @@ class ViewMedicationScreen extends StatelessWidget {
                               extentRatio: 0.18,
                               children: [
                                 Container(
-                                  width: 65,
+                                  width: getDynamicHeight(size: 0.085), // 🔁 approx 65,
                                   height: constraints.maxHeight, // 💥 dynamic height from main container
                                   decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                     border: Border.all(color: Colors.grey.shade400, width: 1),
-                                    borderRadius: const BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                                      bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
                                     ),
                                   ),
                                   child: IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red, size: 22),
+                                    icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.018)),
                                     onPressed: () {},
                                   ),
                                 ),
                               ],
                             ),
                             child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                              padding: const EdgeInsets.all(8),
+                              margin: EdgeInsets.symmetric(
+                                horizontal: getDynamicHeight(size: 0.010),
+                                vertical: getDynamicHeight(size: 0.008),
+                              ),
+                              padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black26),
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
+                                border: Border.all(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
+                                color: AppColor.primaryColor.withOpacity(0.2),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,11 +179,10 @@ class ViewMedicationScreen extends StatelessWidget {
                                           style: const TextStyle(fontWeight: FontWeight.w500),
                                         ),
                                       ),
-                                      GestureDetector(onTap: () => controller.viewbottomsheet(context, index),
-                                        child: Icon(Icons.menu)),
+                                      GestureDetector(onTap: () => controller.viewbottomsheet(context, index), child: Icon(Icons.menu)),
                                     ],
                                   ),
-                                  const SizedBox(height: 6),
+                                  SizedBox(height: getDynamicHeight(size: 0.003)),
                                   Visibility(
                                     visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
                                     child: Text.rich(
@@ -193,7 +206,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
+                                    padding: EdgeInsets.only(top: getDynamicHeight(size: 0.006)),
                                     child: Text(
                                       item.freq1!.isNotEmpty || item.freq2!.isNotEmpty || item.freq3!.isNotEmpty || item.freq4!.isNotEmpty
                                           ? '${item.freq1} - ${item.freq2} - ${item.freq3} - ${item.freq4}'
@@ -244,7 +257,7 @@ class ViewMedicationScreen extends StatelessWidget {
                 onPressed: () {},
                 style: TextButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 167, 166, 166),
-                  foregroundColor: AppColor.blackColor,
+                  foregroundColor: AppColor.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.zero,
                   ),

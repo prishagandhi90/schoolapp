@@ -244,4 +244,6 @@ class AppString {
   static String Days = "Days";
   static String quantity1 = "Quantity";
   static String stoptime = "Stop Time";
+  static String treatmentdate = "Treatment Date:  ";
+  static String addmedication = "Add Medication";
 }

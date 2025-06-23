@@ -1,6 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
@@ -34,13 +37,13 @@ class AddMedicationScreen extends StatelessWidget {
     return GetBuilder<MedicationsheetController>(
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColor.white,
           appBar: AppBar(
-            title: Text("Add Medication", style: AppStyle.primaryplusw700),
+            title: Text(AppString.addmedication, style: AppStyle.primaryplusw700),
             centerTitle: true,
-            backgroundColor: Colors.white,
+            backgroundColor: AppColor.white,
             elevation: 0,
-            leading: Icon(Icons.arrow_back, color: Colors.black),
+            leading: Icon(Icons.arrow_back, color: AppColor.black),
           ),
           body: Column(
             children: [
@@ -62,15 +65,15 @@ class AddMedicationScreen extends StatelessWidget {
                             filled: true,
                             fillColor: Colors.grey.shade100,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             disabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -80,14 +83,14 @@ class AddMedicationScreen extends StatelessWidget {
                         /// Medication Type Dropdown
                         CustomDropdown(
                           text: "Medication Type",
+                          textStyle: TextStyle(color: AppColor.grey),
                           controller: medicationTypeController,
                           buttonStyleData: ButtonStyleData(
                             height: 48,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
+                              border: Border.all(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
-                              color: Colors.white,
+                              color: AppColor.white,
                             ),
                           ),
                           onChanged: (value) {},
@@ -101,46 +104,46 @@ class AddMedicationScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 6),
                         CustomTextFormField(
-                          hint: "Formulary Medicine",
                           decoration: InputDecoration(
                             hintText: "Formulary Medicine",
+                            hintStyle: TextStyle(color: AppColor.grey),
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
                         ),
                         SizedBox(height: 6),
                         CustomTextFormField(
-                          hint: "Non Formulary Medicine",
                           decoration: InputDecoration(
                             hintText: "Non Formulary Medicine",
+                            hintStyle: TextStyle(color: AppColor.grey),
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -151,14 +154,14 @@ class AddMedicationScreen extends StatelessWidget {
                             Expanded(
                               child: CustomDropdown(
                                 text: "Inst Typ",
+                                textStyle: TextStyle(color: AppColor.grey),
                                 controller: instTypeController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 48,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
+                                    border: Border.all(color: AppColor.black),
                                     borderRadius: BorderRadius.circular(4),
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                   ),
                                 ),
                                 onChanged: (value) {},
@@ -176,23 +179,23 @@ class AddMedicationScreen extends StatelessWidget {
                               child: SizedBox(
                                 height: 48,
                                 child: CustomTextFormField(
-                                  hint: "Dose",
                                   decoration: InputDecoration(
                                     hintText: "Dose",
+                                    hintStyle: TextStyle(color: AppColor.grey),
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: AppColor.white,
                                     border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black),
+                                      borderSide: BorderSide(color: AppColor.black),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black),
+                                      borderSide: BorderSide(color: AppColor.black),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black, width: 1.5),
+                                      borderSide: BorderSide(color: AppColor.black, width: 1.5),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
@@ -208,23 +211,23 @@ class AddMedicationScreen extends StatelessWidget {
                               child: SizedBox(
                                 height: 48, // 🔥 Same as dropdown
                                 child: CustomTextFormField(
-                                  hint: 'Qty',
                                   decoration: InputDecoration(
                                     hintText: 'Qty',
+                                    hintStyle: TextStyle(color: AppColor.grey),
                                     isDense: true,
                                     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: AppColor.white,
                                     border: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black),
+                                      borderSide: BorderSide(color: AppColor.black),
                                       borderRadius: BorderRadius.circular(4), // ✅ Apply radius here
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black),
+                                      borderSide: BorderSide(color: AppColor.black),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black, width: 1.5),
+                                      borderSide: BorderSide(color: AppColor.black, width: 1.5),
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                   ),
@@ -235,14 +238,14 @@ class AddMedicationScreen extends StatelessWidget {
                             Expanded(
                               child: CustomDropdown(
                                 text: "Route",
+                                textStyle: TextStyle(color: AppColor.grey),
                                 controller: routeController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 48,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
+                                    border: Border.all(color: AppColor.black),
                                     borderRadius: BorderRadius.circular(4),
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                   ),
                                 ),
                                 onChanged: (value) {},
@@ -260,25 +263,25 @@ class AddMedicationScreen extends StatelessWidget {
                         SizedBox(height: 6),
                         CustomTextFormField(
                           controller: controller.remarksController,
-                          hint: "Remarks",
                           minLines: 1,
                           maxLines: 10,
                           decoration: InputDecoration(
                             hintText: "Remarks",
+                            hintStyle: TextStyle(color: AppColor.grey),
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -289,15 +292,14 @@ class AddMedicationScreen extends StatelessWidget {
                             Expanded(
                               child: CustomDropdown(
                                 text: "Morning",
-                                textStyle: TextStyle(fontSize: 10),
+                                textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
                                 controller: TextEditingController(),
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
+                                    border: Border.all(color: AppColor.black),
                                     borderRadius: BorderRadius.circular(0),
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                   ),
                                 ),
                                 onChanged: (value) {},
@@ -314,14 +316,14 @@ class AddMedicationScreen extends StatelessWidget {
                             Expanded(
                               child: CustomDropdown(
                                 text: "Afternoon",
+                                textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
                                 controller: TextEditingController(),
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
+                                    border: Border.all(color: AppColor.black),
                                     borderRadius: BorderRadius.circular(0),
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                   ),
                                 ),
                                 onChanged: (value) {},
@@ -338,14 +340,14 @@ class AddMedicationScreen extends StatelessWidget {
                             Expanded(
                               child: CustomDropdown(
                                 text: "Evening",
+                                textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
                                 controller: TextEditingController(),
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
+                                    border: Border.all(color: AppColor.black),
                                     borderRadius: BorderRadius.circular(0),
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                   ),
                                 ),
                                 onChanged: (value) {},
@@ -362,14 +364,14 @@ class AddMedicationScreen extends StatelessWidget {
                             Expanded(
                               child: CustomDropdown(
                                 text: "Night",
+                                textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
                                 controller: TextEditingController(),
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
+                                    border: Border.all(color: AppColor.black),
                                     borderRadius: BorderRadius.circular(0),
-                                    color: Colors.white,
+                                    color: AppColor.white,
                                   ),
                                 ),
                                 onChanged: (value) {},
@@ -390,23 +392,23 @@ class AddMedicationScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 6),
                         CustomTextFormField(
-                          hint: "Days",
                           decoration: InputDecoration(
                             hintText: "Days",
+                            hintStyle: TextStyle(color: AppColor.grey),
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -434,13 +436,14 @@ class AddMedicationScreen extends StatelessWidget {
                                     onPressed: () async {
                                       final pickedDate = await showDatePicker(
                                         context: context,
-                                        initialDate: DateTime.now(),
+                                        // initialDate: DateTime.now(),
                                         firstDate: DateTime(2000),
                                         lastDate: DateTime(2100),
                                       );
 
                                       if (pickedDate != null) {
-                                        final formattedDate = "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                        final formattedDate =
+                                            "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
                                         controller.dateController.text = formattedDate;
                                       }
                                       FocusScope.of(context).unfocus();
@@ -495,33 +498,31 @@ class AddMedicationScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 6),
                         CustomTextFormField(
-                          hint: "Flow Rate",
                           decoration: InputDecoration(
                             hintText: "Flow Rate",
+                            hintStyle: TextStyle(color: AppColor.grey),
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: AppColor.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
+                              borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black, width: 1.5),
+                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
                         ),
-
                         SizedBox(height: 10),
-
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
+                            backgroundColor: AppColor.teal,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                           ),
                           onPressed: () {},
@@ -544,20 +545,32 @@ class AddMedicationScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Text(
-                  "Added Medication (0)",
-                  style: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 16),
+                  "Added Medication (${controller.drTreatMasterList[selectedIndex].detail.length})",
+                  style: TextStyle(color: AppColor.teal, fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
-
               // Medication List
               Expanded(
                 flex: 1,
                 child: Scrollbar(
                   controller: listScrollController,
-                  child: ListView.builder(
+                  child: ListView.separated(
                     controller: listScrollController,
-                    itemCount: 0,
-                    itemBuilder: (context, index) => ListTile(title: Text("Medication $index")),
+                    shrinkWrap: true,
+                    itemCount: controller.drTreatMasterList[selectedIndex].detail.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.drTreatMasterList[selectedIndex].detail[index];
+                      return ListTile(
+                        title: Text("${index + 1}. ${item.itemName?.txt ?? ''}"),
+                      );
+                    },
+                    separatorBuilder: (context, index) => Divider(
+                      color: Colors.grey.shade400,
+                      endIndent: 8,
+                      indent: 8,
+                      thickness: 1,
+                      height: 0, // zero gap if you want tight spacing
+                    ),
                   ),
                 ),
               ),
@@ -607,7 +620,7 @@ class AddMedicationScreen extends StatelessWidget {
                         ));
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 216, 150, 112),
+                        backgroundColor: AppColor.orange,
                         foregroundColor: AppColor.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero,

@@ -331,7 +331,7 @@ class MedicationsheetController extends GetxController {
       final drTreatMaster = DrTreatMasterList(
         drMstId: 0, // Example only, dynamically load this
         admissionId: admissionId, // Example only, dynamically lo
-        date: dateTime.toUtc(),
+        date: dateTime, // Convert to UTC and format
         srNo: 1,
         specialOrder: selectedDropdnOptionId.join('; '),
         weight: weightController.text.trim(),
@@ -360,7 +360,7 @@ class MedicationsheetController extends GetxController {
           parentId: 0,
           supName: '',
           dateValue: null,
-        ), // Aapke entered medication detail list yahaan jayege
+        ),
       );
 
       var jsonBody = {
@@ -515,9 +515,11 @@ class MedicationsheetController extends GetxController {
       builder: (context) {
         return GetBuilder<MedicationsheetController>(builder: (controller) {
           return AlertDialog(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            contentPadding: EdgeInsets.all(16),
+            backgroundColor: AppColor.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+            ),
+            contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return SingleChildScrollView(
@@ -533,7 +535,7 @@ class MedicationsheetController extends GetxController {
                               "KISHOR PRABHUBHAI DARJI ( A/1469/25 )",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.teal,
+                                color: AppColor.teal,
                               ),
                             ),
                           ),
@@ -554,14 +556,17 @@ class MedicationsheetController extends GetxController {
                               style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
                               hintText: 'Select Date',
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: getDynamicHeight(size: 0.012),
+                                  vertical: getDynamicHeight(size: 0.011),
+                                ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: AppColor.black1),
-                                  borderRadius: BorderRadius.circular(3),
+                                  borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: AppColor.black1),
-                                  borderRadius: BorderRadius.circular(3),
+                                  borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                 ),
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.calendar_today),
@@ -597,7 +602,7 @@ class MedicationsheetController extends GetxController {
                               // },
                             ),
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: getDynamicHeight(size: 0.008)),
                           Expanded(
                               child: InkWell(
                             onTap: () async {
@@ -610,16 +615,19 @@ class MedicationsheetController extends GetxController {
                               }
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                              padding: EdgeInsets.symmetric(
+                                vertical: getDynamicHeight(size: 0.012),
+                                horizontal: getDynamicHeight(size: 0.010),
+                              ),
                               decoration: BoxDecoration(
                                 border: Border.all(color: AppColor.black1),
-                                borderRadius: BorderRadius.circular(4),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.005)),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(selectedTime.format(context)),
-                                  SizedBox(width: 8),
+                                  SizedBox(width: getDynamicHeight(size: 0.008)),
                                   Icon(Icons.timer_outlined),
                                 ],
                               ),
@@ -627,7 +635,7 @@ class MedicationsheetController extends GetxController {
                           ))
                         ],
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Special Order Dropdown & Weight
                       Row(
@@ -640,8 +648,8 @@ class MedicationsheetController extends GetxController {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(3),
-                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.005)),
+                                  color: AppColor.white,
                                   border: Border.all(
                                     width: 1,
                                     color: AppColor.black1,
@@ -668,15 +676,15 @@ class MedicationsheetController extends GetxController {
                                                 ],
                                               )
                                             : Wrap(
-                                                runSpacing: 5,
-                                                spacing: 8,
+                                                runSpacing: getDynamicHeight(size: 0.004),
+                                                spacing: getDynamicHeight(size: 0.006),
                                                 children: [
                                                   for (int i = 0; i < selectedDropdownList.length; i++)
                                                     Container(
                                                       decoration: BoxDecoration(
                                                         border: Border.all(width: 1, color: ConstColor.hintTextColor),
                                                         borderRadius: BorderRadius.circular(10),
-                                                        color: Colors.white,
+                                                        color: AppColor.white,
                                                       ),
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(left: 7, right: 5, top: 5, bottom: 5),
@@ -697,9 +705,9 @@ class MedicationsheetController extends GetxController {
                                                                 selectedDropdownList.remove(selectedDropdownList[i]);
                                                                 update();
                                                               },
-                                                              child: const Icon(
+                                                              child: Icon(
                                                                 Icons.cancel_outlined,
-                                                                size: 20,
+                                                                size: getDynamicHeight(size: 0.016),
                                                                 color: ConstColor.errorBorderColor,
                                                               ),
                                                             )
@@ -716,21 +724,24 @@ class MedicationsheetController extends GetxController {
                               ),
                             ),
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: getDynamicHeight(size: 0.008)),
                           Container(
-                            width: 100,
+                            width: getDynamicHeight(size: 0.09),
                             child: TextFormField(
                               controller: weightController,
                               decoration: InputDecoration(
                                 hintText: "Weight",
                                 border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: getDynamicHeight(size: 0.010),
+                                  vertical: getDynamicHeight(size: 0.012),
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Remarks Field
                       TextFormField(
@@ -738,12 +749,15 @@ class MedicationsheetController extends GetxController {
                         decoration: InputDecoration(
                           hintText: "Remarks",
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: getDynamicHeight(size: 0.010),
+                            vertical: getDynamicHeight(size: 0.012),
+                          ),
                         ),
                         minLines: 1,
                         maxLines: 10,
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Diagnosis Field
                       TextFormField(
@@ -751,12 +765,15 @@ class MedicationsheetController extends GetxController {
                         decoration: InputDecoration(
                           hintText: "Enter Provisional Diagnosis",
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: getDynamicHeight(size: 0.010),
+                            vertical: getDynamicHeight(size: 0.012),
+                          ),
                         ),
                         minLines: 2,
                         maxLines: 10,
                       ),
-                      SizedBox(height: 12),
+                      SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Template Dropdown
                       CustomDropdown(
@@ -801,22 +818,25 @@ class MedicationsheetController extends GetxController {
                       //   items: ["Template A", "Template B"].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
                       //   onChanged: (val) => selectedTemplate = val,
                       // ),
-                      SizedBox(height: 20),
+                      SizedBox(height: getDynamicHeight(size: 0.02)),
 
                       /// Save Button
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
-                            padding: EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: AppColor.teal,
+                            padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.014)),
                           ),
                           onPressed: () async {
                             // Submit logic
                             await saveMedicationSheet();
                             // Navigator.pop(context);
                           },
-                          child: Text("Save", style: TextStyle(fontSize: 16)),
+                          child: Text(
+                            "Save",
+                            style: TextStyle(fontSize: getDynamicHeight(size: 0.016), color: AppColor.white),
+                          ),
                         ),
                       ),
                     ],
@@ -1070,8 +1090,6 @@ class MedicationsheetController extends GetxController {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 10),
             ],
           ),
         );

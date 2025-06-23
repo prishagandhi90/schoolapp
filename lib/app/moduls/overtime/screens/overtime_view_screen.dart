@@ -136,7 +136,7 @@ class OvertimeViewScreen extends GetView<OvertimeController> {
                                             headingRowColor: WidgetStateColor.resolveWith(
                                               (states) => AppColor.primaryColor,
                                             ),
-                                            columnSpacing: 35,
+                                            columnSpacing: 0,
                                             columns: [
                                               DataColumn(
                                                 label: Text(

@@ -137,7 +137,7 @@ class LeaveViewScreen extends GetView<LeaveController> {
                                             headingRowColor: WidgetStateColor.resolveWith(
                                               (states) => AppColor.primaryColor,
                                             ),
-                                            columnSpacing: getDynamicHeight(size: 0.035),
+                                            columnSpacing: 0, //getDynamicHeight(size: 0.001),
                                             columns: [
                                               DataColumn(
                                                 label: Text(
