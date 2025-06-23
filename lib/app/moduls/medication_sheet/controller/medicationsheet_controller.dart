@@ -912,13 +912,13 @@ class MedicationsheetController extends GetxController {
                       ],
                     ),
                     SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                    _buildNoteSection(AppString.indoorrecordtype, ''),
-                    _buildNoteSection(AppString.entrydatetime, ''),
-                    _buildNoteSection(AppString.specialorder, ''),
-                    _buildNoteSection(AppString.templatename, ''),
-                    _buildNoteSection(AppString.provisionaldiagnosis, ''),
-                    _buildNoteSection(AppString.weight, ''),
-                    _buildNoteSection(AppString.remark, ''),
+                    _buildNoteSection(AppString.indoorrecordtype, drTreatMasterList[index].irt ?? ''),
+                    _buildNoteSection(AppString.entrydatetime, drTreatMasterList[index].sysDate.toString()),
+                    _buildNoteSection(AppString.specialorder, drTreatMasterList[index].specialOrder ?? ''),
+                    _buildNoteSection(AppString.templatename, drTreatMasterList[index].tmplName ?? ''),
+                    _buildNoteSection(AppString.provisionaldiagnosis, drTreatMasterList[index].provisionalDiagnosis ?? ''),
+                    _buildNoteSection(AppString.weight, drTreatMasterList[index].weight ?? ''),
+                    _buildNoteSection(AppString.remark, drTreatMasterList[index].remark ?? ''),
                     Container(
                       height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                       child: Column(
@@ -968,7 +968,7 @@ class MedicationsheetController extends GetxController {
                                     width: getDynamicHeight(size: 0.5), // was height * 0.5
                                     alignment: Alignment.center,
                                     child: Text(
-                                      '',
+                                      drTreatMasterList[index].srNo.toString(),
                                       style: AppStyle.fontfamilyplus,
                                     )),
                               ),
@@ -978,7 +978,7 @@ class MedicationsheetController extends GetxController {
                                     width: getDynamicHeight(size: 0.5), // was height * 0.5
                                     alignment: Alignment.center,
                                     child: Text(
-                                      '',
+                                      drTreatMasterList[index].admissionId.toString(),
                                       style: AppStyle.fontfamilyplus,
                                     )),
                               ),
@@ -987,7 +987,7 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                     ),
-                    _buildNoteSection(AppString.user, ''),
+                    _buildNoteSection(AppString.user, drTreatMasterList[index].userName ?? ''),
                   ],
                 ),
               ),
