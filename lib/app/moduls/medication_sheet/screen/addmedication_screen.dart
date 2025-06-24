@@ -34,7 +34,7 @@ class AddMedicationScreen extends StatelessWidget {
             centerTitle: true,
             backgroundColor: AppColor.white,
             elevation: 0,
-            leading: Icon(Icons.arrow_back, color: AppColor.black),
+            leading: GestureDetector(onTap: () => Navigator.pop(context), child: Icon(Icons.arrow_back, color: AppColor.black)),
           ),
           body: Column(
             children: [
@@ -193,7 +193,7 @@ class AddMedicationScreen extends StatelessWidget {
                                 width: double.infinity,
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(width: 4),
                             Expanded(
                               child: SizedBox(
                                 height: 48,
@@ -253,7 +253,7 @@ class AddMedicationScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(width: 4),
                             Expanded(
                               child: CustomDropdown(
                                 text: "Route",
@@ -329,7 +329,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   height: 45,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(3),
                                     color: AppColor.white,
                                   ),
                                 ),
@@ -365,7 +365,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   height: 45,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(3),
                                     color: AppColor.white,
                                   ),
                                 ),
@@ -401,7 +401,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   height: 45,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(3),
                                     color: AppColor.white,
                                   ),
                                 ),
@@ -437,7 +437,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   height: 45,
                                   decoration: BoxDecoration(
                                     border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(0),
+                                    borderRadius: BorderRadius.circular(3),
                                     color: AppColor.white,
                                   ),
                                 ),
@@ -540,7 +540,7 @@ class AddMedicationScreen extends StatelessWidget {
                                 // },
                               ),
                             ),
-                            SizedBox(width: 8),
+                            SizedBox(width: 4),
                             Expanded(
                                 child: InkWell(
                               onTap: () async {
@@ -640,7 +640,7 @@ class AddMedicationScreen extends StatelessWidget {
                         // dense: true,
                         title: Text(
                           "${index + 1}. ${item.itemName?.txt ?? ''}",
-                          // style: TextStyle(fontSize: 15),
+                          style: TextStyle(fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.014)),
                         ),
                       );
                     },
