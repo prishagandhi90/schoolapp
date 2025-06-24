@@ -19,6 +19,7 @@ import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifie
 import 'package:emp_app/app/moduls/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -65,10 +66,6 @@ class MedicationsheetController extends GetxController {
   void activateSearch(bool status) {
     isSearchActive = status;
     update(); // Call this inside GetX Controller
-  }
-
-  void clearSearch() {
-    searchController.clear();
   }
 
   Future<void> selectOperationName() async {
@@ -412,9 +409,24 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
+  void clearData() {
+    searchController.clear();
+    DateTime now = DateTime.now();
+    String formattedDate = "${now.day.toString().padLeft(2, '0')}-${now.month.toString().padLeft(2, '0')}-${now.year}";
+    dateController.text = formattedDate;
+    selectedTime = TimeOfDay.now(); // 🕒 Set current time
+    remarksController.clear();
+    diagnosisController.clear();
+    weightController.clear();
+    TemplateNameController.clear();
+    selectedDropdownList.clear();
+    selectedDropdnOptionId.clear();
+    update(); // 🔁 Update GetBuilder/UI if needed
+  }
+
   Future<void> showDateBottomSheet(BuildContext context) async {
     showModalBottomSheet(
-      context: context,
+      context: Get.context!,
       isDismissible: true,
       enableDrag: true,
       isScrollControlled: true,
@@ -786,13 +798,14 @@ class MedicationsheetController extends GetxController {
                       /// Template Dropdown
                       CustomDropdown(
                         text: AppString.name,
+                        textStyle: TextStyle(color: AppColor.black1),
                         controller: controller.TemplateNameController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.05),
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          // padding: const EdgeInsets.symmetric(horizontal: 0),
                           decoration: BoxDecoration(
-                            border: Border.all(color: AppColor.black),
-                            borderRadius: BorderRadius.circular(0),
+                            border: Border.all(color: AppColor.originalgrey),
+                            borderRadius: BorderRadius.circular(3),
                             color: AppColor.white,
                           ),
                         ),
@@ -808,7 +821,6 @@ class MedicationsheetController extends GetxController {
                                   child: Text(
                                     item.name ?? '',
                                     style: AppStyle.black.copyWith(
-                                      // fontSize: 14,
                                       fontSize: getDynamicHeight(size: 0.016),
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -840,6 +852,7 @@ class MedicationsheetController extends GetxController {
                             // Submit logic
                             await saveMedicationSheet();
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+                            clearData();
                             Navigator.pop(context);
                           },
                           child: Text(

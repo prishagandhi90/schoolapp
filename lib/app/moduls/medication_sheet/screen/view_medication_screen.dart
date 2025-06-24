@@ -118,7 +118,7 @@ class ViewMedicationScreen extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.cancel),
                         onPressed: () async {
-                          controller.clearSearch();
+                          controller.clearData();
                           controller.activateSearch(false);
                         },
                       ),
@@ -139,7 +139,7 @@ class ViewMedicationScreen extends StatelessWidget {
                               extentRatio: 0.18,
                               children: [
                                 Container(
-                                  width: getDynamicHeight(size: 0.085), // 🔁 approx 65,
+                                  width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
                                   height: constraints.maxHeight, // 💥 dynamic height from main container
                                   decoration: BoxDecoration(
                                     color: AppColor.white,
@@ -158,8 +158,8 @@ class ViewMedicationScreen extends StatelessWidget {
                             ),
                             child: Container(
                               margin: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.010),
-                                vertical: getDynamicHeight(size: 0.008),
+                                horizontal: getDynamicHeight(size: 0.005),
+                                vertical: getDynamicHeight(size: 0.005),
                               ),
                               padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
                               decoration: BoxDecoration(
@@ -196,7 +196,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
+                                                ? item.remark.toString()
+                                                : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
@@ -207,7 +209,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(top: getDynamicHeight(size: 0.006)),
+                                    padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
                                     child: Text(
                                       item.freq1!.isNotEmpty || item.freq2!.isNotEmpty || item.freq3!.isNotEmpty || item.freq4!.isNotEmpty
                                           ? '${item.freq1} - ${item.freq2} - ${item.freq3} - ${item.freq4}'
@@ -225,7 +227,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
+                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                ? item.flowRate.toString()
+                                                : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
