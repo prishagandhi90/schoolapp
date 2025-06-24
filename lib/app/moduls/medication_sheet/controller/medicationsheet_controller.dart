@@ -13,13 +13,13 @@ import 'package:emp_app/app/core/util/custom_color.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_master.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -52,17 +52,19 @@ class MedicationsheetController extends GetxController {
 
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
-
   final medicationTypeController = TextEditingController();
   final instructionTypeController = TextEditingController();
   final routeController = TextEditingController();
-
   final FreqMorningController = TextEditingController();
   final FreqAfternoonController = TextEditingController();
   final FreqEveningController = TextEditingController();
   final FreqNightController = TextEditingController();
 
   List<DrTreatMasterList> drTreatMasterList = [];
+  bool fromAdmittedScreen = false;
+  final TextEditingController nameController = TextEditingController();
+  List<SearchserviceModel> suggestions = [];
+  var searchService = <SearchserviceModel>[].obs;
 
   @override
   void onInit() {
@@ -84,6 +86,63 @@ class MedicationsheetController extends GetxController {
   void activateSearch(bool status) {
     isSearchActive = status;
     update(); // Call this inside GetX Controller
+  }
+
+  String getUHId(String patientName) {
+    if (patientName.isEmpty) return "";
+
+    List<String> parts = patientName.split('|');
+    return parts.last.trim(); // last part with trimmed spaces
+  }
+
+  Future<void> getSuggestions(String query) async {
+    if (query.isEmpty) return;
+    List<SearchserviceModel> results = await fetchSearchService(query);
+
+    suggestions = results;
+    update();
+  }
+
+  Future<List<SearchserviceModel>> fetchSearchService(String flag) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empSearchServiceAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseSearchService responseSearchService = ResponseSearchService.fromJson(jsonDecode(response));
+
+      if (responseSearchService.statusCode == 200) {
+        // searchService.clear();
+        searchService.assignAll(responseSearchService.data ?? []);
+        isLoading = false;
+      } else if (responseSearchService.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseSearchService.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "InvestRequisit",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return searchService.toList();
   }
 
   Future<void> selectOperationName() async {
@@ -599,7 +658,7 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  void clearData() {
+  Future<void> clearData() async {
     searchController.clear();
     DateTime now = DateTime.now();
     String formattedDate = "${now.day.toString().padLeft(2, '0')}-${now.month.toString().padLeft(2, '0')}-${now.year}";
@@ -611,6 +670,12 @@ class MedicationsheetController extends GetxController {
     TemplateNameController.clear();
     selectedDropdownList.clear();
     selectedDropdnOptionId.clear();
+
+    nameController.text = '';
+    ipdNo = '';
+    uhid = '';
+    fromAdmittedScreen = false;
+
     update(); // 🔁 Update GetBuilder/UI if needed
   }
 
@@ -742,7 +807,7 @@ class MedicationsheetController extends GetxController {
                         children: [
                           Expanded(
                             child: Text(
-                              "KISHOR PRABHUBHAI DARJI ( A/1469/25 )",
+                              controller.nameController.text,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: AppColor.teal,
@@ -1364,10 +1429,8 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype,
-                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(
-                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -1506,11 +1569,9 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(
-                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(
-                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),

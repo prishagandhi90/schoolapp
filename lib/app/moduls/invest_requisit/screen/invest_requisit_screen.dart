@@ -59,7 +59,6 @@ class InvestRequisitScreen extends StatelessWidget {
                           return controller.suggestions;
                         },
                         onSelected: (SearchserviceModel selection) {
-                          print('Selected City: ${selection.txt} (ID: ${selection.name})');
                           controller.nameController.text = selection.txt ?? '';
                           controller.ipdNo = selection.name ?? '';
                           controller.uhid = controller.getUHId(selection.txt ?? '');
@@ -67,7 +66,8 @@ class InvestRequisitScreen extends StatelessWidget {
                           controller.update();
                         },
                         fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                          final effectiveController =
+                              controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
                           return CustomTextFormField(
                             controller: effectiveController,
                             focusNode: focusNode,
@@ -125,13 +125,14 @@ class InvestRequisitScreen extends StatelessWidget {
                             flex: 6,
                             child: CustomDropdown(
                               text: AppString.investigationType,
-                              textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
+                              textStyle:
+                                  TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--' ? AppColor.red : AppColor.black),
+                                  border: Border.all(
+                                      color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--' ? AppColor.red : AppColor.black),
                                   borderRadius: BorderRadius.circular(0),
                                   color: AppColor.white,
                                 ),
@@ -279,7 +280,8 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                       child: CustomDropdown(
                         text: AppString.selectServicegroup,
-                        textStyle: TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
+                        textStyle:
+                            TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),

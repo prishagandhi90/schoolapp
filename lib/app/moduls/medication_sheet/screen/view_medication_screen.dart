@@ -48,7 +48,7 @@ class ViewMedicationScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
                           ),
                           child: Text(
-                            "KISHOR PRABHUBHAI DARJI ( A/1469/25 )", // ✅ Replace with any dynamic text you want
+                            controller.nameController.text, // ✅ Replace with any dynamic text you want
                             style: TextStyle(
                               color: AppColor.black,
                               fontSize: Sizes.px12,
@@ -196,9 +196,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                                ? item.remark.toString()
-                                                : '',
+                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
@@ -227,9 +225,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                ? item.flowRate.toString()
-                                                : '',
+                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,

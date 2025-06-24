@@ -333,24 +333,6 @@ class AdpatientScreen extends StatelessWidget {
 
     investRequisitController.update();
 
-    // PersistentNavBarNavigator.pushNewScreen(
-    //   Get.context!,
-    //   screen: InvestRequisitScreen(),
-    //   withNavBar: false,
-    //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    // ).then((value) async {
-    //   final controller = Get.put(InvestRequisitController());
-    //   await controller.resetForm();
-
-    //   // final bottomBarController = Get.find<BottomBarController>();
-    //   // bottomBarController.currentIndex.value = 0;
-    //   // bottomBarController.isIPDHome.value = true;
-    //   hideBottomBar.value = false;
-
-    //   var dashboardController = Get.put(DashboardController());
-    //   await dashboardController.getDashboardDataUsingToken();
-    // });
-
     Get.to(() => InvestRequisitScreen())!.then((value) async {
       final controller = Get.put(InvestRequisitController());
       await controller.resetForm();
@@ -358,6 +340,41 @@ class AdpatientScreen extends StatelessWidget {
       // final bottomBarController = Get.find<BottomBarController>();
       // bottomBarController.currentIndex.value = 0;
       // bottomBarController.isIPDHome.value = true;
+      hideBottomBar.value = false;
+
+      var dashboardController = Get.put(DashboardController());
+      await dashboardController.getDashboardDataUsingToken();
+    });
+  }
+
+  void TapToRedirectToMedicationScreen({
+    required AdPatientController controller,
+    required int index,
+  }) async {
+    final medicationsheetController = Get.put(MedicationsheetController());
+
+    String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+        '${controller.filterpatientsData[index].ipdNo} | '
+        '${controller.filterpatientsData[index].uhid}';
+
+    if (patientDetails.isNotEmpty && controller.filterpatientsData[index].ipdNo!.isNotEmpty) {
+      medicationsheetController.fromAdmittedScreen = true;
+      medicationsheetController.nameController.text = patientDetails;
+      medicationsheetController.ipdNo = controller.filterpatientsData[index].ipdNo!;
+      medicationsheetController.uhid = controller.filterpatientsData[index].uhid!;
+    } else {
+      medicationsheetController.fromAdmittedScreen = false;
+      medicationsheetController.nameController.text = '';
+      medicationsheetController.ipdNo = '';
+      medicationsheetController.uhid = '';
+    }
+
+    medicationsheetController.update();
+
+    Get.to(() => MedicationScreen())!.then((value) async {
+      final controller = Get.put(MedicationsheetController());
+      await controller.clearData();
+
       hideBottomBar.value = false;
 
       var dashboardController = Get.put(DashboardController());
@@ -390,17 +407,23 @@ class AdpatientScreen extends StatelessWidget {
                 );
               } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser_InvReq.trim() != "") {
                 final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
-                medicationsheetController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                // await medicationsheetController.fetchSpecialOrderList();
                 await medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
-                Get.to(() => MedicationScreen())?.then((value) async {
-                  final controller = Get.put(InvestRequisitController());
-                  await controller.resetForm();
-                  hideBottomBar.value = false;
+                TapToRedirectToMedicationScreen(
+                  controller: controller,
+                  index: index,
+                );
+                return;
+                // medicationsheetController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
+                // // await medicationsheetController.fetchSpecialOrderList();
+                // await medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
+                // Get.to(() => MedicationScreen())?.then((value) async {
+                //   final controller = Get.put(InvestRequisitController());
+                //   await controller.resetForm();
+                //   hideBottomBar.value = false;
 
-                  var dashboardController = Get.put(DashboardController());
-                  await dashboardController.getDashboardDataUsingToken();
-                });
+                //   var dashboardController = Get.put(DashboardController());
+                //   await dashboardController.getDashboardDataUsingToken();
+                // });
               }
             },
             child: Card(

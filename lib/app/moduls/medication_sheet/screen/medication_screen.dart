@@ -5,10 +5,13 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
+import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
@@ -53,65 +56,74 @@ class MedicationScreen extends StatelessWidget {
                           FocusScope.of(context).unfocus();
                           return true; // Allow navigation to go back
                         },
-                        child: TextFormField(
-                          cursorColor: AppColor.black,
-                          controller: controller.searchController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(getDynamicHeight(size: 0.012)),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.lightgrey1, width: getDynamicHeight(size: 0.001)),
-                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                              borderSide: BorderSide(
-                                color: AppColor.black,
-                              ),
-                            ),
-                            suffixIcon: controller.searchController.text.trim().isNotEmpty
-                                ? GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).unfocus();
-                                      controller.searchController.clear();
-                                      // controller.fetchDeptwisePatientList(isLoader: false);
-                                    },
-                                    child: const Icon(Icons.cancel_outlined))
-                                : const SizedBox(),
-                            prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                            hintText: AppString.search,
-                            hintStyle: AppStyle.plusgrey,
-                            filled: true,
-                            fillColor: AppColor.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(
-                                getDynamicHeight(size: 0.027),
-                              )),
-                            ),
-                          ),
-                          onTap: () {
-                            controller.update();
-                          },
-                          onChanged: (value) {
-                            // controller.filterSearchResults(value);
-                            // controller.searchController.clear();
-                          },
-                          onTapOutside: (event) {
-                            FocusScope.of(context).unfocus();
-                            Future.delayed(const Duration(milliseconds: 300));
-                            controller.update();
-                          },
-                          onFieldSubmitted: (v) {
-                            // if (controller.searchController.text.trim().isNotEmpty) {
-                            //   controller.fetchDeptwisePatientList(
-                            //     searchPrefix: controller.searchController.text.trim(),
-                            //     isLoader: false,
-                            //   );
-                            //   controller.searchController.clear();
-                            // }
-                            Future.delayed(const Duration(milliseconds: 800));
-                            controller.update();
-                          },
-                        ),
+                        child: Autocomplete<SearchserviceModel>(
+                            displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                            optionsBuilder: (TextEditingValue textEditingValue) async {
+                              if (textEditingValue.text.trim().isEmpty) {
+                                controller.suggestions.clear();
+                                return const Iterable<SearchserviceModel>.empty();
+                              }
+                              await controller.getSuggestions(textEditingValue.text);
+                              return controller.suggestions;
+                            },
+                            onSelected: (SearchserviceModel selection) async {
+                              controller.nameController.text = selection.txt ?? '';
+                              controller.ipdNo = selection.name ?? '';
+                              controller.uhid = controller.getUHId(selection.txt ?? '');
+                              controller.suggestions.clear();
+                              await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet');
+                              controller.update();
+                            },
+                            fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                              final effectiveController =
+                                  controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                              return CustomTextFormField(
+                                controller: effectiveController,
+                                focusNode: focusNode,
+                                // readOnly: controller.nameController.text.isNotEmpty &&
+                                //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                                minLines: 1,
+                                maxLines: null,
+                                keyboardType: TextInputType.multiline,
+                                decoration: InputDecoration(
+                                  hintText: AppString.patientuhidipd,
+                                  isDense: true,
+                                  border: OutlineInputBorder(),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                                      width: getDynamicHeight(size: 0.0008),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(0)),
+                                    borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                  ),
+                                  prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                  suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                                      ? IconButton(
+                                          icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                                          onPressed: () {
+                                            focusNode.unfocus();
+                                            controller.nameController.clear();
+                                            nameController.clear();
+                                            controller.suggestions.clear();
+                                            controller.ipdNo = '';
+                                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                                              controller.update();
+                                            });
+                                          },
+                                        )
+                                      : null,
+                                ),
+                                onTapOutside: (event) {
+                                  focusNode.unfocus();
+                                },
+                                onFieldSubmitted: (value) {
+                                  focusNode.unfocus();
+                                },
+                              );
+                            }),
                       ),
                     ),
                     // 🔽 Same size as IconButton wala niche container
