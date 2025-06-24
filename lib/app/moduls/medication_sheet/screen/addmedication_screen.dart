@@ -8,11 +8,13 @@ import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 class AddMedicationScreen extends StatelessWidget {
@@ -113,27 +115,65 @@ class AddMedicationScreen extends StatelessWidget {
                           width: double.infinity,
                         ),
                         SizedBox(height: 6),
-                        CustomTextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Formulary Medicine",
-                            hintStyle: TextStyle(color: AppColor.grey),
-                            isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                            filled: true,
-                            fillColor: AppColor.white,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.black),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.black),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
+                        Autocomplete<SearchserviceModel>(
+                          displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                          optionsBuilder: (TextEditingValue textEditingValue) async {
+                            if (textEditingValue.text.trim().isEmpty) {
+                              controller.FormularyMedicines_suggestions.clear();
+                              return const Iterable<SearchserviceModel>.empty();
+                            }
+                            await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                            return controller.FormularyMedicines_suggestions;
+                          },
+                          onSelected: (SearchserviceModel selection) {
+                            controller.FormularyMedicines_suggestions.clear();
+                            controller.update();
+                          },
+                          fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                            return CustomTextFormField(
+                              controller: nameController,
+                              focusNode: focusNode,
+                              minLines: 1,
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                hintText: 'Formulary Medicine',
+                                hintStyle: TextStyle(color: AppColor.grey),
+                                isDense: true,
+                                border: OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                                    width: getDynamicHeight(size: 0.0008),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                                  // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                ),
+                                prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                                    ? IconButton(
+                                        icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                                        onPressed: () {
+                                          focusNode.unfocus();
+                                          controller.FormularyMedicines_suggestions.clear();
+                                          nameController.clear();
+                                          SchedulerBinding.instance.addPostFrameCallback((_) {
+                                            controller.update();
+                                          });
+                                        },
+                                      )
+                                    : null,
+                              ),
+                              onTapOutside: (event) {
+                                focusNode.unfocus();
+                              },
+                              onFieldSubmitted: (value) {
+                                focusNode.unfocus();
+                              },
+                            );
+                          },
                         ),
                         SizedBox(height: 6),
                         CustomTextFormField(
