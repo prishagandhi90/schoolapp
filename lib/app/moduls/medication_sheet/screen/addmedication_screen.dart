@@ -4,6 +4,7 @@ import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -57,14 +58,18 @@ class AddMedicationScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         CustomTextFormField(
-                          // hint: "KISHOR PRABHUBHAI DARJI (A/1469/25)",
                           readOnly: true,
                           decoration: InputDecoration(
                             hintText: "KISHOR PRABHUBHAI DARJI (A/1469/25)",
+                            hintStyle: TextStyle(
+                              color: AppColor.primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: CommonFontStyle.plusJakartaSans,
+                            ),
                             isDense: true,
                             contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                             filled: true,
-                            fillColor: Colors.grey.shade100,
+                            fillColor: AppColor.white,
                             border: OutlineInputBorder(
                               borderSide: BorderSide(color: AppColor.black),
                               borderRadius: BorderRadius.circular(4),
@@ -642,7 +647,12 @@ class AddMedicationScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = controller.drTreatMasterList[selectedIndex].detail![index];
                       return ListTile(
-                        title: Text("${index + 1}. ${item.itemName?.txt ?? ''}"),
+                        visualDensity: VisualDensity(vertical: -4), // 🔥 this removes extra vertical space
+                        // dense: true,
+                        title: Text(
+                          "${index + 1}. ${item.itemName?.txt ?? ''}",
+                          // style: TextStyle(fontSize: 15),
+                        ),
                       );
                     },
                     separatorBuilder: (context, index) => Divider(
