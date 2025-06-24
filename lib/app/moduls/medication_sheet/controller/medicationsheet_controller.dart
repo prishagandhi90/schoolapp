@@ -64,6 +64,7 @@ class MedicationsheetController extends GetxController {
   bool fromAdmittedScreen = false;
   final TextEditingController nameController = TextEditingController();
   List<SearchserviceModel> suggestions = [];
+  List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;
 
   @override
@@ -101,6 +102,56 @@ class MedicationsheetController extends GetxController {
 
     suggestions = results;
     update();
+  }
+
+  Future<void> getFormularyMedicines_Autocomp(String query) async {
+    if (query.isEmpty) return;
+    List<SearchserviceModel> results = await getFormularyMedicines_AutoComplete(query);
+
+    FormularyMedicines_suggestions = results;
+    update();
+  }
+
+  Future<List<SearchserviceModel>> getFormularyMedicines_AutoComplete(String flag) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empMedicationSheet_SearchMedicinesAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseSearchService responseSearchService = ResponseSearchService.fromJson(jsonDecode(response));
+
+      if (responseSearchService.statusCode == 200) {
+        // searchService.clear();
+        searchService.assignAll(responseSearchService.data ?? []);
+        isLoading = false;
+      } else if (responseSearchService.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (responseSearchService.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Something went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "InvestRequisit",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return searchService.toList();
   }
 
   Future<List<SearchserviceModel>> fetchSearchService(String flag) async {
