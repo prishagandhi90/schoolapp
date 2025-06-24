@@ -22,17 +22,6 @@ class AddMedicationScreen extends StatelessWidget {
   final ScrollController formScrollController = ScrollController();
   final ScrollController listScrollController = ScrollController();
 
-  // final TextEditingController medicationTypeController = TextEditingController();
-  // final TextEditingController instTypeController = TextEditingController();
-  // final TextEditingController routeController = TextEditingController();
-  // final TextEditingController afternoonController = TextEditingController();
-
-  final List<Map<String, String>> dummyItems = [
-    {"value": "1", "text": "Option 1"},
-    {"value": "2", "text": "Option 2"},
-    {"value": "3", "text": "Option 3"},
-  ];
-
   @override
   Widget build(BuildContext context) {
     Get.put(MedicationsheetController());
