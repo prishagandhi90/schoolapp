@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -20,10 +21,10 @@ class AddMedicationScreen extends StatelessWidget {
   final ScrollController formScrollController = ScrollController();
   final ScrollController listScrollController = ScrollController();
 
-  final TextEditingController medicationTypeController = TextEditingController();
-  final TextEditingController instTypeController = TextEditingController();
-  final TextEditingController routeController = TextEditingController();
-  final TextEditingController afternoonController = TextEditingController();
+  // final TextEditingController medicationTypeController = TextEditingController();
+  // final TextEditingController instTypeController = TextEditingController();
+  // final TextEditingController routeController = TextEditingController();
+  // final TextEditingController afternoonController = TextEditingController();
 
   final List<Map<String, String>> dummyItems = [
     {"value": "1", "text": "Option 1"},
@@ -84,7 +85,7 @@ class AddMedicationScreen extends StatelessWidget {
                         CustomDropdown(
                           text: "Medication Type",
                           textStyle: TextStyle(color: AppColor.grey),
-                          controller: medicationTypeController,
+                          controller: controller.medicationTypeController,
                           buttonStyleData: ButtonStyleData(
                             height: 48,
                             decoration: BoxDecoration(
@@ -93,11 +94,23 @@ class AddMedicationScreen extends StatelessWidget {
                               color: AppColor.white,
                             ),
                           ),
-                          onChanged: (value) {},
-                          items: dummyItems
-                              .map((item) => DropdownMenuItem<Map<String, String>>(
-                                    value: item,
-                                    child: Text(item["text"] ?? ""),
+                          onChanged: (value) async {
+                            controller.update();
+                          },
+                          items: controller.medicationSheetDropdownTable
+                              .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                    value: {
+                                      'value': item.value ?? '',
+                                      'text': item.name ?? '',
+                                    },
+                                    child: Text(
+                                      item.name ?? '',
+                                      style: AppStyle.black.copyWith(
+                                        // fontSize: 14,
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ))
                               .toList(),
                           width: double.infinity,
@@ -155,7 +168,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: CustomDropdown(
                                 text: "Inst Typ",
                                 textStyle: TextStyle(color: AppColor.grey),
-                                controller: instTypeController,
+                                controller: controller.instructionTypeController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 48,
                                   decoration: BoxDecoration(
@@ -164,11 +177,23 @@ class AddMedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                   ),
                                 ),
-                                onChanged: (value) {},
-                                items: dummyItems
-                                    .map((item) => DropdownMenuItem<Map<String, String>>(
-                                          value: item,
-                                          child: Text(item["text"] ?? ""),
+                                onChanged: (value) async {
+                                  controller.update();
+                                },
+                                items: controller.instructionTypeDropdownTable
+                                    .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                          value: {
+                                            'value': item.value ?? '',
+                                            'text': item.name ?? '',
+                                          },
+                                          child: Text(
+                                            item.name ?? '',
+                                            style: AppStyle.black.copyWith(
+                                              // fontSize: 14,
+                                              fontSize: getDynamicHeight(size: 0.016),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ))
                                     .toList(),
                                 width: double.infinity,
@@ -239,7 +264,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: CustomDropdown(
                                 text: "Route",
                                 textStyle: TextStyle(color: AppColor.grey),
-                                controller: routeController,
+                                controller: controller.routeController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 48,
                                   decoration: BoxDecoration(
@@ -248,11 +273,23 @@ class AddMedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                   ),
                                 ),
-                                onChanged: (value) {},
-                                items: dummyItems
-                                    .map((item) => DropdownMenuItem<Map<String, String>>(
-                                          value: item,
-                                          child: Text(item["text"] ?? ""),
+                                onChanged: (value) async {
+                                  controller.update();
+                                },
+                                items: controller.drMedicationRouteDropdownTable
+                                    .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                          value: {
+                                            'value': item.value ?? '',
+                                            'text': item.name ?? '',
+                                          },
+                                          child: Text(
+                                            item.name ?? '',
+                                            style: AppStyle.black.copyWith(
+                                              // fontSize: 14,
+                                              fontSize: getDynamicHeight(size: 0.016),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ))
                                     .toList(),
                                 width: double.infinity,
@@ -293,7 +330,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: CustomDropdown(
                                 text: "Morning",
                                 textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
-                                controller: TextEditingController(),
+                                controller: controller.FreqMorningController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
                                   decoration: BoxDecoration(
@@ -302,11 +339,23 @@ class AddMedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                   ),
                                 ),
-                                onChanged: (value) {},
-                                items: dummyItems
-                                    .map((item) => DropdownMenuItem<Map<String, String>>(
-                                          value: item,
-                                          child: Text(item["text"] ?? "", overflow: TextOverflow.ellipsis),
+                                onChanged: (value) async {
+                                  controller.update();
+                                },
+                                items: controller.drMedicationFreqDropdownTable
+                                    .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                          value: {
+                                            'value': item.value ?? '',
+                                            'text': item.name ?? '',
+                                          },
+                                          child: Text(
+                                            item.name ?? '',
+                                            style: AppStyle.black.copyWith(
+                                              // fontSize: 14,
+                                              fontSize: getDynamicHeight(size: 0.016),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ))
                                     .toList(),
                                 width: double.infinity,
@@ -317,7 +366,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: CustomDropdown(
                                 text: "Afternoon",
                                 textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
-                                controller: TextEditingController(),
+                                controller: controller.FreqAfternoonController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
                                   decoration: BoxDecoration(
@@ -326,11 +375,23 @@ class AddMedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                   ),
                                 ),
-                                onChanged: (value) {},
-                                items: dummyItems
-                                    .map((item) => DropdownMenuItem<Map<String, String>>(
-                                          value: item,
-                                          child: Text(item["text"] ?? "", overflow: TextOverflow.ellipsis),
+                                onChanged: (value) async {
+                                  controller.update();
+                                },
+                                items: controller.drMedicationFreqDropdownTable
+                                    .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                          value: {
+                                            'value': item.value ?? '',
+                                            'text': item.name ?? '',
+                                          },
+                                          child: Text(
+                                            item.name ?? '',
+                                            style: AppStyle.black.copyWith(
+                                              // fontSize: 14,
+                                              fontSize: getDynamicHeight(size: 0.016),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ))
                                     .toList(),
                                 width: double.infinity,
@@ -341,7 +402,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: CustomDropdown(
                                 text: "Evening",
                                 textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
-                                controller: TextEditingController(),
+                                controller: controller.FreqEveningController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
                                   decoration: BoxDecoration(
@@ -350,11 +411,23 @@ class AddMedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                   ),
                                 ),
-                                onChanged: (value) {},
-                                items: dummyItems
-                                    .map((item) => DropdownMenuItem<Map<String, String>>(
-                                          value: item,
-                                          child: Text(item["text"] ?? "", overflow: TextOverflow.ellipsis),
+                                onChanged: (value) async {
+                                  controller.update();
+                                },
+                                items: controller.drMedicationFreqDropdownTable
+                                    .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                          value: {
+                                            'value': item.value ?? '',
+                                            'text': item.name ?? '',
+                                          },
+                                          child: Text(
+                                            item.name ?? '',
+                                            style: AppStyle.black.copyWith(
+                                              // fontSize: 14,
+                                              fontSize: getDynamicHeight(size: 0.016),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ))
                                     .toList(),
                                 width: double.infinity,
@@ -365,7 +438,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: CustomDropdown(
                                 text: "Night",
                                 textStyle: TextStyle(fontSize: 13, color: AppColor.grey),
-                                controller: TextEditingController(),
+                                controller: controller.FreqNightController,
                                 buttonStyleData: ButtonStyleData(
                                   height: 45,
                                   decoration: BoxDecoration(
@@ -374,14 +447,22 @@ class AddMedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                   ),
                                 ),
-                                onChanged: (value) {},
-                                items: dummyItems
-                                    .map((item) => DropdownMenuItem<Map<String, String>>(
-                                          value: item,
+                                onChanged: (value) async {
+                                  controller.update();
+                                },
+                                items: controller.drMedicationFreqDropdownTable
+                                    .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                          value: {
+                                            'value': item.value ?? '',
+                                            'text': item.name ?? '',
+                                          },
                                           child: Text(
-                                            item["text"] ?? "",
+                                            item.name ?? '',
+                                            style: AppStyle.black.copyWith(
+                                              // fontSize: 14,
+                                              fontSize: getDynamicHeight(size: 0.016),
+                                            ),
                                             overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: 15),
                                           ),
                                         ))
                                     .toList(),

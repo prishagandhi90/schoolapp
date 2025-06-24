@@ -28,8 +28,12 @@ class MedicationsheetController extends GetxController {
   List<DropdownMultifieldsTable>? searchDropdnMultifieldsData;
   List<String> selectedDropdnOptionId = [];
   List<DropdownMultifieldsTable> selectedDropdownList = [];
-  List<DropdownMultifieldsTable> dropdownMultifieldsTable = [];
+  List<DropdownMultifieldsTable> specialDropdownMultifieldsTable = [];
   List<DropdownNamesTable> templatedropdownTable = [];
+  List<DropdownNamesTable> medicationSheetDropdownTable = [];
+  List<DropdownNamesTable> instructionTypeDropdownTable = [];
+  List<DropdownNamesTable> drMedicationRouteDropdownTable = [];
+  List<DropdownNamesTable> drMedicationFreqDropdownTable = [];
   final ApiController apiController = Get.put(ApiController());
   String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '', patientname = '';
   int admissionId = 0;
@@ -48,6 +52,15 @@ class MedicationsheetController extends GetxController {
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
 
+  final medicationTypeController = TextEditingController();
+  final instructionTypeController = TextEditingController();
+  final routeController = TextEditingController();
+
+  final FreqMorningController = TextEditingController();
+  final FreqAfternoonController = TextEditingController();
+  final FreqEveningController = TextEditingController();
+  final FreqNightController = TextEditingController();
+
   List<DrTreatMasterList> drTreatMasterList = [];
 
   @override
@@ -55,6 +68,11 @@ class MedicationsheetController extends GetxController {
     super.onInit();
     // Current date ko format karke controller me daalo
     fetchTemplateList();
+    fetchSpecialOrderList();
+    getMedicationTypeList();
+    getInstructionTypeList();
+    getDrTreatmentRoute();
+    getDrTreatmentFrequency();
     final now = DateTime.now();
     final formattedDate = DateFormat('dd-MM-yyyy').format(now);
     dateController.text = formattedDate;
@@ -99,7 +117,7 @@ class MedicationsheetController extends GetxController {
           // child: const OperationListView()),
           child: commonDropdownListview<MedicationsheetController>(
             controller: Get.find<MedicationsheetController>(),
-            getList: (ctrl) => ctrl.dropdownMultifieldsTable,
+            getList: (ctrl) => ctrl.specialDropdownMultifieldsTable,
             getSearchList: (ctrl) => ctrl.searchDropdnMultifieldsData,
             getSelectedIds: (ctrl) => ctrl.selectedDropdnOptionId,
             onToggle: (ctrl, id, item) {
@@ -123,7 +141,7 @@ class MedicationsheetController extends GetxController {
       searchDropdnMultifieldsData = null;
     } else {
       searchDropdnMultifieldsData = [];
-      for (var userDetail in dropdownMultifieldsTable) {
+      for (var userDetail in specialDropdownMultifieldsTable) {
         if (userDetail.name!.toLowerCase().contains(text.toLowerCase())) {
           searchDropdnMultifieldsData!.add(userDetail);
         }
@@ -195,7 +213,7 @@ class MedicationsheetController extends GetxController {
 
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
-          dropdownMultifieldsTable = dropdownMuliFieldsData.data!;
+          specialDropdownMultifieldsTable = dropdownMuliFieldsData.data!;
         } else {}
         update();
       } else if (dropdownMuliFieldsData.statusCode == 401) {
@@ -257,6 +275,178 @@ class MedicationsheetController extends GetxController {
       update();
       ApiErrorHandler.handleError(
         screenName: "MedicationSheet",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return [];
+  }
+
+  Future<List<DropdownNamesTable>> getMedicationTypeList() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empGetMedicationTypeAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
+
+      if (dropdownMuliFieldsData.statusCode == 200) {
+        if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
+          medicationSheetDropdownTable = dropdownMuliFieldsData.data!;
+        } else {}
+        update();
+      } else if (dropdownMuliFieldsData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (dropdownMuliFieldsData.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return [];
+  }
+
+  Future<List<DropdownNamesTable>> getInstructionTypeList() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empGetInstructionTypeAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
+
+      if (dropdownMuliFieldsData.statusCode == 200) {
+        if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
+          instructionTypeDropdownTable = dropdownMuliFieldsData.data!;
+        } else {}
+        update();
+      } else if (dropdownMuliFieldsData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (dropdownMuliFieldsData.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return [];
+  }
+
+  Future<List<DropdownNamesTable>> getDrTreatmentRoute() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empGetDrTreatRouteAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
+
+      if (dropdownMuliFieldsData.statusCode == 200) {
+        if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
+          drMedicationRouteDropdownTable = dropdownMuliFieldsData.data!;
+        } else {}
+        update();
+      } else if (dropdownMuliFieldsData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (dropdownMuliFieldsData.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
+    }
+    isLoading = false;
+    return [];
+  }
+
+  Future<List<DropdownNamesTable>> getDrTreatmentFrequency() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      String url = ConstApiUrl.empGetDrTreatFrequencyAPI;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+
+      var jsonbodyObj = {"loginId": loginId, "empId": empId};
+
+      var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
+      ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
+
+      if (dropdownMuliFieldsData.statusCode == 200) {
+        if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
+          drMedicationFreqDropdownTable = dropdownMuliFieldsData.data!;
+        } else {}
+        update();
+      } else if (dropdownMuliFieldsData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
+      } else if (dropdownMuliFieldsData.statusCode == 400) {
+        isLoading = false;
+      } else {
+        Get.rawSnackbar(message: "Somethin g went wrong");
+      }
+      update();
+    } catch (e) {
+      isLoading = false;
+      update();
+      ApiErrorHandler.handleError(
+        screenName: "LeaveScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
