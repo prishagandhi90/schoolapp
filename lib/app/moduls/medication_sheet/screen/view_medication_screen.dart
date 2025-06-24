@@ -1,9 +1,11 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -37,22 +39,35 @@ class ViewMedicationScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // 🔹 Custom Container with Text (Instead of TabBar)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: getDynamicHeight(size: 0.015),
-                            vertical: getDynamicHeight(size: 0.012),
-                          ),
-                          decoration: BoxDecoration(
-                            // color: AppColor.lightblue,
-                            border: Border.all(color: AppColor.black1),
-                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
-                          ),
-                          child: Text(
-                            controller.nameController.text, // ✅ Replace with any dynamic text you want
-                            style: TextStyle(
-                              color: AppColor.black,
-                              fontSize: Sizes.px12,
-                              fontWeight: FontWeight.w600,
+                        Expanded(
+                          child: CustomTextFormField(
+                            readOnly: true,
+                            minLines: 1,
+                            maxLines: 10,
+                            decoration: InputDecoration(
+                              hintText: controller.nameController.text,
+                              hintStyle: TextStyle(
+                                fontSize: getDynamicHeight(size: 0.015),
+                                color: AppColor.primaryColor,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: CommonFontStyle.plusJakartaSans,
+                              ),
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              filled: true,
+                              fillColor: AppColor.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
                             ),
                           ),
                         ),
@@ -196,7 +211,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                            text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
+                                                ? item.remark.toString()
+                                                : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,
@@ -225,7 +242,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                             style: TextStyle(fontWeight: FontWeight.w500),
                                           ),
                                           TextSpan(
-                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL' ? item.flowRate.toString() : '',
+                                            text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                ? item.flowRate.toString()
+                                                : '',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black1,

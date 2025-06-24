@@ -75,11 +75,13 @@ class MedicationScreen extends StatelessWidget {
                               controller.update();
                             },
                             fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                              final effectiveController =
-                                  controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                              final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
+                                  ? controller.nameController
+                                  : nameController;
                               return CustomTextFormField(
                                 controller: effectiveController,
                                 focusNode: focusNode,
+                                style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
                                 // readOnly: controller.nameController.text.isNotEmpty &&
                                 //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
                                 minLines: 1,
@@ -97,7 +99,8 @@ class MedicationScreen extends StatelessWidget {
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(Radius.circular(0)),
-                                    borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                    borderSide:
+                                        BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
                                   ),
                                   prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                                   suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty

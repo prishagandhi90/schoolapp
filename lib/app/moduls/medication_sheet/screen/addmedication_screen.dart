@@ -48,9 +48,12 @@ class AddMedicationScreen extends StatelessWidget {
                       children: [
                         CustomTextFormField(
                           readOnly: true,
+                          minLines: 1,
+                          maxLines: 10,
                           decoration: InputDecoration(
                             hintText: controller.nameController.text,
                             hintStyle: TextStyle(
+                              fontSize: getDynamicHeight(size: 0.015),
                               color: AppColor.primaryColor,
                               fontWeight: FontWeight.w600,
                               fontFamily: CommonFontStyle.plusJakartaSans,
