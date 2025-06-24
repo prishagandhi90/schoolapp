@@ -49,7 +49,7 @@ class AddMedicationScreen extends StatelessWidget {
                         CustomTextFormField(
                           readOnly: true,
                           decoration: InputDecoration(
-                            hintText: "KISHOR PRABHUBHAI DARJI (A/1469/25)",
+                            hintText: controller.nameController.text,
                             hintStyle: TextStyle(
                               color: AppColor.primaryColor,
                               fontWeight: FontWeight.w600,
