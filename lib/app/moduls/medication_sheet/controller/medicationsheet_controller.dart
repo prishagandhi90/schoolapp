@@ -73,6 +73,7 @@ class MedicationsheetController extends GetxController {
   List<SearchserviceModel> suggestions = [];
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;
+  String webUserName = '';
 
   @override
   void onInit() {
@@ -271,7 +272,7 @@ class MedicationsheetController extends GetxController {
       String empId = pref.getString(AppString.keyEmpId) ?? "";
       String tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "empId": empId, "ipdNo": ipdNo, "treatTyp": treatTyp, "userName": 'Harshil'};
+      var jsonbodyObj = {"loginId": loginId, "empId": empId, "ipdNo": ipdNo, "treatTyp": treatTyp, "userName": webUserName};
 
       // List<dynamic> responseList = jsonDecode(response);
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
@@ -664,7 +665,7 @@ class MedicationsheetController extends GetxController {
         templateName: TemplateNameController.text.trim(),
         prescriptionType: '',
         statusTyp: '',
-        userName: 'Harshil',
+        userName: webUserName,
         terminalName: '::1',
         consDrId: 0,
         consDrName: '',

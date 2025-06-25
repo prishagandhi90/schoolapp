@@ -246,7 +246,7 @@ class IpdDashboardScreen extends StatelessWidget {
                           }
 
                           controller.FromScreen_Redirection = "";
-                          controller.WebLoginUser_InvReq = "";
+                          controller.WebLoginUser = "";
                           controller.update();
 
                           Get.to(() => AdpatientScreen())!.then((value) async {
@@ -307,7 +307,7 @@ class IpdDashboardScreen extends StatelessWidget {
                           }
 
                           controller.FromScreen_Redirection = "";
-                          controller.WebLoginUser_InvReq = "";
+                          controller.WebLoginUser = "";
                           controller.update();
 
                           final envReqController = Get.put(InvestRequisitController());
@@ -356,7 +356,7 @@ class IpdDashboardScreen extends StatelessWidget {
                             }
                           }
                           controller.FromScreen_Redirection = "";
-                          controller.WebLoginUser_InvReq = "";
+                          controller.WebLoginUser = "";
                           controller.update();
                           final envReqController = Get.put(InvestRequisitController());
                           await envReqController.resetForm();

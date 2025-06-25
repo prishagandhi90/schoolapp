@@ -103,9 +103,7 @@ class InvestRequisitController extends GetxController {
 // Aur agar 'external' hai toh 'External Lab' bhi filled hona chahiye
   bool isNextButtonEnabled() {
     if ((ipdNo.isNotEmpty) && (typeController.text.isNotEmpty)) {
-      if ((typeController.text.toLowerCase() == 'lab' ||
-              typeController.text.toLowerCase() == 'radio' ||
-              typeController.text.toLowerCase() == 'other investigation') &&
+      if ((typeController.text.toLowerCase() == 'lab' || typeController.text.toLowerCase() == 'radio' || typeController.text.toLowerCase() == 'other investigation') &&
           InExController.text.toLowerCase() == 'internal') {
         return true;
       } else if (typeController.text.toLowerCase() == 'lab' && InExController.text.toLowerCase() == 'external') {
@@ -460,9 +458,7 @@ class InvestRequisitController extends GetxController {
           uhidNo: uhid,
           ipdNo: ipdNo,
           drId: drIdController.text.trim() != null && drIdController.text.trim() != "" ? int.parse(drIdController.text.trim()) : 0,
-          drName: drNameController.text.trim() != null && drNameController.text.trim() != ""
-              ? drNameController.text.trim()
-              : "", // Replace with actual doctor
+          drName: drNameController.text.trim() != null && drNameController.text.trim() != "" ? drNameController.text.trim() : "", // Replace with actual doctor
           drInstId: 0,
           billDetailId: 0,
           rowState: 1,
@@ -499,9 +495,7 @@ class InvestRequisitController extends GetxController {
         // "empId": empId,
         "uhidNo": uhid,
         "ipdNo": ipdNo,
-        "reqType": typeController.text.toLowerCase() == 'lab'
-            ? "LabRequest"
-            : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
+        "reqType": typeController.text.toLowerCase() == 'lab' ? "LabRequest" : (typeController.text.toLowerCase() == 'radio' ? "RadioRequest" : "ReportingRequest"),
         "remark": null,
         "username": webUserName,
         "dt": DateTime.now().toIso8601String(),
@@ -629,7 +623,7 @@ class InvestRequisitController extends GetxController {
       adPatientcontroller = Get.put(AdPatientController());
     }
     adPatientcontroller.FromScreen_Redirection = fromScreenRedirection;
-    adPatientcontroller.WebLoginUser_InvReq = webUserName;
+    adPatientcontroller.WebLoginUser = webUserName;
     adPatientcontroller.update();
 
     // Get.offUntil(
@@ -1177,9 +1171,7 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.serviceGroup != '' && item.serviceGroup != null
-                                            ? item.serviceGroup.toString()
-                                            : item.reqTyp.toString(),
+                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
                                         style: TextStyle(fontSize: getDynamicHeight(size: 0.011)),
                                       ),
                                     ],
@@ -1190,8 +1182,7 @@ class InvestRequisitController extends GetxController {
                                     Visibility(
                                       visible: item.status != null && item.status!.isNotEmpty,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
+                                        padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
                                         decoration: BoxDecoration(
                                           color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
                                           borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0035)),
@@ -1295,7 +1286,7 @@ class InvestRequisitController extends GetxController {
                 }
 
                 adPatientcontroller.FromScreen_Redirection = fromScreenRedirection;
-                adPatientcontroller.WebLoginUser_InvReq = webUserName;
+                adPatientcontroller.WebLoginUser = webUserName;
                 if (adPatientcontroller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") {
                   await redirectToClickedMenu(controller, menuName, patientDetails, IPDNo, UHID);
                   return;
@@ -1351,8 +1342,7 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Future<void> redirectToClickedMenu(
-      InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
+  Future<void> redirectToClickedMenu(InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
     if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
       if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
         fromAdmittedScreen = true;

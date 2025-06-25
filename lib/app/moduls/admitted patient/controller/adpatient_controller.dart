@@ -76,7 +76,7 @@ class AdPatientController extends GetxController {
   var isInvestigationReq_Navigating = false.obs;
   List<ModuleScreenRights> screenRightsTable = [];
   String FromScreen_Redirection = "";
-  String WebLoginUser_InvReq = "";
+  String WebLoginUser = "";
 
   @override
   void onInit() {
