@@ -140,66 +140,125 @@ class AddMedicationScreen extends StatelessWidget {
                           },
                         ),
 
-                        Autocomplete<SearchserviceModel>(
-                          displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                          optionsBuilder: (TextEditingValue textEditingValue) async {
-                            if (textEditingValue.text.trim().isEmpty) {
-                              controller.FormularyMedicines_suggestions.clear();
-                              return const Iterable<SearchserviceModel>.empty();
-                            }
-                            await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
-                            return controller.FormularyMedicines_suggestions;
-                          },
-                          onSelected: (SearchserviceModel selection) {
-                            controller.FormularyMedicines_suggestions.clear();
-                            controller.update();
-                          },
-                          fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                            return CustomTextFormField(
-                              controller: nameController,
-                              focusNode: focusNode,
-                              minLines: 1,
-                              maxLines: null,
-                              keyboardType: TextInputType.multiline,
-                              decoration: InputDecoration(
-                                hintText: 'Formulary Medicine',
-                                hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                                isDense: true,
-                                border: OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                                    width: getDynamicHeight(size: 0.0008),
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(0)),
-                                  // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
-                                ),
-                                prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                                suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
-                                    ? IconButton(
-                                        icon: Icon(Icons.cancel_outlined, color: AppColor.black),
-                                        onPressed: () {
-                                          focusNode.unfocus();
-                                          controller.FormularyMedicines_suggestions.clear();
-                                          nameController.clear();
-                                          SchedulerBinding.instance.addPostFrameCallback((_) {
-                                            controller.update();
-                                          });
-                                        },
-                                      )
-                                    : null,
-                              ),
-                              onTapOutside: (event) {
-                                focusNode.unfocus();
-                              },
-                              onFieldSubmitted: (value) {
-                                focusNode.unfocus();
-                              },
-                            );
-                          },
-                        ),
+                        // Autocomplete<SearchserviceModel>(
+                        //   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                        //   optionsBuilder: (TextEditingValue textEditingValue) async {
+                        //     if (textEditingValue.text.trim().isEmpty) {
+                        //       controller.FormularyMedicines_suggestions.clear();
+                        //       return const Iterable<SearchserviceModel>.empty();
+                        //     }
+                        //     await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                        //     return controller.FormularyMedicines_suggestions;
+                        //   },
+                        //   onSelected: (SearchserviceModel selection) {
+                        //     controller.FormularyMedicines_suggestions.clear();
+                        //     controller.update();
+                        //   },
+                        //   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                        //     return CustomTextFormField(
+                        //       controller: nameController,
+                        //       focusNode: focusNode,
+                        //       minLines: 1,
+                        //       maxLines: null,
+                        //       keyboardType: TextInputType.multiline,
+                        //       decoration: InputDecoration(
+                        //         hintText: 'Formulary Medicine',
+                        //         hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                        //         isDense: true,
+                        //         border: OutlineInputBorder(),
+                        //         focusedBorder: OutlineInputBorder(
+                        //           borderSide: BorderSide(
+                        //             // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                        //             width: getDynamicHeight(size: 0.0008),
+                        //           ),
+                        //         ),
+                        //         enabledBorder: OutlineInputBorder(
+                        //           borderRadius: BorderRadius.all(Radius.circular(0)),
+                        //           // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                        //         ),
+                        //         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                        //         suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                        //             ? IconButton(
+                        //                 icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                        //                 onPressed: () {
+                        //                   focusNode.unfocus();
+                        //                   controller.FormularyMedicines_suggestions.clear();
+                        //                   nameController.clear();
+                        //                   SchedulerBinding.instance.addPostFrameCallback((_) {
+                        //                     controller.update();
+                        //                   });
+                        //                 },
+                        //               )
+                        //             : null,
+                        //       ),
+                        //       onTapOutside: (event) {
+                        //         focusNode.unfocus();
+                        //       },
+                        //       onFieldSubmitted: (value) {
+                        //         focusNode.unfocus();
+                        //       },
+                        //     );
+                        //   },
+                        // ),Autocomplete<SearchserviceModel>(
+                        //   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                        //   optionsBuilder: (TextEditingValue textEditingValue) async {
+                        //     if (textEditingValue.text.trim().isEmpty) {
+                        //       controller.FormularyMedicines_suggestions.clear();
+                        //       return const Iterable<SearchserviceModel>.empty();
+                        //     }
+                        //     await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                        //     return controller.FormularyMedicines_suggestions;
+                        //   },
+                        //   onSelected: (SearchserviceModel selection) {
+                        //     controller.FormularyMedicines_suggestions.clear();
+                        //     controller.update();
+                        //   },
+                        //   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                        //     return CustomTextFormField(
+                        //       controller: nameController,
+                        //       focusNode: focusNode,
+                        //       minLines: 1,
+                        //       maxLines: null,
+                        //       keyboardType: TextInputType.multiline,
+                        //       decoration: InputDecoration(
+                        //         hintText: 'Formulary Medicine',
+                        //         hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                        //         isDense: true,
+                        //         border: OutlineInputBorder(),
+                        //         focusedBorder: OutlineInputBorder(
+                        //           borderSide: BorderSide(
+                        //             // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                        //             width: getDynamicHeight(size: 0.0008),
+                        //           ),
+                        //         ),
+                        //         enabledBorder: OutlineInputBorder(
+                        //           borderRadius: BorderRadius.all(Radius.circular(0)),
+                        //           // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                        //         ),
+                        //         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                        //         suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                        //             ? IconButton(
+                        //                 icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                        //                 onPressed: () {
+                        //                   focusNode.unfocus();
+                        //                   controller.FormularyMedicines_suggestions.clear();
+                        //                   nameController.clear();
+                        //                   SchedulerBinding.instance.addPostFrameCallback((_) {
+                        //                     controller.update();
+                        //                   });
+                        //                 },
+                        //               )
+                        //             : null,
+                        //       ),
+                        //       onTapOutside: (event) {
+                        //         focusNode.unfocus();
+                        //       },
+                        //       onFieldSubmitted: (value) {
+                        //         focusNode.unfocus();
+                        //       },
+                        //     );
+                        //   },
+                        // ),
                         SizedBox(height: 6),
                         CustomTextFormField(
                           decoration: InputDecoration(

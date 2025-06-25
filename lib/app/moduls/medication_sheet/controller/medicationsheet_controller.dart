@@ -15,6 +15,7 @@ import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_co
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_detail.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_master.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
@@ -60,6 +61,8 @@ class MedicationsheetController extends GetxController {
   final FreqEveningController = TextEditingController();
   final FreqNightController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  List<RespDrTreatDetail>? allDetails = [];
+  List<RespDrTreatDetail>? filteredDetails = [];
 
   List<DrTreatMasterList> drTreatMasterList = [];
   bool fromAdmittedScreen = false;
@@ -84,11 +87,6 @@ class MedicationsheetController extends GetxController {
   }
 
   bool isSearchActive = false;
-
-  void activateSearch(bool status) {
-    isSearchActive = status;
-    update(); // Call this inside GetX Controller
-  }
 
   String getUHId(String patientName) {
     if (patientName.isEmpty) return "";
@@ -279,6 +277,10 @@ class MedicationsheetController extends GetxController {
       if (resp_DrTreatmentMst.statusCode == 200) {
         if (resp_DrTreatmentMst.data != null && resp_DrTreatmentMst.data!.isNotEmpty) {
           drTreatMasterList = resp_DrTreatmentMst.data!;
+          if (drTreatMasterList.isNotEmpty) {
+            // allDetails = drTreatMasterList[selectedindex].detail ?? [];
+            filteredDetails = List.from(allDetails!); // by default all
+          }
         } else {}
         update();
       } else if (resp_DrTreatmentMst.statusCode == 401) {
@@ -288,7 +290,7 @@ class MedicationsheetController extends GetxController {
       } else if (resp_DrTreatmentMst.statusCode == 400) {
         isLoading = false;
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        Get.rawSnackbar(message: "Something went wrong");
       }
       update();
     } catch (e) {
@@ -304,6 +306,27 @@ class MedicationsheetController extends GetxController {
     }
     isLoading = false;
     return [];
+  }
+
+  void activateSearch(bool value) {
+    isSearchActive = value;
+    if (!value) {
+      searchController.clear();
+      filteredDetails = List.from(allDetails!); // Reset
+    }
+    update();
+  }
+
+  void filterSearchResults(String query) {
+    if (query.isEmpty) {
+      filteredDetails = List.from(allDetails!);
+    } else {
+      filteredDetails = allDetails!.where((item) {
+        final name = item.itemName?.txt?.toLowerCase() ?? item.itemNameMnl?.toLowerCase() ?? '';
+        return name.contains(query.toLowerCase());
+      }).toList();
+    }
+    update();
   }
 
   Future<List<DropdownMultifieldsTable>> fetchSpecialOrderList() async {
@@ -1481,8 +1504,10 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype,
+                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(
+                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -1621,9 +1646,11 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(
+                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(
+                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),
