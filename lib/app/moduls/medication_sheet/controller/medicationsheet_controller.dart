@@ -749,7 +749,8 @@ class MedicationsheetController extends GetxController {
     TemplateNameController.clear();
     selectedDropdownList.clear();
     selectedDropdnOptionId.clear();
-
+    fromDateController.clear();
+    toDateController.clear();
     nameController.text = '';
     ipdNo = '';
     uhid = '';
@@ -892,6 +893,7 @@ class MedicationsheetController extends GetxController {
                         ),
                         onPressed: () {
                           fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+                          clearData(); // Clear all fields
                           Navigator.pop(context); // Just close
                         },
                         child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
