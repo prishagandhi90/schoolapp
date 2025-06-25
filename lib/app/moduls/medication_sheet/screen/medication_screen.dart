@@ -329,6 +329,7 @@ class MedicationScreen extends StatelessWidget {
                                           onTap: () {
                                             controller.filteredDetails = controller.drTreatMasterList[index].detail;
                                             controller.selectedMasterIndex = index;
+                                            controller.searchController.clear();
                                             controller.update();
                                             Get.to(ViewMedicationScreen(
                                               selectedIndex: index,
