@@ -560,7 +560,7 @@ class AddMedicationScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: CustomDatePicker(
-                                dateController: controller.dateController,
+                                dateController: controller.stopDateController,
                                 style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
                                 hintText: 'Select Date',
                                 decoration: InputDecoration(
@@ -586,25 +586,12 @@ class AddMedicationScreen extends StatelessWidget {
                                       if (pickedDate != null) {
                                         final formattedDate =
                                             "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                                        controller.dateController.text = formattedDate;
+                                        controller.stopDateController.text = formattedDate;
                                       }
                                       FocusScope.of(context).unfocus();
                                     },
                                   ),
                                 ),
-                                // onDateSelected: () async {
-                                //   final pickedDate = await showDatePicker(
-                                //     context: context,
-                                //     initialDate: DateTime.now(),
-                                //     firstDate: DateTime(2000),
-                                //     lastDate: DateTime(2100),
-                                //   );
-                                //   if (pickedDate != null) {
-                                //     final formattedDate =
-                                //         "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                                //     dateController.text = formattedDate;
-                                //   }
-                                // },
                               ),
                             ),
                             SizedBox(width: 4),

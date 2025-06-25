@@ -42,6 +42,7 @@ class MedicationsheetController extends GetxController {
   bool isLoading = false;
   final TextEditingController searchController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
+  final TextEditingController stopDateController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
   TextEditingController diagnosisController = TextEditingController();
   TextEditingController weightController = TextEditingController();
@@ -725,6 +726,93 @@ class MedicationsheetController extends GetxController {
         empID: empId,
       );
       Get.rawSnackbar(message: 'Error saving data');
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> saveAddMedication() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+      admissionId = await fetchAdmissionId(empId: empId, loginId: loginId, tokenNo: tokenNo, ipdNo: ipdNo);
+      update();
+
+      String url = ConstApiUrl.empSaveAddMedicationSheetAPI; // 👈 detail-only API
+
+      final uuid = Uuid();
+
+      final selectedMedicationDetails = RespDrTreatDetail(
+        drDtlId: 0,
+        drMstId: 0,
+        days: 3,
+        itemNameMnl: "Paracetamol",
+        qty: 6,
+        dose: "500mg",
+        remark: "After food",
+        dose1: DateTime.now(),
+        dose2: DateTime.now().add(Duration(hours: 6)),
+        dose3: DateTime.now().add(Duration(hours: 12)),
+        freq1: "1-0-1",
+        freq2: "0-0-1",
+        freq3: "1-1-1",
+        freq4: "1-0-0",
+        routeName: "Oral",
+        medicationName: "Tablet",
+        dGivenBy1: "Nurse A",
+        dGivenBy2: "Nurse B",
+        itemTxt: "Paracetamol",
+        item: "1234",
+        instType: "Before Food",
+        flowRt: "",
+        userName: webUserName,
+        terminalName: "::1",
+        action: "",
+        stopTime: null,
+        isValid: true,
+        iudId: 0,
+        gridName: "DrTDetail",
+        // ✅ NotMapped Dropdowns bhi set karo (agar UI me use kar rahe ho)
+        frequency1: DropdownMultifieldsTable(name: FreqMorningController.text.trim()),
+        frequency2: DropdownMultifieldsTable(name: FreqAfternoonController.text.trim()),
+        frequency3: DropdownMultifieldsTable(name: FreqEveningController.text.trim()),
+        frequency4: DropdownMultifieldsTable(name: FreqNightController.text.trim()),
+        route: DropdownMultifieldsTable(name: routeController.text.trim()),
+        instructionTyp: DropdownMultifieldsTable(name: instructionTypeController.text.trim()),
+      );
+
+      // Prepare JSON body
+      var jsonBody = selectedMedicationDetails.toJson();
+
+      // Send request
+      var response = await apiController.parseJsonBody(url, "", jsonBody);
+
+      RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
+
+      if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
+        Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
+      } else if (responseData.statusCode == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Your session has expired. Please log in again');
+      } else if (responseData.statusCode == 400) {
+        Get.rawSnackbar(message: responseData.message ?? 'Bad request or no data found');
+      } else {
+        Get.rawSnackbar(message: responseData.message ?? 'Something went wrong');
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: 'MedicationDetailSave',
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+      Get.rawSnackbar(message: 'Error saving medication detail');
     } finally {
       isLoading = false;
       update();
@@ -1564,10 +1652,8 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype,
-                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(
-                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -1706,11 +1792,9 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(
-                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(
-                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),
