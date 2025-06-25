@@ -72,6 +72,10 @@ class MedicationsheetController extends GetxController {
   List<DrTreatMasterList> drTreatMasterList = [];
   bool fromAdmittedScreen = false;
   final TextEditingController FormularyMedicinesController = TextEditingController();
+  final TextEditingController FormularyMedicinesIDController = TextEditingController();
+  final TextEditingController doseController = TextEditingController();
+  final TextEditingController nonFormularyMedicinesController = TextEditingController();
+
   List<SearchserviceModel> suggestions = [];
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;
@@ -749,26 +753,17 @@ class MedicationsheetController extends GetxController {
 
       final selectedMedicationDetails = RespDrTreatDetail(
         drDtlId: 0,
-        drMstId: 0,
+        drMstId: drTreatMasterList[selectedMasterIndex].drMstId,
         days: 3,
-        itemNameMnl: "Paracetamol",
+        itemNameMnl: nonFormularyMedicinesController.text.trim(),
         qty: 6,
-        dose: "500mg",
-        remark: "After food",
-        dose1: DateTime.now(),
-        dose2: DateTime.now().add(Duration(hours: 6)),
-        dose3: DateTime.now().add(Duration(hours: 12)),
-        freq1: "1-0-1",
-        freq2: "0-0-1",
-        freq3: "1-1-1",
-        freq4: "1-0-0",
-        routeName: "Oral",
-        medicationName: "Tablet",
-        dGivenBy1: "Nurse A",
-        dGivenBy2: "Nurse B",
-        itemTxt: "Paracetamol",
-        item: "1234",
-        instType: "Before Food",
+        dose: doseController.text.trim(),
+        remark: remarksController.text.trim(),
+        routeName: "",
+        medicationName: "",
+        itemTxt: "",
+        item: "",
+        instType: "",
         flowRt: "",
         userName: webUserName,
         terminalName: "::1",
@@ -777,13 +772,15 @@ class MedicationsheetController extends GetxController {
         isValid: true,
         iudId: 0,
         gridName: "DrTDetail",
+        itemName: DropdownMultifieldsTable(name: FormularyMedicinesIDController.text.trim()),
+        medicineType: DropdownMultifieldsTable(name: medicationTypeController.text.trim()),
         // ✅ NotMapped Dropdowns bhi set karo (agar UI me use kar rahe ho)
         frequency1: DropdownMultifieldsTable(name: FreqMorningController.text.trim()),
         frequency2: DropdownMultifieldsTable(name: FreqAfternoonController.text.trim()),
         frequency3: DropdownMultifieldsTable(name: FreqEveningController.text.trim()),
         frequency4: DropdownMultifieldsTable(name: FreqNightController.text.trim()),
         route: DropdownMultifieldsTable(name: routeController.text.trim()),
-        instructionTyp: DropdownMultifieldsTable(name: instructionTypeController.text.trim()),
+        instruction_typ: DropdownMultifieldsTable(name: instructionTypeController.text.trim()),
       );
 
       // Prepare JSON body

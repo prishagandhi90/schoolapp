@@ -66,7 +66,7 @@ class RespDrTreatDetail {
   DropdownMultifieldsTable? doseGivenBy8;
   DropdownMultifieldsTable? doseGivenBy9;
   DropdownMultifieldsTable? doseGivenBy10;
-  DropdownMultifieldsTable? instructionTyp;
+  DropdownMultifieldsTable? instruction_typ;
 
   RespDrTreatDetail({
     this.drDtlId,
@@ -134,7 +134,7 @@ class RespDrTreatDetail {
     this.doseGivenBy8,
     this.doseGivenBy9,
     this.doseGivenBy10,
-    this.instructionTyp,
+    this.instruction_typ,
   });
 
   RespDrTreatDetail.fromJson(Map<String, dynamic> json) {
@@ -205,7 +205,7 @@ class RespDrTreatDetail {
     doseGivenBy8 = json['doseGivenBy8'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy8']) : null;
     doseGivenBy9 = json['doseGivenBy9'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy9']) : null;
     doseGivenBy10 = json['doseGivenBy10'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy10']) : null;
-    instructionTyp = json['instruction_typ'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['instruction_typ']) : null;
+    instruction_typ = json['instruction_typ'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['instruction_typ']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -309,8 +309,8 @@ class RespDrTreatDetail {
     if (this.doseGivenBy10 != null) {
       data['doseGivenBy10'] = this.doseGivenBy10!.toJson();
     }
-    if (this.instructionTyp != null) {
-      data['instructionTyp'] = this.instructionTyp!.toJson();
+    if (this.instruction_typ != null) {
+      data['instruction_typ'] = this.instruction_typ!.toJson();
     }
     return data;
   }

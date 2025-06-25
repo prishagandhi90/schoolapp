@@ -129,6 +129,7 @@ class AddMedicationScreen extends StatelessWidget {
                             return controller.FormularyMedicines_suggestions;
                           },
                           onSelected: (SearchserviceModel selection) {
+                            controller.FormularyMedicinesIDController.text = selection.name ?? '';
                             controller.update(); // Trigger state update if needed
                           },
                           onClearSuggestions: () {
@@ -201,6 +202,7 @@ class AddMedicationScreen extends StatelessWidget {
                         // ),
                         SizedBox(height: 6),
                         CustomTextFormField(
+                          controller: controller.nonFormularyMedicinesController,
                           decoration: InputDecoration(
                             hintText: "Non Formulary Medicine",
                             hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
@@ -265,6 +267,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: SizedBox(
                                 height: 48,
                                 child: CustomTextFormField(
+                                  controller: controller.doseController,
                                   decoration: InputDecoration(
                                     hintText: "Dose",
                                     hintStyle: TextStyle(color: AppColor.grey),
@@ -654,7 +657,9 @@ class AddMedicationScreen extends StatelessWidget {
                             backgroundColor: AppColor.teal,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await controller.saveAddMedication();
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                             child: Text("SAVE",
