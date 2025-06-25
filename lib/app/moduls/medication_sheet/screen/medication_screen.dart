@@ -327,6 +327,7 @@ class MedicationScreen extends StatelessWidget {
                                     children: [
                                       GestureDetector(
                                           onTap: () {
+                                            controller.filteredDetails = controller.drTreatMasterList[index].detail;
                                             controller.selectedMasterIndex = index;
                                             controller.update();
                                             Get.to(ViewMedicationScreen(

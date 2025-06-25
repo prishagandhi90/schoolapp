@@ -64,7 +64,7 @@ class MedicationsheetController extends GetxController {
   final FreqEveningController = TextEditingController();
   final FreqNightController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  List<RespDrTreatDetail>? allDetails = [];
+  // List<RespDrTreatDetail>? allDetails = [];
   List<RespDrTreatDetail>? filteredDetails = [];
 
   List<DrTreatMasterList> drTreatMasterList = [];
@@ -280,12 +280,10 @@ class MedicationsheetController extends GetxController {
       if (resp_DrTreatmentMst.statusCode == 200) {
         if (resp_DrTreatmentMst.data != null && resp_DrTreatmentMst.data!.isNotEmpty) {
           drTreatMasterList = resp_DrTreatmentMst.data!;
-          if (drTreatMasterList.isNotEmpty) {
-            if (selectedMasterIndex >= 0) {
-              allDetails = drTreatMasterList[selectedMasterIndex].detail ?? [];
-              filteredDetails = List.from(allDetails!); // by default all
-            }
+          if (selectedMasterIndex < 0) {
+            selectedMasterIndex = 0; // Set default index if not set
           }
+          filteredDetails = drTreatMasterList[selectedMasterIndex].detail; // by default all
         } else {}
         update();
       } else if (resp_DrTreatmentMst.statusCode == 401) {
@@ -317,16 +315,16 @@ class MedicationsheetController extends GetxController {
     isSearchActive = value;
     if (!value) {
       searchController.clear();
-      filteredDetails = List.from(allDetails!); // Reset
+      filteredDetails = List.from(drTreatMasterList[selectedMasterIndex].detail!); // Reset
     }
     update();
   }
 
   void filterSearchResults(String query) {
     if (query.isEmpty) {
-      filteredDetails = List.from(allDetails!);
+      filteredDetails = List.from(drTreatMasterList[selectedMasterIndex].detail!);
     } else {
-      filteredDetails = allDetails!.where((item) {
+      filteredDetails = drTreatMasterList[selectedMasterIndex].detail!.where((item) {
         final name = item.itemName?.txt?.toLowerCase() ?? item.itemNameMnl?.toLowerCase() ?? '';
         return name.contains(query.toLowerCase());
       }).toList();
