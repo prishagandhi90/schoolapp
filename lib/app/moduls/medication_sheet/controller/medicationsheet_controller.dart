@@ -59,10 +59,11 @@ class MedicationsheetController extends GetxController {
   final FreqAfternoonController = TextEditingController();
   final FreqEveningController = TextEditingController();
   final FreqNightController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   List<DrTreatMasterList> drTreatMasterList = [];
   bool fromAdmittedScreen = false;
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController FormularyMedicinesController = TextEditingController();
   List<SearchserviceModel> suggestions = [];
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;

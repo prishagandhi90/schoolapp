@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
+import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -115,6 +116,30 @@ class AddMedicationScreen extends StatelessWidget {
                           width: double.infinity,
                         ),
                         SizedBox(height: 6),
+                        CustomAutoComplete<SearchserviceModel>(
+                          controller: controller.FormularyMedicinesController,
+                          hintText: 'Formulary Medicine',
+                          displayStringForOption: (option) => option.txt ?? '',
+                          optionsBuilder: (textEditingValue) async {
+                            if (textEditingValue.text.trim().isEmpty) {
+                              controller.FormularyMedicines_suggestions.clear();
+                              return const Iterable<SearchserviceModel>.empty();
+                            }
+                            await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                            return controller.FormularyMedicines_suggestions;
+                          },
+                          onSelected: (selection) {
+                            controller.FormularyMedicines_suggestions.clear();
+                            controller.update();
+                          },
+                          onSuffixIconPressed: () {
+                            controller.FormularyMedicinesController.clear();
+                            controller.FormularyMedicines_suggestions.clear();
+                            FocusScope.of(context).unfocus();
+                            controller.update();
+                          },
+                        ),
+
                         Autocomplete<SearchserviceModel>(
                           displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
                           optionsBuilder: (TextEditingValue textEditingValue) async {
