@@ -54,6 +54,7 @@ class MedicationsheetController extends GetxController {
   String? selectedTemplate;
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  TimeOfDay stopTime = TimeOfDay.now();
 
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
