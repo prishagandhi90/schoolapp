@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -56,77 +57,110 @@ class MedicationScreen extends StatelessWidget {
                           FocusScope.of(context).unfocus();
                           return true; // Allow navigation to go back
                         },
-                        child: Autocomplete<SearchserviceModel>(
-                            displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                            optionsBuilder: (TextEditingValue textEditingValue) async {
-                              if (textEditingValue.text.trim().isEmpty) {
-                                controller.suggestions.clear();
-                                return const Iterable<SearchserviceModel>.empty();
-                              }
-                              await controller.getSuggestions(textEditingValue.text);
-                              return controller.suggestions;
-                            },
-                            onSelected: (SearchserviceModel selection) async {
-                              controller.nameController.text = selection.txt ?? '';
-                              controller.ipdNo = selection.name ?? '';
-                              controller.uhid = controller.getUHId(selection.txt ?? '');
+                        child: CustomAutoComplete<SearchserviceModel>(
+                          controller: controller.nameController,
+                          hintText: AppString.patientuhidipd,
+                          displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                          optionsBuilder: (TextEditingValue textEditingValue) async {
+                            if (textEditingValue.text.trim().isEmpty) {
                               controller.suggestions.clear();
-                              await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet');
+                              return const Iterable<SearchserviceModel>.empty();
+                            }
+                            await controller.getSuggestions(textEditingValue.text);
+                            return controller.suggestions;
+                          },
+                          onSelected: (SearchserviceModel selection) async {
+                            controller.nameController.text = selection.txt ?? '';
+                            controller.ipdNo = selection.name ?? '';
+                            controller.uhid = controller.getUHId(selection.txt ?? '');
+                            controller.suggestions.clear();
+                            await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet');
+                            controller.update(); // Trigger state update if needed
+                          },
+                          onClearSuggestions: () {
+                            controller.suggestions.clear();
+                          },
+                          onSuffixIconPressed: () {
+                            controller.nameController.clear();
+                            controller.suggestions.clear();
+                            controller.ipdNo = '';
+                            controller.drTreatMasterList.clear();
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
                               controller.update();
-                            },
-                            fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                              final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
-                                  ? controller.nameController
-                                  : nameController;
-                              return CustomTextFormField(
-                                controller: effectiveController,
-                                focusNode: focusNode,
-                                style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                                // readOnly: controller.nameController.text.isNotEmpty &&
-                                //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
-                                minLines: 1,
-                                maxLines: null,
-                                keyboardType: TextInputType.multiline,
-                                decoration: InputDecoration(
-                                  hintText: AppString.patientuhidipd,
-                                  isDense: true,
-                                  border: OutlineInputBorder(),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                                      width: getDynamicHeight(size: 0.0008),
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    borderSide:
-                                        BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
-                                  ),
-                                  prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                                  suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
-                                      ? IconButton(
-                                          icon: Icon(Icons.cancel_outlined, color: AppColor.black),
-                                          onPressed: () {
-                                            focusNode.unfocus();
-                                            controller.nameController.clear();
-                                            nameController.clear();
-                                            controller.suggestions.clear();
-                                            controller.ipdNo = '';
-                                            SchedulerBinding.instance.addPostFrameCallback((_) {
-                                              controller.update();
-                                            });
-                                          },
-                                        )
-                                      : null,
-                                ),
-                                onTapOutside: (event) {
-                                  focusNode.unfocus();
-                                },
-                                onFieldSubmitted: (value) {
-                                  focusNode.unfocus();
-                                },
-                              );
-                            }),
+                            });
+                          },
+                        ),
+                        // child: Autocomplete<SearchserviceModel>(
+                        //     displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                        //     optionsBuilder: (TextEditingValue textEditingValue) async {
+                        //       if (textEditingValue.text.trim().isEmpty) {
+                        //         controller.suggestions.clear();
+                        //         return const Iterable<SearchserviceModel>.empty();
+                        //       }
+                        //       await controller.getSuggestions(textEditingValue.text);
+                        //       return controller.suggestions;
+                        //     },
+                        //     onSelected: (SearchserviceModel selection) async {
+                        //       controller.nameController.text = selection.txt ?? '';
+                        //       controller.ipdNo = selection.name ?? '';
+                        //       controller.uhid = controller.getUHId(selection.txt ?? '');
+                        //       controller.suggestions.clear();
+                        //       await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet');
+                        //       controller.update();
+                        //     },
+                        //     fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                        //       final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
+                        //           ? controller.nameController
+                        //           : nameController;
+                        //       return CustomTextFormField(
+                        //         controller: effectiveController,
+                        //         focusNode: focusNode,
+                        //         style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                        //         // readOnly: controller.nameController.text.isNotEmpty &&
+                        //         //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                        //         minLines: 1,
+                        //         maxLines: null,
+                        //         keyboardType: TextInputType.multiline,
+                        //         decoration: InputDecoration(
+                        //           hintText: AppString.patientuhidipd,
+                        //           isDense: true,
+                        //           border: OutlineInputBorder(),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(
+                        //               color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                        //               width: getDynamicHeight(size: 0.0008),
+                        //             ),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.all(Radius.circular(0)),
+                        //             borderSide:
+                        //                 BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                        //           ),
+                        //           prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                        //           suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                        //               ? IconButton(
+                        //                   icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                        //                   onPressed: () {
+                        //                     focusNode.unfocus();
+                        //                     controller.nameController.clear();
+                        //                     nameController.clear();
+                        //                     controller.suggestions.clear();
+                        //                     controller.ipdNo = '';
+                        //                     SchedulerBinding.instance.addPostFrameCallback((_) {
+                        //                       controller.update();
+                        //                     });
+                        //                   },
+                        //                 )
+                        //               : null,
+                        //         ),
+                        //         onTapOutside: (event) {
+                        //           focusNode.unfocus();
+                        //         },
+                        //         onFieldSubmitted: (value) {
+                        //           focusNode.unfocus();
+                        //         },
+                        //       );
+                        //     }),
                       ),
                     ),
                     // 🔽 Same size as IconButton wala niche container
@@ -294,6 +328,8 @@ class MedicationScreen extends StatelessWidget {
                                     children: [
                                       GestureDetector(
                                           onTap: () {
+                                            controller.selectedMasterIndex = index;
+                                            controller.update();
                                             Get.to(ViewMedicationScreen(
                                               selectedIndex: index,
                                             ));

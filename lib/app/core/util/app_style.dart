@@ -98,4 +98,9 @@ class AppStyle {
     fontWeight: FontWeight.w700,
     fontFamily: CommonFontStyle.plusJakartaSans,
   );
+  static TextStyle grey = TextStyle(
+    fontSize: getDynamicHeight(size: 0.016),
+    color: AppColor.grey,
+    fontFamily: CommonFontStyle.plusJakartaSans,
+  );
 }

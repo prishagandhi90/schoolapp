@@ -46,6 +46,9 @@ class MedicationsheetController extends GetxController {
   TextEditingController diagnosisController = TextEditingController();
   TextEditingController weightController = TextEditingController();
 
+  int selectedMasterIndex = -1;
+  int selectedDetailIndex = -1;
+
   String? selectedOrder;
   String? selectedTemplate;
   DateTime selectedDate = DateTime.now();
