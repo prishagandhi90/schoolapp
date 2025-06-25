@@ -186,26 +186,26 @@ class RespDrTreatDetail {
     flowRt = json['flowRt'];
 
     // NotMapped fields initialization
-    medicineType = json['medicineType'] != null ? new DropdownMultifieldsTable.fromJson(json['medicineType']) : null;
-    itemName = (json['item'] != null || json['itemTxt'] != null) ? new DropdownMultifieldsTable.fromJson(json['itemTxt']) : null;
+    medicineType = json['medicineType'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['medicineType']) : null;
+    itemName = json['itemName'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['itemName']) : null;
 
-    route = json['route'] != null ? new DropdownMultifieldsTable.fromJson(json['route']) : null;
-    frequency1 = json['frequency1'] != null ? new DropdownMultifieldsTable.fromJson(json['frequency1']) : null;
-    frequency2 = json['frequency2'] != null ? new DropdownMultifieldsTable.fromJson(json['frequency2']) : null;
-    frequency3 = json['frequency3'] != null ? new DropdownMultifieldsTable.fromJson(json['frequency3']) : null;
-    frequency4 = json['frequency4'] != null ? new DropdownMultifieldsTable.fromJson(json['frequency4']) : null;
+    route = json['route'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['route']) : null;
+    frequency1 = json['frequency1'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['frequency1']) : null;
+    frequency2 = json['frequency1'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['frequency2']) : null;
+    frequency3 = json['frequency1'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['frequency3']) : null;
+    frequency4 = json['frequency1'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['frequency4']) : null;
 
-    doseGivenBy1 = json['doseGivenBy1'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy1']) : null;
-    doseGivenBy2 = json['doseGivenBy2'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy2']) : null;
-    doseGivenBy3 = json['doseGivenBy3'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy3']) : null;
-    doseGivenBy4 = json['doseGivenBy4'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy4']) : null;
-    doseGivenBy5 = json['doseGivenBy5'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy5']) : null;
-    doseGivenBy6 = json['doseGivenBy6'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy6']) : null;
-    doseGivenBy7 = json['doseGivenBy7'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy7']) : null;
-    doseGivenBy8 = json['doseGivenBy8'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy8']) : null;
-    doseGivenBy9 = json['doseGivenBy9'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy9']) : null;
-    doseGivenBy10 = json['doseGivenBy10'] != null ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy10']) : null;
-    instructionTyp = json['instType'] != null ? new DropdownMultifieldsTable.fromJson(json['instType']) : null;
+    doseGivenBy1 = json['doseGivenBy1'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy1']) : null;
+    doseGivenBy2 = json['doseGivenBy2'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy2']) : null;
+    doseGivenBy3 = json['doseGivenBy3'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy3']) : null;
+    doseGivenBy4 = json['doseGivenBy4'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy4']) : null;
+    doseGivenBy5 = json['doseGivenBy5'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy5']) : null;
+    doseGivenBy6 = json['doseGivenBy6'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy6']) : null;
+    doseGivenBy7 = json['doseGivenBy7'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy7']) : null;
+    doseGivenBy8 = json['doseGivenBy8'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy8']) : null;
+    doseGivenBy9 = json['doseGivenBy9'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy9']) : null;
+    doseGivenBy10 = json['doseGivenBy10'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['doseGivenBy10']) : null;
+    instructionTyp = json['instruction_typ'] is Map<String, dynamic> ? new DropdownMultifieldsTable.fromJson(json['instruction_typ']) : null;
   }
 
   Map<String, dynamic> toJson() {
