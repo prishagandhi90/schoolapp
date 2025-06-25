@@ -758,6 +758,22 @@ class MedicationsheetController extends GetxController {
     update(); // 🔁 Update GetBuilder/UI if needed
   }
 
+  DateTime? selectedFromDate;
+  DateTime? selectedToDate;
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
+  void filterByDateRange() {
+    final from = selectedFromDate!;
+    final to = selectedToDate!;
+
+    drTreatMasterList = drTreatMasterList.where((item) {
+      final date = item.date;
+      return date != null && date.isAfter(from.subtract(const Duration(days: 1))) && date.isBefore(to.add(const Duration(days: 1)));
+    }).toList();
+
+    update();
+  }
+
   Future<void> showDateBottomSheet(BuildContext context) async {
     showModalBottomSheet(
       context: Get.context!,
@@ -805,17 +821,41 @@ class MedicationsheetController extends GetxController {
                   children: [
                     Expanded(
                       child: CustomDatePicker(
-                        dateController: TextEditingController(),
+                        dateController: fromDateController,
                         hintText: AppString.from,
-                        // onDateSelected: () async => await controller.selectFromDate(context),
+                        onDateSelected: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            selectedFromDate = picked;
+                            fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                            update();
+                          }
+                        },
                       ),
                     ),
                     SizedBox(width: getDynamicHeight(size: 0.01)),
                     Expanded(
                       child: CustomDatePicker(
-                        dateController: TextEditingController(),
+                        dateController: toDateController,
                         hintText: AppString.to,
-                        // onDateSelected: () async => await controller.selectToDate(context),
+                        onDateSelected: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            selectedToDate = picked;
+                            toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                            update();
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -833,7 +873,12 @@ class MedicationsheetController extends GetxController {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                         ),
                         onPressed: () {
-                          // TODO: Confirm logic
+                          if (selectedFromDate != null && selectedToDate != null) {
+                            filterByDateRange();
+                            Navigator.pop(context);
+                          } else {
+                            Get.snackbar("Error", "Please select both dates");
+                          }
                         },
                         child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
                       ),
@@ -846,6 +891,7 @@ class MedicationsheetController extends GetxController {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                         ),
                         onPressed: () {
+                          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
                           Navigator.pop(context); // Just close
                         },
                         child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
@@ -1345,6 +1391,15 @@ class MedicationsheetController extends GetxController {
     );
   }
 
+  void sortTreatmentByDate({required bool isAscending}) {
+    drTreatMasterList.sort((a, b) {
+      final dateA = a.date ?? DateTime(1900);
+      final dateB = b.date ?? DateTime(1900);
+      return isAscending ? dateA.compareTo(dateB) : dateB.compareTo(dateA);
+    });
+    update();
+  }
+
   Future<void> sortByBottomSheet() async {
     showModalBottomSheet(
       context: Get.context!,
@@ -1388,7 +1443,7 @@ class MedicationsheetController extends GetxController {
               /// 🔸 Option 1 - Oldest to Newest
               InkWell(
                 onTap: () {
-                  // Your logic
+                  sortTreatmentByDate(isAscending: true);
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -1406,7 +1461,7 @@ class MedicationsheetController extends GetxController {
               /// 🔸 Option 2 - Newest to Oldest
               InkWell(
                 onTap: () {
-                  // Your logic
+                  sortTreatmentByDate(isAscending: false);
                   Navigator.pop(context);
                 },
                 child: Container(
@@ -1435,6 +1490,7 @@ class MedicationsheetController extends GetxController {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
                       Navigator.pop(context);
                     },
                     child: const Text(
@@ -1508,8 +1564,10 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype,
+                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(
+                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -1648,9 +1706,11 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(
+                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(
+                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),
