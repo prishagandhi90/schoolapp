@@ -119,6 +119,7 @@ class AddMedicationScreen extends StatelessWidget {
                         CustomAutoComplete<SearchserviceModel>(
                           controller: controller.FormularyMedicinesController,
                           hintText: 'Formulary Medicine',
+                          hintStyle: AppStyle.grey,
                           displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
                           optionsBuilder: (TextEditingValue textEditingValue) async {
                             if (textEditingValue.text.trim().isEmpty) {

@@ -53,6 +53,10 @@ class MedicationsheetController extends GetxController {
   String? selectedTemplate;
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  DateTime? selectedFromDate;
+  DateTime? selectedToDate;
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
 
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
@@ -759,10 +763,6 @@ class MedicationsheetController extends GetxController {
     update(); // 🔁 Update GetBuilder/UI if needed
   }
 
-  DateTime? selectedFromDate;
-  DateTime? selectedToDate;
-  TextEditingController fromDateController = TextEditingController();
-  TextEditingController toDateController = TextEditingController();
   void filterByDateRange() {
     final from = selectedFromDate!;
     final to = selectedToDate!;
