@@ -32,6 +32,7 @@ class CustomTextFormField extends StatelessWidget {
   final ScrollPhysics? scrollPhysics;
   final TextStyle? hintStyle;
   final TapRegionCallback? onTapOutside;
+  final EdgeInsetsGeometry? contentPadding;
 
   CustomTextFormField({
     this.label,
@@ -62,7 +63,7 @@ class CustomTextFormField extends StatelessWidget {
     this.hintStyle,
     this.onTapOutside,
     this.focusedBorder,
-    this.enabledBorder,
+    this.enabledBorder, this.contentPadding,
   });
 
   @override
@@ -93,7 +94,7 @@ class CustomTextFormField extends StatelessWidget {
       scrollPhysics: scrollPhysics,
       decoration: decoration ??
           InputDecoration(
-            labelText: label,
+            labelText: label,contentPadding: contentPadding,
             hintText: hint,
             hintStyle: hintStyle,
             filled: filled ?? false,

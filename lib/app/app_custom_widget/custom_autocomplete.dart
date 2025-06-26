@@ -16,6 +16,8 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
   final int? minLines;
   final int? maxLines;
   final TextStyle? hintStyle;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool? isDense;
 
   const CustomAutoComplete({
     Key? key,
@@ -28,7 +30,10 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
     this.onSuffixIconPressed,
     this.onClearSuggestions,
     this.minLines,
-    this.maxLines, this.hintStyle,
+    this.maxLines,
+    this.hintStyle,
+    this.contentPadding,
+    this.isDense,
   }) : super(key: key);
 
   @override
@@ -45,55 +50,59 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
       },
       fieldViewBuilder: (context, textEditingController, localFocusNode, onEditingComplete) {
         // Sync the provided controller with the Autocomplete's controller
-        if (controller != textEditingController) {
-          textEditingController.text = controller.text;
-          controller.addListener(() {
-            if (controller.text != textEditingController.text) {
-              textEditingController.text = controller.text;
-            }
-          });
-          textEditingController.addListener(() {
-            if (textEditingController.text != controller.text) {
-              controller.text = textEditingController.text;
-            }
-          });
-        }
-
-        return CustomTextFormField(
-          controller: textEditingController, // Use Autocomplete's controller
-          minLines: minLines,
-          maxLines: maxLines,
-          focusNode: focusNode ?? localFocusNode, // Use provided or Autocomplete's focus node
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: hintStyle,
-            prefixIcon: Icon(Icons.search, color: AppColor.grey),
-            suffixIcon: textEditingController.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.cancel_outlined, color: Colors.black),
-                    onPressed: () {
-                      textEditingController.clear();
-                      if (onSuffixIconPressed != null) {
-                        onSuffixIconPressed!();
-                      }
-                      if (onClearSuggestions != null) {
-                        onClearSuggestions!(); // Clear suggestions if provided
-                      }
-                      localFocusNode.unfocus();
-                      SchedulerBinding.instance.addPostFrameCallback((_) {});
-                    },
-                  )
-                : null,
-            border: const OutlineInputBorder(),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(width: 0.8),
+        // if (controller != textEditingController) {
+        //   textEditingController.text = controller.text;
+        //   controller.addListener(() {
+        //     if (controller.text != textEditingController.text) {
+        //       textEditingController.text = controller.text;
+        //     }
+        //   });
+        //   textEditingController.addListener(() {
+        //     if (textEditingController.text != controller.text) {
+        //       controller.text = textEditingController.text;
+        //     }
+        //   });
+        // }
+          textEditingController.text = controller.text; // bas ek baar assign karo
+        return Container(
+          child: CustomTextFormField(
+            controller: textEditingController, // Use Autocomplete's controller
+            minLines: minLines,
+            maxLines: maxLines,
+            focusNode: focusNode ?? localFocusNode, // Use provided or Autocomplete's focus node
+            contentPadding: contentPadding,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: hintStyle,
+              isDense: isDense,
+              prefixIcon: Icon(Icons.search, color: AppColor.grey),
+              suffixIcon: textEditingController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                      onPressed: () {
+                        textEditingController.clear();
+                        if (onSuffixIconPressed != null) {
+                          onSuffixIconPressed!();
+                        }
+                        if (onClearSuggestions != null) {
+                          onClearSuggestions!(); // Clear suggestions if provided
+                        }
+                        localFocusNode.unfocus();
+                        SchedulerBinding.instance.addPostFrameCallback((_) {});
+                      },
+                    )
+                  : null,
+              border: const OutlineInputBorder(),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(width: 0.8),
+              ),
             ),
+            onFieldSubmitted: (_) {
+              localFocusNode.unfocus();
+              onEditingComplete();
+            },
+            onTapOutside: (_) => localFocusNode.unfocus(),
           ),
-          onFieldSubmitted: (_) {
-            localFocusNode.unfocus();
-            onEditingComplete();
-          },
-          onTapOutside: (_) => localFocusNode.unfocus(),
         );
       },
     );

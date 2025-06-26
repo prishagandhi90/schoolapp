@@ -197,7 +197,10 @@ class ViewMedicationScreen extends StatelessWidget {
                                         Expanded(
                                           child: Text(
                                             "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item?.itemNameMnl?.isNotEmpty == true ? item?.itemNameMnl! : ''}",
-                                            style: const TextStyle(fontWeight: FontWeight.w500),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: CommonFontStyle.plusJakartaSans,
+                                            ),
                                           ),
                                         ),
                                         GestureDetector(
@@ -212,9 +215,12 @@ class ViewMedicationScreen extends StatelessWidget {
                                       child: Text.rich(
                                         TextSpan(
                                           children: [
-                                            const TextSpan(
+                                            TextSpan(
                                               text: 'Remarks: ',
-                                              style: TextStyle(fontWeight: FontWeight.w500),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                              ),
                                             ),
                                             TextSpan(
                                               text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
@@ -223,6 +229,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 color: AppColor.black1,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
                                               ),
                                             ),
                                           ],
@@ -235,7 +242,11 @@ class ViewMedicationScreen extends StatelessWidget {
                                         item.freq1!.isNotEmpty || item.freq2!.isNotEmpty || item.freq3!.isNotEmpty || item.freq4!.isNotEmpty
                                             ? '${item.freq1} - ${item.freq2} - ${item.freq3} - ${item.freq4}'
                                             : 'No Frequency',
-                                        style: TextStyle(fontWeight: FontWeight.w400, color: AppColor.black1),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: AppColor.black1,
+                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                        ),
                                       ),
                                     ),
                                     Visibility(
@@ -254,6 +265,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 color: AppColor.black1,
+                                                fontFamily: CommonFontStyle.plusJakartaSans,
                                               ),
                                             ),
                                           ],
@@ -298,6 +310,7 @@ class ViewMedicationScreen extends StatelessWidget {
                       color: AppColor.white,
                       fontSize: getDynamicHeight(size: 0.013),
                       fontWeight: FontWeight.w500,
+                      fontFamily: CommonFontStyle.plusJakartaSans,
                     ),
                   ),
                 ),

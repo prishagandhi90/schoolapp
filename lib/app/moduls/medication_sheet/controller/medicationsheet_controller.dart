@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
@@ -6,6 +8,7 @@ import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
@@ -58,7 +61,7 @@ class MedicationsheetController extends GetxController {
   DateTime? selectedToDate;
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
-  TimeOfDay stopTime = TimeOfDay.now();
+  TimeOfDay? stopTime;
 
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
@@ -1092,35 +1095,44 @@ class MedicationsheetController extends GetxController {
                           ),
                           SizedBox(width: getDynamicHeight(size: 0.008)),
                           Expanded(
-                              child: InkWell(
-                            onTap: () async {
-                              final time = await showTimePicker(
-                                context: context,
-                                initialTime: selectedTime,
-                              );
-                              if (time != null) {
-                                setState(() => selectedTime = time);
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: getDynamicHeight(size: 0.012),
-                                horizontal: getDynamicHeight(size: 0.010),
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColor.black1),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.005)),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(selectedTime.format(context)),
-                                  SizedBox(width: getDynamicHeight(size: 0.008)),
-                                  Icon(Icons.timer_outlined),
-                                ],
+                            child: InkWell(
+                              onTap: () async {
+                                final time = await showTimePicker(
+                                  context: context,
+                                  initialTime: controller.selectedTime, // fallback if null
+                                );
+                                if (time != null) {
+                                  controller.selectedTime = time;
+                                  controller.update();
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: getDynamicHeight(size: 0.008),
+                                  vertical: getDynamicHeight(size: 0.012),
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: AppColor.black1),
+                                  borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.004)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      controller.selectedTime != null
+                                          ? controller.selectedTime.format(context)
+                                          : 'Select Time', // 👈 Show this if not selected yet
+                                      style: TextStyle(
+                                        color: controller.selectedTime != null ? AppColor.black : AppColor.grey,
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.008)),
+                                    Icon(Icons.timer_outlined),
+                                  ],
+                                ),
                               ),
                             ),
-                          ))
+                          )
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.012)),
@@ -1447,7 +1459,8 @@ class MedicationsheetController extends GetxController {
                                 child: Container(
                                   width: getDynamicHeight(size: 0.3),
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05)),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
                                   child: Text(
                                     drTreatMasterList[index].srNo.toString(), // ✅ RxID value
                                     style: AppStyle.fontfamilyplus,
@@ -1652,8 +1665,10 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype,
+                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(
+                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -1700,7 +1715,10 @@ class MedicationsheetController extends GetxController {
                                 Flexible(
                                   flex: 1,
                                   child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05)),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: getDynamicHeight(size: 0.05),
+                                        vertical: getDynamicHeight(size: 0.01),
+                                      ), // was EdgeInsets.symmetric(horizontal: 50, vertical: 10)
                                       width: getDynamicHeight(size: 0.3), // was height * 0.5
                                       alignment: Alignment.centerLeft,
                                       child: Text(
@@ -1729,7 +1747,7 @@ class MedicationsheetController extends GetxController {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              height: getDynamicHeight(size: 0.045),
+                              height: getDynamicHeight(size: 0.047),
                               padding: EdgeInsets.all(getDynamicHeight(size: 0.01)), // was EdgeInsets.all(10)
                               decoration: BoxDecoration(color: AppColor.primaryColor),
                               child: Row(
@@ -1769,7 +1787,10 @@ class MedicationsheetController extends GetxController {
                                 Flexible(
                                   flex: 1,
                                   child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05)),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: getDynamicHeight(size: 0.05),
+                                        vertical: getDynamicHeight(size: 0.01),
+                                      ), // was EdgeInsets.symmetric(horizontal: 50, vertical: 10)
                                       width: getDynamicHeight(size: 0.3), // was height * 0.5
                                       alignment: Alignment.centerLeft,
                                       child: Text(
@@ -1792,9 +1813,11 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(
+                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(
+                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),
@@ -1810,7 +1833,7 @@ class MedicationsheetController extends GetxController {
           Container(
             padding: EdgeInsets.all(getDynamicHeight(size: 0.01)),
             width: double.infinity,
-            height: getDynamicHeight(size: 0.045),
+            height: getDynamicHeight(size: 0.047),
             color: AppColor.primaryColor,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.02)),
@@ -1818,7 +1841,7 @@ class MedicationsheetController extends GetxController {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   title,
-                  style: AppStyle.w50018.copyWith(color: Colors.white),
+                  style: AppStyle.w50018.copyWith(color: AppColor.white),
                 ),
               ),
             ),
@@ -1831,7 +1854,7 @@ class MedicationsheetController extends GetxController {
               vertical: getDynamicHeight(size: 0.01),
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.01)),
+              padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.015)),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(

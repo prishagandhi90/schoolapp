@@ -39,6 +39,19 @@ class MedicationScreen extends StatelessWidget {
             title: Text(AppString.medicationsheet, style: AppStyle.primaryplusw700),
             backgroundColor: AppColor.white,
             centerTitle: true,
+            actions: [
+              Padding(
+                padding: EdgeInsets.only(right: 8), // optional right space from screen edge
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildTightIcon(Icons.notifications, onTap: () {}),
+                    _buildTightIcon(Icons.settings, onTap: () {}),
+                    _buildTightIcon(Icons.help_outline, onTap: () {}),
+                  ],
+                ),
+              ),
+            ],
           ),
           body: Column(
             children: [
@@ -411,6 +424,20 @@ class MedicationScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildTightIcon(IconData icon, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 6), // 👈 minimum space between icons
+        child: Icon(
+          icon,
+          color: AppColor.black,
+          size: getDynamicHeight(size: 0.020),
+        ),
+      ),
     );
   }
 }
