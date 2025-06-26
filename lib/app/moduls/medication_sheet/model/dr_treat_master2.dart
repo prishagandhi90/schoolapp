@@ -1,4 +1,4 @@
-import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_detail.dart';
+import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_detail1.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 
 class RespDrTreatmentMst {

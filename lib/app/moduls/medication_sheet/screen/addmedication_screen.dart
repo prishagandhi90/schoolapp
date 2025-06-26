@@ -130,6 +130,7 @@ class AddMedicationScreen extends StatelessWidget {
                             return controller.FormularyMedicines_suggestions;
                           },
                           onSelected: (SearchserviceModel selection) {
+                            controller.FormularyMedicinesIDController.text = selection.name ?? '';
                             controller.update(); // Trigger state update if needed
                           },
                           onClearSuggestions: () {
@@ -202,6 +203,7 @@ class AddMedicationScreen extends StatelessWidget {
                         // ),
                         SizedBox(height: 6),
                         CustomTextFormField(
+                          controller: controller.nonFormularyMedicinesController,
                           decoration: InputDecoration(
                             hintText: "Non Formulary Medicine",
                             hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
@@ -266,6 +268,7 @@ class AddMedicationScreen extends StatelessWidget {
                               child: SizedBox(
                                 height: 48,
                                 child: CustomTextFormField(
+                                  controller: controller.doseController,
                                   decoration: InputDecoration(
                                     hintText: "Dose",
                                     hintStyle: TextStyle(color: AppColor.grey),
@@ -561,7 +564,7 @@ class AddMedicationScreen extends StatelessWidget {
                           children: [
                             Expanded(
                               child: CustomDatePicker(
-                                dateController: controller.dateController,
+                                dateController: controller.stopDateController,
                                 style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
                                 hintText: 'Select Date',
                                 decoration: InputDecoration(
@@ -587,25 +590,12 @@ class AddMedicationScreen extends StatelessWidget {
                                       if (pickedDate != null) {
                                         final formattedDate =
                                             "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                                        controller.dateController.text = formattedDate;
+                                        controller.stopDateController.text = formattedDate;
                                       }
                                       FocusScope.of(context).unfocus();
                                     },
                                   ),
                                 ),
-                                // onDateSelected: () async {
-                                //   final pickedDate = await showDatePicker(
-                                //     context: context,
-                                //     initialDate: DateTime.now(),
-                                //     firstDate: DateTime(2000),
-                                //     lastDate: DateTime(2100),
-                                //   );
-                                //   if (pickedDate != null) {
-                                //     final formattedDate =
-                                //         "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                                //     dateController.text = formattedDate;
-                                //   }
-                                // },
                               ),
                             ),
                             SizedBox(width: 4),
@@ -668,7 +658,9 @@ class AddMedicationScreen extends StatelessWidget {
                             backgroundColor: AppColor.teal,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await controller.saveAddMedication();
+                          },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                             child: Text("SAVE",
