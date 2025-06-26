@@ -1,5 +1,4 @@
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,6 +13,9 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
   final String hintText;
   final VoidCallback? onSuffixIconPressed;
   final VoidCallback? onClearSuggestions; // Add callback to clear suggestions
+  final int? minLines;
+  final int? maxLines;
+  final TextStyle? hintStyle;
 
   const CustomAutoComplete({
     Key? key,
@@ -25,6 +27,8 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
     this.hintText = 'Search',
     this.onSuffixIconPressed,
     this.onClearSuggestions,
+    this.minLines,
+    this.maxLines, this.hintStyle,
   }) : super(key: key);
 
   @override
@@ -57,10 +61,12 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
 
         return CustomTextFormField(
           controller: textEditingController, // Use Autocomplete's controller
+          minLines: minLines,
+          maxLines: maxLines,
           focusNode: focusNode ?? localFocusNode, // Use provided or Autocomplete's focus node
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: AppStyle.grey,
+            hintStyle: hintStyle,
             prefixIcon: Icon(Icons.search, color: AppColor.grey),
             suffixIcon: textEditingController.text.isNotEmpty
                 ? IconButton(

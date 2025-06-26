@@ -171,7 +171,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.018)),
+                                      icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
                                       onPressed: () {},
                                     ),
                                   ),

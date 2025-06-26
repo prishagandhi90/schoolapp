@@ -58,7 +58,12 @@ class MedicationScreen extends StatelessWidget {
                         },
                         child: CustomAutoComplete<SearchserviceModel>(
                           controller: controller.nameController,
+                          maxLines: null,
+                          minLines: 1,
                           hintText: AppString.patientuhidipd,
+                          hintStyle: AppStyle.grey.copyWith(
+                            fontSize: getDynamicHeight(size: 0.012),
+                          ),
                           displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
                           optionsBuilder: (TextEditingValue textEditingValue) async {
                             if (textEditingValue.text.trim().isEmpty) {
