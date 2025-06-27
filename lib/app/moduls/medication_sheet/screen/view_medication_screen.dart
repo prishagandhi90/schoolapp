@@ -151,7 +151,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                 children: [
                                   Container(
                                     width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
-                                    // height: constraints.maxHeight, // 💥 dynamic height from main container
+                                    height: constraints.maxHeight, // 💥 dynamic height from main container
                                     decoration: BoxDecoration(
                                       color: AppColor.white,
                                       border: Border.all(color: Colors.grey.shade400, width: 1),

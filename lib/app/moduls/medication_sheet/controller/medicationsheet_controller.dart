@@ -8,8 +8,6 @@ import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';

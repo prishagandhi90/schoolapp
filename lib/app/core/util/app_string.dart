@@ -241,9 +241,22 @@ class AppString {
   static String instructiontype = "Instruction type";
   static String dose = "Dose";
   static String route = "Route";
-  static String Days = "Days";
   static String quantity1 = "Quantity";
   static String stoptime = "Stop Time";
   static String treatmentdate = "Treatment Date:  ";
   static String addmedication = "Add Medication";
+  static String formularymedicine = "Formulary Medicine";
+  static String nonformularymedicine = "Non Formulary Medicine";
+  static String insttyp = "Inst Typ";
+  static String qty = "Qty";
+  static String remarks = "Remarks";
+  static String morning = "Morning";
+  static String afternoon = "Afternoon";
+  static String evening = "Evening";
+  static String night = "Night";
+  static String selecttime = "Select Time";
+  static String selectmedication = "Select Medication";
+  static String flowrate = "Flow Rate";
+  static String save1 = "SAVE";
+  static String view = "View";
 }

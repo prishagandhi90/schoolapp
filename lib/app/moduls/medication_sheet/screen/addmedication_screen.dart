@@ -87,10 +87,9 @@ class AddMedicationScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: getDynamicHeight(size: 0.006)),
-
                           /// Medication Type Dropdown
                           CustomDropdown(
-                            text: "Medication Type",
+                            text: AppString.medicationtype,
                             textStyle: TextStyle(
                               color: AppColor.grey,
                               fontFamily: CommonFontStyle.plusJakartaSans,
@@ -128,7 +127,7 @@ class AddMedicationScreen extends StatelessWidget {
                           SizedBox(height: getDynamicHeight(size: 0.006)),
                           CustomAutoComplete<SearchserviceModel>(
                             controller: controller.FormularyMedicinesController,
-                            hintText: 'Formulary Medicine',
+                            hintText: AppString.formularymedicine,
                             hintStyle: AppStyle.grey,
                             isDense: true,
                             contentPadding: EdgeInsets.symmetric(
@@ -220,7 +219,7 @@ class AddMedicationScreen extends StatelessWidget {
                           CustomTextFormField(
                             controller: controller.nonFormularyMedicinesController,
                             decoration: InputDecoration(
-                              hintText: "Non Formulary Medicine",
+                              hintText: AppString.nonformularymedicine,
                               hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
@@ -248,7 +247,7 @@ class AddMedicationScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: CustomDropdown(
-                                  text: "Inst Typ",
+                                  text: AppString.insttyp,
                                   textStyle: TextStyle(
                                     color: AppColor.grey,
                                     fontFamily: CommonFontStyle.plusJakartaSans,
@@ -291,7 +290,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   child: CustomTextFormField(
                                     controller: controller.doseController,
                                     decoration: InputDecoration(
-                                      hintText: "Dose",
+                                      hintText: AppString.dose,
                                       hintStyle: TextStyle(color: AppColor.grey),
                                       isDense: true,
                                       contentPadding: EdgeInsets.symmetric(
@@ -327,7 +326,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   child: CustomTextFormField(
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
-                                      hintText: 'Qty',
+                                      hintText: AppString.qty,
                                       hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                                       isDense: true,
                                       contentPadding: EdgeInsets.symmetric(
@@ -355,7 +354,7 @@ class AddMedicationScreen extends StatelessWidget {
                               SizedBox(width: getDynamicHeight(size: 0.006)),
                               Expanded(
                                 child: CustomDropdown(
-                                  text: "Route",
+                                  text: AppString.route,
                                   textStyle: TextStyle(color: AppColor.grey),
                                   controller: controller.routeController,
                                   buttonStyleData: ButtonStyleData(
@@ -396,7 +395,7 @@ class AddMedicationScreen extends StatelessWidget {
                             minLines: 1,
                             maxLines: 10,
                             decoration: InputDecoration(
-                              hintText: "Remarks",
+                              hintText: AppString.remarks,
                               hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
@@ -424,7 +423,7 @@ class AddMedicationScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: CustomDropdown(
-                                  text: "Morning",
+                                  text: AppString.morning,
                                   textStyle: TextStyle(
                                       fontSize: getDynamicHeight(size: 0.013),
                                       color: AppColor.grey,
@@ -463,7 +462,7 @@ class AddMedicationScreen extends StatelessWidget {
                               SizedBox(width: getDynamicHeight(size: 0.004)), // spacing between dropdowns
                               Expanded(
                                 child: CustomDropdown(
-                                  text: "Afternoon",
+                                  text: AppString.afternoon,
                                   textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
                                   controller: controller.FreqAfternoonController,
                                   buttonStyleData: ButtonStyleData(
@@ -499,7 +498,7 @@ class AddMedicationScreen extends StatelessWidget {
                               SizedBox(width: getDynamicHeight(size: 0.004)),
                               Expanded(
                                 child: CustomDropdown(
-                                  text: "Evening",
+                                  text: AppString.evening,
                                   textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
                                   controller: controller.FreqEveningController,
                                   buttonStyleData: ButtonStyleData(
@@ -535,7 +534,7 @@ class AddMedicationScreen extends StatelessWidget {
                               SizedBox(width: getDynamicHeight(size: 0.004)),
                               Expanded(
                                 child: CustomDropdown(
-                                  text: "Night",
+                                  text: AppString.night,
                                   textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
                                   controller: controller.FreqNightController,
                                   buttonStyleData: ButtonStyleData(
@@ -574,7 +573,7 @@ class AddMedicationScreen extends StatelessWidget {
                           CustomTextFormField(
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
-                              hintText: "Days",
+                              hintText: AppString.days,
                               hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
@@ -604,7 +603,7 @@ class AddMedicationScreen extends StatelessWidget {
                                 child: CustomDatePicker(
                                   dateController: controller.stopDateController,
                                   style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
-                                  hintText: 'Select Date',
+                                  hintText: AppString.selectdate,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: getDynamicHeight(size: 0.012),
@@ -667,7 +666,7 @@ class AddMedicationScreen extends StatelessWidget {
                                         Text(
                                           controller.stopTime != null
                                               ? controller.stopTime!.format(context) // 🛑 ! lagaya hai, null nahi hai is point pe
-                                              : 'Select Time',
+                                              : AppString.selecttime,
                                           style: TextStyle(
                                             color: controller.stopTime != null ? AppColor.black : AppColor.grey,
                                           ),
@@ -684,7 +683,7 @@ class AddMedicationScreen extends StatelessWidget {
                           SizedBox(height: getDynamicHeight(size: 0.006)),
                           CustomTextFormField(
                             decoration: InputDecoration(
-                              hintText: "Flow Rate",
+                              hintText: AppString.flowrate,
                               hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(
@@ -721,7 +720,7 @@ class AddMedicationScreen extends StatelessWidget {
                                 horizontal: getDynamicHeight(size: 0.02),
                                 vertical: getDynamicHeight(size: 0.010),
                               ),
-                              child: Text("SAVE",
+                              child: Text(AppString.save1,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: AppColor.white,
@@ -847,7 +846,7 @@ class AddMedicationScreen extends StatelessWidget {
                         alignment: Alignment.center,
                       ),
                       child: Text(
-                        'View',
+                        AppString.view,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColor.white,
