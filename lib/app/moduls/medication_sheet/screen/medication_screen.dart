@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/app_custom_widget/common_methods.dart';
 import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -321,7 +322,7 @@ class MedicationScreen extends StatelessWidget {
                                           style: AppStyle.black,
                                         ),
                                         TextSpan(
-                                          text: controller.drTreatMasterList[index].date.toString(),
+                                          text: formatDateTime_dd_MMM_yy_HH_mm(controller.drTreatMasterList[index].date),
                                           style: AppStyle.black.copyWith(
                                             fontSize: getDynamicHeight(size: 0.013),
                                           ),

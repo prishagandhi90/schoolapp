@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 List<String> getLastTwoYears() {
   int currentYear = DateTime.now().year;
   List<String> years = [];
@@ -5,4 +7,9 @@ List<String> getLastTwoYears() {
     years.add((currentYear - i).toString());
   }
   return years;
+}
+
+String formatDateTime_dd_MMM_yy_HH_mm(DateTime? dt) {
+  if (dt == null) return '';
+  return DateFormat('dd-MMM-yy HH:mm').format(dt);
 }
