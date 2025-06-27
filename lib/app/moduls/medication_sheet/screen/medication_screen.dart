@@ -2,7 +2,6 @@
 
 import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
@@ -20,16 +19,6 @@ class MedicationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double containerHeight;
-
-    if (screenWidth < 360) {
-      containerHeight = getDynamicHeight(size: 0.076); // Small screen fix (static for tiny devices)
-    } else if (screenWidth > 600) {
-      containerHeight = getDynamicHeight(size: 0.040); // iPad
-    } else {
-      containerHeight = getDynamicHeight(size: 0.050); // Normal
-    }
     Get.put(MedicationsheetController());
     return GetBuilder<MedicationsheetController>(
       builder: (controller) {
@@ -45,9 +34,10 @@ class MedicationScreen extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildTightIcon(Icons.notifications, onTap: () {}),
-                    _buildTightIcon(Icons.settings, onTap: () {}),
-                    _buildTightIcon(Icons.help_outline, onTap: () {}),
+                    _buildTightIcon(Icons.filter_alt, onTap: () {
+                      controller.showSortFilterBottomSheet(context);
+                    }),
+                    _buildTightIcon(Icons.notifications_none, onTap: () {}),
                   ],
                 ),
               ),
@@ -61,7 +51,7 @@ class MedicationScreen extends StatelessWidget {
                   children: [
                     // Search Bar (60%)
                     Expanded(
-                      flex: 7,
+                      // flex: 7,
                       // ignore: deprecated_member_use
                       child: WillPopScope(
                         onWillPop: () async {
@@ -181,56 +171,56 @@ class MedicationScreen extends StatelessWidget {
                       ),
                     ),
                     // 🔽 Same size as IconButton wala niche container
-                    SizedBox(width: getDynamicHeight(size: 0.010)),
-                    Expanded(
-                      flex: 1.5.toInt(),
-                      child: Container(
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(
-                            getDynamicHeight(size: 0.012),
-                          ),
-                        ),
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.sortByBottomSheet();
-                            },
-                            child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: Image.asset(
-                                AppImage.filter,
-                                height: getDynamicHeight(size: 0.02),
-                                width: getDynamicHeight(size: 0.02),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: getDynamicHeight(size: 0.008)),
-                    Expanded(
-                      flex: 1.5.toInt(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
-                        ),
-                        child: Center(
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.filter_alt,
-                              color: AppColor.black,
-                              size: getDynamicHeight(size: 0.027), // 🔁 Same size
-                            ),
-                            onPressed: () async {
-                              controller.showDateBottomSheet(context);
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
+                    // SizedBox(width: getDynamicHeight(size: 0.010)),
+                    // Expanded(
+                    //   flex: 1.5.toInt(),
+                    //   child: Container(
+                    //     height: containerHeight,
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(color: AppColor.black),
+                    //       borderRadius: BorderRadius.circular(
+                    //         getDynamicHeight(size: 0.012),
+                    //       ),
+                    //     ),
+                    //     child: Center(
+                    //       child: GestureDetector(
+                    //         onTap: () {
+                    //           controller.sortByBottomSheet();
+                    //         },
+                    //         child: FittedBox(
+                    //           fit: BoxFit.contain,
+                    //           child: Image.asset(
+                    //             AppImage.filter,
+                    //             height: getDynamicHeight(size: 0.02),
+                    //             width: getDynamicHeight(size: 0.02),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(width: getDynamicHeight(size: 0.008)),
+                    // Expanded(
+                    //   flex: 1.5.toInt(),
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       border: Border.all(color: AppColor.black),
+                    //       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.012)),
+                    //     ),
+                    //     child: Center(
+                    //       child: IconButton(
+                    //         icon: Icon(
+                    //           Icons.filter_alt,
+                    //           color: AppColor.black,
+                    //           size: getDynamicHeight(size: 0.027), // 🔁 Same size
+                    //         ),
+                    //         onPressed: () async {
+                    //           controller.showDateBottomSheet(context);
+                    //         },
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -435,7 +425,7 @@ class MedicationScreen extends StatelessWidget {
         child: Icon(
           icon,
           color: AppColor.black,
-          size: getDynamicHeight(size: 0.020),
+          size: getDynamicHeight(size: 0.024),
         ),
       ),
     );

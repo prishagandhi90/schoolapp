@@ -8,6 +8,7 @@ import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/core/service/api_service.dart';
 import 'package:emp_app/app/core/util/api_error_handler.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_const.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
@@ -43,6 +44,7 @@ class MedicationsheetController extends GetxController {
   String tokenNo = '', loginId = '', empId = '', ipdNo = '', uhid = '', patientname = '';
   int admissionId = 0;
   bool isLoading = false;
+  bool isSearching = false;
   final TextEditingController searchController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController stopDateController = TextEditingController();
@@ -110,6 +112,14 @@ class MedicationsheetController extends GetxController {
 
     List<String> parts = patientName.split('|');
     return parts.last.trim(); // last part with trimmed spaces
+  }
+
+   void toggleSearch() {
+    isSearching = !isSearching;
+    if (!isSearching) {
+      searchController.clear();
+    }
+    update(); // important for GetBuilder
   }
 
   Future<void> getSuggestions(String query) async {
@@ -864,141 +874,137 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  Future<void> showDateBottomSheet(BuildContext context) async {
-    showModalBottomSheet(
-      context: Get.context!,
-      isDismissible: true,
-      enableDrag: true,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: MediaQuery.of(context).viewInsets,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 🔹 Title Row with Close Button
-                Row(
-                  children: [
-                    const Spacer(),
-                    const Text(
-                      'Select Date',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: const Color.fromARGB(255, 33, 137, 145),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.close, size: 20),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // 🔹 Date Fields
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomDatePicker(
-                        dateController: fromDateController,
-                        hintText: AppString.from,
-                        onDateSelected: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (picked != null) {
-                            selectedFromDate = picked;
-                            fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-                            update();
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(width: getDynamicHeight(size: 0.01)),
-                    Expanded(
-                      child: CustomDatePicker(
-                        dateController: toDateController,
-                        hintText: AppString.to,
-                        onDateSelected: () async {
-                          final picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (picked != null) {
-                            selectedToDate = picked;
-                            toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-                            update();
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-
-                // 🔹 Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 33, 137, 145),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                        ),
-                        onPressed: () {
-                          if (selectedFromDate != null && selectedToDate != null) {
-                            filterByDateRange();
-                            Navigator.pop(context);
-                          } else {
-                            Get.snackbar("Error", "Please select both dates");
-                          }
-                        },
-                        child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 33, 137, 145),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                        ),
-                        onPressed: () {
-                          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
-                          clearData(); // Clear all fields
-                          Navigator.pop(context); // Just close
-                        },
-                        child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
+  // Future<void> showDateBottomSheet(BuildContext context) async {
+  //   showModalBottomSheet(
+  //     context: Get.context!,
+  //     isDismissible: true,
+  //     enableDrag: true,
+  //     isScrollControlled: true,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+  //     ),
+  //     builder: (context) {
+  //       return Padding(
+  //         padding: MediaQuery.of(context).viewInsets,
+  //         child: Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  //           decoration: const BoxDecoration(
+  //             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //             color: Colors.white,
+  //           ),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               // 🔹 Title Row with Close Button
+  //               Row(
+  //                 children: [
+  //                   const Spacer(),
+  //                   const Text(
+  //                     'Select Date',
+  //                     style: TextStyle(
+  //                       fontSize: 16,
+  //                       color: const Color.fromARGB(255, 33, 137, 145),
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                   const Spacer(),
+  //                   GestureDetector(
+  //                     onTap: () => Navigator.pop(context),
+  //                     child: const Icon(Icons.close, size: 20),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 16),
+  //               // 🔹 Date Fields
+  //               Row(
+  //                 children: [
+  //                   Expanded(
+  //                     child: CustomDatePicker(
+  //                       dateController: fromDateController,
+  //                       hintText: AppString.from,
+  //                       onDateSelected: () async {
+  //                         final picked = await showDatePicker(
+  //                           context: context,
+  //                           initialDate: DateTime.now(),
+  //                           firstDate: DateTime(2000),
+  //                           lastDate: DateTime(2100),
+  //                         );
+  //                         if (picked != null) {
+  //                           selectedFromDate = picked;
+  //                           fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+  //                           update();
+  //                         }
+  //                       },
+  //                     ),
+  //                   ),
+  //                   SizedBox(width: getDynamicHeight(size: 0.01)),
+  //                   Expanded(
+  //                     child: CustomDatePicker(
+  //                       dateController: toDateController,
+  //                       hintText: AppString.to,
+  //                       onDateSelected: () async {
+  //                         final picked = await showDatePicker(
+  //                           context: context,
+  //                           initialDate: DateTime.now(),
+  //                           firstDate: DateTime(2000),
+  //                           lastDate: DateTime(2100),
+  //                         );
+  //                         if (picked != null) {
+  //                           selectedToDate = picked;
+  //                           toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+  //                           update();
+  //                         }
+  //                       },
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 20),
+  //               // 🔹 Buttons
+  //               Row(
+  //                 children: [
+  //                   Expanded(
+  //                     child: ElevatedButton(
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: const Color.fromARGB(255, 33, 137, 145),
+  //                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+  //                       ),
+  //                       onPressed: () {
+  //                         if (selectedFromDate != null && selectedToDate != null) {
+  //                           filterByDateRange();
+  //                           Navigator.pop(context);
+  //                         } else {
+  //                           Get.snackbar("Error", "Please select both dates");
+  //                         }
+  //                       },
+  //                       child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 12),
+  //                   Expanded(
+  //                     child: ElevatedButton(
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: const Color.fromARGB(255, 33, 137, 145),
+  //                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+  //                       ),
+  //                       onPressed: () {
+  //                         fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+  //                         clearData(); // Clear all fields
+  //                         Navigator.pop(context); // Just close
+  //                       },
+  //                       child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 10),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
   /// Show medication dialog with all fields
   Future<void> showMedicationDialog(BuildContext context) async {
     await showDialog(
@@ -1501,111 +1507,327 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  Future<void> sortByBottomSheet() async {
+  // Future<void> sortByBottomSheet() async {
+  //   showModalBottomSheet(
+  //     context: Get.context!,
+  //     isScrollControlled: true,
+  //     backgroundColor: Colors.transparent,
+  //     builder: (context) {
+  //       return Container(
+  //         decoration: const BoxDecoration(
+  //           color: Colors.white,
+  //           borderRadius: BorderRadius.only(
+  //             topLeft: Radius.circular(25),
+  //             topRight: Radius.circular(25),
+  //           ),
+  //         ),
+  //         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             /// 🔹 Title Row
+  //             Row(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               children: [
+  //                 const SizedBox(width: 24),
+  //                 const Text(
+  //                   "Sort By",
+  //                   style: TextStyle(
+  //                     color: Color(0xFF169AAA),
+  //                     fontSize: 18,
+  //                     fontWeight: FontWeight.w600,
+  //                   ),
+  //                 ),
+  //                 InkWell(
+  //                   onTap: () => Navigator.pop(context),
+  //                   child: const Icon(Icons.cancel, color: Colors.grey),
+  //                 ),
+  //               ],
+  //             ),
+  //             const SizedBox(height: 25),
+  //             /// 🔸 Option 1 - Oldest to Newest
+  //             InkWell(
+  //               onTap: () {
+  //                 sortTreatmentByDate(isAscending: true);
+  //                 Navigator.pop(context);
+  //               },
+  //               child: Container(
+  //                 width: double.infinity,
+  //                 padding: const EdgeInsets.symmetric(vertical: 14),
+  //                 decoration: const BoxDecoration(
+  //                   border: Border(
+  //                     bottom: BorderSide(color: Colors.black26, width: 1),
+  //                   ),
+  //                 ),
+  //                 child: const Text("Date [Oldest to Newest]"),
+  //               ),
+  //             ),
+  //             /// 🔸 Option 2 - Newest to Oldest
+  //             InkWell(
+  //               onTap: () {
+  //                 sortTreatmentByDate(isAscending: false);
+  //                 Navigator.pop(context);
+  //               },
+  //               child: Container(
+  //                 width: double.infinity,
+  //                 padding: const EdgeInsets.symmetric(vertical: 14),
+  //                 decoration: const BoxDecoration(
+  //                   border: Border(
+  //                     bottom: BorderSide(color: Colors.black26, width: 1),
+  //                   ),
+  //                 ),
+  //                 child: const Text("Date [Newest to Oldest]"),
+  //               ),
+  //             ),
+  //             const SizedBox(height: 25),
+  //             /// 🔘 Reset Button Center
+  //             Align(
+  //               alignment: Alignment.center,
+  //               child: Container(
+  //                 width: 130,
+  //                 height: 44,
+  //                 decoration: BoxDecoration(
+  //                   color: const Color(0xFF169AAA),
+  //                   borderRadius: BorderRadius.circular(8),
+  //                 ),
+  //                 child: TextButton(
+  //                   onPressed: () {
+  //                     fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: const Text(
+  //                     "Reset",
+  //                     style: TextStyle(
+  //                       fontSize: 16,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Colors.white,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  Future<void> showSortFilterBottomSheet(BuildContext context) async {
     showModalBottomSheet(
       context: Get.context!,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25),
-              topRight: Radius.circular(25),
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /// 🔹 Title Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(width: 24),
-                  const Text(
-                    "Sort By",
-                    style: TextStyle(
-                      color: Color(0xFF169AAA),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.cancel, color: Colors.grey),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 25),
-
-              /// 🔸 Option 1 - Oldest to Newest
-              InkWell(
-                onTap: () {
-                  sortTreatmentByDate(isAscending: true);
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.black26, width: 1),
-                    ),
-                  ),
-                  child: const Text("Date [Oldest to Newest]"),
-                ),
-              ),
-
-              /// 🔸 Option 2 - Newest to Oldest
-              InkWell(
-                onTap: () {
-                  sortTreatmentByDate(isAscending: false);
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.black26, width: 1),
-                    ),
-                  ),
-                  child: const Text("Date [Newest to Oldest]"),
-                ),
-              ),
-
-              const SizedBox(height: 25),
-
-              /// 🔘 Reset Button Center
-              Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 130,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF169AAA),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: TextButton(
-                    onPressed: () {
-                      fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      "Reset",
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /// 🔹 Header Row
+                Row(
+                  children: [
+                    const Spacer(),
+                    const Text(
+                      "Sort and Filters",
                       style: TextStyle(
-                        fontSize: 16,
+                        color: Color(0xFF169AAA),
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
                       ),
                     ),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(Icons.close, color: Colors.grey),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                /// 🔸 Sort By Section
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Sort By",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                InkWell(
+                  onTap: () {
+                    sortTreatmentByDate(isAscending: true);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade300),
+                      color: Colors.grey.shade100,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.arrow_upward_rounded, color: Color(0xFF169AAA)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            "Date [Oldest to Newest]",
+                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+// 🔸 Sort Option 2
+                InkWell(
+                  onTap: () {
+                    sortTreatmentByDate(isAscending: false);
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.grey.shade300),
+                      color: Colors.grey.shade100,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.arrow_downward_rounded, color: Color(0xFF169AAA)),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            "Date [Newest to Oldest]",
+                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                /// 🔸 Date Filter Section
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Filter by Date",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomDatePicker(
+                        dateController: fromDateController,
+                        hintText: AppString.from,
+                        onDateSelected: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            selectedFromDate = picked;
+                            fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                            update();
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: CustomDatePicker(
+                        dateController: toDateController,
+                        hintText: AppString.to,
+                        onDateSelected: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            selectedToDate = picked;
+                            toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                            update();
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                /// 🔘 Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (selectedFromDate != null && selectedToDate != null) {
+                            filterByDateRange();
+                            Navigator.pop(context);
+                          } else {
+                            Get.snackbar("Error", "Please select both dates");
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF169AAA),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text("Apply Filter", style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+                          clearData();
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF169AAA),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Text("Reset", style: TextStyle(color: Colors.white)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

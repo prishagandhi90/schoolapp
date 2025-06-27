@@ -42,6 +42,7 @@ dependencies:
   speech_to_text: ^7.0.0
   mime: ^2.0.0
   device_marketing_names: ^1.1.0
+  flutter_easy_search_bar: ^0.0.2
 
   
 dev_dependencies:

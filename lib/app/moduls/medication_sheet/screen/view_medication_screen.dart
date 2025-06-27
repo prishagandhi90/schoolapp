@@ -2,7 +2,6 @@
 
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
@@ -22,127 +21,118 @@ class ViewMedicationScreen extends StatelessWidget {
         return WillPopScope(
           onWillPop: () async {
             controller.activateSearch(false); // Reset search before going back
+            controller.isSearching = false;
             return true;
           },
           child: Scaffold(
             backgroundColor: AppColor.white,
             appBar: AppBar(
-              title: Text(AppString.viewmedication, style: AppStyle.primaryplusw700),
               backgroundColor: AppColor.white,
               centerTitle: true,
+              automaticallyImplyLeading: false, // important: so we control leading manually
+              leading: controller.isSearching
+                  ? null
+                  : IconButton(
+                      icon: Icon(Icons.arrow_back, color: AppColor.black),
+                      onPressed: () {
+                        controller.activateSearch(false); // Just in case
+                        Get.back();
+                      },
+                    ),
+              title: controller.isSearching
+                  ? TextFormField(
+                      controller: controller.searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search...",
+                        prefixIcon: const Icon(Icons.search),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: getDynamicHeight(size: 0.015),
+                          vertical: getDynamicHeight(size: 0.012),
+                        ),
+                        filled: true,
+                        fillColor: AppColor.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
+                          borderSide: BorderSide(color: AppColor.black),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
+                          borderSide: BorderSide(color: AppColor.black),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        controller.filterSearchResults(value);
+                      },
+                      onTapOutside: (event) {
+                        FocusScope.of(context).unfocus();
+                        // controller.showShortButton = true;
+                        controller.update();
+                      },
+                      onFieldSubmitted: (v) {
+                        if (controller.searchController.text.trim().isNotEmpty) {
+                          // controller.fetchLeaveOTList(controller.selectedRole, controller.selectedLeaveType);
+                          controller.searchController.clear();
+                        }
+                        Future.delayed(const Duration(milliseconds: 800));
+                        // controller.showShortButton = true;
+                        controller.update();
+                      },
+                    )
+                  : Text("View Medication", style: AppStyle.primaryplusw700),
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    controller.isSearching ? Icons.close : Icons.search,
+                    color: AppColor.black,
+                  ),
+                  onPressed: controller.toggleSearch,
+                ),
+                IconButton(
+                  icon: Icon(Icons.notifications_none, color: Colors.black),
+                  onPressed: () {},
+                ),
+              ],
             ),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  AnimatedCrossFade(
-                    duration: const Duration(milliseconds: 300),
-                    crossFadeState: controller.isSearchActive ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                    firstChild: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // 🔹 Custom Container with Text (Instead of TabBar)
-                          Expanded(
-                            child: CustomTextFormField(
-                              readOnly: true,
-                              minLines: 1,
-                              maxLines: 10,
-                              decoration: InputDecoration(
-                                hintText: controller.nameController.text,
-                                hintStyle: TextStyle(
-                                  fontSize: getDynamicHeight(size: 0.015),
-                                  color: AppColor.primaryColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                ),
-                                isDense: true,
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                filled: true,
-                                fillColor: AppColor.white,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.black),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.black),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: AppColor.black),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // 🔍 Search icon
-                          IconButton(
-                            icon: const Icon(Icons.search),
-                            onPressed: () async {
-                              final slidable = Slidable.of(context);
-                              if (slidable != null && slidable.actionPaneType.value != ActionPaneType.none) {
-                                slidable.close();
-                                await Future.delayed(const Duration(milliseconds: 300));
-                              }
-                              controller.activateSearch(true);
-                            },
-                          ),
-                        ],
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
                     ),
-
-                    // 🔄 Second View: Search TextField
-                    secondChild: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: controller.searchController,
-                            decoration: InputDecoration(
-                              hintText: "Search...",
-                              prefixIcon: const Icon(Icons.search),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.015),
-                                vertical: getDynamicHeight(size: 0.012),
-                              ),
-                              filled: true,
-                              fillColor: AppColor.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
-                                borderSide: BorderSide(color: AppColor.black),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
-                                borderSide: BorderSide(color: AppColor.black),
-                              ),
-                            ),
-                            onChanged: (value) {
-                              controller.filterSearchResults(value);
-                            },
-                            onTapOutside: (event) {
-                              FocusScope.of(context).unfocus();
-                              // controller.showShortButton = true;
-                              controller.update();
-                            },
-                            onFieldSubmitted: (v) {
-                              if (controller.searchController.text.trim().isNotEmpty) {
-                                // controller.fetchLeaveOTList(controller.selectedRole, controller.selectedLeaveType);
-                                controller.searchController.clear();
-                              }
-                              Future.delayed(const Duration(milliseconds: 800));
-                              // controller.showShortButton = true;
-                              controller.update();
-                            },
-                          ),
+                    child: CustomTextFormField(
+                      readOnly: true,
+                      minLines: 1,
+                      maxLines: 10,
+                      decoration: InputDecoration(
+                        hintText: controller.nameController.text,
+                        hintStyle: TextStyle(
+                          fontSize: getDynamicHeight(size: 0.015),
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: CommonFontStyle.plusJakartaSans,
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.cancel),
-                          onPressed: () async {
-                            controller.clearData();
-                            controller.activateSearch(false);
-                          },
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: getDynamicHeight(size: 0.012),
+                          vertical: getDynamicHeight(size: 0.010),
                         ),
-                      ],
+                        filled: true,
+                        fillColor: AppColor.white,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColor.black),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -161,7 +151,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                 children: [
                                   Container(
                                     width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
-                                    height: constraints.maxHeight, // 💥 dynamic height from main container
+                                    // height: constraints.maxHeight, // 💥 dynamic height from main container
                                     decoration: BoxDecoration(
                                       color: AppColor.white,
                                       border: Border.all(color: Colors.grey.shade400, width: 1),
@@ -196,7 +186,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                            "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item?.itemNameMnl?.isNotEmpty == true ? item?.itemNameMnl! : ''}",
+                                            "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontFamily: CommonFontStyle.plusJakartaSans,
