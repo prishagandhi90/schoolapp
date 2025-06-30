@@ -111,13 +111,13 @@ class ViewMedicationScreen extends StatelessWidget {
                             withNavBar: false,
                             pageTransitionAnimation: PageTransitionAnimation.cupertino,
                           ).then((value) async {
-                            Get.back();
-                            await dashboardController.getDashboardDataUsingToken();
-                            var bottomBarController = Get.find<BottomBarController>();
-                            bottomBarController.currentIndex.value = 0;
-                            bottomBarController.persistentController.value.index = 0;
-                            bottomBarController.isIPDHome.value = true;
-                            hideBottomBar.value = false;
+                            // Get.back();
+                            // await dashboardController.getDashboardDataUsingToken();
+                            // var bottomBarController = Get.find<BottomBarController>();
+                            // bottomBarController.currentIndex.value = 0;
+                            // bottomBarController.persistentController.value.index = 0;
+                            // bottomBarController.isIPDHome.value = true;
+                            // hideBottomBar.value = false;
                           });
                         },
                         child: Padding(
@@ -240,8 +240,7 @@ class ViewMedicationScreen extends StatelessWidget {
                               ),
                               child: GestureDetector(
                                 onTap: () async {
-                                  await controller
-                                      .editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                  await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
                                   Get.to(
                                     AddMedicationScreen(
                                       selectedMasterIndex: selectedMasterIndex,
@@ -295,9 +294,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                                    ? item.remark.toString()
-                                                    : '',
+                                                text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: AppColor.black1,
@@ -334,10 +331,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                                 style: TextStyle(fontWeight: FontWeight.w500),
                                               ),
                                               TextSpan(
-                                                text:
-                                                    item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                        ? item.flowRate.toString()
-                                                        : '',
+                                                text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                    ? item.flowRate.toString()
+                                                    : '',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: AppColor.black1,

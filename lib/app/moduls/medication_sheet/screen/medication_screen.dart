@@ -66,13 +66,15 @@ class MedicationScreen extends StatelessWidget {
                           withNavBar: false,
                           pageTransitionAnimation: PageTransitionAnimation.cupertino,
                         ).then((value) async {
-                          Get.back();
-                          await dashboardController.getDashboardDataUsingToken();
-                          var bottomBarController = Get.find<BottomBarController>();
-                          bottomBarController.currentIndex.value = 0;
-                          bottomBarController.persistentController.value.index = 0;
-                          bottomBarController.isIPDHome.value = true;
-                          hideBottomBar.value = false;
+                          // Navigator.pop(context);
+                          // Get.back();
+                          // await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet');
+                          // await dashboardController.getDashboardDataUsingToken();
+                          // var bottomBarController = Get.find<BottomBarController>();
+                          // bottomBarController.currentIndex.value = 0;
+                          // bottomBarController.persistentController.value.index = 0;
+                          // bottomBarController.isIPDHome.value = true;
+                          // hideBottomBar.value = false;
                         });
                       },
                       child: Stack(
