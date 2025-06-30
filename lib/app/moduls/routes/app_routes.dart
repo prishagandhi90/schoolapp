@@ -36,6 +36,9 @@ abstract class Routes {
 
   static const IPDDashboardScreen = Paths.IPDDASHBOARDSCREEN;
   static const IPDAdmittedPatients = Paths.IPDADMITTEDPATIENTS;
+
+  static const MedicationScreen = Paths.MEDICATIONSCREEN;
+  static const AddMedicationScreen = Paths.AddMEDICATIONSCREEN;
 }
 
 abstract class Paths {
@@ -86,6 +89,10 @@ abstract class Paths {
   static const PHARMACYSCREEN = '/pharmacy-screen';
   static const PRESCRIPTIONDETAILSSCREEN = '/pres-details-screen';
   static const PRESCRIPTIONVIEWERSCREEN = '/pres-viewer-screen';
+
+  static const MEDICATIONSCREEN = '/medication-screen';
+  static const AddMEDICATIONSCREEN = '/add-medication-screen';
+  static const VIEWMEDICATIONSCREEN = '/view-medication-screen';
 
   static const Force_update = '/force-update';
 }

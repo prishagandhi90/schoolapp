@@ -93,6 +93,9 @@ class MedicationsheetController extends GetxController {
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;
   String webUserName = '';
+  bool isViewBtnclicked = false;
+  bool isMenuBtnclicked = false;
+  bool isPlusBtnclicked = false;
 
   @override
   void onInit() {
@@ -189,8 +192,6 @@ class MedicationsheetController extends GetxController {
   Future<List<SearchserviceModel>> fetchSearchService(String flag) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      // isLoading = true;
-      // update();
       String url = ConstApiUrl.empSearchServiceAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -222,10 +223,7 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
-    } finally {
-      // isLoading = false;
-      // update();
-    }
+    } finally {}
     return searchService.toList();
   }
 

@@ -42,6 +42,10 @@ import 'package:emp_app/app/moduls/lvotApproval/binding/otList_screen_Binding.da
 import 'package:emp_app/app/moduls/lvotApproval/screen/lvlist_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/screen/lvotapproval_screen.dart';
 import 'package:emp_app/app/moduls/lvotApproval/screen/otlist_screen.dart';
+import 'package:emp_app/app/moduls/medication_sheet/bindings/addMedicationScreenBinding.dart';
+import 'package:emp_app/app/moduls/medication_sheet/bindings/medicationScreenBinding.dart';
+import 'package:emp_app/app/moduls/medication_sheet/bindings/viewMedicationScreenBinding.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/medication_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/bindings/mispunch_binding.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/notification/bindings/filterScreenBinding.dart';
@@ -293,6 +297,21 @@ class AppPages {
       name: Paths.PRESCRIPTIONVIEWERSCREEN,
       page: () => PresviewerScreen(),
       binding: PresviewerScreenBinding(),
-    )
+    ),
+    GetPage(
+      name: Paths.MEDICATIONSCREEN,
+      page: () => MedicationScreen(),
+      binding: MedicationScreenbinding(),
+    ),
+    GetPage(
+      name: Paths.AddMEDICATIONSCREEN,
+      page: () => MedicationScreen(),
+      binding: AddMedicationScreenBinding(),
+    ),
+    GetPage(
+      name: Paths.VIEWMEDICATIONSCREEN,
+      page: () => MedicationScreen(),
+      binding: ViewMedicationScreenbinding(),
+    ),
   ];
 }
