@@ -2,18 +2,25 @@
 
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class ViewMedicationScreen extends StatelessWidget {
   int selectedMasterIndex; // Default selected index for the first tab
   ViewMedicationScreen({Key? key, required this.selectedMasterIndex}) : super(key: key);
+  final dashboardController = Get.isRegistered<DashboardController>() ? Get.find<DashboardController>() : Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -81,16 +88,73 @@ class ViewMedicationScreen extends StatelessWidget {
                     )
                   : Text("View Medication", style: AppStyle.primaryplusw700),
               actions: [
-                IconButton(
-                  icon: Icon(
-                    controller.isSearching ? Icons.close : Icons.search,
-                    color: AppColor.black,
+                Padding(
+                  padding: EdgeInsets.only(right: 12),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 🔍 Search / Close Icon
+                      IconButton(
+                        icon: Icon(
+                          controller.isSearching ? Icons.close : Icons.search,
+                          color: AppColor.black,
+                        ),
+                        onPressed: controller.toggleSearch,
+                      ),
+
+                      // 🔔 Notification with badge
+                      GestureDetector(
+                        onTap: () {
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: NotificationScreen(),
+                            withNavBar: false,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ).then((value) async {
+                            Get.back();
+                            await dashboardController.getDashboardDataUsingToken();
+                            var bottomBarController = Get.find<BottomBarController>();
+                            bottomBarController.currentIndex.value = 0;
+                            bottomBarController.persistentController.value.index = 0;
+                            bottomBarController.isIPDHome.value = true;
+                            hideBottomBar.value = false;
+                          });
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 6), // 👈 spacing between icons
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Image.asset(
+                                AppImage.notification,
+                                width: getDynamicHeight(size: 0.022),
+                              ),
+                              if (dashboardController.notificationCount != "0")
+                                Positioned(
+                                  right: -2,
+                                  top: -6,
+                                  child: Container(
+                                    padding: EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Text(
+                                      dashboardController.notificationCount,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  onPressed: controller.toggleSearch,
-                ),
-                IconButton(
-                  icon: Icon(Icons.notifications_none, color: Colors.black),
-                  onPressed: () {},
                 ),
               ],
             ),
@@ -173,7 +237,8 @@ class ViewMedicationScreen extends StatelessWidget {
                               ),
                               child: GestureDetector(
                                 onTap: () async {
-                                  await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                  await controller
+                                      .editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
                                   Get.to(
                                     AddMedicationScreen(
                                       selectedMasterIndex: selectedMasterIndex,
@@ -227,7 +292,9 @@ class ViewMedicationScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                                text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
+                                                    ? item.remark.toString()
+                                                    : '',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: AppColor.black1,
@@ -264,9 +331,10 @@ class ViewMedicationScreen extends StatelessWidget {
                                                 style: TextStyle(fontWeight: FontWeight.w500),
                                               ),
                                               TextSpan(
-                                                text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                    ? item.flowRate.toString()
-                                                    : '',
+                                                text:
+                                                    item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                        ? item.flowRate.toString()
+                                                        : '',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   color: AppColor.black1,
