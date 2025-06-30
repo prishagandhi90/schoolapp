@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
@@ -156,181 +157,170 @@ class ViewMedicationScreen extends StatelessWidget {
                 ),
               ],
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
+            body: controller.isLoading
+                ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: getDynamicHeight(size: 0.102),
                     ),
-                    child: CustomTextFormField(
-                      readOnly: true,
-                      minLines: 1,
-                      maxLines: 10,
-                      decoration: InputDecoration(
-                        hintText: controller.nameController.text,
-                        hintStyle: TextStyle(
-                          fontSize: getDynamicHeight(size: 0.015),
-                          color: AppColor.primaryColor,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: CommonFontStyle.plusJakartaSans,
-                        ),
-                        isDense: true,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: getDynamicHeight(size: 0.012),
-                          vertical: getDynamicHeight(size: 0.010),
-                        ),
-                        filled: true,
-                        fillColor: AppColor.white,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.black),
-                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: controller.filteredDetails?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        final item = controller.filteredDetails![index];
-                        return LayoutBuilder(
-                          builder: (context, constraints) {
-                            return Slidable(
-                              key: ValueKey(index),
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                extentRatio: 0.18,
-                                children: [
-                                  Container(
-                                    width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
-                                    height: constraints.maxHeight, // 💥 dynamic height from main container
-                                    decoration: BoxDecoration(
-                                      color: AppColor.white,
-                                      border: Border.all(color: Colors.grey.shade400, width: 1),
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(getDynamicHeight(size: 0.011)),
-                                        bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
-                                      ),
-                                    ),
-                                    child: IconButton(
-                                      icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
-                                      onPressed: () async {
-                                        await controller.deleteMedicationSheet(
-                                            mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
-                                            dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!);
-                                        controller.filteredDetails!.removeAt(index);
-                                        controller.update();
-                                      },
-                                    ),
-                                  ),
-                                ],
+                    child: Center(child: ProgressWithIcon()),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                          ),
+                          child: CustomTextFormField(
+                            readOnly: true,
+                            minLines: 1,
+                            maxLines: 10,
+                            decoration: InputDecoration(
+                              hintText: controller.nameController.text,
+                              hintStyle: TextStyle(
+                                fontSize: getDynamicHeight(size: 0.015),
+                                color: AppColor.primaryColor,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: CommonFontStyle.plusJakartaSans,
                               ),
-                              child: GestureDetector(
-                                onTap: () async {
-                                  await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
-                                  Get.to(
-                                    AddMedicationScreen(
-                                      selectedMasterIndex: selectedMasterIndex,
-                                      selectedDetailIndex: index,
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: getDynamicHeight(size: 0.005),
-                                    vertical: getDynamicHeight(size: 0.005),
-                                  ),
-                                  padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: AppColor.black),
-                                    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
-                                    color: AppColor.primaryColor.withOpacity(0.2),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
-                                              ),
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: getDynamicHeight(size: 0.012),
+                                vertical: getDynamicHeight(size: 0.010),
+                              ),
+                              filled: true,
+                              fillColor: AppColor.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppColor.black),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.008)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: controller.filteredDetails?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              final item = controller.filteredDetails![index];
+                              return LayoutBuilder(
+                                builder: (context, constraints) {
+                                  return Slidable(
+                                    key: ValueKey(index),
+                                    endActionPane: ActionPane(
+                                      motion: const ScrollMotion(),
+                                      extentRatio: 0.18,
+                                      children: [
+                                        Container(
+                                          width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
+                                          height: constraints.maxHeight, // 💥 dynamic height from main container
+                                          decoration: BoxDecoration(
+                                            color: AppColor.white,
+                                            border: Border.all(color: Colors.grey.shade400, width: 1),
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                                              bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
                                             ),
                                           ),
-                                          GestureDetector(
-                                            onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
-                                            child: Icon(Icons.menu),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: getDynamicHeight(size: 0.003)),
-                                      Visibility(
-                                        visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
-                                        child: Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: 'Remarks: ',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColor.black1,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              ),
-                                            ],
+                                          child: IconButton(
+                                            icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
+                                            onPressed: () async {
+                                              await controller.deleteMedicationSheet(
+                                                  mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
+                                                  dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!);
+                                              controller.filteredDetails!.removeAt(index);
+                                              controller.update();
+                                            },
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
-                                        child: Text(
-                                          (item.freq1?.isNotEmpty ?? false) ||
-                                                  (item.freq2?.isNotEmpty ?? false) ||
-                                                  (item.freq3?.isNotEmpty ?? false) ||
-                                                  (item.freq4?.isNotEmpty ?? false)
-                                              ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
-                                              : '',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            color: AppColor.black1,
-                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                      ],
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                        Get.to(
+                                          AddMedicationScreen(
+                                            selectedMasterIndex: selectedMasterIndex,
+                                            selectedDetailIndex: index,
                                           ),
+                                        );
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(
+                                          horizontal: getDynamicHeight(size: 0.005),
+                                          vertical: getDynamicHeight(size: 0.005),
                                         ),
-                                      ),
-                                      Visibility(
-                                        visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
-                                        child: Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              const TextSpan(
-                                                text: 'Flow Rate: ',
-                                                style: TextStyle(fontWeight: FontWeight.w500),
+                                        padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: AppColor.black),
+                                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
+                                          color: AppColor.primaryColor.withOpacity(0.2),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    ),
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
+                                                  child: Icon(Icons.menu),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: getDynamicHeight(size: 0.003)),
+                                            Visibility(
+                                              visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: 'Remarks: ',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w500,
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
+                                                          ? item.remark.toString()
+                                                          : '',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w400,
+                                                        color: AppColor.black1,
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              TextSpan(
-                                                text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                    ? item.flowRate.toString()
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
+                                              child: Text(
+                                                (item.freq1?.isNotEmpty ?? false) ||
+                                                        (item.freq2?.isNotEmpty ?? false) ||
+                                                        (item.freq3?.isNotEmpty ?? false) ||
+                                                        (item.freq4?.isNotEmpty ?? false)
+                                                    ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
                                                     : '',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w400,
@@ -338,23 +328,43 @@ class ViewMedicationScreen extends StatelessWidget {
                                                   fontFamily: CommonFontStyle.plusJakartaSans,
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                            Visibility(
+                                              visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
+                                              child: Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    const TextSpan(
+                                                      text: 'Flow Rate: ',
+                                                      style: TextStyle(fontWeight: FontWeight.w500),
+                                                    ),
+                                                    TextSpan(
+                                                      text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                          ? item.flowRate.toString()
+                                                          : '',
+                                                      style: TextStyle(
+                                                        fontWeight: FontWeight.w400,
+                                                        color: AppColor.black1,
+                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
             bottomNavigationBar: Padding(
               padding: EdgeInsets.all(
                 getDynamicHeight(size: 0.007),
