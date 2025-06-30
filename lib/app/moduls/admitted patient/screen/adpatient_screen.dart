@@ -423,7 +423,6 @@ class AdpatientScreen extends StatelessWidget {
                   index: index,
                 );
                 controller.isPatientCardClicked = false;
-                controller.update();
               }
             },
             child: Card(

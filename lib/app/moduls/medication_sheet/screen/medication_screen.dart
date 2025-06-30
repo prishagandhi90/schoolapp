@@ -428,16 +428,18 @@ class MedicationScreen extends StatelessWidget {
                                             children: [
                                               GestureDetector(
                                                   onTap: () async {
+                                                    if (controller.isViewBtnclicked) return;
+                                                    controller.isViewBtnclicked = true;
                                                     controller.isLoading = true;
                                                     controller.update();
                                                     controller.filteredDetails = controller.drTreatMasterList[index].detail;
                                                     controller.selectedMasterIndex = index;
                                                     controller.searchController.clear();
-                                                    controller.isLoading = false;
-                                                    controller.update();
                                                     Get.to(ViewMedicationScreen(
                                                       selectedMasterIndex: index,
                                                     ));
+                                                    controller.isLoading = false;
+                                                    controller.isViewBtnclicked = false;
                                                   },
                                                   child: Icon(
                                                     Icons.remove_red_eye_outlined,
@@ -446,7 +448,10 @@ class MedicationScreen extends StatelessWidget {
                                               // SizedBox(width: getDynamicHeight(size: 0.002)),
                                               IconButton(
                                                 onPressed: () {
+                                                  if (controller.isMenuBtnclicked) return;
+                                                  controller.isMenuBtnclicked = true;
                                                   controller.medicationbottomsheet(context, index);
+                                                  controller.isMenuBtnclicked = false;
                                                 },
                                                 icon: Icon(
                                                   Icons.menu,
@@ -471,9 +476,12 @@ class MedicationScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             backgroundColor: AppColor.teal1,
             onPressed: () {
+              if (controller.isPlusBtnclicked) return;
+              controller.isPlusBtnclicked = true;
               controller.isTemplateVisible = true;
               controller.update();
               controller.showMedicationDialog(context, -1);
+              controller.isPlusBtnclicked = false;
             },
             child: Icon(
               Icons.add_circle_outlined,
@@ -500,7 +508,7 @@ class MedicationScreen extends StatelessWidget {
                   alignment: Alignment.center,
                 ),
                 child: Text(
-                  controller.investRequisitController.webUserName,
+                  controller.webUserName,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: AppColor.white,

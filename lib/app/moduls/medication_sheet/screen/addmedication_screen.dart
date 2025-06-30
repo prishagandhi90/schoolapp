@@ -844,6 +844,8 @@ class AddMedicationScreen extends StatelessWidget {
                   child: Container(
                     child: TextButton(
                       onPressed: () {
+                        if (controller.isViewBtnclicked) return;
+                        controller.isViewBtnclicked = true;
                         controller.filteredDetails = controller.drTreatMasterList[selectedMasterIndex].detail;
                         controller.selectedMasterIndex = selectedMasterIndex;
                         controller.searchController.clear();
@@ -851,6 +853,7 @@ class AddMedicationScreen extends StatelessWidget {
                         Get.to(ViewMedicationScreen(
                           selectedMasterIndex: selectedMasterIndex,
                         ));
+                        controller.isViewBtnclicked = false;
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: AppColor.orange,

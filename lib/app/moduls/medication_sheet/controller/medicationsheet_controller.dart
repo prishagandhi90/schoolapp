@@ -93,6 +93,9 @@ class MedicationsheetController extends GetxController {
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;
   String webUserName = '';
+  bool isViewBtnclicked = false;
+  bool isMenuBtnclicked = false;
+  bool isPlusBtnclicked = false;
 
   @override
   void onInit() {
