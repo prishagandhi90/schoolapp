@@ -441,7 +441,10 @@ class AddMedicationScreen extends StatelessWidget {
                                     Expanded(
                                       child: CustomDropdown(
                                         text: AppString.morning,
-                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                        textStyle: TextStyle(
+                                            fontSize: getDynamicHeight(size: 0.013),
+                                            color: AppColor.grey,
+                                            fontFamily: CommonFontStyle.plusJakartaSans),
                                         controller: controller.FreqMorningController,
                                         buttonStyleData: ButtonStyleData(
                                           height: getDynamicHeight(size: 0.046),
@@ -617,7 +620,8 @@ class AddMedicationScreen extends StatelessWidget {
                                     Expanded(
                                       child: CustomDatePicker(
                                         dateController: controller.stopDateController,
-                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
+                                        style:
+                                            TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
                                         hintText: AppString.selectdate,
                                         decoration: InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
