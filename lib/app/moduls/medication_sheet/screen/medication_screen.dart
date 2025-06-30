@@ -65,6 +65,7 @@ class MedicationScreen extends StatelessWidget {
                           maxLines: null,
                           minLines: 1,
                           hintText: AppString.patientuhidipd,
+                          fromAdmittedScreen: controller.fromAdmittedScreen,
                           hintStyle: AppStyle.grey.copyWith(
                             fontSize: getDynamicHeight(size: 0.012),
                           ),
