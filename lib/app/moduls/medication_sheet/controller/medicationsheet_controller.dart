@@ -328,7 +328,7 @@ class MedicationsheetController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "MedicationScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -392,7 +392,7 @@ class MedicationsheetController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "MedicationScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -479,7 +479,7 @@ class MedicationsheetController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "MedicationScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -522,7 +522,7 @@ class MedicationsheetController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "MedicationScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -565,7 +565,7 @@ class MedicationsheetController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "MedicationScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',
@@ -608,7 +608,7 @@ class MedicationsheetController extends GetxController {
       isLoading = false;
       update();
       ApiErrorHandler.handleError(
-        screenName: "LeaveScreen",
+        screenName: "MedicationScreen",
         error: e.toString(),
         loginID: pref.getString(AppString.keyLoginId) ?? '',
         tokenNo: pref.getString(AppString.keyToken) ?? '',

@@ -253,7 +253,8 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter,
+                                              height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -411,7 +412,8 @@ class AdpatientScreen extends StatelessWidget {
                 );
               } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser.trim() != "") {
                 final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
-                await medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
+                await medicationsheetController.fetchDrTreatmentData(
+                    ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
                 TapToRedirectToMedicationScreen(
                   controller: controller,
                   index: index,
