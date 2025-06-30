@@ -828,7 +828,7 @@ class MedicationsheetController extends GetxController {
           drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
         }
         print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
-        var a = 1;
+        // var a = 1;
       } else if (responseData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
