@@ -853,6 +853,59 @@ class MedicationsheetController extends GetxController {
     }
   }
 
+  Future<void> deleteMedicationSheet({
+    required int mstId,
+    required int dtlId,
+  }) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      isLoading = true;
+      loginId = await pref.getString(AppString.keyLoginId) ?? "";
+      tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      empId = await pref.getString(AppString.keyEmpId) ?? "";
+
+      update(); // loading true
+
+      String url = ConstApiUrl.empDeleteMedicationSheetAPI;
+
+      // 🔥 Prepare delete request body
+      final deleteBody = {
+        "LoginId": loginId,
+        "EmpId": empId,
+        "mstId": mstId,
+        "dtlId": dtlId,
+        "UserName": webUserName,
+      };
+
+      // 🔁 Call API
+      var response = await apiController.parseJsonBody(url, "", deleteBody);
+      var parsed = jsonDecode(response);
+
+      if (parsed['statusCode'] == 200 && parsed['isSuccess'] == 'true') {
+        Get.rawSnackbar(message: parsed['Message'] ?? 'Medication deleted successfully');
+        // 💡 Tu yaha se local list se bhi delete kar sakta hai
+      } else if (parsed['statusCode'] == 401) {
+        pref.clear();
+        Get.offAll(const LoginScreen());
+        Get.rawSnackbar(message: 'Session expired. Please login again');
+      } else {
+        Get.rawSnackbar(message: parsed['Message'] ?? 'Something went wrong');
+      }
+    } catch (e) {
+      ApiErrorHandler.handleError(
+        screenName: 'DeleteMedicationSheet',
+        error: e.toString(),
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
+      );
+      Get.rawSnackbar(message: 'Error deleting medication');
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
   templateChangeMethod(Map<String, String>? value) async {
     TemplateIdController.text = value!['value'] ?? '';
     TemplateNameController.text = value['text'] ?? '';

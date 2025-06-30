@@ -97,4 +97,5 @@ class ConstApiUrl {
   static const empGetAdmIdFrmIPDAPI = "$empUrl/EmpApp_GetAdmissionIdFrmIPD";
   static const empMedicationSheet_SearchMedicinesAPI = "$empUrl/EmpApp_MedicationSheet_SearchMedicines";
   static const empSaveAddMedicationSheetAPI = "$empUrl/EmpApp_SaveAddMedicinesSheet";
+  static const empDeleteMedicationSheetAPI = "$empUrl/EmpApp_MedicationSheet_DeleteMedicines";
 }

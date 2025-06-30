@@ -227,7 +227,10 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ),
                                     child: IconButton(
                                       icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await controller.deleteMedicationSheet(
+                                            mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
+                                            dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!);
                                         controller.filteredDetails!.removeAt(index);
                                         controller.update();
                                       },
