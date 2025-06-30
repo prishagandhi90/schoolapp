@@ -413,7 +413,11 @@ class AdpatientScreen extends StatelessWidget {
                 if (controller.isPatientCardClicked) return;
                 controller.isPatientCardClicked = true;
                 final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
-                medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
+                medicationsheetController.fetchDrTreatmentData(
+                  ipdNo: controller.filterpatientsData[index].ipdNo.toString(),
+                  treatTyp: 'Medication Sheet',
+                  isload: true,
+                );
                 TapToRedirectToMedicationScreen(
                   controller: controller,
                   index: index,

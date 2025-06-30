@@ -156,8 +156,9 @@ class MedicationScreen extends StatelessWidget {
                                   controller.ipdNo = selection.name ?? '';
                                   controller.uhid = controller.getUHId(selection.txt ?? '');
                                   controller.suggestions.clear();
-                                  await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet');
-                                  controller.update(); // Trigger state update if needed
+                                  controller.isLoading = true;
+                                  // controller.update();
+                                  await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet', isload: false);
                                 },
                                 onClearSuggestions: () {
                                   controller.suggestions.clear();
@@ -302,7 +303,7 @@ class MedicationScreen extends StatelessWidget {
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet');
+                          await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet', isload: true);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),

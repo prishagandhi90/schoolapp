@@ -189,8 +189,8 @@ class MedicationsheetController extends GetxController {
   Future<List<SearchserviceModel>> fetchSearchService(String flag) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      isLoading = true;
-      update();
+      // isLoading = true;
+      // update();
       String url = ConstApiUrl.empSearchServiceAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -223,8 +223,8 @@ class MedicationsheetController extends GetxController {
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
-      isLoading = false;
-      update();
+      // isLoading = false;
+      // update();
     }
     return searchService.toList();
   }
@@ -293,11 +293,14 @@ class MedicationsheetController extends GetxController {
   Future<List<DrTreatMasterList>> fetchDrTreatmentData({
     required String ipdNo,
     required String treatTyp,
+    required bool isload,
   }) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      isLoading = true;
-      update();
+      if (isload) {
+        isLoading = true;
+        update();
+      }
+      SharedPreferences pref = await SharedPreferences.getInstance();
       String url = ConstApiUrl.empDoctorTreatmentMasterAPI;
       String loginId = pref.getString(AppString.keyLoginId) ?? "";
       String empId = pref.getString(AppString.keyEmpId) ?? "";
@@ -329,13 +332,13 @@ class MedicationsheetController extends GetxController {
     } catch (e) {
       isLoading = false;
       update();
-      ApiErrorHandler.handleError(
-        screenName: "MedicationScreen",
-        error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
-      );
+      // ApiErrorHandler.handleError(
+      //   screenName: "MedicationScreen",
+      //   error: e.toString(),
+      //   loginID: pref.getString(AppString.keyLoginId) ?? '',
+      //   tokenNo: pref.getString(AppString.keyToken) ?? '',
+      //   empID: pref.getString(AppString.keyEmpId) ?? '',
+      // );
     } finally {
       isLoading = false;
       update();
@@ -1531,7 +1534,7 @@ class MedicationsheetController extends GetxController {
                           onPressed: () async {
                             // Submit logic
                             await saveMedicationSheet(selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
-                            await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+                            await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
                             clearData();
                             Navigator.pop(context);
                           },
@@ -2003,7 +2006,7 @@ class MedicationsheetController extends GetxController {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
+                          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
                           clearData();
                           Navigator.pop(context);
                         },

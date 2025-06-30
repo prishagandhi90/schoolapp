@@ -209,7 +209,7 @@ class ViewMedicationScreen extends StatelessWidget {
                         Expanded(
                           child: RefreshIndicator(
                             onRefresh: () async {
-                              await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet');
+                              await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet', isload: true);
                             },
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -250,8 +250,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                       ),
                                       child: GestureDetector(
                                         onTap: () async {
-                                          await controller
-                                              .editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                          await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
                                           Get.to(
                                             AddMedicationScreen(
                                               selectedMasterIndex: selectedMasterIndex,
@@ -293,8 +292,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                               ),
                                               SizedBox(height: getDynamicHeight(size: 0.003)),
                                               Visibility(
-                                                visible:
-                                                    item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                                visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
                                                 child: Text.rich(
                                                   TextSpan(
                                                     children: [
@@ -306,8 +304,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                                         ),
                                                       ),
                                                       TextSpan(
-                                                        text: item.remark.toString().isNotEmpty &&
-                                                                item.remark.toString().toUpperCase() != 'NULL'
+                                                        text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
                                                             ? item.remark.toString()
                                                             : '',
                                                         style: TextStyle(
@@ -337,8 +334,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               Visibility(
-                                                visible:
-                                                    item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
+                                                visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
                                                 child: Text.rich(
                                                   TextSpan(
                                                     children: [
@@ -347,8 +343,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                                         style: TextStyle(fontWeight: FontWeight.w500),
                                                       ),
                                                       TextSpan(
-                                                        text: item.flowRate.toString().isNotEmpty &&
-                                                                item.flowRate.toString().toUpperCase() != 'NULL'
+                                                        text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
                                                             ? item.flowRate.toString()
                                                             : '',
                                                         style: TextStyle(
