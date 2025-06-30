@@ -163,7 +163,10 @@ class ViewMedicationScreen extends StatelessWidget {
                                     ),
                                     child: IconButton(
                                       icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        controller.filteredDetails!.removeAt(index);
+                                        controller.update();
+                                      },
                                     ),
                                   ),
                                 ],
