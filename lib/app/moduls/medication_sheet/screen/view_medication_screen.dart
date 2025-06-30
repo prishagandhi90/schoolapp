@@ -207,159 +207,169 @@ class ViewMedicationScreen extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: controller.filteredDetails?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              final item = controller.filteredDetails![index];
-                              return LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return Slidable(
-                                    key: ValueKey(index),
-                                    endActionPane: ActionPane(
-                                      motion: const ScrollMotion(),
-                                      extentRatio: 0.18,
-                                      children: [
-                                        Container(
-                                          width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
-                                          height: constraints.maxHeight, // 💥 dynamic height from main container
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet');
+                            },
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: controller.filteredDetails?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                final item = controller.filteredDetails![index];
+                                return LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    return Slidable(
+                                      key: ValueKey(index),
+                                      endActionPane: ActionPane(
+                                        motion: const ScrollMotion(),
+                                        extentRatio: 0.18,
+                                        children: [
+                                          Container(
+                                            width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
+                                            height: constraints.maxHeight, // 💥 dynamic height from main container
+                                            decoration: BoxDecoration(
+                                              color: AppColor.white,
+                                              border: Border.all(color: Colors.grey.shade400, width: 1),
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                                                bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                                              ),
+                                            ),
+                                            child: IconButton(
+                                              icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
+                                              onPressed: () async {
+                                                await controller.deleteMedicationSheet(
+                                                    mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
+                                                    dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!);
+                                                controller.filteredDetails!.removeAt(index);
+                                                controller.update();
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          await controller
+                                              .editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                          Get.to(
+                                            AddMedicationScreen(
+                                              selectedMasterIndex: selectedMasterIndex,
+                                              selectedDetailIndex: index,
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.005),
+                                            vertical: getDynamicHeight(size: 0.005),
+                                          ),
+                                          padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
                                           decoration: BoxDecoration(
-                                            color: AppColor.white,
-                                            border: Border.all(color: Colors.grey.shade400, width: 1),
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(getDynamicHeight(size: 0.011)),
-                                              bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
-                                            ),
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
+                                            color: AppColor.primaryColor.withOpacity(0.2),
                                           ),
-                                          child: IconButton(
-                                            icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
-                                            onPressed: () async {
-                                              await controller.deleteMedicationSheet(
-                                                  mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
-                                                  dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!);
-                                              controller.filteredDetails!.removeAt(index);
-                                              controller.update();
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
-                                        Get.to(
-                                          AddMedicationScreen(
-                                            selectedMasterIndex: selectedMasterIndex,
-                                            selectedDetailIndex: index,
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                          horizontal: getDynamicHeight(size: 0.005),
-                                          vertical: getDynamicHeight(size: 0.005),
-                                        ),
-                                        padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColor.black),
-                                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
-                                          color: AppColor.primaryColor.withOpacity(0.2),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w500,
-                                                      fontFamily: CommonFontStyle.plusJakartaSans,
-                                                    ),
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
-                                                  child: Icon(Icons.menu),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: getDynamicHeight(size: 0.003)),
-                                            Visibility(
-                                              visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: 'Remarks: ',
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
                                                       style: TextStyle(
                                                         fontWeight: FontWeight.w500,
                                                         fontFamily: CommonFontStyle.plusJakartaSans,
                                                       ),
                                                     ),
-                                                    TextSpan(
-                                                      text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                                          ? item.remark.toString()
-                                                          : '',
-                                                      style: TextStyle(
-                                                        fontWeight: FontWeight.w400,
-                                                        color: AppColor.black1,
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
+                                                    child: Icon(Icons.menu),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: getDynamicHeight(size: 0.003)),
+                                              Visibility(
+                                                visible:
+                                                    item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                                child: Text.rich(
+                                                  TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Remarks: ',
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w500,
+                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
-                                              child: Text(
-                                                (item.freq1?.isNotEmpty ?? false) ||
-                                                        (item.freq2?.isNotEmpty ?? false) ||
-                                                        (item.freq3?.isNotEmpty ?? false) ||
-                                                        (item.freq4?.isNotEmpty ?? false)
-                                                    ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
-                                                    : '',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColor.black1,
-                                                  fontFamily: CommonFontStyle.plusJakartaSans,
-                                                ),
-                                              ),
-                                            ),
-                                            Visibility(
-                                              visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
-                                              child: Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    const TextSpan(
-                                                      text: 'Flow Rate: ',
-                                                      style: TextStyle(fontWeight: FontWeight.w500),
-                                                    ),
-                                                    TextSpan(
-                                                      text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                          ? item.flowRate.toString()
-                                                          : '',
-                                                      style: TextStyle(
-                                                        fontWeight: FontWeight.w400,
-                                                        color: AppColor.black1,
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
+                                                      TextSpan(
+                                                        text: item.remark.toString().isNotEmpty &&
+                                                                item.remark.toString().toUpperCase() != 'NULL'
+                                                            ? item.remark.toString()
+                                                            : '',
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          color: AppColor.black1,
+                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              Padding(
+                                                padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
+                                                child: Text(
+                                                  (item.freq1?.isNotEmpty ?? false) ||
+                                                          (item.freq2?.isNotEmpty ?? false) ||
+                                                          (item.freq3?.isNotEmpty ?? false) ||
+                                                          (item.freq4?.isNotEmpty ?? false)
+                                                      ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
+                                                      : '',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w400,
+                                                    color: AppColor.black1,
+                                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  ),
+                                                ),
+                                              ),
+                                              Visibility(
+                                                visible:
+                                                    item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
+                                                child: Text.rich(
+                                                  TextSpan(
+                                                    children: [
+                                                      const TextSpan(
+                                                        text: 'Flow Rate: ',
+                                                        style: TextStyle(fontWeight: FontWeight.w500),
+                                                      ),
+                                                      TextSpan(
+                                                        text: item.flowRate.toString().isNotEmpty &&
+                                                                item.flowRate.toString().toUpperCase() != 'NULL'
+                                                            ? item.flowRate.toString()
+                                                            : '',
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.w400,
+                                                          color: AppColor.black1,
+                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         )
                       ],
