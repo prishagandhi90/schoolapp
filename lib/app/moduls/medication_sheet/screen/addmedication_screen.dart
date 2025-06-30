@@ -4,6 +4,7 @@ import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
+import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_font_name.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
@@ -46,220 +47,67 @@ class AddMedicationScreen extends StatelessWidget {
               child: Icon(Icons.arrow_back, color: AppColor.black),
             ),
           ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: SingleChildScrollView(
-                    controller: formScrollController,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.008)),
-                      child: Column(
-                        children: [
-                          CustomTextFormField(
-                            readOnly: true,
-                            minLines: 1,
-                            maxLines: 10,
-                            decoration: InputDecoration(
-                              hintText: controller.nameController.text,
-                              hintStyle: TextStyle(
-                                fontSize: getDynamicHeight(size: 0.015),
-                                color: AppColor.primaryColor,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: CommonFontStyle.plusJakartaSans,
-                              ),
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.012),
-                                vertical: getDynamicHeight(size: 0.010),
-                              ),
-                              filled: true,
-                              fillColor: AppColor.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              disabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
+          body: controller.isLoading
+              ? Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: getDynamicHeight(size: 0.102),
+                  ),
+                  child: Center(child: ProgressWithIcon()),
+                )
+              : SafeArea(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: SingleChildScrollView(
+                          controller: formScrollController,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.008)),
+                            child: Column(
+                              children: [
+                                CustomTextFormField(
+                                  readOnly: true,
+                                  minLines: 1,
+                                  maxLines: 10,
+                                  decoration: InputDecoration(
+                                    hintText: controller.nameController.text,
+                                    hintStyle: TextStyle(
+                                      fontSize: getDynamicHeight(size: 0.015),
+                                      color: AppColor.primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                    ),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.012),
+                                      vertical: getDynamicHeight(size: 0.010),
+                                    ),
+                                    filled: true,
+                                    fillColor: AppColor.white,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
 
-                          /// Medication Type Dropdown
-                          CustomDropdown(
-                            text: AppString.medicationtype,
-                            textStyle: TextStyle(
-                              color: AppColor.grey,
-                              fontFamily: CommonFontStyle.plusJakartaSans,
-                            ),
-                            controller: controller.medicationTypeController,
-                            buttonStyleData: ButtonStyleData(
-                              height: getDynamicHeight(size: 0.048),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                color: AppColor.white,
-                              ),
-                            ),
-                            onChanged: (value) async {
-                              controller.update();
-                            },
-                            items: controller.medicationSheetDropdownTable
-                                .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                      value: {
-                                        'value': item.value ?? '',
-                                        'text': item.name ?? '',
-                                      },
-                                      child: Text(
-                                        item.name ?? '',
-                                        style: AppStyle.black.copyWith(
-                                          // fontSize: 14,
-                                          fontSize: getDynamicHeight(size: 0.016),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ))
-                                .toList(),
-                            width: double.infinity,
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          CustomAutoComplete<SearchserviceModel>(
-                            controller: controller.FormularyMedicinesController,
-                            fromAdmittedScreen: controller.FormularyMedicinesController.text.isNotEmpty ? true : false,
-                            hintText: AppString.formularymedicine,
-                            hintStyle: AppStyle.grey,
-                            isDense: true,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: getDynamicHeight(size: 0.012),
-                              vertical: getDynamicHeight(size: 0.016),
-                            ),
-                            displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                            optionsBuilder: (TextEditingValue textEditingValue) async {
-                              if (textEditingValue.text.trim().isEmpty) {
-                                controller.FormularyMedicines_suggestions.clear();
-                                return const Iterable<SearchserviceModel>.empty();
-                              }
-                              await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
-                              return controller.FormularyMedicines_suggestions;
-                            },
-                            onSelected: (SearchserviceModel selection) {
-                              controller.FormularyMedicinesIDController.text = selection.name ?? '';
-                              controller.FormularyMedicinesController.text = selection.txt ?? '';
-                              controller.update(); // Trigger state update if needed
-                            },
-                            onClearSuggestions: () {
-                              controller.FormularyMedicines_suggestions.clear();
-                            },
-                            onSuffixIconPressed: () {
-                              controller.update(); // Trigger state update if needed
-                            },
-                          ),
-
-                          // Autocomplete<SearchserviceModel>(
-                          //   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                          //   optionsBuilder: (TextEditingValue textEditingValue) async {
-                          //     if (textEditingValue.text.trim().isEmpty) {
-                          //       controller.FormularyMedicines_suggestions.clear();
-                          //       return const Iterable<SearchserviceModel>.empty();
-                          //     }
-                          //     await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
-                          //     return controller.FormularyMedicines_suggestions;
-                          //   },
-                          //   onSelected: (SearchserviceModel selection) {
-                          //     controller.FormularyMedicines_suggestions.clear();
-                          //     controller.update();
-                          //   },
-                          //   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                          //     return CustomTextFormField(
-                          //       controller: nameController,
-                          //       focusNode: focusNode,
-                          //       minLines: 1,
-                          //       maxLines: null,
-                          //       keyboardType: TextInputType.multiline,
-                          //       decoration: InputDecoration(
-                          //         hintText: 'Formulary Medicine',
-                          //         hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                          //         isDense: true,
-                          //         border: OutlineInputBorder(),
-                          //         focusedBorder: OutlineInputBorder(
-                          //           borderSide: BorderSide(
-                          //             // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                          //             width: getDynamicHeight(size: 0.0008),
-                          //           ),
-                          //         ),
-                          //         enabledBorder: OutlineInputBorder(
-                          //           borderRadius: BorderRadius.all(Radius.circular(0)),
-                          //           // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
-                          //         ),
-                          //         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                          //         suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
-                          //             ? IconButton(
-                          //                 icon: Icon(Icons.cancel_outlined, color: AppColor.black),
-                          //                 onPressed: () {
-                          //                   focusNode.unfocus();
-                          //                   controller.FormularyMedicines_suggestions.clear();
-                          //                   nameController.clear();
-                          //                   SchedulerBinding.instance.addPostFrameCallback((_) {
-                          //                     controller.update();
-                          //                   });
-                          //                 },
-                          //               )
-                          //             : null,
-                          //       ),
-                          //       onTapOutside: (event) {
-                          //         focusNode.unfocus();
-                          //       },
-                          //       onFieldSubmitted: (value) {
-                          //         focusNode.unfocus();
-                          //       },
-                          //     );
-                          //   },
-                          // ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          CustomTextFormField(
-                            controller: controller.nonFormularyMedicinesController,
-                            decoration: InputDecoration(
-                              hintText: AppString.nonformularymedicine,
-                              hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.012),
-                                vertical: getDynamicHeight(size: 0.010),
-                              ),
-                              filled: true,
-                              fillColor: AppColor.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.005)),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomDropdown(
-                                  text: AppString.insttyp,
+                                /// Medication Type Dropdown
+                                CustomDropdown(
+                                  text: AppString.medicationtype,
                                   textStyle: TextStyle(
                                     color: AppColor.grey,
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                   ),
-                                  controller: controller.instructionTypeController,
+                                  controller: controller.medicationTypeController,
                                   buttonStyleData: ButtonStyleData(
                                     height: getDynamicHeight(size: 0.048),
                                     decoration: BoxDecoration(
@@ -271,7 +119,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   onChanged: (value) async {
                                     controller.update();
                                   },
-                                  items: controller.instructionTypeDropdownTable
+                                  items: controller.medicationSheetDropdownTable
                                       .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
                                             value: {
                                               'value': item.value ?? '',
@@ -289,514 +137,674 @@ class AddMedicationScreen extends StatelessWidget {
                                       .toList(),
                                   width: double.infinity,
                                 ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.006)),
-                              Expanded(
-                                child: SizedBox(
-                                  height: getDynamicHeight(size: 0.048),
-                                  child: CustomTextFormField(
-                                    controller: controller.doseController,
-                                    decoration: InputDecoration(
-                                      hintText: AppString.dose,
-                                      hintStyle: TextStyle(color: AppColor.grey),
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: getDynamicHeight(size: 0.012),
-                                        vertical: getDynamicHeight(size: 0.014),
-                                      ),
-                                      filled: true,
-                                      fillColor: AppColor.white,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.black),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.black),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                      ),
-                                    ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                CustomAutoComplete<SearchserviceModel>(
+                                  controller: controller.FormularyMedicinesController,
+                                  fromAdmittedScreen: controller.FormularyMedicinesController.text.isNotEmpty ? true : false,
+                                  hintText: AppString.formularymedicine,
+                                  hintStyle: AppStyle.grey,
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: getDynamicHeight(size: 0.012),
+                                    vertical: getDynamicHeight(size: 0.016),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: getDynamicHeight(size: 0.048), // 🔥 Same as dropdown
-                                  child: CustomTextFormField(
-                                    controller: controller.qtyController,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      hintText: AppString.qty,
-                                      hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                                      isDense: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: getDynamicHeight(size: 0.012),
-                                        vertical: getDynamicHeight(size: 0.014),
-                                      ),
-                                      filled: true,
-                                      fillColor: AppColor.white,
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.black),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)), // ✅ Apply radius here
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.black),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                                        borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.006)),
-                              Expanded(
-                                child: CustomDropdown(
-                                  text: AppString.route,
-                                  textStyle: TextStyle(color: AppColor.grey),
-                                  controller: controller.routeController,
-                                  buttonStyleData: ButtonStyleData(
-                                    height: getDynamicHeight(size: 0.048),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColor.black),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                                      color: AppColor.white,
-                                    ),
-                                  ),
-                                  onChanged: (value) async {
-                                    controller.update();
+                                  displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                                  optionsBuilder: (TextEditingValue textEditingValue) async {
+                                    if (textEditingValue.text.trim().isEmpty) {
+                                      controller.FormularyMedicines_suggestions.clear();
+                                      return const Iterable<SearchserviceModel>.empty();
+                                    }
+                                    await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                                    return controller.FormularyMedicines_suggestions;
                                   },
-                                  items: controller.drMedicationRouteDropdownTable
-                                      .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                            value: {
-                                              'value': item.value ?? '',
-                                              'text': item.name ?? '',
-                                            },
-                                            child: Text(
-                                              item.name ?? '',
-                                              style: AppStyle.black.copyWith(
-                                                // fontSize: 14,
-                                                fontSize: getDynamicHeight(size: 0.016),
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  width: double.infinity,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          CustomTextFormField(
-                            controller: controller.remarksController,
-                            minLines: 1,
-                            maxLines: 10,
-                            decoration: InputDecoration(
-                              hintText: AppString.remarks,
-                              hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.012),
-                                vertical: getDynamicHeight(size: 0.014),
-                              ),
-                              filled: true,
-                              fillColor: AppColor.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomDropdown(
-                                  text: AppString.morning,
-                                  textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                                  controller: controller.FreqMorningController,
-                                  buttonStyleData: ButtonStyleData(
-                                    height: getDynamicHeight(size: 0.046),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColor.black),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                                      color: AppColor.white,
-                                    ),
-                                  ),
-                                  onChanged: (value) async {
-                                    controller.update();
+                                  onSelected: (SearchserviceModel selection) {
+                                    controller.FormularyMedicinesIDController.text = selection.name ?? '';
+                                    controller.FormularyMedicinesController.text = selection.txt ?? '';
+                                    controller.update(); // Trigger state update if needed
                                   },
-                                  items: controller.drMedicationFreqDropdownTable
-                                      .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                            value: {
-                                              'value': item.value ?? '',
-                                              'text': item.name ?? '',
-                                            },
-                                            child: Text(
-                                              item.name ?? '',
-                                              style: AppStyle.black.copyWith(
-                                                // fontSize: 14,
-                                                fontSize: getDynamicHeight(size: 0.016),
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  width: double.infinity,
-                                ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.004)), // spacing between dropdowns
-                              Expanded(
-                                child: CustomDropdown(
-                                  text: AppString.afternoon,
-                                  textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
-                                  controller: controller.FreqAfternoonController,
-                                  buttonStyleData: ButtonStyleData(
-                                    height: getDynamicHeight(size: 0.046),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColor.black),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                                      color: AppColor.white,
-                                    ),
-                                  ),
-                                  onChanged: (value) async {
-                                    controller.update();
+                                  onClearSuggestions: () {
+                                    controller.FormularyMedicines_suggestions.clear();
                                   },
-                                  items: controller.drMedicationFreqDropdownTable
-                                      .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                            value: {
-                                              'value': item.value ?? '',
-                                              'text': item.name ?? '',
-                                            },
-                                            child: Text(
-                                              item.name ?? '',
-                                              style: AppStyle.black.copyWith(
-                                                // fontSize: 14,
-                                                fontSize: getDynamicHeight(size: 0.016),
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  width: double.infinity,
-                                ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.004)),
-                              Expanded(
-                                child: CustomDropdown(
-                                  text: AppString.evening,
-                                  textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
-                                  controller: controller.FreqEveningController,
-                                  buttonStyleData: ButtonStyleData(
-                                    height: getDynamicHeight(size: 0.046),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColor.black),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                                      color: AppColor.white,
-                                    ),
-                                  ),
-                                  onChanged: (value) async {
-                                    controller.update();
+                                  onSuffixIconPressed: () {
+                                    controller.update(); // Trigger state update if needed
                                   },
-                                  items: controller.drMedicationFreqDropdownTable
-                                      .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                            value: {
-                                              'value': item.value ?? '',
-                                              'text': item.name ?? '',
-                                            },
-                                            child: Text(
-                                              item.name ?? '',
-                                              style: AppStyle.black.copyWith(
-                                                // fontSize: 14,
-                                                fontSize: getDynamicHeight(size: 0.016),
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  width: double.infinity,
                                 ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.004)),
-                              Expanded(
-                                child: CustomDropdown(
-                                  text: AppString.night,
-                                  textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
-                                  controller: controller.FreqNightController,
-                                  buttonStyleData: ButtonStyleData(
-                                    height: getDynamicHeight(size: 0.046),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColor.black),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                                      color: AppColor.white,
-                                    ),
-                                  ),
-                                  onChanged: (value) async {
-                                    controller.update();
-                                  },
-                                  items: controller.drMedicationFreqDropdownTable
-                                      .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                            value: {
-                                              'value': item.value ?? '',
-                                              'text': item.name ?? '',
-                                            },
-                                            child: Text(
-                                              item.name ?? '',
-                                              style: AppStyle.black.copyWith(
-                                                // fontSize: 14,
-                                                fontSize: getDynamicHeight(size: 0.016),
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  width: double.infinity,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          CustomTextFormField(
-                            controller: controller.daysController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              hintText: AppString.days,
-                              hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.012),
-                                vertical: getDynamicHeight(size: 0.010),
-                              ),
-                              filled: true,
-                              fillColor: AppColor.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 6),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: CustomDatePicker(
-                                  dateController: controller.stopDateController,
-                                  style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
-                                  hintText: AppString.selectdate,
+
+                                // Autocomplete<SearchserviceModel>(
+                                //   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                                //   optionsBuilder: (TextEditingValue textEditingValue) async {
+                                //     if (textEditingValue.text.trim().isEmpty) {
+                                //       controller.FormularyMedicines_suggestions.clear();
+                                //       return const Iterable<SearchserviceModel>.empty();
+                                //     }
+                                //     await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                                //     return controller.FormularyMedicines_suggestions;
+                                //   },
+                                //   onSelected: (SearchserviceModel selection) {
+                                //     controller.FormularyMedicines_suggestions.clear();
+                                //     controller.update();
+                                //   },
+                                //   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                                //     return CustomTextFormField(
+                                //       controller: nameController,
+                                //       focusNode: focusNode,
+                                //       minLines: 1,
+                                //       maxLines: null,
+                                //       keyboardType: TextInputType.multiline,
+                                //       decoration: InputDecoration(
+                                //         hintText: 'Formulary Medicine',
+                                //         hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                //         isDense: true,
+                                //         border: OutlineInputBorder(),
+                                //         focusedBorder: OutlineInputBorder(
+                                //           borderSide: BorderSide(
+                                //             // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                                //             width: getDynamicHeight(size: 0.0008),
+                                //           ),
+                                //         ),
+                                //         enabledBorder: OutlineInputBorder(
+                                //           borderRadius: BorderRadius.all(Radius.circular(0)),
+                                //           // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                //         ),
+                                //         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                //         suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                                //             ? IconButton(
+                                //                 icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                                //                 onPressed: () {
+                                //                   focusNode.unfocus();
+                                //                   controller.FormularyMedicines_suggestions.clear();
+                                //                   nameController.clear();
+                                //                   SchedulerBinding.instance.addPostFrameCallback((_) {
+                                //                     controller.update();
+                                //                   });
+                                //                 },
+                                //               )
+                                //             : null,
+                                //       ),
+                                //       onTapOutside: (event) {
+                                //         focusNode.unfocus();
+                                //       },
+                                //       onFieldSubmitted: (value) {
+                                //         focusNode.unfocus();
+                                //       },
+                                //     );
+                                //   },
+                                // ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                CustomTextFormField(
+                                  controller: controller.nonFormularyMedicinesController,
                                   decoration: InputDecoration(
+                                    hintText: AppString.nonformularymedicine,
+                                    hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                    isDense: true,
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: getDynamicHeight(size: 0.012),
-                                      vertical: getDynamicHeight(size: 0.011),
+                                      vertical: getDynamicHeight(size: 0.010),
+                                    ),
+                                    filled: true,
+                                    fillColor: AppColor.white,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColor.black1),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: AppColor.black1),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(Icons.calendar_today),
-                                      onPressed: () async {
-                                        final pickedDate = await showDatePicker(
-                                          context: context,
-                                          // initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2100),
-                                        );
-
-                                        if (pickedDate != null) {
-                                          final formattedDate =
-                                              "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                                          controller.stopDateController.text = formattedDate;
-                                        }
-                                        FocusScope.of(context).unfocus();
-                                      },
+                                      borderSide: BorderSide(color: AppColor.black, width: 1.5),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(width: getDynamicHeight(size: 0.004)),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () async {
-                                    final time = await showTimePicker(
-                                      context: context,
-                                      initialTime: controller.stopTime ?? TimeOfDay.now(), // fallback agar null hai
-                                    );
-                                    if (time != null) {
-                                      controller.stopTime = time;
-                                      controller.update();
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.008),
-                                      vertical: getDynamicHeight(size: 0.012),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: AppColor.black1),
-                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.004)),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          controller.stopTime != null
-                                              ? controller.stopTime!.format(context) // 🛑 ! lagaya hai, null nahi hai is point pe
-                                              : AppString.selecttime,
-                                          style: TextStyle(
-                                            color: controller.stopTime != null ? AppColor.black : AppColor.grey,
+                                SizedBox(height: getDynamicHeight(size: 0.005)),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomDropdown(
+                                        text: AppString.insttyp,
+                                        textStyle: TextStyle(
+                                          color: AppColor.grey,
+                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                        ),
+                                        controller: controller.instructionTypeController,
+                                        buttonStyleData: ButtonStyleData(
+                                          height: getDynamicHeight(size: 0.048),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            color: AppColor.white,
                                           ),
                                         ),
-                                        SizedBox(width: getDynamicHeight(size: 0.008)),
-                                        Icon(Icons.timer_outlined),
-                                      ],
+                                        onChanged: (value) async {
+                                          controller.update();
+                                        },
+                                        items: controller.instructionTypeDropdownTable
+                                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                                  value: {
+                                                    'value': item.value ?? '',
+                                                    'text': item.name ?? '',
+                                                  },
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: AppStyle.black.copyWith(
+                                                      // fontSize: 14,
+                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.006)),
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: getDynamicHeight(size: 0.048),
+                                        child: CustomTextFormField(
+                                          controller: controller.doseController,
+                                          decoration: InputDecoration(
+                                            hintText: AppString.dose,
+                                            hintStyle: TextStyle(color: AppColor.grey),
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.symmetric(
+                                              horizontal: getDynamicHeight(size: 0.012),
+                                              vertical: getDynamicHeight(size: 0.014),
+                                            ),
+                                            filled: true,
+                                            fillColor: AppColor.white,
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppColor.black),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppColor.black),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: getDynamicHeight(size: 0.048), // 🔥 Same as dropdown
+                                        child: CustomTextFormField(
+                                          controller: controller.qtyController,
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            hintText: AppString.qty,
+                                            hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.symmetric(
+                                              horizontal: getDynamicHeight(size: 0.012),
+                                              vertical: getDynamicHeight(size: 0.014),
+                                            ),
+                                            filled: true,
+                                            fillColor: AppColor.white,
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppColor.black),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)), // ✅ Apply radius here
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppColor.black),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(color: AppColor.black, width: 1.5),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.006)),
+                                    Expanded(
+                                      child: CustomDropdown(
+                                        text: AppString.route,
+                                        textStyle: TextStyle(color: AppColor.grey),
+                                        controller: controller.routeController,
+                                        buttonStyleData: ButtonStyleData(
+                                          height: getDynamicHeight(size: 0.048),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                            color: AppColor.white,
+                                          ),
+                                        ),
+                                        onChanged: (value) async {
+                                          controller.update();
+                                        },
+                                        items: controller.drMedicationRouteDropdownTable
+                                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                                  value: {
+                                                    'value': item.value ?? '',
+                                                    'text': item.name ?? '',
+                                                  },
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: AppStyle.black.copyWith(
+                                                      // fontSize: 14,
+                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                CustomTextFormField(
+                                  controller: controller.remarksController,
+                                  minLines: 1,
+                                  maxLines: 10,
+                                  decoration: InputDecoration(
+                                    hintText: AppString.remarks,
+                                    hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.012),
+                                      vertical: getDynamicHeight(size: 0.014),
+                                    ),
+                                    filled: true,
+                                    fillColor: AppColor.white,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black, width: 1.5),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                          SizedBox(height: getDynamicHeight(size: 0.006)),
-                          CustomTextFormField(
-                            controller: controller.flowRateController,
-                            decoration: InputDecoration(
-                              hintText: AppString.flowrate,
-                              hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
-                              isDense: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.012),
-                                vertical: getDynamicHeight(size: 0.014),
-                              ),
-                              filled: true,
-                              fillColor: AppColor.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColor.black, width: 1.5),
-                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
-                              ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomDropdown(
+                                        text: AppString.morning,
+                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                        controller: controller.FreqMorningController,
+                                        buttonStyleData: ButtonStyleData(
+                                          height: getDynamicHeight(size: 0.046),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                            color: AppColor.white,
+                                          ),
+                                        ),
+                                        onChanged: (value) async {
+                                          controller.update();
+                                        },
+                                        items: controller.drMedicationFreqDropdownTable
+                                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                                  value: {
+                                                    'value': item.value ?? '',
+                                                    'text': item.name ?? '',
+                                                  },
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: AppStyle.black.copyWith(
+                                                      // fontSize: 14,
+                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.004)), // spacing between dropdowns
+                                    Expanded(
+                                      child: CustomDropdown(
+                                        text: AppString.afternoon,
+                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
+                                        controller: controller.FreqAfternoonController,
+                                        buttonStyleData: ButtonStyleData(
+                                          height: getDynamicHeight(size: 0.046),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                            color: AppColor.white,
+                                          ),
+                                        ),
+                                        onChanged: (value) async {
+                                          controller.update();
+                                        },
+                                        items: controller.drMedicationFreqDropdownTable
+                                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                                  value: {
+                                                    'value': item.value ?? '',
+                                                    'text': item.name ?? '',
+                                                  },
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: AppStyle.black.copyWith(
+                                                      // fontSize: 14,
+                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.004)),
+                                    Expanded(
+                                      child: CustomDropdown(
+                                        text: AppString.evening,
+                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
+                                        controller: controller.FreqEveningController,
+                                        buttonStyleData: ButtonStyleData(
+                                          height: getDynamicHeight(size: 0.046),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                            color: AppColor.white,
+                                          ),
+                                        ),
+                                        onChanged: (value) async {
+                                          controller.update();
+                                        },
+                                        items: controller.drMedicationFreqDropdownTable
+                                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                                  value: {
+                                                    'value': item.value ?? '',
+                                                    'text': item.name ?? '',
+                                                  },
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: AppStyle.black.copyWith(
+                                                      // fontSize: 14,
+                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.004)),
+                                    Expanded(
+                                      child: CustomDropdown(
+                                        text: AppString.night,
+                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey),
+                                        controller: controller.FreqNightController,
+                                        buttonStyleData: ButtonStyleData(
+                                          height: getDynamicHeight(size: 0.046),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                            color: AppColor.white,
+                                          ),
+                                        ),
+                                        onChanged: (value) async {
+                                          controller.update();
+                                        },
+                                        items: controller.drMedicationFreqDropdownTable
+                                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                                  value: {
+                                                    'value': item.value ?? '',
+                                                    'text': item.name ?? '',
+                                                  },
+                                                  child: Text(
+                                                    item.name ?? '',
+                                                    style: AppStyle.black.copyWith(
+                                                      // fontSize: 14,
+                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                        width: double.infinity,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                CustomTextFormField(
+                                  controller: controller.daysController,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    hintText: AppString.days,
+                                    hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.012),
+                                      vertical: getDynamicHeight(size: 0.010),
+                                    ),
+                                    filled: true,
+                                    fillColor: AppColor.white,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black, width: 1.5),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomDatePicker(
+                                        dateController: controller.stopDateController,
+                                        style: TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
+                                        hintText: AppString.selectdate,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.012),
+                                            vertical: getDynamicHeight(size: 0.011),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppColor.black1),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: AppColor.black1),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                                          ),
+                                          suffixIcon: IconButton(
+                                            icon: const Icon(Icons.calendar_today),
+                                            onPressed: () async {
+                                              final pickedDate = await showDatePicker(
+                                                context: context,
+                                                // initialDate: DateTime.now(),
+                                                firstDate: DateTime(2000),
+                                                lastDate: DateTime(2100),
+                                              );
+
+                                              if (pickedDate != null) {
+                                                final formattedDate =
+                                                    "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                                controller.stopDateController.text = formattedDate;
+                                              }
+                                              FocusScope.of(context).unfocus();
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: getDynamicHeight(size: 0.004)),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final time = await showTimePicker(
+                                            context: context,
+                                            initialTime: controller.stopTime ?? TimeOfDay.now(), // fallback agar null hai
+                                          );
+                                          if (time != null) {
+                                            controller.stopTime = time;
+                                            controller.update();
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: getDynamicHeight(size: 0.008),
+                                            vertical: getDynamicHeight(size: 0.012),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black1),
+                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.004)),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                controller.stopTime != null
+                                                    ? controller.stopTime!.format(context) // 🛑 ! lagaya hai, null nahi hai is point pe
+                                                    : AppString.selecttime,
+                                                style: TextStyle(
+                                                  color: controller.stopTime != null ? AppColor.black : AppColor.grey,
+                                                ),
+                                              ),
+                                              SizedBox(width: getDynamicHeight(size: 0.008)),
+                                              Icon(Icons.timer_outlined),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(height: getDynamicHeight(size: 0.006)),
+                                CustomTextFormField(
+                                  controller: controller.flowRateController,
+                                  decoration: InputDecoration(
+                                    hintText: AppString.flowrate,
+                                    hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.012),
+                                      vertical: getDynamicHeight(size: 0.014),
+                                    ),
+                                    filled: true,
+                                    fillColor: AppColor.white,
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: AppColor.black, width: 1.5),
+                                      borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: getDynamicHeight(size: 0.01)),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.teal,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006))),
+                                  ),
+                                  onPressed: () async {
+                                    await controller.saveAddMedication(selectedMasterIndex, selectedDetailIndex);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.02),
+                                      vertical: getDynamicHeight(size: 0.010),
+                                    ),
+                                    child: Text(AppString.save1,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColor.white,
+                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                        )),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(height: getDynamicHeight(size: 0.01)),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.teal,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006))),
-                            ),
-                            onPressed: () async {
-                              await controller.saveAddMedication(selectedMasterIndex, selectedDetailIndex);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: getDynamicHeight(size: 0.02),
-                                vertical: getDynamicHeight(size: 0.010),
-                              ),
-                              child: Text(AppString.save1,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColor.white,
-                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                  )),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: AppColor.black,
-                  thickness: 1,
-                ),
-                // Added Medication Title
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: getDynamicHeight(size: 0.012),
-                    vertical: getDynamicHeight(size: 0.008),
-                  ),
-                  child: Text(
-                    "Added Medication (${controller.drTreatMasterList[selectedMasterIndex].detail!.length})",
-                    style: TextStyle(
-                      color: AppColor.teal,
-                      fontWeight: FontWeight.bold,
-                      fontSize: getDynamicHeight(size: 0.018),
-                      fontFamily: CommonFontStyle.plusJakartaSans,
-                    ),
-                  ),
-                ),
-                // Medication List
-                Expanded(
-                  flex: 1,
-                  child: Scrollbar(
-                    controller: listScrollController,
-                    child: ListView.separated(
-                      controller: listScrollController,
-                      shrinkWrap: true,
-                      itemCount: controller.drTreatMasterList[selectedMasterIndex].detail!.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.drTreatMasterList[selectedMasterIndex].detail![index];
-                        return ListTile(
-                          visualDensity: VisualDensity(vertical: -4), // 🔥 this removes extra vertical space
-                          // dense: true,
-                          title: Text(
-                            "${index + 1}. ${item.itemName?.txt ?? ''}",
-                            style: TextStyle(
-                              fontFamily: CommonFontStyle.plusJakartaSans,
-                              fontSize: getDynamicHeight(size: 0.014),
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(
-                        color: Colors.grey.shade400,
-                        endIndent: 8,
-                        indent: 8,
+                      Divider(
+                        color: AppColor.black,
                         thickness: 1,
-                        height: 0, // zero gap if you want tight spacing
                       ),
-                    ),
+                      // Added Medication Title
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: getDynamicHeight(size: 0.012),
+                          vertical: getDynamicHeight(size: 0.008),
+                        ),
+                        child: Text(
+                          "Added Medication (${controller.drTreatMasterList[selectedMasterIndex].detail!.length})",
+                          style: TextStyle(
+                            color: AppColor.teal,
+                            fontWeight: FontWeight.bold,
+                            fontSize: getDynamicHeight(size: 0.018),
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                          ),
+                        ),
+                      ),
+                      // Medication List
+                      Expanded(
+                        flex: 1,
+                        child: Scrollbar(
+                          controller: listScrollController,
+                          child: ListView.separated(
+                            controller: listScrollController,
+                            shrinkWrap: true,
+                            itemCount: controller.drTreatMasterList[selectedMasterIndex].detail!.length,
+                            itemBuilder: (context, index) {
+                              final item = controller.drTreatMasterList[selectedMasterIndex].detail![index];
+                              return ListTile(
+                                visualDensity: VisualDensity(vertical: -4), // 🔥 this removes extra vertical space
+                                // dense: true,
+                                title: Text(
+                                  "${index + 1}. ${item.itemName?.txt ?? ''}",
+                                  style: TextStyle(
+                                    fontFamily: CommonFontStyle.plusJakartaSans,
+                                    fontSize: getDynamicHeight(size: 0.014),
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(
+                              color: Colors.grey.shade400,
+                              endIndent: 8,
+                              indent: 8,
+                              thickness: 1,
+                              height: 0, // zero gap if you want tight spacing
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
           bottomNavigationBar: Padding(
             padding: EdgeInsets.all(getDynamicHeight(size: 0.008)),
             child: Row(
