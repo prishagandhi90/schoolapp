@@ -148,8 +148,6 @@ class MedicationsheetController extends GetxController {
   Future<List<SearchserviceModel>> getFormularyMedicines_AutoComplete(String flag) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
-      isLoading = true;
-      update();
       String url = ConstApiUrl.empMedicationSheet_SearchMedicinesAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -181,10 +179,7 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
-    } finally {
-      isLoading = false;
-      update();
-    }
+    } finally {}
 
     return searchService.toList();
   }

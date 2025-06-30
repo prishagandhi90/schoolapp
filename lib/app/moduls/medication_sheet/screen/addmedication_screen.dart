@@ -140,7 +140,8 @@ class AddMedicationScreen extends StatelessWidget {
                                 SizedBox(height: getDynamicHeight(size: 0.006)),
                                 CustomAutoComplete<SearchserviceModel>(
                                   controller: controller.FormularyMedicinesController,
-                                  fromAdmittedScreen: controller.FormularyMedicinesController.text.isNotEmpty ? true : false,
+                                  // fromAdmittedScreen: controller.FormularyMedicinesController.text.isNotEmpty ? true : false,
+                                  fromAdmittedScreen: controller.fromAdmittedScreen,
                                   hintText: AppString.formularymedicine,
                                   hintStyle: AppStyle.grey,
                                   isDense: true,
