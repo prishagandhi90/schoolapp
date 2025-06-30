@@ -4,20 +4,27 @@ import 'package:emp_app/app/app_custom_widget/common_methods.dart';
 import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
+import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class MedicationScreen extends StatelessWidget {
   MedicationScreen({Key? key}) : super(key: key);
+  final dashboardController = Get.isRegistered<DashboardController>() ? Get.find<DashboardController>() : Get.put(DashboardController());
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +39,72 @@ class MedicationScreen extends StatelessWidget {
             centerTitle: true,
             actions: [
               Padding(
-                padding: EdgeInsets.only(right: 8), // optional right space from screen edge
+                padding: EdgeInsets.only(right: 13),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildTightIcon(Icons.filter_alt, onTap: () {
-                      controller.showSortFilterBottomSheet(context);
-                    }),
-                    _buildTightIcon(Icons.notifications_none, onTap: () {}),
+                    // Filter icon
+                    GestureDetector(
+                      onTap: () {
+                        controller.showSortFilterBottomSheet(context);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 10), // 👈 Minimal spacing between icons
+                        child: Icon(
+                          Icons.filter_alt,
+                          color: AppColor.black,
+                          size: getDynamicHeight(size: 0.024),
+                        ),
+                      ),
+                    ),
+                    // Notification icon with badge
+                    GestureDetector(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: NotificationScreen(),
+                          withNavBar: false,
+                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        ).then((value) async {
+                          Get.back();
+                          await dashboardController.getDashboardDataUsingToken();
+                          var bottomBarController = Get.find<BottomBarController>();
+                          bottomBarController.currentIndex.value = 0;
+                          bottomBarController.persistentController.value.index = 0;
+                          bottomBarController.isIPDHome.value = true;
+                          hideBottomBar.value = false;
+                        });
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Image.asset(
+                            AppImage.notification,
+                            width: getDynamicHeight(size: 0.022),
+                          ),
+                          if (dashboardController.notificationCount != "0")
+                            Positioned(
+                              right: -2,
+                              top: -6,
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Text(
+                                  dashboardController.notificationCount,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -431,20 +496,6 @@ class MedicationScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildTightIcon(IconData icon, {VoidCallback? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 6), // 👈 minimum space between icons
-        child: Icon(
-          icon,
-          color: AppColor.black,
-          size: getDynamicHeight(size: 0.024),
-        ),
-      ),
     );
   }
 }
