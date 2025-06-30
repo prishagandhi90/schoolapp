@@ -77,6 +77,7 @@ class AdPatientController extends GetxController {
   List<ModuleScreenRights> screenRightsTable = [];
   String FromScreen_Redirection = "";
   String WebLoginUser = "";
+  var isPatientCardClicked = false;
 
   @override
   void onInit() {

@@ -146,6 +146,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empMedicationSheet_SearchMedicinesAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -158,7 +159,6 @@ class MedicationsheetController extends GetxController {
       if (responseSearchService.statusCode == 200) {
         // searchService.clear();
         searchService.assignAll(responseSearchService.data ?? []);
-        isLoading = false;
       } else if (responseSearchService.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -168,7 +168,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -179,8 +178,11 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
+
     return searchService.toList();
   }
 
@@ -188,6 +190,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empSearchServiceAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -200,7 +203,6 @@ class MedicationsheetController extends GetxController {
       if (responseSearchService.statusCode == 200) {
         // searchService.clear();
         searchService.assignAll(responseSearchService.data ?? []);
-        isLoading = false;
       } else if (responseSearchService.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -210,7 +212,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -221,8 +222,10 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
     return searchService.toList();
   }
 
@@ -294,6 +297,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empDoctorTreatmentMasterAPI;
       String loginId = pref.getString(AppString.keyLoginId) ?? "";
       String empId = pref.getString(AppString.keyEmpId) ?? "";
@@ -313,7 +317,6 @@ class MedicationsheetController extends GetxController {
           }
           filteredDetails = drTreatMasterList[selectedMasterIndex].detail; // by default all
         } else {}
-        update();
       } else if (resp_DrTreatmentMst.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -323,7 +326,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Something went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -334,8 +336,11 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
+
     return [];
   }
 
@@ -364,6 +369,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empSpecialOrderListAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -377,7 +383,6 @@ class MedicationsheetController extends GetxController {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           specialDropdownMultifieldsTable = dropdownMuliFieldsData.data!;
         } else {}
-        update();
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -387,7 +392,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -398,8 +402,10 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
     return [];
   }
 
@@ -421,7 +427,6 @@ class MedicationsheetController extends GetxController {
         if (dropdownData.data != null && dropdownData.data!.isNotEmpty) {
           templatedropdownTable = dropdownData.data!;
         } else {}
-        update();
       } else if (dropdownData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -431,7 +436,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -442,8 +446,10 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
     return [];
   }
 
@@ -451,6 +457,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empGetMedicationTypeAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -464,7 +471,6 @@ class MedicationsheetController extends GetxController {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           medicationSheetDropdownTable = dropdownMuliFieldsData.data!;
         } else {}
-        update();
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -474,7 +480,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -485,8 +490,11 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
+
     return [];
   }
 
@@ -494,6 +502,7 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
       String url = ConstApiUrl.empGetInstructionTypeAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -507,7 +516,6 @@ class MedicationsheetController extends GetxController {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           instructionTypeDropdownTable = dropdownMuliFieldsData.data!;
         } else {}
-        update();
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -517,7 +525,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -528,8 +535,11 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
+
     return [];
   }
 
@@ -537,6 +547,8 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
+
       String url = ConstApiUrl.empGetDrTreatRouteAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -550,7 +562,6 @@ class MedicationsheetController extends GetxController {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           drMedicationRouteDropdownTable = dropdownMuliFieldsData.data!;
         } else {}
-        update();
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -560,7 +571,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -571,8 +581,11 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
+
     return [];
   }
 
@@ -580,6 +593,8 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
+
       String url = ConstApiUrl.empGetDrTreatFrequencyAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
@@ -593,7 +608,6 @@ class MedicationsheetController extends GetxController {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           drMedicationFreqDropdownTable = dropdownMuliFieldsData.data!;
         } else {}
-        update();
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -603,7 +617,6 @@ class MedicationsheetController extends GetxController {
       } else {
         Get.rawSnackbar(message: "Somethin g went wrong");
       }
-      update();
     } catch (e) {
       isLoading = false;
       update();
@@ -614,8 +627,11 @@ class MedicationsheetController extends GetxController {
         tokenNo: pref.getString(AppString.keyToken) ?? '',
         empID: pref.getString(AppString.keyEmpId) ?? '',
       );
+    } finally {
+      isLoading = false;
+      update();
     }
-    isLoading = false;
+
     return [];
   }
 
@@ -660,6 +676,8 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update();
+
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
       empId = await pref.getString(AppString.keyEmpId) ?? "";
@@ -738,7 +756,6 @@ class MedicationsheetController extends GetxController {
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
         Get.rawSnackbar(message: responseData.message ?? 'Data saved successfully');
-        update();
       } else if (responseData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -860,11 +877,10 @@ class MedicationsheetController extends GetxController {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
+      update(); // loading true
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
       empId = await pref.getString(AppString.keyEmpId) ?? "";
-
-      update(); // loading true
 
       String url = ConstApiUrl.empDeleteMedicationSheetAPI;
 

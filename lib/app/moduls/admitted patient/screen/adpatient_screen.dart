@@ -253,8 +253,7 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter,
-                                              height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -404,32 +403,23 @@ class AdpatientScreen extends StatelessWidget {
   Widget _buildPatientCard(int index, BuildContext context, AdPatientController controller) {
     return controller.filterpatientsData.isNotEmpty
         ? InkWell(
-            onTap: () async {
+            onTap: () {
               if (controller.FromScreen_Redirection.toUpperCase() == "INVESTIGATION REQUISITION" && controller.WebLoginUser.trim() != "") {
                 TapToRedirectToInvestigationScreen(
                   controller: controller,
                   index: index,
                 );
               } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser.trim() != "") {
+                if (controller.isPatientCardClicked) return;
+                controller.isPatientCardClicked = true;
                 final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
-                await medicationsheetController.fetchDrTreatmentData(
-                    ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
+                medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
                 TapToRedirectToMedicationScreen(
                   controller: controller,
                   index: index,
                 );
-                return;
-                // medicationsheetController.ipdNo = controller.filterpatientsData[index].ipdNo ?? '';
-                // // await medicationsheetController.fetchSpecialOrderList();
-                // await medicationsheetController.fetchDrTreatmentData(ipdNo: controller.filterpatientsData[index].ipdNo.toString(), treatTyp: 'Medication Sheet');
-                // Get.to(() => MedicationScreen())?.then((value) async {
-                //   final controller = Get.put(InvestRequisitController());
-                //   await controller.resetForm();
-                //   hideBottomBar.value = false;
-
-                //   var dashboardController = Get.put(DashboardController());
-                //   await dashboardController.getDashboardDataUsingToken();
-                // });
+                controller.isPatientCardClicked = false;
+                controller.update();
               }
             },
             child: Card(
