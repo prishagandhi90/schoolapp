@@ -11,6 +11,7 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
   final String hintText;
+  final bool fromAdmittedScreen;
   final VoidCallback? onSuffixIconPressed;
   final VoidCallback? onClearSuggestions; // Add callback to clear suggestions
   final int? minLines;
@@ -34,6 +35,7 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
     this.hintStyle,
     this.contentPadding,
     this.isDense,
+    this.fromAdmittedScreen = false,
   }) : super(key: key);
 
   @override
@@ -50,13 +52,13 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
       },
       fieldViewBuilder: (context, textEditingController, localFocusNode, onEditingComplete) {
         // Sync the provided controller with the Autocomplete's controller
-        if (controller != textEditingController && controller.text.isNotEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (textEditingController.text != controller.text) {
-              textEditingController.text = controller.text;
-            }
-          });
-        }
+        // if (controller != textEditingController && controller.text.isNotEmpty) {
+        //   WidgetsBinding.instance.addPostFrameCallback((_) {
+        //     if (textEditingController.text != controller.text) {
+        //       textEditingController.text = controller.text;
+        //     }
+        //   });
+        // }
 
         // if (controller != textEditingController) {
         //   textEditingController.text = controller.text;
@@ -71,23 +73,27 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
         //     }
         //   });
         // }
+
+        final effectiveController = controller.text.isNotEmpty && fromAdmittedScreen ? controller : textEditingController;
         return Container(
           child: CustomTextFormField(
-            controller: textEditingController, // Use Autocomplete's controller
+            controller: effectiveController,
             minLines: minLines,
             maxLines: maxLines,
-            focusNode: focusNode ?? localFocusNode, // Use provided or Autocomplete's focus node
+            // focusNode: focusNode ?? localFocusNode, // Use provided or Autocomplete's focus node
+            focusNode: localFocusNode,
             contentPadding: contentPadding,
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: hintStyle,
               isDense: isDense,
               prefixIcon: Icon(Icons.search, color: AppColor.grey),
-              suffixIcon: textEditingController.text.isNotEmpty
+              suffixIcon: textEditingController.text.isNotEmpty || controller.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(Icons.cancel_outlined, color: AppColor.black),
                       onPressed: () {
                         textEditingController.clear();
+                        controller.clear();
                         if (onSuffixIconPressed != null) {
                           onSuffixIconPressed!();
                         }
