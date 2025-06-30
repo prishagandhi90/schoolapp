@@ -479,7 +479,6 @@ class MedicationScreen extends StatelessWidget {
               if (controller.isPlusBtnclicked) return;
               controller.isPlusBtnclicked = true;
               controller.isTemplateVisible = true;
-              controller.update();
               controller.showMedicationDialog(context, -1);
               controller.isPlusBtnclicked = false;
             },
