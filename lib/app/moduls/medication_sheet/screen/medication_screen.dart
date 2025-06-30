@@ -369,10 +369,18 @@ class MedicationScreen extends StatelessWidget {
                                   ],
                                 ),
                                 child: GestureDetector(
-                                  onTap: () => Get.to(AddMedicationScreen(
-                                    selectedMasterIndex: index,
-                                    selectedDetailIndex: -1,
-                                  )),
+                                  onTap: () async {
+                                    controller.isLoading = true;
+                                    controller.update();
+                                    Get.to(
+                                      AddMedicationScreen(
+                                        selectedMasterIndex: index,
+                                        selectedDetailIndex: -1,
+                                      ),
+                                    );
+                                    controller.isLoading = false;
+                                    controller.update();
+                                  },
                                   child: Container(
                                     // margin: EdgeInsets.symmetric(vertical: 6),
                                     padding: EdgeInsets.symmetric(
@@ -414,10 +422,13 @@ class MedicationScreen extends StatelessWidget {
                                         Row(
                                           children: [
                                             GestureDetector(
-                                                onTap: () {
+                                                onTap: () async {
+                                                  controller.isLoading = true;
+                                                  controller.update();
                                                   controller.filteredDetails = controller.drTreatMasterList[index].detail;
                                                   controller.selectedMasterIndex = index;
                                                   controller.searchController.clear();
+                                                  controller.isLoading = false;
                                                   controller.update();
                                                   Get.to(ViewMedicationScreen(
                                                     selectedMasterIndex: index,
