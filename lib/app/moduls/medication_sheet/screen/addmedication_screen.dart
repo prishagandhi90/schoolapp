@@ -18,8 +18,12 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:get/get.dart';
 
 class AddMedicationScreen extends StatelessWidget {
-  int selectedIndex;
-  AddMedicationScreen({Key? key, required this.selectedIndex}) : super(key: key);
+  int selectedMasterIndex, selectedDetailIndex;
+  AddMedicationScreen({
+    Key? key,
+    required this.selectedMasterIndex,
+    required this.selectedDetailIndex,
+  }) : super(key: key);
 
   final ScrollController formScrollController = ScrollController();
   final ScrollController listScrollController = ScrollController();
@@ -87,6 +91,7 @@ class AddMedicationScreen extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: getDynamicHeight(size: 0.006)),
+
                           /// Medication Type Dropdown
                           CustomDropdown(
                             text: AppString.medicationtype,
@@ -324,6 +329,7 @@ class AddMedicationScreen extends StatelessWidget {
                                 child: SizedBox(
                                   height: getDynamicHeight(size: 0.048), // 🔥 Same as dropdown
                                   child: CustomTextFormField(
+                                    controller: controller.qtyController,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       hintText: AppString.qty,
@@ -424,10 +430,7 @@ class AddMedicationScreen extends StatelessWidget {
                               Expanded(
                                 child: CustomDropdown(
                                   text: AppString.morning,
-                                  textStyle: TextStyle(
-                                      fontSize: getDynamicHeight(size: 0.013),
-                                      color: AppColor.grey,
-                                      fontFamily: CommonFontStyle.plusJakartaSans),
+                                  textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                                   controller: controller.FreqMorningController,
                                   buttonStyleData: ButtonStyleData(
                                     height: getDynamicHeight(size: 0.046),
@@ -571,6 +574,7 @@ class AddMedicationScreen extends StatelessWidget {
                           ),
                           SizedBox(height: getDynamicHeight(size: 0.006)),
                           CustomTextFormField(
+                            controller: controller.daysController,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText: AppString.days,
@@ -682,6 +686,7 @@ class AddMedicationScreen extends StatelessWidget {
                           ),
                           SizedBox(height: getDynamicHeight(size: 0.006)),
                           CustomTextFormField(
+                            controller: controller.flowRateController,
                             decoration: InputDecoration(
                               hintText: AppString.flowrate,
                               hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
@@ -713,7 +718,7 @@ class AddMedicationScreen extends StatelessWidget {
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006))),
                             ),
                             onPressed: () async {
-                              await controller.saveAddMedication();
+                              await controller.saveAddMedication(selectedMasterIndex, selectedDetailIndex);
                             },
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -745,7 +750,7 @@ class AddMedicationScreen extends StatelessWidget {
                     vertical: getDynamicHeight(size: 0.008),
                   ),
                   child: Text(
-                    "Added Medication (${controller.drTreatMasterList[selectedIndex].detail!.length})",
+                    "Added Medication (${controller.drTreatMasterList[selectedMasterIndex].detail!.length})",
                     style: TextStyle(
                       color: AppColor.teal,
                       fontWeight: FontWeight.bold,
@@ -762,9 +767,9 @@ class AddMedicationScreen extends StatelessWidget {
                     child: ListView.separated(
                       controller: listScrollController,
                       shrinkWrap: true,
-                      itemCount: controller.drTreatMasterList[selectedIndex].detail!.length,
+                      itemCount: controller.drTreatMasterList[selectedMasterIndex].detail!.length,
                       itemBuilder: (context, index) {
-                        final item = controller.drTreatMasterList[selectedIndex].detail![index];
+                        final item = controller.drTreatMasterList[selectedMasterIndex].detail![index];
                         return ListTile(
                           visualDensity: VisualDensity(vertical: -4), // 🔥 this removes extra vertical space
                           // dense: true,
@@ -829,8 +834,12 @@ class AddMedicationScreen extends StatelessWidget {
                   child: Container(
                     child: TextButton(
                       onPressed: () {
+                        controller.filteredDetails = controller.drTreatMasterList[selectedMasterIndex].detail;
+                        controller.selectedMasterIndex = selectedMasterIndex;
+                        controller.searchController.clear();
+                        controller.update();
                         Get.to(ViewMedicationScreen(
-                          selectedIndex: selectedIndex,
+                          selectedMasterIndex: selectedMasterIndex,
                         ));
                       },
                       style: TextButton.styleFrom(

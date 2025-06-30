@@ -259,8 +259,9 @@ class MedicationScreen extends StatelessWidget {
                                     color: AppColor.white,
                                     size: getDynamicHeight(size: 0.025),
                                   ),
-                                  onPressed: () {
-                                    controller.showMedicationDialog(context);
+                                  onPressed: () async {
+                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
+                                    controller.showMedicationDialog(context, -1);
                                   },
                                 ),
                               ),
@@ -285,15 +286,19 @@ class MedicationScreen extends StatelessWidget {
                                     color: AppColor.teal,
                                     size: getDynamicHeight(size: 0.025),
                                   ),
-                                  onPressed: () {
-                                    controller.showMedicationDialog(context);
+                                  onPressed: () async {
+                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
+                                    await controller.showMedicationDialog(context, index);
                                   },
                                 ),
                               ),
                             ],
                           ),
                           child: GestureDetector(
-                            onTap: () => Get.to(AddMedicationScreen(selectedIndex: index)),
+                            onTap: () => Get.to(AddMedicationScreen(
+                              selectedMasterIndex: index,
+                              selectedDetailIndex: -1,
+                            )),
                             child: Container(
                               // margin: EdgeInsets.symmetric(vertical: 6),
                               padding: EdgeInsets.symmetric(
@@ -341,7 +346,7 @@ class MedicationScreen extends StatelessWidget {
                                             controller.searchController.clear();
                                             controller.update();
                                             Get.to(ViewMedicationScreen(
-                                              selectedIndex: index,
+                                              selectedMasterIndex: index,
                                             ));
                                           },
                                           child: Icon(
@@ -375,7 +380,9 @@ class MedicationScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             backgroundColor: AppColor.teal1,
             onPressed: () {
-              controller.showMedicationDialog(context);
+              controller.isTemplateVisible = true;
+              controller.update();
+              controller.showMedicationDialog(context, -1);
             },
             child: Icon(
               Icons.add_circle_outlined,

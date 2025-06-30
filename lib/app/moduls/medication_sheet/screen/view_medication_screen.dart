@@ -6,13 +6,14 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 class ViewMedicationScreen extends StatelessWidget {
-  int selectedIndex; // Default selected index for the first tab
-  ViewMedicationScreen({Key? key, required this.selectedIndex}) : super(key: key);
+  int selectedMasterIndex; // Default selected index for the first tab
+  ViewMedicationScreen({Key? key, required this.selectedMasterIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -167,102 +168,114 @@ class ViewMedicationScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: getDynamicHeight(size: 0.005),
-                                  vertical: getDynamicHeight(size: 0.005),
-                                ),
-                                padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: AppColor.black),
-                                  borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
-                                  color: AppColor.primaryColor.withOpacity(0.2),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: CommonFontStyle.plusJakartaSans,
-                                            ),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () => controller.viewbottomsheet(context, selectedIndex, index),
-                                          child: Icon(Icons.menu),
-                                        ),
-                                      ],
+                              child: GestureDetector(
+                                onTap: () async {
+                                  await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                  Get.to(
+                                    AddMedicationScreen(
+                                      selectedMasterIndex: selectedMasterIndex,
+                                      selectedDetailIndex: index,
                                     ),
-                                    SizedBox(height: getDynamicHeight(size: 0.003)),
-                                    Visibility(
-                                      visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: 'Remarks: ',
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: getDynamicHeight(size: 0.005),
+                                    vertical: getDynamicHeight(size: 0.005),
+                                  ),
+                                  padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: AppColor.black),
+                                    borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
+                                    color: AppColor.primaryColor.withOpacity(0.2),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontFamily: CommonFontStyle.plusJakartaSans,
                                               ),
                                             ),
-                                            TextSpan(
-                                              text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                                  ? item.remark.toString()
-                                                  : '',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                color: AppColor.black1,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
+                                            child: Icon(Icons.menu),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: getDynamicHeight(size: 0.003)),
+                                      Visibility(
+                                        visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: 'Remarks: ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
-                                      child: Text(
-                                        item.freq1!.isNotEmpty || item.freq2!.isNotEmpty || item.freq3!.isNotEmpty || item.freq4!.isNotEmpty
-                                            ? '${item.freq1} - ${item.freq2} - ${item.freq3} - ${item.freq4}'
-                                            : 'No Frequency',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          color: AppColor.black1,
-                                          fontFamily: CommonFontStyle.plusJakartaSans,
-                                        ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
-                                      child: Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            const TextSpan(
-                                              text: 'Flow Rate: ',
-                                              style: TextStyle(fontWeight: FontWeight.w500),
-                                            ),
-                                            TextSpan(
-                                              text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                  ? item.flowRate.toString()
-                                                  : '',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                color: AppColor.black1,
-                                                fontFamily: CommonFontStyle.plusJakartaSans,
+                                              TextSpan(
+                                                text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL' ? item.remark.toString() : '',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColor.black1,
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
+                                        child: Text(
+                                          (item.freq1?.isNotEmpty ?? false) ||
+                                                  (item.freq2?.isNotEmpty ?? false) ||
+                                                  (item.freq3?.isNotEmpty ?? false) ||
+                                                  (item.freq4?.isNotEmpty ?? false)
+                                              ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
+                                              : '',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColor.black1,
+                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                          ),
+                                        ),
+                                      ),
+                                      Visibility(
+                                        visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
+                                        child: Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: 'Flow Rate: ',
+                                                style: TextStyle(fontWeight: FontWeight.w500),
+                                              ),
+                                              TextSpan(
+                                                text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
+                                                    ? item.flowRate.toString()
+                                                    : '',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  color: AppColor.black1,
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

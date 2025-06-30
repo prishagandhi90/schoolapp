@@ -50,20 +50,27 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
       },
       fieldViewBuilder: (context, textEditingController, localFocusNode, onEditingComplete) {
         // Sync the provided controller with the Autocomplete's controller
-        if (controller != textEditingController) {
-          textEditingController.text = controller.text;
-          controller.addListener(() {
-            if (controller.text != textEditingController.text) {
+        if (controller != textEditingController && controller.text.isNotEmpty) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (textEditingController.text != controller.text) {
               textEditingController.text = controller.text;
             }
           });
-          textEditingController.addListener(() {
-            if (textEditingController.text != controller.text) {
-              controller.text = textEditingController.text;
-            }
-          });
         }
-          // textEditingController.text = controller.text; // bas ek baar assign karo
+
+        // if (controller != textEditingController) {
+        //   textEditingController.text = controller.text;
+        //   controller.addListener(() {
+        //     if (controller.text != textEditingController.text) {
+        //       textEditingController.text = controller.text;
+        //     }
+        //   });
+        //   textEditingController.addListener(() {
+        //     if (textEditingController.text != controller.text) {
+        //       controller.text = textEditingController.text;
+        //     }
+        //   });
+        // }
         return Container(
           child: CustomTextFormField(
             controller: textEditingController, // Use Autocomplete's controller

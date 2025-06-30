@@ -1,5 +1,32 @@
 import 'package:emp_app/app/moduls/medication_sheet/model/resp_dropdown_multifields_model.dart';
 
+class RespDrDetailWithStatus {
+  int? statusCode;
+  String? isSuccess;
+  String? message;
+  RespDrTreatDetail? data; // 👈 List hata ke ek object banaya
+
+  RespDrDetailWithStatus({this.statusCode, this.isSuccess, this.message, this.data});
+
+  RespDrDetailWithStatus.fromJson(Map<String, dynamic> json) {
+    statusCode = json['statusCode'];
+    isSuccess = json['isSuccess'];
+    message = json['message'];
+    if (json['data'] != null && json['data'] is Map) {
+      data = RespDrTreatDetail.fromJson(json['data']);
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'statusCode': statusCode,
+      'isSuccess': isSuccess,
+      'message': message,
+      'data': data?.toJson(),
+    };
+  }
+}
+
 class RespDrTreatDetail {
   int? drDtlId;
   int? drMstId;

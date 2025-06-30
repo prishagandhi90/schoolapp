@@ -63,7 +63,8 @@ class CustomTextFormField extends StatelessWidget {
     this.hintStyle,
     this.onTapOutside,
     this.focusedBorder,
-    this.enabledBorder, this.contentPadding,
+    this.enabledBorder,
+    this.contentPadding,
   });
 
   @override
@@ -88,13 +89,14 @@ class CustomTextFormField extends StatelessWidget {
           ? TextStyle(
               // color: AppColor.white,
               fontFamily: CommonFontStyle.plusJakartaSans,
-              fontSize: getDynamicHeight(size: 0.016),
+              fontSize: getDynamicHeight(size: 0.014),
             ) // Default style if not provided
           : style,
       scrollPhysics: scrollPhysics,
       decoration: decoration ??
           InputDecoration(
-            labelText: label,contentPadding: contentPadding,
+            labelText: label,
+            contentPadding: contentPadding,
             hintText: hint,
             hintStyle: hintStyle,
             filled: filled ?? false,

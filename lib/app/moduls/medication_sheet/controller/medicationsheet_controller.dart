@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:emp_app/app/app_custom_widget/common_methods.dart';
 import 'package:emp_app/app/app_custom_widget/common_text.dart';
 import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
@@ -16,6 +17,7 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
+import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_detail.dart';
 import 'package:emp_app/app/moduls/medication_sheet/model/dr_treat_master.dart';
@@ -73,15 +75,19 @@ class MedicationsheetController extends GetxController {
   final FreqEveningController = TextEditingController();
   final FreqNightController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  // List<RespDrTreatDetail>? allDetails = [];
   List<RespDrTreatDetail>? filteredDetails = [];
 
   List<DrTreatMasterList> drTreatMasterList = [];
   bool fromAdmittedScreen = false;
+  bool isTemplateVisible = true;
   final TextEditingController FormularyMedicinesController = TextEditingController();
   final TextEditingController FormularyMedicinesIDController = TextEditingController();
   final TextEditingController doseController = TextEditingController();
   final TextEditingController nonFormularyMedicinesController = TextEditingController();
+  final TextEditingController qtyController = TextEditingController();
+  final TextEditingController daysController = TextEditingController();
+  final TextEditingController stopTimeController = TextEditingController();
+  final TextEditingController flowRateController = TextEditingController();
 
   List<SearchserviceModel> suggestions = [];
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
@@ -112,7 +118,7 @@ class MedicationsheetController extends GetxController {
     return parts.last.trim(); // last part with trimmed spaces
   }
 
-   void toggleSearch() {
+  void toggleSearch() {
     isSearching = !isSearching;
     if (!isSearching) {
       searchController.clear();
@@ -646,7 +652,11 @@ class MedicationsheetController extends GetxController {
     }
   }
 
-  Future<void> saveMedicationSheet() async {
+  Future<void> saveMedicationSheet(int selMasterindex) async {
+    if (selMasterindex == -2) {
+      Get.rawSnackbar(message: 'Something went wrong in Edit Dr Medication Sheet!');
+      return;
+    }
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -665,6 +675,7 @@ class MedicationsheetController extends GetxController {
         isLoading = false;
         return;
       }
+      // return;
       final dateTime = DateTime(
         parsedDate.year,
         parsedDate.month,
@@ -675,7 +686,7 @@ class MedicationsheetController extends GetxController {
       final uuid = Uuid();
       // Construct RespDrTreatMaster object
       final drTreatMaster = DrTreatMasterList(
-        drMstId: 0,
+        drMstId: selMasterindex == -1 ? 0 : selMasterindex,
         admissionId: admissionId,
         date: dateTime.toUtc(),
         srNo: 1,
@@ -752,7 +763,7 @@ class MedicationsheetController extends GetxController {
     }
   }
 
-  Future<void> saveAddMedication() async {
+  Future<void> saveAddMedication(int selectedMasterIndex, int selectedDetailIndex) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
@@ -767,27 +778,31 @@ class MedicationsheetController extends GetxController {
       final uuid = Uuid();
 
       final selectedMedicationDetails = RespDrTreatDetail(
-        drDtlId: 0,
+        drDtlId: selectedDetailIndex < 0 ? 0 : drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex].drDtlId,
         drMstId: drTreatMasterList[selectedMasterIndex].drMstId,
-        days: 3,
+        days: int.tryParse(daysController.text.trim().isEmpty ? '0' : daysController.text.trim()) ?? 0,
         itemNameMnl: nonFormularyMedicinesController.text.trim(),
-        qty: 6,
+        qty: int.tryParse(qtyController.text.trim().isEmpty ? '0' : qtyController.text.trim()) ?? 0,
         dose: doseController.text.trim(),
         remark: remarksController.text.trim(),
-        routeName: "",
-        medicationName: "",
-        itemTxt: "",
-        item: "",
+        routeName: normalizeString(routeController.text.trim()),
+        medicationName: normalizeString(medicationTypeController.text.trim()),
+        itemTxt: normalizeString(FormularyMedicinesController.text),
+        item: normalizeString(FormularyMedicinesIDController.text),
         instType: "",
         flowRt: "",
         userName: webUserName,
         terminalName: "::1",
-        action: "",
+        action: selectedDetailIndex < 0 ? "" : "Edit",
         stopTime: null,
         isValid: true,
         iudId: 0,
         gridName: "DrTDetail",
-        itemName: DropdownMultifieldsTable(name: FormularyMedicinesIDController.text.trim()),
+        freq1: normalizeString(FreqMorningController.text.trim()),
+        freq2: normalizeString(FreqAfternoonController.text.trim()),
+        freq3: normalizeString(FreqEveningController.text.trim()),
+        freq4: normalizeString(FreqNightController.text.trim()),
+        itemName: DropdownMultifieldsTable(name: FormularyMedicinesIDController.text.trim(), txt: FormularyMedicinesController.text.trim()),
         medicineType: DropdownMultifieldsTable(name: medicationTypeController.text.trim()),
         // ✅ NotMapped Dropdowns bhi set karo (agar UI me use kar rahe ho)
         frequency1: DropdownMultifieldsTable(name: FreqMorningController.text.trim()),
@@ -804,10 +819,16 @@ class MedicationsheetController extends GetxController {
       // Send request
       var response = await apiController.parseJsonBody(url, "", jsonBody);
 
-      RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
+      RespDrDetailWithStatus responseData = RespDrDetailWithStatus.fromJson(jsonDecode(response));
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
         Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
+        final updatedDetail = responseData.data!;
+        if (drTreatMasterList[selectedMasterIndex].detail != null && drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
+          drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+        }
+        print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
+        var a = 1;
       } else if (responseData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -852,10 +873,6 @@ class MedicationsheetController extends GetxController {
     selectedDropdnOptionId.clear();
     fromDateController.clear();
     toDateController.clear();
-    nameController.text = '';
-    ipdNo = '';
-    uhid = '';
-    fromAdmittedScreen = false;
 
     update(); // 🔁 Update GetBuilder/UI if needed
   }
@@ -870,6 +887,111 @@ class MedicationsheetController extends GetxController {
     }).toList();
 
     update();
+  }
+
+  Future<void> editDrTreatmentMasterList(DrTreatMasterList listItem) async {
+    try {
+      selectedDropdownList.clear();
+      selectedDropdnOptionId.clear();
+      remarksController.text = "";
+      diagnosisController.text = "";
+      weightController.text = "";
+
+      DateTime? selectedDateTime;
+      selectedDateTime = DateTime.parse(listItem.date.toString());
+      if (selectedDateTime != null) {
+        // Set Date
+        final formattedDate = "${selectedDateTime!.day.toString().padLeft(2, '0')}-${selectedDateTime!.month.toString().padLeft(2, '0')}-${selectedDateTime!.year}";
+        dateController.text = formattedDate;
+
+        // Set Time
+        selectedTime = TimeOfDay.fromDateTime(selectedDateTime!);
+
+        weightController.text = listItem.weight.toString().trim() == "null" || listItem.weight.toString().isEmpty ? "" : listItem.weight.toString().trim();
+        remarksController.text = listItem.remark.toString().trim();
+        diagnosisController.text = listItem.provisionalDiagnosis.toString().trim();
+        TemplateNameController.text = listItem.templateName.toString().trim();
+        isTemplateVisible = false;
+
+        if (listItem.specialOrder == null || listItem.specialOrder.toString().trim().isEmpty) {
+          update(); // Refresh UI after clear
+          return;
+        }
+
+        final splitItems = listItem.specialOrder.toString().split(';');
+
+        for (var raw in splitItems) {
+          final trimmed = raw.trim();
+
+          // Search in available dropdown list
+          final match = specialDropdownMultifieldsTable.firstWhereOrNull(
+            (element) => (element.name ?? '').toLowerCase() == trimmed.toLowerCase(),
+          );
+
+          if (match != null) {
+            final id = match.value?.toString() ?? '';
+            if (!selectedDropdnOptionId.contains(id)) {
+              selectedDropdnOptionId.add(id);
+              selectedDropdownList.add(match);
+            }
+          }
+        }
+
+        update(); // To refresh the UI
+      }
+    } catch (e) {
+      print("Invalid date format: ${listItem.date.toString()}");
+    }
+  }
+
+  Future<void> editDrTreatmentDetailList(RespDrTreatDetail listItem) async {
+    try {
+      // medicationTypeController.clear();
+      // FormularyMedicinesController.clear();
+      // FormularyMedicinesIDController.clear();
+      // nonFormularyMedicinesController.clear();
+      // instructionTypeController.clear();
+      // doseController.clear();
+      // routeController.clear();
+      // remarksController.clear();
+      // FreqMorningController.clear();
+      // FreqAfternoonController.clear();
+      // FreqEveningController.clear();
+      // FreqNightController.clear();
+      // stopDateController.clear();
+      // qtyController.clear();
+      // daysController.clear();
+
+      stopTimeController.clear();
+      flowRateController.clear();
+
+      medicationTypeController.text = normalizeString(listItem.medicineType!.name.toString());
+      FormularyMedicinesController.text = normalizeString(listItem.itemName!.txt.toString());
+      FormularyMedicinesIDController.text = normalizeString(listItem.itemName!.name.toString());
+      nonFormularyMedicinesController.text = normalizeString(listItem.itemNameMnl.toString());
+      instructionTypeController.text = normalizeString(listItem.instruction_typ!.name.toString());
+      doseController.text = normalizeString(listItem.dose.toString());
+      routeController.text = normalizeString(listItem.route!.name.toString());
+      remarksController.text = normalizeString(listItem.remark.toString());
+      FreqMorningController.text = normalizeString(listItem.frequency1!.name.toString());
+      FreqAfternoonController.text = normalizeString(listItem.frequency2!.name.toString());
+      FreqEveningController.text = normalizeString(listItem.frequency3!.name.toString());
+      FreqNightController.text = normalizeString(listItem.frequency4!.name.toString());
+      stopDateController.text = listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
+      qtyController.text = normalizeString(listItem.qty.toString());
+      daysController.text = normalizeString(listItem.days.toString());
+
+      update(); // To refresh the UI
+    } catch (e) {
+      print("Invalid date format: ${e.toString()}");
+    }
+  }
+
+  String normalizeString(String? input) {
+    if (input == null || input.trim().isEmpty || input.trim().toLowerCase() == 'null') {
+      return '';
+    }
+    return input.trim();
   }
 
   // Future<void> showDateBottomSheet(BuildContext context) async {
@@ -1004,9 +1126,10 @@ class MedicationsheetController extends GetxController {
   //   );
   // }
   /// Show medication dialog with all fields
-  Future<void> showMedicationDialog(BuildContext context) async {
+  Future<void> showMedicationDialog(BuildContext context, int selMasterindex) async {
     await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return GetBuilder<MedicationsheetController>(builder: (controller) {
           return AlertDialog(
@@ -1035,7 +1158,10 @@ class MedicationsheetController extends GetxController {
                             ),
                           ),
                           InkWell(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () {
+                              Navigator.pop(context);
+                              clearData();
+                            },
                             child: Icon(Icons.close),
                           )
                         ],
@@ -1123,9 +1249,7 @@ class MedicationsheetController extends GetxController {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      controller.selectedTime != null
-                                          ? controller.selectedTime.format(context)
-                                          : 'Select Time', // 👈 Show this if not selected yet
+                                      controller.selectedTime != null ? controller.selectedTime.format(context) : 'Select Time', // 👈 Show this if not selected yet
                                       style: TextStyle(
                                         color: controller.selectedTime != null ? AppColor.black : AppColor.grey,
                                       ),
@@ -1231,7 +1355,7 @@ class MedicationsheetController extends GetxController {
                           SizedBox(width: getDynamicHeight(size: 0.008)),
                           Container(
                             width: getDynamicHeight(size: 0.09),
-                            child: TextFormField(
+                            child: CustomTextFormField(
                               controller: weightController,
                               decoration: InputDecoration(
                                 hintText: "Weight",
@@ -1248,7 +1372,7 @@ class MedicationsheetController extends GetxController {
                       SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Remarks Field
-                      TextFormField(
+                      CustomTextFormField(
                         controller: remarksController,
                         decoration: InputDecoration(
                           hintText: "Remarks",
@@ -1264,7 +1388,7 @@ class MedicationsheetController extends GetxController {
                       SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Diagnosis Field
-                      TextFormField(
+                      CustomTextFormField(
                         controller: diagnosisController,
                         decoration: InputDecoration(
                           hintText: "Enter Provisional Diagnosis",
@@ -1280,38 +1404,41 @@ class MedicationsheetController extends GetxController {
                       SizedBox(height: getDynamicHeight(size: 0.012)),
 
                       /// Template Dropdown
-                      CustomDropdown(
-                        text: AppString.name,
-                        textStyle: TextStyle(color: AppColor.black1),
-                        controller: controller.TemplateNameController,
-                        buttonStyleData: ButtonStyleData(
-                          height: getDynamicHeight(size: 0.05),
-                          // padding: const EdgeInsets.symmetric(horizontal: 0),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColor.originalgrey),
-                            borderRadius: BorderRadius.circular(3),
-                            color: AppColor.white,
+                      Visibility(
+                        visible: isTemplateVisible,
+                        child: CustomDropdown(
+                          text: AppString.name,
+                          textStyle: TextStyle(color: AppColor.black1),
+                          controller: controller.TemplateNameController,
+                          buttonStyleData: ButtonStyleData(
+                            height: getDynamicHeight(size: 0.05),
+                            // padding: const EdgeInsets.symmetric(horizontal: 0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColor.originalgrey),
+                              borderRadius: BorderRadius.circular(3),
+                              color: AppColor.white,
+                            ),
                           ),
-                        ),
-                        onChanged: (value) async {
-                          await controller.templateChangeMethod(value);
-                        },
-                        items: controller.templatedropdownTable
-                            .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
-                                  value: {
-                                    'value': item.value ?? '',
-                                    'text': item.name ?? '',
-                                  },
-                                  child: Text(
-                                    item.name ?? '',
-                                    style: AppStyle.black.copyWith(
-                                      fontSize: getDynamicHeight(size: 0.016),
+                          onChanged: (value) async {
+                            await controller.templateChangeMethod(value);
+                          },
+                          items: controller.templatedropdownTable
+                              .map((DropdownNamesTable item) => DropdownMenuItem<Map<String, String>>(
+                                    value: {
+                                      'value': item.value ?? '',
+                                      'text': item.name ?? '',
+                                    },
+                                    child: Text(
+                                      item.name ?? '',
+                                      style: AppStyle.black.copyWith(
+                                        fontSize: getDynamicHeight(size: 0.016),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ))
-                            .toList(),
-                        width: double.infinity,
+                                  ))
+                              .toList(),
+                          width: double.infinity,
+                        ),
                       ),
                       // DropdownButtonFormField<String>(
                       //   decoration: InputDecoration(
@@ -1334,7 +1461,7 @@ class MedicationsheetController extends GetxController {
                           ),
                           onPressed: () async {
                             // Submit logic
-                            await saveMedicationSheet();
+                            await saveMedicationSheet(selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
                             clearData();
                             Navigator.pop(context);
@@ -1463,8 +1590,7 @@ class MedicationsheetController extends GetxController {
                                 child: Container(
                                   width: getDynamicHeight(size: 0.3),
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
+                                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
                                   child: Text(
                                     drTreatMasterList[index].srNo.toString(), // ✅ RxID value
                                     style: AppStyle.fontfamilyplus,
@@ -1885,10 +2011,8 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype,
-                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(
-                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -2033,11 +2157,9 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(
-                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(
-                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),
