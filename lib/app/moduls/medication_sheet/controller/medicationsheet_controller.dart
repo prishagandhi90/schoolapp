@@ -862,10 +862,19 @@ class MedicationsheetController extends GetxController {
         if (responseData.isSuccess == 'true') {
           Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
           final updatedDetail = responseData.data!;
-          if (drTreatMasterList[selectedMasterIndex].detail != null && drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
-            drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+          if (selectedDetailIndex >= 0) {
+            // ✏️ Edit existing
+            if (drTreatMasterList[selectedMasterIndex].detail != null && drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
+              drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+            }
+          } else {
+            // ➕ Append new detail
+            if (drTreatMasterList[selectedMasterIndex].detail == null) {
+              drTreatMasterList[selectedMasterIndex].detail = [];
+            }
+            drTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
           }
-          print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
+          // print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
         } else {
           Get.rawSnackbar(message: responseData.message ?? 'Failed to save medication detail');
         }
