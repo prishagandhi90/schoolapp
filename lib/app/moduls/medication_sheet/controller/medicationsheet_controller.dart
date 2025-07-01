@@ -858,7 +858,6 @@ class MedicationsheetController extends GetxController {
 
       RespDrDetailWithStatus responseData = RespDrDetailWithStatus.fromJson(jsonDecode(response));
 
-
       if (responseData.statusCode == 200) {
         if (responseData.isSuccess == 'true') {
           Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
@@ -875,7 +874,7 @@ class MedicationsheetController extends GetxController {
             }
             drTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
           }
-          // print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
+          clearAddMedication();
         } else {
           Get.rawSnackbar(message: responseData.message ?? 'Failed to save medication detail');
         }
@@ -961,7 +960,7 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  Future<void> clearData() async {
+  Future<void> clearMasterData() async {
     searchController.clear();
     DateTime now = DateTime.now();
     String formattedDate = "${now.day.toString().padLeft(2, '0')}-${now.month.toString().padLeft(2, '0')}-${now.year}";
@@ -975,16 +974,7 @@ class MedicationsheetController extends GetxController {
     selectedDropdnOptionId.clear();
     fromDateController.clear();
     toDateController.clear();
-    flowRateController.clear();
-    stopDateController.clear();
-    nameController.clear();
-    medicationTypeController.clear();
-    FormularyMedicinesController.clear();
-    nonFormularyMedicinesController.clear();
-    instructionTypeController.clear();
-    doseController.clear();
-    qtyController.clear();
-    routeController.clear();
+
     update(); // 🔁 Update GetBuilder/UI if needed
   }
 
@@ -1006,6 +996,7 @@ class MedicationsheetController extends GetxController {
     FreqEveningController.clear();
     FreqNightController.clear();
     daysController.clear();
+
     update();
   }
 
@@ -1033,15 +1024,13 @@ class MedicationsheetController extends GetxController {
       selectedDateTime = DateTime.parse(listItem.date.toString());
       if (selectedDateTime != null) {
         // Set Date
-        final formattedDate =
-            "${selectedDateTime!.day.toString().padLeft(2, '0')}-${selectedDateTime!.month.toString().padLeft(2, '0')}-${selectedDateTime!.year}";
+        final formattedDate = "${selectedDateTime!.day.toString().padLeft(2, '0')}-${selectedDateTime!.month.toString().padLeft(2, '0')}-${selectedDateTime!.year}";
         dateController.text = formattedDate;
 
         // Set Time
         selectedTime = TimeOfDay.fromDateTime(selectedDateTime!);
 
-        weightController.text =
-            listItem.weight.toString().trim() == "null" || listItem.weight.toString().isEmpty ? "" : listItem.weight.toString().trim();
+        weightController.text = listItem.weight.toString().trim() == "null" || listItem.weight.toString().isEmpty ? "" : listItem.weight.toString().trim();
         remarksController.text = listItem.remark.toString().trim();
         diagnosisController.text = listItem.provisionalDiagnosis.toString().trim();
         TemplateNameController.text = listItem.templateName.toString().trim();
@@ -1095,8 +1084,7 @@ class MedicationsheetController extends GetxController {
       FreqAfternoonController.text = normalizeString(listItem.frequency2!.name.toString());
       FreqEveningController.text = normalizeString(listItem.frequency3!.name.toString());
       FreqNightController.text = normalizeString(listItem.frequency4!.name.toString());
-      stopDateController.text =
-          listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
+      stopDateController.text = listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
       qtyController.text = normalizeString(listItem.qty.toString());
       daysController.text = normalizeString(listItem.days.toString());
 
@@ -1279,7 +1267,7 @@ class MedicationsheetController extends GetxController {
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
-                              clearData();
+                              clearMasterData();
                             },
                             child: Icon(Icons.close),
                           )
@@ -1368,9 +1356,7 @@ class MedicationsheetController extends GetxController {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      controller.selectedTime != null
-                                          ? controller.selectedTime.format(context)
-                                          : 'Select Time', // 👈 Show this if not selected yet
+                                      controller.selectedTime != null ? controller.selectedTime.format(context) : 'Select Time', // 👈 Show this if not selected yet
                                       style: TextStyle(
                                         color: controller.selectedTime != null ? AppColor.black : AppColor.grey,
                                       ),
@@ -1582,10 +1568,9 @@ class MedicationsheetController extends GetxController {
                           ),
                           onPressed: () async {
                             // Submit logic
-                            await saveMedicationSheet(
-                                selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
+                            await saveMedicationSheet(selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
-                            clearData();
+                            clearMasterData();
                             Navigator.pop(context);
                           },
                           child: Text(
@@ -1712,8 +1697,7 @@ class MedicationsheetController extends GetxController {
                                 child: Container(
                                   width: getDynamicHeight(size: 0.3),
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
+                                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
                                   child: Text(
                                     drTreatMasterList[index].srNo.toString(), // ✅ RxID value
                                     style: AppStyle.fontfamilyplus,
@@ -2058,7 +2042,7 @@ class MedicationsheetController extends GetxController {
                       child: ElevatedButton(
                         onPressed: () {
                           fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
-                          clearData();
+                          clearMasterData();
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
@@ -2134,10 +2118,8 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype,
-                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(
-                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -2282,11 +2264,9 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(
-                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(
-                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),

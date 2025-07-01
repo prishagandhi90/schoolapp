@@ -377,7 +377,7 @@ class AdpatientScreen extends StatelessWidget {
 
     Get.to(() => MedicationScreen())!.then((value) async {
       final controller = Get.put(MedicationsheetController());
-      await controller.clearData();
+      await controller.clearMasterData();
 
       hideBottomBar.value = false;
 
