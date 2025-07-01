@@ -288,12 +288,12 @@ class MedicationsheetController extends GetxController {
     required String treatTyp,
     required bool isload,
   }) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       if (isload) {
         isLoading = true;
         update();
       }
-      SharedPreferences pref = await SharedPreferences.getInstance();
       String url = ConstApiUrl.empDoctorTreatmentMasterAPI;
       String loginId = pref.getString(AppString.keyLoginId) ?? "";
       String empId = pref.getString(AppString.keyEmpId) ?? "";
@@ -312,26 +312,32 @@ class MedicationsheetController extends GetxController {
             selectedMasterIndex = 0; // Set default index if not set
           }
           filteredDetails = drTreatMasterList[selectedMasterIndex].detail; // by default all
-        } else {}
+        } else {
+          drTreatMasterList = [];
+          filteredDetails = [];
+        }
       } else if (resp_DrTreatmentMst.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (resp_DrTreatmentMst.statusCode == 400) {
-        isLoading = false;
+        drTreatMasterList = [];
+        filteredDetails = [];
       } else {
+        drTreatMasterList = [];
+        filteredDetails = [];
         Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
       update();
-      // ApiErrorHandler.handleError(
-      //   screenName: "MedicationScreen",
-      //   error: e.toString(),
-      //   loginID: pref.getString(AppString.keyLoginId) ?? '',
-      //   tokenNo: pref.getString(AppString.keyToken) ?? '',
-      //   empID: pref.getString(AppString.keyEmpId) ?? '',
-      // );
+      ApiErrorHandler.handleError(
+        screenName: "MedicationScreen",
+        error: e.toString(),
+        loginID: pref.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref.getString(AppString.keyToken) ?? '',
+        empID: pref.getString(AppString.keyEmpId) ?? '',
+      );
     } finally {
       isLoading = false;
       update();
@@ -378,15 +384,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           specialDropdownMultifieldsTable = dropdownMuliFieldsData.data!;
-        } else {}
+        } else {
+          specialDropdownMultifieldsTable = [];
+        }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
-        isLoading = false;
+        specialDropdownMultifieldsTable = [];
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        specialDropdownMultifieldsTable = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
@@ -422,15 +431,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownData.statusCode == 200) {
         if (dropdownData.data != null && dropdownData.data!.isNotEmpty) {
           templatedropdownTable = dropdownData.data!;
-        } else {}
+        } else {
+          templatedropdownTable = [];
+        }
       } else if (dropdownData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownData.statusCode == 400) {
-        isLoading = false;
+        templatedropdownTable = [];
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        templatedropdownTable = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
@@ -466,15 +478,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           medicationSheetDropdownTable = dropdownMuliFieldsData.data!;
-        } else {}
+        } else {
+          medicationSheetDropdownTable = [];
+        }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
-        isLoading = false;
+        medicationSheetDropdownTable = [];
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        medicationSheetDropdownTable = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
@@ -511,15 +526,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           instructionTypeDropdownTable = dropdownMuliFieldsData.data!;
-        } else {}
+        } else {
+          instructionTypeDropdownTable = [];
+        }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
-        isLoading = false;
+        instructionTypeDropdownTable = [];
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        instructionTypeDropdownTable = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
@@ -557,15 +575,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           drMedicationRouteDropdownTable = dropdownMuliFieldsData.data!;
-        } else {}
+        } else {
+          drMedicationRouteDropdownTable = [];
+        }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
-        isLoading = false;
+        drMedicationRouteDropdownTable = [];
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        drMedicationRouteDropdownTable = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
@@ -603,15 +624,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           drMedicationFreqDropdownTable = dropdownMuliFieldsData.data!;
-        } else {}
+        } else {
+          drMedicationFreqDropdownTable = [];
+        }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
-        isLoading = false;
+        drMedicationFreqDropdownTable = [];
       } else {
-        Get.rawSnackbar(message: "Somethin g went wrong");
+        drMedicationFreqDropdownTable = [];
+        Get.rawSnackbar(message: "Something went wrong");
       }
     } catch (e) {
       isLoading = false;
@@ -834,15 +858,27 @@ class MedicationsheetController extends GetxController {
 
       RespDrDetailWithStatus responseData = RespDrDetailWithStatus.fromJson(jsonDecode(response));
 
-      if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
-        Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
-        final updatedDetail = responseData.data!;
-        if (drTreatMasterList[selectedMasterIndex].detail != null &&
-            drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
-          drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+
+      if (responseData.statusCode == 200) {
+        if (responseData.isSuccess == 'true') {
+          Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
+          final updatedDetail = responseData.data!;
+          if (selectedDetailIndex >= 0) {
+            // ✏️ Edit existing
+            if (drTreatMasterList[selectedMasterIndex].detail != null && drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
+              drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+            }
+          } else {
+            // ➕ Append new detail
+            if (drTreatMasterList[selectedMasterIndex].detail == null) {
+              drTreatMasterList[selectedMasterIndex].detail = [];
+            }
+            drTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
+          }
+          // print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
+        } else {
+          Get.rawSnackbar(message: responseData.message ?? 'Failed to save medication detail');
         }
-        print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
-        // var a = 1;
       } else if (responseData.statusCode == 401) {
         pref.clear();
         Get.offAll(const LoginScreen());
@@ -1044,22 +1080,6 @@ class MedicationsheetController extends GetxController {
 
   Future<void> editDrTreatmentDetailList(RespDrTreatDetail listItem) async {
     try {
-      // medicationTypeController.clear();
-      // FormularyMedicinesController.clear();
-      // FormularyMedicinesIDController.clear();
-      // nonFormularyMedicinesController.clear();
-      // instructionTypeController.clear();
-      // doseController.clear();
-      // routeController.clear();
-      // remarksController.clear();
-      // FreqMorningController.clear();
-      // FreqAfternoonController.clear();
-      // FreqEveningController.clear();
-      // FreqNightController.clear();
-      // stopDateController.clear();
-      // qtyController.clear();
-      // daysController.clear();
-
       stopTimeController.clear();
       flowRateController.clear();
 
