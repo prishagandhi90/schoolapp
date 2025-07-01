@@ -2,7 +2,6 @@
 
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
 import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
-import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -167,6 +166,7 @@ class AddMedicationScreen extends StatelessWidget {
                                     controller.FormularyMedicines_suggestions.clear();
                                   },
                                   onSuffixIconPressed: () {
+                                    controller.FormularyMedicinesIDController.clear();
                                     controller.update(); // Trigger state update if needed
                                   },
                                 ),
@@ -441,10 +441,7 @@ class AddMedicationScreen extends StatelessWidget {
                                     Expanded(
                                       child: CustomDropdown(
                                         text: AppString.morning,
-                                        textStyle: TextStyle(
-                                            fontSize: getDynamicHeight(size: 0.013),
-                                            color: AppColor.grey,
-                                            fontFamily: CommonFontStyle.plusJakartaSans),
+                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                                         controller: controller.FreqMorningController,
                                         buttonStyleData: ButtonStyleData(
                                           height: getDynamicHeight(size: 0.046),
@@ -647,9 +644,7 @@ class AddMedicationScreen extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                controller.stopDateController.text.isNotEmpty
-                                                    ? controller.stopDateController.text
-                                                    : AppString.selectdate,
+                                                controller.stopDateController.text.isNotEmpty ? controller.stopDateController.text : AppString.selectdate,
                                                 style: TextStyle(
                                                   fontSize: getDynamicHeight(size: 0.014),
                                                   fontFamily: CommonFontStyle.plusJakartaSans,

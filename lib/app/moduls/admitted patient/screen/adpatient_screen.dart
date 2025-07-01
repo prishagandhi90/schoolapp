@@ -372,12 +372,17 @@ class AdpatientScreen extends StatelessWidget {
       medicationsheetController.uhid = '';
       medicationsheetController.webUserName = '';
     }
-
-    medicationsheetController.update();
+    await medicationsheetController.initSharedPref();
+    medicationsheetController.onMedicationScreenLoad();
+    await medicationsheetController.fetchDrTreatmentData(
+      ipdNo: controller.filterpatientsData[index].ipdNo.toString(),
+      treatTyp: 'Medication Sheet',
+      isload: true,
+    );
 
     Get.to(() => MedicationScreen())!.then((value) async {
       final controller = Get.put(MedicationsheetController());
-      await controller.clearData();
+      await controller.clearMasterData();
 
       hideBottomBar.value = false;
 
@@ -412,12 +417,7 @@ class AdpatientScreen extends StatelessWidget {
               } else if (controller.FromScreen_Redirection.toUpperCase() == "MEDICATION SHEET" && controller.WebLoginUser.trim() != "") {
                 if (controller.isPatientCardClicked) return;
                 controller.isPatientCardClicked = true;
-                final MedicationsheetController medicationsheetController = Get.put(MedicationsheetController());
-                medicationsheetController.fetchDrTreatmentData(
-                  ipdNo: controller.filterpatientsData[index].ipdNo.toString(),
-                  treatTyp: 'Medication Sheet',
-                  isload: true,
-                );
+
                 TapToRedirectToMedicationScreen(
                   controller: controller,
                   index: index,

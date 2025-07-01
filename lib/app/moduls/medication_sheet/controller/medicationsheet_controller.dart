@@ -92,27 +92,39 @@ class MedicationsheetController extends GetxController {
   List<SearchserviceModel> suggestions = [];
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;
+  var searchAddMed_Medicines = <SearchserviceModel>[].obs;
   String webUserName = '';
   bool isViewBtnclicked = false;
   bool isMenuBtnclicked = false;
   bool isPlusBtnclicked = false;
+  SharedPreferences? pref;
 
   @override
   void onInit() {
     super.onInit();
-    // Current date ko format karke controller me daalo
-    fetchTemplateList();
-    fetchSpecialOrderList();
-    getMedicationTypeList();
-    getInstructionTypeList();
-    getDrTreatmentRoute();
-    getDrTreatmentFrequency();
     final now = DateTime.now();
     final formattedDate = DateFormat('dd-MM-yyyy').format(now);
     dateController.text = formattedDate;
   }
 
   bool isSearchActive = false;
+
+  Future<void> initSharedPref() async {
+    pref = await SharedPreferences.getInstance();
+    loginId = pref?.getString(AppString.keyLoginId) ?? '';
+    tokenNo = pref?.getString(AppString.keyToken) ?? '';
+    empId = pref?.getString(AppString.keyEmpId) ?? '';
+    Future.delayed(const Duration(microseconds: 300));
+  }
+
+  void onMedicationScreenLoad() async {
+    fetchTemplateList();
+    fetchSpecialOrderList();
+    getMedicationTypeList();
+    getInstructionTypeList();
+    getDrTreatmentRoute();
+    getDrTreatmentFrequency();
+  }
 
   String getUHId(String patientName) {
     if (patientName.isEmpty) return "";
@@ -146,22 +158,17 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<SearchserviceModel>> getFormularyMedicines_AutoComplete(String flag) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       String url = ConstApiUrl.empMedicationSheet_SearchMedicinesAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
-
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseSearchService responseSearchService = ResponseSearchService.fromJson(jsonDecode(response));
 
+      searchAddMed_Medicines.clear();
       if (responseSearchService.statusCode == 200) {
-        // searchService.clear();
-        searchService.assignAll(responseSearchService.data ?? []);
+        searchAddMed_Medicines.assignAll(responseSearchService.data ?? []);
       } else if (responseSearchService.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseSearchService.statusCode == 400) {
@@ -175,32 +182,27 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "InvestRequisit",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {}
 
-    return searchService.toList();
+    return searchAddMed_Medicines.toList();
   }
 
   Future<List<SearchserviceModel>> fetchSearchService(String flag) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       String url = ConstApiUrl.empSearchServiceAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "flag": flag};
-
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseSearchService responseSearchService = ResponseSearchService.fromJson(jsonDecode(response));
 
+      searchService.clear();
       if (responseSearchService.statusCode == 200) {
-        // searchService.clear();
         searchService.assignAll(responseSearchService.data ?? []);
       } else if (responseSearchService.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseSearchService.statusCode == 400) {
@@ -214,9 +216,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "InvestRequisit",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {}
     return searchService.toList();
@@ -288,17 +290,12 @@ class MedicationsheetController extends GetxController {
     required String treatTyp,
     required bool isload,
   }) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       if (isload) {
         isLoading = true;
         update();
       }
       String url = ConstApiUrl.empDoctorTreatmentMasterAPI;
-      String loginId = pref.getString(AppString.keyLoginId) ?? "";
-      String empId = pref.getString(AppString.keyEmpId) ?? "";
-      String tokenNo = pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId, "ipdNo": ipdNo, "treatTyp": treatTyp, "userName": webUserName};
 
       // List<dynamic> responseList = jsonDecode(response);
@@ -317,7 +314,7 @@ class MedicationsheetController extends GetxController {
           filteredDetails = [];
         }
       } else if (resp_DrTreatmentMst.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (resp_DrTreatmentMst.statusCode == 400) {
@@ -334,9 +331,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
       isLoading = false;
@@ -368,14 +365,10 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<DropdownMultifieldsTable>> fetchSpecialOrderList() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empSpecialOrderListAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
@@ -388,7 +381,7 @@ class MedicationsheetController extends GetxController {
           specialDropdownMultifieldsTable = [];
         }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
@@ -403,9 +396,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
       isLoading = false;
@@ -415,16 +408,11 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<DropdownNamesTable>> fetchTemplateList() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empGetTemplatesListAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
-
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseDropdownNames dropdownData = ResponseDropdownNames.fromJson(jsonDecode(response));
 
@@ -435,7 +423,7 @@ class MedicationsheetController extends GetxController {
           templatedropdownTable = [];
         }
       } else if (dropdownData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownData.statusCode == 400) {
@@ -450,9 +438,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationSheet",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
       isLoading = false;
@@ -462,16 +450,11 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<DropdownNamesTable>> getMedicationTypeList() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empGetMedicationTypeAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
-
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
 
@@ -482,7 +465,7 @@ class MedicationsheetController extends GetxController {
           medicationSheetDropdownTable = [];
         }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
@@ -497,9 +480,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
       isLoading = false;
@@ -510,16 +493,11 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<DropdownNamesTable>> getInstructionTypeList() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
       String url = ConstApiUrl.empGetInstructionTypeAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
-
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
 
@@ -530,7 +508,7 @@ class MedicationsheetController extends GetxController {
           instructionTypeDropdownTable = [];
         }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
@@ -545,9 +523,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
       isLoading = false;
@@ -558,17 +536,12 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<DropdownNamesTable>> getDrTreatmentRoute() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
 
       String url = ConstApiUrl.empGetDrTreatRouteAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
-
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       ResponseDropdownNames dropdownMuliFieldsData = ResponseDropdownNames.fromJson(jsonDecode(response));
 
@@ -579,7 +552,7 @@ class MedicationsheetController extends GetxController {
           drMedicationRouteDropdownTable = [];
         }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
@@ -594,9 +567,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: pref!.getString(AppString.keyLoginId) ?? '',
+        tokenNo: pref!.getString(AppString.keyToken) ?? '',
+        empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
       isLoading = false;
@@ -607,15 +580,11 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<List<DropdownNamesTable>> getDrTreatmentFrequency() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
 
       String url = ConstApiUrl.empGetDrTreatFrequencyAPI;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-
       var jsonbodyObj = {"loginId": loginId, "empId": empId};
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
@@ -628,7 +597,7 @@ class MedicationsheetController extends GetxController {
           drMedicationFreqDropdownTable = [];
         }
       } else if (dropdownMuliFieldsData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (dropdownMuliFieldsData.statusCode == 400) {
@@ -643,9 +612,9 @@ class MedicationsheetController extends GetxController {
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
-        loginID: pref.getString(AppString.keyLoginId) ?? '',
-        tokenNo: pref.getString(AppString.keyToken) ?? '',
-        empID: pref.getString(AppString.keyEmpId) ?? '',
+        loginID: loginId,
+        tokenNo: tokenNo,
+        empID: empId,
       );
     } finally {
       isLoading = false;
@@ -693,18 +662,14 @@ class MedicationsheetController extends GetxController {
       Get.rawSnackbar(message: 'Something went wrong in Edit Dr Medication Sheet!');
       return;
     }
-    SharedPreferences pref = await SharedPreferences.getInstance();
+
     try {
       isLoading = true;
       update();
 
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-      empId = await pref.getString(AppString.keyEmpId) ?? "";
       admissionId = await fetchAdmissionId(empId: empId, loginId: loginId, tokenNo: tokenNo, ipdNo: ipdNo);
       update();
       String url = ConstApiUrl.empSaveDrTreatmentNoteAPI;
-      // Parse date and time
       DateTime? parsedDate;
       try {
         parsedDate = DateFormat('dd-MM-yyyy').parse(dateController.text);
@@ -770,14 +735,12 @@ class MedicationsheetController extends GetxController {
 // 👇👇👇 Proper JSON Body to Send
       var jsonBody = drTreatMaster.toJson(); // ✅ THIS is correct
       var response = await apiController.parseJsonBody(url, "", jsonBody);
-      // print("Response: ${response.toString()}");
-      // debugPrint("Response: ${response.toString()}");
       RespDrTreatmentMst responseData = RespDrTreatmentMst.fromJson(jsonDecode(response));
 
       if (responseData.statusCode == 200 && responseData.isSuccess == 'true') {
         Get.rawSnackbar(message: responseData.message ?? 'Data saved successfully');
       } else if (responseData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (responseData.statusCode == 400) {
@@ -801,18 +764,12 @@ class MedicationsheetController extends GetxController {
   }
 
   Future<void> saveAddMedication(int selectedMasterIndex, int selectedDetailIndex) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-      empId = await pref.getString(AppString.keyEmpId) ?? "";
       admissionId = await fetchAdmissionId(empId: empId, loginId: loginId, tokenNo: tokenNo, ipdNo: ipdNo);
       update();
 
       String url = ConstApiUrl.empSaveAddMedicationSheetAPI; // 👈 detail-only API
-
-      final uuid = Uuid();
 
       final selectedMedicationDetails = RespDrTreatDetail(
         drDtlId: selectedDetailIndex < 0 ? 0 : drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex].drDtlId,
@@ -858,7 +815,6 @@ class MedicationsheetController extends GetxController {
 
       RespDrDetailWithStatus responseData = RespDrDetailWithStatus.fromJson(jsonDecode(response));
 
-
       if (responseData.statusCode == 200) {
         if (responseData.isSuccess == 'true') {
           Get.rawSnackbar(message: responseData.message ?? 'Medication detail saved successfully');
@@ -875,12 +831,12 @@ class MedicationsheetController extends GetxController {
             }
             drTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
           }
-          // print(drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex]);
+          clearAddMedication();
         } else {
           Get.rawSnackbar(message: responseData.message ?? 'Failed to save medication detail');
         }
       } else if (responseData.statusCode == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again');
       } else if (responseData.statusCode == 400) {
@@ -907,14 +863,9 @@ class MedicationsheetController extends GetxController {
     required int mstId,
     required int dtlId,
   }) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update(); // loading true
-      loginId = await pref.getString(AppString.keyLoginId) ?? "";
-      tokenNo = await pref.getString(AppString.keyToken) ?? "";
-      empId = await pref.getString(AppString.keyEmpId) ?? "";
-
       String url = ConstApiUrl.empDeleteMedicationSheetAPI;
 
       // 🔥 Prepare delete request body
@@ -934,7 +885,7 @@ class MedicationsheetController extends GetxController {
         Get.rawSnackbar(message: parsed['Message'] ?? 'Medication deleted successfully');
         // 💡 Tu yaha se local list se bhi delete kar sakta hai
       } else if (parsed['statusCode'] == 401) {
-        pref.clear();
+        pref!.clear();
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Session expired. Please login again');
       } else {
@@ -961,7 +912,7 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  Future<void> clearData() async {
+  Future<void> clearMasterData() async {
     searchController.clear();
     DateTime now = DateTime.now();
     String formattedDate = "${now.day.toString().padLeft(2, '0')}-${now.month.toString().padLeft(2, '0')}-${now.year}";
@@ -975,16 +926,7 @@ class MedicationsheetController extends GetxController {
     selectedDropdnOptionId.clear();
     fromDateController.clear();
     toDateController.clear();
-    flowRateController.clear();
-    stopDateController.clear();
-    nameController.clear();
-    medicationTypeController.clear();
-    FormularyMedicinesController.clear();
-    nonFormularyMedicinesController.clear();
-    instructionTypeController.clear();
-    doseController.clear();
-    qtyController.clear();
-    routeController.clear();
+
     update(); // 🔁 Update GetBuilder/UI if needed
   }
 
@@ -992,7 +934,6 @@ class MedicationsheetController extends GetxController {
     flowRateController.clear();
     stopDateController.clear();
     stopTime = null;
-    nameController.clear();
     medicationTypeController.clear();
     FormularyMedicinesController.clear();
     nonFormularyMedicinesController.clear();
@@ -1006,6 +947,7 @@ class MedicationsheetController extends GetxController {
     FreqEveningController.clear();
     FreqNightController.clear();
     daysController.clear();
+
     update();
   }
 
@@ -1033,15 +975,13 @@ class MedicationsheetController extends GetxController {
       selectedDateTime = DateTime.parse(listItem.date.toString());
       if (selectedDateTime != null) {
         // Set Date
-        final formattedDate =
-            "${selectedDateTime!.day.toString().padLeft(2, '0')}-${selectedDateTime!.month.toString().padLeft(2, '0')}-${selectedDateTime!.year}";
+        final formattedDate = "${selectedDateTime!.day.toString().padLeft(2, '0')}-${selectedDateTime!.month.toString().padLeft(2, '0')}-${selectedDateTime!.year}";
         dateController.text = formattedDate;
 
         // Set Time
         selectedTime = TimeOfDay.fromDateTime(selectedDateTime!);
 
-        weightController.text =
-            listItem.weight.toString().trim() == "null" || listItem.weight.toString().isEmpty ? "" : listItem.weight.toString().trim();
+        weightController.text = listItem.weight.toString().trim() == "null" || listItem.weight.toString().isEmpty ? "" : listItem.weight.toString().trim();
         remarksController.text = listItem.remark.toString().trim();
         diagnosisController.text = listItem.provisionalDiagnosis.toString().trim();
         TemplateNameController.text = listItem.templateName.toString().trim();
@@ -1095,8 +1035,7 @@ class MedicationsheetController extends GetxController {
       FreqAfternoonController.text = normalizeString(listItem.frequency2!.name.toString());
       FreqEveningController.text = normalizeString(listItem.frequency3!.name.toString());
       FreqNightController.text = normalizeString(listItem.frequency4!.name.toString());
-      stopDateController.text =
-          listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
+      stopDateController.text = listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
       qtyController.text = normalizeString(listItem.qty.toString());
       daysController.text = normalizeString(listItem.days.toString());
 
@@ -1279,7 +1218,7 @@ class MedicationsheetController extends GetxController {
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
-                              clearData();
+                              clearMasterData();
                             },
                             child: Icon(Icons.close),
                           )
@@ -1368,9 +1307,7 @@ class MedicationsheetController extends GetxController {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      controller.selectedTime != null
-                                          ? controller.selectedTime.format(context)
-                                          : 'Select Time', // 👈 Show this if not selected yet
+                                      controller.selectedTime != null ? controller.selectedTime.format(context) : 'Select Time', // 👈 Show this if not selected yet
                                       style: TextStyle(
                                         color: controller.selectedTime != null ? AppColor.black : AppColor.grey,
                                       ),
@@ -1582,10 +1519,9 @@ class MedicationsheetController extends GetxController {
                           ),
                           onPressed: () async {
                             // Submit logic
-                            await saveMedicationSheet(
-                                selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
+                            await saveMedicationSheet(selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
-                            clearData();
+                            clearMasterData();
                             Navigator.pop(context);
                           },
                           child: Text(
@@ -1712,8 +1648,7 @@ class MedicationsheetController extends GetxController {
                                 child: Container(
                                   width: getDynamicHeight(size: 0.3),
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
+                                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
                                   child: Text(
                                     drTreatMasterList[index].srNo.toString(), // ✅ RxID value
                                     style: AppStyle.fontfamilyplus,
@@ -2058,7 +1993,7 @@ class MedicationsheetController extends GetxController {
                       child: ElevatedButton(
                         onPressed: () {
                           fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
-                          clearData();
+                          clearMasterData();
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
@@ -2134,10 +2069,8 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                      _buildNoteSection(AppString.medicationtype,
-                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
-                      _buildNoteSection(
-                          AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
+                      _buildNoteSection(AppString.medicationtype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                      _buildNoteSection(AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
                         height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                         child: Column(
@@ -2282,11 +2215,9 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
-                      _buildNoteSection(
-                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
                       _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(
-                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                      _buildNoteSection(AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),

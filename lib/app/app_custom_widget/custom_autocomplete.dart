@@ -52,13 +52,20 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
       fieldViewBuilder: (context, textEditingController, localFocusNode, onEditingComplete) {
         final effectiveFocusNode = focusNode ?? localFocusNode;
 
-        // Sync external controller to internal Autocomplete controller
-        if (controller.text.isNotEmpty && textEditingController.text != controller.text) {
-          textEditingController.text = controller.text;
-          textEditingController.selection = TextSelection.fromPosition(
-            TextPosition(offset: textEditingController.text.length),
-          );
-        }
+        // // Sync external controller to internal Autocomplete controller
+        // if (controller.text.isNotEmpty && textEditingController.text != controller.text) {
+        //   textEditingController.text = controller.text;
+        //   textEditingController.selection = TextSelection.fromPosition(
+        //     TextPosition(offset: textEditingController.text.length),
+        //   );
+        // }
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (controller.text.isNotEmpty && controller.text != textEditingController.text) {
+            textEditingController.text = controller.text;
+            textEditingController.selection = TextSelection.collapsed(offset: controller.text.length);
+          }
+        });
 
         textEditingController.addListener(() {
           if (textEditingController.text != controller.text) {
