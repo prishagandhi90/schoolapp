@@ -618,41 +618,46 @@ class AddMedicationScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: CustomDatePicker(
-                                        dateController: controller.stopDateController,
-                                        style:
-                                            TextStyle(fontSize: getDynamicHeight(size: 0.014), fontFamily: CommonFontStyle.plusJakartaSans),
-                                        hintText: AppString.selectdate,
-                                        decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final pickedDate = await showDatePicker(
+                                            context: context,
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100),
+                                          );
+
+                                          if (pickedDate != null) {
+                                            final formattedDate =
+                                                "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
+                                            controller.stopDateController.text = formattedDate;
+                                            controller.update();
+                                          }
+                                          FocusScope.of(context).unfocus();
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
                                             horizontal: getDynamicHeight(size: 0.012),
                                             vertical: getDynamicHeight(size: 0.011),
                                           ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: AppColor.black1),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: AppColor.black1),
                                             borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
                                           ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(color: AppColor.black1),
-                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                                          ),
-                                          suffixIcon: IconButton(
-                                            icon: const Icon(Icons.calendar_today),
-                                            onPressed: () async {
-                                              final pickedDate = await showDatePicker(
-                                                context: context,
-                                                // initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
-                                                lastDate: DateTime(2100),
-                                              );
-
-                                              if (pickedDate != null) {
-                                                final formattedDate =
-                                                    "${pickedDate.day.toString().padLeft(2, '0')}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.year}";
-                                                controller.stopDateController.text = formattedDate;
-                                              }
-                                              FocusScope.of(context).unfocus();
-                                            },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                controller.stopDateController.text.isNotEmpty
+                                                    ? controller.stopDateController.text
+                                                    : AppString.selectdate,
+                                                style: TextStyle(
+                                                  fontSize: getDynamicHeight(size: 0.014),
+                                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                                  color: controller.stopDateController.text.isNotEmpty ? AppColor.black : AppColor.grey,
+                                                ),
+                                              ),
+                                              Icon(Icons.calendar_today),
+                                            ],
                                           ),
                                         ),
                                       ),
