@@ -144,6 +144,8 @@ class AddMedicationScreen extends StatelessWidget {
                                   hintText: AppString.formularymedicine,
                                   hintStyle: AppStyle.grey,
                                   isDense: true,
+                                  onUpdate: () => controller.update(),
+                                  onChanged: (val) => controller.update(),
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: getDynamicHeight(size: 0.012),
                                     vertical: getDynamicHeight(size: 0.016),
@@ -257,6 +259,9 @@ class AddMedicationScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                   ),
+                                  onChanged: (value) {
+                                    controller.update();
+                                  },
                                 ),
                                 SizedBox(height: getDynamicHeight(size: 0.005)),
                                 Row(
@@ -328,6 +333,9 @@ class AddMedicationScreen extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                             ),
                                           ),
+                                          onChanged: (value) {
+                                            controller.update();
+                                          },
                                         ),
                                       ),
                                     ),
@@ -365,6 +373,9 @@ class AddMedicationScreen extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                             ),
                                           ),
+                                          onChanged: (value) {
+                                            controller.update();
+                                          },
                                         ),
                                       ),
                                     ),
@@ -434,6 +445,9 @@ class AddMedicationScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                   ),
+                                  onChanged: (value) {
+                                    controller.update();
+                                  },
                                 ),
                                 SizedBox(height: getDynamicHeight(size: 0.006)),
                                 Row(
@@ -610,6 +624,9 @@ class AddMedicationScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                   ),
+                                  onChanged: (value) {
+                                    controller.update();
+                                  },
                                 ),
                                 SizedBox(height: 6),
                                 Row(
@@ -725,6 +742,9 @@ class AddMedicationScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006)),
                                     ),
                                   ),
+                                  onChanged: (value) {
+                                    controller.update();
+                                  },
                                 ),
                                 SizedBox(height: getDynamicHeight(size: 0.01)),
                                 ElevatedButton(
@@ -732,9 +752,11 @@ class AddMedicationScreen extends StatelessWidget {
                                     backgroundColor: AppColor.teal,
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.006))),
                                   ),
-                                  onPressed: () async {
-                                    await controller.saveAddMedication(selectedMasterIndex, selectedDetailIndex);
-                                  },
+                                  onPressed: controller.isSaveButtonEnabled()
+                                      ? () async {
+                                          await controller.saveAddMedication(selectedMasterIndex, selectedDetailIndex);
+                                        }
+                                      : null,
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: getDynamicHeight(size: 0.02),

@@ -1,7 +1,6 @@
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 
 class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
@@ -14,13 +13,16 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
   final bool fromAdmittedScreen;
   final VoidCallback? onSuffixIconPressed;
   final VoidCallback? onClearSuggestions;
+  final VoidCallback? onUpdate; // 👈 NEW for GetX controller.update()
   final int? minLines;
   final int? maxLines;
   final TextStyle? hintStyle;
   final EdgeInsetsGeometry? contentPadding;
   final bool? isDense;
+  final void Function(String)? onChanged;
+  final ValueNotifier<bool> wasOptionSelected = ValueNotifier<bool>(false);
 
-  const CustomAutoComplete({
+  CustomAutoComplete({
     Key? key,
     required this.optionsBuilder,
     required this.displayStringForOption,
@@ -30,12 +32,14 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
     this.hintText = 'Search',
     this.onSuffixIconPressed,
     this.onClearSuggestions,
+    this.onUpdate,
     this.minLines,
     this.maxLines,
     this.hintStyle,
     this.contentPadding,
     this.isDense,
     this.fromAdmittedScreen = false,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -44,14 +48,27 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
       displayStringForOption: displayStringForOption,
       optionsBuilder: optionsBuilder,
       onSelected: (T selection) {
+        wasOptionSelected.value = true;
         onSelected(selection);
         if (onClearSuggestions != null) {
           onClearSuggestions!();
         }
+        if (onUpdate != null) onUpdate!();
       },
       fieldViewBuilder: (context, textEditingController, localFocusNode, onEditingComplete) {
         final effectiveFocusNode = focusNode ?? localFocusNode;
 
+        effectiveFocusNode.addListener(() {
+          if (!effectiveFocusNode.hasFocus) {
+            // Focus chala gaya
+            if (!wasOptionSelected.value) {
+              controller.clear();
+              if (onClearSuggestions != null) onClearSuggestions!();
+              if (onUpdate != null) onUpdate!();
+            }
+            wasOptionSelected.value = false; // reset for next time
+          }
+        });
         // // Sync external controller to internal Autocomplete controller
         // if (controller.text.isNotEmpty && textEditingController.text != controller.text) {
         //   textEditingController.text = controller.text;
@@ -73,13 +90,14 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
           }
         });
 
-        return TextFormField(
+        return CustomTextFormField(
           controller: textEditingController,
           focusNode: effectiveFocusNode,
           minLines: minLines,
           maxLines: maxLines,
           style: TextStyle(fontSize: 14),
-          enableInteractiveSelection: true,
+          onChanged: onChanged,
+          // enableInteractiveSelection: true,
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: hintStyle,
@@ -94,6 +112,7 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
                       textEditingController.clear();
                       if (onSuffixIconPressed != null) onSuffixIconPressed!();
                       if (onClearSuggestions != null) onClearSuggestions!();
+                      if (onUpdate != null) onUpdate!();
                       effectiveFocusNode.unfocus();
                     },
                   )

@@ -372,6 +372,8 @@ class AdpatientScreen extends StatelessWidget {
       medicationsheetController.uhid = '';
       medicationsheetController.webUserName = '';
     }
+    medicationsheetController.clearMasterData();
+    medicationsheetController.clearAddMedication();
     await medicationsheetController.initSharedPref();
     medicationsheetController.onMedicationScreenLoad();
     await medicationsheetController.fetchDrTreatmentData(

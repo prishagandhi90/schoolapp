@@ -126,6 +126,33 @@ class MedicationsheetController extends GetxController {
     getDrTreatmentFrequency();
   }
 
+  bool isSaveButtonEnabled() {
+    // 🧠 Basic Checks
+    final isFormularyValid = FormularyMedicinesController.text.trim().isNotEmpty;
+    final isNonFormularyValid = nonFormularyMedicinesController.text.trim().isNotEmpty;
+
+    final isRequiredFieldsValid = medicationTypeController.text.trim().isNotEmpty &&
+        routeController.text.trim().isNotEmpty &&
+        qtyController.text.trim().isNotEmpty &&
+        daysController.text.trim().isNotEmpty;
+
+    final isAnyMedicineSelected = isFormularyValid || isNonFormularyValid;
+
+    // 🔒 All base conditions
+    if (ipdNo.isNotEmpty && isRequiredFieldsValid && isAnyMedicineSelected && medicationTypeController.text.isNotEmpty) {
+      final medType = medicationTypeController.text.trim().toUpperCase();
+      final flowRate = flowRateController.text.trim().toLowerCase();
+
+      if (medType != 'IV FLUIDS / BLOOD TRANSFUSION' && (flowRate == '' || flowRate == 'null')) {
+        return true;
+      } else if (medType == 'IV FLUIDS / BLOOD TRANSFUSION' && flowRate != '' && flowRate != 'null' && flowRate.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   String getUHId(String patientName) {
     if (patientName.isEmpty) return "";
 
@@ -1052,138 +1079,7 @@ class MedicationsheetController extends GetxController {
     return input.trim();
   }
 
-  // Future<void> showDateBottomSheet(BuildContext context) async {
-  //   showModalBottomSheet(
-  //     context: Get.context!,
-  //     isDismissible: true,
-  //     enableDrag: true,
-  //     isScrollControlled: true,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-  //     ),
-  //     builder: (context) {
-  //       return Padding(
-  //         padding: MediaQuery.of(context).viewInsets,
-  //         child: Container(
-  //           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-  //           decoration: const BoxDecoration(
-  //             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //             color: Colors.white,
-  //           ),
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               // 🔹 Title Row with Close Button
-  //               Row(
-  //                 children: [
-  //                   const Spacer(),
-  //                   const Text(
-  //                     'Select Date',
-  //                     style: TextStyle(
-  //                       fontSize: 16,
-  //                       color: const Color.fromARGB(255, 33, 137, 145),
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                   const Spacer(),
-  //                   GestureDetector(
-  //                     onTap: () => Navigator.pop(context),
-  //                     child: const Icon(Icons.close, size: 20),
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 16),
-  //               // 🔹 Date Fields
-  //               Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: CustomDatePicker(
-  //                       dateController: fromDateController,
-  //                       hintText: AppString.from,
-  //                       onDateSelected: () async {
-  //                         final picked = await showDatePicker(
-  //                           context: context,
-  //                           initialDate: DateTime.now(),
-  //                           firstDate: DateTime(2000),
-  //                           lastDate: DateTime(2100),
-  //                         );
-  //                         if (picked != null) {
-  //                           selectedFromDate = picked;
-  //                           fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-  //                           update();
-  //                         }
-  //                       },
-  //                     ),
-  //                   ),
-  //                   SizedBox(width: getDynamicHeight(size: 0.01)),
-  //                   Expanded(
-  //                     child: CustomDatePicker(
-  //                       dateController: toDateController,
-  //                       hintText: AppString.to,
-  //                       onDateSelected: () async {
-  //                         final picked = await showDatePicker(
-  //                           context: context,
-  //                           initialDate: DateTime.now(),
-  //                           firstDate: DateTime(2000),
-  //                           lastDate: DateTime(2100),
-  //                         );
-  //                         if (picked != null) {
-  //                           selectedToDate = picked;
-  //                           toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-  //                           update();
-  //                         }
-  //                       },
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 20),
-  //               // 🔹 Buttons
-  //               Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: ElevatedButton(
-  //                       style: ElevatedButton.styleFrom(
-  //                         backgroundColor: const Color.fromARGB(255, 33, 137, 145),
-  //                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-  //                       ),
-  //                       onPressed: () {
-  //                         if (selectedFromDate != null && selectedToDate != null) {
-  //                           filterByDateRange();
-  //                           Navigator.pop(context);
-  //                         } else {
-  //                           Get.snackbar("Error", "Please select both dates");
-  //                         }
-  //                       },
-  //                       child: const Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-  //                     ),
-  //                   ),
-  //                   const SizedBox(width: 12),
-  //                   Expanded(
-  //                     child: ElevatedButton(
-  //                       style: ElevatedButton.styleFrom(
-  //                         backgroundColor: const Color.fromARGB(255, 33, 137, 145),
-  //                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-  //                       ),
-  //                       onPressed: () {
-  //                         fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet');
-  //                         clearData(); // Clear all fields
-  //                         Navigator.pop(context); // Just close
-  //                       },
-  //                       child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //               const SizedBox(height: 10),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-  /// Show medication dialog with all fields
+  // Show medication dialog with all fields
   Future<void> showMedicationDialog(BuildContext context, int selMasterindex) async {
     await showDialog(
       context: context,
