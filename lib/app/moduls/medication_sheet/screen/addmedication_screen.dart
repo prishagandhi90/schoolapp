@@ -27,6 +27,7 @@ class AddMedicationScreen extends StatelessWidget {
 
   final ScrollController formScrollController = ScrollController();
   final ScrollController listScrollController = ScrollController();
+  bool hasFormularyMedSelFromList = false;
 
   @override
   Widget build(BuildContext context) {
@@ -138,40 +139,48 @@ class AddMedicationScreen extends StatelessWidget {
                                 ),
                                 SizedBox(height: getDynamicHeight(size: 0.006)),
                                 CustomAutoComplete<SearchserviceModel>(
-                                  controller: controller.FormularyMedicinesController,
-                                  // fromAdmittedScreen: controller.FormularyMedicinesController.text.isNotEmpty ? true : false,
-                                  fromAdmittedScreen: controller.fromAdmittedScreen,
-                                  hintText: AppString.formularymedicine,
-                                  hintStyle: AppStyle.grey,
-                                  isDense: true,
-                                  onUpdate: () => controller.update(),
-                                  onChanged: (val) => controller.update(),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: getDynamicHeight(size: 0.012),
-                                    vertical: getDynamicHeight(size: 0.016),
-                                  ),
-                                  displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                                  optionsBuilder: (TextEditingValue textEditingValue) async {
-                                    if (textEditingValue.text.trim().isEmpty) {
+                                    controller: controller.FormularyMedicinesController,
+                                    // fromAdmittedScreen: controller.FormularyMedicinesController.text.isNotEmpty ? true : false,
+                                    fromAdmittedScreen: controller.fromAdmittedScreen,
+                                    hintText: AppString.formularymedicine,
+                                    hintStyle: AppStyle.grey,
+                                    isDense: true,
+                                    // onUpdate: () => controller.update(),
+                                    onChanged: (val) => controller.update(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: getDynamicHeight(size: 0.012),
+                                      vertical: getDynamicHeight(size: 0.016),
+                                    ),
+                                    displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                                    optionsBuilder: (TextEditingValue textEditingValue) async {
+                                      if (textEditingValue.text.trim().isEmpty) {
+                                        controller.FormularyMedicines_suggestions.clear();
+                                        return const Iterable<SearchserviceModel>.empty();
+                                      }
+                                      await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
+                                      return controller.FormularyMedicines_suggestions;
+                                    },
+                                    onSelected: (SearchserviceModel selection) {
+                                      hasFormularyMedSelFromList = true;
+                                      controller.FormularyMedicinesIDController.text = selection.name ?? '';
+                                      controller.FormularyMedicinesController.text = selection.txt ?? '';
+                                      controller.update(); // Trigger state update if needed
+                                    },
+                                    onClearSuggestions: () {
                                       controller.FormularyMedicines_suggestions.clear();
-                                      return const Iterable<SearchserviceModel>.empty();
-                                    }
-                                    await controller.getFormularyMedicines_Autocomp(textEditingValue.text);
-                                    return controller.FormularyMedicines_suggestions;
-                                  },
-                                  onSelected: (SearchserviceModel selection) {
-                                    controller.FormularyMedicinesIDController.text = selection.name ?? '';
-                                    controller.FormularyMedicinesController.text = selection.txt ?? '';
-                                    controller.update(); // Trigger state update if needed
-                                  },
-                                  onClearSuggestions: () {
-                                    controller.FormularyMedicines_suggestions.clear();
-                                  },
-                                  onSuffixIconPressed: () {
-                                    controller.FormularyMedicinesIDController.clear();
-                                    controller.update(); // Trigger state update if needed
-                                  },
-                                ),
+                                    },
+                                    onSuffixIconPressed: () {
+                                      controller.FormularyMedicinesIDController.clear();
+                                      controller.update(); // Trigger state update if needed
+                                    },
+                                    onFocusOutside: () {
+                                      if (!hasFormularyMedSelFromList) {
+                                        controller.FormularyMedicinesController.clear();
+                                        controller.FormularyMedicinesIDController.clear();
+                                        controller.update();
+                                      }
+                                      hasFormularyMedSelFromList = false;
+                                    }),
 
                                 // Autocomplete<SearchserviceModel>(
                                 //   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
