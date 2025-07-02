@@ -185,12 +185,14 @@ class MedicationScreen extends StatelessWidget {
                                     return controller.suggestions;
                                   },
                                   onSelected: (SearchserviceModel selection) async {
+                                    controller.isLoading = true;
                                     controller.nameController.text = selection.txt ?? '';
                                     controller.ipdNo = selection.name ?? '';
                                     controller.uhid = controller.getUHId(selection.txt ?? '');
                                     controller.suggestions.clear();
 
                                     controller.searchFocusNode.unfocus();
+
                                     await controller.fetchDrTreatmentData(
                                       ipdNo: selection.name ?? '',
                                       treatTyp: 'Medication Sheet',
@@ -201,6 +203,7 @@ class MedicationScreen extends StatelessWidget {
                                   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
                                     final effectiveController =
                                         controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                                    controller.setFocusNode(focusNode);
                                     return CustomTextFormField(
                                       controller: effectiveController,
                                       focusNode: focusNode,
