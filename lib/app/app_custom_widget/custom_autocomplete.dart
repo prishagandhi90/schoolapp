@@ -95,6 +95,7 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
           focusNode: effectiveFocusNode,
           minLines: minLines,
           maxLines: maxLines,
+          
           // style: TextStyle(fontSize: 14),
           onChanged: onChanged,
           // enableInteractiveSelection: true,
