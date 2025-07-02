@@ -43,8 +43,8 @@ class ApiController extends GetxController {
 
     // final body = jsonEncode(jsonBodyObj);
     final body = jsonBodyObj == '' ? null : jsonEncode(jsonBodyObj);
-    print("body: $body");
-    print("jsonBodyObj: $jsonBodyObj");
+    // print("body: $body");
+    // print("jsonBodyObj: $jsonBodyObj");
     try {
       final response = await http.post(Uri.parse(apiURL), headers: headers, body: body);
       return response.body; // This returns a String
@@ -211,8 +211,7 @@ class ApiController extends GetxController {
   }
 
 //get dio api
-  static dynamic getMethodWithHeaderDio(
-      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
+  static dynamic getMethodWithHeaderDio({String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -258,8 +257,7 @@ class ApiController extends GetxController {
     }
   }
 
-  static dynamic deleteMethodWithHeaderDio(
-      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
+  static dynamic deleteMethodWithHeaderDio({String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -305,8 +303,7 @@ class ApiController extends GetxController {
     }
   }
 
-  static dynamic putMethodWithHeaderDio(
-      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
+  static dynamic putMethodWithHeaderDio({String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }

@@ -253,8 +253,7 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter,
-                                              height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -383,7 +382,7 @@ class AdpatientScreen extends StatelessWidget {
       isload: true,
     );
 
-    Get.to(() => MedicationScreen())!.then((value) async {
+    Get.toNamed(Paths.MEDICATIONSCREEN)!.then((value) async {
       final controller = Get.put(MedicationsheetController());
       await controller.clearMasterData();
 

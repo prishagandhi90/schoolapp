@@ -10,10 +10,10 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/searchservice_model.dart';
+import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
-import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
-import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,6 +27,7 @@ class MedicationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(MedicationsheetController());
+
     return GetBuilder<MedicationsheetController>(
       builder: (controller) {
         return Scaffold(
@@ -133,117 +134,125 @@ class MedicationScreen extends StatelessWidget {
                                 FocusScope.of(context).unfocus();
                                 return true; // Allow navigation to go back
                               },
-                              child: CustomAutoComplete<SearchserviceModel>(
-                                controller: controller.nameController,
-                                maxLines: null,
-                                minLines: 1,
-                                hintText: AppString.patientuhidipd,
-                                fromAdmittedScreen: controller.fromAdmittedScreen,
-                                hintStyle: AppStyle.grey.copyWith(
-                                  fontSize: getDynamicHeight(size: 0.012),
-                                ),
-                                displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                                optionsBuilder: (TextEditingValue textEditingValue) async {
-                                  if (textEditingValue.text.trim().isEmpty) {
-                                    controller.suggestions.clear();
-                                    return const Iterable<SearchserviceModel>.empty();
-                                  }
-                                  await controller.getSuggestions(textEditingValue.text);
-                                  return controller.suggestions;
-                                },
-                                onSelected: (SearchserviceModel selection) async {
-                                  controller.nameController.text = selection.txt ?? '';
-                                  controller.ipdNo = selection.name ?? '';
-                                  controller.uhid = controller.getUHId(selection.txt ?? '');
-                                  controller.suggestions.clear();
-                                  controller.isLoading = true;
-                                  // controller.update();
-                                  await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet', isload: false);
-                                },
-                                onClearSuggestions: () {
-                                  controller.suggestions.clear();
-                                },
-                                onSuffixIconPressed: () {
-                                  controller.nameController.clear();
-                                  controller.suggestions.clear();
-                                  controller.ipdNo = '';
-                                  controller.drTreatMasterList.clear();
-                                  SchedulerBinding.instance.addPostFrameCallback((_) {
-                                    controller.update();
-                                  });
-                                },
-                              ),
-                              // child: Autocomplete<SearchserviceModel>(
-                              //     displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
-                              //     optionsBuilder: (TextEditingValue textEditingValue) async {
-                              //       if (textEditingValue.text.trim().isEmpty) {
-                              //         controller.suggestions.clear();
-                              //         return const Iterable<SearchserviceModel>.empty();
-                              //       }
-                              //       await controller.getSuggestions(textEditingValue.text);
-                              //       return controller.suggestions;
-                              //     },
-                              //     onSelected: (SearchserviceModel selection) async {
-                              //       controller.nameController.text = selection.txt ?? '';
-                              //       controller.ipdNo = selection.name ?? '';
-                              //       controller.uhid = controller.getUHId(selection.txt ?? '');
+                              // child: CustomAutoComplete<SearchserviceModel>(
+                              //   controller: controller.nameController,
+                              //   maxLines: null,
+                              //   minLines: 1,
+                              //   hintText: AppString.patientuhidipd,
+                              //   fromAdmittedScreen: controller.fromAdmittedScreen,
+                              //   hintStyle: AppStyle.grey.copyWith(
+                              //     fontSize: getDynamicHeight(size: 0.012),
+                              //   ),
+                              //   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                              //   optionsBuilder: (TextEditingValue textEditingValue) async {
+                              //     if (textEditingValue.text.trim().isEmpty) {
                               //       controller.suggestions.clear();
-                              //       await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet');
+                              //       return const Iterable<SearchserviceModel>.empty();
+                              //     }
+                              //     await controller.getSuggestions(textEditingValue.text);
+                              //     return controller.suggestions;
+                              //   },
+                              //   onSelected: (SearchserviceModel selection) async {
+                              //     controller.nameController.text = selection.txt ?? '';
+                              //     controller.ipdNo = selection.name ?? '';
+                              //     controller.uhid = controller.getUHId(selection.txt ?? '');
+                              //     controller.suggestions.clear();
+                              //     controller.isLoading = true;
+                              //     // controller.update();
+                              //     await controller.fetchDrTreatmentData(ipdNo: selection.name ?? '', treatTyp: 'Medication Sheet', isload: false);
+                              //   },
+                              //   onClearSuggestions: () {
+                              //     controller.suggestions.clear();
+                              //   },
+                              //   onSuffixIconPressed: () {
+                              //     controller.nameController.clear();
+                              //     controller.suggestions.clear();
+                              //     controller.ipdNo = '';
+                              //     controller.drTreatMasterList.clear();
+                              //     SchedulerBinding.instance.addPostFrameCallback((_) {
                               //       controller.update();
-                              //     },
-                              //     fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                              //       final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
-                              //           ? controller.nameController
-                              //           : nameController;
-                              //       return CustomTextFormField(
-                              //         controller: effectiveController,
-                              //         focusNode: focusNode,
-                              //         style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
-                              //         // readOnly: controller.nameController.text.isNotEmpty &&
-                              //         //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
-                              //         minLines: 1,
-                              //         maxLines: null,
-                              //         keyboardType: TextInputType.multiline,
-                              //         decoration: InputDecoration(
-                              //           hintText: AppString.patientuhidipd,
-                              //           isDense: true,
-                              //           border: OutlineInputBorder(),
-                              //           focusedBorder: OutlineInputBorder(
-                              //             borderSide: BorderSide(
-                              //               color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                              //               width: getDynamicHeight(size: 0.0008),
-                              //             ),
-                              //           ),
-                              //           enabledBorder: OutlineInputBorder(
-                              //             borderRadius: BorderRadius.all(Radius.circular(0)),
-                              //             borderSide:
-                              //                 BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
-                              //           ),
-                              //           prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
-                              //           suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
-                              //               ? IconButton(
-                              //                   icon: Icon(Icons.cancel_outlined, color: AppColor.black),
-                              //                   onPressed: () {
-                              //                     focusNode.unfocus();
-                              //                     controller.nameController.clear();
-                              //                     nameController.clear();
-                              //                     controller.suggestions.clear();
-                              //                     controller.ipdNo = '';
-                              //                     SchedulerBinding.instance.addPostFrameCallback((_) {
-                              //                       controller.update();
-                              //                     });
-                              //                   },
-                              //                 )
-                              //               : null,
-                              //         ),
-                              //         onTapOutside: (event) {
-                              //           focusNode.unfocus();
-                              //         },
-                              //         onFieldSubmitted: (value) {
-                              //           focusNode.unfocus();
-                              //         },
-                              //       );
-                              //     }),
+                              //     });
+                              //   },
+                              // ),
+                              child: Autocomplete<SearchserviceModel>(
+                                  displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
+                                  optionsBuilder: (TextEditingValue textEditingValue) async {
+                                    if (textEditingValue.text.trim().isEmpty) {
+                                      controller.suggestions.clear();
+                                      return const Iterable<SearchserviceModel>.empty();
+                                    }
+                                    await controller.getSuggestions(textEditingValue.text);
+                                    return controller.suggestions;
+                                  },
+                                  onSelected: (SearchserviceModel selection) async {
+                                    controller.isLoading = true;
+                                    controller.nameController.text = selection.txt ?? '';
+                                    controller.ipdNo = selection.name ?? '';
+                                    controller.uhid = controller.getUHId(selection.txt ?? '');
+                                    controller.suggestions.clear();
+
+                                    controller.searchFocusNode.unfocus();
+
+                                    await controller.fetchDrTreatmentData(
+                                      ipdNo: selection.name ?? '',
+                                      treatTyp: 'Medication Sheet',
+                                      isload: false,
+                                    );
+                                    // controller.update();
+                                  },
+                                  fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                                    final effectiveController =
+                                        controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen ? controller.nameController : nameController;
+                                    controller.setFocusNode(focusNode);
+                                    return CustomTextFormField(
+                                      controller: effectiveController,
+                                      focusNode: focusNode,
+                                      style: TextStyle(fontSize: getDynamicHeight(size: 0.014)),
+                                      // readOnly: controller.nameController.text.isNotEmpty &&
+                                      //     controller.fromAdmittedScreen, // 👈 make readonly if patientname passed
+                                      minLines: 1,
+                                      maxLines: null,
+                                      keyboardType: TextInputType.multiline,
+                                      decoration: InputDecoration(
+                                        hintText: AppString.patientuhidipd,
+                                        isDense: true,
+                                        border: OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
+                                            width: getDynamicHeight(size: 0.0008),
+                                          ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(0)),
+                                          borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                        ),
+                                        prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
+                                        suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
+                                            ? IconButton(
+                                                icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                                                onPressed: () {
+                                                  focusNode.unfocus();
+                                                  controller.nameController.clear();
+                                                  nameController.clear();
+                                                  controller.suggestions.clear();
+                                                  controller.ipdNo = '';
+                                                  controller.drTreatMasterList.clear();
+                                                  SchedulerBinding.instance.addPostFrameCallback((_) {
+                                                    controller.update();
+                                                  });
+                                                },
+                                              )
+                                            : null,
+                                      ),
+                                      onTapOutside: (event) {
+                                        focusNode.unfocus();
+                                      },
+                                      onFieldSubmitted: (value) {
+                                        focusNode.unfocus();
+                                      },
+                                    );
+                                  }),
                             ),
                           ),
                           // 🔽 Same size as IconButton wala niche container
@@ -379,11 +388,18 @@ class MedicationScreen extends StatelessWidget {
                                       controller.selectedDetailIndex = -1;
                                       controller.clearAddMedication();
                                       // controller.update();
-                                      Get.to(
-                                        AddMedicationScreen(
-                                          selectedMasterIndex: index,
-                                          selectedDetailIndex: -1,
-                                        ),
+                                      // Get.to(
+                                      //   AddMedicationScreen(
+                                      //     selectedMasterIndex: index,
+                                      //     selectedDetailIndex: -1,
+                                      //   ),
+                                      // );
+                                      Get.toNamed(
+                                        Paths.AddMEDICATIONSCREEN,
+                                        arguments: {
+                                          'selectedMasterIndex': index,
+                                          'selectedDetailIndex': -1,
+                                        },
                                       );
                                       controller.isLoading = false;
                                       controller.update();
@@ -437,9 +453,15 @@ class MedicationScreen extends StatelessWidget {
                                                     controller.filteredDetails = controller.drTreatMasterList[index].detail;
                                                     controller.selectedMasterIndex = index;
                                                     controller.searchController.clear();
-                                                    Get.to(ViewMedicationScreen(
-                                                      selectedMasterIndex: index,
-                                                    ));
+                                                    Get.toNamed(
+                                                      Paths.VIEWMEDICATIONSCREEN,
+                                                      arguments: {
+                                                        'selectedMasterIndex': index,
+                                                      },
+                                                    );
+                                                    // Get.to(ViewMedicationScreen(
+                                                    //   selectedMasterIndex: index,
+                                                    // ));
                                                     controller.isLoading = false;
                                                     controller.isViewBtnclicked = false;
                                                   },
