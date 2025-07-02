@@ -242,6 +242,7 @@ class AppString {
   static String dose = "Dose";
   static String route = "Route";
   static String quantity1 = "Quantity";
+  static String stopdate = "Stop Date";
   static String stoptime = "Stop Time";
   static String treatmentdate = "Treatment Date:  ";
   static String addmedication = "Add Medication";
