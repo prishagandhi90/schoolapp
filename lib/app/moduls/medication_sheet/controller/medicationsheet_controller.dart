@@ -88,7 +88,7 @@ class MedicationsheetController extends GetxController {
   final TextEditingController daysController = TextEditingController();
   final TextEditingController stopTimeController = TextEditingController();
   final TextEditingController flowRateController = TextEditingController();
-
+  GlobalKey containerKey = GlobalKey();
   List<SearchserviceModel> suggestions = [];
   List<SearchserviceModel> FormularyMedicines_suggestions = [];
   var searchService = <SearchserviceModel>[].obs;

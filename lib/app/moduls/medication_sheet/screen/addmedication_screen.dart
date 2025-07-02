@@ -464,7 +464,10 @@ class AddMedicationScreen extends StatelessWidget {
                                     Expanded(
                                       child: CustomDropdown(
                                         text: AppString.morning,
-                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                        textStyle: TextStyle(
+                                            fontSize: getDynamicHeight(size: 0.013),
+                                            color: AppColor.grey,
+                                            fontFamily: CommonFontStyle.plusJakartaSans),
                                         controller: controller.FreqMorningController,
                                         buttonStyleData: ButtonStyleData(
                                           height: getDynamicHeight(size: 0.046),
@@ -670,7 +673,9 @@ class AddMedicationScreen extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                controller.stopDateController.text.isNotEmpty ? controller.stopDateController.text : AppString.selectdate,
+                                                controller.stopDateController.text.isNotEmpty
+                                                    ? controller.stopDateController.text
+                                                    : AppString.stopdate,
                                                 style: TextStyle(
                                                   fontSize: getDynamicHeight(size: 0.014),
                                                   fontFamily: CommonFontStyle.plusJakartaSans,
@@ -711,7 +716,7 @@ class AddMedicationScreen extends StatelessWidget {
                                               Text(
                                                 controller.stopTime != null
                                                     ? controller.stopTime!.format(context) // 🛑 ! lagaya hai, null nahi hai is point pe
-                                                    : AppString.selecttime,
+                                                    : AppString.stoptime,
                                                 style: TextStyle(
                                                   color: controller.stopTime != null ? AppColor.black : AppColor.grey,
                                                 ),
@@ -806,19 +811,23 @@ class AddMedicationScreen extends StatelessWidget {
                         ),
                       ),
                       // Medication List
-                      Expanded(
-                        flex: 1,
+                      SizedBox(
+                        height: getDynamicHeight(size: 0.045) *
+                            (controller.drTreatMasterList[selectedMasterIndex].detail!.length < 5
+                                ? controller.drTreatMasterList[selectedMasterIndex].detail!.length
+                                : 5),
                         child: Scrollbar(
                           controller: listScrollController,
                           child: ListView.separated(
                             controller: listScrollController,
-                            shrinkWrap: true,
+                            physics: controller.drTreatMasterList[selectedMasterIndex].detail!.length > 5
+                                ? AlwaysScrollableScrollPhysics()
+                                : NeverScrollableScrollPhysics(),
                             itemCount: controller.drTreatMasterList[selectedMasterIndex].detail!.length,
                             itemBuilder: (context, index) {
                               final item = controller.drTreatMasterList[selectedMasterIndex].detail![index];
                               return ListTile(
-                                visualDensity: VisualDensity(vertical: -4), // 🔥 this removes extra vertical space
-                                // dense: true,
+                                visualDensity: VisualDensity(vertical: -4),
                                 title: Text(
                                   "${index + 1}. ${item.itemName?.txt ?? ''}",
                                   style: TextStyle(
@@ -833,7 +842,7 @@ class AddMedicationScreen extends StatelessWidget {
                               endIndent: 8,
                               indent: 8,
                               thickness: 1,
-                              height: 0, // zero gap if you want tight spacing
+                              height: 0,
                             ),
                           ),
                         ),
