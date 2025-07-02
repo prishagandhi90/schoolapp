@@ -64,6 +64,7 @@ class MedicationsheetController extends GetxController {
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
   TimeOfDay? stopTime;
+  late FocusNode searchFocusNode;
 
   final TemplateNameController = TextEditingController();
   final TemplateIdController = TextEditingController();
@@ -105,6 +106,13 @@ class MedicationsheetController extends GetxController {
     final now = DateTime.now();
     final formattedDate = DateFormat('dd-MM-yyyy').format(now);
     dateController.text = formattedDate;
+    searchFocusNode = FocusNode();
+  }
+
+  @override
+  void onClose() {
+    searchFocusNode.dispose(); // cleanup
+    super.onClose();
   }
 
   bool isSearchActive = false;

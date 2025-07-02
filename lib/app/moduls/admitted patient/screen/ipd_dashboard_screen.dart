@@ -10,6 +10,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/controller/invest_requisit_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -249,7 +250,8 @@ class IpdDashboardScreen extends StatelessWidget {
                           controller.WebLoginUser = "";
                           controller.update();
 
-                          Get.to(() => AdpatientScreen())!.then((value) async {
+                          // Get.to(() => AdpatientScreen())!.then((value) async {
+                          Get.toNamed(Paths.IPDADMITTEDPATIENTS)!.then((value) async {
                             final controller = Get.put(AdPatientController());
                             controller.sortBySelected = -1;
                             await controller.resetForm();

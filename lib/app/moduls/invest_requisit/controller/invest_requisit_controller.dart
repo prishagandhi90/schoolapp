@@ -11,7 +11,6 @@ import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/const_api_url.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/admitted%20patient/controller/adpatient_controller.dart';
-import 'package:emp_app/app/moduls/admitted%20patient/screen/adpatient_screen.dart';
 import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/invest_requisit/model/externallab_model.dart';
@@ -1294,7 +1293,8 @@ class InvestRequisitController extends GetxController {
 
                 adPatientcontroller.update();
 
-                Get.to(() => AdpatientScreen())!.then((value) async {
+                // Get.to(() => AdpatientScreen())!.then((value) async {
+                Get.toNamed(Paths.IPDADMITTEDPATIENTS)!.then((value) async {
                   adPatientcontroller.sortBySelected = -1;
                   await adPatientcontroller.resetForm();
                   await adPatientcontroller.fetchData();

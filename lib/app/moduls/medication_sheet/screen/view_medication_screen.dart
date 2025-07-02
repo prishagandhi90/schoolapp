@@ -11,6 +11,8 @@ import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:emp_app/app/moduls/routes/app_pages.dart';
+import 'package:emp_app/my_navigator_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -23,6 +25,8 @@ class ViewMedicationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(MedicationsheetController());
+    Get.put(MedicationsheetController());
     return GetBuilder<MedicationsheetController>(
       builder: (controller) {
         return WillPopScope(
@@ -250,13 +254,67 @@ class ViewMedicationScreen extends StatelessWidget {
                                       ),
                                       child: GestureDetector(
                                         onTap: () async {
-                                          await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
-                                          Get.to(
-                                            AddMedicationScreen(
-                                              selectedMasterIndex: selectedMasterIndex,
-                                              selectedDetailIndex: index,
-                                            ),
-                                          );
+                                          Future.delayed(Duration(milliseconds: 200), () async {
+                                            await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                            // Get.to(
+                                            //   AddMedicationScreen(
+                                            //     selectedMasterIndex: selectedMasterIndex,
+                                            //     selectedDetailIndex: index,
+                                            //   ),
+                                            // );
+
+                                            // List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
+                                            // int i = 1;
+                                            // for (var route in stack) {
+                                            //   print("view med Screen ${i}: ${route.settings.name}");
+                                            //   i++;
+                                            // }
+                                            final stack = MyNavigatorObserver.currentStack;
+                                            final currentIndex = stack.lastIndexWhere((r) => r.settings.name == Paths.AddMEDICATIONSCREEN);
+
+                                            String? previousRouteName;
+                                            debugPrint('currentIndex: ' + currentIndex.toString());
+                                            if (currentIndex > 0) {
+                                              previousRouteName = stack[currentIndex - 1].settings.name;
+                                              debugPrint("Previous screen before AddMedicationScreen: $previousRouteName");
+                                              Get.until((route) => route.settings.name == previousRouteName);
+                                            }
+                                            debugPrint('currentIndex123: ' + currentIndex.toString());
+                                            Get.toNamed(
+                                              Paths.AddMEDICATIONSCREEN,
+                                              arguments: {
+                                                'selectedMasterIndex': selectedMasterIndex,
+                                                'selectedDetailIndex': index,
+                                              },
+                                            );
+                                          });
+                                          // bool found = false;
+
+                                          // Get.until((route) {
+                                          //   found = route.settings.name == previousRouteName; // flag set
+                                          //   return found; // true ⇒ yahin ruk jao
+                                          // });
+
+                                          // if (found) {
+                                          //   // ek aur pop to remove AddMedicationScreen itself
+                                          //   Get.back();
+                                          // }
+
+                                          // Get.toNamed(
+                                          //   Paths.AddMEDICATIONSCREEN,
+                                          //   arguments: {
+                                          //     'selectedMasterIndex': selectedMasterIndex,
+                                          //     'selectedDetailIndex': index,
+                                          //   },
+                                          // );
+
+                                          // stack = MyNavigatorObserver.currentStack;
+                                          // i = 1;
+                                          // for (var route in stack) {
+                                          //   print("view med Screen ${i}: ${route.settings.name}");
+                                          //   i++;
+                                          // }
+                                          int a = 1;
                                         },
                                         child: Container(
                                           margin: EdgeInsets.symmetric(

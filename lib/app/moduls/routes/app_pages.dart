@@ -45,7 +45,9 @@ import 'package:emp_app/app/moduls/lvotApproval/screen/otlist_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/bindings/addMedicationScreenBinding.dart';
 import 'package:emp_app/app/moduls/medication_sheet/bindings/medicationScreenBinding.dart';
 import 'package:emp_app/app/moduls/medication_sheet/bindings/viewMedicationScreenBinding.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:emp_app/app/moduls/medication_sheet/screen/medication_screen.dart';
+import 'package:emp_app/app/moduls/medication_sheet/screen/view_medication_screen.dart';
 import 'package:emp_app/app/moduls/mispunch/bindings/mispunch_binding.dart';
 import 'package:emp_app/app/moduls/mispunch/screen/mispunch_screen.dart';
 import 'package:emp_app/app/moduls/notification/bindings/filterScreenBinding.dart';
@@ -305,12 +307,24 @@ class AppPages {
     ),
     GetPage(
       name: Paths.AddMEDICATIONSCREEN,
-      page: () => MedicationScreen(),
+      // page: () => MedicationScreen(),
+      page: () {
+        final args = Get.arguments;
+        return AddMedicationScreen(
+          selectedMasterIndex: args['selectedMasterIndex'],
+          selectedDetailIndex: args['selectedDetailIndex'],
+        );
+      },
       binding: AddMedicationScreenBinding(),
     ),
     GetPage(
       name: Paths.VIEWMEDICATIONSCREEN,
-      page: () => MedicationScreen(),
+      page: () {
+        final args = Get.arguments;
+        return ViewMedicationScreen(
+          selectedMasterIndex: args['selectedMasterIndex'],
+        );
+      },
       binding: ViewMedicationScreenbinding(),
     ),
   ];
