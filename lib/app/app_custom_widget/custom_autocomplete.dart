@@ -13,14 +13,13 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
   final bool fromAdmittedScreen;
   final VoidCallback? onSuffixIconPressed;
   final VoidCallback? onClearSuggestions;
-  final VoidCallback? onUpdate; // 👈 NEW for GetX controller.update()
   final int? minLines;
   final int? maxLines;
   final TextStyle? hintStyle;
   final EdgeInsetsGeometry? contentPadding;
   final bool? isDense;
   final void Function(String)? onChanged;
-  final ValueNotifier<bool> wasOptionSelected = ValueNotifier<bool>(false);
+  final VoidCallback? onFocusOutside;
 
   CustomAutoComplete({
     Key? key,
@@ -32,7 +31,7 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
     this.hintText = 'Search',
     this.onSuffixIconPressed,
     this.onClearSuggestions,
-    this.onUpdate,
+    // this.onUpdate,
     this.minLines,
     this.maxLines,
     this.hintStyle,
@@ -40,6 +39,7 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
     this.isDense,
     this.fromAdmittedScreen = false,
     this.onChanged,
+    this.onFocusOutside,
   }) : super(key: key);
 
   @override
@@ -48,27 +48,27 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
       displayStringForOption: displayStringForOption,
       optionsBuilder: optionsBuilder,
       onSelected: (T selection) {
-        wasOptionSelected.value = true;
         onSelected(selection);
         if (onClearSuggestions != null) {
           onClearSuggestions!();
         }
-        if (onUpdate != null) onUpdate!();
+        // if (onUpdate != null) onUpdate!();
       },
       fieldViewBuilder: (context, textEditingController, localFocusNode, onEditingComplete) {
         final effectiveFocusNode = focusNode ?? localFocusNode;
 
-        effectiveFocusNode.addListener(() {
-          if (!effectiveFocusNode.hasFocus) {
-            // Focus chala gaya
-            if (!wasOptionSelected.value) {
-              controller.clear();
-              if (onClearSuggestions != null) onClearSuggestions!();
-              if (onUpdate != null) onUpdate!();
-            }
-            wasOptionSelected.value = false; // reset for next time
-          }
-        });
+        // effectiveFocusNode.addListener(() {
+        //   if (!effectiveFocusNode.hasFocus) {
+        //     // Focus chala gaya
+        //     if (!wasOptionSelected.value) {
+        //       controller.clear();
+        //       if (onClearSuggestions != null) onClearSuggestions!();
+        //       // if (onUpdate != null) onUpdate!();
+        //     }
+        //     // wasOptionSelected.value = false; // reset for next time
+        //   }
+        // });
+
         // // Sync external controller to internal Autocomplete controller
         // if (controller.text.isNotEmpty && textEditingController.text != controller.text) {
         //   textEditingController.text = controller.text;
@@ -90,45 +90,51 @@ class CustomAutoComplete<T extends SearchserviceModel> extends StatelessWidget {
           }
         });
 
+        // controller.addListener(() {
+        //   if (controller.text != textEditingController.text) {
+        //     textEditingController.text = controller.text;
+        //   }
+        // });
+
         return CustomTextFormField(
-          controller: textEditingController,
-          focusNode: effectiveFocusNode,
-          minLines: minLines,
-          maxLines: maxLines,
-          
-          // style: TextStyle(fontSize: 14),
-          onChanged: onChanged,
-          // enableInteractiveSelection: true,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: hintStyle,
-            isDense: isDense,
-            contentPadding: contentPadding,
-            prefixIcon: Icon(Icons.search, color: AppColor.grey),
-            suffixIcon: textEditingController.text.isNotEmpty
-                ? IconButton(
-                    icon: Icon(Icons.cancel_outlined, color: AppColor.black),
-                    onPressed: () {
-                      controller.clear();
-                      textEditingController.clear();
-                      if (onSuffixIconPressed != null) onSuffixIconPressed!();
-                      if (onClearSuggestions != null) onClearSuggestions!();
-                      if (onUpdate != null) onUpdate!();
-                      effectiveFocusNode.unfocus();
-                    },
-                  )
-                : null,
-            border: OutlineInputBorder(),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 0.8),
+            controller: textEditingController,
+            focusNode: effectiveFocusNode,
+            minLines: minLines,
+            maxLines: maxLines,
+            style: TextStyle(fontSize: 14),
+            onChanged: onChanged,
+            // enableInteractiveSelection: true,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: hintStyle,
+              isDense: isDense,
+              contentPadding: contentPadding,
+              prefixIcon: Icon(Icons.search, color: AppColor.grey),
+              suffixIcon: textEditingController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.cancel_outlined, color: AppColor.black),
+                      onPressed: () {
+                        controller.clear();
+                        textEditingController.clear();
+                        if (onSuffixIconPressed != null) onSuffixIconPressed!();
+                        if (onClearSuggestions != null) onClearSuggestions!();
+                        effectiveFocusNode.unfocus();
+                      },
+                    )
+                  : null,
+              border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(width: 0.8),
+              ),
             ),
-          ),
-          onFieldSubmitted: (_) {
-            effectiveFocusNode.unfocus();
-            onEditingComplete();
-          },
-          onTapOutside: (_) => effectiveFocusNode.unfocus(),
-        );
+            onFieldSubmitted: (_) {
+              effectiveFocusNode.unfocus();
+              onEditingComplete();
+            },
+            onTapOutside: (_) {
+              if (onFocusOutside != null) onFocusOutside!();
+              effectiveFocusNode.unfocus();
+            });
       },
     );
   }
