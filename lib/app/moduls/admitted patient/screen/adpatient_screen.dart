@@ -253,7 +253,8 @@ class AdpatientScreen extends StatelessWidget {
                                         },
                                         child: FittedBox(
                                           fit: BoxFit.contain,
-                                          child: Image.asset(AppImage.filter, height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
+                                          child: Image.asset(AppImage.filter,
+                                              height: getDynamicHeight(size: 0.02), width: getDynamicHeight(size: 0.02)),
                                         ),
                                       ),
                                     ),
@@ -683,8 +684,7 @@ class AdpatientScreen extends StatelessWidget {
                                             return;
                                           }
                                         }
-
-                                        if ((controller.FromScreen_Redirection.toUpperCase() == "Mdication Sheet" ||
+                                        if ((controller.FromScreen_Redirection.toUpperCase() == "Medication Sheet" ||
                                                 controller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") &&
                                             controller.WebLoginUser.trim() != "") {
                                           TapToRedirectToMedicationScreen(
@@ -694,7 +694,6 @@ class AdpatientScreen extends StatelessWidget {
                                           controller.isPatientCardClicked = false;
                                           return;
                                         }
-
                                         final investRequisitController = Get.put(InvestRequisitController());
                                         String patientDetails = '${controller.filterpatientsData[index].patientName} | '
                                             '${controller.filterpatientsData[index].ipdNo} | '
