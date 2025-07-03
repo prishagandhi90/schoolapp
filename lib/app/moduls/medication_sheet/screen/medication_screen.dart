@@ -185,20 +185,20 @@ class MedicationScreen extends StatelessWidget {
                                     return controller.suggestions;
                                   },
                                   onSelected: (SearchserviceModel selection) async {
-                                    controller.isLoading = true;
+                                    // controller.update();
+                                    controller.searchFocusNode.unfocus();
                                     controller.nameController.text = selection.txt ?? '';
                                     controller.ipdNo = selection.name ?? '';
                                     controller.uhid = controller.getUHId(selection.txt ?? '');
                                     controller.suggestions.clear();
 
-                                    controller.searchFocusNode.unfocus();
-
+                                    controller.isLoading = true;
+                                    // controller.update();
                                     await controller.fetchDrTreatmentData(
                                       ipdNo: selection.name ?? '',
                                       treatTyp: 'Medication Sheet',
                                       isload: false,
                                     );
-                                    // controller.update();
                                   },
                                   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
                                     final effectiveController =

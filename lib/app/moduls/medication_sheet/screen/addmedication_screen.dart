@@ -201,8 +201,9 @@ class AddMedicationScreen extends StatelessWidget {
                                     controller.update();
                                   },
                                   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
+                                    final effectiveController = controller.FormularyMedicinesController.text.isNotEmpty ? controller.nameController : nameController;
                                     return CustomTextFormField(
-                                      controller: nameController,
+                                      controller: effectiveController,
                                       focusNode: focusNode,
                                       minLines: 1,
                                       maxLines: null,
