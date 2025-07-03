@@ -512,6 +512,8 @@ class AdpatientScreen extends StatelessWidget {
                                       _buildMenuItem("Investigation Requisition"),
                                       _buildDivider(),
                                       _buildMenuItem("Investigation History"),
+                                      _buildDivider(),
+                                      _buildMenuItem("Medication Sheet"),
                                     ],
                                     onChanged: (String? value) async {
                                       if (value == "Lab Summary") {
@@ -664,6 +666,51 @@ class AdpatientScreen extends StatelessWidget {
                                           fromScreenRedirection: "ADMITTED PATIENTS",
                                         );
                                         controller.isInvestigationReq_Navigating.value = false;
+                                      } else if (value == "Medication Sheet") {
+                                        if (controller.isPatientCardClicked) return;
+                                        controller.isPatientCardClicked = true;
+
+                                        if (controller.screenRightsTable.isNotEmpty) {
+                                          if (controller.screenRightsTable[2].rightsYN == "N") {
+                                            controller.isPatientCardClicked = false;
+                                            Get.snackbar(
+                                              "You don't have access to this screen",
+                                              '',
+                                              colorText: AppColor.white,
+                                              backgroundColor: AppColor.black,
+                                              duration: const Duration(seconds: 1),
+                                            );
+                                            return;
+                                          }
+                                        }
+
+                                        if ((controller.FromScreen_Redirection.toUpperCase() == "Mdication Sheet" ||
+                                                controller.FromScreen_Redirection.toUpperCase() == "ADMITTED PATIENTS") &&
+                                            controller.WebLoginUser.trim() != "") {
+                                          TapToRedirectToMedicationScreen(
+                                            controller: controller,
+                                            index: index,
+                                          );
+                                          controller.isPatientCardClicked = false;
+                                          return;
+                                        }
+
+                                        final investRequisitController = Get.put(InvestRequisitController());
+                                        String patientDetails = '${controller.filterpatientsData[index].patientName} | '
+                                            '${controller.filterpatientsData[index].ipdNo} | '
+                                            '${controller.filterpatientsData[index].uhid}';
+
+                                        await investRequisitController.resetForm();
+                                        investRequisitController.loginAlertDialog(
+                                          context,
+                                          "Medication Sheet",
+                                          patientDetails,
+                                          controller.filterpatientsData[index].ipdNo ?? "",
+                                          controller.filterpatientsData[index].uhid ?? "",
+                                          fromScreen: "Medication Sheet",
+                                          fromScreenRedirection: "ADMITTED PATIENTS",
+                                        );
+                                        controller.isPatientCardClicked = false;
                                       }
                                     },
                                     dropdownStyleData: DropdownStyleData(
