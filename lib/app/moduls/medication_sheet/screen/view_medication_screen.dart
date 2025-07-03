@@ -9,7 +9,6 @@ import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/leave/screen/widget/custom_textformfield.dart';
 import 'package:emp_app/app/moduls/medication_sheet/controller/medicationsheet_controller.dart';
-import 'package:emp_app/app/moduls/medication_sheet/screen/addmedication_screen.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';
 import 'package:emp_app/my_navigator_observer.dart';
@@ -274,7 +273,6 @@ class ViewMedicationScreen extends StatelessWidget {
                                               //     selectedDetailIndex: index,
                                               //   ),
                                               // );
-
                                               // List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
                                               // int i = 1;
                                               // for (var route in stack) {
@@ -323,7 +321,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                             //   print("view med Screen ${i}: ${route.settings.name}");
                                             //   i++;
                                             // }
-                                            int a = 1;
+                                            // int a = 1;
                                           },
                                           child: Container(
                                             margin: EdgeInsets.symmetric(

@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
-import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
@@ -183,7 +182,6 @@ class AddMedicationScreen extends StatelessWidget {
                                 //       }
                                 //       hasFormularyMedSelFromList = false;
                                 //     }),
-
                                 Autocomplete<SearchserviceModel>(
                                   displayStringForOption: (SearchserviceModel option) => option.txt ?? '',
                                   optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -215,11 +213,11 @@ class AddMedicationScreen extends StatelessWidget {
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                                            width: getDynamicHeight(size: 0.0008),
+                                            width: getDynamicHeight(size: 0.03),
                                           ),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(0)),
+                                          borderRadius: BorderRadius.all(Radius.circular(5)),
                                           // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
                                         ),
                                         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
@@ -309,7 +307,7 @@ class AddMedicationScreen extends StatelessWidget {
                                                     item.name ?? '',
                                                     style: AppStyle.black.copyWith(
                                                       // fontSize: 14,
-                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                      fontSize: getDynamicHeight(size: 0.014),
                                                     ),
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
@@ -420,7 +418,7 @@ class AddMedicationScreen extends StatelessWidget {
                                                     item.name ?? '',
                                                     style: AppStyle.black.copyWith(
                                                       // fontSize: 14,
-                                                      fontSize: getDynamicHeight(size: 0.016),
+                                                      fontSize: getDynamicHeight(size: 0.014),
                                                     ),
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
@@ -469,7 +467,10 @@ class AddMedicationScreen extends StatelessWidget {
                                     Expanded(
                                       child: CustomDropdown(
                                         text: AppString.morning,
-                                        textStyle: TextStyle(fontSize: getDynamicHeight(size: 0.013), color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                        textStyle: TextStyle(
+                                            fontSize: getDynamicHeight(size: 0.013),
+                                            color: AppColor.grey,
+                                            fontFamily: CommonFontStyle.plusJakartaSans),
                                         controller: controller.FreqMorningController,
                                         buttonStyleData: ButtonStyleData(
                                           height: getDynamicHeight(size: 0.046),
@@ -675,7 +676,9 @@ class AddMedicationScreen extends StatelessWidget {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                controller.stopDateController.text.isNotEmpty ? controller.stopDateController.text : AppString.stopdate,
+                                                controller.stopDateController.text.isNotEmpty
+                                                    ? controller.stopDateController.text
+                                                    : AppString.stopdate,
                                                 style: TextStyle(
                                                   fontSize: getDynamicHeight(size: 0.014),
                                                   fontFamily: CommonFontStyle.plusJakartaSans,
@@ -813,13 +816,16 @@ class AddMedicationScreen extends StatelessWidget {
                       // Medication List
                       SizedBox(
                         height: getDynamicHeight(size: 0.045) *
-                            (controller.drTreatMasterList[selectedMasterIndex].detail!.length < 5 ? controller.drTreatMasterList[selectedMasterIndex].detail!.length : 5),
+                            (controller.drTreatMasterList[selectedMasterIndex].detail!.length < 5
+                                ? controller.drTreatMasterList[selectedMasterIndex].detail!.length
+                                : 5),
                         child: Scrollbar(
                           controller: listScrollController,
                           child: ListView.separated(
                             controller: listScrollController,
-                            physics:
-                                controller.drTreatMasterList[selectedMasterIndex].detail!.length > 5 ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
+                            physics: controller.drTreatMasterList[selectedMasterIndex].detail!.length > 5
+                                ? AlwaysScrollableScrollPhysics()
+                                : NeverScrollableScrollPhysics(),
                             itemCount: controller.drTreatMasterList[selectedMasterIndex].detail!.length,
                             itemBuilder: (context, index) {
                               final item = controller.drTreatMasterList[selectedMasterIndex].detail![index];

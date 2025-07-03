@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:emp_app/app/app_custom_widget/common_methods.dart';
-import 'package:emp_app/app/app_custom_widget/custom_autocomplete.dart';
 import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
 import 'package:emp_app/app/core/util/app_color.dart';
 import 'package:emp_app/app/core/util/app_image.dart';
@@ -221,11 +220,11 @@ class MedicationScreen extends StatelessWidget {
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                                            width: getDynamicHeight(size: 0.0008),
+                                            width: getDynamicHeight(size: 0.03),
                                           ),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(0)),
+                                          borderRadius: BorderRadius.all(Radius.circular(5)),
                                           borderSide:
                                               BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
                                         ),
