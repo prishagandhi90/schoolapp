@@ -213,215 +213,229 @@ class ViewMedicationScreen extends StatelessWidget {
                         Expanded(
                           child: RefreshIndicator(
                             onRefresh: () async {
-                              await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet', isload: true);
+                              await controller.fetchDrTreatmentData(
+                                  ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet', isload: true);
                             },
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: controller.filteredDetails?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final item = controller.filteredDetails![index];
-                                return LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    return Slidable(
-                                      key: ValueKey(index),
-                                      endActionPane: ActionPane(
-                                        motion: const ScrollMotion(),
-                                        extentRatio: 0.18,
-                                        children: [
-                                          Container(
-                                            width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
-                                            height: constraints.maxHeight, // 💥 dynamic height from main container
-                                            decoration: BoxDecoration(
-                                              color: AppColor.white,
-                                              border: Border.all(color: Colors.grey.shade400, width: 1),
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(getDynamicHeight(size: 0.011)),
-                                                bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                            child: SlidableAutoCloseBehavior(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: controller.filteredDetails?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  final item = controller.filteredDetails![index];
+                                  return LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return Slidable(
+                                        key: ValueKey(index),
+                                        endActionPane: ActionPane(
+                                          motion: const ScrollMotion(),
+                                          extentRatio: 0.18,
+                                          children: [
+                                            Container(
+                                              width: getDynamicHeight(size: 0.065), // 🔁 approx 65,
+                                              height: constraints.maxHeight, // 💥 dynamic height from main container
+                                              decoration: BoxDecoration(
+                                                color: AppColor.white,
+                                                border: Border.all(color: Colors.grey.shade400, width: 1),
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                                                  bottomRight: Radius.circular(getDynamicHeight(size: 0.011)),
+                                                ),
+                                              ),
+                                              child: IconButton(
+                                                icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
+                                                onPressed: () async {
+                                                  Slidable.of(context)?.close(); // 💥 Close Slidable first
+                                                  await Future.delayed(const Duration(milliseconds: 200));
+
+                                                  showDeleteConfirmationDialog(
+                                                    context: context,
+                                                    onConfirm: () async {
+                                                      await controller.deleteMedicationSheet(
+                                                        mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
+                                                        dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!,
+                                                      );
+                                                      controller.filteredDetails!.removeAt(index);
+                                                      controller.update();
+                                                    },
+                                                  );
+                                                },
                                               ),
                                             ),
-                                            child: IconButton(
-                                              icon: Icon(Icons.delete, color: AppColor.red, size: getDynamicHeight(size: 0.030)),
-                                              onPressed: () async {
-                                                await controller.deleteMedicationSheet(
-                                                    mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
-                                                    dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!);
-                                                controller.filteredDetails!.removeAt(index);
-                                                controller.update();
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          Future.delayed(Duration(milliseconds: 200), () async {
-                                            await controller.editDrTreatmentDetailList(controller.drTreatMasterList[selectedMasterIndex].detail![index]);
-                                            // Get.to(
-                                            //   AddMedicationScreen(
-                                            //     selectedMasterIndex: selectedMasterIndex,
-                                            //     selectedDetailIndex: index,
-                                            //   ),
-                                            // );
+                                          ],
+                                        ),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            Future.delayed(Duration(milliseconds: 200), () async {
+                                              await controller.editDrTreatmentDetailList(
+                                                  controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                              // Get.to(
+                                              //   AddMedicationScreen(
+                                              //     selectedMasterIndex: selectedMasterIndex,
+                                              //     selectedDetailIndex: index,
+                                              //   ),
+                                              // );
 
-                                            // List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
-                                            // int i = 1;
+                                              // List<Route<dynamic>> stack = MyNavigatorObserver.currentStack;
+                                              // int i = 1;
+                                              // for (var route in stack) {
+                                              //   print("view med Screen ${i}: ${route.settings.name}");
+                                              //   i++;
+                                              // }
+                                              final stack = MyNavigatorObserver.currentStack;
+                                              final currentIndex =
+                                                  stack.lastIndexWhere((r) => r.settings.name == Paths.AddMEDICATIONSCREEN);
+
+                                              String? previousRouteName;
+                                              debugPrint('currentIndex: ' + currentIndex.toString());
+                                              if (currentIndex > 0) {
+                                                previousRouteName = stack[currentIndex - 1].settings.name;
+                                                debugPrint("Previous screen before AddMedicationScreen: $previousRouteName");
+                                                Get.until((route) => route.settings.name == previousRouteName);
+                                              }
+                                              debugPrint('currentIndex123: ' + currentIndex.toString());
+                                              Get.toNamed(
+                                                Paths.AddMEDICATIONSCREEN,
+                                                arguments: {
+                                                  'selectedMasterIndex': selectedMasterIndex,
+                                                  'selectedDetailIndex': index,
+                                                },
+                                              );
+                                            });
+                                            // bool found = false;
+                                            // Get.until((route) {
+                                            //   found = route.settings.name == previousRouteName; // flag set
+                                            //   return found; // true ⇒ yahin ruk jao
+                                            // });
+                                            // if (found) {
+                                            //   // ek aur pop to remove AddMedicationScreen itself
+                                            //   Get.back();
+                                            // }
+                                            // Get.toNamed(
+                                            //   Paths.AddMEDICATIONSCREEN,
+                                            //   arguments: {
+                                            //     'selectedMasterIndex': selectedMasterIndex,
+                                            //     'selectedDetailIndex': index,
+                                            //   },
+                                            // );
+                                            // stack = MyNavigatorObserver.currentStack;
+                                            // i = 1;
                                             // for (var route in stack) {
                                             //   print("view med Screen ${i}: ${route.settings.name}");
                                             //   i++;
                                             // }
-                                            final stack = MyNavigatorObserver.currentStack;
-                                            final currentIndex = stack.lastIndexWhere((r) => r.settings.name == Paths.AddMEDICATIONSCREEN);
-
-                                            String? previousRouteName;
-                                            debugPrint('currentIndex: ' + currentIndex.toString());
-                                            if (currentIndex > 0) {
-                                              previousRouteName = stack[currentIndex - 1].settings.name;
-                                              debugPrint("Previous screen before AddMedicationScreen: $previousRouteName");
-                                              Get.until((route) => route.settings.name == previousRouteName);
-                                            }
-                                            debugPrint('currentIndex123: ' + currentIndex.toString());
-                                            Get.toNamed(
-                                              Paths.AddMEDICATIONSCREEN,
-                                              arguments: {
-                                                'selectedMasterIndex': selectedMasterIndex,
-                                                'selectedDetailIndex': index,
-                                              },
-                                            );
-                                          });
-                                          // bool found = false;
-
-                                          // Get.until((route) {
-                                          //   found = route.settings.name == previousRouteName; // flag set
-                                          //   return found; // true ⇒ yahin ruk jao
-                                          // });
-
-                                          // if (found) {
-                                          //   // ek aur pop to remove AddMedicationScreen itself
-                                          //   Get.back();
-                                          // }
-
-                                          // Get.toNamed(
-                                          //   Paths.AddMEDICATIONSCREEN,
-                                          //   arguments: {
-                                          //     'selectedMasterIndex': selectedMasterIndex,
-                                          //     'selectedDetailIndex': index,
-                                          //   },
-                                          // );
-
-                                          // stack = MyNavigatorObserver.currentStack;
-                                          // i = 1;
-                                          // for (var route in stack) {
-                                          //   print("view med Screen ${i}: ${route.settings.name}");
-                                          //   i++;
-                                          // }
-                                          int a = 1;
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.symmetric(
-                                            horizontal: getDynamicHeight(size: 0.005),
-                                            vertical: getDynamicHeight(size: 0.005),
-                                          ),
-                                          padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: AppColor.black),
-                                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
-                                            color: AppColor.primaryColor.withOpacity(0.2),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
-                                                      style: TextStyle(
-                                                        fontWeight: FontWeight.w500,
-                                                        fontFamily: CommonFontStyle.plusJakartaSans,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
-                                                    child: Icon(Icons.menu),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: getDynamicHeight(size: 0.003)),
-                                              Visibility(
-                                                visible: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
-                                                child: Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Remarks: ',
+                                            int a = 1;
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                              horizontal: getDynamicHeight(size: 0.005),
+                                              vertical: getDynamicHeight(size: 0.005),
+                                            ),
+                                            padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: AppColor.black),
+                                              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.011)),
+                                              color: AppColor.primaryColor.withOpacity(0.2),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        "${index + 1}. ${item.itemName?.txt?.isNotEmpty == true && item.itemName?.txt?.toString().toUpperCase() != 'NULL' ? item.itemName!.txt! : item.itemNameMnl?.isNotEmpty == true ? item.itemNameMnl! : ''}",
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w500,
                                                           fontFamily: CommonFontStyle.plusJakartaSans,
                                                         ),
                                                       ),
-                                                      TextSpan(
-                                                        text: item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL'
-                                                            ? item.remark.toString()
-                                                            : '',
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          color: AppColor.black1,
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () => controller.viewbottomsheet(context, selectedMasterIndex, index),
+                                                      child: Icon(Icons.menu),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: getDynamicHeight(size: 0.003)),
+                                                Visibility(
+                                                  visible:
+                                                      item.remark.toString().isNotEmpty && item.remark.toString().toUpperCase() != 'NULL',
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Remarks: ',
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w500,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
-                                                child: Text(
-                                                  (item.freq1?.isNotEmpty ?? false) ||
-                                                          (item.freq2?.isNotEmpty ?? false) ||
-                                                          (item.freq3?.isNotEmpty ?? false) ||
-                                                          (item.freq4?.isNotEmpty ?? false)
-                                                      ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
-                                                      : '',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    color: AppColor.black1,
-                                                    fontFamily: CommonFontStyle.plusJakartaSans,
-                                                  ),
-                                                ),
-                                              ),
-                                              Visibility(
-                                                visible: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL',
-                                                child: Text.rich(
-                                                  TextSpan(
-                                                    children: [
-                                                      const TextSpan(
-                                                        text: 'Flow Rate: ',
-                                                        style: TextStyle(fontWeight: FontWeight.w500),
-                                                      ),
-                                                      TextSpan(
-                                                        text: item.flowRate.toString().isNotEmpty && item.flowRate.toString().toUpperCase() != 'NULL'
-                                                            ? item.flowRate.toString()
-                                                            : '',
-                                                        style: TextStyle(
-                                                          fontWeight: FontWeight.w400,
-                                                          color: AppColor.black1,
-                                                          fontFamily: CommonFontStyle.plusJakartaSans,
+                                                        TextSpan(
+                                                          text: item.remark.toString().isNotEmpty &&
+                                                                  item.remark.toString().toUpperCase() != 'NULL'
+                                                              ? item.remark.toString()
+                                                              : '',
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            color: AppColor.black1,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: getDynamicHeight(size: 0.001)),
+                                                  child: Text(
+                                                    (item.freq1?.isNotEmpty ?? false) ||
+                                                            (item.freq2?.isNotEmpty ?? false) ||
+                                                            (item.freq3?.isNotEmpty ?? false) ||
+                                                            (item.freq4?.isNotEmpty ?? false)
+                                                        ? '${item.freq1 ?? ''} - ${item.freq2 ?? ''} - ${item.freq3 ?? ''} - ${item.freq4 ?? ''}'
+                                                        : '',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w400,
+                                                      color: AppColor.black1,
+                                                      fontFamily: CommonFontStyle.plusJakartaSans,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Visibility(
+                                                  visible: item.flowRate.toString().isNotEmpty &&
+                                                      item.flowRate.toString().toUpperCase() != 'NULL',
+                                                  child: Text.rich(
+                                                    TextSpan(
+                                                      children: [
+                                                        const TextSpan(
+                                                          text: 'Flow Rate: ',
+                                                          style: TextStyle(fontWeight: FontWeight.w500),
+                                                        ),
+                                                        TextSpan(
+                                                          text: item.flowRate.toString().isNotEmpty &&
+                                                                  item.flowRate.toString().toUpperCase() != 'NULL'
+                                                              ? item.flowRate.toString()
+                                                              : '',
+                                                          style: TextStyle(
+                                                            fontWeight: FontWeight.w400,
+                                                            color: AppColor.black1,
+                                                            fontFamily: CommonFontStyle.plusJakartaSans,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         )
@@ -461,6 +475,61 @@ class ViewMedicationScreen extends StatelessWidget {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void showDeleteConfirmationDialog({
+    required BuildContext context,
+    required VoidCallback onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Alert", style: TextStyle(fontWeight: FontWeight.bold)),
+              GestureDetector(
+                onTap: () {
+                  Slidable.of(context)?.close(); // 💥 Close Slidable first
+                  Navigator.of(dialogContext).pop();
+                },
+                child: const Icon(Icons.close),
+              ),
+            ],
+          ),
+          content: const Text("Are you sure you want to delete this record?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                onConfirm(); // ✅ Call the delete logic
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text("Delete"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Slidable.of(context)?.close(); // 💥 Close Slidable first
+                Navigator.of(dialogContext).pop();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text("Cancel"),
+            ),
+          ],
         );
       },
     );
