@@ -218,7 +218,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "InvestRequisit",
         error: e.toString(),
@@ -252,7 +251,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "InvestRequisit",
         error: e.toString(),
@@ -371,7 +369,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
@@ -380,8 +377,10 @@ class MedicationsheetController extends GetxController {
         empID: pref!.getString(AppString.keyEmpId) ?? '',
       );
     } finally {
-      isLoading = false;
-      update();
+      if (isload) {
+        isLoading = false;
+        update();
+      }
     }
 
     return [];
@@ -436,7 +435,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
@@ -478,7 +476,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationSheet",
         error: e.toString(),
@@ -520,7 +517,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
@@ -563,7 +559,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
@@ -607,7 +602,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),
@@ -664,7 +658,6 @@ class MedicationsheetController extends GetxController {
       }
     } catch (e) {
       isLoading = false;
-      update();
       ApiErrorHandler.handleError(
         screenName: "MedicationScreen",
         error: e.toString(),

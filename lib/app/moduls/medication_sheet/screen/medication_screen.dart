@@ -184,20 +184,22 @@ class MedicationScreen extends StatelessWidget {
                                     return controller.suggestions;
                                   },
                                   onSelected: (SearchserviceModel selection) async {
-                                    // controller.update();
-                                    controller.searchFocusNode.unfocus();
-                                    controller.nameController.text = selection.txt ?? '';
-                                    controller.ipdNo = selection.name ?? '';
-                                    controller.uhid = controller.getUHId(selection.txt ?? '');
-                                    controller.suggestions.clear();
+                                    Future.microtask(() async {
+                                      controller.searchFocusNode.unfocus();
+                                      controller.nameController.text = selection.txt ?? '';
+                                      controller.ipdNo = selection.name ?? '';
+                                      controller.uhid = controller.getUHId(selection.txt ?? '');
+                                      controller.suggestions.clear();
 
-                                    controller.isLoading = true;
-                                    // controller.update();
-                                    await controller.fetchDrTreatmentData(
-                                      ipdNo: selection.name ?? '',
-                                      treatTyp: 'Medication Sheet',
-                                      isload: false,
-                                    );
+                                      controller.isLoading = true;
+                                      await controller.fetchDrTreatmentData(
+                                        ipdNo: selection.name ?? '',
+                                        treatTyp: 'Medication Sheet',
+                                        isload: false,
+                                      );
+                                      controller.isLoading = false;
+                                      controller.update();
+                                    });
                                   },
                                   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
                                     final effectiveController = controller.nameController.text.isNotEmpty && controller.fromAdmittedScreen
