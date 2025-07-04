@@ -318,188 +318,186 @@ class MedicationScreen extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: SlidableAutoCloseBehavior(
-                            child: ListView.builder(
-                              itemCount: controller.drTreatMasterList.length, // Your list of treatments
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.all(getDynamicHeight(
-                                    size: 0.002,
-                                  )),
-                                  child: Slidable(
-                                    key: ValueKey(index),
-                                    endActionPane: ActionPane(
-                                      motion: const ScrollMotion(),
-                                      extentRatio: 0.27, // ~18% each
-                                      children: [
-                                        // 🔷 Copy Button
-                                        Container(
-                                          height: getDynamicHeight(size: 0.050),
-                                          width: getDynamicHeight(size: 0.050),
-                                          decoration: BoxDecoration(
-                                            color: AppColor.teal,
-                                            borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(0),
-                                              bottomLeft: Radius.circular(0),
-                                            ),
-                                          ),
-                                          child: IconButton(
-                                            icon: Icon(
-                                              Icons.copy,
-                                              color: AppColor.white,
-                                              size: getDynamicHeight(size: 0.025),
-                                            ),
-                                            onPressed: () async {
-                                              Slidable.of(context)?.close();
-                                              await Future.delayed(Duration(milliseconds: 200));
-                                              await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
-                                              controller.showMedicationDialog(context, -1);
-                                            },
-                                          ),
-                                        ),
-                                        // 🔷 Edit Button
-                                        Container(
-                                          height: getDynamicHeight(size: 0.050),
-                                          width: getDynamicHeight(size: 0.050),
-                                          decoration: BoxDecoration(
-                                            color: AppColor.white,
-                                            border: Border.all(
-                                              color: Colors.grey.shade400,
-                                              width: getDynamicHeight(size: 0.001),
-                                            ),
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(getDynamicHeight(size: 0.008)),
-                                              bottomRight: Radius.circular(getDynamicHeight(size: 0.008)),
-                                            ),
-                                          ),
-                                          child: IconButton(
-                                            icon: Icon(
-                                              Icons.edit,
-                                              color: AppColor.teal,
-                                              size: getDynamicHeight(size: 0.025),
-                                            ),
-                                            onPressed: () async {
-                                              Slidable.of(context)?.close();
-                                              await Future.delayed(Duration(milliseconds: 200));
-                                              await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
-                                              await controller.showMedicationDialog(context, index);
-                                            },
-                                          ),
-                                        ),
-                                      ],
+                          child: controller.drTreatMasterList.isEmpty
+                              ? Center(
+                                  child: Text(
+                                    "No data found for selected dates",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColor.black,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        controller.isLoading = true;
-                                        controller.selectedDetailIndex = -1;
-                                        controller.clearAddMedication();
-                                        // controller.update();
-                                        // Get.to(
-                                        //   AddMedicationScreen(
-                                        //     selectedMasterIndex: index,
-                                        //     selectedDetailIndex: -1,
-                                        //   ),
-                                        // );
-                                        Get.toNamed(
-                                          Paths.AddMEDICATIONSCREEN,
-                                          arguments: {
-                                            'selectedMasterIndex': index,
-                                            'selectedDetailIndex': -1,
-                                          },
-                                        );
-                                        controller.isLoading = false;
-                                        controller.update();
-                                      },
-                                      child: Container(
-                                        // margin: EdgeInsets.symmetric(vertical: 6),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: getDynamicHeight(size: 0.003),
-                                          vertical: getDynamicHeight(size: 0.000),
-                                        ),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: AppColor.primaryColor),
-                                          borderRadius: BorderRadius.circular(
-                                            getDynamicHeight(size: 0.0055),
+                                  ),
+                                )
+                              : SlidableAutoCloseBehavior(
+                                  child: ListView.builder(
+                                    itemCount: controller.drTreatMasterList.length, // Your list of treatments
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.all(getDynamicHeight(
+                                          size: 0.002,
+                                        )),
+                                        child: Slidable(
+                                          key: ValueKey(index),
+                                          endActionPane: ActionPane(
+                                            motion: const ScrollMotion(),
+                                            extentRatio: 0.27, // ~18% each
+                                            children: [
+                                              // 🔷 Copy Button
+                                              Container(
+                                                height: getDynamicHeight(size: 0.050),
+                                                width: getDynamicHeight(size: 0.050),
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.teal,
+                                                  borderRadius: const BorderRadius.only(
+                                                    topLeft: Radius.circular(0),
+                                                    bottomLeft: Radius.circular(0),
+                                                  ),
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.copy,
+                                                    color: AppColor.white,
+                                                    size: getDynamicHeight(size: 0.025),
+                                                  ),
+                                                  onPressed: () async {
+                                                    Slidable.of(context)?.close();
+                                                    await Future.delayed(Duration(milliseconds: 200));
+                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
+                                                    controller.showMedicationDialog(context, -1);
+                                                  },
+                                                ),
+                                              ),
+                                              // 🔷 Edit Button
+                                              Container(
+                                                height: getDynamicHeight(size: 0.050),
+                                                width: getDynamicHeight(size: 0.050),
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.white,
+                                                  border: Border.all(
+                                                    color: Colors.grey.shade400,
+                                                    width: getDynamicHeight(size: 0.001),
+                                                  ),
+                                                  borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(getDynamicHeight(size: 0.008)),
+                                                    bottomRight: Radius.circular(getDynamicHeight(size: 0.008)),
+                                                  ),
+                                                ),
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.edit,
+                                                    color: AppColor.teal,
+                                                    size: getDynamicHeight(size: 0.025),
+                                                  ),
+                                                  onPressed: () async {
+                                                    Slidable.of(context)?.close();
+                                                    await Future.delayed(Duration(milliseconds: 200));
+                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
+                                                    await controller.showMedicationDialog(context, index);
+                                                  },
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            // 🔹 Index and Date
-                                            RichText(
-                                              text: TextSpan(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              controller.isLoading = true;
+                                              controller.selectedDetailIndex = -1;
+                                              controller.clearAddMedication();
+                                              Get.toNamed(
+                                                Paths.AddMEDICATIONSCREEN,
+                                                arguments: {
+                                                  'selectedMasterIndex': index,
+                                                  'selectedDetailIndex': -1,
+                                                },
+                                              );
+                                              controller.isLoading = false;
+                                              controller.update();
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: getDynamicHeight(size: 0.003),
+                                                vertical: getDynamicHeight(size: 0.000),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: AppColor.primaryColor),
+                                                borderRadius: BorderRadius.circular(
+                                                  getDynamicHeight(size: 0.0055),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  TextSpan(
-                                                    text: "${index + 1}.  ",
-                                                    style: AppStyle.black,
-                                                  ),
-                                                  TextSpan(
-                                                    text: AppString.treatmentdate,
-                                                    style: AppStyle.black,
-                                                  ),
-                                                  TextSpan(
-                                                    text: formatDateTime_dd_MMM_yy_HH_mm(controller.drTreatMasterList[index].date),
-                                                    style: AppStyle.black.copyWith(
-                                                      fontSize: getDynamicHeight(size: 0.013),
+                                                  // 🔹 Index and Date
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: "${index + 1}.  ",
+                                                          style: AppStyle.black,
+                                                        ),
+                                                        TextSpan(
+                                                          text: AppString.treatmentdate,
+                                                          style: AppStyle.black,
+                                                        ),
+                                                        TextSpan(
+                                                          text: formatDateTime_dd_MMM_yy_HH_mm(controller.drTreatMasterList[index].date),
+                                                          style: AppStyle.black.copyWith(
+                                                            fontSize: getDynamicHeight(size: 0.013),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
+                                                  ),
+                                                  // 🔹 Icons
+                                                  Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                          onTap: () async {
+                                                            if (controller.isViewBtnclicked) return;
+                                                            controller.isViewBtnclicked = true;
+                                                            controller.isLoading = true;
+                                                            controller.update();
+                                                            controller.filteredDetails = controller.drTreatMasterList[index].detail;
+                                                            controller.selectedMasterIndex = index;
+                                                            controller.searchController.clear();
+                                                            Get.toNamed(
+                                                              Paths.VIEWMEDICATIONSCREEN,
+                                                              arguments: {
+                                                                'selectedMasterIndex': index,
+                                                              },
+                                                            );
+                                                            controller.isLoading = false;
+                                                            controller.isViewBtnclicked = false;
+                                                          },
+                                                          child: Icon(
+                                                            Icons.remove_red_eye_outlined,
+                                                            size: getDynamicHeight(size: 0.021),
+                                                          )),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          if (controller.isMenuBtnclicked) return;
+                                                          controller.isMenuBtnclicked = true;
+                                                          controller.medicationbottomsheet(context, index);
+                                                          controller.isMenuBtnclicked = false;
+                                                        },
+                                                        icon: Icon(
+                                                          Icons.menu,
+                                                          size: getDynamicHeight(size: 0.021),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
                                             ),
-
-                                            // 🔹 Icons
-                                            Row(
-                                              children: [
-                                                GestureDetector(
-                                                    onTap: () async {
-                                                      if (controller.isViewBtnclicked) return;
-                                                      controller.isViewBtnclicked = true;
-                                                      controller.isLoading = true;
-                                                      controller.update();
-                                                      controller.filteredDetails = controller.drTreatMasterList[index].detail;
-                                                      controller.selectedMasterIndex = index;
-                                                      controller.searchController.clear();
-                                                      Get.toNamed(
-                                                        Paths.VIEWMEDICATIONSCREEN,
-                                                        arguments: {
-                                                          'selectedMasterIndex': index,
-                                                        },
-                                                      );
-                                                      // Get.to(ViewMedicationScreen(
-                                                      //   selectedMasterIndex: index,
-                                                      // ));
-                                                      controller.isLoading = false;
-                                                      controller.isViewBtnclicked = false;
-                                                    },
-                                                    child: Icon(
-                                                      Icons.remove_red_eye_outlined,
-                                                      size: getDynamicHeight(size: 0.021),
-                                                    )),
-                                                // SizedBox(width: getDynamicHeight(size: 0.002)),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    if (controller.isMenuBtnclicked) return;
-                                                    controller.isMenuBtnclicked = true;
-                                                    controller.medicationbottomsheet(context, index);
-                                                    controller.isMenuBtnclicked = false;
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.menu,
-                                                    size: getDynamicHeight(size: 0.021),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          ),
+                                ),
                         ),
                       ),
                     ),

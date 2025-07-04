@@ -109,11 +109,11 @@ class MedicationsheetController extends GetxController {
     searchFocusNode = FocusNode();
   }
 
-  @override
-  void onClose() {
-    searchFocusNode.dispose(); // cleanup
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   searchFocusNode.dispose(); // cleanup
+  //   super.onClose();
+  // }
 
   void setFocusNode(FocusNode node) {
     searchFocusNode = node; // Store the focusNode
@@ -997,7 +997,11 @@ class MedicationsheetController extends GetxController {
 
     drTreatMasterList = drTreatMasterList.where((item) {
       final date = item.date;
-      return date != null && date.isAfter(from.subtract(const Duration(days: 1))) && date.isBefore(to.add(const Duration(days: 1)));
+      return date != null &&
+          date.isAfter(from.subtract(const Duration(days: 1))) &&
+          date.isBefore(
+            to.add(const Duration(days: 1)),
+          );
     }).toList();
 
     update();
@@ -1757,7 +1761,6 @@ class MedicationsheetController extends GetxController {
                     ),
                   ),
                 ),
-
 // 🔸 Sort Option 2
                 InkWell(
                   onTap: () {
