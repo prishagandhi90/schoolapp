@@ -196,10 +196,13 @@ class AddMedicationScreen extends StatelessWidget {
                                     controller.FormularyMedicines_suggestions.clear();
                                     controller.FormularyMedicinesIDController.text = selection.name ?? '';
                                     controller.FormularyMedicinesController.text = selection.txt ?? '';
+                                    controller.nonFormularyMedicinesController.clear();
                                     controller.update();
                                   },
                                   fieldViewBuilder: (context, nameController, focusNode, onEditingComplete) {
-                                    final effectiveController = controller.FormularyMedicinesController.text.isNotEmpty ? controller.FormularyMedicinesController : nameController;
+                                    final effectiveController = controller.FormularyMedicinesController.text.isNotEmpty
+                                        ? controller.FormularyMedicinesController
+                                        : nameController;
                                     return CustomTextFormField(
                                       controller: effectiveController,
                                       focusNode: focusNode,
@@ -273,6 +276,8 @@ class AddMedicationScreen extends StatelessWidget {
                                     ),
                                   ),
                                   onChanged: (value) {
+                                    controller.FormularyMedicinesController.clear();
+                                    controller.FormularyMedicinesIDController.clear();
                                     controller.update();
                                   },
                                 ),
@@ -773,6 +778,7 @@ class AddMedicationScreen extends StatelessWidget {
                                   onPressed: controller.isSaveButtonEnabled()
                                       ? () async {
                                           await controller.saveAddMedication(selectedMasterIndex, selectedDetailIndex);
+                                          selectedDetailIndex = -1;
                                         }
                                       : null,
                                   child: Padding(
@@ -833,7 +839,7 @@ class AddMedicationScreen extends StatelessWidget {
                               return ListTile(
                                 visualDensity: VisualDensity(vertical: -4),
                                 title: Text(
-                                  "${index + 1}. ${item.itemName?.txt ?? ''}",
+                                  "${index + 1}. ${item.itemName?.txt ?? item.itemNameMnl.toString().trim()}",
                                   style: TextStyle(
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                     fontSize: getDynamicHeight(size: 0.014),

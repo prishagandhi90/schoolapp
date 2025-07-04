@@ -875,6 +875,7 @@ class MedicationsheetController extends GetxController {
             if (drTreatMasterList[selectedMasterIndex].detail != null &&
                 drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
               drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+              selectedDetailIndex = -1;
             }
           } else {
             // ➕ Append new detail
@@ -882,8 +883,10 @@ class MedicationsheetController extends GetxController {
               drTreatMasterList[selectedMasterIndex].detail = [];
             }
             drTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
+            selectedDetailIndex = -1;
           }
-          clearAddMedication();
+          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: "Medication Sheet", isload: false);
+          clearAddMedication(isUpdate: false);
         } else {
           Get.rawSnackbar(message: responseData.message ?? 'Failed to save medication detail');
         }
@@ -983,12 +986,13 @@ class MedicationsheetController extends GetxController {
     update(); // 🔁 Update GetBuilder/UI if needed
   }
 
-  Future<void> clearAddMedication() async {
+  Future<void> clearAddMedication({bool isUpdate = true}) async {
     flowRateController.clear();
     stopDateController.clear();
     stopTime = null;
     medicationTypeController.clear();
     FormularyMedicinesController.clear();
+    FormularyMedicinesIDController.clear();
     nonFormularyMedicinesController.clear();
     instructionTypeController.clear();
     doseController.clear();
@@ -1003,8 +1007,9 @@ class MedicationsheetController extends GetxController {
     }
     daysController.clear();
     selectedDetailIndex = -1;
-
-    update();
+    if (isUpdate) {
+      update();
+    }
   }
 
   void filterByDateRange() {
