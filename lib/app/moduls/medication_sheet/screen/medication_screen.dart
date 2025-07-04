@@ -364,7 +364,7 @@ class MedicationScreen extends StatelessWidget {
                                                   onPressed: () async {
                                                     Slidable.of(context)?.close();
                                                     await Future.delayed(Duration(milliseconds: 200));
-                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
+                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index], "");
                                                     controller.showMedicationDialog(context, -1);
                                                   },
                                                 ),
@@ -393,7 +393,7 @@ class MedicationScreen extends StatelessWidget {
                                                   onPressed: () async {
                                                     Slidable.of(context)?.close();
                                                     await Future.delayed(Duration(milliseconds: 200));
-                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index]);
+                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index], "Edit");
                                                     await controller.showMedicationDialog(context, index);
                                                   },
                                                 ),

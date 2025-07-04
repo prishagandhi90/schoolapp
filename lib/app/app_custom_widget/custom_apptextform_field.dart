@@ -113,6 +113,7 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       validator: validator,
       autofocus: false,
+      
       maxLines: maxLines,
       onChanged: onChanged,
       readOnly: isReadOnly,

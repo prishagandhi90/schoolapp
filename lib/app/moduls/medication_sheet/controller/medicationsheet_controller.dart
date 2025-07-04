@@ -632,6 +632,18 @@ class MedicationsheetController extends GetxController {
       if (dropdownMuliFieldsData.statusCode == 200) {
         if (dropdownMuliFieldsData.data != null && dropdownMuliFieldsData.data!.isNotEmpty) {
           drMedicationFreqDropdownTable = dropdownMuliFieldsData.data!;
+          if (drMedicationFreqDropdownTable.isNotEmpty && FreqMorningController.text.isEmpty) {
+            FreqMorningController.text = drMedicationFreqDropdownTable.first.name ?? '0';
+          }
+          if (drMedicationFreqDropdownTable.isNotEmpty && FreqAfternoonController.text.isEmpty) {
+            FreqAfternoonController.text = drMedicationFreqDropdownTable.first.name ?? '0';
+          }
+          if (drMedicationFreqDropdownTable.isNotEmpty && FreqEveningController.text.isEmpty) {
+            FreqEveningController.text = drMedicationFreqDropdownTable.first.name ?? '0';
+          }
+          if (drMedicationFreqDropdownTable.isNotEmpty && FreqNightController.text.isEmpty) {
+            FreqNightController.text = drMedicationFreqDropdownTable.first.name ?? '0';
+          }
         } else {
           drMedicationFreqDropdownTable = [];
         }
@@ -730,7 +742,7 @@ class MedicationsheetController extends GetxController {
       final drTreatMaster = DrTreatMasterList(
         drMstId: selMasterindex == -1 ? 0 : selMasterindex,
         admissionId: admissionId,
-        date: dateTime.toUtc(),
+        date: dateTime,
         srNo: 1,
         specialOrder: selectedDropdnOptionId.join('; '),
         weight: weightController.text.trim(),
@@ -823,7 +835,7 @@ class MedicationsheetController extends GetxController {
         itemTxt: normalizeString(FormularyMedicinesController.text),
         item: normalizeString(FormularyMedicinesIDController.text),
         instType: "",
-        flowRt: "",
+        flowRate: normalizeString(flowRateController.text.trim()),
         userName: webUserName,
         terminalName: "::1",
         action: selectedDetailIndex < 0 ? "" : "Edit",
@@ -966,6 +978,7 @@ class MedicationsheetController extends GetxController {
     selectedDropdnOptionId.clear();
     fromDateController.clear();
     toDateController.clear();
+    selectedMasterIndex = -1;
 
     update(); // 🔁 Update GetBuilder/UI if needed
   }
@@ -982,11 +995,14 @@ class MedicationsheetController extends GetxController {
     qtyController.clear();
     routeController.clear();
     remarksController.clear();
-    FreqMorningController.clear();
-    FreqAfternoonController.clear();
-    FreqEveningController.clear();
-    FreqNightController.clear();
+    if (drMedicationFreqDropdownTable.isNotEmpty) {
+      FreqMorningController.text = drMedicationFreqDropdownTable.first.name ?? '';
+      FreqAfternoonController.text = drMedicationFreqDropdownTable.first.name ?? '';
+      FreqEveningController.text = drMedicationFreqDropdownTable.first.name ?? '';
+      FreqNightController.text = drMedicationFreqDropdownTable.first.name ?? '';
+    }
     daysController.clear();
+    selectedDetailIndex = -1;
 
     update();
   }
@@ -1007,7 +1023,7 @@ class MedicationsheetController extends GetxController {
     update();
   }
 
-  Future<void> editDrTreatmentMasterList(DrTreatMasterList listItem) async {
+  Future<void> editDrTreatmentMasterList(DrTreatMasterList listItem, String flag) async {
     try {
       selectedDropdownList.clear();
       selectedDropdnOptionId.clear();
@@ -1032,6 +1048,10 @@ class MedicationsheetController extends GetxController {
         diagnosisController.text = listItem.provisionalDiagnosis.toString().trim();
         TemplateNameController.text = listItem.templateName.toString().trim();
         isTemplateVisible = false;
+
+        if (flag == "Edit") {
+          selectedMasterIndex = listItem.drMstId!;
+        }
 
         if (listItem.specialOrder == null || listItem.specialOrder.toString().trim().isEmpty) {
           update(); // Refresh UI after clear
@@ -1067,7 +1087,6 @@ class MedicationsheetController extends GetxController {
   Future<void> editDrTreatmentDetailList(RespDrTreatDetail listItem) async {
     try {
       stopTimeController.clear();
-      flowRateController.clear();
 
       medicationTypeController.text = normalizeString(listItem.medicineType!.name.toString());
       FormularyMedicinesController.text = normalizeString(listItem.itemName!.txt.toString());
@@ -1085,6 +1104,8 @@ class MedicationsheetController extends GetxController {
           listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
       qtyController.text = normalizeString(listItem.qty.toString());
       daysController.text = normalizeString(listItem.days.toString());
+      flowRateController.text = (listItem.flowRate != "null" && listItem.flowRate != "") ? listItem.flowRate.toString() : "";
+      selectedDetailIndex = listItem.drDtlId!;
 
       update(); // To refresh the UI
     } catch (e) {
@@ -1405,7 +1426,7 @@ class MedicationsheetController extends GetxController {
                           onPressed: () async {
                             // Submit logic
                             await saveMedicationSheet(
-                                selMasterindex > 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
+                                selMasterindex >= 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
                             clearMasterData();
                             Navigator.pop(context);

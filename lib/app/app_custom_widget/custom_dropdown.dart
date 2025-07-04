@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String text;
+  final String? labelText;
   final TextEditingController controller;
   final Function(Map<String, String>?) onChanged;
   final List<DropdownMenuItem<Map<String, String>>> items;
@@ -31,6 +32,7 @@ class CustomDropdown extends StatelessWidget {
     this.dropdownSearchData,
     this.enabled = true,
     this.textStyle, // ✅ default true
+    this.labelText,
   });
 
   @override
@@ -69,6 +71,7 @@ class CustomDropdown extends StatelessWidget {
           menuItemStyleData: MenuItemStyleData(
             height: getDynamicHeight(size: 0.038),
           ),
+
           dropdownSearchData: dropdownSearchData,
           dropdownStyleData: DropdownStyleData(
             useSafeArea: false,
