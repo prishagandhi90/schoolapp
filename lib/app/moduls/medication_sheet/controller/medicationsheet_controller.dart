@@ -1026,9 +1026,9 @@ class MedicationsheetController extends GetxController {
     filterDRTreatMasterList = drTreatMasterList.where((item) {
       final date = item.date;
       return date != null &&
-          date.isAfter(from.subtract(const Duration(days: 1))) &&
+          date.isAfter(from.subtract(const Duration(days: 0))) &&
           date.isBefore(
-            to.add(const Duration(days: 1)),
+            to.add(const Duration(days: 0)),
           );
     }).toList();
 
