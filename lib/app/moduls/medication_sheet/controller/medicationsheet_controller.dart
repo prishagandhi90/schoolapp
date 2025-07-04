@@ -109,11 +109,11 @@ class MedicationsheetController extends GetxController {
     searchFocusNode = FocusNode();
   }
 
-  // @override
-  // void onClose() {
-  //   searchFocusNode.dispose(); // cleanup
-  //   super.onClose();
-  // }
+  @override
+  void onClose() {
+    // searchFocusNode.dispose(); // cleanup
+    super.onClose();
+  }
 
   void setFocusNode(FocusNode node) {
     searchFocusNode = node; // Store the focusNode
