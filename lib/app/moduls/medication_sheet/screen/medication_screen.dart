@@ -220,11 +220,15 @@ class MedicationScreen extends StatelessWidget {
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                             color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                                            width: getDynamicHeight(size: 0.03),
+                                            width: getDynamicHeight(size: 0.0008),
                                           ),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(
+                                              getDynamicHeight(size: 0.005),
+                                            ),
+                                          ),
                                           borderSide:
                                               BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
                                         ),

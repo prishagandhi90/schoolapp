@@ -211,18 +211,20 @@ class AddMedicationScreen extends StatelessWidget {
                                       keyboardType: TextInputType.multiline,
                                       decoration: InputDecoration(
                                         hintText: 'Formulary Medicine',
-                                        hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
+                                        // hintStyle: TextStyle(color: AppColor.grey, fontFamily: CommonFontStyle.plusJakartaSans),
                                         isDense: true,
                                         border: OutlineInputBorder(),
                                         focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            // color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red,
-                                            width: getDynamicHeight(size: 0.03),
+                                            color: AppColor.black,
+                                            width: getDynamicHeight(size: 0.0008),
                                           ),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                                          // borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                          borderRadius: BorderRadius.all(Radius.circular(
+                                            getDynamicHeight(size: 0.005),
+                                          )),
+                                          borderSide: BorderSide(color: AppColor.black),
                                         ),
                                         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                                         suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
