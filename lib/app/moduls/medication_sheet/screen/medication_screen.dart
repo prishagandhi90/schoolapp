@@ -167,7 +167,7 @@ class MedicationScreen extends StatelessWidget {
                               //     controller.nameController.clear();
                               //     controller.suggestions.clear();
                               //     controller.ipdNo = '';
-                              //     controller.drTreatMasterList.clear();
+                              //     controller.filterDRTreatMasterList.clear();
                               //     SchedulerBinding.instance.addPostFrameCallback((_) {
                               //       controller.update();
                               //     });
@@ -242,7 +242,7 @@ class MedicationScreen extends StatelessWidget {
                                                   nameController.clear();
                                                   controller.suggestions.clear();
                                                   controller.ipdNo = '';
-                                                  controller.drTreatMasterList.clear();
+                                                  controller.filterDRTreatMasterList.clear();
                                                   SchedulerBinding.instance.addPostFrameCallback((_) {
                                                     controller.update();
                                                   });
@@ -322,7 +322,7 @@ class MedicationScreen extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: controller.drTreatMasterList.isEmpty
+                          child: controller.filterDRTreatMasterList.isEmpty
                               ? Center(
                                   child: Text(
                                     "No data found for selected dates",
@@ -335,7 +335,7 @@ class MedicationScreen extends StatelessWidget {
                                 )
                               : SlidableAutoCloseBehavior(
                                   child: ListView.builder(
-                                    itemCount: controller.drTreatMasterList.length, // Your list of treatments
+                                    itemCount: controller.filterDRTreatMasterList.length, // Your list of treatments
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       return Padding(
@@ -368,7 +368,8 @@ class MedicationScreen extends StatelessWidget {
                                                   onPressed: () async {
                                                     Slidable.of(context)?.close();
                                                     await Future.delayed(Duration(milliseconds: 200));
-                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index], "");
+                                                    await controller.editDrTreatmentMasterList(
+                                                        controller.filterDRTreatMasterList[index], "");
                                                     controller.showMedicationDialog(context, -1);
                                                   },
                                                 ),
@@ -397,7 +398,8 @@ class MedicationScreen extends StatelessWidget {
                                                   onPressed: () async {
                                                     Slidable.of(context)?.close();
                                                     await Future.delayed(Duration(milliseconds: 200));
-                                                    await controller.editDrTreatmentMasterList(controller.drTreatMasterList[index], "Edit");
+                                                    await controller.editDrTreatmentMasterList(
+                                                        controller.filterDRTreatMasterList[index], "Edit");
                                                     await controller.showMedicationDialog(context, index);
                                                   },
                                                 ),
@@ -446,7 +448,8 @@ class MedicationScreen extends StatelessWidget {
                                                           style: AppStyle.black,
                                                         ),
                                                         TextSpan(
-                                                          text: formatDateTime_dd_MMM_yy_HH_mm(controller.drTreatMasterList[index].date),
+                                                          text: formatDateTime_dd_MMM_yy_HH_mm(
+                                                              controller.filterDRTreatMasterList[index].date),
                                                           style: AppStyle.black.copyWith(
                                                             fontSize: getDynamicHeight(size: 0.013),
                                                           ),
@@ -463,7 +466,7 @@ class MedicationScreen extends StatelessWidget {
                                                             controller.isViewBtnclicked = true;
                                                             controller.isLoading = true;
                                                             controller.update();
-                                                            controller.filteredDetails = controller.drTreatMasterList[index].detail;
+                                                            controller.filteredDetails = controller.filterDRTreatMasterList[index].detail;
                                                             controller.selectedMasterIndex = index;
                                                             controller.searchController.clear();
                                                             Get.toNamed(

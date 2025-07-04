@@ -813,7 +813,7 @@ class AddMedicationScreen extends StatelessWidget {
                           vertical: getDynamicHeight(size: 0.008),
                         ),
                         child: Text(
-                          "Added Medication (${controller.drTreatMasterList[selectedMasterIndex].detail!.length})",
+                          "Added Medication (${controller.filterDRTreatMasterList[selectedMasterIndex].detail!.length})",
                           style: TextStyle(
                             color: AppColor.teal,
                             fontWeight: FontWeight.bold,
@@ -825,23 +825,23 @@ class AddMedicationScreen extends StatelessWidget {
                       // Medication List
                       SizedBox(
                         height: getDynamicHeight(size: 0.045) *
-                            (controller.drTreatMasterList[selectedMasterIndex].detail!.length < 5
-                                ? controller.drTreatMasterList[selectedMasterIndex].detail!.length
+                            (controller.filterDRTreatMasterList[selectedMasterIndex].detail!.length < 5
+                                ? controller.filterDRTreatMasterList[selectedMasterIndex].detail!.length
                                 : 5),
                         child: Scrollbar(
                           controller: listScrollController,
                           child: ListView.separated(
                             controller: listScrollController,
-                            physics: controller.drTreatMasterList[selectedMasterIndex].detail!.length > 5
+                            physics: controller.filterDRTreatMasterList[selectedMasterIndex].detail!.length > 5
                                 ? AlwaysScrollableScrollPhysics()
                                 : NeverScrollableScrollPhysics(),
-                            itemCount: controller.drTreatMasterList[selectedMasterIndex].detail!.length,
+                            itemCount: controller.filterDRTreatMasterList[selectedMasterIndex].detail!.length,
                             itemBuilder: (context, index) {
-                              final item = controller.drTreatMasterList[selectedMasterIndex].detail![index];
+                              final item = controller.filterDRTreatMasterList[selectedMasterIndex].detail![index];
                               return ListTile(
                                 visualDensity: VisualDensity(vertical: -4),
                                 title: Text(
-                                  "${index + 1}. ${item.itemName?.txt ?? item.itemNameMnl.toString().trim()}",
+                                  "${index + 1}. ${item.itemName?.txt.toString() != "" && item.itemName?.txt.toString() != "null" ? item.itemName?.txt.toString() : item.itemNameMnl.toString().trim()}",
                                   style: TextStyle(
                                     fontFamily: CommonFontStyle.plusJakartaSans,
                                     fontSize: getDynamicHeight(size: 0.014),
@@ -903,7 +903,7 @@ class AddMedicationScreen extends StatelessWidget {
                       onPressed: () {
                         if (controller.isViewBtnclicked) return;
                         controller.isViewBtnclicked = true;
-                        controller.filteredDetails = controller.drTreatMasterList[selectedMasterIndex].detail;
+                        controller.filteredDetails = controller.filterDRTreatMasterList[selectedMasterIndex].detail;
                         controller.selectedMasterIndex = selectedMasterIndex;
                         controller.searchController.clear();
                         Future.delayed(Duration(milliseconds: 200), () {

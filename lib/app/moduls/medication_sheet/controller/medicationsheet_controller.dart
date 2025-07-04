@@ -79,6 +79,7 @@ class MedicationsheetController extends GetxController {
   List<RespDrTreatDetail>? filteredDetails = [];
 
   List<DrTreatMasterList> drTreatMasterList = [];
+  List<DrTreatMasterList> filterDRTreatMasterList = [];
   bool fromAdmittedScreen = false;
   bool isTemplateVisible = true;
   final TextEditingController FormularyMedicinesController = TextEditingController();
@@ -347,8 +348,10 @@ class MedicationsheetController extends GetxController {
           if (selectedMasterIndex < 0) {
             selectedMasterIndex = 0; // Set default index if not set
           }
+          filterDRTreatMasterList = drTreatMasterList;
           filteredDetails = drTreatMasterList[selectedMasterIndex].detail; // by default all
         } else {
+          filterDRTreatMasterList = [];
           drTreatMasterList = [];
           filteredDetails = [];
         }
@@ -357,9 +360,11 @@ class MedicationsheetController extends GetxController {
         Get.offAll(const LoginScreen());
         Get.rawSnackbar(message: 'Your session has expired. Please log in again to continue');
       } else if (resp_DrTreatmentMst.statusCode == 400) {
+        filterDRTreatMasterList = [];
         drTreatMasterList = [];
         filteredDetails = [];
       } else {
+        filterDRTreatMasterList = [];
         drTreatMasterList = [];
         filteredDetails = [];
         Get.rawSnackbar(message: "Something went wrong");
@@ -386,16 +391,16 @@ class MedicationsheetController extends GetxController {
     isSearchActive = value;
     if (!value) {
       searchController.clear();
-      filteredDetails = List.from(drTreatMasterList[selectedMasterIndex].detail!); // Reset
+      filteredDetails = List.from(filterDRTreatMasterList[selectedMasterIndex].detail!); // Reset
     }
     update();
   }
 
   void filterSearchResults(String query) {
     if (query.isEmpty) {
-      filteredDetails = List.from(drTreatMasterList[selectedMasterIndex].detail!);
+      filteredDetails = List.from(filterDRTreatMasterList[selectedMasterIndex].detail!);
     } else {
-      filteredDetails = drTreatMasterList[selectedMasterIndex].detail!.where((item) {
+      filteredDetails = filterDRTreatMasterList[selectedMasterIndex].detail!.where((item) {
         final name = item.itemName?.txt?.toLowerCase() ?? item.itemNameMnl?.toLowerCase() ?? '';
         return name.contains(query.toLowerCase());
       }).toList();
@@ -823,8 +828,8 @@ class MedicationsheetController extends GetxController {
       String url = ConstApiUrl.empSaveAddMedicationSheetAPI; // 👈 detail-only API
 
       final selectedMedicationDetails = RespDrTreatDetail(
-        drDtlId: selectedDetailIndex < 0 ? 0 : drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex].drDtlId,
-        drMstId: drTreatMasterList[selectedMasterIndex].drMstId,
+        drDtlId: selectedDetailIndex < 0 ? 0 : filterDRTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex].drDtlId,
+        drMstId: filterDRTreatMasterList[selectedMasterIndex].drMstId,
         days: int.tryParse(daysController.text.trim().isEmpty ? '0' : daysController.text.trim()) ?? 0,
         itemNameMnl: nonFormularyMedicinesController.text.trim(),
         qty: int.tryParse(qtyController.text.trim().isEmpty ? '0' : qtyController.text.trim()) ?? 0,
@@ -872,20 +877,20 @@ class MedicationsheetController extends GetxController {
           final updatedDetail = responseData.data!;
           if (selectedDetailIndex >= 0) {
             // ✏️ Edit existing
-            if (drTreatMasterList[selectedMasterIndex].detail != null &&
-                drTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
-              drTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
+            if (filterDRTreatMasterList[selectedMasterIndex].detail != null &&
+                filterDRTreatMasterList[selectedMasterIndex].detail!.length > selectedDetailIndex) {
+              filterDRTreatMasterList[selectedMasterIndex].detail![selectedDetailIndex] = updatedDetail;
               selectedDetailIndex = -1;
             }
           } else {
             // ➕ Append new detail
-            if (drTreatMasterList[selectedMasterIndex].detail == null) {
-              drTreatMasterList[selectedMasterIndex].detail = [];
+            if (filterDRTreatMasterList[selectedMasterIndex].detail == null) {
+              filterDRTreatMasterList[selectedMasterIndex].detail = [];
             }
-            drTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
+            filterDRTreatMasterList[selectedMasterIndex].detail!.add(updatedDetail);
             selectedDetailIndex = -1;
           }
-          fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: "Medication Sheet", isload: false);
+          // fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: "Medication Sheet", isload: false);
           clearAddMedication(isUpdate: false);
         } else {
           Get.rawSnackbar(message: responseData.message ?? 'Failed to save medication detail');
@@ -1016,7 +1021,9 @@ class MedicationsheetController extends GetxController {
     final from = selectedFromDate!;
     final to = selectedToDate!;
 
-    drTreatMasterList = drTreatMasterList.where((item) {
+    filterDRTreatMasterList = drTreatMasterList;
+
+    filterDRTreatMasterList = drTreatMasterList.where((item) {
       final date = item.date;
       return date != null &&
           date.isAfter(from.subtract(const Duration(days: 1))) &&
@@ -1431,7 +1438,7 @@ class MedicationsheetController extends GetxController {
                           onPressed: () async {
                             // Submit logic
                             await saveMedicationSheet(
-                                selMasterindex >= 0 ? (controller.drTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
+                                selMasterindex >= 0 ? (controller.filterDRTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
                             clearMasterData();
                             Navigator.pop(context);
@@ -1506,13 +1513,13 @@ class MedicationsheetController extends GetxController {
                       ],
                     ),
                     SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
-                    _buildNoteSection(AppString.indoorrecordtype, drTreatMasterList[index].irt ?? ''),
-                    _buildNoteSection(AppString.entrydatetime, drTreatMasterList[index].sysDate.toString()),
-                    _buildNoteSection(AppString.specialorder, drTreatMasterList[index].specialOrder ?? ''),
-                    _buildNoteSection(AppString.templatename, drTreatMasterList[index].tmplName ?? ''),
-                    _buildNoteSection(AppString.provisionaldiagnosis, drTreatMasterList[index].provisionalDiagnosis ?? ''),
-                    _buildNoteSection(AppString.weight, drTreatMasterList[index].weight ?? ''),
-                    _buildNoteSection(AppString.remark, drTreatMasterList[index].remark ?? ''),
+                    _buildNoteSection(AppString.indoorrecordtype, filterDRTreatMasterList[index].irt ?? ''),
+                    _buildNoteSection(AppString.entrydatetime, filterDRTreatMasterList[index].sysDate.toString()),
+                    _buildNoteSection(AppString.specialorder, filterDRTreatMasterList[index].specialOrder ?? ''),
+                    _buildNoteSection(AppString.templatename, filterDRTreatMasterList[index].tmplName ?? ''),
+                    _buildNoteSection(AppString.provisionaldiagnosis, filterDRTreatMasterList[index].provisionalDiagnosis ?? ''),
+                    _buildNoteSection(AppString.weight, filterDRTreatMasterList[index].weight ?? ''),
+                    _buildNoteSection(AppString.remark, filterDRTreatMasterList[index].remark ?? ''),
                     Container(
                       height: getDynamicHeight(size: 0.09), // was MediaQuery height * 0.12
                       child: Column(
@@ -1584,7 +1591,7 @@ class MedicationsheetController extends GetxController {
                         ],
                       ),
                     ),
-                    _buildNoteSection(AppString.user, drTreatMasterList[index].userName ?? ''),
+                    _buildNoteSection(AppString.user, filterDRTreatMasterList[index].userName ?? ''),
                   ],
                 ),
               ),
@@ -1594,7 +1601,7 @@ class MedicationsheetController extends GetxController {
   }
 
   void sortTreatmentByDate({required bool isAscending}) {
-    drTreatMasterList.sort((a, b) {
+    filterDRTreatMasterList.sort((a, b) {
       final dateA = a.date ?? DateTime(1900);
       final dateB = b.date ?? DateTime(1900);
       return isAscending ? dateA.compareTo(dateB) : dateB.compareTo(dateA);
@@ -1982,7 +1989,7 @@ class MedicationsheetController extends GetxController {
                       ),
                       SizedBox(height: getDynamicHeight(size: 0.007)), // was SizedBox(height: 10)
                       _buildNoteSection(AppString.medicationtype,
-                          drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
+                          filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].medicineType!.name ?? ''),
                       _buildNoteSection(
                           AppString.instructiontype, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].instType ?? ''),
                       Container(
@@ -2131,9 +2138,10 @@ class MedicationsheetController extends GetxController {
                       ),
                       _buildNoteSection(
                           AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
-                      _buildNoteSection(AppString.user, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
                       _buildNoteSection(
-                          AppString.entrydatetime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                          AppString.user, filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
+                      _buildNoteSection(AppString.entrydatetime,
+                          filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),

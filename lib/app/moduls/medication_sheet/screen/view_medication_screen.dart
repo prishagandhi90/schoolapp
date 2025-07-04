@@ -250,8 +250,8 @@ class ViewMedicationScreen extends StatelessWidget {
                                                     context: context,
                                                     onConfirm: () async {
                                                       await controller.deleteMedicationSheet(
-                                                        mstId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
-                                                        dtlId: controller.drTreatMasterList[selectedMasterIndex].detail![index].drDtlId!,
+                                                        mstId: controller.filterDRTreatMasterList[selectedMasterIndex].detail![index].drMstId!,
+                                                        dtlId: controller.filterDRTreatMasterList[selectedMasterIndex].detail![index].drDtlId!,
                                                       );
                                                       controller.filteredDetails!.removeAt(index);
                                                       controller.update();
@@ -266,7 +266,7 @@ class ViewMedicationScreen extends StatelessWidget {
                                           onTap: () async {
                                             Future.delayed(Duration(milliseconds: 200), () async {
                                               await controller.editDrTreatmentDetailList(
-                                                  controller.drTreatMasterList[selectedMasterIndex].detail![index]);
+                                                  controller.filterDRTreatMasterList[selectedMasterIndex].detail![index]);
                                               // Get.to(
                                               //   AddMedicationScreen(
                                               //     selectedMasterIndex: selectedMasterIndex,
