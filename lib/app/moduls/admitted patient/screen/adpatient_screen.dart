@@ -59,12 +59,7 @@ class AdpatientScreen extends StatelessWidget {
                   padding: EdgeInsets.only(right: 12),
                   child: GestureDetector(
                     onTap: () {
-                      PersistentNavBarNavigator.pushNewScreen(
-                        context,
-                        screen: NotificationScreen(),
-                        withNavBar: false,
-                        pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                      ).then((value) async {
+                      Get.toNamed(Paths.NOTIFICATIONSCREEN)!.then((value) async {
                         Get.back();
                         await adPatientController.fetchDeptwisePatientList();
                         // var dashboardController = Get.put(DashboardController());
@@ -75,6 +70,22 @@ class AdpatientScreen extends StatelessWidget {
                         bottomBarController.isIPDHome.value = true;
                         hideBottomBar.value = false;
                       });
+                      // PersistentNavBarNavigator.pushNewScreen(
+                      //   context,
+                      //   screen: NotificationScreen(),
+                      //   withNavBar: false,
+                      //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                      // ).then((value) async {
+                      //   Get.back();
+                      //   await adPatientController.fetchDeptwisePatientList();
+                      //   // var dashboardController = Get.put(DashboardController());
+                      //   await dashboardController.getDashboardDataUsingToken();
+                      //   var bottomBarController = Get.find<BottomBarController>();
+                      //   bottomBarController.currentIndex.value = 0;
+                      //   bottomBarController.persistentController.value.index = 0;
+                      //   bottomBarController.isIPDHome.value = true;
+                      //   hideBottomBar.value = false;
+                      // });
                     },
                     child: Stack(
                       clipBehavior: Clip.none,
@@ -376,7 +387,7 @@ class AdpatientScreen extends StatelessWidget {
     medicationsheetController.clearAddMedication();
     await medicationsheetController.initSharedPref();
     medicationsheetController.onMedicationScreenLoad();
-    await medicationsheetController.fetchDrTreatmentData(
+    medicationsheetController.fetchDrTreatmentData(
       ipdNo: controller.filterpatientsData[index].ipdNo.toString(),
       treatTyp: 'Medication Sheet',
       isload: true,
@@ -489,12 +500,13 @@ class AdpatientScreen extends StatelessWidget {
                                 controller.bedNo = controller.filterpatientsData[index].bedNo ?? '';
                                 controller.resetVoiceControls();
                                 controller.update();
-                                PersistentNavBarNavigator.pushNewScreen(
-                                  context,
-                                  screen: VoiceScreen(),
-                                  withNavBar: false,
-                                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                );
+                                Get.toNamed(Paths.VOICESCREEN);
+                                // PersistentNavBarNavigator.pushNewScreen(
+                                //   context,
+                                //   screen: VoiceScreen(),
+                                //   withNavBar: false,
+                                //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                // );
                               },
                               child: const Icon(Icons.mic_none_rounded),
                             ),
@@ -529,12 +541,8 @@ class AdpatientScreen extends StatelessWidget {
                                           controller.fetchsummarylabdata();
                                           await controller.resetForm();
                                         });
-                                        PersistentNavBarNavigator.pushNewScreen(
-                                          context,
-                                          screen: LabSummaryScreen(),
-                                          withNavBar: false,
-                                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                        ).then((value) async {
+
+                                        Get.toNamed(Paths.LABSUMMARYSCREEN)!.then((value) async {
                                           Future.microtask(() async {
                                             if (controller.sortBySelected != null) {
                                               await controller.getSortData(isLoader: true);
@@ -543,6 +551,20 @@ class AdpatientScreen extends StatelessWidget {
                                             await controller.fetchDeptwisePatientList();
                                           });
                                         });
+                                        // PersistentNavBarNavigator.pushNewScreen(
+                                        //   context,
+                                        //   screen: LabSummaryScreen(),
+                                        //   withNavBar: false,
+                                        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                        // ).then((value) async {
+                                        //   Future.microtask(() async {
+                                        //     if (controller.sortBySelected != null) {
+                                        //       await controller.getSortData(isLoader: true);
+                                        //       return;
+                                        //     }
+                                        //     await controller.fetchDeptwisePatientList();
+                                        //   });
+                                        // });
                                       } else if (value == "Lab Report") {
                                         var labreportsController = Get.put(LabReportsController());
                                         labreportsController.showSwipe = true;
