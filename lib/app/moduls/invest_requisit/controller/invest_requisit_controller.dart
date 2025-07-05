@@ -49,8 +49,10 @@ class InvestRequisitController extends GetxController {
   final ExternalLabIdController = TextEditingController();
   final serviceGroupController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  TextEditingController mobileController = TextEditingController(text: '9429728770');
-  TextEditingController passwordController = TextEditingController(text: 'venus9');
+  // TextEditingController mobileController = TextEditingController(text: '9429728770');
+  // TextEditingController passwordController = TextEditingController(text: 'venus9');
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool obscurePassword = true;
   FocusNode focusNode = FocusNode();
   bool hasFocus = false;
