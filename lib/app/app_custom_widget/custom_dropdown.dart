@@ -67,12 +67,10 @@ class CustomDropdown extends StatelessWidget {
                   }
                 }
               : null, // ✅ disable interaction
-
           buttonStyleData: buttonStyleData,
           menuItemStyleData: MenuItemStyleData(
             height: getDynamicHeight(size: 0.038),
           ),
-
           dropdownSearchData: dropdownSearchData,
           dropdownStyleData: DropdownStyleData(
             useSafeArea: false,

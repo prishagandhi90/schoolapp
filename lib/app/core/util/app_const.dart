@@ -2,7 +2,7 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:flutter/material.dart';
 
 class AppConst {
-  static  List<Map<String, dynamic>> listItems = [
+  static List<Map<String, dynamic>> listItems = [
     {'image': AppImage.HIMS, 'label': 'HIMS'},
     {'image': AppImage.opd, 'label': 'OPD'},
     {'image': AppImage.ipd, 'label': 'IPD'},
@@ -14,7 +14,7 @@ class AppConst {
     {'image': AppImage.OT, 'label': 'Operation Theater'},
   ];
 
-  static  List<Map<String, dynamic>> gridview = [
+  static List<Map<String, dynamic>> gridview = [
     {'image': AppImage.HIMS, 'label': 'HIMS'},
     {'image': AppImage.opd, 'label': 'OPD'},
     {'image': AppImage.ipd, 'label': 'IPD'},
@@ -27,7 +27,7 @@ class AppConst {
     {'image': AppImage.nabh, 'label': 'NABH'},
   ];
 
-  static  List<Map<String, dynamic>> payrolllist = [
+  static List<Map<String, dynamic>> payrolllist = [
     {'image': AppImage.attendance, 'label': 'Attendance'},
     {'image': AppImage.mispunch, 'label': 'Mispunch Info'},
     {'image': AppImage.leave, 'label': 'Leave Entry'},
@@ -41,9 +41,9 @@ class AppConst {
     {'icon': Icons.dashboard, 'label': 'Dashboard'},
   ];
 
-  static  List<Map<String, dynamic>> payrollgrid = [
+  static List<Map<String, dynamic>> payrollgrid = [
     {'image': AppImage.attendance, 'label': 'Attendance'},
-    {'image':AppImage.mispunch, 'label': 'Mispunch Info'},
+    {'image': AppImage.mispunch, 'label': 'Mispunch Info'},
     {'image': AppImage.leave, 'label': 'Leave Entry'},
     {'image': AppImage.overtime, 'label': 'Over Time Entry'},
     {'image': AppImage.dutySchedule, 'label': 'Duty Schedule'},
@@ -52,12 +52,13 @@ class AppConst {
 
   static const OTPTimer = 60;
 
-  static  List<Map<String, dynamic>> pharmacygrid = [
+  static List<Map<String, dynamic>> pharmacygrid = [
     {'image': AppImage.prescription, 'label': 'Prescription Viewer'},
   ];
 
-  static  List<Map<String, dynamic>> adpatientgrid = [
+  static List<Map<String, dynamic>> adpatientgrid = [
     {'image': AppImage.adpatient, 'label': 'Admitted Patients'},
     {'image': AppImage.investrequisite, 'label': 'Investigation Requisition'},
+    {'image': AppImage.medication, 'label': 'Medication Sheet'},
   ];
 }

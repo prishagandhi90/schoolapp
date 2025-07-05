@@ -134,7 +134,13 @@ class AdPatientController extends GetxController {
       loginId = pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? "", "orgs": selectedOrgsList, "floors": selectedFloorsList, "wards": selectedWardsList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? "",
+        "orgs": selectedOrgsList,
+        "floors": selectedFloorsList,
+        "wards": selectedWardsList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedpatientdata rsponsedpatientdata = Rsponsedpatientdata.fromJson(jsonDecode(response));
@@ -917,10 +923,7 @@ class AdPatientController extends GetxController {
             return;
           }
         }
-
-        final envReqController = Get.put(
-          InvestRequisitController(),
-        );
+        final envReqController = Get.put(InvestRequisitController());
         await envReqController.resetForm();
         // ⬇️ Call the dialog function directly
         await envReqController.loginAlertDialog(
@@ -945,6 +948,44 @@ class AdPatientController extends GetxController {
         hideBottomBar.value = false;
         isInvestigationReq_Navigating.value = false;
         break;
+      case 2:
+        if (isInvestigationReq_Navigating.value) return;
+        isInvestigationReq_Navigating.value = true;
+
+        if (screenRightsTable.isNotEmpty) {
+          if (screenRightsTable[2].rightsYN == "N") {
+            isInvestigationReq_Navigating.value = false;
+            Get.snackbar(
+              "You don't have access to this screen",
+              '',
+              colorText: AppColor.white,
+              backgroundColor: AppColor.black,
+              duration: const Duration(seconds: 1),
+            );
+            return;
+          }
+        }
+        FromScreen_Redirection = "";
+        WebLoginUser = "";
+        update();
+        final envReqController = Get.put(InvestRequisitController());
+        await envReqController.resetForm();
+        // ⬇️ Call the dialog function directly
+        await envReqController.loginAlertDialog(
+          context,
+          "MEDICATION SHEET",
+          "",
+          "",
+          "",
+          fromScreen: "MEDICATION SHEET",
+          fromScreenRedirection: "MEDICATION SHEET",
+        );
+        // ⬇️ Ye tab chalega jab dialog band ho jayega
+        // final controller = Get.put(AdPatientController());
+        sortBySelected = -1;
+        await resetForm();
+        await fetchData();
+        isInvestigationReq_Navigating.value = false;
     }
   }
 
