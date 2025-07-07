@@ -5,18 +5,20 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:emp_app/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
+import 'package:emp_app/app/moduls/IPD/dietician_checklist/widgets/bed_checkbox.dart';
+import 'package:emp_app/app/moduls/IPD/dietician_checklist/widgets/floor_checkbox.dart';
+import 'package:emp_app/app/moduls/IPD/dietician_checklist/widgets/ward_checkbox.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class DieticianChecklistScreen extends StatelessWidget {
   DieticianChecklistScreen({Key? key}) : super(key: key);
   final dashboardController = Get.isRegistered<DashboardController>() ? Get.find<DashboardController>() : Get.put(DashboardController());
-  final AdPatientController adPatientController = Get.put(AdPatientController());
   @override
   Widget build(BuildContext context) {
     Get.put(DietchecklistController());
@@ -41,11 +43,15 @@ class DieticianChecklistScreen extends StatelessWidget {
                       },
                       child: Padding(
                         padding: EdgeInsets.only(right: 10), // 👈 Minimal spacing between icons
-                        child: Icon(
-                          Icons.filter_alt,
-                          color: AppColor.black,
-                          size: getDynamicHeight(size: 0.024),
-                        ),
+                        child: IconButton(
+                            onPressed: () {
+                              dietFiltterBottomSheet();
+                            },
+                            icon: Icon(
+                              Icons.filter_alt,
+                              color: AppColor.black,
+                              size: getDynamicHeight(size: 0.024),
+                            )),
                       ),
                     ),
                     // Notification icon with badge
@@ -117,7 +123,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                             onTap: () {
                               FocusScope.of(context).unfocus();
                               controller.searchController.clear();
-                              // controller.fetchDeptwisePatientList(isLoader: false);
+                              controller.fetchDieticianList();
                             },
                             child: const Icon(Icons.cancel_outlined))
                         : const SizedBox(),
@@ -134,7 +140,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                     controller.update();
                   },
                   onChanged: (value) {
-                    // controller.filterSearchResults(value);
+                    controller.filterSearchResults(value);
                   },
                   onTapOutside: (event) {
                     FocusScope.of(context).unfocus();
@@ -143,10 +149,9 @@ class DieticianChecklistScreen extends StatelessWidget {
                   },
                   onFieldSubmitted: (v) {
                     if (controller.searchController.text.trim().isNotEmpty) {
-                      // controller.fetchDeptwisePatientList(
-                      //   searchPrefix: controller.searchController.text.trim(),
-                      //   isLoader: false,
-                      // );
+                      controller.fetchDieticianList(
+                        searchPrefix: controller.searchController.text.trim(),
+                      );
                       controller.searchController.clear();
                     }
                     Future.delayed(const Duration(milliseconds: 800));
@@ -157,53 +162,54 @@ class DieticianChecklistScreen extends StatelessWidget {
 
                 /// 🟦 Room Type Tabs
                 Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Fixed "ALL" tab
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 🔵 Static ALL tab from API
+                      if (controller.allTabs.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(right: 8),
                           child: _buildTabWithBadge(
-                            label: 'ALL',
-                            count: 33,
-                            isSelected: controller.selectedTabLabel == 'ALL',
+                            label: controller.allTabs.first.shortWardName ?? '',
+                            count: controller.allTabs.first.wardCount ?? 0,
+                            isSelected: controller.selectedTabLabel == controller.allTabs.first.shortWardName,
                             onTap: () {
-                              controller.updateSelectedTab('ALL');
+                              controller.updateSelectedTab(controller.allTabs.first.shortWardName ?? '');
                             },
                           ),
                         ),
-                        // Scrollable other tabs
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: tabs.map((tab) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: _buildTabWithBadge(
-                                    label: tab['label'],
-                                    count: tab['count'],
-                                    isSelected: controller.selectedTabLabel == tab['label'],
-                                    onTap: () {
-                                      controller.updateSelectedTab(tab['label']);
-                                    },
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+
+                      // 🔵 Scrollable other tabs
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: controller.otherTabs.map((tab) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: _buildTabWithBadge(
+                                  label: tab.shortWardName ?? '',
+                                  count: tab.wardCount ?? 0,
+                                  isSelected: controller.selectedTabLabel == tab.shortWardName,
+                                  onTap: () => tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName ?? '') : null,
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
-                      ],
-                    )),
+                      ),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
-                    controller: controller.adPatientScrollController,
+                    controller: controller.dieticianScrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.all(5),
-                    itemCount: adPatientController.filterpatientsData.length,
+                    padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.009)),
+                    itemCount: controller.filterdieticianList.length,
                     itemBuilder: (context, index) {
-                      return _buildPatientCard(index, context, adPatientController);
+                      return _buildPatientCard(index, context, controller);
                     },
                   ),
                 ),
@@ -214,14 +220,6 @@ class DieticianChecklistScreen extends StatelessWidget {
       },
     );
   }
-
-  List<Map<String, dynamic>> tabs = [
-    {'label': 'Economy AC', 'count': 9},
-    {'label': 'Deluxe', 'count': 8},
-    {'label': 'MICU', 'count': 6},
-    {'label': 'NICU', 'count': 4},
-    // Add more if needed
-  ];
 
   Widget _buildTabWithBadge({
     required String label,
@@ -273,123 +271,384 @@ class DieticianChecklistScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPatientCard(int index, BuildContext context, AdPatientController controller) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: AppColor.primaryColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+  Widget _buildPatientCard(int index, BuildContext context, DietchecklistController controller) {
+    return GestureDetector(
+      onTap: () {
+        controller.showDietDialog(context, index);
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// 🔷 Header
+            Container(
+              decoration: BoxDecoration(
+                color: AppColor.primaryColor,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(controller.filterdieticianList[index].bedNo.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      )),
+                  Text(controller.filterdieticianList[index].ipdNo.toString(), style: const TextStyle(color: Colors.white)),
+                  Text(
+                    "${controller.filterdieticianList[index].wardName.toString()} - Floor ${controller.filterdieticianList[index].floorNo.toString()}",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
-            padding: EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  controller.filterpatientsData[index].bedNo.toString(),
-                  style: TextStyle(color: AppColor.white, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  controller.filterpatientsData[index].ipdNo.toString(),
-                  style: TextStyle(color: AppColor.white),
-                ),
-                Text(
-                  controller.filterpatientsData[index].floor.toString(),
-                  style: TextStyle(color: AppColor.white),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(getDynamicHeight(size: 0.010)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// 🔹 Patient Name + Menu
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        controller.filterpatientsData[index].patientName ?? '',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: Sizes.px16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.primaryColor,
+
+            /// 🔽 Body
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// 🟦 Patient Name + Menu icon (Same Line)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          controller.filterdieticianList[index].patientName.toString(),
+                          style: TextStyle(
+                            fontSize: Sizes.px15,
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.primaryColor,
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.menu),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: getDynamicHeight(size: 0.006)),
-
-                /// 🔹 Doctor Name & Diet
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        controller.filterpatientsData[index].floor ?? '',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      const SizedBox(width: 8),
+                      GestureDetector(
+                        onTap: () => controller.dieticianBottomSheet(index),
+                        child: const Icon(Icons.menu, size: 20),
                       ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        "Diet: ${controller.filterpatientsData[index].floor ?? ''}",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.right,
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  /// 🟨 Row 1: Dr Name + Diet
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// Dr Name
+                      Expanded(
+                        child: Text(
+                          controller.filterdieticianList[index].doctor.toString(),
+                          style: TextStyle(
+                            fontSize: getDynamicHeight(size: 0.015),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 8),
 
-                SizedBox(height: getDynamicHeight(size: 0.006)),
-
-                /// 🔹 DOA & Diagnosis
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "DOA: ${controller.filterpatientsData[index].doa ?? ''}",
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      /// Diet
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'Diet: ',
+                            style: AppStyle.plusbold16.copyWith(
+                              fontSize: getDynamicHeight(size: 0.014),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: controller.filterdieticianList[index].dietPlan.toString(),
+                                style: AppStyle.w50018.copyWith(
+                                  fontSize: getDynamicHeight(size: 0.014),
+                                  color: AppColor.originalgrey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        "Diagnosis: ${controller.filterpatientsData[index].bedNo ?? ''}",
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.right,
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+
+                  /// 🟨 Row 2: DOA + Diagnosis
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// DOA
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'DOA: ',
+                            style: AppStyle.plusbold16.copyWith(
+                              fontSize: getDynamicHeight(size: 0.014),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: DateFormat('dd-MM-yy').format(
+                                  DateTime.parse(controller.filterdieticianList[index].doa.toString()),
+                                ),
+                                style: AppStyle.w50018.copyWith(
+                                  fontSize: getDynamicHeight(size: 0.014),
+                                  color: AppColor.originalgrey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
+                      const SizedBox(width: 8),
+
+                      /// Diagnosis
+                      Expanded(
+                        child: Text.rich(
+                          TextSpan(
+                            text: 'Diagnosis: ',
+                            style: AppStyle.plusbold16.copyWith(
+                              fontSize: getDynamicHeight(size: 0.014),
+                            ),
+                            children: [
+                              TextSpan(
+                                text: controller.filterdieticianList[index].diagnosis.toString(),
+                                style: AppStyle.w50018.copyWith(
+                                  fontSize: getDynamicHeight(size: 0.014),
+                                  color: AppColor.originalgrey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+
+                  /// 🟨 Remarks (Last line)
+                  Text.rich(
+                    TextSpan(
+                      text: 'Remark: ',
+                      style: AppStyle.plusbold16.copyWith(
+                        fontSize: getDynamicHeight(size: 0.014),
+                      ),
+                      children: [
+                        TextSpan(
+                          text: controller.filterdieticianList[index].remark.toString(),
+                          style: AppStyle.w50018.copyWith(
+                            fontSize: getDynamicHeight(size: 0.014),
+                            color: AppColor.originalgrey,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-
-                SizedBox(height: getDynamicHeight(size: 0.006)),
-
-                /// 🔹 Remarks
-                Text(
-                  "Remarks: ${controller.filterpatientsData[index].bedNo ?? ''}",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> dietFiltterBottomSheet() async {
+    showModalBottomSheet(
+        context: Get.context!,
+        isScrollControlled: true,
+        isDismissible: true,
+        useSafeArea: true,
+        backgroundColor: AppColor.transparent,
+        builder: (context) => Container(
+              height: MediaQuery.of(context).size.height * 0.90,
+              width: Get.width,
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25.0),
+                  topRight: Radius.circular(25.0),
+                ),
+              ),
+              child: GetBuilder<DietchecklistController>(builder: (controller) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: 30,
+                          ),
+                          Text(
+                            AppString.filterby,
+                            style: TextStyle(
+                              // fontSize: 25,
+                              fontSize: getDynamicHeight(size: 0.027),
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: Icon(Icons.cancel),
+                          )
+                        ],
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Text(
+                                AppString.selectWardsName,
+                                style: TextStyle(
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              dietWardsCheckBoxes(controller: controller),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                AppString.floor,
+                                style: TextStyle(
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              dietFloorsCheckBoxes(controller: controller),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                AppString.selectbed,
+                                style: TextStyle(
+                                  // fontSize: 20,
+                                  fontSize: getDynamicHeight(size: 0.022),
+                                  color: AppColor.black,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              dietBedsCheckBoxes(controller: controller),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      backgroundColor: AppColor.primaryColor),
+                                  onPressed: () async {
+                                    FocusScope.of(context).unfocus();
+                                    controller.callFilterAPi = true;
+                                    if (controller.selectedWardList.isNotEmpty ||
+                                        controller.selectedFloorList.isNotEmpty ||
+                                        controller.selectedBedList.isNotEmpty) {
+                                      Navigator.pop(context);
+                                      // await fetchpresViewer(isLoader: false);
+                                    } else {
+                                      Get.rawSnackbar(message: AppString.plzselectoptiontosort);
+                                    }
+                                  },
+                                  child: Text(
+                                    AppString.apply,
+                                    style: TextStyle(
+                                      color: AppColor.white,
+                                      // fontSize: 15,
+                                      fontSize: getDynamicHeight(size: 0.017),
+                                    ),
+                                  )),
+                            )),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              child: SizedBox(
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        backgroundColor: AppColor.primaryColor),
+                                    onPressed: () async {
+                                      controller.callFilterAPi = true;
+                                      FocusScope.of(context).unfocus();
+                                      controller.selectedWardList = [];
+                                      controller.selectedFloorList = [];
+                                      controller.selectedBedList = [];
+                                      // await fetchpresViewer();
+                                      Navigator.pop(context);
+                                      controller.update();
+                                    },
+                                    child: Text(
+                                      AppString.resetall,
+                                      style: TextStyle(
+                                        // fontSize: 16,
+                                        fontSize: getDynamicHeight(size: 0.018),
+                                        color: AppColor.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            )).whenComplete(() {
+      // if (!callFilterAPi) {
+      //   fetchpresViewer();
+      //   selectedWardList = List.from(tempWardList);
+      //   selectedFloorList = List.from(tempFloorsList);
+      //   selectedBedList = List.from(tempBedList);
+      //   update();
+      // }
+    });
   }
 }
