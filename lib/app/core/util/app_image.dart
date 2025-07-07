@@ -42,4 +42,5 @@ class AppImage {
   static String prescription = "assets/image/prescription.png";
   //svg
   static String drawersvg = "assets/image/svg/drawer.svg";
+  static String dieticiansvg = "assets/image/svg/dietician.svg";
 }

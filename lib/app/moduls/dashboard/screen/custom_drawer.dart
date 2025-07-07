@@ -6,7 +6,7 @@ import 'package:emp_app/app/core/util/app_image.dart';
 import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
+import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/superlogin/screen/superlogin_screen.dart';
 import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:flutter/material.dart';

@@ -98,4 +98,8 @@ class ConstApiUrl {
   static const empMedicationSheet_SearchMedicinesAPI = "$empUrl/EmpApp_MedicationSheet_SearchMedicines";
   static const empSaveAddMedicationSheetAPI = "$empUrl/EmpApp_SaveAddMedicinesSheet";
   static const empDeleteMedicationSheetAPI = "$empUrl/EmpApp_MedicationSheet_DeleteMedicines";
+
+  //------------------------Dietician Checklist------------------------------
+  static const empDieticianChecklistListAPI = "$empUrl/EMPApp_Getdata_DieticianChecklist";
+  static const empDieticianFilterWardNameAPI = "$empUrl/EMPApp_GetWardNm_Cnt_DieticianChecklist";
 }

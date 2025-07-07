@@ -17,7 +17,7 @@ import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dar
 import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
 import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/mispunch/controller/mispunch_controller.dart';
+import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
 import 'package:emp_app/app/moduls/resetpassword/controller/resetpass_controller.dart';
 import 'package:emp_app/app/moduls/resetpassword/screen/resetpass_screen.dart';
 import 'package:emp_app/app/moduls/routes/app_pages.dart';

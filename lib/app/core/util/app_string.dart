@@ -260,4 +260,7 @@ class AppString {
   static String flowrate = "Flow Rate";
   static String save1 = "SAVE";
   static String view = "View";
+
+  //Dietician Checklist
+  static String dietchecklist = "Dietician Checklist";
 }
