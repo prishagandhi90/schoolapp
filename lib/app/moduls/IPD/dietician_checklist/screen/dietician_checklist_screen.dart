@@ -6,9 +6,7 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
-import 'package:emp_app/app/moduls/IPD/dietician_checklist/widgets/bed_checkbox.dart';
-import 'package:emp_app/app/moduls/IPD/dietician_checklist/widgets/floor_checkbox.dart';
-import 'package:emp_app/app/moduls/IPD/dietician_checklist/widgets/ward_checkbox.dart';
+import 'package:emp_app/app/moduls/IPD/dietician_checklist/model/dieticianfilterwardnm_model.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +43,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                         padding: EdgeInsets.only(right: 10), // 👈 Minimal spacing between icons
                         child: IconButton(
                             onPressed: () {
-                              dietFiltterBottomSheet();
+                              controller.dietFiltterBottomSheet();
                             },
                             icon: Icon(
                               Icons.filter_alt,
@@ -175,7 +173,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                             count: controller.allTabs.first.wardCount ?? 0,
                             isSelected: controller.selectedTabLabel == controller.allTabs.first.shortWardName,
                             onTap: () {
-                              controller.updateSelectedTab(controller.allTabs.first.shortWardName ?? '');
+                              controller.updateSelectedTab(controller.allTabs.first ?? DieticianfilterwardnmModel());
                             },
                           ),
                         ),
@@ -192,7 +190,8 @@ class DieticianChecklistScreen extends StatelessWidget {
                                   label: tab.shortWardName ?? '',
                                   count: tab.wardCount ?? 0,
                                   isSelected: controller.selectedTabLabel == tab.shortWardName,
-                                  onTap: () => tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName ?? '') : null,
+                                  onTap: () =>
+                                      tab.wardCount! > 0 ? controller.updateSelectedTab(tab ?? DieticianfilterwardnmModel()) : null,
                                 ),
                               );
                             }).toList(),
@@ -451,204 +450,5 @@ class DieticianChecklistScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> dietFiltterBottomSheet() async {
-    showModalBottomSheet(
-        context: Get.context!,
-        isScrollControlled: true,
-        isDismissible: true,
-        useSafeArea: true,
-        backgroundColor: AppColor.transparent,
-        builder: (context) => Container(
-              height: MediaQuery.of(context).size.height * 0.90,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: AppColor.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25.0),
-                  topRight: Radius.circular(25.0),
-                ),
-              ),
-              child: GetBuilder<DietchecklistController>(builder: (controller) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Text(
-                            AppString.filterby,
-                            style: TextStyle(
-                              // fontSize: 25,
-                              fontSize: getDynamicHeight(size: 0.027),
-                              color: AppColor.black,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icon(Icons.cancel),
-                          )
-                        ],
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Text(
-                                AppString.selectWardsName,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              dietWardsCheckBoxes(controller: controller),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                AppString.floor,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              dietFloorsCheckBoxes(controller: controller),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                AppString.selectbed,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              dietBedsCheckBoxes(controller: controller),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: SizedBox(
-                              height: 50,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      backgroundColor: AppColor.primaryColor),
-                                  onPressed: () async {
-                                    FocusScope.of(context).unfocus();
-                                    controller.callFilterAPi = true;
-                                    if (controller.selectedWardList.isNotEmpty ||
-                                        controller.selectedFloorList.isNotEmpty ||
-                                        controller.selectedBedList.isNotEmpty) {
-                                      Navigator.pop(context);
-                                      // await fetchpresViewer(isLoader: false);
-                                    } else {
-                                      Get.rawSnackbar(message: AppString.plzselectoptiontosort);
-                                    }
-                                  },
-                                  child: Text(
-                                    AppString.apply,
-                                    style: TextStyle(
-                                      color: AppColor.white,
-                                      // fontSize: 15,
-                                      fontSize: getDynamicHeight(size: 0.017),
-                                    ),
-                                  )),
-                            )),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: SizedBox(
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        backgroundColor: AppColor.primaryColor),
-                                    onPressed: () async {
-                                      controller.callFilterAPi = true;
-                                      FocusScope.of(context).unfocus();
-                                      controller.selectedWardList = [];
-                                      controller.selectedFloorList = [];
-                                      controller.selectedBedList = [];
-                                      // await fetchpresViewer();
-                                      Navigator.pop(context);
-                                      controller.update();
-                                    },
-                                    child: Text(
-                                      AppString.resetall,
-                                      style: TextStyle(
-                                        // fontSize: 16,
-                                        fontSize: getDynamicHeight(size: 0.018),
-                                        color: AppColor.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  )),
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                    ],
-                  ),
-                );
-              }),
-            )).whenComplete(() {
-      // if (!callFilterAPi) {
-      //   fetchpresViewer();
-      //   selectedWardList = List.from(tempWardList);
-      //   selectedFloorList = List.from(tempFloorsList);
-      //   selectedBedList = List.from(tempBedList);
-      //   update();
-      // }
-    });
   }
 }

@@ -102,4 +102,6 @@ class ConstApiUrl {
   //------------------------Dietician Checklist------------------------------
   static const empDieticianChecklistListAPI = "$empUrl/EMPApp_Getdata_DieticianChecklist";
   static const empDieticianFilterWardNameAPI = "$empUrl/EMPApp_GetWardNm_Cnt_DieticianChecklist";
+  static const empDietSaveChecklistMasterAPI = "$empUrl/EmpApp_SaveDietChecklistMaster";
+  static const empDietPlanDropDownAPI = "$empUrl/EmpApp_GetDietPlanList";
 }

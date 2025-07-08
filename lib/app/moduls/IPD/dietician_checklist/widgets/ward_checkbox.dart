@@ -10,39 +10,38 @@ dietWardsCheckBoxes({required DietchecklistController controller}) {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 4),
       itemBuilder: (context, i) {
+        final currentWard = controller.wards[i];
+        final isSelected = controller.selectedWardList.any((e) => e.shortWardName == currentWard.shortWardName);
         return Row(
           children: [
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  if (controller.selectedWardList.contains(controller.wards[i].wardName)) {
-                    controller.selectedWardList.remove(controller.wards[i].wardName);
+                  if (isSelected) {
+                    controller.selectedWardList.removeWhere((e) => e.shortWardName == currentWard.shortWardName);
                   } else {
-                    controller.selectedWardList.add(controller.wards[i].wardName!);
+                    controller.selectedWardList.add(currentWard);
                   }
                   controller.update();
                 },
                 child: Row(
                   children: [
-                    controller.selectedWardList.contains(controller.wards[i].wardName)
-                        ? Container(
-                            height: 20,
-                            width: 20,
-                            decoration: BoxDecoration(
-                                color: AppColor.originalgrey,
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
-                            child: Center(
-                              child: Icon(Icons.check, color: AppColor.white, size: 16),
-                            ),
-                          )
-                        : Container(
-                            height: 20,
-                            width: 20,
-                            decoration: BoxDecoration(
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
-                          ),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                          color: isSelected ? AppColor.originalgrey : AppColor.white,
+                          border: Border.all(width: 1, color: AppColor.originalgrey),
+                          borderRadius: const BorderRadius.all(Radius.circular(3))),
+                      child: Center(
+                        child: isSelected
+                            ? Center(
+                                child: Icon(Icons.check, color: AppColor.white, size: 16),
+                              )
+                            : null,
+                      ),
+                    ),
+
                     SizedBox(
                       width: 10,
                     ),
@@ -50,7 +49,7 @@ dietWardsCheckBoxes({required DietchecklistController controller}) {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          controller.wards[i].wardName ?? '',
+                          controller.wards[i].shortWardName ?? '',
                           style: TextStyle(
                             // fontSize: 14,
                             fontSize: getDynamicHeight(size: 0.016),
