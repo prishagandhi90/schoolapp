@@ -24,6 +24,7 @@ import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.da
 import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DietchecklistController extends GetxController {
@@ -55,7 +56,7 @@ class DietchecklistController extends GetxController {
   List<DieticianfilterwardnmModel> wards = [];
   List<Floors> floors = [];
   List<Beds> beds = [];
-  List<DieticianfilterwardnmModel> selectedWardList = [];
+  List<String> selectedWardList = [];
   List<String> selectedFloorList = [];
   List<String> selectedBedList = [];
   bool callFilterAPi = false;
@@ -66,6 +67,10 @@ class DietchecklistController extends GetxController {
   List<DieticianfilterwardnmModel> allTabs = [];
   List<DieticianfilterwardnmModel> otherTabs = [];
   bool isTemplateVisible = true;
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
+  DateTime? selectedFromDate;
+  DateTime? selectedToDate;
 
   void filterSearchResults(String query) {
     if (query.isEmpty) {
@@ -83,74 +88,74 @@ class DietchecklistController extends GetxController {
     update();
   }
 
-  void updateSelectedTab(DieticianfilterwardnmModel shortWardNameLabel) {
-    selectedTabLabel = shortWardNameLabel.shortWardName.toString();
-
-    if (selectedTabLabel.toLowerCase() == 'all') {
-      selectedWardList = []; // ✅ All selected
-    } else {
-      // 🔍 Find actual wardName (String) from shortWardName
-      String? actualWardName = allTabs
-          .followedBy(otherTabs)
-          .firstWhere(
-            (e) => e.shortWardName?.toLowerCase() == selectedTabLabel.toLowerCase(),
-            orElse: () => DieticianfilterwardnmModel(wardName: ''),
-          )
-          .wardName;
-
-      if (actualWardName != null && actualWardName.isNotEmpty) {
-        selectedWardList = [DieticianfilterwardnmModel(wardName: actualWardName, shortWardName: selectedTabLabel)];
-      } else {
-        // fallback
-        selectedWardList = [shortWardNameLabel];
-      }
-    }
-
-    callFilterAPi = true;
-    fetchDieticianList(); // ✅ API call
-    update(); // ✅ UI update
-  }
-
   // void updateSelectedTab(DieticianfilterwardnmModel shortWardNameLabel) {
   //   selectedTabLabel = shortWardNameLabel.shortWardName.toString();
-
-  //   if (shortWardNameLabel.shortWardName.toString().toLowerCase() == 'all') {
+  //   if (selectedTabLabel.toLowerCase() == 'all') {
   //     selectedWardList = []; // ✅ All selected
   //   } else {
-  //     // 🔍 Find actual wardName from shortWardName (from both tab lists)
-  //     DieticianfilterwardnmModel? actualWardName = allTabs
+  //     // 🔍 Find actual wardName (String) from shortWardName
+  //     String? actualWardName = allTabs
   //         .followedBy(otherTabs)
   //         .firstWhere(
-  //           (e) => e.shortWardName?.toLowerCase() == shortWardNameLabel.shortWardName.toString().toLowerCase(),
+  //           (e) => e.shortWardName?.toLowerCase() == selectedTabLabel.toLowerCase(),
   //           orElse: () => DieticianfilterwardnmModel(wardName: ''),
   //         )
   //         .wardName;
-
   //     if (actualWardName != null && actualWardName.isNotEmpty) {
-  //       selectedWardList = [actualWardName];
+  //       selectedWardList = [DieticianfilterwardnmModel(wardName: actualWardName, shortWardName: selectedTabLabel)];
   //     } else {
-  //       selectedWardList = [shortWardNameLabel]; // fallback (if short==actual)
+  //       // fallback
+  //       selectedWardList = [shortWardNameLabel];
   //     }
   //   }
-
-  //   callFilterAPi = true; // ✅ so when sheet is dismissed, don't re-fetch again
-  //   fetchDieticianList(); // ✅ load patient list
-  //   update(); // 🔁 rebuild the UI
+  //   callFilterAPi = true;
+  //   fetchDieticianList(); // ✅ API call
+  //   update(); // ✅ UI update
   // }
 
-  Future<List<DieticianlistModel>> fetchDieticianList({String? searchPrefix}) async {
+  void updateSelectedTab(String shortWardNameLabel) {
+    selectedTabLabel = shortWardNameLabel.toString();
+
+    if (shortWardNameLabel.toString().toLowerCase() == 'all') {
+      selectedTabLabel = "ALL"; // ✅ All selected
+    } else {
+      // 🔍 Find actual wardName from shortWardName (from both tab lists)
+
+      selectedTabLabel = shortWardNameLabel.toString(); // fallback (if short==actual)
+    }
+
+    callFilterAPi = true; // ✅ so when sheet is dismissed, don't re-fetch again
+    fetchDieticianList(isTabFilter: true); // ✅ load patient list
+    update(); // 🔁 rebuild the UI
+  }
+
+  Future<List<DieticianlistModel>> fetchDieticianList({bool isTabFilter = false, String? searchPrefix}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       String url = ConstApiUrl.empDieticianChecklistListAPI;
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
+      String? selectedTabWardName = "";
+
+      if (isTabFilter) {
+        selectedTabWardName = allTabs
+            .followedBy(otherTabs)
+            .firstWhere(
+              (e) => e.shortWardName?.toLowerCase() == selectedTabLabel.toString().toLowerCase(),
+              orElse: () => DieticianfilterwardnmModel(wardName: ''),
+            )
+            .wardName;
+        if (selectedTabWardName.toString().toLowerCase() == "all") {
+          selectedWardList = [];
+        }
+      }
 
       var jsonbodyObj = {
         "loginId": loginId,
         "empId": empId,
         "prefixText": searchPrefix ?? '',
-        "wards": selectedWardList.where((e) => (e.wardName ?? '').isNotEmpty).map((e) => e.wardName!.trim()).toList(),
+        "wards": isTabFilter && selectedTabWardName.toString().toLowerCase() != "all" ? [selectedTabWardName] : selectedWardList,
         "floors": selectedFloorList,
         "beds": selectedBedList,
       };
@@ -220,7 +225,9 @@ class DietchecklistController extends GetxController {
 
         // ✅ 👇 Important: Call updateSelectedTab here so that list loads based on selected ward
         updateSelectedTab(
-          allTabs.isNotEmpty ? allTabs.first : (otherTabs.isNotEmpty ? otherTabs.first : DieticianfilterwardnmModel()),
+          allTabs.isNotEmpty
+              ? allTabs.first.shortWardName.toString()
+              : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
         );
 
         isLoading = false;
@@ -642,49 +649,61 @@ class DietchecklistController extends GetxController {
                           )
                         ],
                       ),
-                      // Row(
-                      //   children: [
-                      //     Expanded(
-                      //       child: CustomDatePicker(
-                      //         dateController: fromDateController,
-                      //         hintText: AppString.from,
-                      //         onDateSelected: () async {
-                      //           final picked = await showDatePicker(
-                      //             context: context,
-                      //             initialDate: DateTime.now(),
-                      //             firstDate: DateTime(2000),
-                      //             lastDate: DateTime(2100),
-                      //           );
-                      //           if (picked != null) {
-                      //             selectedFromDate = picked;
-                      //             fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-                      //             update();
-                      //           }
-                      //         },
-                      //       ),
-                      //     ),
-                      //     const SizedBox(width: 10),
-                      //     Expanded(
-                      //       child: CustomDatePicker(
-                      //         dateController: toDateController,
-                      //         hintText: AppString.to,
-                      //         onDateSelected: () async {
-                      //           final picked = await showDatePicker(
-                      //             context: context,
-                      //             initialDate: DateTime.now(),
-                      //             firstDate: DateTime(2000),
-                      //             lastDate: DateTime(2100),
-                      //           );
-                      //           if (picked != null) {
-                      //             selectedToDate = picked;
-                      //             toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-                      //             update();
-                      //           }
-                      //         },
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Filter by Date",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomDatePicker(
+                              dateController: fromDateController,
+                              hintText: AppString.from,
+                              onDateSelected: () async {
+                                final picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                if (picked != null) {
+                                  selectedFromDate = picked;
+                                  fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                                  update();
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: CustomDatePicker(
+                              dateController: toDateController,
+                              hintText: AppString.to,
+                              onDateSelected: () async {
+                                final picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                if (picked != null) {
+                                  selectedToDate = picked;
+                                  toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                                  update();
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
@@ -769,13 +788,13 @@ class DietchecklistController extends GetxController {
                                         controller.selectedFloorList.isNotEmpty ||
                                         controller.selectedBedList.isNotEmpty) {
                                       // 🔸 Step: Set selectedTabLabel from selectedWardList[0]
-                                      controller.selectedTabLabel = controller.selectedWardList.length > 0
-                                          ? controller.selectedWardList.first.shortWardName.toString()
-                                          : '';
-
+                                      // controller.selectedTabLabel = controller.selectedWardList.length > 0
+                                      //     ? controller.selectedWardList.first.shortWardName.toString()
+                                      //     : '';
+                                      selectedTabLabel = "";
                                       Navigator.pop(context);
                                       await controller.fetchDieticianList();
-                                      controller.update(); // Ensure UI rebuilds
+                                      // controller.update(); // Ensure UI rebuilds
                                     } else {
                                       Get.rawSnackbar(message: AppString.plzselectoptiontosort);
                                     }

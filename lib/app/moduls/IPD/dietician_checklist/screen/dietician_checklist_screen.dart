@@ -173,7 +173,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                             count: controller.allTabs.first.wardCount ?? 0,
                             isSelected: controller.selectedTabLabel == controller.allTabs.first.shortWardName,
                             onTap: () {
-                              controller.updateSelectedTab(controller.allTabs.first ?? DieticianfilterwardnmModel());
+                              controller.updateSelectedTab(controller.allTabs.first.shortWardName.toString());
                             },
                           ),
                         ),
@@ -190,8 +190,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                                   label: tab.shortWardName ?? '',
                                   count: tab.wardCount ?? 0,
                                   isSelected: controller.selectedTabLabel == tab.shortWardName,
-                                  onTap: () =>
-                                      tab.wardCount! > 0 ? controller.updateSelectedTab(tab ?? DieticianfilterwardnmModel()) : null,
+                                  onTap: () => tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName.toString()) : null,
                                 ),
                               );
                             }).toList(),
