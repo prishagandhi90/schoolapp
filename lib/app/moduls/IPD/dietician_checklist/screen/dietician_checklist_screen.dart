@@ -6,7 +6,6 @@ import 'package:emp_app/app/core/util/app_string.dart';
 import 'package:emp_app/app/core/util/app_style.dart';
 import 'package:emp_app/app/core/util/sizer_constant.dart';
 import 'package:emp_app/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
-import 'package:emp_app/app/moduls/IPD/dietician_checklist/model/dieticianfilterwardnm_model.dart';
 import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class DieticianChecklistScreen extends StatelessWidget {
             backgroundColor: AppColor.white,
             actions: [
               Padding(
-                padding: EdgeInsets.only(right: 13),
+                padding: EdgeInsets.only(right: getDynamicHeight(size: 0.013)),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -40,7 +39,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                         // controller.showSortFilterBottomSheet(context);
                       },
                       child: Padding(
-                        padding: EdgeInsets.only(right: 10), // 👈 Minimal spacing between icons
+                        padding: EdgeInsets.only(right: getDynamicHeight(size: 0.010)), // 👈 Minimal spacing between icons
                         child: IconButton(
                             onPressed: () {
                               controller.dietFiltterBottomSheet();
@@ -74,16 +73,16 @@ class DieticianChecklistScreen extends StatelessWidget {
                               right: -2,
                               top: -6,
                               child: Container(
-                                padding: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(getDynamicHeight(size: 0.004)),
                                 decoration: BoxDecoration(
-                                  color: Colors.red,
+                                  color: AppColor.red,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Text(
                                   dashboardController.notificationCount,
                                   style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
+                                    color: AppColor.white,
+                                    fontSize: getDynamicHeight(size: 0.010),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -98,7 +97,7 @@ class DieticianChecklistScreen extends StatelessWidget {
             ],
           ),
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(getDynamicHeight(size: 0.008)),
             child: Column(
               children: [
                 TextFormField(
@@ -160,24 +159,27 @@ class DieticianChecklistScreen extends StatelessWidget {
 
                 /// 🟦 Room Type Tabs
                 Padding(
-                  padding: const EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(top: getDynamicHeight(size: 0.006)), // 👈 Add top padding to fix badge cutoff
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 🔵 Static ALL tab from API
                       if (controller.allTabs.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.only(right: 8),
+                          padding: EdgeInsets.only(
+                            right: getDynamicHeight(size: 0.008),
+                            top: getDynamicHeight(size: 0.006),
+                          ),
                           child: _buildTabWithBadge(
                             label: controller.allTabs.first.shortWardName ?? '',
                             count: controller.allTabs.first.wardCount ?? 0,
                             isSelected: controller.selectedTabLabel == controller.allTabs.first.shortWardName,
                             onTap: () {
+                              controller.isBottomFilterApplied = false; // ✅ tab use = no filter
                               controller.updateSelectedTab(controller.allTabs.first.shortWardName.toString());
                             },
                           ),
                         ),
-
                       // 🔵 Scrollable other tabs
                       Expanded(
                         child: SingleChildScrollView(
@@ -185,13 +187,18 @@ class DieticianChecklistScreen extends StatelessWidget {
                           child: Row(
                             children: controller.otherTabs.map((tab) {
                               return Padding(
-                                padding: const EdgeInsets.only(right: 8),
+                                padding: EdgeInsets.only(
+                                  right: getDynamicHeight(size: 0.008),
+                                  top: getDynamicHeight(size: 0.006),
+                                ), // 👈 Added top padding here
                                 child: _buildTabWithBadge(
-                                  label: tab.shortWardName ?? '',
-                                  count: tab.wardCount ?? 0,
-                                  isSelected: controller.selectedTabLabel == tab.shortWardName,
-                                  onTap: () => tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName.toString()) : null,
-                                ),
+                                    label: tab.shortWardName ?? '',
+                                    count: tab.wardCount ?? 0,
+                                    isSelected: controller.selectedTabLabel == tab.shortWardName,
+                                    onTap: () {
+                                      controller.isBottomFilterApplied = false; // ✅ tab use = no filter
+                                      tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName.toString()) : null;
+                                    }),
                               );
                             }).toList(),
                           ),
@@ -201,14 +208,28 @@ class DieticianChecklistScreen extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    controller: controller.dieticianScrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.009)),
-                    itemCount: controller.filterdieticianList.length,
-                    itemBuilder: (context, index) {
-                      return _buildPatientCard(index, context, controller);
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      if (controller.isBottomFilterApplied) {
+                        // ✅ Agar filter laga ho to yeh hamesha chale
+                        if (controller.allTabs.isNotEmpty) {
+                          controller.updateSelectedTab(controller.allTabs.first.shortWardName ?? '');
+                        }
+                        await controller.fetchDieticianList();
+                      } else {
+                        // ✅ Agar tab select ho to uske hisaab se refresh
+                        await controller.fetchDieticianList(isTabFilter: true);
+                      }
                     },
+                    child: ListView.builder(
+                      controller: controller.dieticianScrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.009)),
+                      itemCount: controller.filterdieticianList.length,
+                      itemBuilder: (context, index) {
+                        return _buildPatientCard(index, context, controller);
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -231,16 +252,19 @@ class DieticianChecklistScreen extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            padding: EdgeInsets.symmetric(
+              horizontal: getDynamicHeight(size: 0.016),
+              vertical: getDynamicHeight(size: 0.010),
+            ),
             decoration: BoxDecoration(
-              color: isSelected ? AppColor.teal : Colors.white,
+              color: isSelected ? AppColor.teal : AppColor.white,
               border: Border.all(color: AppColor.teal),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.015)),
             ),
             child: Text(
               label,
               style: TextStyle(
-                color: isSelected ? Colors.white : AppColor.teal,
+                color: isSelected ? AppColor.white : AppColor.teal,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -270,19 +294,26 @@ class DieticianChecklistScreen extends StatelessWidget {
   }
 
   Widget _buildPatientCard(int index, BuildContext context, DietchecklistController controller) {
-    bool isRecordUnsaved =
-        (controller.filterdieticianList[index].diagnosis.toString().isEmpty || controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].username.toString().isEmpty || controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].dietPlan.toString().isEmpty || controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
-                controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].remark.toString().isEmpty || controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
+    bool isRecordUnsaved = (controller.filterdieticianList[index].diagnosis.toString().isEmpty ||
+            controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].username.toString().isEmpty ||
+            controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].dietPlan.toString().isEmpty ||
+            controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
+            controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].remark.toString().isEmpty ||
+            controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
     return GestureDetector(
       onTap: () {
         controller.showDietDialog(context, index);
       },
       child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: isRecordUnsaved ? const Color.fromARGB(255, 243, 231, 122) : AppColor.primaryColor,
+            )),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,7 +332,10 @@ class DieticianChecklistScreen extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.white,
                       )),
-                  Text(controller.filterdieticianList[index].ipdNo.toString(), style: const TextStyle(color: Colors.white)),
+                  Text(
+                    controller.filterdieticianList[index].ipdNo.toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
                   Text(
                     "${controller.filterdieticianList[index].wardName.toString()} - Floor ${controller.filterdieticianList[index].floorNo.toString()}",
                     style: const TextStyle(color: Colors.white),

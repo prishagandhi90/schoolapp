@@ -71,6 +71,7 @@ class DietchecklistController extends GetxController {
   TextEditingController toDateController = TextEditingController();
   DateTime? selectedFromDate;
   DateTime? selectedToDate;
+  bool isBottomFilterApplied = false;
 
   void filterSearchResults(String query) {
     if (query.isEmpty) {
@@ -603,255 +604,235 @@ class DietchecklistController extends GetxController {
 
   Future<void> dietFiltterBottomSheet() async {
     showModalBottomSheet(
-        context: Get.context!,
-        isScrollControlled: true,
-        isDismissible: true,
-        useSafeArea: true,
-        backgroundColor: AppColor.transparent,
-        builder: (context) => Container(
-              height: MediaQuery.of(context).size.height * 0.90,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: AppColor.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25.0),
-                  topRight: Radius.circular(25.0),
-                ),
-              ),
-              child: GetBuilder<DietchecklistController>(builder: (controller) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+      context: Get.context!,
+      isScrollControlled: true,
+      isDismissible: true,
+      useSafeArea: true,
+      backgroundColor: AppColor.transparent,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.90,
+        width: Get.width,
+        decoration: BoxDecoration(
+          color: AppColor.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25.0),
+            topRight: Radius.circular(25.0),
+          ),
+        ),
+        child: GetBuilder<DietchecklistController>(builder: (controller) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                // 🔝 Sticky Header
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        height: 25,
+                      const SizedBox(width: 30),
+                      Text(
+                        AppString.filterby,
+                        style: TextStyle(
+                          fontSize: getDynamicHeight(size: 0.022),
+                          color: AppColor.primaryColor,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Text(
-                            AppString.filterby,
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: Icon(Icons.cancel),
+                      )
+                    ],
+                  ),
+                ),
+                // 🧾 Scrollable Content
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Date Range",
                             style: TextStyle(
-                              // fontSize: 25,
-                              fontSize: getDynamicHeight(size: 0.027),
+                              fontSize: getDynamicHeight(size: 0.018),
+                              fontWeight: FontWeight.bold,
                               color: AppColor.black,
-                              fontWeight: FontWeight.w700,
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icon(Icons.cancel),
-                          )
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Filter by Date",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[700],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: CustomDatePicker(
-                              dateController: fromDateController,
-                              hintText: AppString.from,
-                              onDateSelected: () async {
-                                final picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (picked != null) {
-                                  selectedFromDate = picked;
-                                  fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-                                  update();
-                                }
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: CustomDatePicker(
-                              dateController: toDateController,
-                              hintText: AppString.to,
-                              onDateSelected: () async {
-                                final picked = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (picked != null) {
-                                  selectedToDate = picked;
-                                  toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-                                  update();
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Text(
-                                AppString.selectWardsName,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              dietWardsCheckBoxes(controller: controller),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                AppString.floor,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              dietFloorsCheckBoxes(controller: controller),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                AppString.selectbed,
-                                style: TextStyle(
-                                  // fontSize: 20,
-                                  fontSize: getDynamicHeight(size: 0.022),
-                                  color: AppColor.black,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              dietBedsCheckBoxes(controller: controller),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Row(
+                        const SizedBox(height: 10),
+                        Row(
                           children: [
                             Expanded(
-                                child: SizedBox(
-                              height: 50,
-                              child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      backgroundColor: AppColor.primaryColor),
-                                  onPressed: () async {
-                                    FocusScope.of(context).unfocus();
-                                    controller.callFilterAPi = true;
-
-                                    if (controller.selectedWardList.isNotEmpty ||
-                                        controller.selectedFloorList.isNotEmpty ||
-                                        controller.selectedBedList.isNotEmpty) {
-                                      // 🔸 Step: Set selectedTabLabel from selectedWardList[0]
-                                      // controller.selectedTabLabel = controller.selectedWardList.length > 0
-                                      //     ? controller.selectedWardList.first.shortWardName.toString()
-                                      //     : '';
-                                      selectedTabLabel = "";
-                                      Navigator.pop(context);
-                                      await controller.fetchDieticianList();
-                                      // controller.update(); // Ensure UI rebuilds
-                                    } else {
-                                      Get.rawSnackbar(message: AppString.plzselectoptiontosort);
-                                    }
-                                  },
-                                  child: Text(
-                                    AppString.apply,
-                                    style: TextStyle(
-                                      color: AppColor.white,
-                                      // fontSize: 15,
-                                      fontSize: getDynamicHeight(size: 0.017),
-                                    ),
-                                  )),
-                            )),
-                            SizedBox(
-                              width: 20,
+                              child: CustomDatePicker(
+                                dateController: fromDateController,
+                                hintText: AppString.from,
+                                onDateSelected: () async {
+                                  final picked = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (picked != null) {
+                                    selectedFromDate = picked;
+                                    fromDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                                    controller.update();
+                                  }
+                                },
+                              ),
                             ),
+                            const SizedBox(width: 10),
                             Expanded(
-                              child: SizedBox(
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        backgroundColor: AppColor.primaryColor),
-                                    onPressed: () async {
-                                      controller.callFilterAPi = true;
-                                      FocusScope.of(context).unfocus();
-                                      controller.selectedWardList = [];
-                                      controller.selectedFloorList = [];
-                                      controller.selectedBedList = [];
-                                      await controller.fetchDieticianList();
-                                      Navigator.pop(context);
-                                      controller.update();
-                                    },
-                                    child: Text(
-                                      AppString.resetall,
-                                      style: TextStyle(
-                                        // fontSize: 16,
-                                        fontSize: getDynamicHeight(size: 0.018),
-                                        color: AppColor.white,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  )),
-                            )
+                              child: CustomDatePicker(
+                                dateController: toDateController,
+                                hintText: AppString.to,
+                                onDateSelected: () async {
+                                  final picked = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (picked != null) {
+                                    selectedToDate = picked;
+                                    toDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+                                    controller.update();
+                                  }
+                                },
+                              ),
+                            ),
                           ],
                         ),
+                        const SizedBox(height: 25),
+                        Text(AppString.selectWardsName,
+                            style: TextStyle(
+                              fontSize: getDynamicHeight(size: 0.018),
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w700,
+                            )),
+                        const SizedBox(height: 10),
+                        dietWardsCheckBoxes(controller: controller),
+                        // const SizedBox(height: 10),
+                        Text(AppString.floor,
+                            style: TextStyle(
+                              fontSize: getDynamicHeight(size: 0.018),
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w600,
+                            )),
+                        const SizedBox(height: 8),
+                        dietFloorsCheckBoxes(controller: controller),
+                        // const SizedBox(height: 10),
+                        Text(AppString.selectbed,
+                            style: TextStyle(
+                              fontSize: getDynamicHeight(size: 0.018),
+                              color: AppColor.black,
+                              fontWeight: FontWeight.w700,
+                            )),
+                        const SizedBox(height: 8),
+                        dietBedsCheckBoxes(controller: controller),
+                        const SizedBox(height: 8),
+                      ],
+                    ),
+                  ),
+                ),
+
+                // 🔻 Sticky Bottom Buttons
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 25),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              backgroundColor: AppColor.primaryColor,
+                            ),
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              controller.callFilterAPi = true;
+                              controller.isBottomFilterApplied = true; // ✅ set when filter is used
+                              controller.selectedTabLabel = ''; // ✅ remove tab selection
+
+                              final hasDate = controller.selectedFromDate != null && controller.selectedToDate != null;
+                              final hasFilter = controller.selectedWardList.isNotEmpty ||
+                                  controller.selectedFloorList.isNotEmpty ||
+                                  controller.selectedBedList.isNotEmpty;
+
+                              if (hasDate || hasFilter) {
+                                if (hasFilter) {
+                                  await controller.fetchDieticianList(isTabFilter: false);
+                                }
+                                if (hasDate) {
+                                  controller.filterByDateRange();
+                                }
+                                Navigator.pop(context);
+                                fromDateController.clear();
+                                toDateController.clear();
+                              } else {
+                                Get.snackbar("Error", "Please select any filter or date to apply.");
+                              }
+                            },
+                            child: Text(
+                              AppString.apply,
+                              style: TextStyle(
+                                color: AppColor.white,
+                                fontSize: getDynamicHeight(size: 0.017),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      SizedBox(
-                        height: 25,
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              backgroundColor: AppColor.primaryColor,
+                            ),
+                            onPressed: () async {
+                              controller.callFilterAPi = true;
+                              FocusScope.of(context).unfocus();
+                              controller.selectedWardList = [];
+                              controller.selectedFloorList = [];
+                              controller.selectedBedList = [];
+                              fromDateController.clear();
+                              toDateController.clear();
+                              await controller.fetchDieticianList();
+                              Navigator.pop(context);
+                              controller.update();
+                            },
+                            child: Text(
+                              AppString.resetall,
+                              style: TextStyle(
+                                fontSize: getDynamicHeight(size: 0.018),
+                                color: AppColor.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                );
-              }),
-            )).whenComplete(() {
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
+    ).whenComplete(() {
       if (!callFilterAPi) {
         fetchDieticianList();
         selectedWardList = List.from(tempWardList);
@@ -859,9 +840,32 @@ class DietchecklistController extends GetxController {
         selectedBedList = List.from(tempBedList);
         update();
       } else {
-        callFilterAPi = false; // reset after successful filter
+        callFilterAPi = false;
       }
     });
+  }
+
+  void filterByDateRange() {
+    final from = DateTime(selectedFromDate!.year, selectedFromDate!.month, selectedFromDate!.day);
+    final to = DateTime(selectedToDate!.year, selectedToDate!.month, selectedToDate!.day);
+
+    // ✅ Always filter from All Tab data (entire list)
+    final originalList = dieticianList; // Already fetched full data
+
+    filterdieticianList = originalList.where((item) {
+      final doaString = item.doa;
+
+      if (doaString == null || doaString.isEmpty) return false;
+
+      final parsedDoa = DateTime.tryParse(doaString);
+      if (parsedDoa == null) return false;
+
+      final doa = DateTime(parsedDoa.year, parsedDoa.month, parsedDoa.day);
+
+      return !doa.isBefore(from) && !doa.isAfter(to); // ✅ Exact match bhi include
+    }).toList();
+
+    update();
   }
 
   void showDietDialog(BuildContext context, int index) {
@@ -875,7 +879,11 @@ class DietchecklistController extends GetxController {
     if (selectedDiet != null) {
       dietNameController.text = selectedDiet.name ?? '';
       dietIdController.text = selectedDiet.value ?? '';
+    } else {
+      dietNameController.clear(); // ⬅️ Clear previous value
+      dietIdController.clear(); // ⬅️ Clear previous value
     }
+
     showDialog(
       context: context,
       barrierDismissible: false,
