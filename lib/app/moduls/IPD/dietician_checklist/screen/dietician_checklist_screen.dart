@@ -270,6 +270,12 @@ class DieticianChecklistScreen extends StatelessWidget {
   }
 
   Widget _buildPatientCard(int index, BuildContext context, DietchecklistController controller) {
+    bool isRecordUnsaved = controller.filterdieticianList[index].diagnosis.toString().isEmpty &&
+        controller.filterdieticianList[index].username.toString().isEmpty &&
+        controller.filterdieticianList[index].dietPlan.toString().isEmpty &&
+        controller.filterdieticianList[index].relFoodRemark.toString().isEmpty &&
+        controller.filterdieticianList[index].remark.toString().isEmpty &&
+        controller.filterdieticianList[index].doa.toString().isEmpty;
     return GestureDetector(
       onTap: () {
         controller.showDietDialog(context, index);
@@ -283,7 +289,7 @@ class DieticianChecklistScreen extends StatelessWidget {
             /// 🔷 Header
             Container(
               decoration: BoxDecoration(
-                color: AppColor.primaryColor,
+                color: isRecordUnsaved ? AppColor.yellow : AppColor.primaryColor,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
