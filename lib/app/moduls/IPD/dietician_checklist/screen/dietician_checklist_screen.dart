@@ -270,12 +270,14 @@ class DieticianChecklistScreen extends StatelessWidget {
   }
 
   Widget _buildPatientCard(int index, BuildContext context, DietchecklistController controller) {
-    bool isRecordUnsaved = controller.filterdieticianList[index].diagnosis.toString().isEmpty &&
-        controller.filterdieticianList[index].username.toString().isEmpty &&
-        controller.filterdieticianList[index].dietPlan.toString().isEmpty &&
-        controller.filterdieticianList[index].relFoodRemark.toString().isEmpty &&
-        controller.filterdieticianList[index].remark.toString().isEmpty &&
-        controller.filterdieticianList[index].doa.toString().isEmpty;
+    bool isRecordUnsaved =
+        (controller.filterdieticianList[index].diagnosis.toString().isEmpty || controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].username.toString().isEmpty || controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].dietPlan.toString().isEmpty || controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
+                controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].remark.toString().isEmpty || controller.filterdieticianList[index].remark.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].doa.toString().isEmpty || controller.filterdieticianList[index].doa.toString().toLowerCase() == "null");
     return GestureDetector(
       onTap: () {
         controller.showDietDialog(context, index);
