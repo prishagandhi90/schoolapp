@@ -276,8 +276,7 @@ class DieticianChecklistScreen extends StatelessWidget {
             (controller.filterdieticianList[index].dietPlan.toString().isEmpty || controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
             (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
                 controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].remark.toString().isEmpty || controller.filterdieticianList[index].remark.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].doa.toString().isEmpty || controller.filterdieticianList[index].doa.toString().toLowerCase() == "null");
+            (controller.filterdieticianList[index].remark.toString().isEmpty || controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
     return GestureDetector(
       onTap: () {
         controller.showDietDialog(context, index);
