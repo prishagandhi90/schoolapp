@@ -1,18 +1,18 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/controller/invest_requisit_controller.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/externallab_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/servicegrp_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/screen/invest_service_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/screen/widget/custom_textformfield.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_dropdown.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/controller/invest_requisit_controller.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/externallab_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/servicegrp_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/screen/invest_service_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/screen/widget/custom_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -125,14 +125,18 @@ class InvestRequisitScreen extends StatelessWidget {
                             flex: 6,
                             child: CustomDropdown(
                               text: AppString.investigationType,
-                              textStyle:
-                                  TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
+                              textStyle: TextStyle(
+                                  color: AppColor.black.withOpacity(0.4),
+                                  fontFamily: CommonFontStyle.plusJakartaSans,
+                                  fontSize: getDynamicHeight(size: 0.015)),
                               buttonStyleData: ButtonStyleData(
                                 height: getDynamicHeight(size: 0.0475),
                                 padding: const EdgeInsets.symmetric(horizontal: 0),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--' ? AppColor.red : AppColor.black),
+                                      color: controller.typeController.text.isEmpty || controller.typeController.text == '--select--'
+                                          ? AppColor.red
+                                          : AppColor.black),
                                   borderRadius: BorderRadius.circular(0),
                                   color: AppColor.white,
                                 ),
@@ -280,8 +284,10 @@ class InvestRequisitScreen extends StatelessWidget {
                       ),
                       child: CustomDropdown(
                         text: AppString.selectServicegroup,
-                        textStyle:
-                            TextStyle(color: AppColor.black.withOpacity(0.4), fontFamily: CommonFontStyle.plusJakartaSans, fontSize: getDynamicHeight(size: 0.015)),
+                        textStyle: TextStyle(
+                            color: AppColor.black.withOpacity(0.4),
+                            fontFamily: CommonFontStyle.plusJakartaSans,
+                            fontSize: getDynamicHeight(size: 0.015)),
                         controller: controller.serviceGroupController,
                         buttonStyleData: ButtonStyleData(
                           height: getDynamicHeight(size: 0.0475),

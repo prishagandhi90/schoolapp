@@ -1,2 +1,2 @@
-D:/MobProject/emp_app/emp_app/android/app/.cxx/Debug/4w6cs5km/x86_64/CMakeFiles/edit_cache.dir
-D:/MobProject/emp_app/emp_app/android/app/.cxx/Debug/4w6cs5km/x86_64/CMakeFiles/rebuild_cache.dir
+D:/MobProject/schoolapp/schoolapp/android/app/.cxx/Debug/4w6cs5km/x86_64/CMakeFiles/edit_cache.dir
+D:/MobProject/schoolapp/schoolapp/android/app/.cxx/Debug/4w6cs5km/x86_64/CMakeFiles/rebuild_cache.dir

@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/notification/controller/notification_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 class FilterTagScreen extends StatelessWidget {
@@ -106,7 +106,8 @@ class FilterTagScreen extends StatelessWidget {
                                     bool isImage = file["contentType"]!.startsWith("image");
 
                                     return GestureDetector(
-                                      onTap: () => controller.openFile(fileName: file["fileName"]!, base64Content: file["content"]!, contentType: file["contentType"]!),
+                                      onTap: () => controller.openFile(
+                                          fileName: file["fileName"]!, base64Content: file["content"]!, contentType: file["contentType"]!),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(

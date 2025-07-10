@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart' as diopackage;
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/bottombar/screen/bottom_bar_screen.dart';
-import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
-import 'package:emp_app/app/moduls/internetconnection/view/nointernet_screen.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/moduls/bottombar/screen/bottom_bar_screen.dart';
+import 'package:schoolapp/app/moduls/internetconnection/controller/nointernet_controller.dart';
+import 'package:schoolapp/app/moduls/internetconnection/view/nointernet_screen.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

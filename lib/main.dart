@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'package:emp_app/app/core/common/common_firebase.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/force_update/controller/force_update_controller.dart';
-import 'package:emp_app/app/moduls/internetconnection/binding/nointernet_binding.dart';
-import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
-import 'package:emp_app/my_navigator_observer.dart';
+import 'package:schoolapp/app/core/common/common_firebase.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/force_update/controller/force_update_controller.dart';
+import 'package:schoolapp/app/moduls/internetconnection/binding/nointernet_binding.dart';
+import 'package:schoolapp/app/moduls/internetconnection/controller/nointernet_controller.dart';
+import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/app/moduls/routes/app_pages.dart';
+import 'package:schoolapp/my_navigator_observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +28,11 @@ void main() async {
   try {
     await InitFirebaseSettings();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isSuperAdmin =
-        prefs.getString(AppString.keySuperAdmin) != null && prefs.getString(AppString.keySuperAdmin) != '' && prefs.getString(AppString.keySuperAdmin) == 'True' ? true : false;
+    bool isSuperAdmin = prefs.getString(AppString.keySuperAdmin) != null &&
+            prefs.getString(AppString.keySuperAdmin) != '' &&
+            prefs.getString(AppString.keySuperAdmin) == 'True'
+        ? true
+        : false;
     if (isSuperAdmin) {
       await prefs.setString(AppString.keySuperAdmin, '');
     }

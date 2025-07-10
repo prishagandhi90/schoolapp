@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -88,8 +88,7 @@ class OtlistScreen extends GetView<LvotapprovalController> {
                                                   CustomSlidableAction(
                                                     onPressed: (_) async {
                                                       if (controller.selectedRole.toLowerCase() == "incharge") {
-                                                        controller.noteController.text =
-                                                            controller.filteredList[index].inchargeNote.toString();
+                                                        controller.noteController.text = controller.filteredList[index].inchargeNote.toString();
                                                       } else if (controller.selectedRole == "HOD") {
                                                         controller.noteController.text = controller.filteredList[index].hoDNote.toString();
                                                       } else if (controller.selectedRole == "HR") {

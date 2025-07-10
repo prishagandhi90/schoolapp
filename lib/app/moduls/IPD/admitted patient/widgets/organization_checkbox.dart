@@ -1,6 +1,6 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:flutter/material.dart';
 
 organizationCheckBoxes({required AdPatientController controller}) {
@@ -29,7 +29,9 @@ organizationCheckBoxes({required AdPatientController controller}) {
                             height: getDynamicHeight(size: 0.020),
                             width: getDynamicHeight(size: 0.020),
                             decoration: BoxDecoration(
-                                color: AppColor.originalgrey, border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                color: AppColor.originalgrey,
+                                border: Border.all(width: 1, color: AppColor.originalgrey),
+                                borderRadius: const BorderRadius.all(Radius.circular(3))),
                             child: Center(
                               child: Icon(Icons.check, color: AppColor.white, size: getDynamicHeight(size: 0.016)),
                             ),
@@ -37,7 +39,8 @@ organizationCheckBoxes({required AdPatientController controller}) {
                         : Container(
                             height: getDynamicHeight(size: 0.020),
                             width: getDynamicHeight(size: 0.020),
-                            decoration: BoxDecoration(border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
+                            decoration: BoxDecoration(
+                                border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
                           ),
                     SizedBox(
                       width: Sizes.crossLength * 0.010,

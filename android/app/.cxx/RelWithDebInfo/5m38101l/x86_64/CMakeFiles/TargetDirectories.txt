@@ -1,2 +1,2 @@
-D:/Flutter Projects/emp_app/android/app/.cxx/RelWithDebInfo/5m38101l/x86_64/CMakeFiles/edit_cache.dir
-D:/Flutter Projects/emp_app/android/app/.cxx/RelWithDebInfo/5m38101l/x86_64/CMakeFiles/rebuild_cache.dir
+D:/Flutter Projects/schoolapp/android/app/.cxx/RelWithDebInfo/5m38101l/x86_64/CMakeFiles/edit_cache.dir
+D:/Flutter Projects/schoolapp/android/app/.cxx/RelWithDebInfo/5m38101l/x86_64/CMakeFiles/rebuild_cache.dir

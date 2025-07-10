@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/moduls/superlogin/model/common_dropdown_model.dart';
-import 'package:emp_app/app/app_custom_widget/dropdown_G_model.dart';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
-import 'package:emp_app/app/moduls/superlogin/model/superlogincred_model.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/moduls/superlogin/model/common_dropdown_model.dart';
+import 'package:schoolapp/app/app_custom_widget/dropdown_G_model.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/routes/app_pages.dart';
+import 'package:schoolapp/app/moduls/superlogin/model/superlogincred_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +52,7 @@ class SuperloginController extends GetxController {
   }
 
   Future<List<DropdownTable>> fetchUserName() async {
-      SharedPreferences pref = await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();
@@ -94,7 +94,7 @@ class SuperloginController extends GetxController {
   }
 
   Future<List<SuperlogincredModel>> fetchSperLoginCred() async {
-      SharedPreferences pref = await SharedPreferences.getInstance();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;
       update();

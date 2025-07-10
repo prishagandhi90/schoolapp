@@ -1,7 +1,7 @@
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
-import 'package:emp_app/firebase_options.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/firebase_options.dart';
+import 'package:schoolapp/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';

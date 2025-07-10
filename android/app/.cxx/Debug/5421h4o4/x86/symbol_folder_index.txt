@@ -1,1 +1,1 @@
-D:\MobProject\emp_app\emp_app\build\app\intermediates\cxx\Debug\5421h4o4\obj\x86
+D:\MobProject\schoolapp\schoolapp\build\app\intermediates\cxx\Debug\5421h4o4\obj\x86

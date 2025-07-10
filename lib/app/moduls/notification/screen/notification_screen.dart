@@ -1,14 +1,14 @@
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
-import 'package:emp_app/app/moduls/notification/controller/notification_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/filter_tag_screen.dart';
-import 'package:emp_app/app/moduls/notification/screen/filter_screen.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/dashboard/screen/custom_drawer.dart';
+import 'package:schoolapp/app/moduls/notification/controller/notification_controller.dart';
+import 'package:schoolapp/app/moduls/notification/screen/filter_tag_screen.dart';
+import 'package:schoolapp/app/moduls/notification/screen/filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -79,7 +79,8 @@ class NotificationScreen extends StatelessWidget {
                                 child: Icon(Icons.search, color: AppColor.black, size: getDynamicHeight(size: 0.024)), // ✅ Search icon color
                               ),
                               hintText: AppString.search,
-                              hintStyle: AppStyle.plusgrey.copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
+                              hintStyle: AppStyle.plusgrey
+                                  .copyWith(fontSize: getDynamicHeight(size: 0.014), color: AppColor.lightgrey1), // ✅ Hint text style
                               filled: true,
                               fillColor: AppColor.white, // ✅ Background color
                             ),
@@ -212,7 +213,9 @@ class NotificationScreen extends StatelessWidget {
                                   withNavBar: false,
                                   pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                 ).then((value) async {
-                                  if (controller.selectedTags.isEmpty && controller.fromDateController.text.isEmpty && controller.toDateController.text.isEmpty) {
+                                  if (controller.selectedTags.isEmpty &&
+                                      controller.fromDateController.text.isEmpty &&
+                                      controller.toDateController.text.isEmpty) {
                                     await controller.clearFilters();
                                     await controller.fetchNotificationList();
                                   }

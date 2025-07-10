@@ -1,1 +1,1 @@
-D:\MobProject\emp_app\emp_app\build\app\intermediates\cxx\Debug\4w6cs5km\obj\arm64-v8a
+D:\MobProject\schoolapp\schoolapp\build\app\intermediates\cxx\Debug\4w6cs5km\obj\arm64-v8a

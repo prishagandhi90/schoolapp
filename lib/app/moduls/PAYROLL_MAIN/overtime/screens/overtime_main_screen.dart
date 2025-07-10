@@ -1,18 +1,18 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/dashboard/screen/custom_drawer.dart';
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/overtime/screens/overtime_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/overtime/screens/overtime_view_screen.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/dashboard/screen/custom_drawer.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/overtime/controller/overtime_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/overtime/screens/overtime_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/overtime/screens/overtime_view_screen.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -56,8 +56,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                 padding: const EdgeInsets.only(top: 20, left: 10),
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                  decoration:
+                                      BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,8 +71,10 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 15),
                                           child: Align(
-                                              alignment: Alignment.centerLeft, child: Text(AppString.department, style:AppStyle.plus500.copyWith(
-                                                    fontSize:controller.getResponsiveFontSize(context, 16),
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(AppString.department,
+                                                  style: AppStyle.plus500.copyWith(
+                                                    fontSize: controller.getResponsiveFontSize(context, 16),
                                                   ))),
                                         ),
                                       ),
@@ -82,14 +84,12 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
-                                            child: Text(
-                                                controller.otHeaderList.isNotEmpty
-                                                    ? controller.otHeaderList[0].department.toString()
-                                                    : '--:--',
-                                                style: AppStyle.plus500.copyWith(
-                                                  fontSize: controller.getResponsiveFontSize(context, 20),
-                                                  // fontSize: MediaQuery.of(context).size.width * 0.04,
-                                                )),
+                                            child:
+                                                Text(controller.otHeaderList.isNotEmpty ? controller.otHeaderList[0].department.toString() : '--:--',
+                                                    style: AppStyle.plus500.copyWith(
+                                                      fontSize: controller.getResponsiveFontSize(context, 20),
+                                                      // fontSize: MediaQuery.of(context).size.width * 0.04,
+                                                    )),
                                           ),
                                         ),
                                       ),
@@ -138,13 +138,11 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                             alignment: Alignment.centerLeft,
                                             child: Padding(
                                               padding: const EdgeInsets.all(10),
-                                              child: Text(
-                                                  controller.otHeaderList.isNotEmpty
-                                                      ? controller.otHeaderList[0].deptInc.toString()
-                                                      : '--:--',
-                                                  style: AppStyle.plus500.copyWith(
-                                                    fontSize: controller.getResponsiveFontSize(context, 20),
-                                                  )),
+                                              child:
+                                                  Text(controller.otHeaderList.isNotEmpty ? controller.otHeaderList[0].deptInc.toString() : '--:--',
+                                                      style: AppStyle.plus500.copyWith(
+                                                        fontSize: controller.getResponsiveFontSize(context, 20),
+                                                      )),
                                             ),
                                           ),
                                         ),
@@ -187,10 +185,7 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
-                                            child: Text(
-                                                controller.otHeaderList.isNotEmpty
-                                                    ? controller.otHeaderList[0].deptHOD.toString()
-                                                    : '--:--',
+                                            child: Text(controller.otHeaderList.isNotEmpty ? controller.otHeaderList[0].deptHOD.toString() : '--:--',
                                                 style: AppStyle.plus500.copyWith(
                                                   fontSize: controller.getResponsiveFontSize(context, 20),
                                                 )),
@@ -205,8 +200,8 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                 padding: const EdgeInsets.only(top: 20, left: 10),
                                 child: Container(
                                   // height: MediaQuery.of(context).size.height * 0.12,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+                                  decoration:
+                                      BoxDecoration(color: AppColor.lightblue1, borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,10 +228,7 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
-                                            child: Text(
-                                                controller.otHeaderList.isNotEmpty
-                                                    ? controller.otHeaderList[0].subDept.toString()
-                                                    : '--:--',
+                                            child: Text(controller.otHeaderList.isNotEmpty ? controller.otHeaderList[0].subDept.toString() : '--:--',
                                                 style: AppStyle.plus500.copyWith(
                                                   fontSize: controller.getResponsiveFontSize(context, 20),
                                                 )),
@@ -282,13 +274,11 @@ class OvertimeMainScreen extends GetView<OvertimeController> {
                                           alignment: Alignment.centerLeft,
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
-                                            child: Text(
-                                                controller.otHeaderList.isNotEmpty
-                                                    ? controller.otHeaderList[0].subDeptInc.toString()
-                                                    : '--:--',
-                                                style: AppStyle.plus500.copyWith(
-                                                  fontSize: controller.getResponsiveFontSize(context, 20),
-                                                )),
+                                            child:
+                                                Text(controller.otHeaderList.isNotEmpty ? controller.otHeaderList[0].subDeptInc.toString() : '--:--',
+                                                    style: AppStyle.plus500.copyWith(
+                                                      fontSize: controller.getResponsiveFontSize(context, 20),
+                                                    )),
                                           ),
                                         ),
                                       ),

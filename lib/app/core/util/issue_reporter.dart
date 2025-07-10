@@ -1,6 +1,6 @@
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/service/device_info_service.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/service/device_info_service.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
 import 'package:get/get.dart';
 
 final deviceInfo = DeviceInfoService().getDeviceInfo();

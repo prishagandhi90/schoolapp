@@ -1,10 +1,10 @@
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/app_custom_widget/monthpick.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/attendence/controller/attendence_controller.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/app_custom_widget/monthpick.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/attendence/controller/attendence_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -132,8 +132,7 @@ class DetailsScreen extends GetView<AttendenceController> {
                                                         onTap: () {
                                                           detailbottomsheet(context, index);
                                                         },
-                                                        child: const Icon(
-                                                            Icons.arrow_drop_down_circle), // Arrow icon to open details bottom sheet
+                                                        child: const Icon(Icons.arrow_drop_down_circle), // Arrow icon to open details bottom sheet
                                                       ),
                                                     ),
                                                   ],

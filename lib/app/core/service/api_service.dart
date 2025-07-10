@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/payroll/model/payroll_model.dart';
-import 'package:emp_app/app/moduls/verifyotp/model/otp_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/payroll/model/payroll_model.dart';
+import 'package:schoolapp/app/moduls/verifyotp/model/otp_model.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart' as diopackage;
@@ -211,7 +211,8 @@ class ApiController extends GetxController {
   }
 
 //get dio api
-  static dynamic getMethodWithHeaderDio({String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
+  static dynamic getMethodWithHeaderDio(
+      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -257,7 +258,8 @@ class ApiController extends GetxController {
     }
   }
 
-  static dynamic deleteMethodWithHeaderDio({String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
+  static dynamic deleteMethodWithHeaderDio(
+      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }
@@ -303,7 +305,8 @@ class ApiController extends GetxController {
     }
   }
 
-  static dynamic putMethodWithHeaderDio({String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
+  static dynamic putMethodWithHeaderDio(
+      {String? apiUrl, String? token, bool isShowLoader = true, Map<String, dynamic>? queryData, bool? headerChange}) async {
     if (isShowLoader) {
       EasyLoading.show(maskType: EasyLoadingMaskType.clear);
     }

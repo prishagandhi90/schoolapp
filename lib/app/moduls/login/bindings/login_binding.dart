@@ -1,4 +1,4 @@
-import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
+import 'package:schoolapp/app/moduls/login/controller/login_controller.dart';
 import 'package:get/get.dart';
 
 class LoginBinding extends Bindings {

@@ -1,5 +1,5 @@
-import 'package:emp_app/app/moduls/internetconnection/controller/nointernet_controller.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/moduls/internetconnection/controller/nointernet_controller.dart';
+import 'package:schoolapp/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

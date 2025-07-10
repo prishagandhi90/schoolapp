@@ -1,6 +1,6 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
 import 'package:flutter/material.dart';
 
 dietWardsCheckBoxes({required DietchecklistController controller}) {
@@ -48,8 +48,7 @@ dietWardsCheckBoxes({required DietchecklistController controller}) {
                             height: 20,
                             width: 20,
                             decoration: BoxDecoration(
-                                border: Border.all(width: 1, color: AppColor.originalgrey),
-                                borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                border: Border.all(width: 1, color: AppColor.originalgrey), borderRadius: const BorderRadius.all(Radius.circular(3))),
                           ),
                     SizedBox(
                       width: 10,

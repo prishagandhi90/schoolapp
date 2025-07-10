@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -88,7 +88,8 @@ class BottomBarView extends GetView<BottomBarController> {
                       controller.update();
                       return;
                     }
-                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) && (index == 0 || index == 1 || index == 3 || index == 4)) {
+                  } else if ((controller.isIPDHome.value || controller.isPharmacyHome.value) &&
+                      (index == 0 || index == 1 || index == 3 || index == 4)) {
                     controller.persistentController.value.index = 0;
                     controller.currentIndex.value = 0;
                     controller.update();

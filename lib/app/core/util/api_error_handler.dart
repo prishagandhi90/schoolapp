@@ -1,4 +1,4 @@
-import 'package:emp_app/app/core/service/device_info_service.dart';
+import 'package:schoolapp/app/core/service/device_info_service.dart';
 import 'issue_reporter.dart';
 
 class ApiErrorHandler {

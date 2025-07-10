@@ -1,5 +1,5 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

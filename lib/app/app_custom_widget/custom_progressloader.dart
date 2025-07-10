@@ -1,4 +1,4 @@
-import 'package:emp_app/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 

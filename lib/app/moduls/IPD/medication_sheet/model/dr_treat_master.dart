@@ -1,5 +1,5 @@
-import 'package:emp_app/app/moduls/IPD/medication_sheet/model/dr_treat_detail.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/model/resp_dropdown_multifields_model.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/model/dr_treat_detail.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/model/resp_dropdown_multifields_model.dart';
 
 class RespDrTreatmentMst {
   int? statusCode;

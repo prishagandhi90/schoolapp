@@ -1,9 +1,9 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +18,7 @@ class _CustomGridviewState extends State<CustomGridview> {
   int selectedIndex = -1;
   List<Container> containers = [];
 
-  static  List<Map<String, dynamic>> gridview = [
+  static List<Map<String, dynamic>> gridview = [
     {'image': AppImage.HIMS, 'label': 'HIMS'},
     {'image': AppImage.opd, 'label': 'OPD'},
     {'image': AppImage.ipd, 'label': 'IPD'},

@@ -1,18 +1,18 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:emp_app/app/app_custom_widget/common_methods.dart';
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/screen/widget/custom_textformfield.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/controller/medicationsheet_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
+import 'package:schoolapp/app/app_custom_widget/common_methods.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/screen/widget/custom_textformfield.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/app/moduls/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -231,8 +231,7 @@ class MedicationScreen extends StatelessWidget {
                                               getDynamicHeight(size: 0.005),
                                             ),
                                           ),
-                                          borderSide:
-                                              BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
+                                          borderSide: BorderSide(color: controller.nameController.text.isNotEmpty ? AppColor.black : AppColor.red),
                                         ),
                                         prefixIcon: Icon(Icons.search, color: AppColor.lightgrey1),
                                         suffixIcon: nameController.text.isNotEmpty || controller.nameController.text.isNotEmpty
@@ -319,8 +318,7 @@ class MedicationScreen extends StatelessWidget {
                     Expanded(
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          await controller.fetchDrTreatmentData(
-                              ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet', isload: true);
+                          await controller.fetchDrTreatmentData(ipdNo: controller.ipdNo.toString(), treatTyp: 'Medication Sheet', isload: true);
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -370,8 +368,7 @@ class MedicationScreen extends StatelessWidget {
                                                   onPressed: () async {
                                                     Slidable.of(context)?.close();
                                                     await Future.delayed(Duration(milliseconds: 200));
-                                                    await controller.editDrTreatmentMasterList(
-                                                        controller.filterDRTreatMasterList[index], "");
+                                                    await controller.editDrTreatmentMasterList(controller.filterDRTreatMasterList[index], "");
                                                     controller.showMedicationDialog(context, -1);
                                                   },
                                                 ),
@@ -400,8 +397,7 @@ class MedicationScreen extends StatelessWidget {
                                                   onPressed: () async {
                                                     Slidable.of(context)?.close();
                                                     await Future.delayed(Duration(milliseconds: 200));
-                                                    await controller.editDrTreatmentMasterList(
-                                                        controller.filterDRTreatMasterList[index], "Edit");
+                                                    await controller.editDrTreatmentMasterList(controller.filterDRTreatMasterList[index], "Edit");
                                                     await controller.showMedicationDialog(context, index);
                                                   },
                                                 ),
@@ -450,8 +446,7 @@ class MedicationScreen extends StatelessWidget {
                                                           style: AppStyle.black,
                                                         ),
                                                         TextSpan(
-                                                          text: formatDateTime_dd_MMM_yy_HH_mm(
-                                                              controller.filterDRTreatMasterList[index].date),
+                                                          text: formatDateTime_dd_MMM_yy_HH_mm(controller.filterDRTreatMasterList[index].date),
                                                           style: AppStyle.black.copyWith(
                                                             fontSize: getDynamicHeight(size: 0.013),
                                                           ),

@@ -1,14 +1,14 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
-import 'package:emp_app/app/moduls/superlogin/screen/superlogin_screen.dart';
-import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_const.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
+import 'package:schoolapp/app/moduls/superlogin/screen/superlogin_screen.dart';
+import 'package:schoolapp/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,8 +46,7 @@ class CustomDrawer extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: AppColor.darkgery),
-                            borderRadius: const BorderRadius.all(Radius.circular(10))),
+                            border: Border.all(width: 1, color: AppColor.darkgery), borderRadius: const BorderRadius.all(Radius.circular(10))),
                         child: Center(
                           child: Padding(
                             padding: EdgeInsets.only(

@@ -1,5 +1,5 @@
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/moduls/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,14 +26,16 @@ class CodeAlertScreen extends StatelessWidget {
               onPressed: () async {
                 // Stop alarm here if needed
                 final SharedPreferences prefs = await SharedPreferences.getInstance();
-                bool isSuperAdmin =
-                    prefs.getString(AppString.keySuperAdmin) != null && prefs.getString(AppString.keySuperAdmin) != '' && prefs.getString(AppString.keySuperAdmin) == 'True'
-                        ? true
-                        : false;
+                bool isSuperAdmin = prefs.getString(AppString.keySuperAdmin) != null &&
+                        prefs.getString(AppString.keySuperAdmin) != '' &&
+                        prefs.getString(AppString.keySuperAdmin) == 'True'
+                    ? true
+                    : false;
                 if (isSuperAdmin) {
                   await prefs.setString(AppString.keySuperAdmin, '');
                 }
-                bool isLoggedIn = prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
+                bool isLoggedIn =
+                    prefs.getString(AppString.keyToken) != null && prefs.getString(AppString.keyToken) != '' && !isSuperAdmin ? true : false;
                 if (isLoggedIn) {
                   Get.offAllNamed(Routes.BOTTOM_BAR);
                 } else {

@@ -1,36 +1,36 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/app_custom_widget/custom_login_dialogbox.dart';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/externallab_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/gethistory_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/getquerylist_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/requestsheetdetail_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/resp_req_dtl_srv_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/save_selsrv_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/search_dr_nm_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/selreqhistorydetail_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/servicegrp_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/webUserlogincred_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/screen/invest_requisit_screen.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/controller/medicationsheet_controller.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/screen/medication_screen.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
-import 'package:emp_app/main.dart';
-import 'package:emp_app/my_navigator_observer.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_dropdown.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_login_dialogbox.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/externallab_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/gethistory_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/getquerylist_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/requestsheetdetail_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/resp_req_dtl_srv_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/save_selsrv_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/search_dr_nm_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/selreqhistorydetail_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/servicegrp_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/webUserlogincred_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/screen/invest_requisit_screen.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/controller/medicationsheet_controller.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/screen/medication_screen.dart';
+import 'package:schoolapp/app/moduls/routes/app_pages.dart';
+import 'package:schoolapp/main.dart';
+import 'package:schoolapp/my_navigator_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -1178,9 +1178,7 @@ class InvestRequisitController extends GetxController {
                                             fontWeight: FontWeight.w500,
                                           )),
                                       Text(
-                                        item.serviceGroup != '' && item.serviceGroup != null
-                                            ? item.serviceGroup.toString()
-                                            : item.reqTyp.toString(),
+                                        item.serviceGroup != '' && item.serviceGroup != null ? item.serviceGroup.toString() : item.reqTyp.toString(),
                                         style: TextStyle(fontSize: getDynamicHeight(size: 0.011)),
                                       ),
                                     ],
@@ -1191,8 +1189,8 @@ class InvestRequisitController extends GetxController {
                                     Visibility(
                                       visible: item.status != null && item.status!.isNotEmpty,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.007), vertical: getDynamicHeight(size: 0.0035)),
                                         decoration: BoxDecoration(
                                           color: item.status == 'Verified' ? Colors.green.shade100 : Colors.yellow.shade100,
                                           borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0035)),
@@ -1353,8 +1351,7 @@ class InvestRequisitController extends GetxController {
     );
   }
 
-  Future<void> redirectToClickedMenu(
-      InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
+  Future<void> redirectToClickedMenu(InvestRequisitController controller, String menuName, String patientDetails, String IPDNo, String UHID) async {
     if (menuName.toUpperCase() == 'INVESTIGATION REQUISITION') {
       if (patientDetails.isNotEmpty && IPDNo.isNotEmpty) {
         fromAdmittedScreen = true;

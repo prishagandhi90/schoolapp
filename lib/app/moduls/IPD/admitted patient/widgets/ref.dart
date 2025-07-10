@@ -1,7 +1,7 @@
-import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/labreport_controller.dart';
+import 'package:schoolapp/app/app_custom_widget/common_text.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/labreport_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,9 +59,7 @@ class ReferenceWidget extends StatelessWidget {
                                   allReportsData[i]['NormalRange'] != null && allReportsData[i]['NormalRange'] != ''
                                       ? allReportsData[i]['NormalRange']
                                       : '-',
-                                  allReportsData[i]['Unit'] != null && allReportsData[i]['Unit'] != ''
-                                      ? allReportsData[i]['Unit']
-                                      : '-',
+                                  allReportsData[i]['Unit'] != null && allReportsData[i]['Unit'] != '' ? allReportsData[i]['Unit'] : '-',
                                   allReportsData,
                                   dateLsiting,
                                   i),
@@ -70,8 +68,7 @@ class ReferenceWidget extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     AppText(
-                                      text: allReportsData[i]['NormalRange'] != null &&
-                                              allReportsData[i]['NormalRange'] != ''
+                                      text: allReportsData[i]['NormalRange'] != null && allReportsData[i]['NormalRange'] != ''
                                           ? allReportsData[i]['NormalRange']
                                           : '-',
                                       fontSize: Sizes.px13,
@@ -82,9 +79,7 @@ class ReferenceWidget extends StatelessWidget {
                                       maxLine: 10,
                                     ),
                                     AppText(
-                                      text: allReportsData[i]['Unit'] != null && allReportsData[i]['Unit'] != ''
-                                          ? allReportsData[i]['Unit']
-                                          : '-',
+                                      text: allReportsData[i]['Unit'] != null && allReportsData[i]['Unit'] != '' ? allReportsData[i]['Unit'] : '-',
                                       fontSize: Sizes.px9,
                                       fontColor: AppColor.black6B6B6B,
                                       fontWeight: FontWeight.w500,

@@ -1,6 +1,6 @@
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/custom_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/custom_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -107,13 +107,12 @@ class AppTextField extends StatelessWidget {
     return TextFormField(
       key: key,
       onTap: onTap,
-      style: TextStyle(
-          fontFamily: CommonFontStyle.plusJakartaSans, color: ConstColor.boldBlackColor, fontSize: Sizes.px14, fontWeight: FontWeight.w400),
+      style:
+          TextStyle(fontFamily: CommonFontStyle.plusJakartaSans, color: ConstColor.boldBlackColor, fontSize: Sizes.px14, fontWeight: FontWeight.w400),
       enabled: enabled,
       controller: controller,
       validator: validator,
       autofocus: false,
-      
       maxLines: maxLines,
       onChanged: onChanged,
       readOnly: isReadOnly,

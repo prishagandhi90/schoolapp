@@ -1,4 +1,4 @@
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
 import 'package:get/get.dart';
 
 class LeaveViewBinding extends Bindings {

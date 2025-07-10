@@ -1,26 +1,26 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/app_custom_widget/custom_stepper.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/dutyschedule/model/dropdown_model.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_dropdown.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_stepper.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/model/dropdown_model.dart';
+import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class DutyscheduleScreen extends GetView<DutyscheduleController> {
   DutyscheduleScreen({Key? key}) : super(key: key);
-final DashboardController dashboardController = Get.put(DashboardController());
+  final DashboardController dashboardController = Get.put(DashboardController());
   final AdPatientController adPatientController = Get.put(AdPatientController());
 
   @override
@@ -143,9 +143,7 @@ final DashboardController dashboardController = Get.put(DashboardController());
                                           : TextStyle(
                                               // fontSize: 13,
                                               fontSize: getDynamicHeight(size: 0.015),
-                                              color: item.name == controller.CurrentWeekItem
-                                                  ? AppColor.primaryColor
-                                                  : Colors.black, // Custom color
+                                              color: item.name == controller.CurrentWeekItem ? AppColor.primaryColor : Colors.black, // Custom color
                                               // fontWeight: item.name == controller.CurrentWeekItem
                                               //     ? FontWeight.bold
                                               //     : FontWeight.normal,

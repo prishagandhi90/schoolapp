@@ -39,13 +39,13 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = D$:/MobProject/emp_app/emp_app/android/app/.cxx/Debug/4w6cs5km/x86/
+cmake_ninja_workdir = D$:/MobProject/schoolapp/schoolapp/android/app/.cxx/Debug/4w6cs5km/x86/
 
 #############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D D:\MobProject\emp_app\emp_app\android\app\.cxx\Debug\4w6cs5km\x86 && C:\Users\PREMIUM\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe -E echo "No interactive CMake dialog available.""
+  COMMAND = cmd.exe /C "cd /D D:\MobProject\schoolapp\schoolapp\android\app\.cxx\Debug\4w6cs5km\x86 && C:\Users\PREMIUM\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -56,7 +56,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D D:\MobProject\emp_app\emp_app\android\app\.cxx\Debug\4w6cs5km\x86 && C:\Users\PREMIUM\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SC:\Users\PREMIUM\dev\flutter\packages\flutter_tools\gradle\src\main\groovy -BD:\MobProject\emp_app\emp_app\android\app\.cxx\Debug\4w6cs5km\x86"
+  COMMAND = cmd.exe /C "cd /D D:\MobProject\schoolapp\schoolapp\android\app\.cxx\Debug\4w6cs5km\x86 && C:\Users\PREMIUM\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SC:\Users\PREMIUM\dev\flutter\packages\flutter_tools\gradle\src\main\groovy -BD:\MobProject\schoolapp\schoolapp\android\app\.cxx\Debug\4w6cs5km\x86"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -72,7 +72,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 
 #############################################
-# Folder: D:/MobProject/emp_app/emp_app/android/app/.cxx/Debug/4w6cs5km/x86
+# Folder: D:/MobProject/schoolapp/schoolapp/android/app/.cxx/Debug/4w6cs5km/x86
 
 build all: phony
 

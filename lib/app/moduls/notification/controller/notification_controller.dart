@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/notification/model/notificationfile_model.dart';
-import 'package:emp_app/app/moduls/notification/model/notificationlist_model.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/notification/model/notificationfile_model.dart';
+import 'package:schoolapp/app/moduls/notification/model/notificationlist_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -39,6 +39,7 @@ class NotificationController extends GetxController {
     searchFocusNode.addListener(_onsearchFocusChange);
     super.onInit();
   }
+
   // Called when search text field's focus changes
   void _onsearchFocusChange() {
     if (!searchFocusNode.hasFocus) {
@@ -46,6 +47,7 @@ class NotificationController extends GetxController {
       update();
     }
   }
+
   // Open a date picker and set selected value to fromDateController
   Future<void> selectFromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -73,8 +75,7 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<List<NotificationlistModel>> fetchNotificationList(
-      {int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
+  Future<List<NotificationlistModel>> fetchNotificationList({int days = 0, String tag = "", String fromDate = "", String toDate = ""}) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     try {
       isLoading = true;

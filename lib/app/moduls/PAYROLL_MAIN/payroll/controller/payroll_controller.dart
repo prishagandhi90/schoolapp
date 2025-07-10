@@ -1,29 +1,29 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
-import 'package:emp_app/app/core/common/common_methods.dart';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/common/module.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/dutyschedule/screen/dutyschedule_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/screen/lvotapproval_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/screen/mispunch_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/payroll/model/empsummdash_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/payroll/model/payroll_model.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/core/common/common_methods.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/app_const.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/attendence/controller/attendence_controller.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/common/module.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/screen/dutyschedule_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/screen/lvotapproval_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/mispunch/screen/mispunch_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/payroll/model/empsummdash_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/payroll/model/payroll_model.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -250,7 +250,7 @@ class PayrollController extends GetxController with SingleGetTickerProviderMixin
 
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen:  DutyscheduleScreen(),
+          screen: DutyscheduleScreen(),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         ).then((value) async {

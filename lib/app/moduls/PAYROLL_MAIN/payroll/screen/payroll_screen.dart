@@ -1,25 +1,25 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/attendence/controller/attendence_controller.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/dutyschedule/screen/dutyschedule_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/screen/lvotapproval_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/mispunch/screen/mispunch_screen.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/payroll/controller/payroll_controller.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/attendence/controller/attendence_controller.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/screen/dutyschedule_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/controller/leave_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/screen/lvotapproval_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/mispunch/controller/mispunch_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/mispunch/screen/mispunch_screen.dart';
+import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/payroll/controller/payroll_controller.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -381,8 +381,7 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   children: [
                                                     Text(AppString.lcEgmin, style: AppStyle.plus14w500),
                                                     if (controller.empSummDashboardTable.isNotEmpty)
-                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(),
-                                                          style: AppStyle.plus16w600)
+                                                      Text(controller.empSummDashboardTable[0].totLCEGMin.toString(), style: AppStyle.plus16w600)
                                                     else
                                                       Text('-- ', style: AppStyle.plus16w600),
                                                   ],
@@ -469,12 +468,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: controller.empModuleScreenRightsTable.isNotEmpty
                                                   ? Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Image.asset(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image.asset(
                                                         controller.getImage(controller.empModuleScreenRightsTable[0].screenName.toString()),
                                                         color: AppColor.primaryColor,
                                                       ),
-                                                  )
+                                                    )
                                                   : SizedBox(),
                                             ),
                                           ),
@@ -542,12 +541,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 borderRadius: BorderRadius.circular(10)),
                                             child: controller.empModuleScreenRightsTable.isNotEmpty
                                                 ? Padding(
-                                                  padding: const EdgeInsets.all(8.0),
-                                                  child: Image.asset(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Image.asset(
                                                       controller.getImage(controller.empModuleScreenRightsTable[1].screenName.toString()),
                                                       color: AppColor.primaryColor,
                                                     ),
-                                                )
+                                                  )
                                                 : SizedBox(),
                                           ),
                                         ),
@@ -603,12 +602,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: controller.empModuleScreenRightsTable.isNotEmpty
                                                   ? Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Image.asset(
-                                                      controller.getImage(controller.empModuleScreenRightsTable[2].screenName.toString()),
-                                                      color: AppColor.primaryColor,
-                                                    ),
-                                                  )
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image.asset(
+                                                        controller.getImage(controller.empModuleScreenRightsTable[2].screenName.toString()),
+                                                        color: AppColor.primaryColor,
+                                                      ),
+                                                    )
                                                   : SizedBox(),
                                             ),
                                           ),
@@ -661,12 +660,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                   borderRadius: BorderRadius.circular(10)),
                                               child: controller.empModuleScreenRightsTable.isNotEmpty
                                                   ? Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Image.asset(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image.asset(
                                                         controller.getImage(controller.empModuleScreenRightsTable[3].screenName.toString()),
                                                         color: AppColor.primaryColor,
                                                       ),
-                                                  )
+                                                    )
                                                   : SizedBox(),
                                             ),
                                           ),
@@ -748,12 +747,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 ),
                                                 child: controller.empModuleScreenRightsTable.isNotEmpty
                                                     ? Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Image.asset(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Image.asset(
                                                           controller.getImage(controller.empModuleScreenRightsTable[4].screenName.toString()),
                                                           color: AppColor.primaryColor,
                                                         ),
-                                                    )
+                                                      )
                                                     : SizedBox(),
                                               ),
                                             ),
@@ -833,12 +832,12 @@ class PayrollScreen extends GetView<PayrollController> {
                                                 ),
                                                 child: controller.empModuleScreenRightsTable.isNotEmpty
                                                     ? Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Image.asset(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Image.asset(
                                                           controller.getImage(controller.empModuleScreenRightsTable[5].screenName.toString()),
                                                           color: AppColor.primaryColor,
                                                         ),
-                                                    )
+                                                      )
                                                     : SizedBox(),
                                               ),
                                             ),

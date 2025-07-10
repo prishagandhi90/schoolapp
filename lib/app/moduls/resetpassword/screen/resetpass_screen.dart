@@ -1,11 +1,11 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
-import 'package:emp_app/app/moduls/resetpassword/controller/resetpass_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/forgotpassword/screen/forgotpass_screen.dart';
+import 'package:schoolapp/app/moduls/resetpassword/controller/resetpass_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -205,8 +205,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColor.white,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10), side: BorderSide(color: AppColor.primaryColor)),
                             ),
                             child: Text(
                               AppString.cancel,

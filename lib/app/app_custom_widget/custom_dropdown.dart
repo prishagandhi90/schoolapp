@@ -1,9 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/routes/app_pages.dart';
-import 'package:emp_app/app/moduls/verifyotp/model/dashboard_model.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/moduls/routes/app_pages.dart';
+import 'package:schoolapp/app/moduls/verifyotp/model/dashboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

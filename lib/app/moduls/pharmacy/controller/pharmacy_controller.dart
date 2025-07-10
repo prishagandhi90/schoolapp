@@ -1,22 +1,22 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
-import 'package:emp_app/app/core/common/common_methods.dart';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/common/module.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/pharmacy/model/pharmafilter_model.dart';
-import 'package:emp_app/app/moduls/pharmacy/model/presdetail_model.dart';
-import 'package:emp_app/app/moduls/pharmacy/model/presviewer_model.dart';
-import 'package:emp_app/app/moduls/pharmacy/widgets/bed_checkbox.dart';
-import 'package:emp_app/app/moduls/pharmacy/widgets/floor_checkbox.dart';
-import 'package:emp_app/app/moduls/pharmacy/widgets/ward_checkbox.dart';
+import 'package:schoolapp/app/core/common/common_methods.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_const.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/common/module.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/pharmacy/model/pharmafilter_model.dart';
+import 'package:schoolapp/app/moduls/pharmacy/model/presdetail_model.dart';
+import 'package:schoolapp/app/moduls/pharmacy/model/presviewer_model.dart';
+import 'package:schoolapp/app/moduls/pharmacy/widgets/bed_checkbox.dart';
+import 'package:schoolapp/app/moduls/pharmacy/widgets/floor_checkbox.dart';
+import 'package:schoolapp/app/moduls/pharmacy/widgets/ward_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,7 +112,13 @@ class PharmacyController extends GetxController with SingleGetTickerProviderMixi
       loginId = await pref.getString(AppString.keyLoginId) ?? "";
       tokenNo = await pref.getString(AppString.keyToken) ?? "";
 
-      var jsonbodyObj = {"loginId": loginId, "prefixText": searchPrefix ?? '', "wards": selectedWardList, "floors": selectedFloorList, "beds": selectedBedList};
+      var jsonbodyObj = {
+        "loginId": loginId,
+        "prefixText": searchPrefix ?? '',
+        "wards": selectedWardList,
+        "floors": selectedFloorList,
+        "beds": selectedBedList
+      };
 
       var response = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
       Rsponsedrpresviewer rsponsedrpresviewer = Rsponsedrpresviewer.fromJson(jsonDecode(response));

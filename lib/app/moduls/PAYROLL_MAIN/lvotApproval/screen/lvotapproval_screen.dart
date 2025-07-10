@@ -1,13 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:emp_app/app/app_custom_widget/custom_progressloader.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/screen/lvlist_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/lvotApproval/screen/otlist_screen.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/controller/lvotapproval_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/screen/lvlist_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/lvotApproval/screen/otlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -158,9 +158,7 @@ class LvotapprovalScreen extends StatelessWidget {
                                       onTap: () async {
                                         await controller.clearSearch();
                                         await controller.activateSearch(false);
-                                        controller.HODYN_c.value
-                                            ? await controller.fetchLeaveOTList('HOD', controller.selectedLeaveType)
-                                            : null;
+                                        controller.HODYN_c.value ? await controller.fetchLeaveOTList('HOD', controller.selectedLeaveType) : null;
                                       },
                                     ),
                                   ),
@@ -178,9 +176,7 @@ class LvotapprovalScreen extends StatelessWidget {
                                       onTap: () async {
                                         await controller.clearSearch();
                                         await controller.activateSearch(false);
-                                        controller.HRYN_c.value
-                                            ? await controller.fetchLeaveOTList('HR', controller.selectedLeaveType)
-                                            : null;
+                                        controller.HRYN_c.value ? await controller.fetchLeaveOTList('HR', controller.selectedLeaveType) : null;
                                       },
                                     ),
                                   ),
@@ -214,8 +210,7 @@ class LvotapprovalScreen extends StatelessWidget {
                                     ElevatedButton(
                                       onPressed: () async {
                                         bool hasRejectedLeave = controller.selectedItems.any((item) =>
-                                            item.typeValue == controller.selectedLeaveType &&
-                                            item.inchargeAction?.toLowerCase() == 'rejected');
+                                            item.typeValue == controller.selectedLeaveType && item.inchargeAction?.toLowerCase() == 'rejected');
 
                                         if (hasRejectedLeave) {
                                           controller.showByPassApproveDialog(context);

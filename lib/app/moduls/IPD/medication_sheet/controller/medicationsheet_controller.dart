@@ -2,27 +2,27 @@
 
 import 'dart:convert';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:emp_app/app/app_custom_widget/common_methods.dart';
-import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/app_custom_widget/custom_date_picker.dart';
-import 'package:emp_app/app/app_custom_widget/custom_dropdown.dart';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/core/util/custom_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/controller/invest_requisit_controller.dart';
-import 'package:emp_app/app/app_custom_widget/common_dropdown_model.dart';
-import 'package:emp_app/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/screen/widget/custom_textformfield.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/model/dr_treat_detail.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/model/dr_treat_master.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/model/resp_dropdown_multifields_model.dart';
-import 'package:emp_app/app/moduls/IPD/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
+import 'package:schoolapp/app/app_custom_widget/common_methods.dart';
+import 'package:schoolapp/app/app_custom_widget/common_text.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_date_picker.dart';
+import 'package:schoolapp/app/app_custom_widget/custom_dropdown.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/core/util/custom_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/controller/invest_requisit_controller.dart';
+import 'package:schoolapp/app/app_custom_widget/common_dropdown_model.dart';
+import 'package:schoolapp/app/moduls/IPD/invest_requisit/model/searchservice_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/screen/widget/custom_textformfield.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/model/dr_treat_detail.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/model/dr_treat_master.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/model/resp_dropdown_multifields_model.dart';
+import 'package:schoolapp/app/moduls/IPD/medication_sheet/screen/widget/common_multiselect_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -1105,8 +1105,7 @@ class MedicationsheetController extends GetxController {
       FreqAfternoonController.text = normalizeString(listItem.frequency2!.name.toString());
       FreqEveningController.text = normalizeString(listItem.frequency3!.name.toString());
       FreqNightController.text = normalizeString(listItem.frequency4!.name.toString());
-      stopDateController.text =
-          listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
+      stopDateController.text = listItem.stopTime != "null" && listItem.stopTime != "" ? formatDateTime_dd_MMM_yy_HH_mm(listItem.stopTime) : '';
       qtyController.text = normalizeString(listItem.qty.toString());
       daysController.text = normalizeString(listItem.days.toString());
       flowRateController.text = (listItem.flowRate != "null" && listItem.flowRate != "") ? listItem.flowRate.toString() : "";
@@ -1430,8 +1429,7 @@ class MedicationsheetController extends GetxController {
                           ),
                           onPressed: () async {
                             // Submit logic
-                            await saveMedicationSheet(
-                                selMasterindex >= 0 ? (controller.filterDRTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
+                            await saveMedicationSheet(selMasterindex >= 0 ? (controller.filterDRTreatMasterList[selMasterindex].drMstId ?? -2) : -1);
                             await fetchDrTreatmentData(ipdNo: ipdNo, treatTyp: 'Medication Sheet', isload: true);
                             clearMasterData();
                             Navigator.pop(context);
@@ -1560,8 +1558,7 @@ class MedicationsheetController extends GetxController {
                                 child: Container(
                                   width: getDynamicHeight(size: 0.3),
                                   alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
+                                  padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.05), vertical: getDynamicHeight(size: 0.01)),
                                   child: Text(
                                     drTreatMasterList[index].srNo.toString(), // ✅ RxID value
                                     style: AppStyle.fontfamilyplus,
@@ -2129,12 +2126,10 @@ class MedicationsheetController extends GetxController {
                           ],
                         ),
                       ),
+                      _buildNoteSection(AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
+                      _buildNoteSection(AppString.user, filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
                       _buildNoteSection(
-                          AppString.stoptime, drTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].stopTime.toString()),
-                      _buildNoteSection(
-                          AppString.user, filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].userName ?? ''),
-                      _buildNoteSection(AppString.entrydatetime,
-                          filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
+                          AppString.entrydatetime, filterDRTreatMasterList[selectedMasterIndex].detail![detailMedicineindex].sysDate.toString()),
                     ],
                   ),
                 ),

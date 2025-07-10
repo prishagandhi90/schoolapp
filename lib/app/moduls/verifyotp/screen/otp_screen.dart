@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_const.dart';
-import 'package:emp_app/app/core/util/app_font_name.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/login/controller/login_controller.dart';
-import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
-import 'package:emp_app/app/moduls/verifyotp/model/mobileno_model.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_const.dart';
+import 'package:schoolapp/app/core/util/app_font_name.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/login/controller/login_controller.dart';
+import 'package:schoolapp/app/moduls/verifyotp/controller/otp_controller.dart';
+import 'package:schoolapp/app/moduls/verifyotp/model/mobileno_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -206,7 +206,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                       loginController.responseOTPNo,
                                       otpController.deviceTok,
                                     );
-                                   
                                   }
                                 },
                           style: ElevatedButton.styleFrom(

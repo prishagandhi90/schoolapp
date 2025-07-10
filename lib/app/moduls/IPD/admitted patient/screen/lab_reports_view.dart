@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable, deprecated_member_use
 
-import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/labreport_controller.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/widgets/ref.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/widgets/start_heading.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/app_custom_widget/common_text.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/labreport_controller.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/widgets/ref.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/widgets/start_heading.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +22,6 @@ class LabReportsView extends StatelessWidget {
     return GetBuilder<LabReportsController>(
       builder: (controller) {
         return Scaffold(
-  
           backgroundColor: AppColor.white,
           // drawer: const MyDrawer(),
           body: GestureDetector(
@@ -214,8 +213,7 @@ class LabReportsView extends StatelessWidget {
                                                                       ),
                                                                     ),
                                                                     Icon(
-                                                                      controller.dataContain
-                                                                              .contains(controller.commonList[index]['report_name'])
+                                                                      controller.dataContain.contains(controller.commonList[index]['report_name'])
                                                                           ? Icons.keyboard_arrow_up
                                                                           : Icons.keyboard_arrow_down,
                                                                       size: 40,
@@ -330,15 +328,13 @@ class LabReportsView extends StatelessWidget {
                                                                                               ),
                                                                                               IntrinsicHeight(
                                                                                                 child: SizedBox(
-                                                                                                  height:
-                                                                                                      getHeight(indexWiseData, dateLists1),
+                                                                                                  height: getHeight(indexWiseData, dateLists1),
                                                                                                   width: getDynamicHeight(size: 0.120),
                                                                                                   child: ListView.builder(
                                                                                                     padding: EdgeInsets.zero,
                                                                                                     shrinkWrap: true,
                                                                                                     itemCount: indexWiseData.length,
-                                                                                                    physics:
-                                                                                                        const NeverScrollableScrollPhysics(),
+                                                                                                    physics: const NeverScrollableScrollPhysics(),
                                                                                                     // controller: controller.scrollController3[index],
                                                                                                     itemBuilder: (item, i) {
                                                                                                       return IntrinsicHeight(
@@ -346,23 +342,18 @@ class LabReportsView extends StatelessWidget {
                                                                                                           children: [
                                                                                                             SizedBox(
                                                                                                               height: getHeightOfWidget(
-                                                                                                                  indexWiseData[i][
-                                                                                                                                  'NormalRange'] !=
+                                                                                                                  indexWiseData[i]['NormalRange'] !=
                                                                                                                               null &&
-                                                                                                                          indexWiseData[i][
-                                                                                                                                  'NormalRange'] !=
+                                                                                                                          indexWiseData[i]
+                                                                                                                                  ['NormalRange'] !=
                                                                                                                               ''
                                                                                                                       ? indexWiseData[i]
                                                                                                                           ['NormalRange']
                                                                                                                       : '-',
-                                                                                                                  indexWiseData[i][
-                                                                                                                                  'Unit'] !=
-                                                                                                                              null &&
-                                                                                                                          indexWiseData[i][
-                                                                                                                                  'Unit'] !=
+                                                                                                                  indexWiseData[i]['Unit'] != null &&
+                                                                                                                          indexWiseData[i]['Unit'] !=
                                                                                                                               ''
-                                                                                                                      ? indexWiseData[i]
-                                                                                                                          ['Unit']
+                                                                                                                      ? indexWiseData[i]['Unit']
                                                                                                                       : '-',
                                                                                                                   indexWiseData,
                                                                                                                   dateLists1,
@@ -370,47 +361,36 @@ class LabReportsView extends StatelessWidget {
                                                                                                               child: Center(
                                                                                                                   child: Column(
                                                                                                                 mainAxisAlignment:
-                                                                                                                    MainAxisAlignment
-                                                                                                                        .center,
+                                                                                                                    MainAxisAlignment.center,
                                                                                                                 children: [
                                                                                                                   AppText(
-                                                                                                                    text: indexWiseData[i][
-                                                                                                                                    dateLists1[
-                                                                                                                                        index]] !=
+                                                                                                                    text: indexWiseData[i][dateLists1[
+                                                                                                                                    index]] !=
                                                                                                                                 null &&
-                                                                                                                            indexWiseData[i]
-                                                                                                                                    [
+                                                                                                                            indexWiseData[i][
                                                                                                                                     dateLists1[
                                                                                                                                         index]] !=
                                                                                                                                 ''
-                                                                                                                        ? splitName(
-                                                                                                                            indexWiseData[i]
-                                                                                                                                [dateLists1[
-                                                                                                                                    index]])
+                                                                                                                        ? splitName(indexWiseData[i]
+                                                                                                                            [dateLists1[index]])
                                                                                                                         : '-',
                                                                                                                     // text: i == 0 ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged" : "",
                                                                                                                     fontSize: Sizes.px13,
-                                                                                                                    fontColor: indexWiseData[
-                                                                                                                                        i][
+                                                                                                                    fontColor: indexWiseData[i][
                                                                                                                                     dateLists1[
                                                                                                                                         index]] !=
                                                                                                                                 null &&
-                                                                                                                            indexWiseData[
-                                                                                                                                        i][
+                                                                                                                            indexWiseData[i][
                                                                                                                                     dateLists1[
                                                                                                                                         index]] !=
                                                                                                                                 ''
-                                                                                                                        ? textColor(indexWiseData[
-                                                                                                                                    i][
-                                                                                                                                dateLists1[
-                                                                                                                                    index]])
+                                                                                                                        ? textColor(indexWiseData[i]
+                                                                                                                                [dateLists1[index]])
                                                                                                                             ? AppColor.red
                                                                                                                             : AppColor.black
                                                                                                                         : AppColor.black,
-                                                                                                                    fontWeight:
-                                                                                                                        FontWeight.w500,
-                                                                                                                    textAlign:
-                                                                                                                        TextAlign.center,
+                                                                                                                    fontWeight: FontWeight.w500,
+                                                                                                                    textAlign: TextAlign.center,
                                                                                                                     // maxLine: 10,
                                                                                                                     // overflow: TextOverflow.ellipsis,
                                                                                                                   ),
@@ -428,10 +408,8 @@ class LabReportsView extends StatelessWidget {
                                                                                                             ),
                                                                                                             Divider(
                                                                                                               thickness: 1,
-                                                                                                              height: getDynamicHeight(
-                                                                                                                  size: 0.002),
-                                                                                                              color: AppColor.black
-                                                                                                                  .withOpacity(0.3),
+                                                                                                              height: getDynamicHeight(size: 0.002),
+                                                                                                              color: AppColor.black.withOpacity(0.3),
                                                                                                             ),
                                                                                                           ],
                                                                                                         ),

@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/common/module.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/moduls/common/module.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 

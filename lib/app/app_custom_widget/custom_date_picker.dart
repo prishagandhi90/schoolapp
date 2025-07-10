@@ -1,7 +1,7 @@
-import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 
-import 'package:emp_app/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
 
 class CustomDatePicker extends StatelessWidget {
   final TextEditingController dateController;

@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/app_image.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
-import 'package:emp_app/app/moduls/dashboard/controller/dashboard_controller.dart';
-import 'package:emp_app/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/app_image.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/dietician_checklist/controller/dietchecklist_controller.dart';
+import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -305,13 +305,16 @@ class DieticianChecklistScreen extends StatelessWidget {
   }
 
   Widget _buildPatientCard(int index, BuildContext context, DietchecklistController controller) {
-    bool isRecordUnsaved =
-        (controller.filterdieticianList[index].diagnosis.toString().isEmpty || controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].username.toString().isEmpty || controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].dietPlan.toString().isEmpty || controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
-                controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
-            (controller.filterdieticianList[index].remark.toString().isEmpty || controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
+    bool isRecordUnsaved = (controller.filterdieticianList[index].diagnosis.toString().isEmpty ||
+            controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].username.toString().isEmpty ||
+            controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].dietPlan.toString().isEmpty ||
+            controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
+            controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
+        (controller.filterdieticianList[index].remark.toString().isEmpty ||
+            controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
     return GestureDetector(
       onTap: () {
         // FocusScope.of(context).unfocus();

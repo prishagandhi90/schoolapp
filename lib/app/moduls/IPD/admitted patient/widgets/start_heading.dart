@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:emp_app/app/app_custom_widget/common_text.dart';
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/labreport_controller.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/widgets/ref.dart';
+import 'package:schoolapp/app/app_custom_widget/common_text.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/labreport_controller.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/widgets/ref.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

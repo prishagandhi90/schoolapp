@@ -1,6 +1,6 @@
-import 'package:emp_app/app/core/util/app_color.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
-import 'package:emp_app/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
+import 'package:schoolapp/app/core/util/app_color.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/moduls/IPD/admitted%20patient/controller/adpatient_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -91,8 +91,7 @@ class VoiceScreen extends StatelessWidget {
                   ElevatedButton.icon(
                     icon: Icon(controller.isRecording ? Icons.stop : Icons.mic),
                     label: Text(controller.isRecording ? 'Stop Recording' : 'Start Recording'),
-                    onPressed:
-                        controller.isRecording ? () => controller.stopListeningAndRecording() : controller.startListeningAndRecording,
+                    onPressed: controller.isRecording ? () => controller.stopListeningAndRecording() : controller.startListeningAndRecording,
                     // onPressed: controller.stopListeningAndRecording,
                     style: ElevatedButton.styleFrom(backgroundColor: controller.isRecording ? AppColor.red : null),
                   ),

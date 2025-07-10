@@ -1,5 +1,5 @@
-import 'package:emp_app/app/core/util/app_style.dart';
-import 'package:emp_app/app/core/util/sizer_constant.dart';
+import 'package:schoolapp/app/core/util/app_style.dart';
+import 'package:schoolapp/app/core/util/sizer_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,7 +24,8 @@ class CustomLoginDialogBox extends StatelessWidget {
     this.controller,
     this.passcontroller,
     this.passwordHintText,
-    this.onTap, this.inputFormatters,
+    this.onTap,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override

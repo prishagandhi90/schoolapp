@@ -1,22 +1,22 @@
 // ignore_for_file: deprecated_member_use
 import 'dart:convert';
-import 'package:emp_app/app/core/service/api_service.dart';
-import 'package:emp_app/app/core/util/api_error_handler.dart';
-import 'package:emp_app/app/core/util/app_string.dart';
-import 'package:emp_app/app/core/util/const_api_url.dart';
-import 'package:emp_app/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/dropdownlist_custom.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/headerlist_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leaveReliverName_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leave_saveentrylist_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leavedays_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leavedelayreason_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leaveentrylist_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leavenames_model.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/leave/model/leavereason_model.dart';
-import 'package:emp_app/app/moduls/login/screen/login_screen.dart';
-import 'package:emp_app/app/moduls/PAYROLL_MAIN/overtime/controller/overtime_controller.dart';
-import 'package:emp_app/main.dart';
+import 'package:schoolapp/app/core/service/api_service.dart';
+import 'package:schoolapp/app/core/util/api_error_handler.dart';
+import 'package:schoolapp/app/core/util/app_string.dart';
+import 'package:schoolapp/app/core/util/const_api_url.dart';
+import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/dropdownlist_custom.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/headerlist_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leaveReliverName_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leave_saveentrylist_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leavedays_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leavedelayreason_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leaveentrylist_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leavenames_model.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/leave/model/leavereason_model.dart';
+import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/moduls/PAYROLL_MAIN/overtime/controller/overtime_controller.dart';
+import 'package:schoolapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -301,12 +301,7 @@ class LeaveController extends GetxController with SingleGetTickerProviderMixin {
       if (toDate != null) {
         isDaysFieldEnabled.value = true;
 
-        var jsonbodyObj = {
-          "loginId": loginId,
-          "empId": empId,
-          "leaveType": leaveValueController.text,
-          "leaveDate": toDate.toIso8601String()
-        };
+        var jsonbodyObj = {"loginId": loginId, "empId": empId, "leaveType": leaveValueController.text, "leaveDate": toDate.toIso8601String()};
 
         var decodedResp = await apiController.parseJsonBody(url, tokenNo, jsonbodyObj);
         LeaveDays leaveDays = LeaveDays.fromJson(jsonDecode(decodedResp));

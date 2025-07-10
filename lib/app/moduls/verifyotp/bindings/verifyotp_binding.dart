@@ -1,4 +1,4 @@
-import 'package:emp_app/app/moduls/verifyotp/controller/otp_controller.dart';
+import 'package:schoolapp/app/moduls/verifyotp/controller/otp_controller.dart';
 import 'package:get/get.dart';
 
 class VerifyotpBinding extends Bindings {

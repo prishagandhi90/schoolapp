@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:emp_app/app/moduls/internetconnection/view/nointernet_screen.dart';
+import 'package:schoolapp/app/moduls/internetconnection/view/nointernet_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -79,9 +79,9 @@ class NoInternetController extends GetxController {
         break;
       // default:
       //   Get.rawSnackbar(message: "Failed to get connection type");
-        // Get.showSnackbar(const GetSnackBar(
-        //     title: 'Error', message: 'Failed to get connection type'));
-        // break;
+      // Get.showSnackbar(const GetSnackBar(
+      //     title: 'Error', message: 'Failed to get connection type'));
+      // break;
     }
     update();
   }
