@@ -119,7 +119,8 @@ class DieticianChecklistScreen extends StatelessWidget {
                     suffixIcon: controller.searchController.text.trim().isNotEmpty
                         ? GestureDetector(
                             onTap: () {
-                              FocusScope.of(context).unfocus();
+                              // FocusScope.of(context).unfocus();
+                              controller.searchFocusNode.unfocus();
                               controller.searchController.clear();
                               controller.fetchDieticianList();
                             },
@@ -141,9 +142,10 @@ class DieticianChecklistScreen extends StatelessWidget {
                     controller.filterSearchResults(value);
                   },
                   onTapOutside: (event) {
-                    FocusScope.of(context).unfocus();
+                    // FocusScope.of(context).unfocus();
                     Future.delayed(const Duration(milliseconds: 300));
                     controller.update();
+                    controller.searchFocusNode.unfocus();
                   },
                   onFieldSubmitted: (v) {
                     if (controller.searchController.text.trim().isNotEmpty) {
@@ -314,6 +316,7 @@ class DieticianChecklistScreen extends StatelessWidget {
       onTap: () {
         // FocusScope.of(context).unfocus();
         controller.showDietDialog(context, index);
+        controller.searchFocusNode.unfocus();
       },
       child: Card(
         shape: RoundedRectangleBorder(
