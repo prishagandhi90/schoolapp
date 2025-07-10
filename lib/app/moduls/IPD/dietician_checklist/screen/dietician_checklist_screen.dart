@@ -273,18 +273,22 @@ class DieticianChecklistScreen extends StatelessWidget {
             top: -4,
             right: -4,
             child: Container(
-              padding: const EdgeInsets.all(6),
+              padding: EdgeInsets.all(getDynamicHeight(size: 0.005)),
               decoration: const BoxDecoration(
                 color: Colors.teal,
                 shape: BoxShape.circle,
               ),
               child: Text(
                 count.toString(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
+                style: AppStyle.white.copyWith(
+                  fontSize: getDynamicHeight(size: 0.0098),
                   fontWeight: FontWeight.bold,
                 ),
+                // style: const TextStyle(
+                //   color: Colors.white,
+                //   fontSize: 10,
+                //   fontWeight: FontWeight.bold,
+                // ),
               ),
             ),
           ),
@@ -294,27 +298,29 @@ class DieticianChecklistScreen extends StatelessWidget {
   }
 
   Widget _buildPatientCard(int index, BuildContext context, DietchecklistController controller) {
-    bool isRecordUnsaved = (controller.filterdieticianList[index].diagnosis.toString().isEmpty ||
-            controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
-        (controller.filterdieticianList[index].username.toString().isEmpty ||
-            controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
-        (controller.filterdieticianList[index].dietPlan.toString().isEmpty ||
-            controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
-        (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
-            controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
-        (controller.filterdieticianList[index].remark.toString().isEmpty ||
-            controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
+    bool isRecordUnsaved =
+        (controller.filterdieticianList[index].diagnosis.toString().isEmpty || controller.filterdieticianList[index].diagnosis.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].username.toString().isEmpty || controller.filterdieticianList[index].username.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].dietPlan.toString().isEmpty || controller.filterdieticianList[index].dietPlan.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].relFoodRemark.toString().isEmpty ||
+                controller.filterdieticianList[index].relFoodRemark.toString().toLowerCase() == "null") &&
+            (controller.filterdieticianList[index].remark.toString().isEmpty || controller.filterdieticianList[index].remark.toString().toLowerCase() == "null");
     return GestureDetector(
       onTap: () {
         controller.showDietDialog(context, index);
       },
       child: Card(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(
+              getDynamicHeight(size: 0.0098),
+            ),
             side: BorderSide(
               color: isRecordUnsaved ? const Color.fromARGB(255, 243, 231, 122) : AppColor.primaryColor,
             )),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        margin: EdgeInsets.symmetric(
+          vertical: getDynamicHeight(size: 0.0078),
+          horizontal: getDynamicHeight(size: 0.0039),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -322,9 +328,15 @@ class DieticianChecklistScreen extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: isRecordUnsaved ? AppColor.yellow : AppColor.primaryColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(
+                  getDynamicHeight(size: 0.0098),
+                )),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: EdgeInsets.symmetric(
+                horizontal: getDynamicHeight(size: 0.0118),
+                vertical: getDynamicHeight(size: 0.0058),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -346,7 +358,10 @@ class DieticianChecklistScreen extends StatelessWidget {
 
             /// 🔽 Body
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: EdgeInsets.symmetric(
+                horizontal: getDynamicHeight(size: 0.0118),
+                vertical: getDynamicHeight(size: 0.0078),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -357,21 +372,28 @@ class DieticianChecklistScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           controller.filterdieticianList[index].patientName.toString(),
-                          style: TextStyle(
-                            fontSize: Sizes.px15,
+                          style: AppStyle.black.copyWith(
                             fontWeight: FontWeight.bold,
                             color: AppColor.primaryColor,
                           ),
+                          // style: TextStyle(
+                          //   fontSize: Sizes.px15,
+                          //   fontWeight: FontWeight.bold,
+                          //   color: AppColor.primaryColor,
+                          // ),
                         ),
                       ),
                       const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () => controller.dieticianBottomSheet(index),
-                        child: const Icon(Icons.menu, size: 20),
+                        child: Icon(
+                          Icons.menu,
+                          size: getDynamicHeight(size: 0.0195),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: getDynamicHeight(size: 0.0078)),
 
                   /// 🟨 Row 1: Dr Name + Diet
                   Row(
@@ -381,13 +403,14 @@ class DieticianChecklistScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           controller.filterdieticianList[index].doctor.toString(),
-                          style: TextStyle(
-                            fontSize: getDynamicHeight(size: 0.015),
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppStyle.black,
+                          // style: TextStyle(
+                          //   fontSize: getDynamicHeight(size: 0.015),
+                          //   fontWeight: FontWeight.w600,
+                          // ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: getDynamicHeight(size: 0.0078)),
 
                       /// Diet
                       Expanded(
@@ -411,7 +434,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: getDynamicHeight(size: 0.0059)),
 
                   /// 🟨 Row 2: DOA + Diagnosis
                   Row(
@@ -439,7 +462,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: getDynamicHeight(size: 0.0078)),
 
                       /// Diagnosis
                       Expanded(
@@ -463,7 +486,7 @@ class DieticianChecklistScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: getDynamicHeight(size: 0.0059)),
 
                   /// 🟨 Remarks (Last line)
                   Text.rich(

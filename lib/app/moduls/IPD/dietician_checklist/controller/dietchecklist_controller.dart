@@ -221,14 +221,11 @@ class DietchecklistController extends GetxController {
         otherTabs.addAll(tabs.where((e) => (e.shortWardName?.toLowerCase() != 'all')));
         wards = otherTabs;
         // ✅ Select default tab
-        selectedTabLabel =
-            allTabs.isNotEmpty ? allTabs.first.shortWardName ?? '' : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName ?? '' : '');
+        selectedTabLabel = allTabs.isNotEmpty ? allTabs.first.shortWardName ?? '' : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName ?? '' : '');
 
         // ✅ 👇 Important: Call updateSelectedTab here so that list loads based on selected ward
         updateSelectedTab(
-          allTabs.isNotEmpty
-              ? allTabs.first.shortWardName.toString()
-              : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
+          allTabs.isNotEmpty ? allTabs.first.shortWardName.toString() : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
         );
 
         isLoading = false;
@@ -305,16 +302,7 @@ class DietchecklistController extends GetxController {
       Map<String, dynamic> jsonbodyObj = {
         "id": dieticianList[index].id,
         "diagnosis": diagnosisController.text,
-        "diet": {
-          "id": 0,
-          "name": dietNameController.text,
-          "value": "",
-          "sort": 0,
-          "txt": "",
-          "parentId": 0,
-          "sup_name": "",
-          "dateValue": "2025-07-07T09:49:56.472Z"
-        },
+        "diet": {"id": 0, "name": dietNameController.text, "value": "", "sort": 0, "txt": "", "parentId": 0, "sup_name": "", "dateValue": "2025-07-07T09:49:56.472Z"},
         "remark": remarksController.text,
         "relFood_Remark": relativeFoodRemarkController.text,
         "username": dieticianList[index].username,
@@ -425,7 +413,7 @@ class DietchecklistController extends GetxController {
 
                     /// 🔹 ID & UHID Section
                     Container(
-                      padding: const EdgeInsets.only(bottom: 8),
+                      padding: EdgeInsets.only(bottom: getDynamicHeight(size: 0.0078)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -615,22 +603,22 @@ class DietchecklistController extends GetxController {
         decoration: BoxDecoration(
           color: AppColor.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25.0),
-            topRight: Radius.circular(25.0),
+            topLeft: Radius.circular(getDynamicHeight(size: 0.0234)),
+            topRight: Radius.circular(getDynamicHeight(size: 0.0234)),
           ),
         ),
         child: GetBuilder<DietchecklistController>(builder: (controller) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: getDynamicHeight(size: 0.0185)),
             child: Column(
               children: [
                 // 🔝 Sticky Header
                 Padding(
-                  padding: const EdgeInsets.only(top: 15),
+                  padding: EdgeInsets.only(top: getDynamicHeight(size: 0.0145)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(width: 30),
+                      SizedBox(width: getDynamicHeight(size: 0.0282)),
                       Text(
                         AppString.filterby,
                         style: TextStyle(
@@ -663,7 +651,7 @@ class DietchecklistController extends GetxController {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: getDynamicHeight(size: 0.0097)),
                         Row(
                           children: [
                             Expanded(
@@ -685,7 +673,7 @@ class DietchecklistController extends GetxController {
                                 },
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: getDynamicHeight(size: 0.0097)),
                             Expanded(
                               child: CustomDatePicker(
                                 dateController: toDateController,
@@ -707,14 +695,14 @@ class DietchecklistController extends GetxController {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 25),
+                        SizedBox(height: getDynamicHeight(size: 0.0235)),
                         Text(AppString.selectWardsName,
                             style: TextStyle(
                               fontSize: getDynamicHeight(size: 0.018),
                               color: AppColor.black,
                               fontWeight: FontWeight.w700,
                             )),
-                        const SizedBox(height: 10),
+                        SizedBox(height: getDynamicHeight(size: 0.0097)),
                         dietWardsCheckBoxes(controller: controller),
                         // const SizedBox(height: 10),
                         Text(AppString.floor,
@@ -732,9 +720,9 @@ class DietchecklistController extends GetxController {
                               color: AppColor.black,
                               fontWeight: FontWeight.w700,
                             )),
-                        const SizedBox(height: 8),
+                        SizedBox(height: getDynamicHeight(size: 0.0079)),
                         dietBedsCheckBoxes(controller: controller),
-                        const SizedBox(height: 8),
+                        SizedBox(height: getDynamicHeight(size: 0.0079)),
                       ],
                     ),
                   ),
@@ -747,11 +735,11 @@ class DietchecklistController extends GetxController {
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.0475),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0097)),
                               ),
                               backgroundColor: AppColor.primaryColor,
                             ),
@@ -762,9 +750,8 @@ class DietchecklistController extends GetxController {
                               controller.selectedTabLabel = ''; // ✅ remove tab selection
 
                               final hasDate = controller.selectedFromDate != null && controller.selectedToDate != null;
-                              final hasFilter = controller.selectedWardList.isNotEmpty ||
-                                  controller.selectedFloorList.isNotEmpty ||
-                                  controller.selectedBedList.isNotEmpty;
+                              final hasFilter =
+                                  controller.selectedWardList.isNotEmpty || controller.selectedFloorList.isNotEmpty || controller.selectedBedList.isNotEmpty;
 
                               if (hasDate || hasFilter) {
                                 if (hasFilter) {
@@ -790,14 +777,14 @@ class DietchecklistController extends GetxController {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 20),
+                      SizedBox(width: getDynamicHeight(size: 0.019)),
                       Expanded(
                         child: SizedBox(
-                          height: 50,
+                          height: getDynamicHeight(size: 0.0475),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.0097)),
                               ),
                               backgroundColor: AppColor.primaryColor,
                             ),
@@ -892,10 +879,15 @@ class DietchecklistController extends GetxController {
           builder: (controller) {
             return AlertDialog(
               backgroundColor: AppColor.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              contentPadding: const EdgeInsets.all(10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                getDynamicHeight(size: 0.0097),
+              )),
+              contentPadding: EdgeInsets.all(
+                getDynamicHeight(size: 0.0097),
+              ),
               content: SizedBox(
-                width: 350,
+                width: getDynamicHeight(size: 0.3465),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -907,7 +899,7 @@ class DietchecklistController extends GetxController {
                             '${dieticianList[index].patientName} (${dieticianList[index].ipdNo})',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: getDynamicHeight(size: 0.0155),
                               color: Colors.teal,
                             ),
                           ),
@@ -918,7 +910,7 @@ class DietchecklistController extends GetxController {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: getDynamicHeight(size: 0.0135)),
 
                     /// 🔹 Diagnosis
                     CustomTextFormField(
@@ -932,7 +924,7 @@ class DietchecklistController extends GetxController {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: getDynamicHeight(size: 0.0097)),
 
                     /// 🔹 Diet Dropdown
                     CustomDropdown(
@@ -944,7 +936,7 @@ class DietchecklistController extends GetxController {
                         // padding: const EdgeInsets.symmetric(horizontal: 0),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColor.originalgrey),
-                          borderRadius: BorderRadius.circular(3),
+                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
                           color: AppColor.white,
                         ),
                       ),
@@ -968,7 +960,7 @@ class DietchecklistController extends GetxController {
                           .toList(),
                       width: double.infinity,
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: getDynamicHeight(size: 0.0097)),
 
                     /// 🔹 Remarks
                     CustomTextFormField(
@@ -998,7 +990,7 @@ class DietchecklistController extends GetxController {
                       minLines: 2,
                       maxLines: 10,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: getDynamicHeight(size: 0.019)),
 
                     /// 🟩 Buttons Row
                     Row(
@@ -1012,7 +1004,10 @@ class DietchecklistController extends GetxController {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal,
-                            minimumSize: const Size(100, 40),
+                            minimumSize: Size(
+                              getDynamicHeight(size: 0.098),
+                              getDynamicHeight(size: 0.0385),
+                            ),
                           ),
                           child: Text(
                             'Save',
@@ -1025,7 +1020,10 @@ class DietchecklistController extends GetxController {
                           onPressed: () => Navigator.pop(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.teal,
-                            minimumSize: const Size(100, 40),
+                            minimumSize: Size(
+                              getDynamicHeight(size: 0.098),
+                              getDynamicHeight(size: 0.0385),
+                            ),
                           ),
                           child: Text(
                             'Cancel',
