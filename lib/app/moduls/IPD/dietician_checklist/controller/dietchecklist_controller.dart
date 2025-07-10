@@ -72,6 +72,14 @@ class DietchecklistController extends GetxController {
   DateTime? selectedFromDate;
   DateTime? selectedToDate;
   bool isBottomFilterApplied = false;
+  final FocusNode searchFocusNode = FocusNode();
+
+  @override
+  void onClose() {
+    searchFocusNode.dispose(); // Dispose FocusNode when controller is closed
+    searchController.dispose();
+    super.onClose();
+  }
 
   void filterSearchResults(String query) {
     if (query.isEmpty) {
@@ -221,14 +229,11 @@ class DietchecklistController extends GetxController {
         otherTabs.addAll(tabs.where((e) => (e.shortWardName?.toLowerCase() != 'all')));
         wards = otherTabs;
         // ✅ Select default tab
-        selectedTabLabel =
-            allTabs.isNotEmpty ? allTabs.first.shortWardName ?? '' : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName ?? '' : '');
+        selectedTabLabel = allTabs.isNotEmpty ? allTabs.first.shortWardName ?? '' : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName ?? '' : '');
 
         // ✅ 👇 Important: Call updateSelectedTab here so that list loads based on selected ward
         updateSelectedTab(
-          allTabs.isNotEmpty
-              ? allTabs.first.shortWardName.toString()
-              : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
+          allTabs.isNotEmpty ? allTabs.first.shortWardName.toString() : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
         );
 
         isLoading = false;
@@ -305,16 +310,7 @@ class DietchecklistController extends GetxController {
       Map<String, dynamic> jsonbodyObj = {
         "id": dieticianList[index].id,
         "diagnosis": diagnosisController.text,
-        "diet": {
-          "id": 0,
-          "name": dietNameController.text,
-          "value": "",
-          "sort": 0,
-          "txt": "",
-          "parentId": 0,
-          "sup_name": "",
-          "dateValue": "2025-07-07T09:49:56.472Z"
-        },
+        "diet": {"id": 0, "name": dietNameController.text, "value": "", "sort": 0, "txt": "", "parentId": 0, "sup_name": "", "dateValue": "2025-07-07T09:49:56.472Z"},
         "remark": remarksController.text,
         "relFood_Remark": relativeFoodRemarkController.text,
         "username": dieticianList[index].username,
@@ -349,6 +345,7 @@ class DietchecklistController extends GetxController {
           filterdieticianList[index].dietPlan = dietNameController.text;
           update();
           Get.rawSnackbar(message: "Diet entry saved successfully ✅");
+          searchFocusNode.unfocus();
           // resetForm(); or refresh list here
         } else {
           Get.rawSnackbar(message: responseSaveDietListMaster.message ?? "Failed to save");
@@ -762,9 +759,8 @@ class DietchecklistController extends GetxController {
                               controller.selectedTabLabel = ''; // ✅ remove tab selection
 
                               final hasDate = controller.selectedFromDate != null && controller.selectedToDate != null;
-                              final hasFilter = controller.selectedWardList.isNotEmpty ||
-                                  controller.selectedFloorList.isNotEmpty ||
-                                  controller.selectedBedList.isNotEmpty;
+                              final hasFilter =
+                                  controller.selectedWardList.isNotEmpty || controller.selectedFloorList.isNotEmpty || controller.selectedBedList.isNotEmpty;
 
                               if (hasDate || hasFilter) {
                                 if (hasFilter) {
@@ -888,168 +884,170 @@ class DietchecklistController extends GetxController {
       context: context,
       barrierDismissible: false,
       builder: (_) {
-        return GetBuilder<DietchecklistController>(
-          builder: (controller) {
-            return AlertDialog(
-              backgroundColor: AppColor.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                getDynamicHeight(size: 0.0097),
-              )),
-              contentPadding: EdgeInsets.all(
-                getDynamicHeight(size: 0.0097),
-              ),
-              content: SizedBox(
-                width: getDynamicHeight(size: 0.3465),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    /// 🟦 Patient Name + IPD + Close Icon
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${dieticianList[index].patientName} (${dieticianList[index].ipdNo})',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: getDynamicHeight(size: 0.0155),
-                              color: AppColor.primaryColor,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: const Icon(Icons.close),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: getDynamicHeight(size: 0.0135)),
-
-                    /// 🔹 Diagnosis
-                    CustomTextFormField(
-                      controller: diagnosisController,
-                      decoration: InputDecoration(
-                        hintText: 'diagnosis',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: getDynamicHeight(size: 0.010),
-                          vertical: getDynamicHeight(size: 0.012),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: getDynamicHeight(size: 0.0097)),
-
-                    /// 🔹 Diet Dropdown
-                    CustomDropdown(
-                      text: 'Diet',
-                      textStyle: TextStyle(color: AppColor.black1),
-                      controller: controller.dietNameController,
-                      buttonStyleData: ButtonStyleData(
-                        height: getDynamicHeight(size: 0.05),
-                        // padding: const EdgeInsets.symmetric(horizontal: 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.originalgrey),
-                          borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
-                          color: AppColor.white,
-                        ),
-                      ),
-                      onChanged: (value) async {
-                        templateDietChangeMethod(value);
-                      },
-                      items: dietPlanDropDown
-                          .map((DietPlanDropDown item) => DropdownMenuItem<Map<String, String>>(
-                                value: {
-                                  'value': item.value ?? '',
-                                  'text': item.name ?? '',
-                                },
-                                child: Text(
-                                  item.name ?? '',
-                                  style: AppStyle.black.copyWith(
-                                    fontSize: getDynamicHeight(size: 0.016),
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ))
-                          .toList(),
-                      width: double.infinity,
-                    ),
-                    SizedBox(height: getDynamicHeight(size: 0.0097)),
-
-                    /// 🔹 Remarks
-                    CustomTextFormField(
-                      controller: remarksController,
-                      decoration: InputDecoration(
-                        hintText: 'Remark',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: getDynamicHeight(size: 0.010),
-                          vertical: getDynamicHeight(size: 0.012),
-                        ),
-                      ),
-                      minLines: 1,
-                      maxLines: 10,
-                    ),
-                    SizedBox(height: getDynamicHeight(size: 0.012)),
-                    CustomTextFormField(
-                      controller: relativeFoodRemarkController,
-                      decoration: InputDecoration(
-                        hintText: 'Relative Food Remarks',
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: getDynamicHeight(size: 0.010),
-                          vertical: getDynamicHeight(size: 0.012),
-                        ),
-                      ),
-                      minLines: 2,
-                      maxLines: 10,
-                    ),
-                    SizedBox(height: getDynamicHeight(size: 0.019)),
-
-                    /// 🟩 Buttons Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        /// ✅ Save Button
-                        ElevatedButton(
-                          onPressed: () {
-                            saveDietEntry(index);
-                            Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.primaryColor,
-                            minimumSize: Size(
-                              getDynamicHeight(size: 0.098),
-                              getDynamicHeight(size: 0.0385),
-                            ),
-                          ),
-                          child: Text(
-                            'Save',
-                            style: TextStyle(color: AppColor.white),
-                          ),
-                        ),
-
-                        /// ❌ Cancel Button
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColor.primaryColor,
-                            minimumSize: Size(
-                              getDynamicHeight(size: 0.098),
-                              getDynamicHeight(size: 0.0385),
-                            ),
-                          ),
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(color: AppColor.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+        return FocusScope(
+          child: GetBuilder<DietchecklistController>(
+            builder: (controller) {
+              return AlertDialog(
+                backgroundColor: AppColor.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                  getDynamicHeight(size: 0.0097),
+                )),
+                contentPadding: EdgeInsets.all(
+                  getDynamicHeight(size: 0.0097),
                 ),
-              ),
-            );
-          },
+                content: SizedBox(
+                  width: getDynamicHeight(size: 0.3465),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      /// 🟦 Patient Name + IPD + Close Icon
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${dieticianList[index].patientName} (${dieticianList[index].ipdNo})',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: getDynamicHeight(size: 0.0155),
+                                color: AppColor.primaryColor,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: const Icon(Icons.close),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.0135)),
+
+                      /// 🔹 Diagnosis
+                      CustomTextFormField(
+                        controller: diagnosisController,
+                        decoration: InputDecoration(
+                          hintText: 'diagnosis',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: getDynamicHeight(size: 0.010),
+                            vertical: getDynamicHeight(size: 0.012),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.0097)),
+
+                      /// 🔹 Diet Dropdown
+                      CustomDropdown(
+                        text: 'Diet',
+                        textStyle: TextStyle(color: AppColor.black1),
+                        controller: controller.dietNameController,
+                        buttonStyleData: ButtonStyleData(
+                          height: getDynamicHeight(size: 0.05),
+                          // padding: const EdgeInsets.symmetric(horizontal: 0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColor.originalgrey),
+                            borderRadius: BorderRadius.circular(getDynamicHeight(size: 0.003)),
+                            color: AppColor.white,
+                          ),
+                        ),
+                        onChanged: (value) async {
+                          templateDietChangeMethod(value);
+                        },
+                        items: dietPlanDropDown
+                            .map((DietPlanDropDown item) => DropdownMenuItem<Map<String, String>>(
+                                  value: {
+                                    'value': item.value ?? '',
+                                    'text': item.name ?? '',
+                                  },
+                                  child: Text(
+                                    item.name ?? '',
+                                    style: AppStyle.black.copyWith(
+                                      fontSize: getDynamicHeight(size: 0.016),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        width: double.infinity,
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.0097)),
+
+                      /// 🔹 Remarks
+                      CustomTextFormField(
+                        controller: remarksController,
+                        decoration: InputDecoration(
+                          hintText: 'Remark',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: getDynamicHeight(size: 0.010),
+                            vertical: getDynamicHeight(size: 0.012),
+                          ),
+                        ),
+                        minLines: 1,
+                        maxLines: 10,
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.012)),
+                      CustomTextFormField(
+                        controller: relativeFoodRemarkController,
+                        decoration: InputDecoration(
+                          hintText: 'Relative Food Remarks',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: getDynamicHeight(size: 0.010),
+                            vertical: getDynamicHeight(size: 0.012),
+                          ),
+                        ),
+                        minLines: 2,
+                        maxLines: 10,
+                      ),
+                      SizedBox(height: getDynamicHeight(size: 0.019)),
+
+                      /// 🟩 Buttons Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          /// ✅ Save Button
+                          ElevatedButton(
+                            onPressed: () {
+                              saveDietEntry(index);
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.primaryColor,
+                              minimumSize: Size(
+                                getDynamicHeight(size: 0.098),
+                                getDynamicHeight(size: 0.0385),
+                              ),
+                            ),
+                            child: Text(
+                              'Save',
+                              style: TextStyle(color: AppColor.white),
+                            ),
+                          ),
+
+                          /// ❌ Cancel Button
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.primaryColor,
+                              minimumSize: Size(
+                                getDynamicHeight(size: 0.098),
+                                getDynamicHeight(size: 0.0385),
+                              ),
+                            ),
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(color: AppColor.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );
