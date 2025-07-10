@@ -221,11 +221,14 @@ class DietchecklistController extends GetxController {
         otherTabs.addAll(tabs.where((e) => (e.shortWardName?.toLowerCase() != 'all')));
         wards = otherTabs;
         // ✅ Select default tab
-        selectedTabLabel = allTabs.isNotEmpty ? allTabs.first.shortWardName ?? '' : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName ?? '' : '');
+        selectedTabLabel =
+            allTabs.isNotEmpty ? allTabs.first.shortWardName ?? '' : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName ?? '' : '');
 
         // ✅ 👇 Important: Call updateSelectedTab here so that list loads based on selected ward
         updateSelectedTab(
-          allTabs.isNotEmpty ? allTabs.first.shortWardName.toString() : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
+          allTabs.isNotEmpty
+              ? allTabs.first.shortWardName.toString()
+              : (otherTabs.isNotEmpty ? otherTabs.first.shortWardName.toString() : ''),
         );
 
         isLoading = false;
@@ -302,7 +305,16 @@ class DietchecklistController extends GetxController {
       Map<String, dynamic> jsonbodyObj = {
         "id": dieticianList[index].id,
         "diagnosis": diagnosisController.text,
-        "diet": {"id": 0, "name": dietNameController.text, "value": "", "sort": 0, "txt": "", "parentId": 0, "sup_name": "", "dateValue": "2025-07-07T09:49:56.472Z"},
+        "diet": {
+          "id": 0,
+          "name": dietNameController.text,
+          "value": "",
+          "sort": 0,
+          "txt": "",
+          "parentId": 0,
+          "sup_name": "",
+          "dateValue": "2025-07-07T09:49:56.472Z"
+        },
         "remark": remarksController.text,
         "relFood_Remark": relativeFoodRemarkController.text,
         "username": dieticianList[index].username,
@@ -750,8 +762,9 @@ class DietchecklistController extends GetxController {
                               controller.selectedTabLabel = ''; // ✅ remove tab selection
 
                               final hasDate = controller.selectedFromDate != null && controller.selectedToDate != null;
-                              final hasFilter =
-                                  controller.selectedWardList.isNotEmpty || controller.selectedFloorList.isNotEmpty || controller.selectedBedList.isNotEmpty;
+                              final hasFilter = controller.selectedWardList.isNotEmpty ||
+                                  controller.selectedFloorList.isNotEmpty ||
+                                  controller.selectedBedList.isNotEmpty;
 
                               if (hasDate || hasFilter) {
                                 if (hasFilter) {
@@ -900,7 +913,7 @@ class DietchecklistController extends GetxController {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: getDynamicHeight(size: 0.0155),
-                              color: Colors.teal,
+                              color: AppColor.primaryColor,
                             ),
                           ),
                         ),
@@ -1003,7 +1016,7 @@ class DietchecklistController extends GetxController {
                             Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
+                            backgroundColor: AppColor.primaryColor,
                             minimumSize: Size(
                               getDynamicHeight(size: 0.098),
                               getDynamicHeight(size: 0.0385),
@@ -1019,7 +1032,7 @@ class DietchecklistController extends GetxController {
                         ElevatedButton(
                           onPressed: () => Navigator.pop(context),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.teal,
+                            backgroundColor: AppColor.primaryColor,
                             minimumSize: Size(
                               getDynamicHeight(size: 0.098),
                               getDynamicHeight(size: 0.0385),

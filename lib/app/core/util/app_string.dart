@@ -263,4 +263,5 @@ class AppString {
 
   //Dietician Checklist
   static String dietchecklist = "Dietician Checklist";
+  static String diet = "Diet: ";
 }
