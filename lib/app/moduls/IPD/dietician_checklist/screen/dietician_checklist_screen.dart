@@ -155,81 +155,85 @@ class DieticianChecklistScreen extends StatelessWidget {
                     controller.update();
                   },
                 ),
-                SizedBox(height: getDynamicHeight(size: 0.010)),
+                SizedBox(height: getDynamicHeight(size: 0.005)),
 
                 /// 🟦 Room Type Tabs
-                Padding(
-                  padding: EdgeInsets.only(top: getDynamicHeight(size: 0.006)), // 👈 Add top padding to fix badge cutoff
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 🔵 Static ALL tab from API
-                      if (controller.allTabs.isNotEmpty)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            right: getDynamicHeight(size: 0.008),
-                            top: getDynamicHeight(size: 0.006),
-                          ),
-                          child: _buildTabWithBadge(
-                            label: controller.allTabs.first.shortWardName ?? '',
-                            count: controller.allTabs.first.wardCount ?? 0,
-                            isSelected: controller.selectedTabLabel == controller.allTabs.first.shortWardName,
-                            onTap: () {
-                              controller.isBottomFilterApplied = false; // ✅ tab use = no filter
-                              controller.updateSelectedTab(controller.allTabs.first.shortWardName.toString());
-                            },
-                          ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 🔵 Static ALL tab from API
+                    if (controller.allTabs.isNotEmpty)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          right: getDynamicHeight(size: 0.008),
+                          top: getDynamicHeight(size: 0.006),
                         ),
-                      // 🔵 Scrollable other tabs
+                        child: _buildTabWithBadge(
+                          label: controller.allTabs.first.shortWardName ?? '',
+                          count: controller.allTabs.first.wardCount ?? 0,
+                          isSelected: controller.selectedTabLabel == controller.allTabs.first.shortWardName,
+                          onTap: () {
+                            controller.isBottomFilterApplied = false; // ✅ tab use = no filter
+                            controller.updateSelectedTab(controller.allTabs.first.shortWardName.toString());
+                          },
+                        ),
+                      ),
+                    // 🔵 Scrollable other tabs
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: controller.otherTabs.map((tab) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                right: getDynamicHeight(size: 0.008),
+                                top: getDynamicHeight(size: 0.006),
+                              ), // 👈 Added top padding here
+                              child: _buildTabWithBadge(
+                                  label: tab.shortWardName ?? '',
+                                  count: tab.wardCount ?? 0,
+                                  isSelected: controller.selectedTabLabel == tab.shortWardName,
+                                  onTap: () {
+                                    controller.isBottomFilterApplied = false; // ✅ tab use = no filter
+                                    tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName.toString()) : null;
+                                  }),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      SizedBox(height: getDynamicHeight(size: 0.015)),
                       Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: controller.otherTabs.map((tab) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  right: getDynamicHeight(size: 0.008),
-                                  top: getDynamicHeight(size: 0.006),
-                                ), // 👈 Added top padding here
-                                child: _buildTabWithBadge(
-                                    label: tab.shortWardName ?? '',
-                                    count: tab.wardCount ?? 0,
-                                    isSelected: controller.selectedTabLabel == tab.shortWardName,
-                                    onTap: () {
-                                      controller.isBottomFilterApplied = false; // ✅ tab use = no filter
-                                      tab.wardCount! > 0 ? controller.updateSelectedTab(tab.shortWardName.toString()) : null;
-                                    }),
-                              );
-                            }).toList(),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            if (controller.isBottomFilterApplied) {
+                              // ✅ Agar filter laga ho to yeh hamesha chale
+                              if (controller.allTabs.isNotEmpty) {
+                                controller.updateSelectedTab(controller.allTabs.first.shortWardName ?? '');
+                              }
+                              await controller.fetchDieticianList();
+                            } else {
+                              // ✅ Agar tab select ho to uske hisaab se refresh
+                              await controller.fetchDieticianList(isTabFilter: true);
+                            }
+                          },
+                          child: ListView.builder(
+                            controller: controller.dieticianScrollController,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.002)),
+                            itemCount: controller.filterdieticianList.length,
+                            itemBuilder: (context, index) {
+                              return _buildPatientCard(index, context, controller);
+                            },
                           ),
                         ),
                       ),
                     ],
-                  ),
-                ),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      if (controller.isBottomFilterApplied) {
-                        // ✅ Agar filter laga ho to yeh hamesha chale
-                        if (controller.allTabs.isNotEmpty) {
-                          controller.updateSelectedTab(controller.allTabs.first.shortWardName ?? '');
-                        }
-                        await controller.fetchDieticianList();
-                      } else {
-                        // ✅ Agar tab select ho to uske hisaab se refresh
-                        await controller.fetchDieticianList(isTabFilter: true);
-                      }
-                    },
-                    child: ListView.builder(
-                      controller: controller.dieticianScrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.symmetric(vertical: getDynamicHeight(size: 0.009)),
-                      itemCount: controller.filterdieticianList.length,
-                      itemBuilder: (context, index) {
-                        return _buildPatientCard(index, context, controller);
-                      },
-                    ),
                   ),
                 ),
               ],
