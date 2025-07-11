@@ -1,4 +1,4 @@
-import 'package:schoolapp/app/moduls/internetconnection/controller/nointernet_controller.dart';
+import 'package:schoolapp/app/modules/internetconnection/controller/nointernet_controller.dart';
 import 'package:schoolapp/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';

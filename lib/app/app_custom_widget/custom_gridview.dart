@@ -3,7 +3,7 @@ import 'package:schoolapp/app/core/util/app_font_name.dart';
 import 'package:schoolapp/app/core/util/app_image.dart';
 import 'package:schoolapp/app/core/util/app_string.dart';
 import 'package:schoolapp/app/core/util/sizer_constant.dart';
-import 'package:schoolapp/app/moduls/dashboard/controller/dashboard_controller.dart';
+import 'package:schoolapp/app/modules/dashboard/controller/dashboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

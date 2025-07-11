@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:schoolapp/app/moduls/PAYROLL_MAIN/payroll/model/payroll_model.dart';
-import 'package:schoolapp/app/moduls/verifyotp/model/otp_model.dart';
+import 'package:schoolapp/app/modules/PAYROLL_MAIN/payroll/model/payroll_model.dart';
+import 'package:schoolapp/app/modules/verifyotp/model/otp_model.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart' as diopackage;

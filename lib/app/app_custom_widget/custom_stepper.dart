@@ -1,7 +1,7 @@
 import 'package:schoolapp/app/app_custom_widget/custom_progressloader.dart';
 import 'package:schoolapp/app/core/util/app_color.dart';
 import 'package:schoolapp/app/core/util/sizer_constant.dart';
-import 'package:schoolapp/app/moduls/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
+import 'package:schoolapp/app/modules/PAYROLL_MAIN/dutyschedule/controller/dutyschedule_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stepper_list_view/stepper_list_view.dart';

@@ -1,5 +1,5 @@
-import 'package:schoolapp/app/moduls/bottombar/controller/bottom_bar_controller.dart';
-import 'package:schoolapp/app/moduls/notification/screen/notification_screen.dart';
+import 'package:schoolapp/app/modules/bottombar/controller/bottom_bar_controller.dart';
+import 'package:schoolapp/app/modules/notification/screen/notification_screen.dart';
 import 'package:schoolapp/firebase_options.dart';
 import 'package:schoolapp/main.dart';
 import 'package:firebase_core/firebase_core.dart';

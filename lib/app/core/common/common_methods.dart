@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:schoolapp/app/core/service/api_service.dart';
 import 'package:schoolapp/app/core/util/app_string.dart';
 import 'package:schoolapp/app/core/util/const_api_url.dart';
-import 'package:schoolapp/app/moduls/common/module.dart';
-import 'package:schoolapp/app/moduls/login/screen/login_screen.dart';
+import 'package:schoolapp/app/modules/common/module.dart';
+import 'package:schoolapp/app/modules/login/screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 

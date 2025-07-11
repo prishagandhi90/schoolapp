@@ -1,5 +1,5 @@
 import 'package:schoolapp/app/core/util/app_color.dart';
-import 'package:schoolapp/app/moduls/PAYROLL_MAIN/overtime/controller/overtime_controller.dart';
+import 'package:schoolapp/app/modules/PAYROLL_MAIN/overtime/controller/overtime_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
