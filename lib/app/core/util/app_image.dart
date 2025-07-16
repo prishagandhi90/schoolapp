@@ -2,7 +2,7 @@ class AppImage {
   static String logo = "assets/output-onlinepngtools.png";
   static String venuspro = "assets/venus_profile.png";
   static String sidemenulogo = "assets/sidemenulogo.png";
-  static String venuslogo = "assets/Venus_Hospital_New_Logo-removebg-preview.png";
+  static String venuslogo = "assets/surat_school_New_Logo-removebg-preview.png";
 
   static String home = "assets/image/home.png";
   static String attendance = "assets/image/attendence.png";

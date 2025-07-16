@@ -220,7 +220,7 @@ class ResetpassScreen extends GetView<ResetpassController> {
                     //     : Align(
                     //         alignment: Alignment.bottomCenter,
                     //         child: Image.asset(
-                    //           'assets/Venus_Hospital_New_Logo-removebg-preview.png',
+                    //           'assets/surat_school_New_Logo-removebg-preview.png',
                     //           width: MediaQuery.of(context).size.width * 0.8,
                     //         ),
                     //       ),

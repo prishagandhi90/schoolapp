@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart' as diopackage;
+import 'package:get/get.dart';
 import 'package:schoolapp/app/core/util/const_api_url.dart';
 import 'package:schoolapp/app/modules/bottombar/screen/bottom_bar_screen.dart';
 import 'package:schoolapp/app/modules/internetconnection/controller/nointernet_controller.dart';
 import 'package:schoolapp/app/modules/internetconnection/view/nointernet_screen.dart';
 import 'package:schoolapp/app/modules/login/screen/login_screen.dart';
-import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashController extends GetxController {
@@ -32,17 +32,17 @@ class SplashController extends GetxController {
           )
           .timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
-        ConstApiUrl().initailUrl = "${ConstApiUrl.baseURL}/api";
+        ConstApiUrl.initailUrl = "${ConstApiUrl.baseURL}/api";
         // 'http://117.217.126.127:44166/api';
         update();
-        gotToNextPage();
+        // gotToNextPage();
       } else {
-        fetchDataFromSecondUrl();
+        await fetchDataFromSecondUrl();
         throw Exception('Failed to load data from active URL');
       }
     } catch (e) {
       if (!apiCall) {
-        fetchDataFromSecondUrl();
+        await fetchDataFromSecondUrl();
       }
     }
   }
@@ -64,9 +64,10 @@ class SplashController extends GetxController {
           .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
-        ConstApiUrl().initailUrl = "${ConstApiUrl.baseSecondURL}/api";
+        ConstApiUrl.initailUrl = "${ConstApiUrl.baseSecondURL}/api";
+        // update();
         // 'http://103.251.17.214:44166/api';
-        gotToNextPage();
+        // gotToNextPage();
       } else {
         Get.offAll(const NoInternetView());
         throw Exception('Failed to load data from active URL');

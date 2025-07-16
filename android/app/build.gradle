@@ -21,22 +21,23 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0.1'
+    flutterVersionName = '1.1'
 }
 
 android {
-    namespace = "com.venus_hospital.schoolapp"
+    namespace = "com.surat_school.schoolapp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.venus_hospital.schoolapp"
+        applicationId = "com.surat_school.schoolapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         // minSdk = flutter.minSdkVersion
@@ -46,7 +47,7 @@ android {
         minSdk = 23
         targetSdk = 35
         versionCode = 1
-        versionName = 1.0.1
+        versionName = 1.1
     }
 
     signingConfigs {
@@ -72,6 +73,8 @@ android {
         implementation "androidx.work:work-runtime:2.7.1" 
         implementation platform('com.google.firebase:firebase-bom:28.4.1')
         implementation 'com.google.firebase:firebase-messaging'
+
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     }
 }
 

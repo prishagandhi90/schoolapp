@@ -11,4 +11,4 @@ PRODUCT_NAME = schoolapp
 PRODUCT_BUNDLE_IDENTIFIER = com.venushospital.empApp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2024 com.venus_hospital. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.surat_school. All rights reserved.

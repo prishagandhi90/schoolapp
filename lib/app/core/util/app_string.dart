@@ -1,4 +1,14 @@
 class AppString {
+  static String firstName = "First Name";
+  static String fatherName = "Father Name";
+  static String surname = "Surname";
+  static String dob = "Date of birth: ";
+  static String address = "Address";
+  static String pincode = "Pincode";
+  static String city = "City";
+  static String mobile1 = "Mobile1";
+  static String mobile2 = "Mobile2";
+
   static String teamwork = "Team work all";
   static String hithere = "Hi there!";
   static String pleaselogin = "Please log in to continue";
@@ -204,8 +214,7 @@ class AppString {
   static String information = "Information";
   static String toviewthenormalrange =
       "a. To view the normal range for a test, simply long press on the specific test name or its corresponding report name, and the normal range will be displayed.";
-  static String anytestvaluesthatareabnormal =
-      "b. Any test values that are abnormal will be displayed in red colour for clear identification.";
+  static String anytestvaluesthatareabnormal = "b. Any test values that are abnormal will be displayed in red colour for clear identification.";
   static String bluebackgroundcolour =
       "c. Blue background colour indicates provisional report which is pending to verify by pathologist/microbiologist.";
   static String normalrange = "Normal Range";
